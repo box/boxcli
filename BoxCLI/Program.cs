@@ -11,6 +11,8 @@ using BoxCLI.BoxPlatform.Service;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.CommandLineUtils;
+using BoxCLI.Commands;
 
 namespace BoxCLI
 {
@@ -19,10 +21,10 @@ namespace BoxCLI
         static public IConfigurationRoot Configuration { get; set; }
         static public IServiceProvider Services { get; set; }
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            Task.Run(async () =>
-            {
+            // Task.Run(async () =>
+            // {
                 var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -33,11 +35,25 @@ namespace BoxCLI
                 Services = serviceCollection.BuildServiceProvider();
                 Services.GetService<ILoggerFactory>()
                     .AddConsole(LogLevel.Debug);
-                var Box = Services.GetRequiredService<IBoxPlatformService>();
-                var boxClient = Box.AdminClient();
-                var user = await boxClient.UsersManager.GetCurrentUserInformationAsync();
-                System.Console.WriteLine(user.Name);
-            }).GetAwaiter().GetResult();
+
+                var app = new CommandLineApplication();
+                var root = Services.GetService<RootCommand>();
+
+                root.Configure(app);
+
+                try
+                {
+                    return app.Execute(args);
+                }
+                catch (Exception ex)
+                {
+                    return 1;
+                }
+                // var Box = Services.GetRequiredService<IBoxPlatformService>();
+                // var boxClient = Box.AdminClient();
+                // var user = await boxClient.UsersManager.GetCurrentUserInformationAsync();
+                // System.Console.WriteLine(user.Name);
+            // }).GetAwaiter().GetResult();
         }
 
         static private void ConfigureServices(IServiceCollection serviceCollection)
@@ -47,7 +63,9 @@ namespace BoxCLI
               .AddMemoryCache()
               .AddLogging()
               .AddSingleton<IBoxPlatformCache, BoxPlatformCache>()
-              .AddSingleton<IBoxPlatformService, BoxPlatformService>();
+              .AddSingleton<IBoxPlatformService, BoxPlatformService>()
+              .AddSingleton<GreetCommand>()
+              .AddSingleton<RootCommand>();
         }
     }
 }
