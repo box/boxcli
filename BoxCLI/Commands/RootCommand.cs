@@ -5,7 +5,6 @@ namespace BoxCLI.Commands
     public class RootCommand
     {
 
-        private readonly CommandLineApplication _app;
         private readonly GreetCommand _greet;
 
         public RootCommand(GreetCommand greet)
@@ -22,14 +21,14 @@ namespace BoxCLI.Commands
 
             app.OnExecute(() =>
             {
-                this.Run();
+                this.Run(app);
                 return 0;
             });
         }
 
-        public void Run()
+        public void Run(CommandLineApplication app)
         {
-            _app.ShowHelp();
+            app.ShowHelp();
         }
     }
 }

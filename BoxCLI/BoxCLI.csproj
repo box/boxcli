@@ -3,6 +3,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <RuntimeIdentifiers>win10-x64;osx.10.11-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
+    <AssemblyName>box</AssemblyName>
+    <PackageId>BoxCLI</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Box.V2.Core" Version="2.15.5" />
