@@ -6,10 +6,12 @@ namespace BoxCLI.Commands
     {
 
         private readonly GreetCommand _greet;
+        private readonly UserCommand _user;
 
-        public RootCommand(GreetCommand greet)
+        public RootCommand(GreetCommand greet, UserCommand user)
         {
             _greet = greet;
+            _user = user;
         }
 
         public void Configure(CommandLineApplication app)
@@ -18,6 +20,7 @@ namespace BoxCLI.Commands
 
             // Register commands
             app.Command("greet", _greet.Configure);
+            app.Command("user", _user.Configure);
 
             app.OnExecute(() =>
             {

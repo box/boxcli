@@ -65,6 +65,7 @@ namespace BoxCLI
               .AddSingleton<IBoxPlatformCache, BoxPlatformCache>()
               .AddSingleton<IBoxPlatformService, BoxPlatformService>()
               .AddSingleton<GreetCommand>()
+              .AddSingleton<UserCommand>()
               .AddSingleton<RootCommand>();
         }
     }
