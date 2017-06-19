@@ -12,7 +12,6 @@ namespace BoxCLI.BoxPlatform.Cache
     {
         public const string CACHE_PREFIX = "box_platform";
         public const string ENTERPRISE = "enterprise";
-        public const string USER = "user";
         public const string EXPIRES_AT = "expires_at";
         public const string CACHE_DELIMITER = "/";
 
@@ -35,10 +34,6 @@ namespace BoxCLI.BoxPlatform.Cache
             if (tokenType == BoxTokenTypes.Enterprise)
             {
                 tokenTypeString = ENTERPRISE;
-            }
-            if (tokenType == BoxTokenTypes.User)
-            {
-                tokenTypeString = USER;
             }
             if (String.IsNullOrWhiteSpace(tokenTypeString))
             {

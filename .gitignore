@@ -6,6 +6,7 @@ private_key.pem
 appsettings.json
 globalsettings.json
 .vscode/
+*config.json
 
 # User-specific files
 *.suo

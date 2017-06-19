@@ -10,11 +10,9 @@ namespace BoxCLI.BoxPlatform
 
         public string JwtPublicKeyId { get; set; }
 
-        public string JwtPrivateKeyFilePath { get; set; }
+        public string JwtPrivateKeyFilePath { get; set; }  = "/private_key.pem";
 
-        public string JwtPrivateKeyPassword { get; set; } = "/private_key.pem";
-
-        public string BoxAppUserId { get; set; } = "box_appuser_id";
+        public string JwtPrivateKeyPassword { get; set; }
 
     }
 }
