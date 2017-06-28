@@ -5,13 +5,13 @@ namespace BoxCLI.Commands
     public class RootCommand
     {
 
-        private readonly GreetCommand _greet;
         private readonly UserCommand _user;
+        private readonly ConfigCommand _config;
 
-        public RootCommand(GreetCommand greet, UserCommand user)
+        public RootCommand(UserCommand user, ConfigCommand config)
         {
-            _greet = greet;
             _user = user;
+            _config = config;
         }
 
         public void Configure(CommandLineApplication app)
@@ -19,7 +19,7 @@ namespace BoxCLI.Commands
             app.HelpOption("-?|-h|--help");
 
             // Register commands
-            app.Command("greet", _greet.Configure);
+            app.Command("configure", _config.Configure);
             app.Command("user", _user.Configure);
 
             app.OnExecute(() =>
