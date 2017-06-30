@@ -39,8 +39,6 @@ namespace BoxCLI.BoxPlatform.Service
         {
             BoxService.BoxPlatformCache = BoxPlatformCache;
             System.Console.WriteLine("Cache set");
-            BoxPlatformCache.BustCache();
-            System.Console.WriteLine("Busted cache...");
         }
 
         public void SetAuthorizedClient()
