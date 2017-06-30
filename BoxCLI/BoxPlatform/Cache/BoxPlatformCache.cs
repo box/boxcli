@@ -45,21 +45,23 @@ namespace BoxCLI.BoxPlatform.Cache
 
             //Check in-memory cache for token first...
             System.Console.WriteLine("Checking in-memory cache");
-            if (!_memoryCache.TryGetValue(tokenKey, out tokenString))
-            {
-                System.Console.WriteLine("Nothing found...");
-                //Check PersistantCache next...
-                token = BoxHome.GetBoxCache().RetrieveTokenFromCache();
-            }
-            System.Console.WriteLine("Finished checking cache file");
+            _memoryCache.TryGetValue(tokenKey, out tokenString);
             if (!string.IsNullOrEmpty(tokenString))
             {
                 System.Console.WriteLine("Found an in-memory token and deserializing it");
                 //If something was found in memory, deserialize it...
                 token = DeserializeToken(tokenString);
             }
+            else
+            {
+                System.Console.WriteLine("Nothing found...");
+                //Check PersistantCache next...
+                token = BoxHome.GetBoxCache().RetrieveTokenFromCache();
+            }
+            System.Console.WriteLine("Finished checking cache file");
+            
             System.Console.WriteLine("Checking if token is still empty");
-            // System.Console.WriteLine(token.AccessToken);
+            System.Console.WriteLine(token.AccessToken);
             //If nothing was found in either cache...
             if (string.IsNullOrEmpty(token.AccessToken))
             {
