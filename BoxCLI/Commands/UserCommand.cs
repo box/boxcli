@@ -17,7 +17,7 @@ namespace BoxCLI.Commands
 
             var idArgument = command.Argument("userId",
                                    "Id of user to manage, use 'me' for the current user");
-                            
+
             command.OnExecute(async () =>
                 {
                     await this.Run(idArgument.Value);
@@ -27,32 +27,46 @@ namespace BoxCLI.Commands
         }
 
         private readonly IBoxPlatformService _boxPlatform;
+        private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         private CommandLineApplication _app;
 
-        public UserCommand(IBoxPlatformService boxPlatform)
+        public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder)
         {
-            _boxPlatform = boxPlatform;
+            _boxPlatformBuilder = boxPlatformBuilder;
         }
 
         public async Task Run(string id)
         {
-            if(id == null) 
+            if (id == null)
             {
                 _app.ShowHelp();
             }
-            var boxClient = _boxPlatform.AdminClient();
-            var user = await boxClient.UsersManager.GetUserInformationAsync(id);
-            PrintUserInfo(user);
+            System.Console.WriteLine("Running user command...");
+            System.Console.WriteLine("Building BoxClient");
+            try
+            {
+
+                var box = _boxPlatformBuilder.Build();
+                System.Console.WriteLine("Finishined building...");
+                
+                var boxClient = box.AdminClient();
+                var user = await boxClient.UsersManager.GetUserInformationAsync(id);
+                PrintUserInfo(user);
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
         }
 
         public void PrintUserInfo(BoxUser user)
         {
             System.Console.WriteLine("----Information about this user----");
-            if(user.IsPlatformAccessOnly == true)
+            if (user.IsPlatformAccessOnly == true)
             {
                 System.Console.WriteLine("User is an App User");
             }
-            if(user.Login.Contains("AutomationUser") && user.Login.Contains("@boxdevedition.com"))
+            if (user.Login.Contains("AutomationUser") && user.Login.Contains("@boxdevedition.com"))
             {
                 System.Console.WriteLine("User is a Service Account");
             }

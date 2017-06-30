@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace BoxCLI.CommandUtilities
 {
-    public static class CommandUtilities
+    public static class GeneralUtilities
     {
-        public static string ResolveTilde()
+        private static string ResolveTilde()
         {
             var home = Environment.GetEnvironmentVariable("HOME");
             return Path.GetFullPath(home);

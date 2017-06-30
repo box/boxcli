@@ -5,12 +5,13 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using BoxCLI.BoxPlatform.Cache;
 using BoxCLI.BoxPlatform.Utilities;
+using BoxCLI.BoxHome;
 
 namespace BoxCLI.BoxPlatform.Cache
 {
     public class BoxPlatformCache : IBoxPlatformCache
     {
-        public const string CACHE_PREFIX = "box_platform";
+        public const string CACHE_PREFIX = "box_cli";
         public const string ENTERPRISE = "enterprise";
         public const string EXPIRES_AT = "expires_at";
         public const string CACHE_DELIMITER = "/";
@@ -19,53 +20,64 @@ namespace BoxCLI.BoxPlatform.Cache
         private static readonly DateTime EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private readonly IMemoryCache _memoryCache;
+        private readonly IBoxHome BoxHome;
 
-        public BoxPlatformCache(IMemoryCache memoryCache)
+        public BoxPlatformCache(IMemoryCache memoryCache, IBoxHome boxHome)
         {
             _memoryCache = memoryCache;
+            BoxHome = boxHome;
         }
 
-        public IBoxCachedToken GetToken(BoxTokenTypes tokenType, string tokenId, Func<string> generateToken)
+        public void BustCache()
+        {
+            var key = ConstructCacheKey();
+            _memoryCache.Remove(key);
+            BoxHome.GetBoxCache().BustCache();
+        }
+
+        public BoxCachedToken GetToken(Func<string> generateToken)
         {
             string tokenString;
             var token = new BoxCachedToken();
-            var tokenTypeString = String.Empty;
+            System.Console.WriteLine(token.AccessToken);
 
-            if (tokenType == BoxTokenTypes.Enterprise)
-            {
-                tokenTypeString = ENTERPRISE;
-            }
-            if (String.IsNullOrWhiteSpace(tokenTypeString))
-            {
-                throw new Exception("Token Type must be Enterprise or User");
-            }
-
-            var tokenKey = ConstructCacheKey(tokenTypeString, tokenId);
+            var tokenKey = ConstructCacheKey();
 
             //Check in-memory cache for token first...
+            System.Console.WriteLine("Checking in-memory cache");
             if (!_memoryCache.TryGetValue(tokenKey, out tokenString))
             {
-                //Check that the token isn't expired.
-                if (IsTokenExpired(token))
-                {
-                    token = HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
-                    SetTokenInMemory(tokenKey, JsonConvert.SerializeObject(token), ReturnNewInMemoryCacheExpirationFromCachedToken(ref token, tokenKey, generateToken));
-                    return token;
-                }
-                else
-                {
-                    return HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
-                }
+                System.Console.WriteLine("Nothing found...");
+                //Check PersistantCache next...
+                token = BoxHome.GetBoxCache().RetrieveTokenFromCache();
+            }
+            System.Console.WriteLine("Finished checking cache file");
+            if (!string.IsNullOrEmpty(tokenString))
+            {
+                System.Console.WriteLine("Found an in-memory token and deserializing it");
+                //If something was found in memory, deserialize it...
+                token = DeserializeToken(tokenString);
+            }
+            System.Console.WriteLine("Checking if token is still empty");
+            // System.Console.WriteLine(token.AccessToken);
+            //If nothing was found in either cache...
+            if (string.IsNullOrEmpty(token.AccessToken))
+            {
+                System.Console.WriteLine("Getting new token...");
+                token = HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
+                SetTokenInMemory(tokenKey, JsonConvert.SerializeObject(token));
             }
             else
             {
-                token = DeserializeToken(tokenString);
+                System.Console.WriteLine("Found a token");
+                //Check if the token from cache is expired...
                 if (IsTokenExpired(token))
                 {
                     token = HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
+                    SetTokenInMemory(tokenKey, JsonConvert.SerializeObject(token));
                 }
-                return token;
             }
+            return token;
         }
 
         private BoxCachedToken DeserializeToken(string token)
@@ -73,43 +85,24 @@ namespace BoxCLI.BoxPlatform.Cache
             return JsonConvert.DeserializeObject<BoxCachedToken>(token);
         }
 
-        private BoxCachedToken CheckPersistentCache(string tokenKey)
-        {
-            var token = new BoxCachedToken();
-            // var value = _distributedCache.Get(tokenKey);
-            // if (value != null)
-            // {
-            //     token = DeserializeToken(Encoding.UTF8.GetString(value));
-            // }
-            return token;
-        }
-
         private BoxCachedToken HandleExpiredOrEmptyToken(BoxCachedToken token, string tokenKey, Func<string> generateToken)
         {
+            System.Console.WriteLine("Creating new token...");
             token.AccessToken = null;
             token.ExpiresAt = null;
             token.AccessToken = generateToken();
             token = AddExpirationToToken(token);
+            System.Console.WriteLine("Token created");
+            System.Console.WriteLine(token.AccessToken);
             var tokenString = JsonConvert.SerializeObject(token);
             SetTokenInMemory(tokenKey, tokenString);
-            SetTokenInPersistentCache(tokenKey, tokenString);
+            BoxHome.GetBoxCache().SetTokenInCache(token);
             return token;
         }
 
         private void SetTokenInMemory(string tokenKey, string token)
         {
             this._memoryCache.Set(tokenKey, token, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TOKEN_EXPIRATION_PERIOD));
-        }
-
-        private void SetTokenInMemory(string tokenKey, string token, TimeSpan expirationFromDistrubutedCache)
-        {
-            this._memoryCache.Set(tokenKey, token, new MemoryCacheEntryOptions().SetAbsoluteExpiration(expirationFromDistrubutedCache));
-        }
-
-        private void SetTokenInPersistentCache(string tokenKey, string token)
-        {
-            var tokenBytes = Encoding.UTF8.GetBytes(token);
-            // this._distributedCache.Set(tokenKey, tokenBytes, new DistributedCacheEntryOptions().SetAbsoluteExpiration(TOKEN_EXPIRATION_PERIOD));
         }
 
         private BoxCachedToken AddExpirationToToken(BoxCachedToken token)
@@ -138,17 +131,6 @@ namespace BoxCLI.BoxPlatform.Cache
             return false;
         }
 
-        private TimeSpan ReturnNewInMemoryCacheExpirationFromCachedToken(ref BoxCachedToken token, string tokenKey, Func<string> generateToken)
-        {
-            var timeRemaining = ToDateTimeFromUnixTimestamp(token.ExpiresAt).Subtract(DateTime.Now);
-            if (timeRemaining.Minutes <= 0)
-            {
-                token = HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
-                return TOKEN_EXPIRATION_PERIOD;
-            }
-            return TimeSpan.FromMinutes(timeRemaining.Minutes);
-        }
-
         private static long ToUnixTimestamp(DateTime input)
         {
             var time = input.Subtract(new TimeSpan(EPOCH.Ticks));
@@ -160,9 +142,9 @@ namespace BoxCLI.BoxPlatform.Cache
             return EPOCH.AddMilliseconds(Convert.ToInt64(timestamp)).ToLocalTime();
         }
 
-        private string ConstructCacheKey(string tokenType, string tokenId)
+        private string ConstructCacheKey()
         {
-            return CACHE_PREFIX + CACHE_DELIMITER + tokenType + CACHE_DELIMITER + tokenId;
+            return CACHE_PREFIX + CACHE_DELIMITER + ENTERPRISE;
         }
     }
 }
