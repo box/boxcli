@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using BoxCLI.Commands;
+using BoxCLI.BoxHome;
 
 namespace BoxCLI
 {
@@ -59,11 +60,11 @@ namespace BoxCLI
         static private void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection
-              .Configure<BoxPlatformSettings>(Configuration.GetSection("BoxPlatform"))
               .AddMemoryCache()
               .AddLogging()
-              .AddSingleton<IBoxPlatformCache, BoxPlatformCache>()
-              .AddSingleton<IBoxPlatformService, BoxPlatformService>()
+              .AddTransient<IBoxHome, BoxHomeDirectory>()
+              .AddTransient<IBoxPlatformCache, BoxPlatformCache>()
+              .AddTransient<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
               .AddSingleton<ConfigCommand>()
               .AddSingleton<UserCommand>()
               .AddSingleton<RootCommand>();

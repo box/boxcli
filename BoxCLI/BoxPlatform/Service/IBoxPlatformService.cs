@@ -7,17 +7,12 @@ namespace BoxCLI.BoxPlatform.Service
 {
     public interface IBoxPlatformService
     {
-        string JwtPrivateKey { get; }
 
-        BoxConfig BoxPlatformConfig { get; }
-
-        BoxJWTAuth BoxPlatformAuthorizedClient { get; }
+        BoxJWTAuth BoxPlatformAuthorizedClient { get; set; }
 
         BoxClient AdminClient();
-
+        
         string EnterpriseToken();
-
-        IBoxCachedToken EnterpriseAccessTokenAndExpiration();
 
     }
 }

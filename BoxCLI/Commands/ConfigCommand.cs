@@ -1,7 +1,10 @@
 using System.IO;
 using System.Threading.Tasks;
+using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
+
 
 namespace BoxCLI.Commands
 {
@@ -9,7 +12,6 @@ namespace BoxCLI.Commands
     {
         public void Configure(CommandLineApplication command)
         {
-
             command.Description = "Interact with your Box credentials.";
             command.HelpOption("--help|-h|-?");
             var filePathOption = command.Option("-f|--file <file>",
@@ -17,7 +19,7 @@ namespace BoxCLI.Commands
                                CommandOptionType.SingleValue);
             command.OnExecute(() =>
             {
-                this.Run(filePathOption.Value());
+                this.RunSet(filePathOption.Value());
                 return 0;
             });
 
@@ -28,10 +30,13 @@ namespace BoxCLI.Commands
                 var filePathOptionSet = config.Option("-f|--file <file>",
                                "Provide path to configuration file",
                                CommandOptionType.SingleValue);
+                var environmentName = config.Option("-n|--name <name>",
+                               "Give this configuration a name for easy retrieval later",
+                               CommandOptionType.SingleValue);
                 config.HelpOption("--help|-h|-?");
                 config.OnExecute(() =>
                 {
-                    this.Run(filePathOptionSet.Value());
+                    this.RunSet(filePathOptionSet.Value(), environmentName.Value());
                     return 0;
                 });
             });
@@ -39,42 +44,42 @@ namespace BoxCLI.Commands
 
         }
 
-        public ConfigCommand()
+        private readonly IBoxHome BoxHome;
+        public ConfigCommand(IBoxHome boxHome)
         {
+            BoxHome = boxHome;
         }
 
-        public void SetConfigFile(string filePath)
+        public void SetConfigFile(string filePath, string environmentName)
         {
             System.Console.WriteLine("Found a filePath");
-            System.Console.WriteLine(ResolvePathToConfigFile(filePath));
-            var resolvedFilePath = ResolvePathToConfigFile(filePath);
-            if (File.Exists(resolvedFilePath))
+            var environments = BoxHome.GetBoxEnvironments();
+            if (environments.VerifyBoxConfigFile(filePath))
             {
-                if(ConfigUtilities.ConfigUtilities.VerifyBoxConfigFile(filePath))
-                {
-                    System.Console.WriteLine("Found config file.");
-                }
-                else 
-                {
-                    System.Console.WriteLine("Not a true config file.");
-                }
+                System.Console.WriteLine("Found config file.");
+                var env = environments.TranslateConfigFileToEnvironment(filePath);
+                env.Name = environmentName;
+                System.Console.WriteLine(env.Name);
+                environments.AddNewEnvironment(env);
+                System.Console.WriteLine(env.Name);
+                System.Console.WriteLine("Successfully configured new Box environment.");
             }
             else
             {
-                System.Console.WriteLine("Couldn't locate that specified file.");
+                System.Console.WriteLine("Not a true config file.");
             }
         }
 
-        public string ResolvePathToConfigFile(string filePath)
+        public void RunSet(string filePath = "", string environmentName = "")
         {
-            return CommandUtilities.CommandUtilities.TranslatePath(filePath);
-        }
-
-        public void Run(string filePath = "")
-        {
+            if(string.IsNullOrEmpty(environmentName))
+            {
+                environmentName = "default";
+            }
+            System.Console.WriteLine(environmentName);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
-                SetConfigFile(filePath);
+                SetConfigFile(filePath, environmentName);
             }
             else
             {

@@ -2,12 +2,12 @@ using Newtonsoft.Json;
 
 namespace BoxCLI.BoxPlatform.Cache
 {
-    public class BoxCachedToken : IBoxCachedToken
+    public class BoxCachedToken
     {
         [JsonProperty(PropertyName = "access_token")]
-        public string AccessToken { get; set; }
+        public string AccessToken { get; set; } = "";
 
         [JsonProperty(PropertyName = "expires_at")]
-        public string ExpiresAt { get; set; }
+        public string ExpiresAt { get; set; } = "";
     }
 }
