@@ -10,7 +10,7 @@ namespace BoxCLI.BoxHome
     {
         public readonly string BoxHomeDirectoryName;
         public readonly string BoxHomeEnvironmentVariable;
-        
+
         public readonly string BoxHomeSettingsFileName;
 
         public readonly BoxEnvironments BoxEnvironments;
@@ -43,7 +43,7 @@ namespace BoxCLI.BoxHome
         {
             return BoxPersistantCache;
         }
-        
+
         private string GetBaseDirectoryPath()
         {
             var home = Environment.GetEnvironmentVariable(BoxHomeEnvironmentVariable);
@@ -52,7 +52,11 @@ namespace BoxCLI.BoxHome
                 home = Environment.GetEnvironmentVariable("HOME");
                 if (string.IsNullOrEmpty(home))
                 {
-                    throw new Exception($"Cannot locate the {BoxHomeDirectoryName} directory.");
+                    home = Environment.GetEnvironmentVariable("USERPROFILE");
+                    if (string.IsNullOrEmpty(home))
+                    {
+                        throw new Exception($"Cannot locate the {BoxHomeDirectoryName} directory.");
+                    }
                 }
             }
             return home;
