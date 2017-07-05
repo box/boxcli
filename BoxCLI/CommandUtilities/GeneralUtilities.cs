@@ -11,8 +11,14 @@ namespace BoxCLI.CommandUtilities
         private static string ResolveTilde()
         {
             var home = Environment.GetEnvironmentVariable("HOME");
-            System.Console.WriteLine("Home variable:");
-            System.Console.WriteLine(home);
+            if (string.IsNullOrEmpty(home))
+            {
+                home = Environment.GetEnvironmentVariable("USERPROFILE");
+                if (string.IsNullOrEmpty(home))
+                {
+                    throw new Exception($"Cannot locate the Home directory.");
+                }
+            }
             return Path.GetFullPath(home);
         }
 
@@ -33,7 +39,7 @@ namespace BoxCLI.CommandUtilities
             if (winDirectoryRegex.IsMatch(path))
             {
                 System.Console.WriteLine("Found win directory...");
-                var match =  winDirectoryRegex.Match(path);
+                var match = winDirectoryRegex.Match(path);
                 winDirectory = match.Value;
                 path = path.Substring(match.Length - 1);
                 System.Console.WriteLine($"Path: {path}");
