@@ -26,7 +26,6 @@ namespace BoxCLI.Commands
 
         }
 
-        private readonly IBoxPlatformService _boxPlatform;
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         private CommandLineApplication _app;
 
@@ -48,13 +47,14 @@ namespace BoxCLI.Commands
 
                 var box = _boxPlatformBuilder.Build();
                 System.Console.WriteLine("Finishined building...");
-                
+
                 var boxClient = box.AdminClient();
                 var user = await boxClient.UsersManager.GetUserInformationAsync(id);
                 PrintUserInfo(user);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
+                System.Console.WriteLine("User command error...");
                 System.Console.WriteLine(e.Message);
             }
         }
@@ -75,9 +75,12 @@ namespace BoxCLI.Commands
             System.Console.WriteLine($"User Type: {user.Type}");
             System.Console.WriteLine($"User Name: {user.Name}");
             System.Console.WriteLine($"User Login: {user.Login}");
-            System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Name}");
-            System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Id}");
-            System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Type}");
+            if (user.Enterprise != null)
+            {
+                System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Name}");
+                System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Id}");
+                System.Console.WriteLine($"Enterprise this User Belongs to: {user.Enterprise.Type}");
+            }
             System.Console.WriteLine($"User Address: {user.Address}");
             System.Console.WriteLine($"User Phone: {user.Phone}");
             System.Console.WriteLine($"User Language: {user.Language}");

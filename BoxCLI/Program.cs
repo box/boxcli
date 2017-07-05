@@ -24,37 +24,31 @@ namespace BoxCLI
 
         static int Main(string[] args)
         {
-            // Task.Run(async () =>
-            // {
-                var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                Configuration = builder.Build();
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            Configuration = builder.Build();
 
-                IServiceCollection serviceCollection = new ServiceCollection();
-                ConfigureServices(serviceCollection);
-                Services = serviceCollection.BuildServiceProvider();
-                Services.GetService<ILoggerFactory>()
-                    .AddConsole(LogLevel.Debug);
+            IServiceCollection serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            Services = serviceCollection.BuildServiceProvider();
+            Services.GetService<ILoggerFactory>()
+                .AddConsole(LogLevel.Debug);
 
-                var app = new CommandLineApplication();
-                var root = Services.GetService<RootCommand>();
+            var app = new CommandLineApplication();
+            var root = Services.GetService<RootCommand>();
 
-                root.Configure(app);
+            root.Configure(app);
 
-                try
-                {
-                    return app.Execute(args);
-                }
-                catch (Exception ex)
-                {
-                    return 1;
-                }
-                // var Box = Services.GetRequiredService<IBoxPlatformService>();
-                // var boxClient = Box.AdminClient();
-                // var user = await boxClient.UsersManager.GetCurrentUserInformationAsync();
-                // System.Console.WriteLine(user.Name);
-            // }).GetAwaiter().GetResult();
+            try
+            {
+                return app.Execute(args);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return 1;
+            }
         }
 
         static private void ConfigureServices(IServiceCollection serviceCollection)
