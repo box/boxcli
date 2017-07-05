@@ -143,7 +143,7 @@ namespace BoxCLI.BoxHome
             }
             else
             {
-                System.Console.WriteLine("Couldn't find this environment.");
+                throw new Exception("Couldn't find this environment.");
             }
         }
 
@@ -154,6 +154,12 @@ namespace BoxCLI.BoxHome
             environments.Environments.TryGetValue(environments.DefaultEnvironment, out defaultEnv);
             return defaultEnv;
 
+        }
+
+        public Dictionary<string, BoxHomeConfigModel> GetAllEnvironments()
+        {
+            var environments = DeserializeBoxEnvironmentFile();
+            return environments.Environments;
         }
 
         private void SerializeBoxEnvironmentFile(EnvironmentsModel environments)
