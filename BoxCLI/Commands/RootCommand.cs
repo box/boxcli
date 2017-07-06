@@ -20,7 +20,7 @@ namespace BoxCLI.Commands
 
             // Register commands
             app.Command("configure", _config.Configure);
-            app.Command("user", _user.Configure);
+            app.Command("users", _user.Configure);
 
             app.OnExecute(() =>
             {

@@ -11,7 +11,7 @@ namespace BoxCLI.Commands
         public void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Manage your Box user -- get information about a user, create new users, delete users.";
+            command.Description = "Manage your Box users -- get information about a user, create new users, delete users.";
             command.HelpOption("--help|-h|-?");
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box user in your Enterprise.";
 
@@ -20,9 +20,36 @@ namespace BoxCLI.Commands
 
             command.OnExecute(async () =>
                 {
-                    await this.Run(idArgument.Value);
+                    await this.RunGet(idArgument.Value);
                     return 0;
                 });
+
+            command.Command("get", users =>
+            {
+                var userIdArgument = users.Argument("userId",
+                                   "Id of user to manage, use 'me' for the current user");
+                users.Description = "Get information about a Box user.";
+                users.HelpOption("--help|-h|-?");
+                users.OnExecute(async () =>
+                {
+                    await this.RunGet(userIdArgument.Value);
+                    return 0;
+                });
+            });
+
+            command.Command("list", users =>
+            {
+                users.Description = "List Box users.";
+                users.HelpOption("--help|-h|-?");
+                var managedOnly = users.Option("-m|--managed-users <file>",
+                               "List only managed users",
+                               CommandOptionType.NoValue);
+                users.OnExecute(async () =>
+                {
+                    await this.RunList(managedOnly.HasValue());
+                    return 0;
+                });
+            });
 
         }
 
@@ -34,11 +61,104 @@ namespace BoxCLI.Commands
             _boxPlatformBuilder = boxPlatformBuilder;
         }
 
-        public async Task Run(string id)
+        public async Task RunList(bool managedOnly = false)
+        {
+            try
+            {
+                var box = _boxPlatformBuilder.Build();
+                System.Console.WriteLine("Finishined building...");
+
+                var boxClient = box.AdminClient();
+                var users = await boxClient.UsersManager.GetEnterpriseUsersAsync();
+                var showNext = "";
+                var start = 0;
+                int offset = 0;
+                var all = users.TotalCount;
+                var currentCallCount = users.Entries.Count;
+                if (managedOnly)
+                {
+                    users.Entries.RemoveAll(user =>
+                    {
+                        return user.Login.Contains("AppUser");
+                    });
+                    all -= (currentCallCount - users.Entries.Count);
+                }
+                System.Console.WriteLine(users.Offset);
+                System.Console.WriteLine(users.TotalCount);
+                System.Console.WriteLine(users.Limit);
+                System.Console.WriteLine(users.Entries.Count);
+                while (showNext != "q" && all > 0)
+                {
+                    if (users.Entries.Count > 0)
+                    {
+
+                        try
+                        {
+                            PrintUserInfo(users.Entries[0]);
+                            users.Entries.RemoveAt(0);
+                            all--;
+                        }
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine(e.Message);
+                            break;
+                        }
+                    }
+                    if (users.Entries.Count == 0 && all > 0)
+                    {
+                        offset += users.Limit;
+                        System.Console.WriteLine("Scanning for more users...");
+                        System.Console.WriteLine($"Offset: {(uint)offset}");
+                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(offset: (uint)offset);
+                        currentCallCount = users.Entries.Count;
+                        if (managedOnly)
+                        {
+                            users.Entries.RemoveAll(user =>
+                            {
+                                return user.Login.Contains("AppUser");
+                            });
+                            all -= (currentCallCount - users.Entries.Count);
+                            if (users.Entries.Count == 0)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                PrintUserInfo(users.Entries[0]);
+                                users.Entries.RemoveAt(0);
+                                all--;
+                            }
+                        }
+                        System.Console.WriteLine($"Offset: {users.Offset}");
+                        System.Console.WriteLine($"Total Count: {users.TotalCount}");
+                        System.Console.WriteLine($"Limit: {users.Limit}");
+                        System.Console.WriteLine($"Entries Count: {users.Entries.Count}");
+                    }
+                    if (all != 0)
+                    {
+                        System.Console.WriteLine($"Total: {all}");
+                        System.Console.WriteLine($"Index: {start}");
+                        System.Console.WriteLine("Show next? Type q to quit.");
+                        showNext = System.Console.ReadLine();
+                        showNext.ToLower();
+                    }
+                }
+                System.Console.WriteLine("Finished...");
+                System.Console.WriteLine(all);
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("User command error...");
+                System.Console.WriteLine(e.Message);
+            }
+        }
+
+        public async Task RunGet(string id)
         {
             if (id == null)
             {
                 _app.ShowHelp();
+                return;
             }
             System.Console.WriteLine("Running user command...");
             System.Console.WriteLine("Building BoxClient");
