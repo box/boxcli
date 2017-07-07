@@ -145,8 +145,7 @@ namespace BoxCLI.Commands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine("User command error...");
-                System.Console.WriteLine(e.Message);
+                _logger.LogDebug(e.Message);
             }
         }
 
@@ -157,7 +156,6 @@ namespace BoxCLI.Commands
                 _app.ShowHelp();
                 return;
             }
-            System.Console.WriteLine("Running user command...");
             try
             {
                 var user = await BoxServiceAccountClient.UsersManager.GetUserInformationAsync(id);
@@ -165,8 +163,7 @@ namespace BoxCLI.Commands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine("User command error...");
-                System.Console.WriteLine(e.Message);
+                _logger.LogDebug(e.Message);
             }
         }
 

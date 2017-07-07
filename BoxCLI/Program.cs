@@ -38,6 +38,7 @@ namespace BoxCLI
 
             var app = new CommandLineApplication();
             var root = Services.GetService<RootCommand>();
+            var logger = Services.GetService<ILogger>();
 
             root.Configure(app);
 
@@ -47,7 +48,7 @@ namespace BoxCLI
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
+                logger.LogDebug(ex.Message);
                 return 1;
             }
         }

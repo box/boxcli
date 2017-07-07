@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using BoxCLI.BoxPlatform.Cache;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace BoxCLI.BoxHome
@@ -9,9 +10,11 @@ namespace BoxCLI.BoxHome
     {
         private readonly IBoxHome _boxHome;
         public readonly string BoxHomeCacheFileName;
-        public BoxPersistantCache(string fileName, IBoxHome home)
+        private readonly ILogger _logger;
+        public BoxPersistantCache(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
         {
             _boxHome = home;
+            _logger = logger;
             BoxHomeCacheFileName = fileName;
         }
 
@@ -84,7 +87,7 @@ namespace BoxCLI.BoxHome
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
+                _logger.LogDebug(e.Message);
                 return false;
             }
         }

@@ -39,39 +39,30 @@ namespace BoxCLI.BoxPlatform.Cache
         {
             string tokenString;
             var token = new BoxCachedToken();
-            System.Console.WriteLine(token.AccessToken);
 
             var tokenKey = ConstructCacheKey();
 
             //Check in-memory cache for token first...
-            System.Console.WriteLine("Checking in-memory cache");
             _memoryCache.TryGetValue(tokenKey, out tokenString);
             if (!string.IsNullOrEmpty(tokenString))
             {
-                System.Console.WriteLine("Found an in-memory token and deserializing it");
                 //If something was found in memory, deserialize it...
                 token = DeserializeToken(tokenString);
             }
             else
             {
-                System.Console.WriteLine("Nothing found...");
                 //Check PersistantCache next...
                 token = BoxHome.GetBoxCache().RetrieveTokenFromCache();
             }
-            System.Console.WriteLine("Finished checking cache file");
-            
-            System.Console.WriteLine("Checking if token is still empty");
-            System.Console.WriteLine(token.AccessToken);
+
             //If nothing was found in either cache...
             if (string.IsNullOrEmpty(token.AccessToken))
             {
-                System.Console.WriteLine("Getting new token...");
                 token = HandleExpiredOrEmptyToken(token, tokenKey, generateToken);
                 SetTokenInMemory(tokenKey, JsonConvert.SerializeObject(token));
             }
             else
             {
-                System.Console.WriteLine("Found a token");
                 //Check if the token from cache is expired...
                 if (IsTokenExpired(token))
                 {
@@ -89,13 +80,10 @@ namespace BoxCLI.BoxPlatform.Cache
 
         private BoxCachedToken HandleExpiredOrEmptyToken(BoxCachedToken token, string tokenKey, Func<string> generateToken)
         {
-            System.Console.WriteLine("Creating new token...");
             token.AccessToken = null;
             token.ExpiresAt = null;
             token.AccessToken = generateToken();
             token = AddExpirationToToken(token);
-            System.Console.WriteLine("Token created");
-            System.Console.WriteLine(token.AccessToken);
             var tokenString = JsonConvert.SerializeObject(token);
             SetTokenInMemory(tokenKey, tokenString);
             BoxHome.GetBoxCache().SetTokenInCache(token);

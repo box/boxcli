@@ -28,10 +28,7 @@ namespace BoxCLI.BoxPlatform.Service
         public void SetConfig()
         {
             var environments = BoxHome.GetBoxEnvironments();
-            System.Console.WriteLine("Pulling default environment...");
             var defaultEnv = environments.GetDefaultEnvironment();
-            System.Console.WriteLine("Found default environment...");
-            System.Console.WriteLine(defaultEnv.Name);
             BoxPlatformConfig = new BoxCLIConfig(defaultEnv.ClientId, defaultEnv.ClientSecret,
                 defaultEnv.EnterpriseId, defaultEnv.JwtPrivateKey, defaultEnv.JwtPrivateKeyPassword,
                 defaultEnv.JwtPublicKeyId);
@@ -41,13 +38,11 @@ namespace BoxCLI.BoxPlatform.Service
         public void SetCache()
         {
             BoxService.BoxPlatformCache = BoxPlatformCache;
-            System.Console.WriteLine("Cache set");
         }
 
         public void SetAuthorizedClient()
         {
             BoxService.BoxPlatformAuthorizedClient = new BoxJWTAuth(BoxPlatformConfig);
-            System.Console.WriteLine("Authorized client...");
         }
 
         public void SetIterators()
@@ -61,7 +56,6 @@ namespace BoxCLI.BoxPlatform.Service
             SetCache();
             SetAuthorizedClient();
             SetIterators();
-            System.Console.WriteLine("Returning built service...");
             return BoxService;
         }
     }

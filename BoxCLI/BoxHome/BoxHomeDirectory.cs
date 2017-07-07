@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BoxCLI.BoxHome.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace BoxCLI.BoxHome
@@ -15,14 +16,17 @@ namespace BoxCLI.BoxHome
 
         public readonly BoxEnvironments BoxEnvironments;
         public readonly BoxPersistantCache BoxPersistantCache;
-        public BoxHomeDirectory(IOptions<BoxHomeSettings> settings)
+
+        private readonly ILogger _logger;
+        public BoxHomeDirectory(IOptions<BoxHomeSettings> settings, ILogger<BoxHomeDirectory> logger)
         {
+            _logger = logger;
             BoxHomeDirectoryName = settings.Value.BoxHomeDirectoryName;
             BoxHomeEnvironmentVariable = settings.Value.BoxHomeEnvironmentVariable;
             CreateBoxHomeDirectory();
 
-            BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this);
-            BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this);
+            BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this, logger);
+            BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this, logger);
 
         }
         public string GetBoxHomeDirectoryPath()
@@ -90,7 +94,7 @@ namespace BoxCLI.BoxHome
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
+                _logger.LogError(e.Message);
                 return false;
             }
         }
