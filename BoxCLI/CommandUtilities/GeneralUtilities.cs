@@ -22,6 +22,11 @@ namespace BoxCLI.CommandUtilities
             return Path.GetFullPath(home);
         }
 
+        private static string ResolveDot()
+        {
+            return Directory.GetCurrentDirectory();
+        }
+
         public static string TranslatePath(string path)
         {
             var pathContents = new List<string>();
@@ -31,6 +36,11 @@ namespace BoxCLI.CommandUtilities
             {
                 path = path.Substring(1, path.Length - 1);
                 path = $"{ResolveTilde()}{path}";
+            }
+            if (path.StartsWith("."))
+            {
+                path = path.Substring(1, path.Length - 1);
+                path = $"{ResolveDot()}{path}";
             }
 
             if (winDirectoryRegex.IsMatch(path))
