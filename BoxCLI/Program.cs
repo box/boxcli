@@ -48,7 +48,10 @@ namespace BoxCLI
             }
             catch (Exception ex)
             {
-                logger.LogDebug(ex.Message);
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    logger.LogDebug(ex.Message);
+                }
                 return 1;
             }
         }
