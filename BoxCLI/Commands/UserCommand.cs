@@ -1,8 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Box.V2;
 using Box.V2.Models;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.BoxPlatform.Utilities;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 
 namespace BoxCLI.Commands
 {
@@ -51,100 +54,94 @@ namespace BoxCLI.Commands
                 });
             });
 
+            command.Command("search", users =>
+            {
+                users.Description = "Search for Box users.";
+                users.HelpOption("--help|-h|-?");
+                var userName = users.Argument("userName",
+                                   "Name of user to search for");
+                var managedOnly = users.Option("-m|--managed-users <file>",
+                               "Limit search to only managed users",
+                               CommandOptionType.NoValue);
+                users.OnExecute(async () =>
+                {
+                    await this.RunSearch(users, userName.Value, managedOnly.HasValue());
+                    return 0;
+                });
+            });
+
         }
 
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
+        private readonly ILogger _logger;
         private CommandLineApplication _app;
+        private IBoxPlatformService Box;
+        private BoxClient BoxServiceAccountClient;
+        private IBoxCollectionsIterators BoxCollectionsIterators;
 
-        public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder)
+        public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, ILogger<UserCommand> logger)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
+            _logger = logger;
+            Box = _boxPlatformBuilder.Build();
+            BoxServiceAccountClient = Box.AdminClient();
+            BoxCollectionsIterators = Box.BoxCollectionsIterators;
+        }
+
+        public async Task RunSearch(CommandLineApplication app, string userName, bool managedOnly = false)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                System.Console.WriteLine("A user name is required to search.");
+                app.ShowHelp();
+                return;
+            }
+            if (managedOnly)
+            {
+                var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(filterTerm: userName, autoPaginate: true);
+                users.Entries.RemoveAll(user =>
+                {
+                    return user.Login.Contains("AppUser");
+                });
+                var showNext = "";
+                while (users.Entries.Count > 0 && showNext != "q")
+                {
+                    showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                }
+                System.Console.WriteLine("Finished...");
+                return;
+            }
+            await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
+                {
+                    return BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(offset: offset, filterTerm: userName);
+                }, PrintUserInfo);
+            System.Console.WriteLine("Finished...");
         }
 
         public async Task RunList(bool managedOnly = false)
         {
             try
             {
-                var box = _boxPlatformBuilder.Build();
-                System.Console.WriteLine("Finishined building...");
-
-                var boxClient = box.AdminClient();
-                var users = await boxClient.UsersManager.GetEnterpriseUsersAsync();
-                var showNext = "";
-                var start = 0;
-                int offset = 0;
-                var all = users.TotalCount;
-                var currentCallCount = users.Entries.Count;
                 if (managedOnly)
                 {
+                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(autoPaginate: true);
                     users.Entries.RemoveAll(user =>
                     {
                         return user.Login.Contains("AppUser");
                     });
-                    all -= (currentCallCount - users.Entries.Count);
+                    var showNext = "";
+                    while (users.Entries.Count > 0 && showNext != "q")
+                    {
+                        showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                    }
+                    System.Console.WriteLine("Finished...");
+                    return;
                 }
-                System.Console.WriteLine(users.Offset);
-                System.Console.WriteLine(users.TotalCount);
-                System.Console.WriteLine(users.Limit);
-                System.Console.WriteLine(users.Entries.Count);
-                while (showNext != "q" && all > 0)
+                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
                 {
-                    if (users.Entries.Count > 0)
-                    {
-
-                        try
-                        {
-                            PrintUserInfo(users.Entries[0]);
-                            users.Entries.RemoveAt(0);
-                            all--;
-                        }
-                        catch (Exception e)
-                        {
-                            System.Console.WriteLine(e.Message);
-                            break;
-                        }
-                    }
-                    if (users.Entries.Count == 0 && all > 0)
-                    {
-                        offset += users.Limit;
-                        System.Console.WriteLine("Scanning for more users...");
-                        System.Console.WriteLine($"Offset: {(uint)offset}");
-                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(offset: (uint)offset);
-                        currentCallCount = users.Entries.Count;
-                        if (managedOnly)
-                        {
-                            users.Entries.RemoveAll(user =>
-                            {
-                                return user.Login.Contains("AppUser");
-                            });
-                            all -= (currentCallCount - users.Entries.Count);
-                            if (users.Entries.Count == 0)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                PrintUserInfo(users.Entries[0]);
-                                users.Entries.RemoveAt(0);
-                                all--;
-                            }
-                        }
-                        System.Console.WriteLine($"Offset: {users.Offset}");
-                        System.Console.WriteLine($"Total Count: {users.TotalCount}");
-                        System.Console.WriteLine($"Limit: {users.Limit}");
-                        System.Console.WriteLine($"Entries Count: {users.Entries.Count}");
-                    }
-                    if (all != 0)
-                    {
-                        System.Console.WriteLine($"Total: {all}");
-                        System.Console.WriteLine($"Index: {start}");
-                        System.Console.WriteLine("Show next? Type q to quit.");
-                        showNext = System.Console.ReadLine();
-                        showNext.ToLower();
-                    }
-                }
+                    return BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
+                }, PrintUserInfo);
                 System.Console.WriteLine("Finished...");
-                System.Console.WriteLine(all);
             }
             catch (Exception e)
             {
@@ -161,15 +158,9 @@ namespace BoxCLI.Commands
                 return;
             }
             System.Console.WriteLine("Running user command...");
-            System.Console.WriteLine("Building BoxClient");
             try
             {
-
-                var box = _boxPlatformBuilder.Build();
-                System.Console.WriteLine("Finishined building...");
-
-                var boxClient = box.AdminClient();
-                var user = await boxClient.UsersManager.GetUserInformationAsync(id);
+                var user = await BoxServiceAccountClient.UsersManager.GetUserInformationAsync(id);
                 PrintUserInfo(user);
             }
             catch (Exception e)

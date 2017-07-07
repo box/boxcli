@@ -6,6 +6,7 @@ using Box.V2.JWTAuth;
 using Microsoft.Extensions.Options;
 using BoxCLI.BoxPlatform.Cache;
 using BoxCLI.BoxPlatform.Utilities;
+using System.Threading.Tasks;
 
 namespace BoxCLI.BoxPlatform.Service
 {
@@ -14,6 +15,7 @@ namespace BoxCLI.BoxPlatform.Service
         public BoxJWTAuth BoxPlatformAuthorizedClient { get; set; }
         public IBoxPlatformCache BoxPlatformCache { get; set; }
         public IBoxConfig BoxPlatformConfig { get; set; }
+        public IBoxCollectionsIterators BoxCollectionsIterators { get; set; }
         public BoxPlatformService()
         {
         }
