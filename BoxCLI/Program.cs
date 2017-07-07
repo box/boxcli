@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using BoxCLI.Commands;
 using BoxCLI.BoxHome;
+using BoxCLI.BoxPlatform.Utilities;
 
 namespace BoxCLI
 {
@@ -33,7 +34,7 @@ namespace BoxCLI
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
             Services.GetService<ILoggerFactory>()
-                .AddConsole(LogLevel.Debug);
+                .AddConsole();
 
             var app = new CommandLineApplication();
             var root = Services.GetService<RootCommand>();
@@ -58,6 +59,7 @@ namespace BoxCLI
               .AddLogging()
               .AddTransient<IBoxHome, BoxHomeDirectory>()
               .AddTransient<IBoxPlatformCache, BoxPlatformCache>()
+              .AddTransient<IBoxCollectionsIterators, BoxCollectionsIterators>()
               .AddTransient<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
               .AddSingleton<ConfigCommand>()
               .AddSingleton<UserCommand>()
