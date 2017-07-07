@@ -5,6 +5,7 @@ using Box.V2.Config;
 using BoxCLI.BoxHome.Models;
 using BoxCLI.BoxHome.Models.BoxConfigFile;
 using BoxCLI.CommandUtilities;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -14,10 +15,12 @@ namespace BoxCLI.BoxHome
     {
         private readonly IBoxHome _boxHome;
         public readonly string BoxHomeEnvironmentsFileName;
-        public BoxEnvironments(string fileName, IBoxHome home)
+        private readonly ILogger _logger;
+        public BoxEnvironments(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
         {
             _boxHome = home;
             BoxHomeEnvironmentsFileName = fileName;
+            _logger = logger;
         }
 
         public bool VerifyBoxConfigFile(string filePath)
@@ -34,7 +37,7 @@ namespace BoxCLI.BoxHome
                     }
                     catch (Exception e)
                     {
-                        System.Console.WriteLine(e.Message);
+                        _logger.LogDebug(e.Message);
                         return false;
                     }
                 }
@@ -48,15 +51,10 @@ namespace BoxCLI.BoxHome
         public BoxHomeConfigModel TranslateConfigFileToEnvironment(string filePath)
         {
             filePath = GeneralUtilities.TranslatePath(filePath);
-            System.Console.WriteLine("Translated filePath");
-            System.Console.WriteLine(filePath);
             var translatedConfig = new BoxHomeConfigModel();
             if (File.Exists(filePath))
             {
-                System.Console.WriteLine("File exists...");
                 var config = DeserializeBoxConfigFile(filePath);
-                System.Console.WriteLine("Deserialized config...");
-                System.Console.WriteLine(config.EnterpriseId);
                 translatedConfig.ClientId = config.appSettings.ClientId;
                 translatedConfig.ClientSecret = config.appSettings.ClientSecret;
                 translatedConfig.EnterpriseId = config.EnterpriseId;
@@ -94,30 +92,24 @@ namespace BoxCLI.BoxHome
 
         public void AddNewEnvironment(BoxHomeConfigModel env, bool isDefault = false)
         {
-            System.Console.WriteLine("Loading environment file into memory...");
             var update = DeserializeBoxEnvironmentFile();
             if (isDefault || string.IsNullOrEmpty(update.DefaultEnvironment))
             {
                 update.DefaultEnvironment = env.Name;
             }
-            System.Console.WriteLine("Checking for existing config...");
             if (!CheckForDistinctEnvironments(update.Environments, env.Name))
             {
-                System.Console.WriteLine("Config not found, adding...");
                 update.Environments.Add(env.Name, env);
             }
             else
             {
                 System.Console.WriteLine("This environment already exists.");
             }
-            System.Console.WriteLine("Serializing and saving environments file...");
             SerializeBoxEnvironmentFile(update);
         }
 
         private bool CheckForDistinctEnvironments(Dictionary<string, BoxHomeConfigModel> environments, string name)
         {
-            System.Console.WriteLine("Checking if distinct config...");
-            System.Console.WriteLine(name);
             var isExisting = false;
             try
             {
@@ -125,9 +117,8 @@ namespace BoxCLI.BoxHome
             }
             catch(Exception e)
             {
-                System.Console.WriteLine(e.Message);
+                _logger.LogDebug(e.Message);
             }
-            System.Console.WriteLine(isExisting);
             return isExisting;
         }
 
@@ -201,7 +192,7 @@ namespace BoxCLI.BoxHome
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
+                _logger.LogDebug(e.Message);
                 return false;
             }
         }

@@ -87,16 +87,12 @@ namespace BoxCLI.Commands
 
         public void SetConfigFile(string filePath, string environmentName)
         {
-            System.Console.WriteLine("Found a filePath");
             var environments = BoxHome.GetBoxEnvironments();
             if (environments.VerifyBoxConfigFile(filePath))
             {
-                System.Console.WriteLine("Found config file.");
                 var env = environments.TranslateConfigFileToEnvironment(filePath);
                 env.Name = environmentName;
-                System.Console.WriteLine(env.Name);
                 environments.AddNewEnvironment(env);
-                System.Console.WriteLine(env.Name);
                 System.Console.WriteLine("Successfully configured new Box environment.");
             }
             else
@@ -111,15 +107,12 @@ namespace BoxCLI.Commands
             {
                 environmentName = "default";
             }
-            System.Console.WriteLine(environmentName);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
                 SetConfigFile(filePath, environmentName);
             }
             else
             {
-                System.Console.WriteLine("Set is running...");
-                // var arg = config.Argument("filePath", "Path to your configuration file.", false);
                 System.Console.Write("Box Client ID: ");
                 var clientId = System.Console.ReadLine();
             }

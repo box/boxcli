@@ -22,17 +22,12 @@ namespace BoxCLI.BoxPlatform.Service
 
         public BoxClient AdminClient()
         {
-            System.Console.WriteLine("Getting token...");
             var token = EnterpriseToken();
-            System.Console.WriteLine("Token:");
-            System.Console.WriteLine(token);
             return BoxPlatformAuthorizedClient.AdminClient(token);
         }
 
         public string EnterpriseToken()
         {
-            System.Console.WriteLine("Trying token call...");
-            System.Console.WriteLine(BoxPlatformCache.GetType());
             return BoxPlatformCache.GetToken(() => { return BoxPlatformAuthorizedClient.AdminToken(); }).AccessToken;
         }
     }

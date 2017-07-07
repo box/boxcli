@@ -40,7 +40,6 @@ namespace BoxCLI.BoxPlatform.Utilities
                 else
                 {
                     offset += (uint)collection.Limit;
-                    System.Console.WriteLine("Scanning for more...");
                     collection = await callBox(offset);
                 }
             }
