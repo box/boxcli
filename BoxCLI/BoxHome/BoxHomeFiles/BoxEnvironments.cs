@@ -9,17 +9,17 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace BoxCLI.BoxHome
+namespace BoxCLI.BoxHome.BoxHomeFiles
 {
     public class BoxEnvironments
     {
         private readonly IBoxHome _boxHome;
-        public readonly string BoxHomeEnvironmentsFileName;
+        private readonly string _boxHomeEnvironmentsFileName;
         private readonly ILogger _logger;
         public BoxEnvironments(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
         {
             _boxHome = home;
-            BoxHomeEnvironmentsFileName = fileName;
+            _boxHomeEnvironmentsFileName = fileName;
             _logger = logger;
         }
 
@@ -56,11 +56,8 @@ namespace BoxCLI.BoxHome
             {
                 var config = DeserializeBoxConfigFile(filePath);
                 translatedConfig.ClientId = config.appSettings.ClientId;
-                translatedConfig.ClientSecret = config.appSettings.ClientSecret;
                 translatedConfig.EnterpriseId = config.EnterpriseId;
-                translatedConfig.JwtPrivateKey = config.appSettings.AppAuth.PrivateKey;
-                translatedConfig.JwtPrivateKeyPassword = config.appSettings.AppAuth.Passphrase;
-                translatedConfig.JwtPublicKeyId = config.appSettings.AppAuth.PublicKeyId;
+                translatedConfig.BoxConfigFilePath = filePath;
             }
             else
             {
@@ -76,7 +73,7 @@ namespace BoxCLI.BoxHome
         private string CreateBoxEnvironmentFile()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, BoxHomeEnvironmentsFileName);
+            var path = Path.Combine(boxHome, _boxHomeEnvironmentsFileName);
             if (!CheckIfBoxEnvironmentFileExists())
             {
                 File.Create(path).Dispose();
@@ -185,7 +182,7 @@ namespace BoxCLI.BoxHome
         private bool CheckIfBoxEnvironmentFileExists()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, BoxHomeEnvironmentsFileName);
+            var path = Path.Combine(boxHome, _boxHomeEnvironmentsFileName);
             try
             {
                 return File.Exists(path);

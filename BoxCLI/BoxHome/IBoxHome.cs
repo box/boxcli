@@ -1,3 +1,5 @@
+using BoxCLI.BoxHome.BoxHomeFiles;
+
 namespace BoxCLI.BoxHome
 {
     public interface IBoxHome

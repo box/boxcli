@@ -50,7 +50,7 @@ namespace BoxCLI.Commands
             {
                 config.Description = "Add a new Box environment.";
                 var filePathOptionSet = config.Option("-f|--file <file>",
-                               "Provide path to configuration file",
+                               "Required -- Provide a file path to configuration file",
                                CommandOptionType.SingleValue);
                 var environmentName = config.Option("-n|--name <name>",
                                "Give this configuration a name for easy retrieval later",
@@ -111,11 +111,6 @@ namespace BoxCLI.Commands
             {
                 SetConfigFile(filePath, environmentName);
             }
-            else
-            {
-                System.Console.Write("Box Client ID: ");
-                var clientId = System.Console.ReadLine();
-            }
         }
 
         public void RunList()
@@ -128,6 +123,7 @@ namespace BoxCLI.Commands
                 System.Console.WriteLine($"Name: {environment.Value.Name}");
                 System.Console.WriteLine($"Client ID: {environment.Value.ClientId}");
                 System.Console.WriteLine($"Enterprise ID: {environment.Value.EnterpriseId}");
+                System.Console.WriteLine($"Path to Config File: {environment.Value.BoxConfigFilePath}");
                 System.Console.WriteLine("*******************************");
             }
         }

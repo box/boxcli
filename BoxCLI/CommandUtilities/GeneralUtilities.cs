@@ -27,6 +27,11 @@ namespace BoxCLI.CommandUtilities
             return Directory.GetCurrentDirectory();
         }
 
+        private static string ResolveDoubleDot(string path)
+        {
+            return Path.GetFullPath($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{path}");
+        }
+
         public static string TranslatePath(string path)
         {
             var pathContents = new List<string>();
@@ -37,10 +42,14 @@ namespace BoxCLI.CommandUtilities
                 path = path.Substring(1, path.Length - 1);
                 path = $"{ResolveTilde()}{path}";
             }
-            if (path.StartsWith("."))
+            if (path.StartsWith($".{Path.DirectorySeparatorChar}"))
             {
                 path = path.Substring(1, path.Length - 1);
                 path = $"{ResolveDot()}{path}";
+            }
+            if(path.StartsWith(".."))
+            {
+                path = ResolveDoubleDot(path);
             }
 
             if (winDirectoryRegex.IsMatch(path))

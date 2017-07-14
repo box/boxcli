@@ -38,7 +38,7 @@ namespace BoxCLI
 
             var app = new CommandLineApplication();
             var root = Services.GetService<RootCommand>();
-            var logger = Services.GetService<ILogger>();
+            var logger = Services.GetService<ILogger<Program>>();
 
             root.Configure(app);
 
