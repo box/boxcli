@@ -29,10 +29,11 @@ namespace BoxCLI.BoxPlatform.Service
         {
             var environments = BoxHome.GetBoxEnvironments();
             var defaultEnv = environments.GetDefaultEnvironment();
-            BoxPlatformConfig = new BoxCLIConfig(defaultEnv.ClientId, defaultEnv.ClientSecret,
-                defaultEnv.EnterpriseId, defaultEnv.JwtPrivateKey, defaultEnv.JwtPrivateKeyPassword,
-                defaultEnv.JwtPublicKeyId);
-            BoxService.BoxPlatformConfig = BoxPlatformConfig;
+            using (FileStream fs = new FileStream(defaultEnv.BoxConfigFilePath, FileMode.Open))
+            {
+                BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
+                BoxService.BoxPlatformConfig = BoxPlatformConfig;
+            }
         }
 
         public void SetCache()

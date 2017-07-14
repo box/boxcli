@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BoxCLI.BoxHome.Models;
+using BoxCLI.BoxHome.BoxHomeFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 

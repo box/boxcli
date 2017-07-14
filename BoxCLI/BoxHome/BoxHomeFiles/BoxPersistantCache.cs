@@ -4,18 +4,18 @@ using BoxCLI.BoxPlatform.Cache;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace BoxCLI.BoxHome
+namespace BoxCLI.BoxHome.BoxHomeFiles
 {
     public class BoxPersistantCache
     {
         private readonly IBoxHome _boxHome;
-        public readonly string BoxHomeCacheFileName;
+        private readonly string _boxHomeCacheFileName;
         private readonly ILogger _logger;
         public BoxPersistantCache(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
         {
             _boxHome = home;
             _logger = logger;
-            BoxHomeCacheFileName = fileName;
+            _boxHomeCacheFileName = fileName;
         }
 
         public BoxCachedToken RetrieveTokenFromCache()
@@ -65,7 +65,7 @@ namespace BoxCLI.BoxHome
         private string CreateBoxCacheFile()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, BoxHomeCacheFileName);
+            var path = Path.Combine(boxHome, _boxHomeCacheFileName);
             if (!CheckIfBoxEnvironmentFileExists())
             {
                 File.Create(path).Dispose();
@@ -80,7 +80,7 @@ namespace BoxCLI.BoxHome
         private bool CheckIfBoxEnvironmentFileExists()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, BoxHomeCacheFileName);
+            var path = Path.Combine(boxHome, _boxHomeCacheFileName);
             try
             {
                 return File.Exists(path);

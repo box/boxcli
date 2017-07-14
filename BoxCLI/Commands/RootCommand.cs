@@ -1,4 +1,6 @@
+using System;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 
 namespace BoxCLI.Commands
 {
@@ -7,11 +9,13 @@ namespace BoxCLI.Commands
 
         private readonly UserCommand _user;
         private readonly ConfigCommand _config;
+        private readonly ILogger _logger;
 
-        public RootCommand(UserCommand user, ConfigCommand config)
+        public RootCommand(UserCommand user, ConfigCommand config, ILogger<RootCommand> logger)
         {
             _user = user;
             _config = config;
+            _logger = logger;
         }
 
         public void Configure(CommandLineApplication app)
@@ -24,8 +28,16 @@ namespace BoxCLI.Commands
 
             app.OnExecute(() =>
             {
-                this.Run(app);
-                return 0;
+                try
+                {
+                    this.Run(app);
+                    return 0;
+                }
+                catch(Exception e) 
+                {
+                    _logger.LogDebug(e.Message);
+                    return 1;
+                }
             });
         }
 

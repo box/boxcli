@@ -44,7 +44,7 @@ namespace BoxCLI.Commands
             {
                 users.Description = "List Box users.";
                 users.HelpOption("--help|-h|-?");
-                var managedOnly = users.Option("-m|--managed-users <file>",
+                var managedOnly = users.Option("-m|--managed-users <managed-users>",
                                "List only managed users",
                                CommandOptionType.NoValue);
                 users.OnExecute(async () =>
@@ -60,7 +60,7 @@ namespace BoxCLI.Commands
                 users.HelpOption("--help|-h|-?");
                 var userName = users.Argument("userName",
                                    "Name of user to search for");
-                var managedOnly = users.Option("-m|--managed-users <file>",
+                var managedOnly = users.Option("-m|--managed-users <managed-users>",
                                "Limit search to only managed users",
                                CommandOptionType.NoValue);
                 users.OnExecute(async () =>
@@ -75,21 +75,18 @@ namespace BoxCLI.Commands
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         private readonly ILogger _logger;
         private CommandLineApplication _app;
-        private IBoxPlatformService Box;
-        private BoxClient BoxServiceAccountClient;
-        private IBoxCollectionsIterators BoxCollectionsIterators;
 
         public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, ILogger<UserCommand> logger)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
             _logger = logger;
-            Box = _boxPlatformBuilder.Build();
-            BoxServiceAccountClient = Box.AdminClient();
-            BoxCollectionsIterators = Box.BoxCollectionsIterators;
         }
 
         public async Task RunSearch(CommandLineApplication app, string userName, bool managedOnly = false)
         {
+            var Box = _boxPlatformBuilder.Build();
+            var BoxServiceAccountClient = Box.AdminClient();
+            var BoxCollectionsIterators = Box.BoxCollectionsIterators;
             if (string.IsNullOrEmpty(userName))
             {
                 System.Console.WriteLine("A user name is required to search.");
@@ -120,6 +117,9 @@ namespace BoxCLI.Commands
 
         public async Task RunList(bool managedOnly = false)
         {
+            var Box = _boxPlatformBuilder.Build();
+            var BoxServiceAccountClient = Box.AdminClient();
+            var BoxCollectionsIterators = Box.BoxCollectionsIterators;
             try
             {
                 if (managedOnly)
@@ -151,6 +151,8 @@ namespace BoxCLI.Commands
 
         public async Task RunGet(string id)
         {
+            var Box = _boxPlatformBuilder.Build();
+            var BoxServiceAccountClient = Box.AdminClient();
             if (id == null)
             {
                 _app.ShowHelp();
