@@ -1,16 +1,22 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Models;
+using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.BoxPlatform.Utilities;
+using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 
 namespace BoxCLI.Commands
 {
-    public class UserCommand
+    public class UserCommand : BaseCommand
     {
+        const string USERS_COMMAND = "users";
+        const string LIST_SUB_COMMAND = "list";
+
         public void Configure(CommandLineApplication command)
         {
             _app = command;
@@ -40,16 +46,19 @@ namespace BoxCLI.Commands
                 });
             });
 
-            command.Command("list", users =>
+            command.Command(LIST_SUB_COMMAND, users =>
             {
                 users.Description = "List Box users.";
                 users.HelpOption("--help|-h|-?");
                 var managedOnly = users.Option("-m|--managed-users <managed-users>",
                                "List only managed users",
                                CommandOptionType.NoValue);
+                var save = users.Option("-s|--save <save>",
+                               "Save report to disk",
+                               CommandOptionType.NoValue);
                 users.OnExecute(async () =>
                 {
-                    await this.RunList(managedOnly.HasValue());
+                    await this.RunList(managedOnly.HasValue(), save.HasValue());
                     return 0;
                 });
             });
@@ -75,8 +84,9 @@ namespace BoxCLI.Commands
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         private readonly ILogger _logger;
         private CommandLineApplication _app;
-
-        public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, ILogger<UserCommand> logger)
+        
+        public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, ILogger<UserCommand> logger)
+            : base(boxPlatformBuilder, boxHome)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
             _logger = logger;
@@ -115,11 +125,12 @@ namespace BoxCLI.Commands
             System.Console.WriteLine("Finished...");
         }
 
-        public async Task RunList(bool managedOnly = false)
+        public async Task RunList(bool managedOnly = false, bool save = false)
         {
             var Box = _boxPlatformBuilder.Build();
             var BoxServiceAccountClient = Box.AdminClient();
             var BoxCollectionsIterators = Box.BoxCollectionsIterators;
+            var fileName = $"{USERS_COMMAND}-{LIST_SUB_COMMAND}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
             try
             {
                 if (managedOnly)
@@ -129,18 +140,39 @@ namespace BoxCLI.Commands
                     {
                         return user.Login.Contains("AppUser");
                     });
-                    var showNext = "";
-                    while (users.Entries.Count > 0 && showNext != "q")
+                    if (save == true)
                     {
-                        showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                        var json = GeneralUtilities.JsonWriter<BoxCollection<BoxUser>>(users);
+                        System.Console.WriteLine($"JSON: {json}");
+                        System.Console.WriteLine(base.ConstructReportPath(fileName));
+                        File.WriteAllText($"{base.ConstructReportPath(fileName)}", json);
+                    }
+                    else
+                    {
+                        var showNext = "";
+                        while (users.Entries.Count > 0 && showNext != "q")
+                        {
+                            showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                        }
                     }
                     System.Console.WriteLine("Finished...");
                     return;
                 }
-                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
+                if (save == true)
                 {
-                    return BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
-                }, PrintUserInfo);
+                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(autoPaginate: true);
+                    var json = GeneralUtilities.JsonWriter<BoxCollection<BoxUser>>(users);
+                    System.Console.WriteLine($"JSON: {json}");
+                    System.Console.WriteLine(base.ConstructReportPath(fileName));
+                    File.WriteAllText($"{base.ConstructReportPath(fileName)}", json);
+                }
+                else
+                {
+                    await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
+                    {
+                        return BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
+                    }, PrintUserInfo);
+                }
                 System.Console.WriteLine("Finished...");
             }
             catch (Exception e)
@@ -200,5 +232,7 @@ namespace BoxCLI.Commands
             System.Console.WriteLine($"User Space Alloted: {user.SpaceAmount}");
             System.Console.WriteLine($"User Space Used: {user.SpaceUsed}");
         }
+
+        
     }
 }

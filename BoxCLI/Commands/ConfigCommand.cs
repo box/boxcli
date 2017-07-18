@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
+using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
@@ -76,23 +77,48 @@ namespace BoxCLI.Commands
                 });
             });
 
+            command.Command("settings", config =>
+            {
+                config.Description = "Work with your Box CLI settings.";
+                config.HelpOption("--help|-h|-?");
+                config.OnExecute(() =>
+                {
+                    command.ShowHelp();
+                    return 0;
+                });
+
+                config.Command("list", settings =>
+                {
+                    settings.Description = "List all current settings";
+                    settings.HelpOption("--help|-h|-?");
+                    settings.OnExecute(() =>
+                    {
+                        this.RunSettingsList();
+                        return 0;
+                    });
+                });
+            });
+
 
         }
 
-        private readonly IBoxHome BoxHome;
+        private readonly IBoxHome _boxHome;
+        private readonly BoxEnvironments _environments;
+        private readonly BoxDefaultSettings _settings;
         public ConfigCommand(IBoxHome boxHome)
         {
-            BoxHome = boxHome;
+            _boxHome = boxHome;
+            _environments = boxHome.GetBoxEnvironments();
+            _settings = boxHome.GetBoxHomeSettings();
         }
 
         public void SetConfigFile(string filePath, string environmentName)
         {
-            var environments = BoxHome.GetBoxEnvironments();
-            if (environments.VerifyBoxConfigFile(filePath))
+            if (_environments.VerifyBoxConfigFile(filePath))
             {
-                var env = environments.TranslateConfigFileToEnvironment(filePath);
+                var env = _environments.TranslateConfigFileToEnvironment(filePath);
                 env.Name = environmentName;
-                environments.AddNewEnvironment(env);
+                _environments.AddNewEnvironment(env);
                 System.Console.WriteLine("Successfully configured new Box environment.");
             }
             else
@@ -115,8 +141,7 @@ namespace BoxCLI.Commands
 
         public void RunList()
         {
-            var environmentFile = BoxHome.GetBoxEnvironments();
-            var environments = environmentFile.GetAllEnvironments();
+            var environments = _environments.GetAllEnvironments();
             foreach (var environment in environments)
             {
                 System.Console.WriteLine("*******************************");
@@ -130,8 +155,7 @@ namespace BoxCLI.Commands
 
         public void RunGetDefault()
         {
-            var environmentFile = BoxHome.GetBoxEnvironments();
-            var defaultEnv = environmentFile.GetDefaultEnvironment();
+            var defaultEnv = _environments.GetDefaultEnvironment();
             System.Console.WriteLine("Current default environment:");
             System.Console.WriteLine($"Name: {defaultEnv.Name}");
             System.Console.WriteLine($"Client ID: {defaultEnv.ClientId}");
@@ -145,10 +169,22 @@ namespace BoxCLI.Commands
                 System.Console.WriteLine("You must enter a name for the Box environment.");
                 return;
             }
-            var environmentFile = BoxHome.GetBoxEnvironments();
-            environmentFile.SetDefaultEnvironment(name);
+            _environments.SetDefaultEnvironment(name);
             System.Console.WriteLine("Successfully set new default environment:");
             this.RunGetDefault();
+        }
+
+        public void RunSettingsList()
+        {
+            var settings = _settings.GetAllSettings();
+            System.Console.WriteLine("Current settings:");
+            System.Console.WriteLine($"Path to store Box Reports: {settings.BoxReportsFolderPath}");
+            System.Console.WriteLine($"Box Reports folder name: {settings.BoxReportsFolderName}");
+            System.Console.WriteLine($"Default file format for Box Reports: {settings.BoxReportsFileFormat}");
+            System.Console.WriteLine($"Is default As User profile active?: {(settings.UseDefaultAsUser ? "Yes" : "No")}");
+            System.Console.WriteLine($"Current default As User profile ID: {settings.DefaultAsUserId}");
+            System.Console.WriteLine($"Is temporary As User profile active?: {(settings.UseTempAsUser ? "Yes" : "No")}");
+            System.Console.WriteLine($"Current temporary As User profile ID: {settings.TempAsUserId}");
         }
     }
 }

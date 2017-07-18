@@ -13,7 +13,9 @@ namespace BoxCLI.BoxPlatform.Service
         IBoxCollectionsIterators BoxCollectionsIterators { get; set; }
 
         BoxClient AdminClient();
-        
+        BoxClient AsUserClient(string asUserId);
+
+
         string EnterpriseToken();
 
     }

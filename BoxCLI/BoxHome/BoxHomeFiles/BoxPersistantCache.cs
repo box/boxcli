@@ -66,7 +66,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
             var path = Path.Combine(boxHome, _boxHomeCacheFileName);
-            if (!CheckIfBoxEnvironmentFileExists())
+            if (!CheckIfBoxCacheFileExists())
             {
                 File.Create(path).Dispose();
                 return path;
@@ -77,7 +77,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
         }
 
-        private bool CheckIfBoxEnvironmentFileExists()
+        private bool CheckIfBoxCacheFileExists()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
             var path = Path.Combine(boxHome, _boxHomeCacheFileName);

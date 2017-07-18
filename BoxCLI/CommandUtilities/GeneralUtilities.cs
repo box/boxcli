@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Box.V2.Converter;
 
 namespace BoxCLI.CommandUtilities
 {
@@ -47,7 +48,7 @@ namespace BoxCLI.CommandUtilities
                 path = path.Substring(1, path.Length - 1);
                 path = $"{ResolveDot()}{path}";
             }
-            if(path.StartsWith(".."))
+            if (path.StartsWith(".."))
             {
                 path = ResolveDoubleDot(path);
             }
@@ -84,6 +85,23 @@ namespace BoxCLI.CommandUtilities
                 }
             }
             return resolvedPath;
+        }
+
+        public static string JsonWriter<T>(T entity)
+        {
+            var converter = new BoxJsonConverter();
+            return converter.Serialize<T>(entity);
+        
+        }
+        public static T JsonReader<T>(string json)
+        {
+            var converter = new BoxJsonConverter();
+            return converter.Parse<T>(json);
+        }
+
+        public static string GetDateFormatString()
+        {
+            return "yyyy-MM-dd:HH:mm:ss";
         }
     }
 }
