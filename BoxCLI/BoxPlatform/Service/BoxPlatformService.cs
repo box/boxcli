@@ -26,6 +26,12 @@ namespace BoxCLI.BoxPlatform.Service
             return BoxPlatformAuthorizedClient.AdminClient(token);
         }
 
+        public BoxClient AsUserClient(string asUserId)
+        {
+            var token = EnterpriseToken();
+            return BoxPlatformAuthorizedClient.AdminClient(token, asUserId);
+        }
+
         public string EnterpriseToken()
         {
             return BoxPlatformCache.GetToken(() => { return BoxPlatformAuthorizedClient.AdminToken(); }).AccessToken;

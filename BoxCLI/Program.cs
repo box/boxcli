@@ -67,6 +67,8 @@ namespace BoxCLI
               .AddTransient<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
               .AddSingleton<ConfigCommand>()
               .AddSingleton<UserCommand>()
+              .AddSingleton<FolderCommand>()
+              .AddSingleton<FileCommand>()
               .AddSingleton<RootCommand>();
         }
     }

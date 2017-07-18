@@ -17,6 +17,7 @@ namespace BoxCLI.BoxHome
 
         public readonly BoxEnvironments BoxEnvironments;
         public readonly BoxPersistantCache BoxPersistantCache;
+        public readonly BoxDefaultSettings BoxHomeDefaultSettings;
 
         private readonly ILogger _logger;
         public BoxHomeDirectory(IOptions<BoxHomeSettings> settings, ILogger<BoxHomeDirectory> logger)
@@ -28,6 +29,7 @@ namespace BoxCLI.BoxHome
 
             BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this, logger);
             BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this, logger);
+            BoxHomeDefaultSettings = new BoxDefaultSettings(settings.Value.BoxHomeSettingsFileName, this, logger);
 
         }
         public string GetBoxHomeDirectoryPath()
@@ -49,7 +51,12 @@ namespace BoxCLI.BoxHome
             return BoxPersistantCache;
         }
 
-        private string GetBaseDirectoryPath()
+        public BoxDefaultSettings GetBoxHomeSettings()
+        {
+            return BoxHomeDefaultSettings;
+        }
+
+        public string GetBaseDirectoryPath()
         {
             var home = Environment.GetEnvironmentVariable(BoxHomeEnvironmentVariable);
             if (string.IsNullOrEmpty(home))
