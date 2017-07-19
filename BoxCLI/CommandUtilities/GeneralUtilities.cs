@@ -87,21 +87,9 @@ namespace BoxCLI.CommandUtilities
             return resolvedPath;
         }
 
-        public static string JsonWriter<T>(T entity)
-        {
-            var converter = new BoxJsonConverter();
-            return converter.Serialize<T>(entity);
-        
-        }
-        public static T JsonReader<T>(string json)
-        {
-            var converter = new BoxJsonConverter();
-            return converter.Parse<T>(json);
-        }
-
         public static string GetDateFormatString()
         {
-            return "yyyy-MM-dd:HH:mm:ss";
+            return "yyyy-MM-dd|HH_mm_ss";
         }
     }
 }

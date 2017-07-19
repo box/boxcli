@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Box.V2;
@@ -7,8 +8,10 @@ using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CsvModels;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace BoxCLI.Commands
 {
@@ -24,12 +27,9 @@ namespace BoxCLI.Commands
             command.HelpOption("--help|-h|-?");
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box user in your Enterprise.";
 
-            var idArgument = command.Argument("userId",
-                                   "Id of user to manage, use 'me' for the current user");
-
-            command.OnExecute(async () =>
+            command.OnExecute(() =>
                 {
-                    await this.RunGet(idArgument.Value);
+                    command.ShowHelp();
                     return 0;
                 });
 
@@ -41,8 +41,16 @@ namespace BoxCLI.Commands
                 users.HelpOption("--help|-h|-?");
                 users.OnExecute(async () =>
                 {
-                    await this.RunGet(userIdArgument.Value);
-                    return 0;
+                    if (string.IsNullOrEmpty(userIdArgument.Value))
+                    {
+                        users.ShowHelp();
+                        return 0;
+                    }
+                    else
+                    {
+                        await this.RunGet(userIdArgument.Value);
+                        return 0;
+                    }
                 });
             });
 
@@ -56,9 +64,19 @@ namespace BoxCLI.Commands
                 var save = users.Option("-s|--save <save>",
                                "Save report to disk",
                                CommandOptionType.NoValue);
+                var path = users.Option("--file-path <file-path>",
+                               "File path to save report",
+                               CommandOptionType.SingleValue);
+                var fileFormat = users.Option("--file-format <file-format>",
+                               "File format for report, JSON or CSV",
+                               CommandOptionType.SingleValue);
+                var rawFields = users.Option("--fields <fields>",
+                               "The fields to include in the Box response, separate each field with a comma",
+                               CommandOptionType.SingleValue);
                 users.OnExecute(async () =>
                 {
-                    await this.RunList(managedOnly.HasValue(), save.HasValue());
+                    await this.RunList(managedOnly.HasValue(), save.HasValue(),
+                        path.Value(), fileFormat.Value(), rawFields.Value());
                     return 0;
                 });
             });
@@ -79,17 +97,56 @@ namespace BoxCLI.Commands
                 });
             });
 
+            command.Command("create", users =>
+            {
+                users.Description = "Create a new Box User";
+                users.HelpOption("--help|-h|-?");
+                var path = users.Option("--file-path <file-path>",
+                               "File path to save report",
+                               CommandOptionType.SingleValue);
+                users.OnExecute(async () =>
+                {
+                    await RunCreate(path.Value());
+                    return 0;
+                });
+            });
+
         }
 
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         private readonly ILogger _logger;
         private CommandLineApplication _app;
-        
+        private List<string> _fields;
+
         public UserCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, ILogger<UserCommand> logger)
             : base(boxPlatformBuilder, boxHome)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
             _logger = logger;
+            _fields = new List<string>()
+            {
+                "name",
+                "login",
+                "enterprise",
+                "status",
+                "role",
+                "address",
+                "phone",
+                "job_title",
+                "language",
+                "avatar_url",
+                "created_at",
+                "modified_at",
+                "max_upload_size",
+                "space_amount",
+                "space_used",
+                "tracking_codes",
+                "is_platform_access_only",
+                "is_sync_enabled",
+                "is_exempt_from_login_verification",
+                "is_exempt_from_device_limits",
+                "can_see_managed_users"
+            };
         }
 
         public async Task RunSearch(CommandLineApplication app, string userName, bool managedOnly = false)
@@ -125,27 +182,25 @@ namespace BoxCLI.Commands
             System.Console.WriteLine("Finished...");
         }
 
-        public async Task RunList(bool managedOnly = false, bool save = false)
+        public async Task RunList(bool managedOnly = false, bool save = false, string path = "", string fileFormat = "", string rawFields = "")
         {
             var Box = _boxPlatformBuilder.Build();
             var BoxServiceAccountClient = Box.AdminClient();
             var BoxCollectionsIterators = Box.BoxCollectionsIterators;
             var fileName = $"{USERS_COMMAND}-{LIST_SUB_COMMAND}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+            var fields = ProcessFields(rawFields);
             try
             {
                 if (managedOnly)
                 {
-                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(autoPaginate: true);
+                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
                     users.Entries.RemoveAll(user =>
                     {
                         return user.Login.Contains("AppUser");
                     });
                     if (save == true)
                     {
-                        var json = GeneralUtilities.JsonWriter<BoxCollection<BoxUser>>(users);
-                        System.Console.WriteLine($"JSON: {json}");
-                        System.Console.WriteLine(base.ConstructReportPath(fileName));
-                        File.WriteAllText($"{base.ConstructReportPath(fileName)}", json);
+                        base.WriteCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat.ToLower());
                     }
                     else
                     {
@@ -160,11 +215,12 @@ namespace BoxCLI.Commands
                 }
                 if (save == true)
                 {
-                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(autoPaginate: true);
-                    var json = GeneralUtilities.JsonWriter<BoxCollection<BoxUser>>(users);
-                    System.Console.WriteLine($"JSON: {json}");
-                    System.Console.WriteLine(base.ConstructReportPath(fileName));
-                    File.WriteAllText($"{base.ConstructReportPath(fileName)}", json);
+                    System.Console.WriteLine("Saving file...");
+                    System.Console.WriteLine(fileFormat);
+                    var users = await BoxServiceAccountClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                    System.Console.WriteLine(users.TotalCount);
+                    var saved = base.WriteCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat);
+                    System.Console.WriteLine($"File saved: {saved}");
                 }
                 else
                 {
@@ -185,11 +241,6 @@ namespace BoxCLI.Commands
         {
             var Box = _boxPlatformBuilder.Build();
             var BoxServiceAccountClient = Box.AdminClient();
-            if (id == null)
-            {
-                _app.ShowHelp();
-                return;
-            }
             try
             {
                 var user = await BoxServiceAccountClient.UsersManager.GetUserInformationAsync(id);
@@ -197,6 +248,39 @@ namespace BoxCLI.Commands
             }
             catch (Exception e)
             {
+                _logger.LogDebug(e.Message);
+            }
+        }
+
+        public async Task RunCreate(string path = "")
+        {
+            System.Console.WriteLine("Starting to create users...");
+            var Box = _boxPlatformBuilder.Build();
+            var BoxServiceAccountClient = Box.AdminClient();
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = GeneralUtilities.TranslatePath(path);
+            }
+            System.Console.WriteLine($"Path: {path}");
+            try
+            {
+                System.Console.WriteLine("Reading file...");
+                var userRequests = base.ReadFile<BoxUserRequest, BoxUserRequestMap>(path);
+                System.Console.WriteLine($"User Requests: {userRequests}");
+                System.Console.WriteLine($"User Requests: {userRequests.Count}");
+                System.Console.WriteLine($"User Requests: {userRequests.FirstOrDefault().Name}");
+                foreach (var userRequest in userRequests)
+                {
+                    System.Console.WriteLine($"Processing a user request: {userRequest.Name}");
+                    System.Console.WriteLine($"Processing a user request: {userRequest.Type}");
+                    var createdUser = await BoxServiceAccountClient.UsersManager.CreateEnterpriseUserAsync(userRequest);
+                    PrintUserInfo(createdUser);
+                }
+                System.Console.WriteLine("Created all users...");
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
                 _logger.LogDebug(e.Message);
             }
         }
@@ -233,6 +317,19 @@ namespace BoxCLI.Commands
             System.Console.WriteLine($"User Space Used: {user.SpaceUsed}");
         }
 
-        
+        private List<string> ProcessFields(string rawFields)
+        {
+            var fields = new List<string>();
+            if (string.IsNullOrEmpty(rawFields))
+            {
+                fields = _fields;
+            }
+            else
+            {
+                fields = new List<string>(rawFields.Split(','));
+            }
+            return fields;
+        }
+
     }
 }

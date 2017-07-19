@@ -68,8 +68,10 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var path = Path.Combine(boxHome, _boxHomeCacheFileName);
             if (!CheckIfBoxCacheFileExists())
             {
-                File.Create(path).Dispose();
-                return path;
+                using (var fs = File.Create(path))
+                {
+                    return path;
+                }
             }
             else
             {
