@@ -13,6 +13,9 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         private readonly string _boxHomeSettingsFileName;
         private readonly ILogger _logger;
 
+        public readonly string FILE_FORMAT_CSV = "csv";
+        public readonly string FILE_FORMAT_JSON = "json";
+
         public BoxDefaultSettings(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
         {
             _boxHome = home;
@@ -123,8 +126,10 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var path = Path.Combine(boxHome, _boxHomeSettingsFileName);
             if (!CheckIfBoxHomeSettingsFileExists())
             {
-                File.Create(path).Dispose();
-                return path;
+                using (var fs = File.Create(path))
+                {
+                    return path;
+                }
             }
             else
             {

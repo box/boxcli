@@ -76,10 +76,12 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var path = Path.Combine(boxHome, _boxHomeEnvironmentsFileName);
             if (!CheckIfBoxEnvironmentFileExists())
             {
-                File.Create(path).Dispose();
-                var emptyEnv = new EnvironmentsModel();
-                SerializeBoxEnvironmentFile(emptyEnv);
-                return path;
+                using (var fs = File.Create(path))
+                {
+                    var emptyEnv = new EnvironmentsModel();
+                    SerializeBoxEnvironmentFile(emptyEnv);
+                    return path;
+                }
             }
             else
             {
@@ -112,7 +114,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             {
                 isExisting = environments.ContainsKey(name);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogDebug(e.Message);
             }

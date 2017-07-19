@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Box.V2.Core" Version="2.15.5" />
+    <PackageReference Include="CsvHelper" Version="2.16.3.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.0" />
