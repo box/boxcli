@@ -71,6 +71,7 @@ namespace BoxCLI
               .AddSingleton<UserCommand>()
               .AddSingleton<FolderCommand>()
               .AddSingleton<FileCommand>()
+              .AddSingleton<WebhooksCommand>()
               .AddSingleton<RootCommand>();
         }
     }

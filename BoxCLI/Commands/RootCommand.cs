@@ -14,15 +14,18 @@ namespace BoxCLI.Commands
         private readonly ConfigureCommand _config;
         private readonly FolderCommand _folder;
         private readonly FileCommand _file;
+        private readonly WebhooksCommand _webhooks;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
 
-        public RootCommand(UserCommand user, ConfigureCommand config, FolderCommand folder, FileCommand file, LocalizedStringsResource names)
+        public RootCommand(UserCommand user, ConfigureCommand config, 
+            FolderCommand folder, FileCommand file, WebhooksCommand webhooks, LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
             _folder = folder;
             _file = file;
+            _webhooks = webhooks;
             _names = names;
         }
 
@@ -34,6 +37,7 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Users, _user.Configure);
             app.Command(_names.CommandNames.Folders, _folder.Configure);
             app.Command(_names.CommandNames.Files, _file.Configure);
+            app.Command(_names.CommandNames.Webhooks, _webhooks.Configure);
 
             app.OnExecute(() =>
             {

@@ -10,9 +10,11 @@ using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.BoxPlatform.Utilities;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
 using Microsoft.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
 
 namespace BoxCLI.Commands
 {
@@ -64,7 +66,7 @@ namespace BoxCLI.Commands
             return $"{filePath}{fileName}";
         }
 
-        protected BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnAdmin = false)
+        protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnAdmin = false)
         {
             var Box = _boxPlatformBuilder.Build();
             if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnAdmin)
@@ -85,13 +87,19 @@ namespace BoxCLI.Commands
             }
         }
 
-        protected IBoxCollectionsIterators GetIterators()
+        protected virtual IBoxCollectionsIterators GetIterators()
         {
             var Box = _boxPlatformBuilder.Build();
             return Box.BoxCollectionsIterators;
         }
 
-        public bool WriteResultsToReport<T>(T entity, string fileName, string filePath = "", string fileFormat = "")
+        protected virtual void OutputJson<T>(T entity)
+        {
+            var converter = new BoxJsonConverter();
+            Reporter.WriteInformation(converter.Serialize<T>(entity));
+        }
+
+        protected virtual bool WriteResultsToReport<T>(T entity, string fileName, string filePath = "", string fileFormat = "")
         {
             filePath = ConstructReportPath(fileName, filePath);
             if (string.IsNullOrEmpty(fileFormat))
@@ -127,7 +135,7 @@ namespace BoxCLI.Commands
             }
         }
 
-        public bool WriteCollectionResultsToReport<T, M>(BoxCollection<T> entity, string fileName, string filePath = "", string fileFormat = "")
+        protected virtual bool WriteCollectionResultsToReport<T, M>(BoxCollection<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
             System.Console.WriteLine("Starting writer...");
@@ -180,15 +188,116 @@ namespace BoxCLI.Commands
                 return false;
             }
         }
-
-        public List<T> ReadFile<T, M>(string path)
+        protected virtual bool WriteMarkerCollectionResultsToReport<T, M>(BoxCollectionMarkerBased<T> entity, string fileName, string filePath = "", string fileFormat = "")
+            where T : BoxEntity, new()
         {
-            System.Console.WriteLine("Inside reader...");
+            System.Console.WriteLine("Starting writer...");
+            filePath = ConstructReportPath(fileName, filePath);
+            System.Console.WriteLine($"File path: {filePath}");
+            if (string.IsNullOrEmpty(fileFormat))
+            {
+                System.Console.WriteLine("Finding default file format...");
+                fileFormat = _settings.GetBoxReportsFileFormatSetting();
+                System.Console.WriteLine($"Default file format: {fileFormat}");
+            }
+            fileFormat = fileFormat.ToLower();
+            filePath = $"{filePath}.{fileFormat}";
+            System.Console.WriteLine($"File Format: {fileFormat}");
+            if (fileFormat == _settings.FILE_FORMAT_JSON)
+            {
+                try
+                {
+                    System.Console.WriteLine("Writing JSON file...");
+                    var converter = new BoxJsonConverter();
+                    File.WriteAllText(filePath, converter.Serialize<BoxCollectionMarkerBased<T>>(entity));
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                    return false;
+                }
+            }
+            else if (fileFormat == _settings.FILE_FORMAT_CSV)
+            {
+                try
+                {
+                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (var csv = new CsvWriter(fs))
+                    {
+                        csv.Configuration.RegisterClassMap(typeof(M));
+                        csv.WriteRecords(entity.Entries);
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private string ProcessFileFormatFromPath(string path)
+        {
             var fileFormat = Path.GetExtension(path);
             if (fileFormat.StartsWith("."))
             {
                 fileFormat = fileFormat.Substring(1);
             }
+            return fileFormat;
+        }
+
+        protected virtual List<string> ReadFileForIds(string path)
+        {
+            var fileFormat = this.ProcessFileFormatFromPath(path);
+            var ids = new List<string>();
+            if (fileFormat == _settings.FILE_FORMAT_JSON)
+            {
+                var jsonString = File.ReadAllText(path);
+                using (var stringReader = new StringReader(jsonString))
+                using (var jsonReader = new JsonTextReader(stringReader))
+                {
+                    while (jsonReader.Read())
+                    {
+                        if (jsonReader.TokenType == JsonToken.PropertyName
+                            && (string)jsonReader.Value == "id")
+                        {
+                            jsonReader.Read();
+
+                            var serializer = new JsonSerializer();
+                            ids.Add(serializer.Deserialize<string>(jsonReader));
+                        }
+                    }
+                }
+            }
+            else if (fileFormat == _settings.FILE_FORMAT_CSV)
+            {
+                using (var fs = File.OpenText(path))
+                using (var csv = new CsvReader(fs))
+                {
+                    while (csv.Read())
+                    {
+                        ids.Add(csv.GetField<string>("Id"));
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+            return ids;
+        }
+
+        protected virtual List<T> ReadFile<T, M>(string path)
+        {
+            System.Console.WriteLine("Inside reader...");
+            var fileFormat = this.ProcessFileFormatFromPath(path);
             System.Console.WriteLine($"File is {fileFormat}");
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
@@ -209,11 +318,11 @@ namespace BoxCLI.Commands
             }
             else
             {
-                throw new Exception("Please use either a .csv or .json file.");
+                throw new Exception("File format {fileFormat} is not currently supported.");
             }
         }
 
-        protected List<string> ProcessFields(string rawFields, List<string> baseFields)
+        protected virtual List<string> ProcessFields(string rawFields, List<string> baseFields)
         {
             var fields = new List<string>();
             if (string.IsNullOrEmpty(rawFields))

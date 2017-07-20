@@ -7,6 +7,7 @@ using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
 using BoxCLI.Commands.FileSubCommand;
 using BoxCLI.Commands.FolderSubCommands;
 using BoxCLI.Commands.UserSubCommands;
+using BoxCLI.Commands.WebhooksSubComands;
 using BoxCLI.CommandUtilities.Globalization;
 
 namespace BoxCLI.Commands
@@ -49,6 +50,10 @@ namespace BoxCLI.Commands
             else if (factoryName == _names.CommandNames.Users)
             {
                 return new UserSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Webhooks)
+            {
+                return new WebhooksSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else
             {
