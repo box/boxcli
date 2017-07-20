@@ -5,6 +5,7 @@ using BoxCLI.BoxHome.Models;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using BoxCLI.CommandUtilities;
 
 namespace BoxCLI.BoxHome
 {
@@ -19,17 +20,15 @@ namespace BoxCLI.BoxHome
         public readonly BoxPersistantCache BoxPersistantCache;
         public readonly BoxDefaultSettings BoxHomeDefaultSettings;
 
-        private readonly ILogger _logger;
-        public BoxHomeDirectory(IOptions<BoxHomeSettings> settings, ILogger<BoxHomeDirectory> logger)
+        public BoxHomeDirectory(IOptions<BoxHomeSettings> settings)
         {
-            _logger = logger;
             BoxHomeDirectoryName = settings.Value.BoxHomeDirectoryName;
             BoxHomeEnvironmentVariable = settings.Value.BoxHomeEnvironmentVariable;
             CreateBoxHomeDirectory();
 
-            BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this, logger);
-            BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this, logger);
-            BoxHomeDefaultSettings = new BoxDefaultSettings(settings.Value.BoxHomeSettingsFileName, this, logger);
+            BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this);
+            BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this);
+            BoxHomeDefaultSettings = new BoxDefaultSettings(settings.Value.BoxHomeSettingsFileName, this);
 
         }
         public string GetBoxHomeDirectoryPath()
@@ -102,7 +101,7 @@ namespace BoxCLI.BoxHome
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }

@@ -11,16 +11,14 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
     {
         private readonly IBoxHome _boxHome;
         private readonly string _boxHomeSettingsFileName;
-        private readonly ILogger _logger;
 
         public readonly string FILE_FORMAT_CSV = "csv";
         public readonly string FILE_FORMAT_JSON = "json";
 
-        public BoxDefaultSettings(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
+        public BoxDefaultSettings(string fileName, IBoxHome home)
         {
             _boxHome = home;
             _boxHomeSettingsFileName = fileName;
-            _logger = logger;
             var defaultSettings = new BoxHomeDefaultSettings();
             SetBoxReportsFolderPathIfNull(defaultSettings);
             SetBoxDownloadsFolderPathIfNull(defaultSettings);
@@ -90,7 +88,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }
@@ -147,7 +145,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }
@@ -161,7 +159,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }
@@ -174,7 +172,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }

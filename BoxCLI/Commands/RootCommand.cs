@@ -1,59 +1,59 @@
 using System;
 using BoxCLI.BoxHome;
+using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 
 namespace BoxCLI.Commands
 {
-    public class RootCommand
+    public class RootCommand : HelpCommandBase
     {
 
         private readonly UserCommand _user;
-        private readonly ConfigCommand _config;
+        private readonly ConfigureCommand _config;
         private readonly FolderCommand _folder;
         private readonly FileCommand _file;
-        private readonly IBoxHome _boxHome;
-        private readonly ILogger _logger;
+        private readonly LocalizedStringsResource _names;
+        private CommandLineApplication _app;
 
-        public RootCommand(UserCommand user, ConfigCommand config, FolderCommand folder, FileCommand file,
-            IBoxHome boxHome, ILogger<RootCommand> logger)
+        public RootCommand(UserCommand user, ConfigureCommand config, FolderCommand folder, FileCommand file, LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
             _folder = folder;
             _file = file;
-            _boxHome = boxHome;
-            _logger = logger;
+            _names = names;
         }
 
-        public virtual void Configure(CommandLineApplication app)
+        public override void Configure(CommandLineApplication app)
         {
-            app.HelpOption("-?|-h|--help");
-
             // Register commands
-            app.Command("configure", _config.Configure);
-            app.Command("users", _user.Configure);
-            app.Command("folders", _folder.Configure);
-            app.Command("files", _file.Configure);
+            _app = app;
+            app.Command(_names.CommandNames.Configure, _config.Configure);
+            app.Command(_names.CommandNames.Users, _user.Configure);
+            app.Command(_names.CommandNames.Folders, _folder.Configure);
+            app.Command(_names.CommandNames.Files, _file.Configure);
 
             app.OnExecute(() =>
             {
                 try
                 {
-                    this.Run(app);
-                    return 0;
+                    return this.Execute();
                 }
-                catch(Exception e) 
+                catch (Exception e)
                 {
-                    _logger.LogDebug(e.Message);
+                    Reporter.WriteError(e.Message);
                     return 1;
                 }
             });
+            base.Configure(app);
         }
 
-        public void Run(CommandLineApplication app)
+        protected override int Execute()
         {
-            app.ShowHelp();
+            _app.ShowHelp();
+            return base.Execute();
         }
     }
 }
