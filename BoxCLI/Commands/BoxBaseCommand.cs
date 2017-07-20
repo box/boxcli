@@ -9,21 +9,36 @@ using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.BoxPlatform.Utilities;
+using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands
 {
-    public abstract class BaseCommand
+    public abstract class BoxBaseCommand : HelpCommandBaseAsync
     {
         private readonly IBoxHome _boxHome;
         private readonly BoxDefaultSettings _settings;
         private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
-        public BaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome)
+        private IBoxPlatformServiceBuilder boxPlatformBuilder;
+        private IBoxHome boxHome;
+        protected readonly LocalizedStringsResource _names;
+
+        public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
             _boxHome = boxHome;
             _settings = boxHome.GetBoxHomeSettings();
+            _names = names;
         }
+
+        public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome)
+        {
+            this.boxPlatformBuilder = boxPlatformBuilder;
+            this.boxHome = boxHome;
+        }
+
         protected virtual string ConstructReportPath(string fileName, string filePath = "")
         {
             if (string.IsNullOrEmpty(filePath))
@@ -49,18 +64,18 @@ namespace BoxCLI.Commands
             return $"{filePath}{fileName}";
         }
 
-        protected BoxClient ConfigureBoxClient(string oneCallAsUserId = null)
+        protected BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnAdmin = false)
         {
             var Box = _boxPlatformBuilder.Build();
-            if (!string.IsNullOrEmpty(oneCallAsUserId))
+            if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnAdmin)
             {
                 return Box.AsUserClient(oneCallAsUserId);
             }
-            else if (_settings.GetBoxReportsUseDefaultAsUserSetting())
+            else if (_settings.GetBoxReportsUseDefaultAsUserSetting() && !returnAdmin)
             {
                 return Box.AsUserClient(_settings.GetBoxReportsDefaultAsUserIdSetting());
             }
-            else if (_settings.GetBoxReportsUseTempAsUserSetting())
+            else if (_settings.GetBoxReportsUseTempAsUserSetting() && !returnAdmin)
             {
                 return Box.AsUserClient(_settings.GetBoxReportsTempAsUserIdSetting());
             }
@@ -68,6 +83,12 @@ namespace BoxCLI.Commands
             {
                 return Box.AdminClient();
             }
+        }
+
+        protected IBoxCollectionsIterators GetIterators()
+        {
+            var Box = _boxPlatformBuilder.Build();
+            return Box.BoxCollectionsIterators;
         }
 
         public bool WriteResultsToReport<T>(T entity, string fileName, string filePath = "", string fileFormat = "")
@@ -190,6 +211,20 @@ namespace BoxCLI.Commands
             {
                 throw new Exception("Please use either a .csv or .json file.");
             }
+        }
+
+        protected List<string> ProcessFields(string rawFields, List<string> baseFields)
+        {
+            var fields = new List<string>();
+            if (string.IsNullOrEmpty(rawFields))
+            {
+                fields = baseFields;
+            }
+            else
+            {
+                fields = new List<string>(rawFields.Split(','));
+            }
+            return fields;
         }
     }
 }

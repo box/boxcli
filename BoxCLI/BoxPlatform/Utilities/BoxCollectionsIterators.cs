@@ -8,14 +8,6 @@ namespace BoxCLI.BoxPlatform.Utilities
 {
     public class BoxCollectionsIterators : IBoxCollectionsIterators
     {
-
-        private readonly ILogger _logger;
-
-        public BoxCollectionsIterators(ILogger<BoxCollectionsIterators> logger)
-        {
-            _logger = logger;
-        }
-
         public string PageInConsole<T>(Action<T> print, BoxCollection<T> collection) where T : class, new()
         {
             print(collection.Entries[0]);

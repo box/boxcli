@@ -15,12 +15,10 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
     {
         private readonly IBoxHome _boxHome;
         private readonly string _boxHomeEnvironmentsFileName;
-        private readonly ILogger _logger;
-        public BoxEnvironments(string fileName, IBoxHome home, ILogger<BoxHomeDirectory> logger)
+        public BoxEnvironments(string fileName, IBoxHome home)
         {
             _boxHome = home;
             _boxHomeEnvironmentsFileName = fileName;
-            _logger = logger;
         }
 
         public bool VerifyBoxConfigFile(string filePath)
@@ -37,7 +35,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                     }
                     catch (Exception e)
                     {
-                        _logger.LogDebug(e.Message);
+                        Reporter.WriteError(e.Message);
                         return false;
                     }
                 }
@@ -61,7 +59,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             else
             {
-                System.Console.WriteLine("Couldn't open file...");
+                Reporter.WriteError("Couldn't open file...");
             }
             return translatedConfig;
         }
@@ -89,7 +87,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
         }
 
-        public void AddNewEnvironment(BoxHomeConfigModel env, bool isDefault = false)
+        public bool AddNewEnvironment(BoxHomeConfigModel env, bool isDefault = false)
         {
             var update = DeserializeBoxEnvironmentFile();
             if (isDefault || string.IsNullOrEmpty(update.DefaultEnvironment))
@@ -99,12 +97,14 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             if (!CheckForDistinctEnvironments(update.Environments, env.Name))
             {
                 update.Environments.Add(env.Name, env);
+                SerializeBoxEnvironmentFile(update);
+                return true;
             }
             else
             {
-                System.Console.WriteLine("This environment already exists.");
+                Reporter.WriteWarning("This environment already exists.");
+                return false;
             }
-            SerializeBoxEnvironmentFile(update);
         }
 
         private bool CheckForDistinctEnvironments(Dictionary<string, BoxHomeConfigModel> environments, string name)
@@ -116,7 +116,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
             }
             return isExisting;
         }
@@ -191,7 +191,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e.Message);
+                Reporter.WriteError(e.Message);
                 return false;
             }
         }

@@ -15,6 +15,9 @@ using Microsoft.Extensions.CommandLineUtils;
 using BoxCLI.Commands;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Utilities;
+using BoxCLI.CommandUtilities.Globalization;
+using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.Globalization.Models;
 
 namespace BoxCLI
 {
@@ -33,24 +36,21 @@ namespace BoxCLI
             IServiceCollection serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
-            Services.GetService<ILoggerFactory>()
-                .AddConsole();
 
-            var app = new CommandLineApplication();
-            var root = Services.GetService<RootCommand>();
-            var logger = Services.GetService<ILogger<Program>>();
-
-            root.Configure(app);
 
             try
             {
+                var app = new CommandLineApplication();
+                var root = Services.GetService<RootCommand>();
+
+                root.Configure(app);
                 return app.Execute(args);
             }
             catch (Exception ex)
             {
                 if (!string.IsNullOrEmpty(ex.Message))
                 {
-                    logger.LogDebug(ex.Message);
+                    Reporter.WriteError(ex.Message);
                 }
                 return 1;
             }
@@ -60,12 +60,14 @@ namespace BoxCLI
         {
             serviceCollection
               .AddMemoryCache()
-              .AddLogging()
+              .Configure<LocalizedStrings>(Configuration.GetSection("LocalizedStrings"))
               .AddTransient<IBoxHome, BoxHomeDirectory>()
               .AddTransient<IBoxPlatformCache, BoxPlatformCache>()
               .AddTransient<IBoxCollectionsIterators, BoxCollectionsIterators>()
               .AddTransient<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
-              .AddSingleton<ConfigCommand>()
+              .AddSingleton<LocalizedStringsResource>()
+              .AddSingleton<SubCommandFactory>()
+              .AddSingleton<ConfigureCommand>()
               .AddSingleton<UserCommand>()
               .AddSingleton<FolderCommand>()
               .AddSingleton<FileCommand>()
