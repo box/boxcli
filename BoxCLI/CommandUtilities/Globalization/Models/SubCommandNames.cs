@@ -10,5 +10,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Download { get; set; } = "download";
         public string Search { get; set; } = "search";
         public string Create { get; set; } = "create";
+        public string Update { get; set; } = "update";
+        public string Delete { get; set; } = "delete";
     }
 }
