@@ -22,7 +22,7 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Manage your Box users -- get information about a user, create new users, delete users.";
+            command.Description = "Manage your Box users.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box user in your Enterprise.";
 
             command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);

@@ -15,17 +15,25 @@ namespace BoxCLI.Commands
         private readonly FolderCommand _folder;
         private readonly FileCommand _file;
         private readonly WebhooksCommand _webhooks;
+        private readonly GroupCommand _group;
+        private readonly MetadataTemplateCommand _mdt;
+        private readonly EventCommand _evt;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
 
         public RootCommand(UserCommand user, ConfigureCommand config, 
-            FolderCommand folder, FileCommand file, WebhooksCommand webhooks, LocalizedStringsResource names)
+            FolderCommand folder, FileCommand file, WebhooksCommand webhooks, 
+            GroupCommand group,  MetadataTemplateCommand mdt, EventCommand evt,
+            LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
             _folder = folder;
             _file = file;
             _webhooks = webhooks;
+            _group = group;
+            _mdt = mdt;
+            _evt = evt;
             _names = names;
         }
 
@@ -38,6 +46,9 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Folders, _folder.Configure);
             app.Command(_names.CommandNames.Files, _file.Configure);
             app.Command(_names.CommandNames.Webhooks, _webhooks.Configure);
+            app.Command(_names.CommandNames.Groups, _group.Configure);
+            app.Command(_names.CommandNames.MetadataTemplates, _mdt.Configure);
+            app.Command(_names.CommandNames.Events, _evt.Configure);
 
             app.OnExecute(() =>
             {
