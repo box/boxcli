@@ -20,11 +20,9 @@ namespace BoxCLI.Commands
 {
     public abstract class BoxBaseCommand : HelpCommandBaseAsync
     {
-        private readonly IBoxHome _boxHome;
+        protected readonly IBoxHome _boxHome;
         private readonly BoxDefaultSettings _settings;
-        private readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
-        private IBoxPlatformServiceBuilder boxPlatformBuilder;
-        private IBoxHome boxHome;
+        protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
 
         public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
@@ -35,10 +33,11 @@ namespace BoxCLI.Commands
             _names = names;
         }
 
-        public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome)
+        protected virtual void PrintMiniUser(BoxUser u)
         {
-            this.boxPlatformBuilder = boxPlatformBuilder;
-            this.boxHome = boxHome;
+            Reporter.WriteInformation($"User ID: {u.Id}");
+            Reporter.WriteInformation($"User Name: {u.Name}");
+            Reporter.WriteInformation($"User Login: {u.Login}");
         }
 
         protected virtual string ConstructReportPath(string fileName, string filePath = "")
@@ -101,12 +100,8 @@ namespace BoxCLI.Commands
 
         protected virtual bool WriteResultsToReport<T>(T entity, string fileName, string filePath = "", string fileFormat = "")
         {
-            filePath = ConstructReportPath(fileName, filePath);
-            if (string.IsNullOrEmpty(fileFormat))
-            {
-                fileFormat = _settings.GetBoxReportsFileFormatSetting();
-            }
-            filePath = $"{filePath}.{fileFormat}";
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 var converter = new BoxJsonConverter();
@@ -131,7 +126,7 @@ namespace BoxCLI.Commands
             }
             else
             {
-                return false;
+                throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
 
@@ -139,17 +134,8 @@ namespace BoxCLI.Commands
             where T : BoxEntity, new()
         {
             System.Console.WriteLine("Starting writer...");
-            filePath = ConstructReportPath(fileName, filePath);
-            System.Console.WriteLine($"File path: {filePath}");
-            if (string.IsNullOrEmpty(fileFormat))
-            {
-                System.Console.WriteLine("Finding default file format...");
-                fileFormat = _settings.GetBoxReportsFileFormatSetting();
-                System.Console.WriteLine($"Default file format: {fileFormat}");
-            }
-            fileFormat = fileFormat.ToLower();
-            filePath = $"{filePath}.{fileFormat}";
-            System.Console.WriteLine($"File Format: {fileFormat}");
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
@@ -161,7 +147,7 @@ namespace BoxCLI.Commands
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(e.Message);
+                    Reporter.WriteError(e.Message);
                     return false;
                 }
             }
@@ -179,30 +165,21 @@ namespace BoxCLI.Commands
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(e.Message);
+                    Reporter.WriteError(e.Message);
                     return false;
                 }
             }
             else
             {
-                return false;
+                throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
         protected virtual bool WriteMarkerCollectionResultsToReport<T, M>(BoxCollectionMarkerBased<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
             System.Console.WriteLine("Starting writer...");
-            filePath = ConstructReportPath(fileName, filePath);
-            System.Console.WriteLine($"File path: {filePath}");
-            if (string.IsNullOrEmpty(fileFormat))
-            {
-                System.Console.WriteLine("Finding default file format...");
-                fileFormat = _settings.GetBoxReportsFileFormatSetting();
-                System.Console.WriteLine($"Default file format: {fileFormat}");
-            }
-            fileFormat = fileFormat.ToLower();
-            filePath = $"{filePath}.{fileFormat}";
-            System.Console.WriteLine($"File Format: {fileFormat}");
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
@@ -214,7 +191,7 @@ namespace BoxCLI.Commands
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(e.Message);
+                    Reporter.WriteError(e.Message);
                     return false;
                 }
             }
@@ -232,25 +209,15 @@ namespace BoxCLI.Commands
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(e.Message);
+                    Reporter.WriteError(e.Message);
                     return false;
                 }
             }
             else
             {
-                return false;
+                throw new Exception($"File format {fileFormat} is not currently supported.");
             }
 
-        }
-
-        private string ProcessFileFormatFromPath(string path)
-        {
-            var fileFormat = Path.GetExtension(path);
-            if (fileFormat.StartsWith("."))
-            {
-                fileFormat = fileFormat.Substring(1);
-            }
-            return fileFormat;
         }
 
         protected virtual List<string> ReadFileForIds(string path)
@@ -334,6 +301,32 @@ namespace BoxCLI.Commands
                 fields = new List<string>(rawFields.Split(','));
             }
             return fields;
+        }
+
+        private string ProcessReportsFilePathForWriters(string filePath, string fileName, string fileFormat)
+        {
+            return $"{this.ConstructReportPath(fileName, filePath)}.{fileFormat}";
+        }
+
+        private string ProcessReportsFileFormat(string fileFormat = "")
+        {
+            if (string.IsNullOrEmpty(fileFormat))
+            {
+                System.Console.WriteLine("Finding default file format...");
+                fileFormat = _settings.GetBoxReportsFileFormatSetting();
+                System.Console.WriteLine($"Default file format: {fileFormat}");
+            }
+            return fileFormat.ToLower();
+        }
+
+        private string ProcessFileFormatFromPath(string path)
+        {
+            var fileFormat = Path.GetExtension(path);
+            if (fileFormat.StartsWith("."))
+            {
+                fileFormat = fileFormat.Substring(1);
+            }
+            return fileFormat;
         }
     }
 }

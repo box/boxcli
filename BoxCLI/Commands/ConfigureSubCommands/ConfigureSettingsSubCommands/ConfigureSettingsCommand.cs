@@ -3,7 +3,7 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands
+namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
 {
     public class ConfigureSettingsCommand : HelpCommandBase
     {

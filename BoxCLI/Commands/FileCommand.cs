@@ -19,6 +19,7 @@ namespace BoxCLI.Commands
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about files in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
+            command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.OnExecute(async () =>
                {
                    return await this.Execute();
@@ -33,10 +34,12 @@ namespace BoxCLI.Commands
         }
 
         private readonly ISubCommandFactory _subCommands;
+        private readonly SubCommandFactory _factory;
 
         public FileCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names) 
             : base(boxPlatformBuilder, boxHome, names)
         {
+            _factory = factory;
             _subCommands = factory.CreateFactory(_names.CommandNames.Files);
         }
     }

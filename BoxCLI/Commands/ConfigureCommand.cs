@@ -5,6 +5,7 @@ using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.Commands.ConfigureSubCommands;
+using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
@@ -25,13 +26,9 @@ namespace BoxCLI.Commands
             });
 
             command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
-
             command.Command(_names.SubCommandNames.GetDefault, _subCommands.CreateSubCommand(_names.SubCommandNames.GetDefault).Configure);
-
             command.Command(_names.SubCommandNames.Add, _subCommands.CreateSubCommand(_names.SubCommandNames.Add).Configure);
-
             command.Command(_names.SubCommandNames.SetDefault, _subCommands.CreateSubCommand(_names.SubCommandNames.SetDefault).Configure);
-
             command.Command(_names.CommandNames.Settings, new ConfigureSettingsCommand(_boxHome, _factory, _names).Configure);
 
             base.Configure(command);
