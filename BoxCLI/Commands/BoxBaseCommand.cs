@@ -21,7 +21,7 @@ namespace BoxCLI.Commands
     public abstract class BoxBaseCommand : HelpCommandBaseAsync
     {
         protected readonly IBoxHome _boxHome;
-        private readonly BoxDefaultSettings _settings;
+        protected readonly BoxDefaultSettings _settings;
         protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
 
@@ -319,7 +319,7 @@ namespace BoxCLI.Commands
             return fileFormat.ToLower();
         }
 
-        private string ProcessFileFormatFromPath(string path)
+        protected string ProcessFileFormatFromPath(string path)
         {
             var fileFormat = Path.GetExtension(path);
             if (fileFormat.StartsWith("."))

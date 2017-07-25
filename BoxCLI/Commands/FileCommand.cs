@@ -19,9 +19,15 @@ namespace BoxCLI.Commands
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about files in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
+            command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
+            command.Command(_names.SubCommandNames.Copy, _subCommands.CreateSubCommand(_names.SubCommandNames.Copy).Configure);
+            command.Command(_names.SubCommandNames.Move, _subCommands.CreateSubCommand(_names.SubCommandNames.Move).Configure);
+            command.Command(_names.SubCommandNames.Rename, _subCommands.CreateSubCommand(_names.SubCommandNames.Rename).Configure);
+            command.Command(_names.SubCommandNames.Upload, _subCommands.CreateSubCommand(_names.SubCommandNames.Upload).Configure);
             command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.Command(_names.CommandNames.Collaborations, new CollaborationCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.Command(_names.CommandNames.SharedLinks, new SharedLinkCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
+            command.Command(_names.CommandNames.FileVersions, new FileVersionCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names).Configure);
             command.OnExecute(async () =>
                {
                    return await this.Execute();
@@ -38,7 +44,7 @@ namespace BoxCLI.Commands
         private readonly ISubCommandFactory _subCommands;
         private readonly SubCommandFactory _factory;
 
-        public FileCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names) 
+        public FileCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
             _factory = factory;

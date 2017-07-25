@@ -1,20 +1,20 @@
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
-using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.FileSubCommand
+namespace BoxCLI.Commands.FileVersionSubCommands
 {
-    public class FileGetCommand : FileSubCommandBase
+    public class FileVersionListCommand : FileVersionSubCommandBase
     {
-        private CommandArgument _fileId;
         private CommandLineApplication _app;
-        public FileGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
+        private CommandArgument _fileId;
+        public FileVersionListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
         }
+
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
@@ -30,15 +30,19 @@ namespace BoxCLI.Commands.FileSubCommand
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunList();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunList()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var fileInfo = await boxClient.FilesManager.GetInformationAsync(this._fileId.Value);
+            var fileVersions = await boxClient.FilesManager.ViewVersionsAsync(this._fileId.Value);
+            foreach(var version in fileVersions.Entries)
+            {
+                base.PrintFileVersion(version);
+            }
         }
     }
 }

@@ -1,26 +1,30 @@
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
-using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.FileSubCommand
 {
-    public class FileGetCommand : FileSubCommandBase
+    public class FileCopyCommand : FileSubCommandBase
     {
         private CommandArgument _fileId;
+        private CommandArgument _parentFolderId;
         private CommandLineApplication _app;
-        public FileGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
-            : base(boxPlatformBuilder, boxHome, names)
+        public FileCopyCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
         }
+
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Copy a file to a different folder.";
             _fileId = command.Argument("fileId",
                                "Id of file to manage");
+            _parentFolderId = command.Argument("parentFolderId",
+                                                "Id of new parent folder");
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -30,15 +34,16 @@ namespace BoxCLI.Commands.FileSubCommand
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunCopy();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunCopy()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var fileInfo = await boxClient.FilesManager.GetInformationAsync(this._fileId.Value);
+            var copy = await base.CopyFile(this._fileId.Value, this._parentFolderId.Value);
+            Reporter.WriteSuccess($"Copied file {this._fileId.Value} to folder {this._parentFolderId.Value}");
+            base.PrintFile(copy);
         }
     }
 }

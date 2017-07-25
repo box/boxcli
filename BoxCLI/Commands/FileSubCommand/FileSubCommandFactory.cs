@@ -23,6 +23,26 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 return new FileDownloadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == _names.SubCommandNames.Delete)
+            {
+                return new FileDeleteCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Copy)
+            {
+                return new FileCopyCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Move)
+            {
+                return new FileMoveCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Rename)
+            {
+                return new FileRenameCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Upload)
+            {
+                return new FileUploadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

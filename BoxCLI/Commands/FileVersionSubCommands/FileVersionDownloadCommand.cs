@@ -1,28 +1,30 @@
-using System.IO;
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
-using BoxCLI.CommandUtilities;
-using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.Commands.FileSubCommand;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.FileSubCommand
+namespace BoxCLI.Commands.FileVersionSubCommands
 {
-    public class FileDownloadCommand : FileSubCommandBase
+    public class FileVersionDownloadCommand : FileVersionSubCommandBase
     {
         private CommandArgument _fileId;
+        private CommandArgument _fileVersionId;
         private CommandLineApplication _app;
-        public FileDownloadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
-            : base(boxPlatformBuilder, boxHome, names)
+        public FileVersionDownloadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
         }
+
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
             command.Description = "Download a file.";
             _fileId = command.Argument("fileId",
                                "Id of file to download");
+            _fileVersionId = command.Argument("fileVersionId",
+                               "Id of file version to download");
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -39,7 +41,8 @@ namespace BoxCLI.Commands.FileSubCommand
         private async Task RunDownload()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            await base.DownloadFile(this._fileId.Value);
+            base.CheckForFileVersionId(this._fileVersionId.Value, this._app);
+            await base.DownloadFile(this._fileId.Value, this._fileVersionId.Value);
         }
     }
 }

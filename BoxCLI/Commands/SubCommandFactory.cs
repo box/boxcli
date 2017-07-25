@@ -7,6 +7,7 @@ using BoxCLI.Commands.ConfigureSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
 using BoxCLI.Commands.EventSubCommands;
 using BoxCLI.Commands.FileSubCommand;
+using BoxCLI.Commands.FileVersionSubCommands;
 using BoxCLI.Commands.FolderSubCommands;
 using BoxCLI.Commands.GroupSubCommands;
 using BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands;
@@ -14,6 +15,7 @@ using BoxCLI.Commands.MetadataSubCommands;
 using BoxCLI.Commands.MetadataTemplateSubCommands;
 using BoxCLI.Commands.SharedItemSubCommands;
 using BoxCLI.Commands.SharedLinkSubCommands;
+using BoxCLI.Commands.TrashSubCommands;
 using BoxCLI.Commands.UserSubCommands;
 using BoxCLI.Commands.WebhooksSubComands;
 using BoxCLI.CommandUtilities.Globalization;
@@ -51,9 +53,17 @@ namespace BoxCLI.Commands
             {
                 return new FolderSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
+            else if (factoryName == _names.CommandNames.Trash)
+            {
+                return new TrashSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
             else if (factoryName == _names.CommandNames.Files)
             {
                 return new FileSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.FileVersions)
+            {
+                return new FileVersionSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else if (factoryName == _names.CommandNames.Users)
             {
