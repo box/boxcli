@@ -8,7 +8,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.FolderSubCommands
 {
-    public class FolderSubCommandBase : BoxBaseCommand
+    public class FolderSubCommandBase : BoxItemCommandBase
     {
         private CommandLineApplication _app;
        

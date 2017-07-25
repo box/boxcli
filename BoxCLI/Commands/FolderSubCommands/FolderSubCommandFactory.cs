@@ -19,6 +19,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 return new FolderGetCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == base._names.SubCommandNames.Create)
+            {
+                return new FolderCreateCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

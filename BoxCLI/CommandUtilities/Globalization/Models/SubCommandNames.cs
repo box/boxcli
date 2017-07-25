@@ -18,5 +18,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Move { get; set; } = "move";
         public string Rename { get; set; } = "rename";
         public string Upload { get; set; } = "upload";
+        public string Lock { get; set; } = "lock";
+        public string Unlock { get; set; } = "unlock";
     }
 }

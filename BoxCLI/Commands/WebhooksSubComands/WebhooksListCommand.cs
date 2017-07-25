@@ -16,7 +16,6 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private CommandOption _save;
         private CommandOption _path;
         private CommandOption _fileFormat;
-        private CommandOption _json;
         private CommandLineApplication _app;
         public WebhooksListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -31,7 +30,6 @@ namespace BoxCLI.Commands.WebhooksSubComands
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
-            _json = OutputJsonOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -60,7 +58,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                     var saved = base.WriteMarkerCollectionResultsToReport<BoxWebhook, BoxWebhookMap>(webhooks, fileName, _path.Value(), _fileFormat.Value());
                     System.Console.WriteLine($"File saved: {saved}");
                 }
-                else if (_json.HasValue())
+                else if (base._json.HasValue())
                 {
                     var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
                     base.OutputJson(webhooks);

@@ -43,6 +43,14 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 return new FileUploadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == _names.SubCommandNames.Lock)
+            {
+                return new FileLockCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Unlock)
+            {
+                return new FileUnlockCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

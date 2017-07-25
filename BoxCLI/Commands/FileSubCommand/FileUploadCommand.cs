@@ -52,7 +52,7 @@ namespace BoxCLI.Commands.FileSubCommand
             }
             base.CheckForParentFolderId(this._parentFolderId.Value, this._app);
             base.CheckForFilePath(this._path.Value, this._app);
-            base.PrintEntity(await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value, fileName: this._name.Value()));
+            base.PrintFile(await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value, fileName: this._name.Value()));
         }
     }
 }

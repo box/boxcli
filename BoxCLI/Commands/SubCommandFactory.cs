@@ -13,7 +13,6 @@ using BoxCLI.Commands.GroupSubCommands;
 using BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands;
 using BoxCLI.Commands.MetadataSubCommands;
 using BoxCLI.Commands.MetadataTemplateSubCommands;
-using BoxCLI.Commands.SharedItemSubCommands;
 using BoxCLI.Commands.SharedLinkSubCommands;
 using BoxCLI.Commands.TrashSubCommands;
 using BoxCLI.Commands.UserSubCommands;
@@ -117,9 +116,9 @@ namespace BoxCLI.Commands
             {
                 return new EventSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
-            else if (factoryName == _names.CommandNames.SharedItems)
+            else if (factoryName == _names.CommandNames.SharedLinks)
             {
-                return new SharedItemSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+                return new SharedLinkSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else
             {

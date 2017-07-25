@@ -15,7 +15,6 @@ namespace BoxCLI.Commands.TrashSubCommands
         private CommandOption _save;
         private CommandOption _path;
         private CommandOption _fileFormat;
-        private CommandOption _json;
         private CommandLineApplication _app;
         public TrashListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -30,7 +29,6 @@ namespace BoxCLI.Commands.TrashSubCommands
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
-            _json = OutputJsonOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();

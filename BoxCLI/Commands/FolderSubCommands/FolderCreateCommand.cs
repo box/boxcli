@@ -1,20 +1,21 @@
 using System;
 using System.Threading.Tasks;
+using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
-using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.FolderSubCommands
 {
-    public class FolderGetCommand : FolderSubCommandBase
+    public class FolderCreateCommand : FolderSubCommandBase
     {
-        private CommandArgument _folderId;
+        private CommandArgument _parentFolderId;
+        private CommandArgument _name;
         private CommandLineApplication _app;
-        public FolderGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
-            : base(boxPlatformBuilder, boxHome, names)
+        public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) 
+            : base(boxPlatformBuilder, home, names)
         {
         }
 
@@ -22,8 +23,9 @@ namespace BoxCLI.Commands.FolderSubCommands
         {
             _app = command;
             command.Description = "Get information about a folder.";
-            _folderId = command.Argument("folderId",
-                               "Id of folder to manage, use '0' for the root folder");
+            _parentFolderId = command.Argument("parentFolderId",
+                               "Id of parent folder to add new folder to, use '0' for the root folder");
+            _name = command.Argument("name", "Name of new folder");
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -33,21 +35,25 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet(_folderId.Value, _asUser.Value());
+            await this.RunCreate();
             return await base.Execute();
         }
 
-        protected async Task RunGet(string id, string asUserId)
+        protected async Task RunCreate()
         {
-            var BoxClient = base.ConfigureBoxClient(asUserId);
-            if (id == null)
+            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            if (this._parentFolderId.Value == null)
             {
                 _app.ShowHelp();
                 return;
             }
             try
             {
-                var folder = await BoxClient.FoldersManager.GetInformationAsync(id);
+                var folderRequest = new BoxFolderRequest();
+                folderRequest.Parent = new BoxItemRequest();
+                folderRequest.Parent.Id = this._parentFolderId.Value;
+                folderRequest.Name = this._name.Value;
+                var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
                 System.Console.WriteLine(folder.Name);
                 foreach (var item in folder.ItemCollection.Entries)
                 {
@@ -59,6 +65,5 @@ namespace BoxCLI.Commands.FolderSubCommands
                 Reporter.WriteError(e.Message);
             }
         }
-
     }
 }

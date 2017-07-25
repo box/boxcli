@@ -11,7 +11,6 @@ namespace BoxCLI.Commands.WebhooksSubComands
     public class WebhooksGetCommand : WebhooksSubCommandBase
     {
         private CommandArgument _webhookId;
-        private CommandOption _json;
         private CommandLineApplication _app;
         public WebhooksGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -24,7 +23,6 @@ namespace BoxCLI.Commands.WebhooksSubComands
             command.Description = "Get information about a webhook.";
             _webhookId = command.Argument("webhookId",
                                    "Id of webhook");
-            _json = OutputJsonOption.ConfigureOption(command);
 
             command.OnExecute(async () =>
             {
@@ -43,7 +41,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             var collection = await boxClient.WebhooksManager.GetWebhooksAsync();
-            if (_json.HasValue())
+            if (base._json.HasValue())
             {
                 base.OutputJson(collection);
                 return;

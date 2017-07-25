@@ -72,5 +72,11 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             Reporter.WriteInformation($"Download count: {link.DownloadCount}");
             Reporter.WriteInformation($"Preview count: {link.PreviewCount}");
         }
+
+        protected virtual void PrintItem(BoxItem item)
+        {
+            Reporter.WriteInformation($"ID: {item.Id}");
+            Reporter.WriteInformation($"Name: {item.Name}");
+        }
     }
 }

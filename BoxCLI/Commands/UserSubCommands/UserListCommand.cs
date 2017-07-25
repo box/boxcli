@@ -64,7 +64,7 @@ namespace BoxCLI.Commands.UserSubCommands
                     });
                     if (save == true)
                     {
-                        base.WriteCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat.ToLower());
+                        base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat.ToLower());
                     }
                     else
                     {
@@ -83,7 +83,7 @@ namespace BoxCLI.Commands.UserSubCommands
                     System.Console.WriteLine(fileFormat);
                     var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
                     System.Console.WriteLine(users.TotalCount);
-                    var saved = base.WriteCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat);
+                    var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat);
                     System.Console.WriteLine($"File saved: {saved}");
                 }
                 else

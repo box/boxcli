@@ -9,6 +9,50 @@ namespace BoxCLI.CommandUtilities
 {
     public static class GeneralUtilities
     {
+        public static DateTime ResolveTimeUnit(double span, char unit)
+        {
+            switch (unit)
+            {
+                case 's':
+                    return DateTime.Now.AddSeconds(span);
+                case 'm':
+                    return DateTime.Now.AddMinutes(span);
+                case 'h':
+                    return DateTime.Now.AddHours(span);
+                case 'd':
+                    return DateTime.Now.AddDays(span);
+                case 'M':
+                    return DateTime.Now.AddMonths(Convert.ToInt32(span));
+                default:
+                    throw new Exception("Time format unrecognized.");
+            }
+        }
+        public static DateTime GetDateTimeFromString(string t, bool allowNegativeTime = false)
+        {
+            t = t.Trim();
+            var pattern = @"^[0-6][0-9]{1}[s,m,h,d,M]$";
+            var negativePattern = @"^-[0-6][0-9]{1}[s,m,h,d,M]$";
+            var regex = new Regex(pattern);
+            var negativeRegex = new Regex(negativePattern);
+            if (regex.Match(t).Success)
+            {
+                var unit = t[2];
+                double span;
+                double.TryParse(t.Substring(0, 2), out span);
+                return ResolveTimeUnit(span, unit);
+            }
+            else if (regex.Match(t).Success && allowNegativeTime)
+            {
+                var unit = t[3];
+                double span;
+                double.TryParse(t.Substring(0, 3), out span);
+                return ResolveTimeUnit(span, unit);
+            }
+            else
+            {
+                throw new Exception("Time format unrecognized.");
+            }
+        }
         private static string ResolveTilde()
         {
             var home = Environment.GetEnvironmentVariable("HOME");

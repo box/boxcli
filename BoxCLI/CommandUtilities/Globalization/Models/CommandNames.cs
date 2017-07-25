@@ -21,7 +21,6 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string FileCollaborations { get; set; } = "file-collaborations";
         public string FolderCollaborations { get; set; } = "folder-collaborations";
         public string Events { get; set; } = "events";
-        public string SharedItems { get; set; } = "shared-items";
         public string Settings { get; set; } = "settings";
         public string Trash { get; set; } = "trash";
     }

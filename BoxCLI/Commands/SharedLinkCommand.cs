@@ -15,9 +15,15 @@ namespace BoxCLI.Commands
             _app = command;
             command.Description = "Manage your shared links.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about shared links in your Enterprise.";
-
-            command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
-            command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
+            if (this._t == BoxType.enterprise)
+            {
+                command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+            }
+            else
+            {
+                command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+                command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
+            }
 
             command.OnExecute(async () =>
             {
@@ -32,10 +38,13 @@ namespace BoxCLI.Commands
             return await base.Execute();
         }
         private readonly ISubCommandFactory _subCommands;
+        private readonly BoxType _t;
 
-        public SharedLinkCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names, BoxType t)
+        public SharedLinkCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, 
+            LocalizedStringsResource names, BoxType t = BoxType.enterprise)
             : base(boxPlatformBuilder, boxHome, names)
         {
+            _t = t;
             if (t == BoxType.file)
             {
                 _subCommands = factory.CreateFactory(base._names.CommandNames.FileSharedLinks);
@@ -43,6 +52,10 @@ namespace BoxCLI.Commands
             else if (t == BoxType.folder)
             {
                 _subCommands = factory.CreateFactory(base._names.CommandNames.FolderSharedLinks);
+            }
+            else
+            {
+                _subCommands = factory.CreateFactory(base._names.CommandNames.SharedLinks);
             }
         }
     }

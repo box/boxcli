@@ -55,7 +55,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             }
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForFilePath(this._path.Value, this._app);
-            base.PrintEntity(await base.UploadFile(path: this._path.Value, fileId: this._fileId.Value, fileName: this._name.Value()));
+            base.PrintFile(await base.UploadFile(path: this._path.Value, fileId: this._fileId.Value, fileName: this._name.Value()));
         }
     }
 }

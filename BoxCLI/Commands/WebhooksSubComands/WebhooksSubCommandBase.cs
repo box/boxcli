@@ -16,6 +16,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
     {
         protected readonly List<string> _fields;
         protected CommandOption _asUser;
+        protected CommandOption _json;
         public WebhooksSubCommandBase(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
@@ -24,6 +25,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
         public override void Configure(CommandLineApplication command)
         {
             _asUser = AsUserOption.ConfigureOption(command);
+            _json = OutputJsonOption.ConfigureOption(command);
             base.Configure(command);
         }
 

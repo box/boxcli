@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Box.V2;
 using Box.V2.Converter;
 using Box.V2.Models;
@@ -11,6 +12,7 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
 using Microsoft.Extensions.CommandLineUtils;
@@ -25,12 +27,18 @@ namespace BoxCLI.Commands
         protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
 
+
         public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
         {
             _boxPlatformBuilder = boxPlatformBuilder;
             _boxHome = boxHome;
             _settings = boxHome.GetBoxHomeSettings();
             _names = names;
+        }
+
+        public override void Configure(CommandLineApplication command)
+        {
+            base.Configure(command);
         }
 
         protected virtual void PrintMiniUser(BoxUser u)
@@ -130,7 +138,7 @@ namespace BoxCLI.Commands
             }
         }
 
-        protected virtual bool WriteCollectionResultsToReport<T, M>(BoxCollection<T> entity, string fileName, string filePath = "", string fileFormat = "")
+        protected virtual bool WriteOffsetCollectionResultsToReport<T, M>(BoxCollection<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
             System.Console.WriteLine("Starting writer...");
@@ -285,7 +293,7 @@ namespace BoxCLI.Commands
             }
             else
             {
-                throw new Exception("File format {fileFormat} is not currently supported.");
+                throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
 

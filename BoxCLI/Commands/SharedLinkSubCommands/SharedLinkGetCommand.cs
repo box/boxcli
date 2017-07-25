@@ -12,6 +12,8 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
     public class SharedLinkGetCommand : SharedLinkSubCommandBase
     {
         private CommandArgument _id;
+        private CommandArgument _url;
+        private CommandOption _password;
         private CommandLineApplication _app;
         public SharedLinkGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
@@ -21,9 +23,20 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get shared links on a Box item.";
-            _id = command.Argument("boxItemId",
-                                   "Id of the Box item");
+            if (base._t == BoxType.enterprise)
+            {
+                command.Description = "Get information from a shared item URL.";
+                _url = command.Argument("itemUrl",
+                                       "Shared item url");
+                _password = command.Option("--password",
+                                       "Shared item password", CommandOptionType.SingleValue);
+            }
+            else
+            {
+                command.Description = "Get shared links on a Box item.";
+                _id = command.Argument("boxItemId",
+                                       "Id of the Box item");
+            }
 
             command.OnExecute(async () =>
             {
@@ -42,7 +55,6 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
         {
             System.Console.WriteLine("Running Get on Shared Links...");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            BoxSharedLink link;
             var fields = new List<string>()
             {
                 "shared_link"
@@ -50,18 +62,23 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             if (base._t == BoxType.file)
             {
                 System.Console.WriteLine($"Looking for Shared link on this file {this._id.Value}...");
-                link = (await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
+                base.PrintSharedLink((await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
             }
             else if (base._t == BoxType.folder)
             {
                 System.Console.WriteLine($"Looking for Shared link on this folder {this._id.Value}...");
-                link = (await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
+                base.PrintSharedLink((await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
+                
+            }
+            else if (base._t == BoxType.enterprise)
+            {
+                base.PrintItem(await boxClient.SharedItemsManager.SharedItemsAsync(this._url.Value, this._password.Value()));
             }
             else
             {
-                throw new Exception("This item doesn't currently support metadata.");
+                throw new Exception("This item doesn't currently support shared links.");
             }
-            base.PrintSharedLink(link);
+
         }
     }
 }
