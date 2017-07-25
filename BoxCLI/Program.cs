@@ -75,6 +75,8 @@ namespace BoxCLI
               .AddSingleton<GroupCommand>()
               .AddSingleton<MetadataTemplateCommand>()
               .AddSingleton<EventCommand>()
+              .AddSingleton<CollaborationCommand>()
+              .AddSingleton<SharedItemCommand>()
               .AddSingleton<RootCommand>();
         }
     }

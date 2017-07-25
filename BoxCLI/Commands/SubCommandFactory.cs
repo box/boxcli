@@ -2,6 +2,7 @@ using System;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.Commands.CollaborationSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
 using BoxCLI.Commands.EventSubCommands;
@@ -11,6 +12,8 @@ using BoxCLI.Commands.GroupSubCommands;
 using BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands;
 using BoxCLI.Commands.MetadataSubCommands;
 using BoxCLI.Commands.MetadataTemplateSubCommands;
+using BoxCLI.Commands.SharedItemSubCommands;
+using BoxCLI.Commands.SharedLinkSubCommands;
 using BoxCLI.Commands.UserSubCommands;
 using BoxCLI.Commands.WebhooksSubComands;
 using BoxCLI.CommandUtilities.Globalization;
@@ -76,6 +79,26 @@ namespace BoxCLI.Commands
             {
                 return new FoldersMetadataSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
+            else if (factoryName == _names.CommandNames.FileSharedLinks)
+            {
+                return new FilesSharedLinkSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.FolderSharedLinks)
+            {
+                return new FoldersSharedLinkSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Collaborations)
+            {
+                return new CollaborationSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.FileCollaborations)
+            {
+                return new FilesCollaborationSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.FolderCollaborations)
+            {
+                return new FoldersCollaborationSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
             else if (factoryName == _names.CommandNames.MetadataTemplates)
             {
                 return new MetadataTemplateSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
@@ -83,6 +106,10 @@ namespace BoxCLI.Commands
             else if (factoryName == _names.CommandNames.Events)
             {
                 return new EventSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.SharedItems)
+            {
+                return new SharedItemSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else
             {

@@ -10,7 +10,6 @@ using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CsvModels;
 using Microsoft.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using BoxCLI.CommandUtilities.Globalization;
 

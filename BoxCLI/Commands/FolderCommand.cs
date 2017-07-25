@@ -17,6 +17,8 @@ namespace BoxCLI.Commands
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box folders in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
+            command.Command(_names.CommandNames.Collaborations, new CollaborationCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
+            command.Command(_names.CommandNames.SharedLinks, new SharedLinkCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
             command.OnExecute(async () =>
             {
                 return await this.Execute();

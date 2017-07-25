@@ -17,14 +17,16 @@ namespace BoxCLI.Commands
         private readonly WebhooksCommand _webhooks;
         private readonly GroupCommand _group;
         private readonly MetadataTemplateCommand _mdt;
+        private readonly CollaborationCommand _collab;
         private readonly EventCommand _evt;
+        private readonly SharedItemCommand _si;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
 
         public RootCommand(UserCommand user, ConfigureCommand config, 
             FolderCommand folder, FileCommand file, WebhooksCommand webhooks, 
             GroupCommand group,  MetadataTemplateCommand mdt, EventCommand evt,
-            LocalizedStringsResource names)
+            CollaborationCommand collab, SharedItemCommand si, LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
@@ -34,6 +36,8 @@ namespace BoxCLI.Commands
             _group = group;
             _mdt = mdt;
             _evt = evt;
+            _collab = collab;
+            _si = si;
             _names = names;
         }
 
@@ -49,6 +53,8 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Groups, _group.Configure);
             app.Command(_names.CommandNames.MetadataTemplates, _mdt.Configure);
             app.Command(_names.CommandNames.Events, _evt.Configure);
+            app.Command(_names.CommandNames.Collaborations, _collab.Configure);
+            app.Command(_names.CommandNames.SharedItems, _si.Configure);
 
             app.OnExecute(() =>
             {

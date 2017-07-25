@@ -20,6 +20,8 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
             command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
+            command.Command(_names.CommandNames.Collaborations, new CollaborationCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
+            command.Command(_names.CommandNames.SharedLinks, new SharedLinkCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.OnExecute(async () =>
                {
                    return await this.Execute();
