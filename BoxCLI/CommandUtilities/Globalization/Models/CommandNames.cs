@@ -13,7 +13,14 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string MetadataTemplates { get; set; } = "metadata-templates";
         public string FileMetadata { get; set; } = "file-metadata";
         public string FolderMetadata { get; set; } = "folder-metadata";
+        public string SharedLinks { get; set; } = "shared-links";
+        public string FileSharedLinks { get; set; } = "file-shared-links";
+        public string FolderSharedLinks { get; set; } = "folder-shared-links";
+        public string Collaborations { get; set; } = "collaborations";
+        public string FileCollaborations { get; set; } = "file-collaborations";
+        public string FolderCollaborations { get; set; } = "folder-collaborations";
         public string Events { get; set; } = "events";
+        public string SharedItems { get; set; } = "shared-items";
         public string Settings { get; set; } = "settings";
     }
 }
