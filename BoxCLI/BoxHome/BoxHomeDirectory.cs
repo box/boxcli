@@ -49,6 +49,10 @@ namespace BoxCLI.BoxHome
         {
             return BoxPersistantCache;
         }
+        public void BustCache()
+        {
+            this.BoxPersistantCache.BustCache();
+        }
 
         public BoxDefaultSettings GetBoxHomeSettings()
         {

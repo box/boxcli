@@ -1,17 +1,17 @@
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
-using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.FileSubCommand
+namespace BoxCLI.Commands.TrashSubCommands
 {
-    public class FileGetCommand : FileSubCommandBase
+    public class TrashDeleteCommand : TrashSubCommandBase
     {
-        private CommandArgument _fileId;
         private CommandLineApplication _app;
-        public FileGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
+        private CommandArgument _itemId;
+        public TrashDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
         }
@@ -19,7 +19,7 @@ namespace BoxCLI.Commands.FileSubCommand
         {
             _app = command;
             command.Description = "Get a file's information.";
-            _fileId = command.Argument("fileId",
+            _itemId = command.Argument("itemId",
                                "Id of file to manage");
             command.OnExecute(async () =>
             {
@@ -30,15 +30,23 @@ namespace BoxCLI.Commands.FileSubCommand
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunDelete();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunDelete()
         {
-            base.CheckForFileId(this._fileId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var fileInfo = await boxClient.FilesManager.GetInformationAsync(this._fileId.Value);
+            var fileDeleted = false;
+            fileDeleted = await boxClient.FilesManager.PurgeTrashedAsync(this._itemId.Value);
+            if (fileDeleted)
+            {
+                Reporter.WriteSuccess($"Deleted file {this._itemId.Value}");
+            }
+            else
+            {
+                Reporter.WriteError($"Couldn't delete file {this._itemId.Value}");
+            }
         }
     }
 }

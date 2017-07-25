@@ -38,6 +38,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands
             }
             base._environments.SetDefaultEnvironment(name);
             Reporter.WriteSuccess("Successfully set new default environment:");
+            base._boxHome.BustCache();
             base.RunGetDefault();
         }
     }

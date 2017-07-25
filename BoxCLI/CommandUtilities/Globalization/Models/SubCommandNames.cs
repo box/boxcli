@@ -14,5 +14,9 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Update { get; set; } = "update";
         public string Delete { get; set; } = "delete";
         public string Poll { get; set; } = "poll";
+        public string Copy { get; set; } = "copy";
+        public string Move { get; set; } = "move";
+        public string Rename { get; set; } = "rename";
+        public string Upload { get; set; } = "upload";
     }
 }

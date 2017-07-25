@@ -12,6 +12,7 @@ namespace BoxCLI.BoxHome
         BoxEnvironments GetBoxEnvironments();
         BoxPersistantCache GetBoxCache();
         BoxDefaultSettings GetBoxHomeSettings();
+        void BustCache();
 
     }
 }

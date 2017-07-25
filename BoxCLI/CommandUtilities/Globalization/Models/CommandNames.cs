@@ -5,6 +5,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Configure { get; set; } = "configure";
         public string Folders { get; set; } = "folders";
         public string Files { get; set; } = "files";
+        public string FileVersions { get; set; } = "versions";
         public string Users { get; set; } = "users";
         public string Groups { get; set; } = "groups";
         public string GroupMembership { get; set; } = "membership";
@@ -22,5 +23,6 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Events { get; set; } = "events";
         public string SharedItems { get; set; } = "shared-items";
         public string Settings { get; set; } = "settings";
+        public string Trash { get; set; } = "trash";
     }
 }
