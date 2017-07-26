@@ -30,26 +30,6 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             return DeserializeBoxHomeSettingsFile();
 
         }
-        public bool GetBoxReportsUseDefaultAsUserSetting()
-        {
-            var settings = DeserializeBoxHomeSettingsFile();
-            return settings.UseDefaultAsUser;
-        }
-        public string GetBoxReportsDefaultAsUserIdSetting()
-        {
-            var settings = DeserializeBoxHomeSettingsFile();
-            return settings.DefaultAsUserId;
-        }
-        public bool GetBoxReportsUseTempAsUserSetting()
-        {
-            var settings = DeserializeBoxHomeSettingsFile();
-            return settings.UseTempAsUser;
-        }
-        public string GetBoxReportsTempAsUserIdSetting()
-        {
-            var settings = DeserializeBoxHomeSettingsFile();
-            return settings.TempAsUserId;
-        }
         public string GetBoxReportsFolderPathSetting()
         {
             var settings = DeserializeBoxHomeSettingsFile();
@@ -122,31 +102,14 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
             var path = Path.Combine(boxHome, _boxHomeSettingsFileName);
-            if (!CheckIfBoxHomeSettingsFileExists())
+            if (!File.Exists(path))
             {
-                using (var fs = File.Create(path))
-                {
-                    return path;
-                }
+                File.Create(path).Dispose();
+                return path;
             }
             else
             {
                 return path;
-            }
-        }
-
-        private bool CheckIfBoxHomeSettingsFileExists()
-        {
-            var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, _boxHomeSettingsFileName);
-            try
-            {
-                return File.Exists(path);
-            }
-            catch (Exception e)
-            {
-                Reporter.WriteError(e.Message);
-                return false;
             }
         }
 

@@ -2,18 +2,20 @@ using BoxCLI.BoxHome;
 using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.ConfigureSubCommands
+namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 {
-    public class ConfigureSetDefaultCommand : ConfigureSubCommandBase
+    public class ConfigureEnvironmentsSetCurrentCommand : ConfigureEnvironmentsSubCommandBase
     {
         private CommandArgument _name;
-        public ConfigureSetDefaultCommand(IBoxHome boxHome) : base(boxHome)
+        private CommandLineApplication _app;
+        public ConfigureEnvironmentsSetCurrentCommand(IBoxHome boxHome) : base(boxHome)
         {
         }
 
         public override void Configure(CommandLineApplication command)
         {
-            command.Description = "Set the default Box environment to use.";
+            _app = command;
+            command.Description = "Set your current Box environment to use.";
             _name = command.Argument("name",
                                "Name of the environment");
             command.OnExecute(() =>
@@ -25,21 +27,17 @@ namespace BoxCLI.Commands.ConfigureSubCommands
 
         protected override int Execute()
         {
-            this.RunSetDefault(_name.Value);
+            this.RunSetCurrent();
             return base.Execute();
         }
 
-        private void RunSetDefault(string name)
+        private void RunSetCurrent()
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                System.Console.WriteLine("You must enter a name for the Box environment.");
-                return;
-            }
-            base._environments.SetDefaultEnvironment(name);
+            base.CheckForValue(this._name.Value, this._app, "An environment name is required for this command.");
+            base._environments.SetDefaultEnvironment(this._name.Value);
             Reporter.WriteSuccess("Successfully set new default environment:");
             base._boxHome.BustCache();
-            base.RunGetDefault();
+            base.GetCurrent();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
 
         private async Task RunList()
         {
-            var boxClient = base.ConfigureBoxClient(returnAdmin: true);
+            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var collection = await boxClient.MetadataManager.GetEnterpriseMetadataAsync();
             foreach(var template in collection.Entries)
             {

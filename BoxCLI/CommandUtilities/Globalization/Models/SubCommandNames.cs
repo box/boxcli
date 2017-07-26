@@ -7,8 +7,8 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string ListItems { get; set; } = "list-items";
         public string Add { get; set; } = "add";
         public string GetAll { get; set; } = "get-all";
-        public string GetDefault { get; set; } = "get-default";
-        public string SetDefault { get; set; } = "set-default";
+        public string GetCurrent { get; set; } = "get-current";
+        public string SetCurrent { get; set; } = "set-current";
         public string Download { get; set; } = "download";
         public string Search { get; set; } = "search";
         public string Create { get; set; } = "create";
@@ -24,5 +24,6 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Promote { get; set; } = "promote";
         public string UpdateLock { get; set; } = "update-lock";
         public string ChangeUploadEmail { get; set; } = "change-upload-email";
+        public string BustCache { get; set; } = "bust-token-cache";
     }
 }

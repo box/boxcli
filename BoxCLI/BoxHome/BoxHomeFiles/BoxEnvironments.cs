@@ -63,23 +63,43 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             return translatedConfig;
         }
-        private string GetBoxEnvironmentFilePath()
+
+        public bool GetUseDefaultAsUserSetting()
         {
-            return CreateBoxEnvironmentFile();
+            var env = GetDefaultEnvironment();
+            return env.UseDefaultAsUser;
+        }
+        public string GetDefaultAsUserIdSetting()
+        {
+            var env = GetDefaultEnvironment();
+            return env.DefaultAsUserId;
+        }
+        public bool GetUseTempAsUserSetting()
+        {
+            var env = GetDefaultEnvironment();
+            return env.UseTempAsUser;
+        }
+        public string GetTempAsUserIdSetting()
+        {
+            var env = GetDefaultEnvironment();
+            return env.TempAsUserId;
         }
 
-        private string CreateBoxEnvironmentFile()
+        private string GetBoxEnvironmentFilePath()
+        {
+            return CreateOrReturnBoxEnvironmentFile();
+        }
+
+        private string CreateOrReturnBoxEnvironmentFile()
         {
             var boxHome = _boxHome.GetBoxHomeDirectoryPath();
             var path = Path.Combine(boxHome, _boxHomeEnvironmentsFileName);
-            if (!CheckIfBoxEnvironmentFileExists())
+            if (!File.Exists(path))
             {
-                using (var fs = File.Create(path))
-                {
-                    var emptyEnv = new EnvironmentsModel();
-                    SerializeBoxEnvironmentFile(emptyEnv);
-                    return path;
-                }
+                File.Create(path).Dispose();
+                var emptyEnv = new EnvironmentsModel();
+                SerializeBoxEnvironmentFile(emptyEnv);
+                return path;
             }
             else
             {
@@ -178,21 +198,6 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             {
                 var serializer = new JsonSerializer();
                 return (BoxConfigFileModel)serializer.Deserialize(fs, typeof(BoxConfigFileModel));
-            }
-        }
-
-        private bool CheckIfBoxEnvironmentFileExists()
-        {
-            var boxHome = _boxHome.GetBoxHomeDirectoryPath();
-            var path = Path.Combine(boxHome, _boxHomeEnvironmentsFileName);
-            try
-            {
-                return File.Exists(path);
-            }
-            catch (Exception e)
-            {
-                Reporter.WriteError(e.Message);
-                return false;
             }
         }
     }

@@ -23,21 +23,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands
 
         public ISubCommand CreateSubCommand(string commandName)
         {
-            if (commandName == _names.SubCommandNames.List)
+            if (commandName == _names.SubCommandNames.BustCache)
             {
-                return new ConfigureListCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.Add)
-            {
-                return new ConfigureAddCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.GetDefault)
-            {
-                return new ConfigureGetDefaultCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.SetDefault)
-            {
-                return new ConfigureSetDefaultCommand(_boxHome);
+                return new ConfigureBustCacheCommand(_boxHome);
             }
             else
             {

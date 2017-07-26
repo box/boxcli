@@ -40,7 +40,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private async Task RunCreate(string path = "")
         {
             System.Console.WriteLine("Starting to create users...");
-            var BoxServiceAccountClient = base.ConfigureBoxClient(returnAdmin: true);
+            var BoxServiceAccountClient = base.ConfigureBoxClient(returnServiceAccount: true);
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);

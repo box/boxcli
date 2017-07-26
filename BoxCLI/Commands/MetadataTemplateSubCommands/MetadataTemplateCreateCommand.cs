@@ -47,7 +47,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         {
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForName(this._name.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(returnAdmin: true);
+            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var template = new BoxMetadataTemplate();
             template.Scope = this._scope.Value;
             template.DisplayName = this._name.Value;
