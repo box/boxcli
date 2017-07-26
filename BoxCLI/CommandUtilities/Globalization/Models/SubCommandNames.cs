@@ -4,6 +4,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
     {
         public string Get { get; set; } = "get";
         public string List { get; set; } = "list";
+        public string ListItems { get; set; } = "list-items";
         public string Add { get; set; } = "add";
         public string GetAll { get; set; } = "get-all";
         public string GetDefault { get; set; } = "get-default";
@@ -20,5 +21,8 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Upload { get; set; } = "upload";
         public string Lock { get; set; } = "lock";
         public string Unlock { get; set; } = "unlock";
+        public string Promote { get; set; } = "promote";
+        public string UpdateLock { get; set; } = "update-lock";
+        public string ChangeUploadEmail { get; set; } = "change-upload-email";
     }
 }

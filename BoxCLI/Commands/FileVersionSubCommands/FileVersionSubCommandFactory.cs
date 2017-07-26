@@ -26,6 +26,14 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             {
                 return new FileVersionUploadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == _names.SubCommandNames.Delete)
+            {
+                return new FileVersionDeleteCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == _names.SubCommandNames.Promote)
+            {
+                return new FileVersionPromoteCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

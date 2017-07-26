@@ -24,13 +24,13 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Update a file.";
             _fileId = command.Argument("fileId",
-                               "Id of file to manage");
+                               "Id of file to update");
             _fileName = command.Option("-n|--name",
                                "New name of file", CommandOptionType.SingleValue);
             _description = command.Option("--description", "Change the file description", CommandOptionType.SingleValue);
-            _etag = command.Option("--etag", "Only rename if etag value matches", CommandOptionType.SingleValue);
+            _etag = command.Option("--etag", "Only update if etag value matches", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();

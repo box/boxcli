@@ -14,7 +14,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandArgument _parentFolderId;
         private CommandArgument _name;
         private CommandLineApplication _app;
-        public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) 
+        public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
         }
@@ -41,14 +41,10 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         protected async Task RunCreate()
         {
-            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
-            if (this._parentFolderId.Value == null)
-            {
-                _app.ShowHelp();
-                return;
-            }
+            base.CheckForParentId(this._parentFolderId.Value, this._app);
             try
             {
+                var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
                 var folderRequest = new BoxFolderRequest();
                 folderRequest.Parent = new BoxItemRequest();
                 folderRequest.Parent.Id = this._parentFolderId.Value;

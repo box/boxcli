@@ -18,6 +18,14 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             {
                 return new MetadataTemplateGetCommand(_boxPlatformBuilder, _boxHome, _names);
             }
+            else if (commandName == base._names.SubCommandNames.List)
+            {
+                return new MetadataTemplateListCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (commandName == base._names.SubCommandNames.Create)
+            {
+                return new MetadataTemplateCreateCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

@@ -16,6 +16,8 @@ namespace BoxCLI.Commands
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about metadata templates in your Enterprise.";
 
             command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+            command.Command(base._names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
+            command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
 
             command.OnExecute(async () =>
             {

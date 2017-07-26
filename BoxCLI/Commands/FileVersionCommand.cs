@@ -17,6 +17,8 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
             command.Command(_names.SubCommandNames.Upload, _subCommands.CreateSubCommand(_names.SubCommandNames.Upload).Configure);
+            command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
+            command.Command(_names.SubCommandNames.Promote, _subCommands.CreateSubCommand(_names.SubCommandNames.Promote).Configure);
             command.OnExecute(async () =>
                {
                    return await this.Execute();

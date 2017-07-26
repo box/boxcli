@@ -41,6 +41,16 @@ namespace BoxCLI.Commands
             base.Configure(command);
         }
 
+        protected virtual void CheckForId(string id, CommandLineApplication app, string message = "")
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                app.ShowHelp();
+                message = (string.IsNullOrEmpty(message)) ? "An ID is required for this command." : message;
+                throw new Exception(message);
+            }
+        }
+
         protected virtual void PrintMiniUser(BoxUser u)
         {
             Reporter.WriteInformation($"User ID: {u.Id}");
