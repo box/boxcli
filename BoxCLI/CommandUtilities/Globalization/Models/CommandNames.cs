@@ -23,5 +23,6 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Events { get; set; } = "events";
         public string Settings { get; set; } = "settings";
         public string Trash { get; set; } = "trash";
+        public string WebLinks { get; set; } = "weblinks";
     }
 }

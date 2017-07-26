@@ -1,22 +1,23 @@
 using System;
 using System.Threading.Tasks;
+using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
-using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.FolderSubCommands
 {
-    public class FolderGetCommand : FolderSubCommandBase
+    public class FolderListItemsCommand : FolderSubCommandBase
     {
         private CommandArgument _folderId;
         private CommandLineApplication _app;
-        public FolderGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        public FolderListItemsCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
         }
+
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
@@ -32,24 +33,26 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunGetItems();
             return await base.Execute();
         }
 
-        protected async Task RunGet()
+        protected async Task RunGetItems()
         {
             base.CheckForId(this._folderId.Value, this._app);
             try
             {
-                var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
-                base.PrintFolder(folder);
+                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+                var BoxCollectionsIterators = base.GetIterators();
+                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
+                {
+                    return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, offset: (int)offset);
+                }, base.PrintItem);
             }
             catch (Exception e)
             {
                 Reporter.WriteError(e.Message);
             }
         }
-
     }
 }

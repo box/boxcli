@@ -51,6 +51,10 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 return new FileUnlockCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == _names.SubCommandNames.UpdateLock)
+            {
+                return new FileUpdateLockCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

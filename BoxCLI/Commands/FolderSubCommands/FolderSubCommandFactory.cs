@@ -23,6 +23,26 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 return new FolderCreateCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == base._names.SubCommandNames.ListItems)
+            {
+                return new FolderListItemsCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.Move)
+            {
+                return new FolderMoveCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.Copy)
+            {
+                return new FolderCopyCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.Delete)
+            {
+                return new FolderDeleteCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.ChangeUploadEmail)
+            {
+                return new FolderChangeUploadEmailCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

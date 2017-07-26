@@ -10,8 +10,9 @@ namespace BoxCLI.Commands.EventSubCommands
 {
     public class EventPollCommand : EventSubCommandBase
     {
+        private CommandOption _enterprise;
         private CommandLineApplication _app;
-        public EventPollCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
+        public EventPollCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
         }
@@ -19,7 +20,7 @@ namespace BoxCLI.Commands.EventSubCommands
         {
             _app = command;
             command.Description = "Poll the event stream.";
-
+            _enterprise = command.Option("-e|--enterprise", "Poll enterprise events", CommandOptionType.NoValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -38,7 +39,14 @@ namespace BoxCLI.Commands.EventSubCommands
             Reporter.WriteSuccess("Poll started...");
             Reporter.WriteInformation("Press Ctrl+C to stop polling.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            await boxClient.EventsManager.LongPollUserEvents("now", base.PrintEventCollection, new CancellationToken());
+            if (this._enterprise.HasValue())
+            {
+                await base.PollEnterpriseEvents();
+            }
+            else
+            {
+                await boxClient.EventsManager.LongPollUserEvents("now", base.PrintEventCollection, new CancellationToken());
+            }
         }
     }
 }

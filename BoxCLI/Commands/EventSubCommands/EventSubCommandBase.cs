@@ -1,6 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
@@ -39,6 +42,34 @@ namespace BoxCLI.Commands.EventSubCommands
             Reporter.WriteInformation($"Source Type: {evt.Source.Type}");
             base.PrintMiniUser(evt.CreatedBy);
             Reporter.WriteInformation($"***********************");
+        }
+
+        protected async virtual Task PollEnterpriseEvents()
+        {
+            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-5));
+            foreach (var evt in events.Entries)
+            {
+                this.PrintEvent(evt);
+            }
+            var nextStream = events.NextStreamPosition;
+            while (true)
+            {
+                System.Console.WriteLine($"Trying stream postion: {nextStream}");
+                nextStream = await PollForMoreEnterpriseEvents(nextStream);
+            }
+        }
+
+        protected async virtual Task<string> PollForMoreEnterpriseEvents(string nextStream)
+        {
+            await Task.Delay(60000);
+            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var moreEvents = await boxClient.EventsManager.EnterpriseEventsAsync(streamPosition: nextStream);
+            foreach (var evt in moreEvents.Entries)
+            {
+                this.PrintEvent(evt);
+            }
+            return moreEvents.NextStreamPosition;
         }
     }
 }

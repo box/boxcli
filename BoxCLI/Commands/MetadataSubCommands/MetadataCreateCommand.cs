@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.MetadataSubCommands
 {
-    public class MetadataGetCommand : MetadataSubCommandBase
+    public class MetadataCreateCommand : MetadataSubCommandBase
     {
         private CommandArgument _id;
         private CommandArgument _scope;
         private CommandArgument _template;
         private CommandLineApplication _app;
-        public MetadataGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
+        public MetadataCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t) 
             : base(boxPlatformBuilder, home, names, t)
         {
         }
@@ -39,29 +40,30 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunCreate();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunCreate()
         {
             base.CheckForId(this._id.Value, this._app);
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForTemplate(this._template.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            Dictionary<string, object> metadata;
+            var metadata = base.MetadataKeyValuesFromConsole();
             if (base._t == BoxType.file)
             {
-                metadata = await boxClient.MetadataManager.GetFileMetadataAsync(_id.Value, _scope.Value, _template.Value);
+                metadata = await boxClient.MetadataManager.CreateFileMetadataAsync(this._id.Value, metadata, this._scope.Value, this._template.Value);
             }
             else if (base._t == BoxType.folder)
             {
-                metadata = await boxClient.MetadataManager.GetFolderMetadataAsync(_id.Value, _scope.Value, _template.Value);
+                metadata = await boxClient.MetadataManager.CreateFolderMetadataAsync(this._id.Value, metadata, this._scope.Value, this._template.Value);
             }
             else
             {
                 throw new Exception("This item doesn't currently support metadata.");
             }
+            Reporter.WriteSuccess("Created metadata.");
             base.PrintMetadata(metadata);
         }
     }

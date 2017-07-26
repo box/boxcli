@@ -39,6 +39,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
         private async Task RunGetAll()
         {
+            base.CheckForId(this._id.Value, _app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             BoxMetadataTemplateCollection<Dictionary<string, object>> metadataCollection;
             if (base._t == BoxType.file)

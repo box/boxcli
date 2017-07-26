@@ -20,9 +20,9 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a metadata object.";
+            command.Description = "Get information about a metadata template.";
             _scope = command.Argument("scope",
-                                   "The scope of the metadata object");
+                                   "The scope of the metadata template");
             _template = command.Argument("template",
                                    "The key of the template");
 
@@ -41,6 +41,8 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
 
         private async Task RunGet()
         {
+            base.CheckForScope(this._scope.Value, this._app);
+            base.CheckForTemplate(this._template.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnAdmin: true);
             base.PrintMetadataTemplate(await boxClient.MetadataManager.GetMetadataTemplate(this._scope.Value, this._template.Value));
         }

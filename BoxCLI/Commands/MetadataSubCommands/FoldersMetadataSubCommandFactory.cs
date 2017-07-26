@@ -21,6 +21,14 @@ namespace BoxCLI.Commands.MetadataSubCommands
             {
                 return new MetadataGetAllCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.folder);
             }
+            else if (commandName == base._names.SubCommandNames.Create)
+            {
+                return new MetadataCreateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.folder);
+            }
+            else if (commandName == base._names.SubCommandNames.Update)
+            {
+                return new MetadataUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.folder);
+            }
             else
             {
                 throw new Exception("Command not registered.");

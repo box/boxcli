@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Models;
@@ -37,8 +38,17 @@ namespace BoxCLI.Commands
             base.Configure(command);
         }
 
-         protected BoxFileRequest ConfigureFileRequest(string fileId = "", string parentId = "",
-            string fileName = "", string description = "")
+        protected virtual void CheckForParentId(string parentId, CommandLineApplication app)
+        {
+            if (string.IsNullOrEmpty(parentId))
+            {
+                app.ShowHelp();
+                throw new Exception("A Parent ID is required for this command.");
+            }
+        }
+
+        protected BoxFileRequest ConfigureFileRequest(string fileId = "", string parentId = "",
+           string fileName = "", string description = "")
         {
             var fileRequest = new BoxFileRequest();
             if (!string.IsNullOrEmpty(fileId))
@@ -61,11 +71,33 @@ namespace BoxCLI.Commands
             return fileRequest;
         }
 
+        protected virtual void PrintItem(BoxItem item)
+        {
+            Reporter.WriteInformation($"Item ID: {item.Id}");
+            Reporter.WriteInformation($"Item Name: {item.Name}");
+            Reporter.WriteInformation($"Item Type: {item.Type}");
+        }
+
         protected void PrintFile(BoxFile file)
         {
             Reporter.WriteInformation($"File ID: {file.Id}");
             Reporter.WriteInformation($"File Name: {file.Name}");
             Reporter.WriteInformation($"File Size: {file.Size}");
+        }
+        protected void PrintFolder(BoxFolder folder)
+        {
+            Reporter.WriteInformation($"Folder ID: {folder.Id}");
+            Reporter.WriteInformation($"Folder Name: {folder.Name}");
+            if (folder.FolderUploadEmail != null)
+            {
+                Reporter.WriteInformation($"Folder Upload Email Access: {folder.FolderUploadEmail.Acesss}");
+                Reporter.WriteInformation($"Folder Upload Email Address: {folder.FolderUploadEmail.Address}");
+            }
+            if (folder.Parent != null)
+            {
+                Reporter.WriteInformation($"Folder Parent:");
+                this.PrintFolder(folder.Parent);
+            }
         }
 
         protected void PrintFileLock(BoxFileLock fileLock)
@@ -129,17 +161,59 @@ namespace BoxCLI.Commands
                     Reporter.WriteData("File request created...");
                     if (isNewVersion)
                     {
-                        if(string.IsNullOrEmpty(fileId))
+                        if (string.IsNullOrEmpty(fileId))
                         {
                             throw new Exception("A file ID is required for this command.");
                         }
                         Reporter.WriteInformation("Uploading new version...");
                         Reporter.WriteInformation(fileName);
-                        return await boxClient.FilesManager.UploadNewVersionAsync(fileName, fileId, fileStream);
+                        var preflightCheckRequest = new BoxPreflightCheckRequest()
+                        {
+                            Name = fileName,
+                            Size = file.Length,
+                            Parent = new BoxItemRequest()
+                            {
+                                Id = parentId
+                            }
+                        };
+                        var preflight = await boxClient.FilesManager.PreflightCheckNewVersion(fileId, preflightCheckRequest);
+                        if (preflight.Success)
+                        {
+                            using (var sha1 = SHA1.Create())
+                            {
+                                var checksum = sha1.ComputeHash(fileStream);
+                                return await boxClient.FilesManager.UploadNewVersionAsync(fileName, fileId, fileStream, uploadUri: preflight.UploadUri, contentMD5: checksum);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Preflight check failed.");
+                        }
                     }
                     else
                     {
-                        return await boxClient.FilesManager.UploadAsync(fileRequest, fileStream);
+                        var preflightCheckRequest = new BoxPreflightCheckRequest()
+                        {
+                            Name = fileName,
+                            Size = file.Length,
+                            Parent = new BoxItemRequest()
+                            {
+                                Id = parentId
+                            }
+                        };
+                        var preflight = await boxClient.FilesManager.PreflightCheck(preflightCheckRequest);
+                        if (preflight.Success)
+                        {
+                            using (var sha1 = SHA1.Create())
+                            {
+                                var checksum = sha1.ComputeHash(fileStream);
+                                return await boxClient.FilesManager.UploadAsync(fileRequest, fileStream, uploadUri: preflight.UploadUri, contentMD5: checksum);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Preflight check failed.");
+                        }
                     }
                 }
             }
@@ -202,8 +276,6 @@ namespace BoxCLI.Commands
             using (var fileInMemoryStream = File.Open(path, FileMode.Open))
             {
                 System.Console.WriteLine($"File name: {fileName}");
-                var shaTask = new Task<string>(() => Box.V2.Utility.Helper.GetSha1Hash(fileInMemoryStream));
-                shaTask.Start();
                 BoxFileUploadSession boxFileUploadSession;
                 if (!string.IsNullOrEmpty(fileId))
                 {
@@ -250,7 +322,7 @@ namespace BoxCLI.Commands
 
                 BoxSessionParts sessionPartsForCommit = new BoxSessionParts() { Parts = allSessionParts };
                 Reporter.WriteInformation("Attempting to commit...");
-                var completeFileSha = await shaTask;
+                var completeFileSha = Box.V2.Utility.Helper.GetSha1Hash(fileInMemoryStream);
                 // Commit
                 if (!string.IsNullOrEmpty(fileId))
                 {
@@ -315,7 +387,7 @@ namespace BoxCLI.Commands
         private async Task<List<BoxUploadPartResponse>> UploadPartsInSessionAsync(Uri uploadPartsUri, int numberOfParts, long partSize, Stream stream,
             long fileSize, BoxClient client)
         {
-            var tasks = ParallelEnumerable.Range(0, numberOfParts)
+            var tasks = Enumerable.Range(0, numberOfParts)
                 .Select(i =>
                 {
                     System.Console.WriteLine($"Current index: {i}");
