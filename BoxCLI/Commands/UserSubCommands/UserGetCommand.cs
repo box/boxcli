@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.UserSubCommands
             }
             else
             {
-                boxClient = base.ConfigureBoxClient(returnAdmin: true);
+                boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             }
             try
             {

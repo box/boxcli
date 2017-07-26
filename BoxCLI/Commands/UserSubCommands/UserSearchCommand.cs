@@ -41,7 +41,7 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunSearch(string userName, bool managedOnly = false)
         {
-            var boxClient = base.ConfigureBoxClient(returnAdmin: true);
+            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var BoxCollectionsIterators = base.GetIterators();
             if (string.IsNullOrEmpty(userName))
             {

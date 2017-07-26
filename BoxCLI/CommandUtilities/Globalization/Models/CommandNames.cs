@@ -22,6 +22,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string FolderCollaborations { get; set; } = "folder-collaborations";
         public string Events { get; set; } = "events";
         public string Settings { get; set; } = "settings";
+        public string Environments { get; set; } = "environments";
         public string Trash { get; set; } = "trash";
         public string WebLinks { get; set; } = "weblinks";
     }

@@ -69,6 +69,7 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 fileDeleted = await boxClient.FilesManager.DeleteAsync(this._fileId.Value, this._etag.Value());
             }
+            
             if (fileDeleted)
             {
                 Reporter.WriteSuccess($"Deleted file {this._fileId.Value}");

@@ -33,10 +33,6 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
             System.Console.WriteLine($"Path to store Box Reports: {settings.BoxReportsFolderPath}");
             System.Console.WriteLine($"Box Reports folder name: {settings.BoxReportsFolderName}");
             System.Console.WriteLine($"Default file format for Box Reports: {settings.BoxReportsFileFormat}");
-            System.Console.WriteLine($"Is default As User profile active?: {(settings.UseDefaultAsUser ? "Yes" : "No")}");
-            System.Console.WriteLine($"Current default As User profile ID: {settings.DefaultAsUserId}");
-            System.Console.WriteLine($"Is temporary As User profile active?: {(settings.UseTempAsUser ? "Yes" : "No")}");
-            System.Console.WriteLine($"Current temporary As User profile ID: {settings.TempAsUserId}");
         }
 
     }

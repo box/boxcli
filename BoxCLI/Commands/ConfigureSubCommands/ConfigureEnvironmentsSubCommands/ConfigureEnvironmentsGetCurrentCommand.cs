@@ -1,11 +1,11 @@
 using BoxCLI.BoxHome;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.ConfigureSubCommands
+namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 {
-    public class ConfigureGetDefaultCommand : ConfigureSubCommandBase
+    public class ConfigureEnvironmentsGetCurrentCommand : ConfigureEnvironmentsSubCommandBase
     {
-        public ConfigureGetDefaultCommand(IBoxHome boxHome) : base(boxHome)
+        public ConfigureEnvironmentsGetCurrentCommand(IBoxHome boxHome) : base(boxHome)
         {
         }
 
@@ -21,8 +21,14 @@ namespace BoxCLI.Commands.ConfigureSubCommands
 
         protected override int Execute()
         {
-            base.RunGetDefault();
+            this.RunGetCurrent();
             return base.Execute();
         }
+
+        protected virtual void RunGetCurrent()
+        {
+            base.GetCurrent();
+        }
+
     }
 }

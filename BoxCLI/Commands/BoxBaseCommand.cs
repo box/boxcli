@@ -24,6 +24,7 @@ namespace BoxCLI.Commands
     {
         protected readonly IBoxHome _boxHome;
         protected readonly BoxDefaultSettings _settings;
+        protected readonly BoxEnvironments _environments;
         protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
 
@@ -33,6 +34,7 @@ namespace BoxCLI.Commands
             _boxPlatformBuilder = boxPlatformBuilder;
             _boxHome = boxHome;
             _settings = boxHome.GetBoxHomeSettings();
+            _environments = boxHome.GetBoxEnvironments();
             _names = names;
         }
 
@@ -83,20 +85,20 @@ namespace BoxCLI.Commands
             return $"{filePath}{fileName}";
         }
 
-        protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnAdmin = false)
+        protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnServiceAccount = false)
         {
             var Box = _boxPlatformBuilder.Build();
-            if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnAdmin)
+            if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnServiceAccount)
             {
                 return Box.AsUserClient(oneCallAsUserId);
             }
-            else if (_settings.GetBoxReportsUseDefaultAsUserSetting() && !returnAdmin)
+            else if (this._environments.GetUseDefaultAsUserSetting() && !returnServiceAccount)
             {
-                return Box.AsUserClient(_settings.GetBoxReportsDefaultAsUserIdSetting());
+                return Box.AsUserClient(this._environments.GetDefaultAsUserIdSetting());
             }
-            else if (_settings.GetBoxReportsUseTempAsUserSetting() && !returnAdmin)
+            else if (this._environments.GetUseTempAsUserSetting() && !returnServiceAccount)
             {
-                return Box.AsUserClient(_settings.GetBoxReportsTempAsUserIdSetting());
+                return Box.AsUserClient(this._environments.GetTempAsUserIdSetting());
             }
             else
             {

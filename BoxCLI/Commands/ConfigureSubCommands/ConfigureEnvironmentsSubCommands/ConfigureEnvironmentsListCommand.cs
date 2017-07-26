@@ -3,11 +3,11 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.ConfigureSubCommands
+namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 {
-    public class ConfigureListCommand : ConfigureSubCommandBase
+    public class ConfigureEnvironmentsListCommand : ConfigureEnvironmentsSubCommandBase
     {
-        public ConfigureListCommand(IBoxHome boxHome) : base(boxHome)
+        public ConfigureEnvironmentsListCommand(IBoxHome boxHome) : base(boxHome)
         {
         }
 
@@ -37,6 +37,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands
                 Reporter.WriteInformation($"Client ID: {environment.Value.ClientId}");
                 Reporter.WriteInformation($"Enterprise ID: {environment.Value.EnterpriseId}");
                 Reporter.WriteInformation($"Path to Config File: {environment.Value.BoxConfigFilePath}");
+                Reporter.WriteInformation($"Is default As User profile active?: {(environment.Value.UseDefaultAsUser ? "Yes" : "No")}");
+                Reporter.WriteInformation($"Current default As User profile ID: {environment.Value.DefaultAsUserId}");
+                Reporter.WriteInformation($"Is temporary As User profile active?: {(environment.Value.UseTempAsUser ? "Yes" : "No")}");
+                Reporter.WriteInformation($"Current temporary As User profile ID: {environment.Value.TempAsUserId}");
                 Reporter.WriteInformation("*******************************");
             }
         }

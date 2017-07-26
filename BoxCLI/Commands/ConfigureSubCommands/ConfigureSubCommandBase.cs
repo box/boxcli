@@ -16,14 +16,5 @@ namespace BoxCLI.Commands.ConfigureSubCommands
             _environments = boxHome.GetBoxEnvironments();
             _settings = boxHome.GetBoxHomeSettings();
         }
-
-        public virtual void RunGetDefault()
-        {
-            var defaultEnv = _environments.GetDefaultEnvironment();
-            System.Console.WriteLine("Current default environment:");
-            System.Console.WriteLine($"Name: {defaultEnv.Name}");
-            System.Console.WriteLine($"Client ID: {defaultEnv.ClientId}");
-            System.Console.WriteLine($"Enterprise ID: {defaultEnv.EnterpriseId}");
-        }
     }
 }

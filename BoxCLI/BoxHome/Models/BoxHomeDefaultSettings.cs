@@ -14,13 +14,7 @@ namespace BoxCLI.BoxHome.Models
         public string BoxDownloadsFolderPath { get; set; }
         [JsonProperty(PropertyName = "boxDownloadsFolderName")]
         public string BoxDownloadsFolderName { get; set; } = "Box-Downloads";
-        [JsonProperty(PropertyName = "defaultAsUserId")]
-        public string DefaultAsUserId { get; set; }
-        [JsonProperty(PropertyName = "tempAsUserId")]
-        public string TempAsUserId { get; set; }
-        [JsonProperty(PropertyName = "useDefaultAsUser")]
-        public bool UseDefaultAsUser { get; set; } = false;
-        [JsonProperty(PropertyName = "useTempAsUser")]
-        public bool UseTempAsUser { get; set; } = false;
+        [JsonProperty(PropertyName = "autoSave")]
+        public bool AutoSave { get; set; } = false;
     }
 }

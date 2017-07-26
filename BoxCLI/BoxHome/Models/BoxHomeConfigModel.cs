@@ -12,5 +12,15 @@ namespace BoxCLI.BoxHome.Models
         public string BoxConfigFilePath { get; set; }
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+        [JsonProperty(PropertyName = "defaultAsUserId")]
+        public string DefaultAsUserId { get; set; }
+        [JsonProperty(PropertyName = "tempAsUserId")]
+        public string TempAsUserId { get; set; }
+        [JsonProperty(PropertyName = "adminAsUserId")]
+        public string AdminAsUserId { get; set; }
+        [JsonProperty(PropertyName = "useDefaultAsUser")]
+        public bool UseDefaultAsUser { get; set; } = false;
+        [JsonProperty(PropertyName = "useTempAsUser")]
+        public bool UseTempAsUser { get; set; } = false;
     }
 }

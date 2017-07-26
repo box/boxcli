@@ -4,6 +4,7 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.Commands.CollaborationSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands;
+using BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
 using BoxCLI.Commands.EventSubCommands;
 using BoxCLI.Commands.FileSubCommand;
@@ -47,6 +48,10 @@ namespace BoxCLI.Commands
             else if (factoryName == _names.CommandNames.Settings)
             {
                 return new ConfigureSettingsSubCommandFactory(_boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Environments)
+            {
+                return new ConfigureEnvironmentsSubCommandFactory(_boxHome, _names);
             }
             else if (factoryName == _names.CommandNames.Folders)
             {

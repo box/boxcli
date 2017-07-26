@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.UserSubCommands
 
         public async Task RunList(bool managedOnly = false, bool save = false, string path = "", string fileFormat = "", string rawFields = "")
         {
-            var boxClient = base.ConfigureBoxClient(returnAdmin: true);
+            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var BoxCollectionsIterators = base.GetIterators();
             var fileName = $"{base._names.CommandNames.Users}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
             var fields = base.ProcessFields(rawFields, base._fields);

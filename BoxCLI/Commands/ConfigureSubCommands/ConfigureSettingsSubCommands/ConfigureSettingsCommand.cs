@@ -5,7 +5,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
 {
-    public class ConfigureSettingsCommand : HelpCommandBase
+    public class ConfigureSettingsCommand : ConfigureSubCommandBase
     {
         private CommandLineApplication _app;
         public override void Configure(CommandLineApplication command)
@@ -24,16 +24,11 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
             _app.ShowHelp();
             return base.Execute();
         }
-        private readonly IBoxHome _boxHome;
-        private readonly BoxEnvironments _environments;
-        private readonly BoxDefaultSettings _settings;
         private readonly ISubCommandFactory _subCommands;
         private readonly LocalizedStringsResource _names;
         public ConfigureSettingsCommand(IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names)
+            : base (boxHome)
         {
-            _boxHome = boxHome;
-            _environments = boxHome.GetBoxEnvironments();
-            _settings = boxHome.GetBoxHomeSettings();
             _names = names;
             _subCommands = factory.CreateFactory(_names.CommandNames.Settings);
 
