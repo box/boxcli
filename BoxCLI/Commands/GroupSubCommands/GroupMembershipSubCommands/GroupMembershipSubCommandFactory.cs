@@ -18,6 +18,26 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             {
                 return new GroupMemberGetCommand(_boxPlatformBuilder, _boxHome, _names);
             }
+            else if (commandName == base._names.SubCommandNames.Add)
+            {
+                return new GroupMembershipCreateCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (commandName == base._names.SubCommandNames.Remove)
+            {
+                return new GroupMembershipDeleteCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (commandName == base._names.SubCommandNames.Update)
+            {
+                return new GroupMembershipUpdateCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (commandName == base._names.SubCommandNames.List)
+            {
+                return new GroupMembershipListCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (commandName == base._names.SubCommandNames.Create)
+            {
+                return new GroupMembershipCreateCommand(_boxPlatformBuilder, _boxHome, _names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

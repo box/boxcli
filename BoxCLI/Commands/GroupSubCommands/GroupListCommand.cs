@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities.Globalization;
@@ -6,11 +7,10 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.GroupSubCommands
 {
-    public class GroupGetCommand : GroupSubCommandBase
+    public class GroupListCommand : GroupSubCommandBase
     {
-        private CommandArgument _groupId;
         private CommandLineApplication _app;
-        public GroupGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+        public GroupListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
         }
@@ -18,9 +18,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a group.";
-            _groupId = command.Argument("groupId",
-                                   "Id of group");
+            command.Description = "List all groups.";
 
             command.OnExecute(async () =>
             {
@@ -31,15 +29,18 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunList();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunList()
         {
-            base.CheckForValue(this._groupId.Value, this._app, "A group ID is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintGroup(await boxClient.GroupsManager.GetGroupAsync(_groupId.Value));
+            var BoxCollectionsIterators = base.GetIterators();
+            await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroup>((offset) =>
+            {
+                return boxClient.GroupsManager.GetAllGroupsAsync(limit: 100, offset: (int)offset);
+            }, base.PrintGroup);
         }
     }
 }

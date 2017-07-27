@@ -71,12 +71,7 @@ namespace BoxCLI.Commands
             return fileRequest;
         }
 
-        protected virtual void PrintItem(BoxItem item)
-        {
-            Reporter.WriteInformation($"Item ID: {item.Id}");
-            Reporter.WriteInformation($"Item Name: {item.Name}");
-            Reporter.WriteInformation($"Item Type: {item.Type}");
-        }
+        
 
         protected void PrintFile(BoxFile file)
         {

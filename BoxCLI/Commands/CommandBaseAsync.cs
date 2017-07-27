@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
@@ -29,5 +30,14 @@ namespace BoxCLI.Commands
 
         protected async virtual Task<int> Execute()
             => await Task.FromResult(0);
+
+        protected virtual void CheckForValue(string value, CommandLineApplication app, string message)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                app.ShowHelp();
+                throw new Exception(message);
+            }
+        }
     }
 }
