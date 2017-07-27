@@ -1,15 +1,21 @@
+using System.Threading.Tasks;
 using BoxCLI.BoxHome;
+using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.ConfigureSubCommands
+namespace BoxCLI.Commands.SessionSubCommands
 {
-    public class ConfigureBustCacheCommand : ConfigureSubCommandBase
+    public class SessionBustCacheCommand : SessionSubCommandBase
     {
         private CommandLineApplication _app;
-        public ConfigureBustCacheCommand(IBoxHome boxHome) : base(boxHome)
+
+        public SessionBustCacheCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, boxHome, names)
         {
         }
+
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
@@ -20,14 +26,14 @@ namespace BoxCLI.Commands.ConfigureSubCommands
             });
             base.Configure(command);
         }
-        protected override int Execute()
+        protected async override Task<int> Execute()
         {
             this.RunBust();
-            return base.Execute();
+            return await base.Execute();
         }
         protected virtual void RunBust()
         {
-            base._boxHome.BustCache();
+            base._boxPlatformBuilder.Build().BustCache();
             Reporter.WriteSuccess("Token cache cleared.");
         }
     }

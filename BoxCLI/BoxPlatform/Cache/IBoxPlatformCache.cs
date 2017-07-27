@@ -6,6 +6,6 @@ namespace BoxCLI.BoxPlatform.Cache
     public interface IBoxPlatformCache
     {
         BoxCachedToken GetToken(Func<string> generateToken);
-        void BustCache();
+        BoxCachedToken BustCache();
     }
 }

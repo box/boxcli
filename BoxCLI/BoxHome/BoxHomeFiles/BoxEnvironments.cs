@@ -5,6 +5,7 @@ using Box.V2.Config;
 using BoxCLI.BoxHome.Models;
 using BoxCLI.BoxHome.Models.BoxConfigFile;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -334,6 +335,8 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         public BoxHomeConfigModel GetDefaultEnvironment()
         {
             var environments = DeserializeBoxEnvironmentFile();
+            if(string.IsNullOrEmpty(environments.DefaultEnvironment))
+                throw new NoEnvironmentsFoundException("No default environment found.");
             BoxHomeConfigModel defaultEnv;
             environments.Environments.TryGetValue(environments.DefaultEnvironment, out defaultEnv);
             return defaultEnv;

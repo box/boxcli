@@ -21,14 +21,16 @@ namespace BoxCLI.Commands
         private readonly EventCommand _evt;
         private readonly SharedLinkCommand _sl;
         private readonly TrashCommand _trsh;
+        private readonly SessionCommand _ssn;
+        private readonly TokenCommand _tk;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
 
-        public RootCommand(UserCommand user, ConfigureCommand config, 
-            FolderCommand folder, FileCommand file, WebhooksCommand webhooks, 
-            GroupCommand group,  MetadataTemplateCommand mdt, EventCommand evt,
-            CollaborationCommand collab, SharedLinkCommand sl, TrashCommand trsh, 
-            LocalizedStringsResource names)
+        public RootCommand(UserCommand user, ConfigureCommand config,
+            FolderCommand folder, FileCommand file, WebhooksCommand webhooks,
+            GroupCommand group, MetadataTemplateCommand mdt, EventCommand evt,
+            CollaborationCommand collab, SharedLinkCommand sl, TrashCommand trsh,
+            SessionCommand ssn, TokenCommand tk, LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
@@ -41,6 +43,8 @@ namespace BoxCLI.Commands
             _collab = collab;
             _sl = sl;
             _trsh = trsh;
+            _ssn = ssn;
+            _tk = tk;
             _names = names;
         }
 
@@ -59,6 +63,8 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Collaborations, _collab.Configure);
             app.Command(_names.CommandNames.SharedLinks, _sl.Configure);
             app.Command(_names.CommandNames.Trash, _trsh.Configure);
+            app.Command(_names.CommandNames.Session, _ssn.Configure);
+            app.Command(_names.CommandNames.Token, _tk.Configure);
 
             app.OnExecute(() =>
             {

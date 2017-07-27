@@ -25,5 +25,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Environments { get; set; } = "environments";
         public string Trash { get; set; } = "trash";
         public string WebLinks { get; set; } = "weblinks";
+        public string Token { get; set; } = "tokens";
+        public string Session { get; set; } = "sessions";
     }
 }

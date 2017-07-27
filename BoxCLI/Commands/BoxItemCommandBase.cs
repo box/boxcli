@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Models;
@@ -71,7 +72,7 @@ namespace BoxCLI.Commands
             return fileRequest;
         }
 
-        
+
 
         protected void PrintFile(BoxFile file)
         {
@@ -137,15 +138,24 @@ namespace BoxCLI.Commands
         {
             var boxClient = base.ConfigureBoxClient(this._asUser.Value());
             path = GeneralUtilities.TranslatePath(path);
+
             var file = new FileInfo(path);
-            Reporter.WriteData($"File Size: {file.Length}");
             if (string.IsNullOrEmpty(fileName))
             {
                 fileName = file.Name;
             }
-            if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE)
+            if (string.IsNullOrEmpty(parentId))
             {
-                return await this.ChunkedUpload(path, fileName, parentId, file.Length, fileId);
+                parentId = "0";
+            }
+
+            if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE && isNewVersion)
+            {
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length, fileId, true);
+            }
+            else if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE)
+            {
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length);
             }
             else
             {
@@ -265,14 +275,14 @@ namespace BoxCLI.Commands
             }
         }
 
-        private async Task<BoxFile> ChunkedUpload(string path, string fileName, string parentFolderId, long fileSize, string fileId = "")
+        private async Task<BoxFile> ChunkedUpload(string path, string fileName, string parentFolderId, long fileSize, string fileId = "", bool isNewVersion = false)
         {
             var boxClient = base.ConfigureBoxClient(this._asUser.Value());
             using (var fileInMemoryStream = File.Open(path, FileMode.Open))
             {
                 System.Console.WriteLine($"File name: {fileName}");
                 BoxFileUploadSession boxFileUploadSession;
-                if (!string.IsNullOrEmpty(fileId))
+                if (isNewVersion)
                 {
                     System.Console.WriteLine(fileId);
                     // TODO: Correct after SDK is fixed.
@@ -303,6 +313,10 @@ namespace BoxCLI.Commands
                 System.Console.WriteLine($"Type: {boxFileUploadSession.Type}");
                 System.Console.WriteLine($"Total Parts: {boxFileUploadSession.TotalParts}");
                 System.Console.WriteLine($"Expires: {boxFileUploadSession.SessionExpiresAt}");
+                var completeFileSha = await Task.Run(() =>
+                {
+                    return Box.V2.Utility.Helper.GetSha1Hash(fileInMemoryStream);
+                });
                 var boxSessionEndpoint = boxFileUploadSession.SessionEndpoints;
                 var uploadPartUri = new Uri(boxSessionEndpoint.UploadPart);
                 var commitUri = new Uri(boxSessionEndpoint.Commit);
@@ -310,24 +324,36 @@ namespace BoxCLI.Commands
                 long partSizeLong;
                 long.TryParse(partSize, out partSizeLong);
                 var numberOfParts = this.GetUploadPartsCount(fileSize, partSizeLong);
+                ProgressBar.UpdateProgress($"Processing {fileName}", 0, numberOfParts);
+                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong, fileInMemoryStream, client: boxClient, fileSize: fileSize);
 
-                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong, fileInMemoryStream, fileSize, boxClient);
-                var allSessionParts = new List<BoxSessionPartInfo>();
-                allSessionParts.AddRange(boxSessionParts.Select(s => s.Part));
-
-                BoxSessionParts sessionPartsForCommit = new BoxSessionParts() { Parts = allSessionParts };
+                BoxSessionParts sessionPartsForCommit = new BoxSessionParts() { Parts = boxSessionParts };
                 Reporter.WriteInformation("Attempting to commit...");
-                var completeFileSha = Box.V2.Utility.Helper.GetSha1Hash(fileInMemoryStream);
+                const int retryCount = 5;
+                var retryInterval = boxSessionParts.Count() * 100;
+
                 // Commit
                 if (!string.IsNullOrEmpty(fileId))
                 {
                     //TODO: Fix after SDK update
                     var command = boxClient.ResourcePlugins.Get<BoxFileManagerCommand>();
-                    return await command.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit);
+                    var response =
+                    await Box.V2.Utility.Retry.ExecuteAsync(
+                        async () =>
+                            await command.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit),
+                        TimeSpan.FromMilliseconds(retryInterval), retryCount);
+
+                    return response;
                 }
                 else
                 {
-                    return await boxClient.FilesManager.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit);
+                    var response =
+                    await Box.V2.Utility.Retry.ExecuteAsync(
+                        async () =>
+                            await boxClient.FilesManager.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit),
+                        TimeSpan.FromMilliseconds(retryInterval), retryCount);
+
+                    return response;
                 }
             }
         }
@@ -379,31 +405,65 @@ namespace BoxCLI.Commands
             return partStream;
         }
 
-        private async Task<List<BoxUploadPartResponse>> UploadPartsInSessionAsync(Uri uploadPartsUri, int numberOfParts, long partSize, Stream stream,
-            long fileSize, BoxClient client)
+        private async Task<IEnumerable<BoxSessionPartInfo>> UploadPartsInSessionAsync(
+            Uri uploadPartsUri, int numberOfParts, long partSize, Stream stream, BoxClient client,
+            long fileSize, TimeSpan? timeout = null)
         {
-            var tasks = Enumerable.Range(0, numberOfParts)
-                .Select(i =>
-                {
-                    System.Console.WriteLine($"Current index: {i}");
-                    // Split file as per part size
-                    long partOffset = partSize * i;
-                    Stream partFileStream = this.GetFilePart(stream, partSize, partOffset);
-                    string sha = Box.V2.Utility.Helper.GetSha1Hash(partFileStream);
-                    partFileStream.Position = 0;
-                    System.Console.WriteLine($"Running Task for {partOffset}...");
-                    return client.FilesManager.UploadPartAsync(uploadPartsUri, sha, partOffset, fileSize, partFileStream);
-                });
+            var maxTaskNum = Environment.ProcessorCount + 1;
 
-            List<BoxUploadPartResponse> allParts = (await Task.WhenAll(tasks)).ToList();
-            foreach (var resp in allParts)
+            // Retry 5 times for 10 seconds
+            const int retryMaxCount = 5;
+            const int retryMaxInterval = 10;
+
+            var ret = new List<BoxSessionPartInfo>();
+
+            using (SemaphoreSlim concurrencySemaphore = new SemaphoreSlim(maxTaskNum))
             {
-                System.Console.WriteLine($"Offset: {resp.Part.Offset}");
-                System.Console.WriteLine($"Part ID: {resp.Part.PartId}");
-                System.Console.WriteLine($"SHA: {resp.Part.Sha1}");
-                System.Console.WriteLine($"Size: {resp.Part.Size}");
+                var postTaskTasks = new List<Task>();
+                int taskCompleted = 0;
+
+                var tasks = new List<Task<BoxUploadPartResponse>>();
+                for (var i = 0; i < numberOfParts; i++)
+                {
+                    await concurrencySemaphore.WaitAsync();
+
+                    // Split file as per part size
+                    var partOffset = partSize * i;
+
+                    // Retry
+                    var uploadPartWithRetryTask = Box.V2.Utility.Retry.ExecuteAsync(async () =>
+                    {
+                        // Release the memory when done
+                        using (var partFileStream = this.GetFilePart(stream, partSize,
+                                    partOffset))
+                        {
+                            var sha = Box.V2.Utility.Helper.GetSha1Hash(partFileStream);
+                            partFileStream.Position = 0;
+                            var uploadPartResponse = await client.FilesManager.UploadPartAsync(
+                                uploadPartsUri, sha, partOffset, fileSize, partFileStream,
+                                timeout);
+
+                            return uploadPartResponse;
+                        }
+                    }, TimeSpan.FromSeconds(retryMaxInterval), retryMaxCount);
+
+                    // Have each task notify the Semaphore when it completes so that it decrements the number of tasks currently running.
+                    postTaskTasks.Add(uploadPartWithRetryTask.ContinueWith(tsk =>
+                        {
+                            concurrencySemaphore.Release();
+                            ++taskCompleted;
+                            ProgressBar.UpdateProgress($"Processing...", taskCompleted, numberOfParts);
+                        }
+                    ));
+
+                    tasks.Add(uploadPartWithRetryTask);
+                }
+
+                var results = await Task.WhenAll(tasks);
+                ret.AddRange(results.Select(elem => elem.Part));
             }
-            return allParts;
+
+            return ret;
         }
     }
 }

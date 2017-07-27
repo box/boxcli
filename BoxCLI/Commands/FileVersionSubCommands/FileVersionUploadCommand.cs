@@ -12,6 +12,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
     {
         private CommandArgument _fileId;
         private CommandArgument _path;
+        private CommandOption _parentFolderId;
         private CommandOption _name;
         private CommandOption _bulkPath;
         private CommandLineApplication _app;
@@ -30,6 +31,9 @@ namespace BoxCLI.Commands.FileVersionSubCommands
                                         "Local path to file");
             _name = command.Option("-n|--name",
                                         "Provide different name for local file", CommandOptionType.SingleValue);
+            _parentFolderId = command.Option("-p|--parent-folder",
+                                        "Id of folder to upload file to, defaults to the root folder", 
+                                        CommandOptionType.SingleValue);
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
@@ -55,7 +59,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             }
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForFilePath(this._path.Value, this._app);
-            base.PrintFile(await base.UploadFile(path: this._path.Value, fileId: this._fileId.Value, fileName: this._name.Value()));
+            base.PrintFile(await base.UploadFile(this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value(), isNewVersion: true));
         }
     }
 }

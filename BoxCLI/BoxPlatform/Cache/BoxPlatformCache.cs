@@ -28,11 +28,11 @@ namespace BoxCLI.BoxPlatform.Cache
             BoxHome = boxHome;
         }
 
-        public void BustCache()
+        public BoxCachedToken BustCache()
         {
             var key = ConstructCacheKey();
             _memoryCache.Remove(key);
-            BoxHome.GetBoxCache().BustCache();
+            return BoxHome.BustCache();
         }
 
         public BoxCachedToken GetToken(Func<string> generateToken)

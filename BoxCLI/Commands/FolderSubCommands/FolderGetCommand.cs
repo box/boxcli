@@ -39,16 +39,9 @@ namespace BoxCLI.Commands.FolderSubCommands
         protected async Task RunGet()
         {
             base.CheckForId(this._folderId.Value, this._app);
-            try
-            {
-                var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
-                base.PrintFolder(folder);
-            }
-            catch (Exception e)
-            {
-                Reporter.WriteError(e.Message);
-            }
+            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
+            base.PrintFolder(folder);
         }
 
     }

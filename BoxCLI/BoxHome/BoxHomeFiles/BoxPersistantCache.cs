@@ -44,10 +44,12 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
         }
 
-        public void BustCache()
+        public BoxCachedToken BustCache()
         {
+            var token = this._boxHome.GetBoxCache().RetrieveTokenFromCache();
             RemoveBoxCacheFile();
             CreateBoxCacheFile();
+            return token;
         }
 
         public void RemoveBoxCacheFile()
