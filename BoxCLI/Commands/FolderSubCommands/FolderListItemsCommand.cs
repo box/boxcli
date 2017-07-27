@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 var BoxCollectionsIterators = base.GetIterators();
                 await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
                 {
-                    return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, offset: (int)offset);
+                    return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 100, offset: (int)offset);
                 }, base.PrintItem);
             }
             catch (Exception e)

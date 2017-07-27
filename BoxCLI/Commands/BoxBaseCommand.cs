@@ -85,20 +85,43 @@ namespace BoxCLI.Commands
             return $"{filePath}{fileName}";
         }
 
-        protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null, bool returnServiceAccount = false)
+        protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null,
+        bool returnServiceAccount = false, bool asAdmin = false)
         {
             var Box = _boxPlatformBuilder.Build();
             if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnServiceAccount)
             {
                 return Box.AsUserClient(oneCallAsUserId);
             }
-            else if (this._environments.GetUseDefaultAsUserSetting() && !returnServiceAccount)
+            else if (asAdmin && !returnServiceAccount)
             {
-                return Box.AsUserClient(this._environments.GetDefaultAsUserIdSetting());
+                if (string.IsNullOrEmpty(this._environments.GetAdminAsUserIdSetting()))
+                {
+                    throw new Exception("Admin User ID is not currently set. Use the box configure environments set-admin-user command to use this feature.");
+                }
+                return Box.AsUserClient(this._environments.GetAdminAsUserIdSetting());
             }
-            else if (this._environments.GetUseTempAsUserSetting() && !returnServiceAccount)
+            else if (this._environments.GetUserSessionEnabledSetting() && !returnServiceAccount)
             {
-                return Box.AsUserClient(this._environments.GetTempAsUserIdSetting());
+                Reporter.WriteInformation("User session enabled...");
+                var expiresAt = this._environments.GetUserSessionExpirationSetting();
+                if (!expiresAt.HasValue || expiresAt < DateTime.Now)
+                {
+                    this._environments.ExpireUserSession();
+                    throw new Exception("User session is expired.");
+                }
+                Reporter.WriteInformation("Checking for user...");
+                string id;
+                if (this._environments.GetUseDefaultAsUserSetting())
+                {
+                    id = this._environments.GetDefaultAsUserIdSetting();
+                }
+                else
+                {
+                    id = this._environments.GetTempAsUserIdSetting();
+                }
+                Reporter.WriteInformation($"Calls made on-behalf of user {id}");
+                return Box.AsUserClient(id);
             }
             else
             {

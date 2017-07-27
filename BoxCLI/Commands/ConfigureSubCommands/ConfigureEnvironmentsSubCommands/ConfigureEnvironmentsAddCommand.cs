@@ -39,13 +39,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         {
             if (base._environments.VerifyBoxConfigFile(filePath))
             {
-                Reporter.WriteInformation("Verified config file...");
                 var env = base._environments.TranslateConfigFileToEnvironment(filePath);
-                Reporter.WriteInformation("deserialized config file...");
                 env.Name = environmentName;
-                Reporter.WriteInformation("adding config file...");
                 var set = base._environments.AddNewEnvironment(env);
-                Reporter.WriteInformation("config file added...");
                 if (set == true)
                 {
                     Reporter.WriteSuccess("Successfully configured new Box environment.");

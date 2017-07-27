@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Models;
+using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.Logging;
 
 namespace BoxCLI.BoxPlatform.Utilities
@@ -29,7 +30,8 @@ namespace BoxCLI.BoxPlatform.Utilities
             uint offset = 0;
             var collection = await callBox(offset);
             var all = collection.TotalCount;
-            while (all > 0 && showNext != "q")
+            var total = collection.TotalCount;
+            while (all > 0 && showNext != "q" && offset < total)
             {
                 if (collection.Entries.Count > 0)
                 {
@@ -38,6 +40,7 @@ namespace BoxCLI.BoxPlatform.Utilities
                 }
                 else
                 {
+                    Reporter.WriteInformation("Please wait...");
                     offset += (uint)collection.Limit;
                     collection = await callBox(offset);
                 }
