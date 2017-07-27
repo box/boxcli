@@ -25,5 +25,12 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string UpdateLock { get; set; } = "update-lock";
         public string ChangeUploadEmail { get; set; } = "change-upload-email";
         public string BustCache { get; set; } = "bust-token-cache";
+        public string SetAdminUser { get; set; } = "set-admin-user";
+        public string GetAdminUser { get; set; } = "get-admin-user";
+        public string GetDefaultUser { get; set; } = "get-default-user";
+        public string SetDefaultUser { get; set; } = "set-default-user";
+        public string StartUserSession { get; set; } = "start-user-session";
+        public string EndUserSession { get; set; } = "end-user-session";
+        public string GetSessionExpiration { get; set; } = "get-session-expiration";
     }
 }

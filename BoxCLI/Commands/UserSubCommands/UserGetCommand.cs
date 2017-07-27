@@ -36,16 +36,17 @@ namespace BoxCLI.Commands.UserSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet(_userId.Value, _asUser.Value());
+            await this.RunGet();
             return await base.Execute();
         }
 
-        public async Task RunGet(string id, string asUser = null)
+        public async Task RunGet()
         {
+            var id = this._userId.Value;
             BoxClient boxClient;
             if (id == "me")
             {
-                boxClient = base.ConfigureBoxClient(asUser);
+                boxClient = base.ConfigureBoxClient(this._asUser.Value());
             }
             else
             {

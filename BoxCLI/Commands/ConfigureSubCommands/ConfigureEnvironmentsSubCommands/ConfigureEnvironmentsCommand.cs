@@ -20,6 +20,14 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             command.Command(_names.SubCommandNames.Add, _subCommands.CreateSubCommand(_names.SubCommandNames.Add).Configure);
             command.Command(_names.SubCommandNames.GetCurrent, _subCommands.CreateSubCommand(_names.SubCommandNames.GetCurrent).Configure);
             command.Command(_names.SubCommandNames.SetCurrent, _subCommands.CreateSubCommand(_names.SubCommandNames.SetCurrent).Configure);
+            command.Command(_names.SubCommandNames.SetAdminUser, _subCommands.CreateSubCommand(_names.SubCommandNames.SetAdminUser).Configure);
+            command.Command(_names.SubCommandNames.GetAdminUser, _subCommands.CreateSubCommand(_names.SubCommandNames.GetAdminUser).Configure);
+            command.Command(_names.SubCommandNames.GetDefaultUser, _subCommands.CreateSubCommand(_names.SubCommandNames.GetDefaultUser).Configure);
+            command.Command(_names.SubCommandNames.SetDefaultUser, _subCommands.CreateSubCommand(_names.SubCommandNames.SetDefaultUser).Configure);
+            command.Command(_names.SubCommandNames.Rename, _subCommands.CreateSubCommand(_names.SubCommandNames.Rename).Configure);
+            command.Command(_names.SubCommandNames.StartUserSession, _subCommands.CreateSubCommand(_names.SubCommandNames.StartUserSession).Configure);
+            command.Command(_names.SubCommandNames.EndUserSession, _subCommands.CreateSubCommand(_names.SubCommandNames.EndUserSession).Configure);
+            command.Command(_names.SubCommandNames.GetSessionExpiration, _subCommands.CreateSubCommand(_names.SubCommandNames.GetSessionExpiration).Configure);
             base.Configure(command);
         }
         protected override int Execute()
