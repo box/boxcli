@@ -40,11 +40,5 @@ namespace BoxCLI.Commands.TrashSubCommands
                 throw new Exception($"One of the following types is required: {types}");
             }
         }
-
-        protected virtual void PrintItem(BoxItem item)
-        {
-            Reporter.WriteInformation($"ID: {item.Id}");
-            Reporter.WriteInformation($"Name: {item.Name}");
-        }
     }
 }

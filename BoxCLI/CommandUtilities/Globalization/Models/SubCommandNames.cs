@@ -6,6 +6,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string List { get; set; } = "list";
         public string ListItems { get; set; } = "list-items";
         public string Add { get; set; } = "add";
+        public string Remove { get; set; } = "remove";
         public string GetAll { get; set; } = "get-all";
         public string GetCurrent { get; set; } = "get-current";
         public string SetCurrent { get; set; } = "set-current";

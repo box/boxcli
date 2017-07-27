@@ -81,14 +81,8 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             }
             foreach (var collab in collabs.Entries)
             {
-                this.PrintCollaboration(collab);
+                base.PrintCollaboration(collab);
             }
-        }
-        protected virtual void PrintCollaboration(BoxCollaboration collab)
-        {
-            Reporter.WriteInformation($"ID: {collab.Id}");
-            Reporter.WriteInformation($"Status: {collab.Status}");
-            base.PrintMiniUser(collab.CreatedBy);
         }
     }
 }

@@ -16,6 +16,10 @@ namespace BoxCLI.Commands
             command.Description = "Work with groups in Box.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about groups in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+            command.Command(_names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
+            command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
+            command.Command(_names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
+            command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
             command.Command(_names.CommandNames.GroupMembership, new GroupMembershipCommand(base._boxPlatformBuilder, base._boxHome, base._names, this._factory).Configure);
             command.OnExecute(async () =>
                {

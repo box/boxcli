@@ -53,11 +53,33 @@ namespace BoxCLI.Commands
             }
         }
 
+        protected virtual void PrintCollaboration(BoxCollaboration c)
+        {
+            Reporter.WriteInformation($"Collaboration ID: {c.Id}");
+            if (c.Item != null)
+            {
+                Reporter.WriteInformation("Collaboration Item: ");
+                this.PrintItem(c.Item);
+            }
+            Reporter.WriteInformation($"Collaboration Role: {c.Role}");
+            Reporter.WriteInformation($"Collaboration Status: {c.Status}");
+            if (c.CreatedBy != null)
+            {
+                Reporter.WriteInformation("Created by: ");
+                this.PrintMiniUser(c.CreatedBy);
+            }
+        }
         protected virtual void PrintMiniUser(BoxUser u)
         {
             Reporter.WriteInformation($"User ID: {u.Id}");
             Reporter.WriteInformation($"User Name: {u.Name}");
             Reporter.WriteInformation($"User Login: {u.Login}");
+        }
+        protected virtual void PrintItem(BoxItem item)
+        {
+            Reporter.WriteInformation($"Item ID: {item.Id}");
+            Reporter.WriteInformation($"Item Name: {item.Name}");
+            Reporter.WriteInformation($"Item Type: {item.Type}");
         }
 
         protected virtual string ConstructReportPath(string fileName, string filePath = "")
