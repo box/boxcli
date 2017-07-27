@@ -6,6 +6,7 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using BoxCLI.CommandUtilities;
+using BoxCLI.BoxPlatform.Cache;
 
 namespace BoxCLI.BoxHome
 {
@@ -49,9 +50,9 @@ namespace BoxCLI.BoxHome
         {
             return BoxPersistantCache;
         }
-        public void BustCache()
+        public BoxCachedToken BustCache()
         {
-            this.BoxPersistantCache.BustCache();
+            return this.BoxPersistantCache.BustCache();
         }
 
         public BoxDefaultSettings GetBoxHomeSettings()

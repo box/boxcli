@@ -6,21 +6,15 @@ using BoxCLI.CommandUtilities.Globalization;
 
 namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 {
-    public class ConfigureEnvironmentsSubCommandFactory : ISubCommandFactory
+    public class ConfigureEnvironmentsSubCommandFactory : AbstractBoxSubCommandFactory
     {
-        private readonly IBoxHome _boxHome;
-        private readonly BoxEnvironments _environments;
-        private readonly BoxDefaultSettings _settings;
-        private readonly LocalizedStringsResource _names;
-        public ConfigureEnvironmentsSubCommandFactory(IBoxHome boxHome, LocalizedStringsResource names)
+
+        public ConfigureEnvironmentsSubCommandFactory(IBoxPlatformServiceBuilder builder, IBoxHome boxHome, LocalizedStringsResource names)
+            : base(builder, boxHome, names)
         {
-            _boxHome = boxHome;
-            _environments = boxHome.GetBoxEnvironments();
-            _settings = boxHome.GetBoxHomeSettings();
-            _names = names;
         }
 
-        public ISubCommand CreateSubCommand(string commandName)
+        public override ISubCommand CreateSubCommand(string commandName)
         {
             if (commandName == _names.SubCommandNames.List)
             {
@@ -29,14 +23,6 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             else if (commandName == _names.SubCommandNames.Add)
             {
                 return new ConfigureEnvironmentsAddCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.GetCurrent)
-            {
-                return new ConfigureEnvironmentsGetCurrentCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.SetCurrent)
-            {
-                return new ConfigureEnvironmentsSetCurrentCommand(_boxHome);
             }
             else if (commandName == _names.SubCommandNames.SetAdminUser)
             {
@@ -58,17 +44,13 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             {
                 return new ConfigureEnvironmentsRenameCommand(_boxHome);
             }
-            else if (commandName == _names.SubCommandNames.StartUserSession)
+            else if (commandName == _names.SubCommandNames.GetCurrent)
             {
-                return new ConfigureEnvironmentsStartUserSessionCommand(_boxHome);
+                return new ConfigureEnvironmentsGetCurrentCommand(_boxHome);
             }
-            else if (commandName == _names.SubCommandNames.EndUserSession)
+            else if (commandName == _names.SubCommandNames.SetCurrent)
             {
-                return new ConfigureEnvironmentsEndUserSessionCommand(_boxHome);
-            }
-            else if (commandName == _names.SubCommandNames.GetSessionExpiration)
-            {
-                return new ConfigureEnvironmentsGetSessionExpirationCommand(_boxHome);
+                return new ConfigureEnvironmentsSetCurrentCommand(_boxPlatformBuilder, _boxHome, _names);
             }
             else
             {

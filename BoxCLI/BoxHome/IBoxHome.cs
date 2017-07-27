@@ -1,4 +1,5 @@
 using BoxCLI.BoxHome.BoxHomeFiles;
+using BoxCLI.BoxPlatform.Cache;
 
 namespace BoxCLI.BoxHome
 {
@@ -12,7 +13,7 @@ namespace BoxCLI.BoxHome
         BoxEnvironments GetBoxEnvironments();
         BoxPersistantCache GetBoxCache();
         BoxDefaultSettings GetBoxHomeSettings();
-        void BustCache();
+        BoxCachedToken BustCache();
 
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using BoxCLI.BoxPlatform.Cache;
 using BoxCLI.BoxPlatform.Utilities;
 using System.Threading.Tasks;
+using Box.V2.Auth;
 
 namespace BoxCLI.BoxPlatform.Service
 {
@@ -31,10 +32,31 @@ namespace BoxCLI.BoxPlatform.Service
             var token = EnterpriseToken();
             return BoxPlatformAuthorizedClient.AdminClient(token, asUserId);
         }
+        public BoxClient ClientFromToken(string token)
+        {
+            var auth = new OAuthSession(token, "", 3600, "bearer");
+            return new BoxClient(this.BoxPlatformConfig, auth);
+        }
+
+        public async Task<bool> BustCache()
+        {
+            var token = this.BoxPlatformCache.BustCache();
+            await this.ClientFromToken(token.AccessToken).Auth.LogoutAsync();
+            return true;
+        }
 
         public string EnterpriseToken()
         {
             return BoxPlatformCache.GetToken(() => { return BoxPlatformAuthorizedClient.AdminToken(); }).AccessToken;
+        }
+
+        public string GetServiceAccountToken()
+        {
+            return BoxPlatformAuthorizedClient.AdminToken();
+        }
+        public string GetUserToken(string id)
+        {
+            return BoxPlatformAuthorizedClient.UserToken(id);
         }
     }
 }

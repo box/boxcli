@@ -26,7 +26,6 @@ namespace BoxCLI.Commands
                 return this.Execute();
             });
 
-            command.Command(_names.SubCommandNames.BustCache, _subCommands.CreateSubCommand(_names.SubCommandNames.BustCache).Configure);
             command.Command(_names.CommandNames.Settings, new ConfigureSettingsCommand(_boxHome, _factory, _names).Configure);
             command.Command(_names.CommandNames.Environments, new ConfigureEnvironmentsCommand(_boxHome, _factory, _names).Configure);
 
@@ -43,7 +42,6 @@ namespace BoxCLI.Commands
         private readonly BoxEnvironments _environments;
         private readonly BoxDefaultSettings _settings;
         private readonly SubCommandFactory _factory;
-        private readonly ISubCommandFactory _subCommands;
         private readonly LocalizedStringsResource _names;
         public ConfigureCommand(IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names)
         {
@@ -52,7 +50,6 @@ namespace BoxCLI.Commands
             _settings = boxHome.GetBoxHomeSettings();
             _factory = factory;
             _names = names;
-            _subCommands = factory.CreateFactory(_names.CommandNames.Configure);
         }
     }
 }

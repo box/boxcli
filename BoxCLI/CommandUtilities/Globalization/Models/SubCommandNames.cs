@@ -33,5 +33,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string StartUserSession { get; set; } = "start-user-session";
         public string EndUserSession { get; set; } = "end-user-session";
         public string GetSessionExpiration { get; set; } = "get-session-expiration";
+        public string Exchange { get; set; } = "exchange";
+        public string Revoke { get; set; } = "revoke";
     }
 }

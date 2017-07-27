@@ -18,6 +18,8 @@ using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities.Globalization;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization.Models;
+using BoxCLI.Commands.ConfigureSubCommands;
+using BoxCLI.CommandUtilities.Exceptions;
 
 namespace BoxCLI
 {
@@ -52,6 +54,14 @@ namespace BoxCLI
                 {
                     Reporter.WriteError(ex.Message);
                 }
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException.GetType() == typeof(NoEnvironmentsFoundException))
+                    {
+                        Reporter.WriteError("It looks like you haven't configured the Box CLI yet.");
+                        Reporter.WriteError("Use this command to start using the CLI: box configure environments add");
+                    }
+                }
                 return 1;
             }
         }
@@ -78,6 +88,8 @@ namespace BoxCLI
               .AddSingleton<CollaborationCommand>()
               .AddSingleton<SharedLinkCommand>()
               .AddSingleton<TrashCommand>()
+              .AddSingleton<SessionCommand>()
+              .AddSingleton<TokenCommand>()
               .AddSingleton<RootCommand>();
         }
     }

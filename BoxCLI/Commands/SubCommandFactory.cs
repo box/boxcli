@@ -14,7 +14,9 @@ using BoxCLI.Commands.GroupSubCommands;
 using BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands;
 using BoxCLI.Commands.MetadataSubCommands;
 using BoxCLI.Commands.MetadataTemplateSubCommands;
+using BoxCLI.Commands.SessionSubCommands;
 using BoxCLI.Commands.SharedLinkSubCommands;
+using BoxCLI.Commands.TokenSubCommands;
 using BoxCLI.Commands.TrashSubCommands;
 using BoxCLI.Commands.UserSubCommands;
 using BoxCLI.Commands.WebhooksSubComands;
@@ -41,17 +43,13 @@ namespace BoxCLI.Commands
 
         public ISubCommandFactory CreateFactory(string factoryName)
         {
-            if (factoryName == _names.CommandNames.Configure)
-            {
-                return new ConfigureSubCommandFactory(_boxHome, _names);
-            }
-            else if (factoryName == _names.CommandNames.Settings)
+            if (factoryName == _names.CommandNames.Settings)
             {
                 return new ConfigureSettingsSubCommandFactory(_boxHome, _names);
             }
             else if (factoryName == _names.CommandNames.Environments)
             {
-                return new ConfigureEnvironmentsSubCommandFactory(_boxHome, _names);
+                return new ConfigureEnvironmentsSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else if (factoryName == _names.CommandNames.Folders)
             {
@@ -124,6 +122,14 @@ namespace BoxCLI.Commands
             else if (factoryName == _names.CommandNames.SharedLinks)
             {
                 return new SharedLinkSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Session)
+            {
+                return new SessionSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Token)
+            {
+                return new TokenSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
             else
             {

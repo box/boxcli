@@ -1,15 +1,20 @@
+using System.Threading.Tasks;
 using BoxCLI.BoxHome;
+using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
+namespace BoxCLI.Commands.SessionSubCommands
 {
-    public class ConfigureEnvironmentsGetSessionExpirationCommand : ConfigureEnvironmentsSubCommandBase
+    public class SessionGetSessionExpirationCommand : SessionSubCommandBase
     {
         private CommandLineApplication _app;
-        public ConfigureEnvironmentsGetSessionExpirationCommand(IBoxHome boxHome) : base(boxHome)
+
+        public SessionGetSessionExpirationCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
+            : base(boxPlatformBuilder, boxHome, names)
         {
-        } 
+        }
 
         public override void Configure(CommandLineApplication command)
         {
@@ -22,10 +27,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             base.Configure(command);
         }
 
-        protected override int Execute()
+        protected async override Task<int> Execute()
         {
             this.RunGetExpiration();
-            return base.Execute();
+            return await base.Execute();
         }
 
         private void RunGetExpiration()
