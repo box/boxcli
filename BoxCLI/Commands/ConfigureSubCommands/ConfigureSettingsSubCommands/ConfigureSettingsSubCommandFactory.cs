@@ -26,6 +26,46 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
             {
                 return new ConfigureSettingsListCommand(_boxHome);
             }
+            else if (commandName == _names.SubCommandNames.GetFileFormat)
+            {
+                return new ConfigureSettingsGetFileFormatCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.GetFolderName)
+            {
+                return new ConfigureSettingsGetFolderNameCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.GetFolderPath)
+            {
+                return new ConfigureSettingsGetFolderPathCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.SetFileFormat)
+            {
+                return new ConfigureSettingsSetFileFormatCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.SetFolderName)
+            {
+                return new ConfigureSettingsSetFolderNameCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.SetFolderPath)
+            {
+                return new ConfigureSettingsSetFolderPathCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.GetOutputJson)
+            {
+                return new ConfigureSettingsGetOutputJsonCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.GetAutoSave)
+            {
+                return new ConfigureSettingsGetAutoSaveCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.ToggleAutoSave)
+            {
+                return new ConfigureSettingsToggleAutoSaveCommand(_boxHome);
+            }
+            else if (commandName == _names.SubCommandNames.ToggleOutputJson)
+            {
+                return new ConfigureSettingsToggleOutputJsonCommand(_boxHome);
+            }
             else
             {
                 throw new Exception("Command not registered.");

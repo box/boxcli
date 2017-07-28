@@ -17,6 +17,16 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
                 return this.Execute();
             });
             command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
+            command.Command(_names.SubCommandNames.GetAutoSave, _subCommands.CreateSubCommand(_names.SubCommandNames.GetAutoSave).Configure);
+            command.Command(_names.SubCommandNames.ToggleAutoSave, _subCommands.CreateSubCommand(_names.SubCommandNames.ToggleAutoSave).Configure);
+            command.Command(_names.SubCommandNames.GetOutputJson, _subCommands.CreateSubCommand(_names.SubCommandNames.GetOutputJson).Configure);
+            command.Command(_names.SubCommandNames.ToggleOutputJson, _subCommands.CreateSubCommand(_names.SubCommandNames.ToggleOutputJson).Configure);
+            command.Command(_names.SubCommandNames.GetFileFormat, _subCommands.CreateSubCommand(_names.SubCommandNames.GetFileFormat).Configure);
+            command.Command(_names.SubCommandNames.SetFileFormat, _subCommands.CreateSubCommand(_names.SubCommandNames.SetFileFormat).Configure);
+            command.Command(_names.SubCommandNames.GetFolderName, _subCommands.CreateSubCommand(_names.SubCommandNames.GetFolderName).Configure);
+            command.Command(_names.SubCommandNames.SetFolderName, _subCommands.CreateSubCommand(_names.SubCommandNames.SetFolderName).Configure);
+            command.Command(_names.SubCommandNames.GetFolderPath, _subCommands.CreateSubCommand(_names.SubCommandNames.GetFolderPath).Configure);
+            command.Command(_names.SubCommandNames.SetFolderPath, _subCommands.CreateSubCommand(_names.SubCommandNames.SetFolderPath).Configure);
             base.Configure(command);
         }
         protected override int Execute()

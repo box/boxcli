@@ -1,5 +1,6 @@
 using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
+using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
@@ -29,10 +30,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
         private void RunSettingsList()
         {
             var settings = base._settings.GetAllSettings();
-            System.Console.WriteLine("Current settings:");
-            System.Console.WriteLine($"Path to store Box Reports: {settings.BoxReportsFolderPath}");
-            System.Console.WriteLine($"Box Reports folder name: {settings.BoxReportsFolderName}");
-            System.Console.WriteLine($"Default file format for Box Reports: {settings.BoxReportsFileFormat}");
+            Reporter.WriteInformation("Current settings:");
+            Reporter.WriteInformation($"Path to store Box Reports: {settings.BoxReportsFolderPath}");
+            Reporter.WriteInformation($"Box Reports folder name: {settings.BoxReportsFolderName}");
+            Reporter.WriteInformation($"Default file format for Box Reports: {settings.BoxReportsFileFormat}");
         }
 
     }

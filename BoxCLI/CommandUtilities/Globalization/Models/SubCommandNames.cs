@@ -35,5 +35,15 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string GetSessionExpiration { get; set; } = "get-session-expiration";
         public string Exchange { get; set; } = "exchange";
         public string Revoke { get; set; } = "revoke";
+        public string GetFolderName { get; set; } = "get-folder-name";
+        public string GetFolderPath { get; set; } = "get-folder-path";
+        public string GetFileFormat { get; set; } = "get-file-format";
+        public string SetFolderName { get; set; } = "set-folder-name";
+        public string SetFolderPath { get; set; } = "set-folder-path";
+        public string SetFileFormat { get; set; } = "set-file-format";
+        public string GetOutputJson { get; set; } = "get-output-json";
+        public string ToggleOutputJson { get; set; } = "toggle-output-json";
+        public string GetAutoSave { get; set; } = "get-auto-save";
+        public string ToggleAutoSave { get; set; } = "toggle-auto-save";
     }
 }
