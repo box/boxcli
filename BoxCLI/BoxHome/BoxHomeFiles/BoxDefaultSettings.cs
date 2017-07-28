@@ -30,6 +30,16 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             return DeserializeBoxHomeSettingsFile();
 
         }
+        public bool GetAutoSaveSetting()
+        {
+            var settings = DeserializeBoxHomeSettingsFile();
+            return settings.AutoSave;
+        }
+        public bool GetOutputJsonSetting()
+        {
+            var settings = DeserializeBoxHomeSettingsFile();
+            return settings.OutputJson;
+        }
         public string GetBoxReportsFolderPathSetting()
         {
             var settings = DeserializeBoxHomeSettingsFile();
@@ -45,6 +55,16 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var settings = DeserializeBoxHomeSettingsFile();
             return settings.BoxDownloadsFolderPath;
         }
+        public string GetBoxReportsFolderName()
+        {
+            var settings = DeserializeBoxHomeSettingsFile();
+            return settings.BoxReportsFolderName;
+        }
+        public string GetBoxDownloadsFolderName()
+        {
+            var settings = DeserializeBoxHomeSettingsFile();
+            return settings.BoxDownloadsFolderName;
+        }
 
         public string GetBoxReportsFolderPath()
         {
@@ -56,11 +76,102 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             return CreateBoxDownloadsFolder();
         }
 
+        public bool SetBoxDownloadsFolderName(string name)
+        {
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.BoxDownloadsFolderName = name;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
+        public bool SetBoxDownloadsFolderPath(string path)
+        {
+            path = GeneralUtilities.TranslatePath(path);
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.BoxDownloadsFolderPath = path;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
+        public bool SetBoxReportsFolderName(string name)
+        {
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.BoxReportsFolderName = name;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
         public bool SetBoxReportsFolderPath(string path)
         {
             path = GeneralUtilities.TranslatePath(path);
             var currentSettings = DeserializeBoxHomeSettingsFile();
             currentSettings.BoxReportsFolderPath = path;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
+        public bool SetBoxReportsFileFormat(string format)
+        {
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.BoxReportsFileFormat = format;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
+        public bool ToggleAutoSaveSetting()
+        {
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.AutoSave = !currentSettings.AutoSave;
+            try
+            {
+                SerializeBoxHomeSettingsFile(currentSettings);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+                return false;
+            }
+        }
+        public bool ToggleOutputJsonSetting()
+        {
+            var currentSettings = DeserializeBoxHomeSettingsFile();
+            currentSettings.OutputJson = !currentSettings.OutputJson;
             try
             {
                 SerializeBoxHomeSettingsFile(currentSettings);
