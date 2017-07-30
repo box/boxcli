@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
@@ -83,6 +85,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             {
                 base.PrintCollaboration(collab);
             }
+        }
+
+        protected virtual string ProcessRoleOptions(Dictionary<string, bool> possibleRoles)
+        {
+            var result = possibleRoles.First(x => x.Value == true);
+            return result.Key;
         }
     }
 }

@@ -7,16 +7,16 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands
 {
-    public class CollaborationCommand : BoxBaseCommand
+    public class CollaborationOnItemCommand : BoxBaseCommand
     {
         private CommandLineApplication _app;
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Manage individual collaborations.";
-            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a collaboration in your Enterprise.";
+            command.Description = "Manage your collaborations on Box items.";
+            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about collaborations in your Enterprise.";
 
-            command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+            command.Command(base._names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
             command.Command(base._names.SubCommandNames.Add, _subCommands.CreateSubCommand(_names.SubCommandNames.Add).Configure);
             command.Command(base._names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
 
@@ -34,11 +34,22 @@ namespace BoxCLI.Commands
         }
         private readonly ISubCommandFactory _subCommands;
 
-        public CollaborationCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory,
+        public CollaborationOnItemCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, 
             LocalizedStringsResource names, BoxType t = BoxType.enterprise)
             : base(boxPlatformBuilder, boxHome, names)
         {
-            _subCommands = factory.CreateFactory(base._names.CommandNames.Collaborations);
+            if (t == BoxType.file)
+            {
+                _subCommands = factory.CreateFactory(base._names.CommandNames.FileCollaborations);
+            }
+            else if (t == BoxType.folder)
+            {
+                _subCommands = factory.CreateFactory(base._names.CommandNames.FolderCollaborations);
+            }
+            else
+            {
+                throw new Exception("This item does not support collaborations.");
+            }
         }
     }
 }

@@ -22,6 +22,14 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             {
                 return new CollaborationAddCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.enterprise);
             }
+            else if (commandName == base._names.SubCommandNames.Delete)
+            {
+                return new CollaborationDeleteCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.enterprise);
+            }
+            else if (commandName == base._names.SubCommandNames.Update)
+            {
+                return new CollaborationUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.enterprise);
+            }
             else
             {
                 throw new Exception("Command not registered.");
