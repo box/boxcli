@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.CollaborationSubCommands
 {
-    public class CollaborationGetCommand : CollaborationSubCommandBase
+    public class CollaborationDeleteCommand : CollaborationSubCommandBase
     {
         private CommandArgument _id;
         private CommandLineApplication _app;
-        public CollaborationGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
+        public CollaborationDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
         }
@@ -21,9 +19,9 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get an individual collaboration.";
+            command.Description = "Remove a collaboration";
             _id = command.Argument("collaborationId",
-                                   "Id of the collaboration");
+                                   "ID of the collaboration");
 
             command.OnExecute(async () =>
             {
@@ -34,15 +32,24 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet();
+            await this.RunDelete();
             return await base.Execute();
         }
 
-        private async Task RunGet()
+        private async Task RunDelete()
         {
+
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintCollaboration(await boxClient.CollaborationsManager.GetCollaborationAsync(this._id.Value));
+            var result = await boxClient.CollaborationsManager.RemoveCollaborationAsync(this._id.Value);
+            if(result)
+            {
+                Reporter.WriteSuccess($"Collaboration {this._id.Value} successfully removed");
+            }
+            else
+            {
+                Reporter.WriteSuccess($"Couldn't remove collaboration {this._id.Value}");
+            }
         }
     }
 }

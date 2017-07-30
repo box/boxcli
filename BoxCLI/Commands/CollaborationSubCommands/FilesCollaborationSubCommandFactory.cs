@@ -14,13 +14,17 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         public override ISubCommand CreateSubCommand(string commandName)
         {
-            if (commandName == base._names.SubCommandNames.Get) 
+            if (commandName == base._names.SubCommandNames.List) 
             {
-                return new CollaborationGetCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
+                return new CollaborationListCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
             }
             else if (commandName == base._names.SubCommandNames.Add)
             {
                 return new CollaborationAddCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
+            }
+            else if (commandName == base._names.SubCommandNames.Update)
+            {
+                return new CollaborationUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
             }
             else
             {
