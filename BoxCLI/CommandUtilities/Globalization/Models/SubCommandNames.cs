@@ -45,5 +45,11 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string ToggleOutputJson { get; set; } = "toggle-output-json";
         public string GetAutoSave { get; set; } = "get-auto-save";
         public string ToggleAutoSave { get; set; } = "toggle-auto-save";
+        public string Invite { get; set; } = "invite-user";
+        public string MoveRootContent { get; set; } = "move-root-content";
+        public string ChangeLogin { get; set; } = "change-primary-email";
+        public string AddEmailAlias { get; set; } = "add-email-alias";
+        public string GetEmailAliases { get; set; } = "get-email-aliases";
+        public string DeleteEmailAlias { get; set; } = "delete-email-alias";
     }
 }

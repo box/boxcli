@@ -101,5 +101,17 @@ namespace BoxCLI.Commands.UserSubCommands
                 throw new Exception(error);
             }
         }
+
+        protected void PrintAliases(BoxCollection<BoxEmailAlias> aliases)
+        {
+            Reporter.WriteInformation($"User has a total of {aliases.TotalCount} email aliases");
+            for(int i=0; i<aliases.TotalCount; i++) 
+            {
+                Reporter.WriteInformation($"Email Alias Information");
+                Reporter.WriteInformation($"Email Alias:       {aliases.Entries[i].Email}");
+                Reporter.WriteInformation($"Aliases Confirmed: {aliases.Entries[i].IsConfirmed}");
+                Reporter.WriteInformation($"Alias ID:          {aliases.Entries[i].Id}");
+            }
+        }
     }
 }

@@ -53,11 +53,15 @@ namespace BoxCLI.Commands.UserSubCommands
             }
             else if (commandName == base._names.SubCommandNames.AddEmailAlias)
             {
-                return new UserAddAliasCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+                return new UserAddEmailAliasCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
             else if (commandName == base._names.SubCommandNames.GetEmailAliases)
             {
                 return new UserGetEmailAliasesCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.DeleteEmailAlias)
+            {
+                return new UserDeleteEmailAliasCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
             else
             {

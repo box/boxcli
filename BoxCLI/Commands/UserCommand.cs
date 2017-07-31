@@ -35,6 +35,7 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.ChangeLogin, _subCommands.CreateSubCommand(_names.SubCommandNames.ChangeLogin).Configure);
             command.Command(_names.SubCommandNames.AddEmailAlias, _subCommands.CreateSubCommand(_names.SubCommandNames.AddEmailAlias).Configure);
             command.Command(_names.SubCommandNames.GetEmailAliases, _subCommands.CreateSubCommand(_names.SubCommandNames.GetEmailAliases).Configure);
+            command.Command(_names.SubCommandNames.DeleteEmailAlias, _subCommands.CreateSubCommand(_names.SubCommandNames.DeleteEmailAlias).Configure);
 
             command.OnExecute(async () =>
             {
