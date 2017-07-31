@@ -93,15 +93,6 @@ namespace BoxCLI.Commands.UserSubCommands
             }
         }
 
-        protected void CheckForValue(string value, CommandLineApplication app, string error)
-        {
-            if(string.IsNullOrEmpty(value))
-            {
-                app.ShowHelp();
-                throw new Exception(error);
-            }
-        }
-
         protected void PrintAliases(BoxCollection<BoxEmailAlias> aliases)
         {
             Reporter.WriteInformation($"User has a total of {aliases.TotalCount} email aliases");
