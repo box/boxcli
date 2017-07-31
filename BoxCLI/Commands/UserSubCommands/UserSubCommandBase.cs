@@ -1,8 +1,21 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Box.V2;
+using Box.V2.Config;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandModels;
+using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
+using CsvHelper;
+using Microsoft.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
 
 namespace BoxCLI.Commands.UserSubCommands
 {
@@ -69,6 +82,36 @@ namespace BoxCLI.Commands.UserSubCommands
             System.Console.WriteLine($"User Max Upload Size: {user.MaxUploadSize}");
             System.Console.WriteLine($"User Space Alloted: {user.SpaceAmount}");
             System.Console.WriteLine($"User Space Used: {user.SpaceUsed}");
+        }
+
+        protected void CheckForUserId(string id, CommandLineApplication app)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                app.ShowHelp();
+                throw new Exception("A user ID is required for this command.");
+            }
+        }
+
+        protected void CheckForValue(string value, CommandLineApplication app, string error)
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                app.ShowHelp();
+                throw new Exception(error);
+            }
+        }
+
+        protected void PrintAliases(BoxCollection<BoxEmailAlias> aliases)
+        {
+            Reporter.WriteInformation($"User has a total of {aliases.TotalCount} email aliases");
+            for(int i=0; i<aliases.TotalCount; i++) 
+            {
+                Reporter.WriteInformation($"Email Alias Information");
+                Reporter.WriteInformation($"Email Alias:       {aliases.Entries[i].Email}");
+                Reporter.WriteInformation($"Aliases Confirmed: {aliases.Entries[i].IsConfirmed}");
+                Reporter.WriteInformation($"Alias ID:          {aliases.Entries[i].Id}");
+            }
         }
     }
 }
