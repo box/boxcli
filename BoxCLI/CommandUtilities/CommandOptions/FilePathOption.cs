@@ -5,6 +5,6 @@ namespace BoxCLI.CommandUtilities.CommandOptions
     public static class FilePathOption
     {
         public static CommandOption ConfigureOption(CommandLineApplication command)
-            => command.Option("--file-path <file-path>", "File path to save report", CommandOptionType.SingleValue);
+            => command.Option("--save-to-file-path <file-path>", "Override default file path to save report", CommandOptionType.SingleValue);
     }
 }

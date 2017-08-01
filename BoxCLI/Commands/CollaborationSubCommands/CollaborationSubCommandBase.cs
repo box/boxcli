@@ -29,22 +29,6 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             base.Configure(command);
         }
 
-        protected BoxType ProcessType(string type)
-        {
-            if (type.ToLower() == "file")
-            {
-                return BoxType.file;
-            }
-            else if (type.ToLower() == "folder")
-            {
-                return BoxType.folder;
-            }
-            else
-            {
-                throw new Exception("Not a valid Box item type to collaborate.");
-            }
-        }
-
         protected async Task ProcessCollaborationsFromFile(string id, string path, BoxType t, string asUser = "")
         {
             var boxClient = base.ConfigureBoxClient(asUser);

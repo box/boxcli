@@ -1,7 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -9,6 +13,8 @@ namespace BoxCLI.Commands.GroupSubCommands
 {
     public class GroupListCommand : GroupSubCommandBase
     {
+        private CommandOption _save;
+        private CommandOption _fileFormat;
         private CommandLineApplication _app;
         public GroupListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -18,6 +24,8 @@ namespace BoxCLI.Commands.GroupSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
+            _save = SaveOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
             command.Description = "List all groups.";
 
             command.OnExecute(async () =>
@@ -35,7 +43,17 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task RunList()
         {
+            
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+			if (_save.HasValue())
+			{
+				var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+				Reporter.WriteInformation("Saving file...");
+                var saveGroups = await boxClient.GroupsManager.GetAllGroupsAsync(autoPaginate: true);
+				var saved = base.WriteOffsetCollectionResultsToReport<BoxGroup, BoxGroupMap>(saveGroups, fileName, fileFormat: this._fileFormat.Value());
+				Reporter.WriteInformation($"File saved: {saved}");
+				return;
+			}
             var BoxCollectionsIterators = base.GetIterators();
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroup>((offset) =>
             {
