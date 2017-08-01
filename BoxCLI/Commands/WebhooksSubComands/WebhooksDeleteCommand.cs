@@ -27,7 +27,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
             command.Description = "Delete a webhook.";
             _webhookId = command.Argument("webhookId",
                                    "Id of webhook to delete");
-            _path = FilePathOption.ConfigureOption(command);
+            _path = BulkFilePathOption.ConfigureOption(command);
 
             command.OnExecute(async () =>
             {

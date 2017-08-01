@@ -12,7 +12,6 @@ namespace BoxCLI.Commands.UserSubCommands
     public class UserGetEmailAliasesCommand : UserSubCommandBase
     {
         private CommandArgument _userId;
-        private CommandArgument _userEmail;
         private CommandLineApplication _app;
         public UserGetEmailAliasesCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -21,7 +20,7 @@ namespace BoxCLI.Commands.UserSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get All Email Alises for a User";
+            command.Description = "Get all Email Alises for a User";
             _userId = command.Argument("userId",
                                    "User ID to add email alias");
             command.OnExecute(async () =>
