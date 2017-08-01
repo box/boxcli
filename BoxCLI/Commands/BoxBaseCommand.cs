@@ -227,6 +227,7 @@ namespace BoxCLI.Commands
                     var collection = new BoxCollection<T>();
                     collection.Entries = new List<T>();
                     collection.Entries.AddRange(entity);
+                    collection.TotalCount = entity.Count();
                     File.WriteAllText(filePath, converter.Serialize<BoxCollection<T>>(collection));
                     return true;
                 }

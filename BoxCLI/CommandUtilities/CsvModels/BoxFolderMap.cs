@@ -4,15 +4,15 @@ using CsvHelper.Configuration;
 
 namespace BoxCLI.CommandUtilities.CsvModels
 {
-    public class BoxItemMap : CsvClassMap<BoxItem>
+    public class BoxFolderMap : CsvClassMap<BoxFolder>
     {
-        public BoxItemMap()
+        public BoxFolderMap()
         {
             Map(m => m.Id);
             Map(m => m.Name);
             Map(m => m.Type);
             Map(m => m.ETag);
-            Map(m => m.SequenceId);
+            Map(m => m.Size);
         }
     }
 }
