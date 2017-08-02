@@ -92,6 +92,7 @@ namespace BoxCLI
               .AddSingleton<TokenCommand>()
               .AddSingleton<SearchCommand>()
               .AddSingleton<TaskCommand>()
+              .AddSingleton<TaskAssignmentCommand>()
               .AddSingleton<RootCommand>();
         }
     }
