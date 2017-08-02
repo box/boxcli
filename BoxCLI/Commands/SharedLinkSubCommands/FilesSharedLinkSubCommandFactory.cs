@@ -22,6 +22,10 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             {
                 return new SharedLinkCreateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
             }
+			else if (commandName == base._names.SubCommandNames.Update)
+			{
+				return new SharedLinkUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
+			}
             else
             {
                 throw new Exception("Command not registered.");

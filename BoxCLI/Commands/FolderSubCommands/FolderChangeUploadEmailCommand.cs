@@ -26,7 +26,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             _folderId = command.Argument("folderId",
                                "Id of folder to move");
             _access = command.Argument("access", "Can be open or collaborators");
-            _etag = command.Option("--etag", "Only move if etag value matches", CommandOptionType.SingleValue);
+            _etag = command.Option("--etag", "Only update if etag value matches", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 Id = this._folderId.Value,
                 FolderUploadEmail = new BoxEmailRequest()
                 {
-                    Access = this._access.Value
+                    Access = this._access.Value,
                 }
             };
             var changedEmail = await boxClient.FoldersManager.UpdateInformationAsync(email, etag: this._etag.Value());

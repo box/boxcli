@@ -12,6 +12,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Webhooks { get; set; } = "webhooks";
         public string Metadata { get; set; } = "metadata";
         public string MetadataTemplates { get; set; } = "metadata-templates";
+        public string MetadataTemplateFields { get; set; } = "metadata-template-fields";
         public string FileMetadata { get; set; } = "file-metadata";
         public string FolderMetadata { get; set; } = "folder-metadata";
         public string SharedLinks { get; set; } = "shared-links";
@@ -27,5 +28,8 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string WebLinks { get; set; } = "weblinks";
         public string Token { get; set; } = "tokens";
         public string Session { get; set; } = "sessions";
+        public string Search { get; set; } = "search";
+        public string Task { get; set; } = "tasks";
+        public string FileTask { get; set; } = "file-tasks";
     }
 }

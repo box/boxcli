@@ -18,6 +18,7 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
             command.Command(_names.SubCommandNames.ListItems, _subCommands.CreateSubCommand(_names.SubCommandNames.ListItems).Configure);
+            command.Command(_names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
             command.Command(_names.SubCommandNames.Move, _subCommands.CreateSubCommand(_names.SubCommandNames.Move).Configure);
             command.Command(_names.SubCommandNames.Copy, _subCommands.CreateSubCommand(_names.SubCommandNames.Copy).Configure);
             command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);

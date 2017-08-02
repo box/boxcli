@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Box.V2.Models;
+using Box.V2.Models.Request;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -51,6 +54,66 @@ namespace BoxCLI.Commands.GroupSubCommands
         {
             Reporter.WriteInformation($"ID: {g.Id}");
             Reporter.WriteInformation($"Name: {g.Name}");
+        }
+
+        protected async Task CreateGroupsFromFile(string path, string asUser = "",
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+        {
+            var boxClient = base.ConfigureBoxClient(asUser);
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = GeneralUtilities.TranslatePath(path);
+            }
+            try
+            {
+                Reporter.WriteInformation("Reading file...");
+                var groupRequests = base.ReadFile<BoxGroupRequest, BoxGroupRequestMap>(path);
+                List<BoxGroup> saveCreated = new List<BoxGroup>();
+
+                foreach (var groupRequest in groupRequests)
+                {
+                    Reporter.WriteInformation($"Processing a group request: {groupRequest.Name}");
+                    BoxGroup createdGroup = null;
+                    try
+                    {
+                        createdGroup = await boxClient.GroupsManager.CreateAsync(groupRequest);
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError("Couldn't create group...");
+                        Reporter.WriteError(e.Message);
+                    }
+                    if (createdGroup != null)
+                    {
+                        Reporter.WriteSuccess("Created a group:");
+                        this.PrintGroup(createdGroup);
+                        if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                        {
+                            saveCreated.Add(createdGroup);
+                        }
+                    }
+                }
+                Reporter.WriteInformation("Finished processing groups...");
+                if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                {
+                    var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+                    if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+                    {
+                        fileFormat = overrideSaveFileFormat;
+                    }
+                    var savePath = base._settings.GetBoxReportsFolderPath();
+                    if (!string.IsNullOrEmpty(overrideSavePath))
+                    {
+                        savePath = overrideSavePath;
+                    }
+                    var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.Create}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    base.WriteListResultsToReport<BoxGroup, BoxGroupMap>(saveCreated, fileName, savePath, fileFormat);
+                }
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+            }
         }
     }
 }
