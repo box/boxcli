@@ -4,6 +4,7 @@ using Box.V2.Models;
 using Box.V2.Models.Request;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -14,6 +15,8 @@ namespace BoxCLI.Commands.GroupSubCommands
         private CommandArgument _name;
         private CommandOption _inviteLevel;
         private CommandOption _viewMembershipLevel;
+        private CommandOption _save;
+        private CommandOption _bulkPath;
         private CommandLineApplication _app;
         public GroupCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -24,6 +27,8 @@ namespace BoxCLI.Commands.GroupSubCommands
             _app = command;
             command.Description = "Create a group.";
             _name = command.Argument("name", "Group name");
+            _bulkPath = BulkFilePathOption.ConfigureOption(command);
+            _save = SaveOption.ConfigureOption(command);
             _inviteLevel = command.Option("-i|--invite",
                                    "Specifies who can invite the group to collaborate. Enter admins_only, admins_and_members, or all_managed_users",
                                    CommandOptionType.SingleValue);
@@ -46,6 +51,11 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task RunCreate()
         {
+            if(this._bulkPath.HasValue())
+            {
+                await base.CreateGroupsFromFile(this._bulkPath.Value(), this._asUser.Value(), this._save.HasValue());
+                return;
+            }
             base.CheckForValue(this._name.Value, this._app, "A group name is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var groupRequest = new BoxGroupRequest();

@@ -12,7 +12,9 @@ using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandModels;
 using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
 using Microsoft.Extensions.CommandLineUtils;
@@ -211,6 +213,83 @@ namespace BoxCLI.Commands
                 throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
+        protected virtual bool WriteMetadataTemplateCollectionResultsToReport(List<BoxMetadataTemplate> entity,
+            string fileNameTemplate, string fileNameFields, string filePathTemplate = "", string filePathFields = "", string fileFormat = "")
+        {
+
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePathTemplate = this.ProcessReportsFilePathForWriters(filePathTemplate, fileNameTemplate, fileFormat);
+            filePathFields = this.ProcessReportsFilePathForWriters(filePathFields, fileNameFields, fileFormat);
+            if (fileFormat.ToLower() == this._settings.FILE_FORMAT_JSON)
+            {
+                try
+                {
+                    var converter = new BoxJsonConverter();
+                    File.WriteAllText(filePathTemplate, converter.Serialize<List<BoxMetadataTemplate>>(entity));
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else if (fileFormat.ToLower() == this._settings.FILE_FORMAT_CSV)
+            {
+                try
+                {
+                    var fields = new List<BoxMetadataTemplateFieldForCsv>();
+                    foreach (var template in entity)
+                    {
+                        if (template.Fields != null && template.Fields.Count > 0)
+                        {
+                            foreach (var field in template.Fields)
+                            {
+                                var optionsList = new List<string>();
+                                if (field.Options != null && field.Options.Count > 0)
+                                {
+                                    foreach (var option in field.Options)
+                                    {
+                                        optionsList.Add(option.Key);
+                                    }
+                                }
+                                var fieldForCsv = new BoxMetadataTemplateFieldForCsv();
+                                fieldForCsv.DisplayName = field.DisplayName;
+                                fieldForCsv.Hidden = field.Hidden;
+                                fieldForCsv.Key = field.Key;
+                                fieldForCsv.TemplateKey = template.TemplateKey;
+                                fieldForCsv.OptionsFromCsv = optionsList;
+                                fieldForCsv.Type = field.Type;
+                                fields.Add(fieldForCsv);
+                            }
+                        }
+                    }
+                    using (StreamWriter fs = File.CreateText(filePathTemplate))
+                    using (var csv = new CsvWriter(fs))
+                    {
+                        csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateMap));
+                        csv.WriteRecords(entity);
+                    }
+                    using (StreamWriter fs = File.CreateText(filePathFields))
+                    using (var csv = new CsvWriter(fs))
+                    {
+                        csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateFieldMap));
+                        csv.WriteRecords(fields);
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+        }
+
 
         protected virtual bool WriteListResultsToReport<T, M>(List<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
@@ -407,6 +486,27 @@ namespace BoxCLI.Commands
             else
             {
                 throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+        }
+
+        protected virtual BoxSharedLinkAccessType ResolveSharedLinkAccessType(string access)
+        {
+            access = access.ToLower();
+            if (access == "collaborators")
+            {
+                return BoxSharedLinkAccessType.collaborators;
+            }
+            else if (access == "company")
+            {
+                return BoxSharedLinkAccessType.company;
+            }
+            else if (access == "open")
+            {
+                return BoxSharedLinkAccessType.open;
+            }
+            else
+            {
+                throw new Exception("Unknown Shared Link access type.");
             }
         }
 

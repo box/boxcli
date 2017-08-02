@@ -43,6 +43,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 return new FolderChangeUploadEmailCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+			else if (commandName == base._names.SubCommandNames.Update)
+			{
+				return new FolderUpdateCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+			}
             else
             {
                 throw new Exception("Command not registered.");

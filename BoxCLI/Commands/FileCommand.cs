@@ -31,6 +31,7 @@ namespace BoxCLI.Commands
             command.Command(_names.CommandNames.Collaborations, new CollaborationOnItemCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.Command(_names.CommandNames.SharedLinks, new SharedLinkCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.Command(_names.CommandNames.FileVersions, new FileVersionCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names).Configure);
+            command.Command(_names.CommandNames.Task, new TaskCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.file).Configure);
             command.OnExecute(async () =>
                {
                    return await this.Execute();

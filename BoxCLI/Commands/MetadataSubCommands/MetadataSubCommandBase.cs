@@ -87,5 +87,69 @@ namespace BoxCLI.Commands.MetadataSubCommands
                 Reporter.WriteInformation($"{key}: {md[key]}");
             }
         }
+
+        //protected virtual bool ProcessMetadataTemplates(string path, string asUser = "",
+        //    bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+        //{
+        //    var boxClient = base.ConfigureBoxClient(asUser);
+        //    if (!string.IsNullOrEmpty(path))
+        //    {
+        //        path = GeneralUtilities.TranslatePath(path);
+        //    }
+
+        //    try
+        //    {
+        //        Reporter.WriteInformation("Reading file...");
+        //        var metadataTemplateRequests = base.ReadFile<BoxMetadataTemplate, Dictionary<string, object>>(path);
+        //        List<BoxWebhook> saveUpdated = new List<BoxWebhook>();
+
+        //        foreach (var webhookRequest in webhookRequests)
+        //        {
+        //            Reporter.WriteInformation($"Processing a webhook request: {webhookRequest.Address}");
+        //            BoxWebhook updatedWebhook = null;
+        //            try
+        //            {
+        //                updatedWebhook = await boxClient.WebhooksManager.UpdateWebhookAsync(webhookRequest);
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                Reporter.WriteError("Couldn't update webhook...");
+        //                Reporter.WriteError(e.Message);
+        //            }
+        //            Reporter.WriteSuccess("Updated a webhook:");
+        //            if (updatedWebhook != null)
+        //            {
+        //                this.PrintWebhook(updatedWebhook);
+        //                if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+        //                {
+        //                    saveUpdated.Add(updatedWebhook);
+        //                }
+        //            }
+        //        }
+        //        Reporter.WriteInformation("Finished processing webhooks...");
+        //        if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+        //        {
+        //            var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+        //            if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+        //            {
+        //                fileFormat = overrideSaveFileFormat;
+        //            }
+        //            var savePath = base._settings.GetBoxReportsFolderPath();
+        //            if (!string.IsNullOrEmpty(overrideSavePath))
+        //            {
+        //                savePath = overrideSavePath;
+        //            }
+        //            var fileName = $"{base._names.CommandNames.Webhooks}-{base._names.SubCommandNames.Update}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+        //            base.WriteListResultsToReport<BoxWebhook, BoxWebhookMap>(saveUpdated, fileName, savePath, fileFormat);
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //    return true;
+        //}
+
     }
 }

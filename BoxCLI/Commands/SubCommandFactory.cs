@@ -16,6 +16,7 @@ using BoxCLI.Commands.MetadataSubCommands;
 using BoxCLI.Commands.MetadataTemplateSubCommands;
 using BoxCLI.Commands.SessionSubCommands;
 using BoxCLI.Commands.SharedLinkSubCommands;
+using BoxCLI.Commands.TaskSubCommands;
 using BoxCLI.Commands.TokenSubCommands;
 using BoxCLI.Commands.TrashSubCommands;
 using BoxCLI.Commands.UserSubCommands;
@@ -131,6 +132,14 @@ namespace BoxCLI.Commands
             {
                 return new TokenSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
+			else if (factoryName == _names.CommandNames.Task)
+			{
+				return new TaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+			}
+			else if (factoryName == _names.CommandNames.FileTask)
+			{
+				return new FileTaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+			}
             else
             {
                 throw new Exception("Command not registered.");
