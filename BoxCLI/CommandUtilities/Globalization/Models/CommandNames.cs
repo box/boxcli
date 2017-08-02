@@ -31,5 +31,6 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string Search { get; set; } = "search";
         public string Task { get; set; } = "tasks";
         public string FileTask { get; set; } = "file-tasks";
+        public string TaskAssignment { get; set; } = "task-assignments";
     }
 }

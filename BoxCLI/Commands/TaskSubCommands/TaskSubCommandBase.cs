@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
@@ -22,12 +22,5 @@ namespace BoxCLI.Commands.TaskSubCommands
 			_json = OutputJsonOption.ConfigureOption(command);
 			base.Configure(command);
 		}
-
-        protected virtual void PrintTask(BoxTask task)
-        {
-            Reporter.WriteInformation($"Task ID: {task.Id}");
-            Reporter.WriteInformation($"Task Action: {task.Action}");
-            Reporter.WriteInformation($"Task Message: {task.Message}");
-        }
     }
 }

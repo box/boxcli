@@ -105,6 +105,20 @@ namespace BoxCLI.Commands
             base.PrintMiniUser(fileLock.CreatedBy);
         }
 
+        protected virtual void PrintTaskAssignment(BoxTaskAssignment taskAssignment)
+        {
+            Reporter.WriteInformation($"Task Assignment ID: {taskAssignment.Id}");
+            Reporter.WriteInformation($"Task Assignment Message: {taskAssignment.Message}");
+            Reporter.WriteInformation($"Task Assignment Resolution State: {taskAssignment.ResolutionState.Value}");
+        }
+
+        protected virtual void PrintTask(BoxTask task)
+        {
+            Reporter.WriteInformation($"Task ID: {task.Id}");
+            Reporter.WriteInformation($"Task Action: {task.Action}");
+            Reporter.WriteInformation($"Task Message: {task.Message}");
+        }
+
         protected List<T> ReadCustomFile<T, M>(string path)
         {
             var fileFormat = base.ProcessFileFormatFromPath(path);

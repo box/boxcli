@@ -20,5 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\TaskSubCommands\" />
+    <Folder Include="Commands\TaskAssignmentsSubCommands\" />
   </ItemGroup>
 </Project>
