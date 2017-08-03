@@ -16,6 +16,7 @@ namespace BoxCLI.Commands.FolderSubCommands
     {
         private CommandArgument _folderId;
         private CommandOption _save;
+        private CommandOption _path;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
         public FolderListItemsCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
@@ -30,6 +31,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             _folderId = command.Argument("folderId",
                                "Id of folder to manage, use '0' for the root folder");
             _save = SaveOption.ConfigureOption(command);
+            _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
@@ -55,11 +57,11 @@ namespace BoxCLI.Commands.FolderSubCommands
                     Reporter.WriteInformation("Saving file...");
                     var foldersFileName = $"{base._names.CommandNames.Folders}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                     var filesFileName = $"{base._names.CommandNames.Files}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    var collection = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true);
+                    var collection = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
 					var folders = collection.Entries.FindAll(x => x.Type == "folder").Cast<BoxFolder>().ToList();
                     var files = collection.Entries.FindAll(x => x.Type == "file").Cast<BoxFile>().ToList();
-                    var savedFolders = base.WriteListResultsToReport<BoxFolder, BoxFolderMap>(folders, foldersFileName, fileFormat: this._fileFormat.Value());
-                    var savedFiles = base.WriteListResultsToReport<BoxFile, BoxFileMap>(files, filesFileName, fileFormat: this._fileFormat.Value());
+                    var savedFolders = base.WriteListResultsToReport<BoxFolder, BoxFolderMap>(folders, foldersFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
+                    var savedFiles = base.WriteListResultsToReport<BoxFile, BoxFileMap>(files, filesFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
                     if(savedFiles && savedFolders)
                     {
                         Reporter.WriteSuccess("Saved file.");

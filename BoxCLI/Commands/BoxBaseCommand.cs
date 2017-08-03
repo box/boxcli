@@ -84,7 +84,11 @@ namespace BoxCLI.Commands
             Reporter.WriteInformation($"Item Name: {item.Name}");
             Reporter.WriteInformation($"Item Type: {item.Type}");
         }
-
+		protected virtual void PrintEntity(BoxEntity item)
+		{
+			Reporter.WriteInformation($"Item ID: {item.Id}");
+			Reporter.WriteInformation($"Item Type: {item.Type}");
+		}
         protected virtual string ConstructReportPath(string fileName, string filePath = "")
         {
             if (string.IsNullOrEmpty(filePath))

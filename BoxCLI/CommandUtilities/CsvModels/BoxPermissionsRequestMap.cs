@@ -7,7 +7,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxPermissionsRequestMap()
         {
-            Map(m => m.Download).Name("CanDownload");
+            Map(m => m.Download).Name("SharedLinkCanDownload");
         }
     }
 }
