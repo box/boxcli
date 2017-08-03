@@ -13,7 +13,7 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Manage your metadata.";
+            command.Description = "Manage your metadata on Box items.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about metadata in your Enterprise.";
 
             command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);

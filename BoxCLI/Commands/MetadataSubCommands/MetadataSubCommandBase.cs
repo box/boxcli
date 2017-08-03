@@ -1,11 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandModels;
 using BoxCLI.CommandUtilities.CommandOptions;
+using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
+using CsvHelper;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace BoxCLI.Commands.MetadataSubCommands
@@ -87,6 +93,109 @@ namespace BoxCLI.Commands.MetadataSubCommands
                 Reporter.WriteInformation($"{key}: {md[key]}");
             }
         }
+
+		protected virtual List<BoxMetadataForCsv> ReadMetadataCsvFile(string filePath)
+		{
+			var allMetadataOnItem = new List<BoxMetadataForCsv>();
+			using (var fs = File.OpenText(filePath))
+			using (var csv = new CsvReader(fs))
+			{
+				System.Console.WriteLine("Processing csv...");
+
+				csv.Configuration.RegisterClassMap(typeof(BoxMetadataMap));
+				allMetadataOnItem = csv.GetRecords<BoxMetadataForCsv>().ToList();
+			}
+			
+			return allMetadataOnItem;
+		}
+
+		protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", BoxType type = BoxType.enterprise,
+			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+		{
+			var boxClient = base.ConfigureBoxClient(asUser);
+			if (!string.IsNullOrEmpty(path))
+			{
+				path = GeneralUtilities.TranslatePath(path);
+			}
+			try
+			{
+				Reporter.WriteInformation("Reading file...");
+                var metadataRequests = this.ReadMetadataCsvFile(path);
+				var saveCreated = new List<BoxMetadataForCsv>();
+
+				foreach (var metadataRequest in metadataRequests)
+				{
+					Reporter.WriteInformation($"Processing a metadata request: {metadataRequest.TemplateKey}");
+					Dictionary<string, object> createdMetadata = null;
+                    if(metadataRequest.ItemType != null)
+                    {
+                        type = metadataRequest.ItemType.Value;
+                    }
+                    else if (type == BoxType.enterprise)
+                    {
+                        throw new Exception("Must have a Box Item type of file or folder");
+                    }
+					try
+					{
+                        if (type == BoxType.file)
+                        {
+                            createdMetadata = await boxClient.MetadataManager.CreateFileMetadataAsync(metadataRequest.ItemId, metadataRequest.Metadata, metadataRequest.Scope, metadataRequest.TemplateKey);
+                        }
+                        else if (type == BoxType.folder)
+                        {
+                            createdMetadata = await boxClient.MetadataManager.CreateFolderMetadataAsync(metadataRequest.ItemId, metadataRequest.Metadata, metadataRequest.Scope, metadataRequest.TemplateKey);
+                        }
+                        else
+                        {
+                            throw new Exception("Metadata currently only supported on files and folders.");
+                        }
+					}
+					catch (Exception e)
+					{
+						Reporter.WriteError("Couldn't add metadata...");
+						Reporter.WriteError(e.Message);
+					}
+					Reporter.WriteSuccess("Added a metadata:");
+					if (createdMetadata != null)
+					{
+						this.PrintMetadata(createdMetadata);
+						if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+						{
+                            saveCreated.Add(new BoxMetadataForCsv() 
+                            {
+                                TemplateKey = metadataRequest.TemplateKey,
+                                Scope = metadataRequest.Scope,
+                                ItemId = metadataRequest.ItemId,
+                                ItemType = metadataRequest.ItemType,
+                                Metadata = createdMetadata
+                            });
+						}
+					}
+				}
+				Reporter.WriteInformation("Finished processing metadata...");
+				if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+				{
+					var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+					if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+					{
+						fileFormat = overrideSaveFileFormat;
+					}
+					var savePath = base._settings.GetBoxReportsFolderPath();
+					if (!string.IsNullOrEmpty(overrideSavePath))
+					{
+						savePath = overrideSavePath;
+					}
+					var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.Create}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+					//base.WriteListResultsToReport<BoxMetadataForCsv, BoxMetadataMap>(saveCreated, fileName, savePath, fileFormat);
+				}
+			}
+			catch (Exception e)
+			{
+				System.Console.WriteLine(e.Message);
+				Reporter.WriteError(e.Message);
+			}
+		}
+
 
         //protected virtual bool ProcessMetadataTemplates(string path, string asUser = "",
         //    bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")

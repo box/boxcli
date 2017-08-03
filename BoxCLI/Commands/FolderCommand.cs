@@ -13,7 +13,7 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Work with folders in Box.";
+            command.Description = "Manage folders in Box.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box folders in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);

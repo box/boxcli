@@ -13,7 +13,7 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Work with groups in Box.";
+            command.Description = "Manage groups in Box.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about groups in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);

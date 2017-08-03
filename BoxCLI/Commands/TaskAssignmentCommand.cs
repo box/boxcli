@@ -13,7 +13,7 @@ namespace BoxCLI.Commands
 		public override void Configure(CommandLineApplication command)
 		{
 			_app = command;
-			command.Description = "Work with task assignments in Box.";
+			command.Description = "Manage task assignments in Box.";
 			command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about task assignments in your Enterprise.";
 			command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);

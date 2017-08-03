@@ -29,7 +29,7 @@ namespace BoxCLI.Commands
 		public override void Configure(CommandLineApplication command)
 		{
 			_app = command;
-			command.Description = "Search your Enterprise.";
+			command.Description = "Search for files and folders in your Enterprise.";
 			command.ExtendedHelpText = "You can use this command to search for files and folders.";
             _query = command.Argument("query", "The search term");
             _asUser = AsUserOption.ConfigureOption(command);
