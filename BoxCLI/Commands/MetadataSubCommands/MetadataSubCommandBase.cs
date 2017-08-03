@@ -186,7 +186,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
 						savePath = overrideSavePath;
 					}
 					var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.Create}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-					//base.WriteListResultsToReport<BoxMetadataForCsv, BoxMetadataMap>(saveCreated, fileName, savePath, fileFormat);
+					base.WriteMetadataCollectionResultsToReport(saveCreated, fileName, savePath, fileFormat);
 				}
 			}
 			catch (Exception e)

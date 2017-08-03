@@ -30,9 +30,7 @@ namespace BoxCLI
 
         static int Main(string[] args)
         {
-            var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var builder = new ConfigurationBuilder();
             Configuration = builder.Build();
 
             IServiceCollection serviceCollection = new ServiceCollection();

@@ -8,10 +8,10 @@ namespace BoxCLI.CommandUtilities.Globalization
         public readonly CommandNames CommandNames;
         public readonly SubCommandNames SubCommandNames;
 
-        public LocalizedStringsResource(IOptions<LocalizedStrings> names)
+        public LocalizedStringsResource()
         {
-            CommandNames = names.Value.CommandNames;
-            SubCommandNames = names.Value.SubCommandNames;
+            CommandNames = new CommandNames();
+            SubCommandNames = new SubCommandNames();
         }
 
     }

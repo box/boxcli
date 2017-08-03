@@ -21,15 +21,16 @@ namespace BoxCLI.BoxHome
         public readonly BoxPersistantCache BoxPersistantCache;
         public readonly BoxDefaultSettings BoxHomeDefaultSettings;
 
-        public BoxHomeDirectory(IOptions<BoxHomeSettings> settings)
+        public BoxHomeDirectory()
         {
-            BoxHomeDirectoryName = settings.Value.BoxHomeDirectoryName;
-            BoxHomeEnvironmentVariable = settings.Value.BoxHomeEnvironmentVariable;
+            var settings = new BoxHomeSettings();
+            BoxHomeDirectoryName = settings.BoxHomeDirectoryName;
+            BoxHomeEnvironmentVariable = settings.BoxHomeEnvironmentVariable;
             CreateBoxHomeDirectory();
 
-            BoxEnvironments = new BoxEnvironments(settings.Value.BoxHomeEnvironmentsFileName, this);
-            BoxPersistantCache = new BoxPersistantCache(settings.Value.BoxHomeCacheFileName, this);
-            BoxHomeDefaultSettings = new BoxDefaultSettings(settings.Value.BoxHomeSettingsFileName, this);
+            BoxEnvironments = new BoxEnvironments(settings.BoxHomeEnvironmentsFileName, this);
+            BoxPersistantCache = new BoxPersistantCache(settings.BoxHomeCacheFileName, this);
+            BoxHomeDefaultSettings = new BoxDefaultSettings(settings.BoxHomeSettingsFileName, this);
 
         }
         public string GetBoxHomeDirectoryPath()
