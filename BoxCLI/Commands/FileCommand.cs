@@ -15,8 +15,8 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Work with files in Box.";
-            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about files in your Enterprise.";
+            command.Description = "Manage files in Box.";
+            command.ExtendedHelpText = "You can use this command to create, update, delete, upload, download, and get information about files in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
             command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);

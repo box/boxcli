@@ -13,8 +13,8 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Manage your trash.";
-            command.ExtendedHelpText = "You can use this command to work with your trash folder.";
+            command.Description = "Start a session with a user ID.";
+            command.ExtendedHelpText = "You can use this command set the CLI to make calls as a Box user for a set amount of time.";
 
             command.Command(base._names.SubCommandNames.BustCache, _subCommands.CreateSubCommand(_names.SubCommandNames.BustCache).Configure);
             command.Command(base._names.SubCommandNames.StartUserSession, _subCommands.CreateSubCommand(_names.SubCommandNames.StartUserSession).Configure);

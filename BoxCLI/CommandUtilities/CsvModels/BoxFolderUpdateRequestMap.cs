@@ -30,11 +30,11 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.FolderUploadEmail).ConvertUsing<BoxEmailRequest>(row =>
             {
                 var field = row.GetField("FolderUploadEmailAccess");
-                if(string.IsNullOrEmpty(field))
+                if (string.IsNullOrEmpty(field))
                 {
                     return null;
                 }
-                else 
+                else
                 {
                     return new BoxEmailRequest()
                     {
@@ -42,13 +42,13 @@ namespace BoxCLI.CommandUtilities.CsvModels
                     };
                 }
             });
-            Map(m => m.SharedLink).ConvertUsing<BoxSharedLinkRequest>(row => 
+            Map(m => m.SharedLink).ConvertUsing<BoxSharedLinkRequest>(row =>
             {
                 var access = row.GetField("SharedLinkAccess");
                 var password = row.GetField("SharedLinkPassword");
                 var unsharedAt = row.GetField("SharedLinkUnsharedAt");
                 var canDownload = row.GetField("SharedLinkCanDownload");
-                if(string.IsNullOrEmpty(access) && string.IsNullOrEmpty(password)
+                if (string.IsNullOrEmpty(access) && string.IsNullOrEmpty(password)
                   && string.IsNullOrEmpty(unsharedAt) && string.IsNullOrEmpty(canDownload))
                 {
                     return null;
@@ -56,19 +56,35 @@ namespace BoxCLI.CommandUtilities.CsvModels
                 else
                 {
                     var sharedLinkRequest = new BoxSharedLinkRequest();
-                    if(!string.IsNullOrEmpty(access))
+                    if (!string.IsNullOrEmpty(access))
                     {
-                        sharedLinkRequest.Access = access;
+                        access = access.ToLower();
+                        if (access == "open")
+                        {
+                            sharedLinkRequest.Access = BoxSharedLinkAccessType.open;
+                        }
+                        else if (access == "collaborators")
+                        {
+                            sharedLinkRequest.Access = BoxSharedLinkAccessType.collaborators;
+                        }
+                        else if (access == "company")
+                        {
+                            sharedLinkRequest.Access = BoxSharedLinkAccessType.company;
+                        }
+                        else
+                        {
+                            throw new Exception("Unsupported access type. Please use 'open', 'collaborators', or 'company'.");
+                        }
                     }
-                    if(!string.IsNullOrEmpty(password))
+                    if (!string.IsNullOrEmpty(password))
                     {
                         sharedLinkRequest.Password = password;
                     }
-                    if(!string.IsNullOrEmpty(unsharedAt))
+                    if (!string.IsNullOrEmpty(unsharedAt))
                     {
                         sharedLinkRequest.UnsharedAt = Convert.ToDateTime(unsharedAt);
                     }
-                    if(!string.IsNullOrEmpty(canDownload))
+                    if (!string.IsNullOrEmpty(canDownload))
                     {
                         sharedLinkRequest.Permissions = new BoxPermissionsRequest();
                         sharedLinkRequest.Permissions.Download = Convert.ToBoolean(canDownload);
