@@ -26,6 +26,7 @@ namespace BoxCLI.Commands
         private readonly SearchCommand _srch;
         private readonly TaskCommand _tsk;
         private readonly TaskAssignmentCommand _tskAsgn;
+        private readonly CommentCommand _cmt;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
 
@@ -34,7 +35,8 @@ namespace BoxCLI.Commands
             GroupCommand group, MetadataTemplateCommand mdt, EventCommand evt,
             CollaborationCommand collab, SharedLinkCommand sl, TrashCommand trsh,
             SessionCommand ssn, TokenCommand tk, SearchCommand srch,
-            TaskCommand tsk, TaskAssignmentCommand tskAsgn, LocalizedStringsResource names)
+            TaskCommand tsk, TaskAssignmentCommand tskAsgn, CommentCommand cmt,
+            LocalizedStringsResource names)
         {
             _user = user;
             _config = config;
@@ -52,6 +54,7 @@ namespace BoxCLI.Commands
             _srch = srch;
             _tsk = tsk;
             _tskAsgn = tskAsgn;
+            _cmt = cmt;
             _names = names;
         }
 
@@ -75,6 +78,7 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Search, _srch.Configure);
             app.Command(_names.CommandNames.Task, _tsk.Configure);
             app.Command(_names.CommandNames.TaskAssignment, _tskAsgn.Configure);
+            app.Command(_names.CommandNames.Comment, _cmt.Configure);
 
             app.OnExecute(() =>
             {

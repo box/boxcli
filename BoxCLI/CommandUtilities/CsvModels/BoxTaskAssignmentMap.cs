@@ -13,7 +13,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.Message);
             Map(m => m.ResolutionState);
             Map(m => m.RemindedAt);
-            References<BoxItemInsideObjectMap>(m => m.Item);
+            References<BoxItemOnObjectMap>(m => m.Item);
         }
     }
 

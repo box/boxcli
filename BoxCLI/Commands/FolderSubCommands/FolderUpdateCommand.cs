@@ -4,6 +4,7 @@ using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -12,6 +13,10 @@ namespace BoxCLI.Commands.FolderSubCommands
     public class FolderUpdateCommand : FolderSubCommandBase
     {
         private CommandArgument _folderId;
+        private CommandOption _bulkFilePath;
+        private CommandOption _filePath;
+        private CommandOption _fileFormat;
+        private CommandOption _save;
         private CommandOption _parentFolderId;
         private CommandOption _name;
         private CommandOption _description;
@@ -37,6 +42,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             command.Description = "Update a folder.";
             _folderId = command.Argument("folderId",
                                "Id of folder to update");
+            _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
+            _filePath = FilePathOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
+            _save = SaveOption.ConfigureOption(command);
             _parentFolderId = command.Option("--parent-folder-id",
                                         "Id of new parent folder <ID>", CommandOptionType.SingleValue);
             _name = command.Option("--name",
@@ -71,6 +80,12 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         private async Task RunUpdate()
         {
+            if(this._bulkFilePath.HasValue())
+            {
+                await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), base._asUser.Value(), this._save.HasValue(), 
+                                                 this._filePath.Value(), this._fileFormat.Value());
+                return;
+            }
             base.CheckForId(this._folderId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var folderUpdateRequest = new BoxFolderRequest();

@@ -53,7 +53,6 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
 
         private async Task RunGet()
         {
-            System.Console.WriteLine("Running Get on Shared Links...");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var fields = new List<string>()
             {
@@ -61,14 +60,11 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             };
             if (base._t == BoxType.file)
             {
-                System.Console.WriteLine($"Looking for Shared link on this file {this._id.Value}...");
                 base.PrintSharedLink((await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
             }
             else if (base._t == BoxType.folder)
             {
-                System.Console.WriteLine($"Looking for Shared link on this folder {this._id.Value}...");
                 base.PrintSharedLink((await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
-                
             }
             else if (base._t == BoxType.enterprise)
             {

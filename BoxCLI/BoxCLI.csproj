@@ -21,5 +21,6 @@
   <ItemGroup>
     <Folder Include="Commands\TaskSubCommands\" />
     <Folder Include="Commands\TaskAssignmentsSubCommands\" />
+    <Folder Include="Commands\CommentSubCommands\" />
   </ItemGroup>
 </Project>

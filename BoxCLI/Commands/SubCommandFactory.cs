@@ -3,6 +3,7 @@ using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.Commands.CollaborationSubCommands;
+using BoxCLI.Commands.CommentSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands;
 using BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands;
@@ -144,6 +145,10 @@ namespace BoxCLI.Commands
 			else if (factoryName == _names.CommandNames.TaskAssignment)
 			{
 				return new TaskAssignmentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+			}
+			else if (factoryName == _names.CommandNames.Comment)
+			{
+				return new CommentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
 			}
             else
             {
