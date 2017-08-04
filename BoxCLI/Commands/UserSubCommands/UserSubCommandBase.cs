@@ -133,5 +133,49 @@ namespace BoxCLI.Commands.UserSubCommands
                 Reporter.WriteError(e.Message);
             }
         }
+
+        protected BoxUserRequest CreateUserRequest(string name = "", string userId = "", string role = "", bool removeFromEnterprise = false,
+            string language = "", string jobTitle = "", string phoneNumber = "", string address = "", string spaceAmount = "", string status = "",
+            bool syncDisable = false, bool syncEnable = false, bool isExemptFromDeviceLimits = false, bool notExemptFromDeviceLimits = false,
+            bool isExemptFromLoginVerificaton = false, bool notExemptFromLoginVerification = false, bool isPasswordResetRequired = false)
+        {
+            if (syncDisable && syncEnable)
+            {
+                throw new Exception("--sync-disable and --sync-enable cannot be passed in a single call");
+            }
+            if (isExemptFromDeviceLimits && notExemptFromDeviceLimits)
+            {
+                throw new Exception("--is-exempt-from-device-limits and --not-exempt-from-device-limits cannot be passed in a single call");
+            }
+            if (isExemptFromLoginVerificaton && notExemptFromLoginVerification)
+            {
+                throw new Exception("--is-exempt-login-verification and --not-exempt-login-verification cannot be passed in a single call");
+            }
+
+            BoxUserRequest userRequest = new BoxUserRequest();
+            if (!string.IsNullOrEmpty(userId)) { userRequest.Id = userId; }
+            if (removeFromEnterprise) { userRequest.Enterprise = "null"; }
+            if (!string.IsNullOrEmpty(name)) { userRequest.Name = name; }
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (!(role == "user" || role == "coadmin")) { throw new Exception("Role must be coadmin or user."); }
+                userRequest.Role = role;
+            }
+            if (!string.IsNullOrEmpty(language)) { userRequest.Language = language; }
+            if (syncEnable) { userRequest.IsSyncEnabled = true; }
+            if (syncDisable) { userRequest.IsSyncEnabled = false; }
+            if (!string.IsNullOrEmpty(jobTitle)) { userRequest.JobTitle = jobTitle; }
+            if (!string.IsNullOrEmpty(phoneNumber)) { userRequest.Phone = phoneNumber; }
+            if (!string.IsNullOrEmpty(address)) { userRequest.Address = address; }
+            if (!string.IsNullOrEmpty(spaceAmount)) { userRequest.SpaceAmount = double.Parse(spaceAmount); }
+            if (!string.IsNullOrEmpty(status)) { userRequest.Status = status; }
+            if (isExemptFromDeviceLimits) { userRequest.IsExemptFromDeviceLimits = true; }
+            if (notExemptFromDeviceLimits) { userRequest.IsExemptFromDeviceLimits = false; }
+            if (isExemptFromLoginVerificaton) { userRequest.IsExemptFromLoginVerification = true; }
+            if (notExemptFromLoginVerification) { userRequest.IsExemptFromLoginVerification = false; }
+            if (isPasswordResetRequired) { userRequest.IsPasswordResetRequired = true; }
+
+            return userRequest;
+        }
     }
 }

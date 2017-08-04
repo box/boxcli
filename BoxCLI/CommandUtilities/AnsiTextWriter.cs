@@ -19,6 +19,10 @@ namespace BoxCLI.CommandUtilities
             Interpret(text);
             _writer.Write(Environment.NewLine);
         }
+        public void Write(string text)
+        {
+            Interpret(text);
+        }
 
         private void Interpret(string value)
         {

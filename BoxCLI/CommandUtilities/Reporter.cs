@@ -21,6 +21,9 @@ namespace BoxCLI.CommandUtilities
         public static void WriteWarning(string message)
             => WriteLine(Prefix("warn:    ", Colorize(message, x => Bold + Yellow + x + Reset)));
 
+        public static void WriteWarningNoNewLine(string message)
+            => Write(Prefix("warn:    ", Colorize(message, x => Bold + Yellow + x + Reset)));
+
         public static void WriteInformation(string message)
             => WriteLine(Prefix("info:    ", message));
 
@@ -43,6 +46,17 @@ namespace BoxCLI.CommandUtilities
             else
             {
                 AnsiConsole.WriteLine(value);
+            }
+        }
+        private static void Write(string value)
+        {
+            if (NoColor)
+            {
+                Console.Write(value);
+            }
+            else
+            {
+                AnsiConsole.Write(value);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace BoxCLI.BoxPlatform.Utilities
             return System.Console.ReadLine().Trim().ToLower();
         }
 
-        public async Task ListOffsetCollectionToConsole<T>(Func<uint, Task<BoxCollection<T>>> callBox, Action<T> print) where T : BoxEntity, new()
+        public async Task ListOffsetCollectionToConsole<T>(Func<uint, Task<BoxCollection<T>>> callBox, Action<T> print, int limit = -1) where T : BoxEntity, new()
         {
             var showNext = "";
             uint offset = 0;
@@ -35,6 +35,11 @@ namespace BoxCLI.BoxPlatform.Utilities
             {
                 if (collection.Entries.Count > 0)
                 {
+                    if(limit == 0)
+                    {
+                        break;
+                    }
+                    limit--;
                     all--;
                     showNext = PageInConsole(print, collection);
                 }

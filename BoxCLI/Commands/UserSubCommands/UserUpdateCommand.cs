@@ -74,7 +74,11 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            var userRequest = CreateUserRequest();
+            var userRequest = base.CreateUserRequest(this._name.Value(), this._userId.Value, this._role.Value(), this._enterprise.HasValue(), 
+            this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(), 
+            this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(), 
+            this._notExemptFromDeviceLimits.HasValue(), this._isExemptFromLoginVerificaton.HasValue(), this._notExemptFromLoginVerification.HasValue(),
+            this._isPasswordResetRequired.HasValue());
 
             BoxUser updatedUser = await boxClient.UsersManager.UpdateUserInformationAsync(userRequest);
 
@@ -89,43 +93,5 @@ namespace BoxCLI.Commands.UserSubCommands
             }
         }
 
-        private BoxUserRequest CreateUserRequest()
-        {
-            if(this._syncDisable.HasValue() && this._syncEnable.HasValue())
-            {
-                throw new Exception("--sync-disable and --sync-enable cannot be passed in a single call");
-            }
-            if(this._isExemptFromDeviceLimits.HasValue() && this._notExemptFromDeviceLimits.HasValue())
-            {
-                throw new Exception("--is-exempt-from-device-limits and --not-exempt-from-device-limits cannot be passed in a single call");
-            }
-            if(this._isExemptFromLoginVerificaton.HasValue() && this._notExemptFromLoginVerification.HasValue())
-            {
-                throw new Exception("--is-exempt-login-verification and --not-exempt-login-verification cannot be passed in a single call");
-            }
-
-            BoxUserRequest userRequest = new BoxUserRequest()
-            {
-                Id = this._userId.Value
-            };
-            if(this._enterprise.HasValue()) { userRequest.Enterprise = "null"; }
-            if(this._name.HasValue()) { userRequest.Name = this._name.Value(); }
-            if(this._role.HasValue()) { userRequest.Role = this._role.Value(); }
-            if(this._language.HasValue()) { userRequest.Language = this._language.Value(); }
-            if(this._syncEnable.HasValue()) { userRequest.IsSyncEnabled = true; }
-            if(this._syncDisable.HasValue()) { userRequest.IsSyncEnabled = false; }
-            if(this._jobTitle.HasValue()) { userRequest.JobTitle = this._jobTitle.Value(); }
-            if(this._phoneNumber.HasValue()) { userRequest.Phone = this._phoneNumber.Value(); }
-            if(this._address.HasValue()) { userRequest.Address = this._address.Value(); }
-            if(this._spaceAmount.HasValue()) { userRequest.SpaceAmount = double.Parse(this._spaceAmount.Value()); }
-            if(this._status.HasValue()) { userRequest.Status = this._status.Value(); }
-            if(this._isExemptFromDeviceLimits.HasValue()) { userRequest.IsExemptFromDeviceLimits = true; }
-            if(this._notExemptFromDeviceLimits.HasValue()) { userRequest.IsExemptFromDeviceLimits = false; }
-            if(this._isExemptFromLoginVerificaton.HasValue()) { userRequest.IsExemptFromLoginVerification = true; }
-            if(this._notExemptFromLoginVerification.HasValue()) { userRequest.IsExemptFromLoginVerification = false;}
-            if(this._isPasswordResetRequired.HasValue()) { userRequest.IsPasswordResetRequired = true; }
-
-            return userRequest;
-        }
     }
 }
