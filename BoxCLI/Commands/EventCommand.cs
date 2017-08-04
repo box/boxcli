@@ -16,6 +16,7 @@ namespace BoxCLI.Commands
             command.ExtendedHelpText = "Monitor events in your Enterprise.";
 
             command.Command(base._names.SubCommandNames.Poll, _subCommands.CreateSubCommand(_names.SubCommandNames.Poll).Configure);
+            command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
 
             command.OnExecute(async () =>
             {

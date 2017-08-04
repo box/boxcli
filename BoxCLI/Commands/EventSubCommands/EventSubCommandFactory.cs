@@ -18,6 +18,10 @@ namespace BoxCLI.Commands.EventSubCommands
             {
                 return new EventPollCommand(_boxPlatformBuilder, _boxHome, _names);
             }
+			else if (commandName == base._names.SubCommandNames.Get)
+			{
+				return new EventGetCommand(_boxPlatformBuilder, _boxHome, _names);
+			}
             else
             {
                 throw new Exception("Command not registered.");

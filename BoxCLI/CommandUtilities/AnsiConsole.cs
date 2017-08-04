@@ -8,5 +8,7 @@ namespace BoxCLI.CommandUtilities
 
         public static void WriteLine(string text)
             => _out.WriteLine(text);
+        public static void Write(string text)
+            => _out.Write(text);
     }
 }

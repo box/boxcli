@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
@@ -14,6 +15,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandArgument _userId;
         private CommandOption _notify;
         private CommandOption _force;
+        private CommandOption _dontPrompt;
         private CommandLineApplication _app;
         public UserDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -28,6 +30,7 @@ namespace BoxCLI.Commands.UserSubCommands
                                    "User ID to Delete");
             _notify = command.Option("--notify", "The user should be notified", CommandOptionType.NoValue);
             _force = command.Option("-f|--force", "Delete user even if they own files", CommandOptionType.NoValue);
+            _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,10 +49,27 @@ namespace BoxCLI.Commands.UserSubCommands
             base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var userDeleted = new BoxUser();
+            if (this._dontPrompt.HasValue())
+            {
+                userDeleted = await boxClient.UsersManager.DeleteEnterpriseUserAsync(this._userId.Value, this._notify.HasValue(), this._force.HasValue());
+            }
+            else
+            {
+                Reporter.WriteWarningNoNewLine("Are you sure you want to delete this user? y/N ");
+                var yNKey = "n";
+                yNKey = Console.ReadLine().ToLower();
+                if (yNKey != "y")
+                {
+                    Reporter.WriteInformation("Aborted user deletion.");
+                    return;
+                }
+                else
+                {
+                    userDeleted = await boxClient.UsersManager.DeleteEnterpriseUserAsync(this._userId.Value, this._notify.HasValue(), this._force.HasValue());
+                }
+            }
 
-            userDeleted = await boxClient.UsersManager.DeleteEnterpriseUserAsync(this._userId.Value,this._notify.HasValue(),this._force.HasValue());
-            
-            if(userDeleted == null)
+            if (userDeleted == null)
             {
                 Reporter.WriteSuccess($"Deleted user {this._userId.Value}");
             }

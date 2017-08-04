@@ -5,6 +5,7 @@ using Box.V2.Models;
 using BoxCLI.CommandUtilities.CommandModels;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using Newtonsoft.Json;
 
 namespace BoxCLI.CommandUtilities.CsvModels
 {
@@ -34,25 +35,15 @@ namespace BoxCLI.CommandUtilities.CsvModels
 
         public object ConvertFromString(TypeConverterOptions options, string text)
         {
-            var md = new Dictionary<string, object>();
-            var newlines = text.Split('\n');
-            foreach (var line in newlines)
-            {
-                var kv = line.Split(':');
-                md.Add(kv.ElementAtOrDefault(0), kv.ElementAtOrDefault(1));
-            }
-            return md;
+            System.Console.WriteLine("Text from file...");
+            System.Console.WriteLine(text);
+            return JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
         }
 
         public string ConvertToString(TypeConverterOptions options, object value)
         {
             var valDict = value as Dictionary<string, object>;
-            var str = "";
-            foreach (var keyVal in valDict)
-            {
-                str += $"{keyVal.Key}:{keyVal.Value}\n";
-            }
-            return str;
+           return JsonConvert.SerializeObject(valDict);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _fileFormat;
         private CommandOption _fieldsOption;
         private CommandOption _managedUsers;
+        private CommandOption _limit;
         private CommandLineApplication _app;
         public UserListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
@@ -33,6 +34,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
             _fieldsOption = FieldsOption.ConfigureOption(command);
+            _limit = LimitOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -88,10 +90,19 @@ namespace BoxCLI.Commands.UserSubCommands
                 }
                 else
                 {
+                    int limit = -1;
+                    if (this._limit.HasValue())
+                    {
+                        try
+                        {
+                            limit = Convert.ToInt32(this._limit.Value());
+                        }
+                        catch { }
+                    }
                     await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
                     {
                         return boxClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
-                    }, PrintUserInfo);
+                    }, PrintUserInfo, limit);
                 }
                 System.Console.WriteLine("Finished...");
             }
