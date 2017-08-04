@@ -14,7 +14,11 @@ namespace BoxCLI.Commands.UserSubCommands
 {
     public class UserCreateCommand : UserSubCommandBase
     {
+        private CommandArgument _name;
         private CommandOption _path;
+        private CommandOption _coAdmin;
+        private CommandOption _appUser;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public UserCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
@@ -23,7 +27,11 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             _app = command;
             command.Description = "Create a new Box User";
-            _path = FilePathOption.ConfigureOption(command);
+            _name = command.Argument("name", "The user's name");
+            _path = BulkFilePathOption.ConfigureOption(command);
+            _coAdmin = command.Option("--co-admin", "Set this user as a co-admin", CommandOptionType.NoValue);
+            _appUser = command.Option("--app-user", "Set this user as an app user", CommandOptionType.NoValue);
+            _idOnly = command.Option("--id-only", "Return only an ID to output from this command", CommandOptionType.NoValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -33,39 +41,30 @@ namespace BoxCLI.Commands.UserSubCommands
 
         protected async override Task<int> Execute()
         {
-            await RunCreate(_path.Value());
+            await RunCreate();
             return await base.Execute();
         }
 
-        private async Task RunCreate(string path = "")
+        private async Task RunCreate()
         {
-            System.Console.WriteLine("Starting to create users...");
-            var BoxServiceAccountClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            if (!string.IsNullOrEmpty(path))
+            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            if (this._path.HasValue())
             {
-                path = GeneralUtilities.TranslatePath(path);
+                await base.CreateUsersFromFile(this._path.Value());
+                return;
             }
-            System.Console.WriteLine($"Path: {path}");
-            try
+            base.CheckForValue(this._name.Value, this._app, "A name is required for this command.");
+            var userRequest = new BoxUserRequest();
+            userRequest.Name = this._name.Value;
+            if(this._appUser.HasValue())
             {
-                System.Console.WriteLine("Reading file...");
-                var userRequests = base.ReadFile<BoxUserRequest, BoxUserRequestMap>(path);
-                System.Console.WriteLine($"User Requests: {userRequests}");
-                System.Console.WriteLine($"User Requests: {userRequests.Count}");
-                System.Console.WriteLine($"User Requests: {userRequests.FirstOrDefault().Name}");
-                foreach (var userRequest in userRequests)
+                userRequest.IsPlatformAccessOnly = true;
+                var user = await boxClient.UsersManager.CreateEnterpriseUserAsync(userRequest);
+                if(this._idOnly.HasValue())
                 {
-                    System.Console.WriteLine($"Processing a user request: {userRequest.Name}");
-                    System.Console.WriteLine($"Processing a user request: {userRequest.Type}");
-                    var createdUser = await BoxServiceAccountClient.UsersManager.CreateEnterpriseUserAsync(userRequest);
-                    PrintUserInfo(createdUser);
+                    Reporter.WriteInformation(user.Id);
                 }
-                System.Console.WriteLine("Created all users...");
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e.Message);
-                Reporter.WriteError(e.Message);
+                return;
             }
         }
     }

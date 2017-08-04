@@ -51,12 +51,15 @@ namespace BoxCLI.Commands.MetadataSubCommands
             {
                 var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.GetAll}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                 BoxMetadataTemplateCollection<Dictionary<string, object>> metadataCollectionForReport;
+                var type = "";
                 if (base._t == BoxType.file)
                 {
+                    type = "file";
                     metadataCollectionForReport = await boxClient.MetadataManager.GetAllFileMetadataTemplatesAsync(_id.Value);
                 }
                 else if (base._t == BoxType.folder)
                 {
+                    type = "folder";
                     metadataCollectionForReport = await boxClient.MetadataManager.GetAllFolderMetadataTemplatesAsync(_id.Value);
                 }
                 else
@@ -71,7 +74,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
                     metadataFullObjectCollection.Add(new BoxMetadataForCsv()
                     {
                         ItemId = this._id.Value,
-                        ItemType = base._t,
+                        ItemType = type,
                         Metadata = metadata
                     });
                 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -14,6 +15,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         private CommandArgument _id;
         private CommandArgument _scope;
         private CommandArgument _template;
+        private CommandOption _bulkFilePath;
         private CommandLineApplication _app;
         public MetadataCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t) 
             : base(boxPlatformBuilder, home, names, t)
@@ -30,7 +32,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
                                    "The scope of the metadata object");
             _template = command.Argument("template",
                                    "The key of the template");
-
+            _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,6 +48,11 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
         private async Task RunCreate()
         {
+            if(this._bulkFilePath.HasValue())
+            {
+                await base.AddMetadataToItemFromFile(this._bulkFilePath.Value());
+                return;
+            }
             base.CheckForId(this._id.Value, this._app);
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForTemplate(this._template.Value, this._app);
