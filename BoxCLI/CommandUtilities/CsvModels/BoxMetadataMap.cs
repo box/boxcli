@@ -1,30 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Box.V2.Models;
 using BoxCLI.CommandUtilities.CommandModels;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 
 namespace BoxCLI.CommandUtilities.CsvModels
 {
     public class BoxMetadataMap : CsvClassMap<BoxMetadataForCsv>
     {
-        public BoxMetadataMap(IEnumerable<string> metadataHeaders)
+        public BoxMetadataMap()
         {
             Map(m => m.ItemId);
             Map(m => m.ItemType);
             Map(m => m.Scope);
             Map(m => m.TemplateKey);
-            Map(m => m.Metadata).ConvertUsing<Dictionary<string, object>>(row => 
+            Map(m => m.Metadata).TypeConverter<MetadataConverter>();
+        }
+    }
+
+    public class MetadataConverter : ITypeConverter
+    {
+        public bool CanConvertFrom(Type type)
+        {
+            return typeof(Dictionary<string, object>) == type;
+        }
+
+        public bool CanConvertTo(Type type)
+        {
+            return typeof(string) == type;
+        }
+
+        public object ConvertFromString(TypeConverterOptions options, string text)
+        {
+            var md = new Dictionary<string, object>();
+            var newlines = text.Split('\n');
+            foreach (var line in newlines)
             {
-                var metadata = row.CurrentRecord.Skip(4);
-                var metadataDict = new Dictionary<string, object>();
-                for (var i = 0; i < metadata.Count(); i++) 
-                {
-                    metadataDict.Add(metadata.ElementAt(i), metadata.ElementAt(i + 1));
-                }
-                return metadataDict;
-            });
+                var kv = line.Split(':');
+                md.Add(kv.ElementAtOrDefault(0), kv.ElementAtOrDefault(1));
+            }
+            return md;
+        }
+
+        public string ConvertToString(TypeConverterOptions options, object value)
+        {
+            var valDict = value as Dictionary<string, object>;
+            var str = "";
+            foreach (var keyVal in valDict)
+            {
+                str += $"{keyVal.Key}:{keyVal.Value}\n";
+            }
+            return str;
         }
     }
 }

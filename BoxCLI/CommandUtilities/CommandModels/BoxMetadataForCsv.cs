@@ -13,7 +13,7 @@ namespace BoxCLI.CommandUtilities.CommandModels
         [JsonProperty(PropertyName = "item_id")]
         public string ItemId { get; set; }
         [JsonProperty(PropertyName = "item_type")]
-        public BoxType? ItemType { get; set; }
+        public string ItemType { get; set; }
         [JsonProperty(PropertyName = "metadata")]
         public Dictionary<string, object> Metadata { get; set; }
     }

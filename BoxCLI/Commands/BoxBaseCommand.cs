@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -83,11 +84,11 @@ namespace BoxCLI.Commands
             Reporter.WriteInformation($"Item Name: {item.Name}");
             Reporter.WriteInformation($"Item Type: {item.Type}");
         }
-		protected virtual void PrintEntity(BoxEntity item)
-		{
-			Reporter.WriteInformation($"Item ID: {item.Id}");
-			Reporter.WriteInformation($"Item Type: {item.Type}");
-		}
+        protected virtual void PrintEntity(BoxEntity item)
+        {
+            Reporter.WriteInformation($"Item ID: {item.Id}");
+            Reporter.WriteInformation($"Item Type: {item.Type}");
+        }
         protected virtual string ConstructReportPath(string fileName, string filePath = "")
         {
             if (string.IsNullOrEmpty(filePath))
@@ -217,61 +218,48 @@ namespace BoxCLI.Commands
             }
         }
 
-		protected virtual bool WriteMetadataCollectionResultsToReport(List<BoxMetadataForCsv> entity, string fileName, string filePath = "", string fileFormat = "")
-		{
+        protected virtual bool WriteMetadataCollectionResultsToReport(List<BoxMetadataForCsv> entity, string fileName, string filePath = "", string fileFormat = "")
+        {
 
-			fileFormat = this.ProcessReportsFileFormat(fileFormat);
-			filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
-			if (fileFormat.ToLower() == this._settings.FILE_FORMAT_JSON)
-			{
-				try
-				{
-					var converter = new BoxJsonConverter();
-					File.WriteAllText(filePath, converter.Serialize<List<BoxMetadataForCsv>>(entity));
-					return true;
-				}
-				catch (Exception e)
-				{
-					Reporter.WriteError(e.Message);
-					return false;
-				}
-			}
-			else if (fileFormat.ToLower() == this._settings.FILE_FORMAT_CSV)
-			{
-				try
-				{
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
+            if (fileFormat.ToLower() == this._settings.FILE_FORMAT_JSON)
+            {
+                try
+                {
+                    var converter = new BoxJsonConverter();
+                    File.WriteAllText(filePath, converter.Serialize<List<BoxMetadataForCsv>>(entity));
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else if (fileFormat.ToLower() == this._settings.FILE_FORMAT_CSV)
+            {
+                try
+                {
                     using (StreamWriter fs = File.CreateText(filePath))
-					using (var csv = new CsvWriter(fs))
-					{
-                        foreach(var ent in entity)
-                        {
-                            var ItemId = new Dictionary<string, string>();
-                            ItemId.Add("ItemId", ent.ItemId);
-                            csv.WriteField<Dictionary<string, string>>(ItemId);
-                            csv.WriteField<Tuple<string, BoxType>>(new Tuple<string, BoxType>("ItemType", ent.ItemType.Value));
-                            csv.WriteField<Tuple<string, string>>(new Tuple<string, string>("Scope", ent.Scope));
-                            csv.WriteField<Tuple<string, string>>(new Tuple<string, string>("TemplateKey", ent.TemplateKey));
-                            foreach(var tup in ent.Metadata)
-                            {
-                                csv.WriteField(tup.Key);
-                                csv.WriteField(tup.Value);
-                            }
-							csv.NextRecord();
-                        }
-					}
-					return true;
-				}
-				catch (Exception e)
-				{
-					Reporter.WriteError(e.Message);
-					return false;
-				}
-			}
-			else
-			{
-				throw new Exception($"File format {fileFormat} is not currently supported.");
-			}
-		}
+                    using (var csv = new CsvWriter(fs))
+                    {
+                        csv.Configuration.RegisterClassMap(typeof(BoxMetadataMap));
+                        csv.WriteRecords(entity);
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+        }
 
         protected virtual bool WriteMetadataTemplateCollectionResultsToReport(List<BoxMetadataTemplate> entity,
             string fileNameTemplate, string fileNameFields, string filePathTemplate = "", string filePathFields = "", string fileFormat = "")

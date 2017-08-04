@@ -102,14 +102,14 @@ namespace BoxCLI.Commands.MetadataSubCommands
 			{
 				System.Console.WriteLine("Processing csv...");
 
-				csv.Configuration.RegisterClassMap(typeof(BoxMetadataMap));
+				csv.Configuration.RegisterClassMap(typeof(BoxMetadataRequestMap));
 				allMetadataOnItem = csv.GetRecords<BoxMetadataForCsv>().ToList();
 			}
 			
 			return allMetadataOnItem;
 		}
 
-		protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", BoxType type = BoxType.enterprise,
+		protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", string type = "",
 			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
 		{
 			var boxClient = base.ConfigureBoxClient(asUser);
@@ -129,19 +129,24 @@ namespace BoxCLI.Commands.MetadataSubCommands
 					Dictionary<string, object> createdMetadata = null;
                     if(metadataRequest.ItemType != null)
                     {
-                        type = metadataRequest.ItemType.Value;
+                        type = metadataRequest.ItemType;
                     }
-                    else if (type == BoxType.enterprise)
+                    else
                     {
                         throw new Exception("Must have a Box Item type of file or folder");
                     }
 					try
 					{
-                        if (type == BoxType.file)
+                        Reporter.WriteInformation("Attempting create metadata...");
+                        foreach(var kv in metadataRequest.Metadata)
+                        {
+                            Reporter.WriteInformation($"Key: {kv.Key} Value: {kv.Value}");
+                        }
+                        if (type == "file")
                         {
                             createdMetadata = await boxClient.MetadataManager.CreateFileMetadataAsync(metadataRequest.ItemId, metadataRequest.Metadata, metadataRequest.Scope, metadataRequest.TemplateKey);
                         }
-                        else if (type == BoxType.folder)
+                        else if (type == "folder")
                         {
                             createdMetadata = await boxClient.MetadataManager.CreateFolderMetadataAsync(metadataRequest.ItemId, metadataRequest.Metadata, metadataRequest.Scope, metadataRequest.TemplateKey);
                         }
@@ -155,7 +160,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
 						Reporter.WriteError("Couldn't add metadata...");
 						Reporter.WriteError(e.Message);
 					}
-					Reporter.WriteSuccess("Added a metadata:");
+					Reporter.WriteSuccess("Added metadata:");
 					if (createdMetadata != null)
 					{
 						this.PrintMetadata(createdMetadata);
