@@ -18,6 +18,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         private CommandOption _hidden;
         private CommandOption _bulkFilePaths;
         private CommandOption _bulkFilePath;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public MetadataTemplateCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
@@ -38,6 +39,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                                     "Provide file paths for the metadata temple CSV file and metadata template fields CSV file", 
                                     CommandOptionType.MultipleValue);
             _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -75,8 +77,13 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             template.Hidden = this._hidden.HasValue();
             template.TemplateKey = this._templateKey.Value();
             template.Fields = base.BuildTemplateFromConsole();
-
-            base.PrintMetadataTemplate(await boxClient.MetadataManager.CreateMetadataTemplate(template));
+            var createdTemplate = await boxClient.MetadataManager.CreateMetadataTemplate(template);
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(createdTemplate.TemplateKey);
+                return;
+            }
+            base.PrintMetadataTemplate(createdTemplate);
         }
     }
 }

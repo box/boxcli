@@ -4,6 +4,7 @@ using Box.V2.Models;
 using Box.V2.Models.Request;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
@@ -17,6 +18,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         private CommandOption _viewMembershipLevel;
         private CommandOption _save;
         private CommandOption _bulkPath;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public GroupCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -35,6 +37,7 @@ namespace BoxCLI.Commands.GroupSubCommands
             _viewMembershipLevel = command.Option("-m|--view-members",
                                    "Specifies who can view the members of the group. Enter admins_only, admins_and_members, or all_managed_users",
                                    CommandOptionType.SingleValue);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
 
             command.OnExecute(async () =>
             {
@@ -68,8 +71,13 @@ namespace BoxCLI.Commands.GroupSubCommands
             {
                 groupRequest.MemberViewabilityLevel = base.CheckViewMembersLevel(this._viewMembershipLevel.Value());
             }
-
-            base.PrintGroup(await boxClient.GroupsManager.CreateAsync(groupRequest));
+            var createdGroup = await boxClient.GroupsManager.CreateAsync(groupRequest);
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(createdGroup.Id);
+                return;
+            }
+            base.PrintGroup(createdGroup);
         }
     }
 }

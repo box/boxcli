@@ -30,6 +30,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             {
                 return new CollaborationUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.enterprise);
             }
+			else if (commandName == base._names.SubCommandNames.GetPending)
+			{
+				return new CollaborationGetPendingCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.enterprise);
+			}
             else
             {
                 throw new Exception("Command not registered.");
