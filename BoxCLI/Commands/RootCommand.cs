@@ -97,6 +97,7 @@ namespace BoxCLI.Commands
 
         protected override int Execute()
         {
+            Reporter.WriteInformation($"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}");
             _app.ShowHelp();
             return base.Execute();
         }

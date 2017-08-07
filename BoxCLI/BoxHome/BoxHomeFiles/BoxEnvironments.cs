@@ -347,7 +347,26 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var environments = DeserializeBoxEnvironmentFile();
             return environments.Environments;
         }
-
+		public bool DeleteEnvironment(string name)
+		{
+			var environmentFile = DeserializeBoxEnvironmentFile();
+			BoxHomeConfigModel found;
+			environmentFile.Environments.TryGetValue(name, out found);
+			if (found != null)
+			{
+				environmentFile.Environments.Remove(name);
+                if (environmentFile.DefaultEnvironment == name)
+                {
+                    environmentFile.DefaultEnvironment = "";
+                }
+				SerializeBoxEnvironmentFile(environmentFile);
+                return true;
+			}
+			else
+			{
+				throw new Exception("Couldn't find this environment.");
+			}
+		}
         public bool UpdateEnvironmentFilePath(string path, string envName)
         {
             var environments = DeserializeBoxEnvironmentFile();

@@ -5,6 +5,6 @@ namespace BoxCLI.CommandUtilities.CommandOptions
     public static class FileFormatOption
     {
         public static CommandOption ConfigureOption(CommandLineApplication command)
-            => command.Option("--file-format <file-format>", "Override default file format for report, JSON or CSV", CommandOptionType.SingleValue);
+            => command.Option("--file-format <FILEFORMAT>", "Override default file format for report, JSON or CSV", CommandOptionType.SingleValue);
     }
 }

@@ -18,6 +18,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _fileFormat;
         private CommandOption _fieldsOption;
         private CommandOption _managedUsers;
+        private CommandOption _appUsers;
         private CommandOption _limit;
         private CommandLineApplication _app;
         public UserListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
@@ -30,6 +31,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _app = command;
             command.Description = "List all Box users.";
             _managedUsers = ManagedUsersOnlyOption.ConfigureOption(command);
+            _appUsers = ManagedUsersOnlyOption.ConfigureOption(command);
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
@@ -76,15 +78,29 @@ namespace BoxCLI.Commands.UserSubCommands
                             showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
                         }
                     }
-                    System.Console.WriteLine("Finished...");
+                    Reporter.WriteInformation("Finished...");
                     return;
                 }
                 if (save == true)
                 {
-                    System.Console.WriteLine("Saving file...");
-                    System.Console.WriteLine(fileFormat);
-                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
-                    System.Console.WriteLine(users.TotalCount);
+                    Reporter.WriteInformation("Saving file...");
+                    BoxCollection<BoxUser> users;
+                    if (this._appUsers.HasValue())
+                    {
+                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "");
+                    }
+                    else if (this._managedUsers.HasValue())
+                    {
+                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                        users.Entries.RemoveAll(user =>
+                        {
+                            return user.Login.Contains("AppUser");
+                        });
+                    }
+                    else
+                    {
+                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                    }
                     var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat);
                     System.Console.WriteLine($"File saved: {saved}");
                 }

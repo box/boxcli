@@ -24,7 +24,7 @@ namespace BoxCLI.Commands.CommentSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Create a task assignment.";
+            command.Description = "Create a comment on a Box item.";
             _itemId = command.Argument("itemId",
                                        "Id of item on which to comment");
             _itemType = command.Argument("itemType",

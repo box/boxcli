@@ -148,7 +148,8 @@ namespace BoxCLI.Commands
             }
         }
 
-        protected async Task<BoxFile> UploadFile(string path, string parentId = "", string fileName = "", string fileId = "", bool isNewVersion = false)
+        protected async Task<BoxFile> UploadFile(string path, string parentId = "", string fileName = "",
+            string fileId = "", bool isNewVersion = false, bool idOnly = false)
         {
             var boxClient = base.ConfigureBoxClient(this._asUser.Value());
             path = GeneralUtilities.TranslatePath(path);
@@ -165,27 +166,23 @@ namespace BoxCLI.Commands
 
             if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE && isNewVersion)
             {
-                return await this.ChunkedUpload(path, fileName, parentId, file.Length, fileId, true);
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length, fileId, true, idOnly: idOnly);
             }
             else if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE)
             {
-                return await this.ChunkedUpload(path, fileName, parentId, file.Length);
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length, idOnly: idOnly);
             }
             else
             {
                 using (var fileStream = File.Open(path, FileMode.Open))
                 {
-                    Reporter.WriteData("creating file request...");
                     var fileRequest = this.ConfigureFileRequest(parentId: parentId, fileName: fileName);
-                    Reporter.WriteData("File request created...");
                     if (isNewVersion)
                     {
                         if (string.IsNullOrEmpty(fileId))
                         {
                             throw new Exception("A file ID is required for this command.");
                         }
-                        Reporter.WriteInformation("Uploading new version...");
-                        Reporter.WriteInformation(fileName);
                         var preflightCheckRequest = new BoxPreflightCheckRequest()
                         {
                             Name = fileName,
@@ -243,16 +240,11 @@ namespace BoxCLI.Commands
             try
             {
                 path = GeneralUtilities.TranslatePath(path);
-                System.Console.WriteLine($"Path: {path}");
-                System.Console.WriteLine("Reading file...");
                 var fileRequests = this.ReadCustomFile<BoxFileUpload, BoxFileUploadMap>(path);
-                System.Console.WriteLine(fileRequests.Count);
                 if (!isNewVersion)
                 {
                     foreach (var fileRequest in fileRequests)
                     {
-                        System.Console.WriteLine($"Processing a file request");
-                        System.Console.WriteLine($"File Path: {fileRequest.Path}");
                         try
                         {
                             var uploadedFile = await this.UploadFile(path: fileRequest.Path, parentId: fileRequest.Parent.Id, fileName: fileRequest.Name);
@@ -268,8 +260,6 @@ namespace BoxCLI.Commands
                 {
                     foreach (var fileRequest in fileRequests)
                     {
-                        System.Console.WriteLine($"Processing a new file version request");
-                        System.Console.WriteLine($"File Path: {fileRequest.Path}");
                         try
                         {
                             var uploadedFile = await this.UploadFile(path: fileRequest.Path, fileId: fileRequest.Id, fileName: fileRequest.Name, isNewVersion: true);
@@ -281,7 +271,6 @@ namespace BoxCLI.Commands
                         }
                     }
                 }
-                System.Console.WriteLine("Uploaded all files...");
             }
             catch (Exception e)
             {
@@ -289,16 +278,19 @@ namespace BoxCLI.Commands
             }
         }
 
-        private async Task<BoxFile> ChunkedUpload(string path, string fileName, string parentFolderId, long fileSize, string fileId = "", bool isNewVersion = false)
+        private async Task<BoxFile> ChunkedUpload(string path, string fileName, string parentFolderId,
+            long fileSize, string fileId = "", bool isNewVersion = false, bool idOnly = false)
         {
             var boxClient = base.ConfigureBoxClient(this._asUser.Value());
             using (var fileInMemoryStream = File.Open(path, FileMode.Open))
             {
-                System.Console.WriteLine($"File name: {fileName}");
+                if (!idOnly)
+                {
+                    Reporter.WriteInformation($"File name: {fileName}");
+                }
                 BoxFileUploadSession boxFileUploadSession;
                 if (isNewVersion)
                 {
-                    System.Console.WriteLine(fileId);
                     // TODO: Correct after SDK is fixed.
                     boxClient.AddResourcePlugin<BoxFileManagerCommand>();
                     var command = boxClient.ResourcePlugins.Get<BoxFileManagerCommand>();
@@ -314,19 +306,6 @@ namespace BoxCLI.Commands
                     };
                     boxFileUploadSession = await boxClient.FilesManager.CreateUploadSessionAsync(boxFileUploadSessionRequest);
                 }
-                System.Console.WriteLine("Requested for an Upload Session...");
-                System.Console.WriteLine($"ID: {boxFileUploadSession.Id}");
-                System.Console.WriteLine($"Parts Processed: {boxFileUploadSession.NumPartsProcessed}");
-                System.Console.WriteLine($"Part Size: {boxFileUploadSession.PartSize}");
-                System.Console.WriteLine($"Abort: {boxFileUploadSession.SessionEndpoints.Abort}");
-                System.Console.WriteLine($"Commit: {boxFileUploadSession.SessionEndpoints.Commit}");
-                System.Console.WriteLine($"List Parts: {boxFileUploadSession.SessionEndpoints.ListParts}");
-                System.Console.WriteLine($"Log Event: {boxFileUploadSession.SessionEndpoints.LogEvent}");
-                System.Console.WriteLine($"Status: {boxFileUploadSession.SessionEndpoints.Status}");
-                System.Console.WriteLine($"Upload Part: {boxFileUploadSession.SessionEndpoints.UploadPart}");
-                System.Console.WriteLine($"Type: {boxFileUploadSession.Type}");
-                System.Console.WriteLine($"Total Parts: {boxFileUploadSession.TotalParts}");
-                System.Console.WriteLine($"Expires: {boxFileUploadSession.SessionExpiresAt}");
                 var completeFileSha = await Task.Run(() =>
                 {
                     return Box.V2.Utility.Helper.GetSha1Hash(fileInMemoryStream);
@@ -338,11 +317,20 @@ namespace BoxCLI.Commands
                 long partSizeLong;
                 long.TryParse(partSize, out partSizeLong);
                 var numberOfParts = this.GetUploadPartsCount(fileSize, partSizeLong);
-                ProgressBar.UpdateProgress($"Processing {fileName}", 0, numberOfParts);
-                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong, fileInMemoryStream, client: boxClient, fileSize: fileSize);
+                if (!idOnly)
+                {
+                    Reporter.WriteInformation($"Processing {fileName}");
+                    ProgressBar.UpdateProgress($"Processing ", 0, numberOfParts);
+                }
+                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong, 
+                                                      fileInMemoryStream, client: boxClient, fileSize: fileSize, idOnly: idOnly);
 
                 BoxSessionParts sessionPartsForCommit = new BoxSessionParts() { Parts = boxSessionParts };
-                Reporter.WriteInformation("Attempting to commit...");
+                if (!idOnly)
+                {
+                    Reporter.WriteInformation("");
+                    Reporter.WriteInformation("Attempting to commit...");
+                }
                 const int retryCount = 5;
                 var retryInterval = boxSessionParts.Count() * 100;
 
@@ -421,7 +409,7 @@ namespace BoxCLI.Commands
 
         private async Task<IEnumerable<BoxSessionPartInfo>> UploadPartsInSessionAsync(
             Uri uploadPartsUri, int numberOfParts, long partSize, Stream stream, BoxClient client,
-            long fileSize, TimeSpan? timeout = null)
+            long fileSize, TimeSpan? timeout = null, bool idOnly = false)
         {
             var maxTaskNum = Environment.ProcessorCount + 1;
 
@@ -466,7 +454,10 @@ namespace BoxCLI.Commands
                         {
                             concurrencySemaphore.Release();
                             ++taskCompleted;
-                            ProgressBar.UpdateProgress($"Processing...", taskCompleted, numberOfParts);
+                            if (!idOnly)
+                            {
+                                ProgressBar.UpdateProgress($"Processing...", taskCompleted, numberOfParts);
+                            }
                         }
                     ));
 

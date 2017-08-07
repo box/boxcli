@@ -52,6 +52,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             {
                 return new ConfigureEnvironmentsSetCurrentCommand(_boxPlatformBuilder, _boxHome, _names);
             }
+			else if (commandName == _names.SubCommandNames.Delete)
+			{
+				return new ConfigureEnvironmentDeleteCommand(_boxPlatformBuilder, _boxHome, _names);
+			}
             else
             {
                 throw new Exception("Command not registered.");

@@ -41,7 +41,11 @@ namespace BoxCLI.BoxPlatform.Service
         public async Task<bool> BustCache()
         {
             var token = this.BoxPlatformCache.BustCache();
-            await this.ClientFromToken(token.AccessToken).Auth.LogoutAsync();
+            try
+            {
+                await this.ClientFromToken(token.AccessToken).Auth.LogoutAsync();
+            }
+            catch { };
             return true;
         }
 

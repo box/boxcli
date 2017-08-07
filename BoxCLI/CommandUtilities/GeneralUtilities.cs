@@ -41,7 +41,7 @@ namespace BoxCLI.CommandUtilities
                 double.TryParse(t.Substring(0, 2), out span);
                 return ResolveTimeUnit(span, unit);
             }
-            else if (regex.Match(t).Success && allowNegativeTime)
+            else if (negativeRegex.Match(t).Success && allowNegativeTime)
             {
                 var unit = t[3];
                 double span;
