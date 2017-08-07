@@ -51,5 +51,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string AddEmailAlias { get; set; } = "add-email-alias";
         public string GetEmailAliases { get; set; } = "get-email-aliases";
         public string DeleteEmailAlias { get; set; } = "delete-email-alias";
+        public string GetPending { get; set; } = "get-pending";
+        public string ListForGroup { get; set; } = "list-for-group";
     }
 }

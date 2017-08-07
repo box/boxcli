@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
@@ -13,6 +14,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _parentFolderId;
         private CommandOption _name;
         private CommandOption _bulkPath;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public FileUploadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -31,6 +33,7 @@ namespace BoxCLI.Commands.FileSubCommand
             _name = command.Option("-n|--name",
                                         "Provide different name for local file", CommandOptionType.SingleValue);
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -52,7 +55,13 @@ namespace BoxCLI.Commands.FileSubCommand
                 return;
             }
             base.CheckForFilePath(this._path.Value, this._app);
-            base.PrintFile(await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value()));
+            var file = await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value());
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(file.Id);
+                return;
+            }
+            base.PrintFile(file);
         }
     }
 }

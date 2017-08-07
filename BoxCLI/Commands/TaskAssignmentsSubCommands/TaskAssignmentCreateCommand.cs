@@ -14,6 +14,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private CommandArgument _taskId;
         private CommandOption _assignToUserId;
         private CommandOption _assignToUserLogin;
+
         private CommandLineApplication _app;
         public TaskAssignmentCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)

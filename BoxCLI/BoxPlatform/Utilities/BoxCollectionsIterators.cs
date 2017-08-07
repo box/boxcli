@@ -23,6 +23,13 @@ namespace BoxCLI.BoxPlatform.Utilities
             System.Console.Write("Show next? Enter q to quit. ");
             return System.Console.ReadLine().Trim().ToLower();
         }
+		public string PageInConsole(Action<BoxEnterpriseEvent> print, BoxEventCollection<BoxEnterpriseEvent> collection)
+		{
+			print(collection.Entries[0]);
+			collection.Entries.RemoveAt(0);
+			System.Console.Write("Show next? Enter q to quit. ");
+			return System.Console.ReadLine().Trim().ToLower();
+		}
 
         public async Task ListOffsetCollectionToConsole<T>(Func<uint, Task<BoxCollection<T>>> callBox, Action<T> print, int limit = -1) where T : BoxEntity, new()
         {
@@ -76,5 +83,29 @@ namespace BoxCLI.BoxPlatform.Utilities
             }
             while (keepGoing && showNext != "q");
         }
+		public async Task ListEventCollectionToConsole(Func<string, Task<BoxEventCollection<BoxEnterpriseEvent>>> callBox, Action<BoxEnterpriseEvent> print)
+		{
+			var keepGoing = false;
+			var showNext = "";
+			do
+			{
+				string streamPosition = "";
+				var collection = await callBox(streamPosition);
+				if (collection.Entries.Count > 0)
+				{
+					while (collection.Entries.Count > 0 && showNext != "q")
+					{
+						showNext = PageInConsole(print, collection);
+					}
+				}
+				else
+				{
+					streamPosition = collection.NextStreamPosition;
+					collection = await callBox(streamPosition);
+				}
+				keepGoing = !string.IsNullOrEmpty(collection.NextStreamPosition);
+			}
+			while (keepGoing && showNext != "q");
+		}
     }
 }

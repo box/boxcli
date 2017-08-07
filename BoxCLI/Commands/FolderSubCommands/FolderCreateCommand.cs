@@ -18,6 +18,7 @@ namespace BoxCLI.Commands.FolderSubCommands
 		private CommandOption _filePath;
 		private CommandOption _fileFormat;
 		private CommandOption _save;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -32,6 +33,7 @@ namespace BoxCLI.Commands.FolderSubCommands
 			_filePath = FilePathOption.ConfigureOption(command);
 			_fileFormat = FileFormatOption.ConfigureOption(command);
 			_save = SaveOption.ConfigureOption(command);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             _parentFolderId = command.Argument("parentFolderId",
                                "Id of parent folder to add new folder to, use '0' for the root folder");
             _name = command.Argument("name", "Name of new folder");
@@ -65,11 +67,12 @@ namespace BoxCLI.Commands.FolderSubCommands
                 folderRequest.Parent.Id = this._parentFolderId.Value;
                 folderRequest.Name = this._name.Value;
                 var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
-                System.Console.WriteLine(folder.Name);
-                foreach (var item in folder.ItemCollection.Entries)
+                if(this._idOnly.HasValue())
                 {
-                    System.Console.WriteLine($"{item.Name} - {item.Id}");
+                    Reporter.WriteInformation(folder.Id);
+                    return;
                 }
+                base.PrintFolder(folder);
             }
             catch (Exception e)
             {

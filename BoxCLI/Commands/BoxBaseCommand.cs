@@ -337,7 +337,49 @@ namespace BoxCLI.Commands
                 throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
-
+		protected virtual bool WriteEventListResultsToReport(List<BoxEnterpriseEvent> entity, string fileName, string filePath = "", string fileFormat = "")
+		{
+			System.Console.WriteLine("Starting writer...");
+			fileFormat = this.ProcessReportsFileFormat(fileFormat);
+			filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
+			if (fileFormat == _settings.FILE_FORMAT_JSON)
+			{
+				try
+				{
+					System.Console.WriteLine("Writing JSON file...");
+					var converter = new BoxJsonConverter();
+					File.WriteAllText(filePath, converter.Serialize<List<BoxEnterpriseEvent>>(entity));
+					return true;
+				}
+				catch (Exception e)
+				{
+					Reporter.WriteError(e.Message);
+					return false;
+				}
+			}
+			else if (fileFormat == _settings.FILE_FORMAT_CSV)
+			{
+				try
+				{
+					using (StreamWriter fs = File.CreateText(filePath))
+					using (var csv = new CsvWriter(fs))
+					{
+						csv.Configuration.RegisterClassMap(typeof(BoxEventMap));
+						csv.WriteRecords(entity);
+					}
+					return true;
+				}
+				catch (Exception e)
+				{
+					Reporter.WriteError(e.Message);
+					return false;
+				}
+			}
+			else
+			{
+				throw new Exception($"File format {fileFormat} is not currently supported.");
+			}
+		}
 
         protected virtual bool WriteListResultsToReport<T, M>(List<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()

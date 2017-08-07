@@ -21,6 +21,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private CommandArgument _address;
         private CommandOption _path;
         private CommandOption _save;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public WebhooksCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
@@ -32,6 +33,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
             command.Description = "Create a new webhook";
             _path = BulkFilePathOption.ConfigureOption(command);
             _save = SaveOption.ConfigureOption(command);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             _id = command.Argument("boxItemId",
                                    "Id of the Box item");
             _type = command.Argument("boxItemType", "Type of Box item");
@@ -81,9 +83,14 @@ namespace BoxCLI.Commands.WebhooksSubComands
 
             webhookRequest.Triggers = triggers;
             webhookRequest.Address = this._address.Value;
-
+            var createdWebhook = await boxClient.WebhooksManager.CreateWebhookAsync(webhookRequest);
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(createdWebhook.Id);
+                return;
+            }
             Reporter.WriteSuccess("Created new webhook...");
-            base.PrintWebhook(await boxClient.WebhooksManager.CreateWebhookAsync(webhookRequest));
+            base.PrintWebhook(createdWebhook);
         }
     }
 }

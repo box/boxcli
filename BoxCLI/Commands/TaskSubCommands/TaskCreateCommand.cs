@@ -6,6 +6,7 @@ using BoxCLI.CommandUtilities.Globalization;
 using Box.V2.Models;
 using Microsoft.Extensions.CommandLineUtils;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
 
 namespace BoxCLI.Commands.TaskSubCommands
 {
@@ -14,6 +15,7 @@ namespace BoxCLI.Commands.TaskSubCommands
         private CommandArgument _fileId;
         private CommandOption _message;
         private CommandOption _due;
+        private CommandOption _idOnly;
         private CommandLineApplication _app;
         public TaskCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -28,6 +30,7 @@ namespace BoxCLI.Commands.TaskSubCommands
                                    "Id of file");
             _message = command.Option("--message", "Message for task.", CommandOptionType.SingleValue);
             _due = command.Option("--due-at", "When this task is due, use format 05h for 5 hours for example.", CommandOptionType.SingleValue);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -58,8 +61,13 @@ namespace BoxCLI.Commands.TaskSubCommands
             {
                 taskRequest.DueAt = GeneralUtilities.GetDateTimeFromString(this._due.Value());
             }
-
-            base.PrintTask(await boxClient.TasksManager.CreateTaskAsync(taskRequest));
+            var createdTask = await boxClient.TasksManager.CreateTaskAsync(taskRequest);
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(createdTask.Id);
+                return;
+            }
+            base.PrintTask(createdTask);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
@@ -26,6 +27,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _groupId;
         private CommandOption _login;
         private CommandOption _canViewPath;
+        private CommandOption _idOnly;
         private CommandArgument _type;
         private CommandLineApplication _app;
         public CollaborationAddCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
@@ -50,6 +52,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             _groupId = command.Option("--group-id", "Id for group to collaborate", CommandOptionType.SingleValue);
             _login = command.Option("--login", "Login for user to collaborate", CommandOptionType.SingleValue);
             _canViewPath = command.Option("--can-view-path", "Whether view path collaboration feature is enabled or not.", CommandOptionType.NoValue);
+            _idOnly = IdOnlyOption.ConfigureOption(command);
             _id = command.Argument("boxItemId",
                                    "Id of the Box item");
             if (base._t == BoxType.enterprise)
@@ -141,6 +144,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             collabRequest.Item.Id = this._id.Value;
             collabRequest.Role = role;
             var result = await boxClient.CollaborationsManager.AddCollaborationAsync(collabRequest);
+            if(this._idOnly.HasValue())
+            {
+                Reporter.WriteInformation(result.Id);
+                return;
+            }
             base.PrintCollaboration(result);
         }
     }
