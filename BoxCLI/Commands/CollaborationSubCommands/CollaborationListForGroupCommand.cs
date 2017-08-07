@@ -41,11 +41,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGetPending();
+            await this.RunListGroups();
             return await base.Execute();
         }
 
-        private async Task RunGetPending()
+        private async Task RunListGroups()
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID is required for this command.");
             var BoxCollectionsIterators = base.GetIterators();
