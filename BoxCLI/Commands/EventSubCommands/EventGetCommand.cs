@@ -67,16 +67,17 @@ namespace BoxCLI.Commands.EventSubCommands
                     {
                         createdBefore = DateTime.Parse(this._createdBefore.Value());
                     }
+                    Reporter.WriteInformation(createdBefore.ToString());
                 }
                 if (this._createdAfter.HasValue())
                 {
                     try
                     {
-                        createdAfter = GeneralUtilities.GetDateTimeFromString(this._createdBefore.Value(), true);
+                        createdAfter = GeneralUtilities.GetDateTimeFromString(this._createdAfter.Value(), true);
                     }
                     catch
                     {
-                        createdAfter = DateTime.Parse(this._createdBefore.Value());
+                        createdAfter = DateTime.Parse(this._createdAfter.Value());
                     }
                 }
 				if (this._save.HasValue())

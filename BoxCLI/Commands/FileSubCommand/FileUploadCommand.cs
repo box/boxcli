@@ -55,7 +55,7 @@ namespace BoxCLI.Commands.FileSubCommand
                 return;
             }
             base.CheckForFilePath(this._path.Value, this._app);
-            var file = await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value());
+            var file = await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value(), idOnly: this._idOnly.HasValue());
             if(this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(file.Id);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -11,6 +12,7 @@ namespace BoxCLI.Commands.TaskSubCommands
     public class TaskDeleteCommand : TaskSubCommandBase
     {
         private CommandArgument _taskId;
+        private CommandOption _dontPrompt;
         private CommandLineApplication _app;
         public TaskDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -23,7 +25,7 @@ namespace BoxCLI.Commands.TaskSubCommands
             command.Description = "Delete a task.";
             _taskId = command.Argument("taskId",
                                    "Id of task");
-
+            _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -44,7 +46,26 @@ namespace BoxCLI.Commands.TaskSubCommands
             bool deleted;
             try
             {
-                deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
+				if (this._dontPrompt.HasValue())
+				{
+					deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
+				}
+				else
+				{
+					Reporter.WriteWarningNoNewLine("Are you sure you want to delete this task? y/N ");
+					var yNKey = "n";
+					yNKey = Console.ReadLine().ToLower();
+					if (yNKey != "y")
+					{
+						Reporter.WriteInformation("Aborted task deletion.");
+						return;
+					}
+					else
+					{
+						deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
+					}
+				}
+
                 if (deleted)
                 {
                     Reporter.WriteSuccess($"Successfully deleted task {this._taskId.Value}.");
