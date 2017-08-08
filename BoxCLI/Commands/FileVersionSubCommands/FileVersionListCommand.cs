@@ -18,9 +18,9 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Get a list of file versions.";
             _fileId = command.Argument("fileId",
-                               "Id of file to manage");
+                               "Id of file to get versions for");
             command.OnExecute(async () =>
             {
                 return await this.Execute();

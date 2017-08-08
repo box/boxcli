@@ -24,14 +24,14 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Upload a file";
             _parentFolderId = command.Option("-p|--parent-folder",
                                                 "Id of folder to upload file to, defaults to the root folder",
                                                 CommandOptionType.SingleValue);
             _path = command.Argument("filePath",
                                         "Local path to file");
             _name = command.Option("-n|--name",
-                                        "Provide different name for local file", CommandOptionType.SingleValue);
+                                        "Provide different name for uploaded file", CommandOptionType.SingleValue);
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
             _idOnly = IdOnlyOption.ConfigureOption(command);
             command.OnExecute(async () =>

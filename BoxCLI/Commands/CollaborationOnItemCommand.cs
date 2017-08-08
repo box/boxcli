@@ -14,7 +14,7 @@ namespace BoxCLI.Commands
         {
             _app = command;
             command.Description = "Manage your collaborations on Box items.";
-            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about collaborations in your Enterprise.";
+            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about collaborations on items in your Enterprise.";
 
             command.Command(base._names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
             command.Command(base._names.SubCommandNames.Add, _subCommands.CreateSubCommand(_names.SubCommandNames.Add).Configure);

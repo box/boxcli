@@ -23,9 +23,9 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Rename a file";
             _fileId = command.Argument("fileId",
-                               "Id of file to manage");
+                               "Id of file to rename");
             _fileName = command.Argument("fileName",
                                "New name of file");
             _description = command.Option("--description", "Change the file description", CommandOptionType.SingleValue);

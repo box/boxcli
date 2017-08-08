@@ -27,12 +27,12 @@ namespace BoxCLI.Commands.FolderSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a folder.";
+            command.Description = "Delete a folder";
             _folderId = command.Argument("folderId",
-                               "Id of folder to manage, use '0' for the root folder");
+                               "Id of folder to delete");
             _recursive = command.Option("-r|--recursive", "Whether to delete this folder if it has items inside of it.", CommandOptionType.NoValue);
-            _force = command.Option("-f|--force", "Permanently delete a file", CommandOptionType.NoValue);
-            _etag = command.Option("--etag", "Only move if etag value matches", CommandOptionType.SingleValue);
+            _force = command.Option("-f|--force", "Permanently delete a folder", CommandOptionType.NoValue);
+            _etag = command.Option("--etag", "Only delete if etag value matches", CommandOptionType.SingleValue);
             _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {

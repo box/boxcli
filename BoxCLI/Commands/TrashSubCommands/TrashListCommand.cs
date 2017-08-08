@@ -25,7 +25,7 @@ namespace BoxCLI.Commands.TrashSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "List all webhooks.";
+            command.Description = "List all items in trash.";
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);

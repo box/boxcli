@@ -23,7 +23,7 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Lock a file.";
             _fileId = command.Argument("fileId",
                                "Id of file to lock");
             _expires = command.Option("--expires",

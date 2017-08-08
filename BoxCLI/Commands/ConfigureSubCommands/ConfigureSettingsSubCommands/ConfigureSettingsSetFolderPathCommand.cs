@@ -17,13 +17,13 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get folder names for download and reports folders.";
+            command.Description = "Set folder path for download and reports folders.";
             _path = command.Argument("folderPath", "New folder path.");
             _reports = command.Option("-r|--reports",
                                                 "Set reports folder path",
                                                 CommandOptionType.NoValue);
             _downloads = command.Option("-d|--downloads",
-                                                "Set downloads folder name",
+                                                "Set downloads folder path",
                                                 CommandOptionType.NoValue);
             command.OnExecute(() =>
             {

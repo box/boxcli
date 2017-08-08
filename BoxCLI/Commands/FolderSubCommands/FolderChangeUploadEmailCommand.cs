@@ -24,7 +24,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             _app = command;
             command.Description = "Update the folder's upload email.";
             _folderId = command.Argument("folderId",
-                               "Id of folder to move");
+                               "Id of folder to update");
             _access = command.Argument("access", "Can be open or collaborators");
             _etag = command.Option("--etag", "Only update if etag value matches", CommandOptionType.SingleValue);
             command.OnExecute(async () =>

@@ -75,7 +75,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
 				webhookRequest.Address = this._address.Value();
             }
 
-            Reporter.WriteSuccess("Created new webhook...");
+            Reporter.WriteSuccess("Updated webhook...");
             base.PrintWebhook(await boxClient.WebhooksManager.UpdateWebhookAsync(webhookRequest));
         }
     }

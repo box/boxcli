@@ -25,9 +25,9 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Delete a file.";
             _fileId = command.Argument("fileId",
-                               "Id of file to manage");
+                               "Id of file to delete");
             _etag = command.Option("--etag", "Only delete if etag value matches", CommandOptionType.SingleValue);
             _force = command.Option("-f|--force", "Permanently delete a file", CommandOptionType.NoValue);
             _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);

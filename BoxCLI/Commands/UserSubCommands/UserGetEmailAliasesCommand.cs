@@ -20,9 +20,9 @@ namespace BoxCLI.Commands.UserSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get all Email Alises for a User";
+            command.Description = "Get all Email Aliases for a User";
             _userId = command.Argument("userId",
-                                   "User ID to add email alias");
+                                   "User ID to get email aliases");
             command.OnExecute(async () =>
             {
                 return await this.Execute();

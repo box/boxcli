@@ -22,7 +22,7 @@ namespace BoxCLI.Commands
         {
             _app = command;
             command.Description = "Manage your Box users.";
-            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box user in your Enterprise.";
+            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a users in your Enterprise.";
             
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
