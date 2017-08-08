@@ -28,7 +28,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a metadata template.";
+            command.Description = "Create a new metadata template";
             _scope = command.Argument("scope",
                                    "The scope of the metadata template");
             _name = command.Argument("displayName",

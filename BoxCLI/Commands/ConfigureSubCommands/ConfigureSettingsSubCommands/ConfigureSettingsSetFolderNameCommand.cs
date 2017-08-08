@@ -17,7 +17,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get folder names for download and reports folders.";
+            command.Description = "Set folder names for download and reports folders.";
             _name = command.Argument("folderName", "New folder name.");
             _reports = command.Option("-r|--reports",
                                                 "Set reports folder name",

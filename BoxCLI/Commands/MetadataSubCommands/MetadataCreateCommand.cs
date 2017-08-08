@@ -25,7 +25,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a metadata object.";
+            command.Description = "Add metadata to an item";
             _id = command.Argument("boxItemId",
                                    "Id of the Box item");
             _scope = command.Argument("scope",

@@ -117,7 +117,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing webhooks...");
+                Reporter.WriteInformation("Finished processing updates...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -177,7 +177,7 @@ namespace BoxCLI.Commands.FolderSubCommands
 						}
 					}
 				}
-				Reporter.WriteInformation("Finished processing webhooks...");
+				Reporter.WriteInformation("Finished processing updates...");
 				if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
 				{
 					var fileFormat = base._settings.GetBoxReportsFileFormatSetting();

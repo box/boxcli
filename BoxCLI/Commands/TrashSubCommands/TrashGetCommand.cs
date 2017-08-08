@@ -54,7 +54,7 @@ namespace BoxCLI.Commands.TrashSubCommands
             }
             else
             {
-                throw new Exception("Unsupported type for restoration.");
+                throw new Exception("Unsupported type for getting information.");
             }
         }
     }

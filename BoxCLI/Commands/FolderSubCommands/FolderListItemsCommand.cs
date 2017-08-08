@@ -27,7 +27,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a folder.";
+            command.Description = "List items in a folder.";
             _folderId = command.Argument("folderId",
                                "Id of folder to manage, use '0' for the root folder");
             _save = SaveOption.ConfigureOption(command);

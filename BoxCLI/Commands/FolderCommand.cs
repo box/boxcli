@@ -14,7 +14,7 @@ namespace BoxCLI.Commands
         {
             _app = command;
             command.Description = "Manage folders in Box.";
-            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about a Box folders in your Enterprise.";
+            command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about folders in your Enterprise.";
             command.Command(_names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
             command.Command(_names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
             command.Command(_names.SubCommandNames.ListItems, _subCommands.CreateSubCommand(_names.SubCommandNames.ListItems).Configure);

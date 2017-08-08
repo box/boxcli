@@ -23,9 +23,9 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Change the lock on a file";
             _fileId = command.Argument("fileId",
-                               "Id of file to lock");
+                               "Id of file to manage lock");
             _expires = command.Option("--expires",
                                "Make the lock expire from a timespan set from now. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s.", 
                                CommandOptionType.SingleValue);

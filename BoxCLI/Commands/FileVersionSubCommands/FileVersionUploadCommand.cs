@@ -24,7 +24,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get a file's information.";
+            command.Description = "Upload a new version of a file.";
             _fileId = command.Argument("fileId",
                                         "Id of file");
             _path = command.Argument("filePath",

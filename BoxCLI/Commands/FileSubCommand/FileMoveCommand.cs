@@ -21,7 +21,7 @@ namespace BoxCLI.Commands.FileSubCommand
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Copy a file to a different folder.";
+            command.Description = "Move a file to a different folder.";
             _fileId = command.Argument("fileId",
                                "Id of file to manage");
             _parentFolderId = command.Argument("parentFolderId",

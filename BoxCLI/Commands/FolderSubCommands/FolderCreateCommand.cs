@@ -28,7 +28,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Get information about a folder.";
+            command.Description = "Create a new folder";
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
 			_filePath = FilePathOption.ConfigureOption(command);
 			_fileFormat = FileFormatOption.ConfigureOption(command);
