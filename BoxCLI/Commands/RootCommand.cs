@@ -29,6 +29,7 @@ namespace BoxCLI.Commands
         private readonly CommentCommand _cmt;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
+        private IBoxHome _home;
 
         public RootCommand(UserCommand user, ConfigureCommand config,
             FolderCommand folder, FileCommand file, WebhooksCommand webhooks,
@@ -36,7 +37,7 @@ namespace BoxCLI.Commands
             CollaborationCommand collab, SharedLinkCommand sl, TrashCommand trsh,
             SessionCommand ssn, TokenCommand tk, SearchCommand srch,
             TaskCommand tsk, TaskAssignmentCommand tskAsgn, CommentCommand cmt,
-            LocalizedStringsResource names)
+            LocalizedStringsResource names, IBoxHome home)
         {
             _user = user;
             _config = config;
@@ -56,6 +57,7 @@ namespace BoxCLI.Commands
             _tskAsgn = tskAsgn;
             _cmt = cmt;
             _names = names;
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication app)
@@ -99,6 +101,13 @@ namespace BoxCLI.Commands
         {
             Reporter.WriteInformation($"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}");
             _app.ShowHelp();
+            var envs = this._home.GetBoxEnvironments();
+            if (envs.GetAllEnvironments().Count <= 0)
+            {
+                Reporter.WriteInformation("It looks like this might be the first time you're using the Box CLI.");
+                Reporter.WriteInformation("Use the command 'box configure environments add' to add a new environment to the Box CLI.");
+                Reporter.WriteInformation("Here's an example: box configure environments add ~/Downloads/954218_4lvitde1_config.json --name AMSXBG_CLI");
+            }
             return base.Execute();
         }
     }
