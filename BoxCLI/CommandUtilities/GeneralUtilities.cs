@@ -77,6 +77,70 @@ namespace BoxCLI.CommandUtilities
             return Path.GetFullPath($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{path}");
         }
 
+        private static string ResolveContainerPath(string containerPath)
+        {
+            return containerPath.Substring(0, containerPath.LastIndexOf(Path.DirectorySeparatorChar));
+        }
+
+        public static string TranslateDependentPath(string path, string containerPath)
+        {
+            var pathContents = new List<string>();
+            var winDirectoryRegex = new Regex(@"^[a-zA-Z]:\\");
+            var winDirectory = "";
+            if (path.StartsWith("~"))
+            {
+                path = path.Substring(1, path.Length - 1);
+                path = $"{ResolveTilde()}{path}";
+            }
+            if (path.StartsWith($".{Path.DirectorySeparatorChar}"))
+            {
+                path = path.Substring(1, path.Length - 1);
+                path = $"{ResolveContainerPath(containerPath)}{Path.DirectorySeparatorChar}{path}";
+            }
+            if (path.StartsWith(".."))
+            {
+                path = Path.GetFullPath($"{ResolveContainerPath(containerPath)}{Path.DirectorySeparatorChar}{path}");
+            }
+
+            if (winDirectoryRegex.IsMatch(path))
+            {
+                var match = winDirectoryRegex.Match(path);
+                winDirectory = match.Value;
+                path = path.Substring(match.Length - 1);
+            }
+
+            if (!path.StartsWith(Path.DirectorySeparatorChar.ToString()) && !path.StartsWith("~") && !path.StartsWith("..") &&
+            !path.StartsWith($".{Path.DirectorySeparatorChar}") && !winDirectoryRegex.IsMatch(path))
+            {
+                path = $"{ResolveContainerPath(containerPath)}{Path.DirectorySeparatorChar}{path}";
+            }
+            if (path.Contains("/"))
+            {
+                pathContents.AddRange(path.Split('/'));
+            }
+
+            if (path.Contains("\\"))
+            {
+                pathContents.AddRange(path.Split('\\'));
+            }
+            pathContents = pathContents.Where(x => !string.IsNullOrEmpty(x)).ToList();
+            var resolvedPath = "";
+            if (pathContents.Count > 0)
+            {
+                resolvedPath = Path.Combine(pathContents.ToArray());
+
+                if (!resolvedPath.StartsWith(Path.DirectorySeparatorChar.ToString()) && string.IsNullOrEmpty(winDirectory))
+                {
+                    resolvedPath = $"{Path.DirectorySeparatorChar}{resolvedPath}";
+                }
+                else
+                {
+                    resolvedPath = $"{winDirectory}{resolvedPath}";
+                }
+            }
+            return resolvedPath;
+        }
+
         public static string TranslatePath(string path)
         {
             var pathContents = new List<string>();

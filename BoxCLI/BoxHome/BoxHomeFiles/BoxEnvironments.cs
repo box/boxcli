@@ -116,15 +116,19 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                 }
                 else if (!string.IsNullOrEmpty(config.AppSettings.AppAuth.PrivateKey))
                 {
+                    Reporter.WriteInformation("Detected private key value in config...");
                     var pattern = @"^-----BEGIN ENCRYPTED PRIVATE KEY-----\n";
                     var regex = new Regex(pattern);
                     if (regex.IsMatch(config.AppSettings.AppAuth.PrivateKey))
                     {
+                        Reporter.WriteInformation("Detected in-line private key.");
                         translatedConfig.HasInLinePrivateKey = true;
                     }
                     else
                     {
-                        var potentialPath = GeneralUtilities.TranslatePath(config.AppSettings.AppAuth.PrivateKey);
+                        Reporter.WriteInformation("Attempting to resolve file path for private key.");
+                        var potentialPath = GeneralUtilities.TranslateDependentPath(config.AppSettings.AppAuth.PrivateKey, filePath);
+                        Reporter.WriteInformation($"Found {potentialPath}.");
                         if (File.Exists(potentialPath))
                         {
                             translatedConfig.PrivateKeyPath = potentialPath;

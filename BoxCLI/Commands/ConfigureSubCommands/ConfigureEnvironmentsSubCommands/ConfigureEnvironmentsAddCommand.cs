@@ -1,3 +1,4 @@
+using System;
 using BoxCLI.BoxHome;
 using BoxCLI.CommandUtilities;
 using Microsoft.Extensions.CommandLineUtils;
@@ -9,6 +10,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         private CommandArgument _path;
         private CommandOption _environmentName;
         private CommandOption _pemPath;
+        private CommandOption _setAsCurrent;
         private CommandLineApplication _app;
         public ConfigureEnvironmentsAddCommand(IBoxHome boxHome) : base(boxHome)
         {
@@ -26,6 +28,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             _pemPath = command.Option("--private-key-path <PATH>",
                            "Provide a path to your application private key.",
                            CommandOptionType.SingleValue);
+            _setAsCurrent = command.Option("--set-as-current",
+                           "Set this new environment as your current environment.",
+                           CommandOptionType.NoValue);
             command.OnExecute(() =>
             {
                 return this.Execute();
@@ -50,10 +55,15 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
                 {
                     Reporter.WriteSuccess("Successfully configured new Box environment.");
                 }
+                else
+                {
+                    throw new Exception("Couldn't add this environment.");
+                }
             }
             else
             {
                 Reporter.WriteWarning("Not a true config file.");
+                throw new Exception("Couldn't add this environment.");
             }
         }
 
@@ -67,6 +77,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             }
             Reporter.WriteInformation($"Adding new environment");
             this.SetConfigFile(this._path.Value, environmentName);
+            if (this._setAsCurrent.HasValue())
+            {
+                base._environments.SetDefaultEnvironment(environmentName);
+            }
         }
     }
 }

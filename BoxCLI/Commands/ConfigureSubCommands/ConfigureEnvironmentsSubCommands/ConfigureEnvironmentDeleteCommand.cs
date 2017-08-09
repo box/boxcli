@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
@@ -64,8 +65,18 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 					deleted = base._environments.DeleteEnvironment(this._name.Value);
 				}
 			}
-			
             Reporter.WriteSuccess("Successfully deleted environment");
+			if(base._environments.GetAllEnvironments().Count > 0)
+			{
+				var newDefault = base._environments.GetAllEnvironments().First();
+				base._environments.SetDefaultEnvironment(newDefault.Value.Name);
+				Reporter.WriteInformation($"Set {newDefault.Value.Name} as the current environment.");
+			}
+			else
+			{
+				Reporter.WriteInformation($"No environments configured. Please add a new environment by using the following command:");
+				Reporter.WriteInformation("box configure environments add <FILEPATH> --name <NAME> --private-key-path <KEYPATH>");
+			}
 		}
     }
 }
