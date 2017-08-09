@@ -51,8 +51,10 @@ namespace BoxCLI.Commands.TaskSubCommands
             var taskRequest = new BoxTaskCreateRequest();
             taskRequest.Item = new BoxRequestEntity()
             {
-                Id = this._fileId.Value
+                Id = this._fileId.Value,
+                Type = BoxType.file
             };
+
             if (this._message.HasValue())
             {
                 taskRequest.Message = this._message.Value();
@@ -62,7 +64,7 @@ namespace BoxCLI.Commands.TaskSubCommands
                 taskRequest.DueAt = GeneralUtilities.GetDateTimeFromString(this._due.Value());
             }
             var createdTask = await boxClient.TasksManager.CreateTaskAsync(taskRequest);
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(createdTask.Id);
                 return;

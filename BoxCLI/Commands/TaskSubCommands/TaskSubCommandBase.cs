@@ -18,8 +18,6 @@ namespace BoxCLI.Commands.TaskSubCommands
 
 		public override void Configure(CommandLineApplication command)
 		{
-			_asUser = AsUserOption.ConfigureOption(command);
-			_json = OutputJsonOption.ConfigureOption(command);
 			base.Configure(command);
 		}
     }
