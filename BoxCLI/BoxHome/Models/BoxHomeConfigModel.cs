@@ -11,6 +11,10 @@ namespace BoxCLI.BoxHome.Models
         public string EnterpriseId { get; set; }
         [JsonProperty(PropertyName = "boxConfigFilePath")]
         public string BoxConfigFilePath { get; set; }
+		[JsonProperty(PropertyName = "hasInLinePrivateKey")]
+		public bool HasInLinePrivateKey { get; set; }
+		[JsonProperty(PropertyName = "privateKeyPath")]
+		public string PrivateKeyPath { get; set; }
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
         [JsonProperty(PropertyName = "defaultAsUserId")]

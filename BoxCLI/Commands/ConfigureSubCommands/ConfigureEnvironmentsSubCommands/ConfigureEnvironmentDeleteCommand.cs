@@ -8,14 +8,14 @@ using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 {
-    public class ConfigureEnvironmentDeleteCommand : BoxBaseCommand
+    public class ConfigureEnvironmentDeleteCommand : ConfigureEnvironmentsSubCommandBase
     {
 		private CommandArgument _name;
         private CommandOption _dontPrompt;
 		private CommandLineApplication _app;
 
-		public ConfigureEnvironmentDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
-            : base(boxPlatformBuilder, boxHome, names)
+		public ConfigureEnvironmentDeleteCommand(IBoxHome boxHome) 
+            : base(boxHome)
         {
 		}
 
@@ -33,19 +33,19 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 			base.Configure(command);
 		}
 
-		protected async override Task<int> Execute()
-		{
-			await this.Delete();
-			return await base.Execute();
-		}
+		 protected override int Execute()
+        {
+            this.RunDelete();
+            return base.Execute();
+        }
 
-		private async Task Delete()
+		private void RunDelete()
 		{
 			base.CheckForValue(this._name.Value, this._app, "An environment name is required for this command.");
             bool deleted;
 			if (this._dontPrompt.HasValue())
 			{
-                await base._boxPlatformBuilder.Build().BustCache();
+                base._boxHome.BustCache();
 				deleted = base._environments.DeleteEnvironment(this._name.Value);
 			}
 			else
@@ -60,7 +60,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 				}
 				else
 				{
-                    await base._boxPlatformBuilder.Build().BustCache();
+                    base._boxHome.BustCache();
 					deleted = base._environments.DeleteEnvironment(this._name.Value);
 				}
 			}

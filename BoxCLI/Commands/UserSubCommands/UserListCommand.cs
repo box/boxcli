@@ -31,7 +31,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _app = command;
             command.Description = "List all Box users.";
             _managedUsers = ManagedUsersOnlyOption.ConfigureOption(command);
-            _appUsers = ManagedUsersOnlyOption.ConfigureOption(command);
+            _appUsers = AppUsersOnlyOption.ConfigureOption(command);
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
@@ -46,48 +46,25 @@ namespace BoxCLI.Commands.UserSubCommands
 
         protected async override Task<int> Execute()
         {
-            await this.RunList(_managedUsers.HasValue(), _save.HasValue(),
-                        _path.Value(), _fileFormat.Value(), _fieldsOption.Value());
+            await this.RunList();
             return await base.Execute();
         }
 
-        public async Task RunList(bool managedOnly = false, bool save = false, string path = "", string fileFormat = "", string rawFields = "")
+        public async Task RunList()
         {
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var BoxCollectionsIterators = base.GetIterators();
             var fileName = $"{base._names.CommandNames.Users}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-            var fields = base.ProcessFields(rawFields, base._fields);
+            var fields = base.ProcessFields(this._fieldsOption.Value(), base._fields);
             try
             {
-                if (managedOnly)
-                {
-                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
-                    users.Entries.RemoveAll(user =>
-                    {
-                        return user.Login.Contains("AppUser");
-                    });
-                    if (save == true)
-                    {
-                        base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat.ToLower());
-                    }
-                    else
-                    {
-                        var showNext = "";
-                        while (users.Entries.Count > 0 && showNext != "q")
-                        {
-                            showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
-                        }
-                    }
-                    Reporter.WriteInformation("Finished...");
-                    return;
-                }
-                if (save == true)
+                if (this._save.HasValue())
                 {
                     Reporter.WriteInformation("Saving file...");
                     BoxCollection<BoxUser> users;
                     if (this._appUsers.HasValue())
                     {
-                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "");
+                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
                     }
                     else if (this._managedUsers.HasValue())
                     {
@@ -101,8 +78,43 @@ namespace BoxCLI.Commands.UserSubCommands
                     {
                         users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
                     }
-                    var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, path, fileFormat);
-                    System.Console.WriteLine($"File saved: {saved}");
+
+                    var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, this._path.Value(), this._fileFormat.Value());
+                    if(saved)
+                    {
+						Reporter.WriteSuccess("File saved.");
+                    }
+                    else 
+                    {
+                        Reporter.WriteError("Error while saving file.");
+                    }
+                    return;
+                }
+                if (this._managedUsers.HasValue())
+                {
+                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                    users.Entries.RemoveAll(user =>
+                    {
+                        return user.Login.Contains("AppUser");
+                    });
+                    var showNext = "";
+                    while (users.Entries.Count > 0 && showNext != "q")
+                    {
+                        showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                    }
+                    Reporter.WriteInformation("Finished...");
+                    return;
+                }
+                else if (this._appUsers.HasValue())
+                {
+                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
+					var showNext = "";
+					while (users.Entries.Count > 0 && showNext != "q")
+					{
+						showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+					}
+					Reporter.WriteInformation("Finished...");
+					return;
                 }
                 else
                 {
@@ -120,7 +132,7 @@ namespace BoxCLI.Commands.UserSubCommands
                         return boxClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
                     }, PrintUserInfo, limit);
                 }
-                System.Console.WriteLine("Finished...");
+                Reporter.WriteInformation("Finished...");
             }
             catch (Exception e)
             {

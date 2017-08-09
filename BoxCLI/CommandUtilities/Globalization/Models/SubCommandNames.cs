@@ -28,8 +28,8 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string BustCache { get; set; } = "bust-token-cache";
         public string SetAdminUser { get; set; } = "set-admin-user";
         public string GetAdminUser { get; set; } = "get-admin-user";
-        public string GetDefaultUser { get; set; } = "get-default-user";
-        public string SetDefaultUser { get; set; } = "set-default-user";
+        public string GetDefaultUser { get; set; } = "get-default-as-user";
+        public string SetDefaultUser { get; set; } = "set-default-as-user";
         public string StartUserSession { get; set; } = "start-user-session";
         public string EndUserSession { get; set; } = "end-user-session";
         public string GetSessionExpiration { get; set; } = "get-session-expiration";
@@ -53,5 +53,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string DeleteEmailAlias { get; set; } = "delete-email-alias";
         public string GetPending { get; set; } = "get-pending";
         public string ListForGroup { get; set; } = "list-for-group";
+        public string UpdatePrivateKeyPath { get; set; } = "update-private-key-path";
+        public string UpdateConfigFilePath { get; set; } = "update-config-file-path";
     }
 }

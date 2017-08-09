@@ -16,7 +16,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Set the Admin user in a Box environment.";
+            command.Description = "Rename an existing environment.";
             _existingName = command.Argument("existingEnvironmentName",
                                "The existing name of the environment to rename.");
             _newName = command.Argument("newEnvironmentName",
