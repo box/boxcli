@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Box.V2.Config;
 using BoxCLI.BoxHome.Models;
 using BoxCLI.BoxHome.Models.BoxConfigFile;
+using BoxCLI.BoxPlatform.Utilities;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BoxCLI.BoxHome.BoxHomeFiles
 {
@@ -24,20 +28,45 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         public bool VerifyBoxConfigFile(string filePath)
         {
             filePath = GeneralUtilities.TranslatePath(filePath);
+            Reporter.WriteInformation($"Looking for file at this path {filePath}");
             if (File.Exists(filePath))
             {
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                try
                 {
-                    try
+                    Reporter.WriteInformation("Getting results of validation...");
+                    var config = ValidateConfigFileValues(File.ReadAllText(filePath));
+                    if (config.IsValid)
                     {
-                        var config = BoxConfig.CreateFromJsonFile(fs);
                         return true;
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Reporter.WriteError(e.Message);
-                        return false;
+                        if (!config.HasClientId)
+                        {
+                            throw new Exception("Your configuration file is missing the client ID value.");
+                        }
+                        else if (!config.HasClientSecret)
+                        {
+                            throw new Exception("Your configuration file is missing the client secret value.");
+                        }
+                        else if (!config.HasEnterpriseId)
+                        {
+                            throw new Exception("Your configuration file is missing the Enterprise ID value.");
+                        }
+                        else if (!config.HasPublicKeyId)
+                        {
+                            throw new Exception("Your configuration file is missing the public key ID value.");
+                        }
+                        else
+                        {
+                            throw new Exception("An unknown error occurred.");
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
                 }
             }
             else
@@ -45,14 +74,68 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                 return false;
             }
         }
-        public BoxHomeConfigModel TranslateConfigFileToEnvironment(string filePath)
+        private BoxEnvironmentConfigFileValidation ValidateConfigFileValues(string jsonString)
+        {
+
+            var validation = new BoxEnvironmentConfigFileValidation();
+            var config = BoxPlatformUtilities.ParseBoxConfig(jsonString);
+
+            validation.HasClientId = (!string.IsNullOrEmpty(config.AppSettings.ClientId));
+            validation.HasClientSecret = (!string.IsNullOrEmpty(config.AppSettings.ClientSecret));
+            validation.HasPublicKeyId = (!string.IsNullOrEmpty(config.AppSettings.AppAuth.PublicKeyId));
+            validation.HasEnterpriseId = (!string.IsNullOrEmpty(config.EnterpriseId));
+
+            if (validation.HasClientId && validation.HasClientSecret && validation.HasEnterpriseId && validation.HasPublicKeyId)
+            {
+                validation.IsValid = true;
+            }
+            return validation;
+        }
+        public BoxHomeConfigModel RevalidateExistingConfigFile(string filePath, string privateKeyPath = "")
+        {
+            return TranslateConfigFileToEnvironment(filePath, privateKeyPath);
+        }
+        public BoxHomeConfigModel TranslateConfigFileToEnvironment(string filePath, string privateKeyPath = "")
         {
             filePath = GeneralUtilities.TranslatePath(filePath);
             var translatedConfig = new BoxHomeConfigModel();
             if (File.Exists(filePath))
             {
                 var config = DeserializeBoxConfigFile(filePath);
-                translatedConfig.ClientId = config.appSettings.ClientId;
+                if (!string.IsNullOrEmpty(privateKeyPath))
+                {
+                    var potentialPathFromOptions = GeneralUtilities.TranslatePath(privateKeyPath);
+                    if (File.Exists(potentialPathFromOptions))
+                    {
+                        translatedConfig.PrivateKeyPath = potentialPathFromOptions;
+                    }
+                    else
+                    {
+                        throw new Exception("Couldn't access the private key file from the path provided.");
+                    }
+                }
+                else if (!string.IsNullOrEmpty(config.AppSettings.AppAuth.PrivateKey))
+                {
+                    var pattern = @"^-----BEGIN ENCRYPTED PRIVATE KEY-----\n";
+                    var regex = new Regex(pattern);
+                    if (regex.IsMatch(config.AppSettings.AppAuth.PrivateKey))
+                    {
+                        translatedConfig.HasInLinePrivateKey = true;
+                    }
+                    else
+                    {
+                        var potentialPath = GeneralUtilities.TranslatePath(config.AppSettings.AppAuth.PrivateKey);
+                        if (File.Exists(potentialPath))
+                        {
+                            translatedConfig.PrivateKeyPath = potentialPath;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception("No in-line private key or private key file path provided.");
+                }
+                translatedConfig.ClientId = config.AppSettings.ClientId;
                 translatedConfig.EnterpriseId = config.EnterpriseId;
                 translatedConfig.BoxConfigFilePath = filePath;
             }
@@ -202,6 +285,52 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             this.SerializeBoxEnvironmentFile(environments);
             return true;
         }
+        public bool UpdatePrivateKeyPath(string existingName, string newPath)
+        {
+            var environments = DeserializeBoxEnvironmentFile();
+            var foundEnv = new BoxHomeConfigModel();
+            environments.Environments.TryGetValue(existingName, out foundEnv);
+            if (foundEnv == null || string.IsNullOrEmpty(foundEnv.Name))
+            {
+                throw new Exception("Couldn't find that environment");
+            }
+            foundEnv.PrivateKeyPath = GeneralUtilities.TranslatePath(newPath);
+            environments.Environments[existingName] = foundEnv;
+            this.SerializeBoxEnvironmentFile(environments);
+            return true;
+        }
+        public bool UpdateConfigFilePath(string existingName, string newPath, string newPemPath = "")
+        {
+            var environments = DeserializeBoxEnvironmentFile();
+            var foundEnv = new BoxHomeConfigModel();
+            environments.Environments.TryGetValue(existingName, out foundEnv);
+            if (foundEnv == null || string.IsNullOrEmpty(foundEnv.Name))
+            {
+                throw new Exception("Couldn't find that environment");
+            }
+            var translatePath = GeneralUtilities.TranslatePath(newPath);
+            if (this.VerifyBoxConfigFile(translatePath))
+            {
+                BoxHomeConfigModel env;
+                if (!string.IsNullOrEmpty(newPemPath))
+                {
+                    var translatePemPath = GeneralUtilities.TranslatePath(newPemPath);
+                    env = this.TranslateConfigFileToEnvironment(translatePath, translatePemPath);
+                }
+                else
+                {
+                    env = this.TranslateConfigFileToEnvironment(translatePath);
+                }
+                foundEnv.BoxConfigFilePath = env.BoxConfigFilePath;
+                foundEnv.ClientId = env.ClientId;
+                foundEnv.EnterpriseId = env.EnterpriseId;
+                foundEnv.HasInLinePrivateKey = env.HasInLinePrivateKey;
+                foundEnv.PrivateKeyPath = env.PrivateKeyPath;
+            }
+            environments.Environments[existingName] = foundEnv;
+            this.SerializeBoxEnvironmentFile(environments);
+            return true;
+        }
         public bool SetTempAsUserIdSetting(string userId)
         {
             var environments = DeserializeBoxEnvironmentFile();
@@ -335,7 +464,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         public BoxHomeConfigModel GetDefaultEnvironment()
         {
             var environments = DeserializeBoxEnvironmentFile();
-            if(string.IsNullOrEmpty(environments.DefaultEnvironment))
+            if (string.IsNullOrEmpty(environments.DefaultEnvironment))
                 throw new NoEnvironmentsFoundException("No default environment found.");
             BoxHomeConfigModel defaultEnv;
             environments.Environments.TryGetValue(environments.DefaultEnvironment, out defaultEnv);
@@ -347,26 +476,26 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             var environments = DeserializeBoxEnvironmentFile();
             return environments.Environments;
         }
-		public bool DeleteEnvironment(string name)
-		{
-			var environmentFile = DeserializeBoxEnvironmentFile();
-			BoxHomeConfigModel found;
-			environmentFile.Environments.TryGetValue(name, out found);
-			if (found != null)
-			{
-				environmentFile.Environments.Remove(name);
+        public bool DeleteEnvironment(string name)
+        {
+            var environmentFile = DeserializeBoxEnvironmentFile();
+            BoxHomeConfigModel found;
+            environmentFile.Environments.TryGetValue(name, out found);
+            if (found != null)
+            {
+                environmentFile.Environments.Remove(name);
                 if (environmentFile.DefaultEnvironment == name)
                 {
                     environmentFile.DefaultEnvironment = "";
                 }
-				SerializeBoxEnvironmentFile(environmentFile);
+                SerializeBoxEnvironmentFile(environmentFile);
                 return true;
-			}
-			else
-			{
-				throw new Exception("Couldn't find this environment.");
-			}
-		}
+            }
+            else
+            {
+                throw new Exception("Couldn't find this environment.");
+            }
+        }
         public bool UpdateEnvironmentFilePath(string path, string envName)
         {
             var environments = DeserializeBoxEnvironmentFile();
@@ -391,6 +520,19 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                 throw new Exception("Not a valid config file.");
             }
 
+        }
+        public bool UpdateEnvironment(BoxHomeConfigModel newEnv, string envName)
+        {
+            var environments = DeserializeBoxEnvironmentFile();
+            var foundEnv = new BoxHomeConfigModel();
+            environments.Environments.TryGetValue(envName, out foundEnv);
+            if (foundEnv == null || string.IsNullOrEmpty(foundEnv.Name))
+            {
+                throw new Exception("Couldn't find that environment");
+            }
+            environments.Environments[envName] = newEnv;
+            this.SerializeBoxEnvironmentFile(environments);
+            return true;
         }
 
         private string GetBoxEnvironmentFilePath()

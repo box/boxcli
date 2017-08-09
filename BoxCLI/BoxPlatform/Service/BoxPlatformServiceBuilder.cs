@@ -29,10 +29,54 @@ namespace BoxCLI.BoxPlatform.Service
         {
             var environments = BoxHome.GetBoxEnvironments();
             var defaultEnv = environments.GetDefaultEnvironment();
-            using (FileStream fs = new FileStream(defaultEnv.BoxConfigFilePath, FileMode.Open))
+            if (defaultEnv.HasInLinePrivateKey)
             {
-                BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
+                using (FileStream fs = new FileStream(defaultEnv.BoxConfigFilePath, FileMode.Open))
+                {
+                    BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
+                    BoxService.BoxPlatformConfig = BoxPlatformConfig;
+                }
+            }
+            else if (!string.IsNullOrEmpty(defaultEnv.PrivateKeyPath))
+            {
+                var config = BoxPlatformUtilities.ParseBoxConfig(File.ReadAllText(defaultEnv.BoxConfigFilePath));
+                var pem = File.ReadAllText(defaultEnv.PrivateKeyPath);
+                BoxPlatformConfig = new BoxCLIConfig(config.AppSettings.ClientId, config.AppSettings.ClientSecret,
+                                                    config.EnterpriseId, pem, config.AppSettings.AppAuth.Passphrase,
+                                                    config.AppSettings.AppAuth.PublicKeyId);
                 BoxService.BoxPlatformConfig = BoxPlatformConfig;
+            }
+            else
+            {
+                // Logic to revalidate existing environments to add new detectable fields added to the model.
+                // Could come in handy when introducing breaking changes to environment file model.
+                var existing = environments.RevalidateExistingConfigFile(defaultEnv.BoxConfigFilePath, defaultEnv.PrivateKeyPath);
+                existing.Name = defaultEnv.Name;
+                if (!environments.UpdateEnvironment(existing, defaultEnv.Name))
+                {
+                    throw new Exception($"An error occurred with your environment. Try deleting the environment {defaultEnv.Name} and adding again.");
+                }
+                if (existing.HasInLinePrivateKey)
+                {
+                    using (FileStream fs = new FileStream(existing.BoxConfigFilePath, FileMode.Open))
+                    {
+                        BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
+                        BoxService.BoxPlatformConfig = BoxPlatformConfig;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(existing.PrivateKeyPath))
+                {
+                    var config = BoxPlatformUtilities.ParseBoxConfig(File.ReadAllText(existing.BoxConfigFilePath));
+                    var pem = File.ReadAllText(existing.PrivateKeyPath);
+                    BoxPlatformConfig = new BoxCLIConfig(config.AppSettings.ClientId, config.AppSettings.ClientSecret,
+                                                        config.EnterpriseId, pem, config.AppSettings.AppAuth.Passphrase,
+                                                        config.AppSettings.AppAuth.PublicKeyId);
+                    BoxService.BoxPlatformConfig = BoxPlatformConfig;
+                }
+                else
+                {
+                    throw new Exception("An unknown error occured.");
+                }
             }
         }
 

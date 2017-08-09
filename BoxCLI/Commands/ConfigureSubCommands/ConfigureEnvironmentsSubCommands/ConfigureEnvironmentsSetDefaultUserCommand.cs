@@ -15,7 +15,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         public override void Configure(CommandLineApplication command)
         {
             _app = command;
-            command.Description = "Set the Admin user in a Box environment.";
+            command.Description = "Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment you add.";
             _defaultUserId = command.Argument("defaultUserId",
                                "The user ID for a default user for this environment.");
             _envName = command.Option("--env-name",

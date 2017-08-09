@@ -54,7 +54,15 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             }
 			else if (commandName == _names.SubCommandNames.Delete)
 			{
-				return new ConfigureEnvironmentDeleteCommand(_boxPlatformBuilder, _boxHome, _names);
+				return new ConfigureEnvironmentDeleteCommand(_boxHome);
+			}
+			else if (commandName == _names.SubCommandNames.UpdatePrivateKeyPath)
+			{
+				return new ConfigureEnvironmentsUpdatePrivateKeyPathCommand(_boxHome);
+			}
+			else if (commandName == _names.SubCommandNames.UpdateConfigFilePath)
+			{
+				return new ConfigureEnvironmentsUpdateConfigFilePathCommand(_boxHome);
 			}
             else
             {

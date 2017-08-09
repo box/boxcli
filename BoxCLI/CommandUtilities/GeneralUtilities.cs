@@ -82,7 +82,7 @@ namespace BoxCLI.CommandUtilities
             var pathContents = new List<string>();
             var winDirectoryRegex = new Regex(@"^[a-zA-Z]:\\");
             var winDirectory = "";
-            if (path.Contains("~"))
+            if (path.StartsWith("~"))
             {
                 path = path.Substring(1, path.Length - 1);
                 path = $"{ResolveTilde()}{path}";
@@ -102,6 +102,12 @@ namespace BoxCLI.CommandUtilities
                 var match = winDirectoryRegex.Match(path);
                 winDirectory = match.Value;
                 path = path.Substring(match.Length - 1);
+            }
+
+            if (!path.StartsWith(Path.DirectorySeparatorChar.ToString()) && !path.StartsWith("~") && !path.StartsWith("..") &&
+            !path.StartsWith($".{Path.DirectorySeparatorChar}") && !winDirectoryRegex.IsMatch(path))
+            {
+                path = $"{ResolveDot()}{Path.DirectorySeparatorChar}{path}";
             }
 
             if (path.Contains("/"))
@@ -133,7 +139,7 @@ namespace BoxCLI.CommandUtilities
 
         public static string GetDateFormatString()
         {
-            return "yyyy-MM-dd|HH_mm_ss";
+            return "yyyy-MM-ddTHH_mm_ss";
         }
     }
 }

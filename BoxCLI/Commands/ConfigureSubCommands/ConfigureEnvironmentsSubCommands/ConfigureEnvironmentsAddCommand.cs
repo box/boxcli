@@ -8,6 +8,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
     {
         private CommandArgument _path;
         private CommandOption _environmentName;
+        private CommandOption _pemPath;
         private CommandLineApplication _app;
         public ConfigureEnvironmentsAddCommand(IBoxHome boxHome) : base(boxHome)
         {
@@ -19,8 +20,11 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             command.Description = "Add a new Box environment.";
             _path = command.Argument("path",
                            "Provide a file path to configuration file");
-            _environmentName = command.Option("-n|--name <name>",
+            _environmentName = command.Option("-n|--name <NAME>",
                            "Give this configuration a name for retrieval later",
+                           CommandOptionType.SingleValue);
+            _pemPath = command.Option("--private-key-path <PATH>",
+                           "Provide a path to your application private key.",
                            CommandOptionType.SingleValue);
             command.OnExecute(() =>
             {
@@ -39,7 +43,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         {
             if (base._environments.VerifyBoxConfigFile(filePath))
             {
-                var env = base._environments.TranslateConfigFileToEnvironment(filePath);
+                var env = base._environments.TranslateConfigFileToEnvironment(filePath, this._pemPath.Value());
                 env.Name = environmentName;
                 var set = base._environments.AddNewEnvironment(env);
                 if (set == true)

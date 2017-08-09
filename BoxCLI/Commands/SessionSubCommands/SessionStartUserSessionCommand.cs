@@ -27,7 +27,7 @@ namespace BoxCLI.Commands.SessionSubCommands
                                 "Provide a user ID for this session. If not set, the session uses your Default User for the current environment.",
                                 CommandOptionType.SingleValue);
             _expires = command.Option("--expires",
-                               "Make the session expire from a timespan set from now. If not set, the session expires in 8 hours. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s.",
+                               "Make the session expire from a timespan set from now. If not set, the session expires in 8 hours. 2 digit, 1 letter formatting expected. For example, 30 seconds is 30s.",
                                 CommandOptionType.SingleValue);
             command.OnExecute(() =>
             {

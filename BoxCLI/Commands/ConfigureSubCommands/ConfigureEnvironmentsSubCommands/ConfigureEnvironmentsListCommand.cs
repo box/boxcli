@@ -32,15 +32,14 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             var environments = base._environments.GetAllEnvironments();
             foreach (var environment in environments)
             {
+                var inline = (environment.Value.HasInLinePrivateKey) ? "Yes" : "No";
                 Reporter.WriteInformation("*******************************");
                 Reporter.WriteInformation($"Name: {environment.Value.Name}");
                 Reporter.WriteInformation($"Client ID: {environment.Value.ClientId}");
                 Reporter.WriteInformation($"Enterprise ID: {environment.Value.EnterpriseId}");
                 Reporter.WriteInformation($"Path to Config File: {environment.Value.BoxConfigFilePath}");
-                Reporter.WriteInformation($"Is default As User profile active?: {(environment.Value.UseDefaultAsUser ? "Yes" : "No")}");
-                Reporter.WriteInformation($"Current default As User profile ID: {environment.Value.DefaultAsUserId}");
-                Reporter.WriteInformation($"Is temporary As User profile active?: {(environment.Value.UseTempAsUser ? "Yes" : "No")}");
-                Reporter.WriteInformation($"Current temporary As User profile ID: {environment.Value.TempAsUserId}");
+                Reporter.WriteInformation($"Path to Private Key File: {environment.Value.PrivateKeyPath}");
+                Reporter.WriteInformation($"Has in-line Private Key?: {inline}");
                 Reporter.WriteInformation("*******************************");
             }
         }
