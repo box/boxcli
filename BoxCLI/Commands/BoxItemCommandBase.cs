@@ -24,7 +24,6 @@ namespace BoxCLI.Commands
     public class BoxItemCommandBase : BoxBaseCommand
     {
         protected CommandOption _asUser;
-        protected CommandOption _json;
         private CommandLineApplication _app;
         protected const long MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE = 50000000;
         public BoxItemCommandBase(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
@@ -35,7 +34,6 @@ namespace BoxCLI.Commands
         {
             _app = command;
             _asUser = AsUserOption.ConfigureOption(command);
-            _json = OutputJsonOption.ConfigureOption(command);
             base.Configure(command);
         }
 

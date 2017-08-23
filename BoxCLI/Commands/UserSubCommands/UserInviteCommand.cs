@@ -55,10 +55,14 @@ namespace BoxCLI.Commands.UserSubCommands
                     Login = this._userEmail.Value
                 }
             };
-            
-            var userInvite = await boxClient.UsersManager.InviteUserToEnterpriseAsync(userInviteRequest);
 
-            if(userInvite.InvitedTo.Id == this._enterpriseId.Value)
+            var userInvite = await boxClient.UsersManager.InviteUserToEnterpriseAsync(userInviteRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(userInvite);
+                return;
+            }
+            if (userInvite.InvitedTo.Id == this._enterpriseId.Value)
             {
                 Reporter.WriteSuccess($"Invited user {this._userEmail.Value}");
             }

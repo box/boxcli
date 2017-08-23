@@ -56,12 +56,23 @@ namespace BoxCLI.Commands.UserSubCommands
                 {
                     return user.Login.Contains("AppUser");
                 });
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(users);
+                    return;
+                }
                 var showNext = "";
                 while (users.Entries.Count > 0 && showNext != "q")
                 {
                     showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(base.PrintUserInfo, users);
                 }
                 System.Console.WriteLine("Finished...");
+                return;
+            }
+            if (base._json.HasValue())
+            {
+                var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(filterTerm: userName, autoPaginate: true);
+                base.OutputJson(users);
                 return;
             }
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>

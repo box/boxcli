@@ -67,8 +67,14 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             {
                 throw new Exception("Couldn't update the user's membership role.");
             }
+            var updatedMembership = await boxClient.GroupsManager.UpdateGroupMembershipAsync(this._membershipId.Value, memberRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(updatedMembership);
+                return;
+            }
             Reporter.WriteSuccess("Updated the user's role.");
-            base.PrintGroupMember(await boxClient.GroupsManager.UpdateGroupMembershipAsync(this._membershipId.Value, memberRequest));
+            base.PrintGroupMember(updatedMembership);
         }
     }
 }

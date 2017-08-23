@@ -60,6 +60,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 Reporter.WriteInformation($"File saved: {saved}");
                 return;
             }
+            if (base._json.HasValue())
+            {
+                var result = await boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true);
+                base.OutputJson(result);
+                return;
+            }
 			int limit = -1;
 			if (this._limit.HasValue())
 			{

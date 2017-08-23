@@ -47,26 +47,26 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._id.Value, this._app, "An ID is required for this command.");
-			var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Collaborations}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                 Reporter.WriteInformation("Saving file...");
                 BoxCollection<BoxCollaboration> saveCollabs;
-				if (base._t == BoxType.file)
-				{
-					System.Console.WriteLine($"Looking for Collaborations on this file {this._id.Value}...");
-					saveCollabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
-				}
-				else if (base._t == BoxType.folder)
-				{
-					System.Console.WriteLine($"Looking for Collaborations on this folder {this._id.Value}...");
-					saveCollabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
-				}
-				else
-				{
-					throw new Exception("This item doesn't currently support collaborations.");
-				}
+                if (base._t == BoxType.file)
+                {
+                    System.Console.WriteLine($"Looking for Collaborations on this file {this._id.Value}...");
+                    saveCollabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
+                }
+                else if (base._t == BoxType.folder)
+                {
+                    System.Console.WriteLine($"Looking for Collaborations on this folder {this._id.Value}...");
+                    saveCollabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
+                }
+                else
+                {
+                    throw new Exception("This item doesn't currently support collaborations.");
+                }
                 var saved = base.WriteOffsetCollectionResultsToReport<BoxCollaboration, BoxCollaborationMap>(saveCollabs, fileName, fileFormat: this._fileFormat.Value());
                 Reporter.WriteInformation($"File saved: {saved}");
                 return;
@@ -86,6 +86,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             else
             {
                 throw new Exception("This item doesn't currently support collaborations.");
+            }
+
+            if (base._json.HasValue())
+            {
+                base.OutputJson(collabs);
+                return;
             }
             base.PrintCollaborations(collabs);
         }

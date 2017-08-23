@@ -44,7 +44,13 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForTemplate(this._template.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            base.PrintMetadataTemplate(await boxClient.MetadataManager.GetMetadataTemplate(this._scope.Value, this._template.Value));
+            var template = await boxClient.MetadataManager.GetMetadataTemplate(this._scope.Value, this._template.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(template);
+                return;
+            }
+            base.PrintMetadataTemplate(template);
         }
     }
 }

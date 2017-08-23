@@ -54,6 +54,11 @@ namespace BoxCLI.Commands.FolderSubCommands
                 Reporter.WriteInformation(copy.Id);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(copy);
+                return;
+            }
             Reporter.WriteSuccess($"Copied folder {this._folderId.Value} to folder {this._parentFolderId.Value}");
             base.PrintFolder(copy);
         }

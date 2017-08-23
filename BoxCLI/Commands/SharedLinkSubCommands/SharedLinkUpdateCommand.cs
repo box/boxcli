@@ -73,6 +73,11 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     fileRequest.SharedLink.Permissions.Download = true;
                 }
                 var result = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(result);
+                    return;
+                }
                 Reporter.WriteSuccess("Updated shared link:");
                 base.PrintItem(result);
             }
@@ -98,6 +103,11 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     folderUpdateRequest.SharedLink.Permissions.Download = true;
                 }
                 var updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(updated);
+                    return;
+                }
                 Reporter.WriteSuccess("Updated shared link:");
                 base.PrintItem(updated);
             }

@@ -27,7 +27,7 @@ namespace BoxCLI.Commands.UserSubCommands
                                    "User whose content should be moved");
             _newUserId = command.Argument("newUserId",
                                    "User to whom the content should be moved");
-            _notify = command.Option("--notify","Notify the user that their content has been moved",CommandOptionType.NoValue);
+            _notify = command.Option("--notify", "Notify the user that their content has been moved", CommandOptionType.NoValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,14 +46,19 @@ namespace BoxCLI.Commands.UserSubCommands
             base.CheckForId(this._userId.Value, this._app);
             base.CheckForId(this._newUserId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-
-            if(this._notify.HasValue()) 
+            BoxFolder folder;
+            if (this._notify.HasValue())
             {
-                var folder = await boxClient.UsersManager.MoveUserFolderAsync(this._userId.Value, this._newUserId.Value,"0",true);
+                folder = await boxClient.UsersManager.MoveUserFolderAsync(this._userId.Value, this._newUserId.Value, "0", true);
             }
             else
             {
-                var folder = await boxClient.UsersManager.MoveUserFolderAsync(this._userId.Value, this._newUserId.Value);
+                folder = await boxClient.UsersManager.MoveUserFolderAsync(this._userId.Value, this._newUserId.Value);
+            }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(folder);
+                return;
             }
             Reporter.WriteSuccess($"Moved all items to user {this._newUserId.Value} from user {this._userId.Value}");
         }

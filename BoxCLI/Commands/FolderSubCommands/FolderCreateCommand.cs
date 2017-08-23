@@ -15,9 +15,9 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandArgument _parentFolderId;
         private CommandArgument _name;
         private CommandOption _bulkPath;
-		private CommandOption _filePath;
-		private CommandOption _fileFormat;
-		private CommandOption _save;
+        private CommandOption _filePath;
+        private CommandOption _fileFormat;
+        private CommandOption _save;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
         public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
@@ -30,9 +30,9 @@ namespace BoxCLI.Commands.FolderSubCommands
             _app = command;
             command.Description = "Create a new folder";
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
-			_filePath = FilePathOption.ConfigureOption(command);
-			_fileFormat = FileFormatOption.ConfigureOption(command);
-			_save = SaveOption.ConfigureOption(command);
+            _filePath = FilePathOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
+            _save = SaveOption.ConfigureOption(command);
             _idOnly = IdOnlyOption.ConfigureOption(command);
             _parentFolderId = command.Argument("parentFolderId",
                                "Id of parent folder to add new folder to, use '0' for the root folder");
@@ -52,9 +52,9 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         protected async Task RunCreate()
         {
-            if(this._bulkPath.HasValue())
+            if (this._bulkPath.HasValue())
             {
-                await this.CreateFoldersFromFile(this._bulkPath.Value(), base._asUser.Value(), this._save.HasValue(), 
+                await this.CreateFoldersFromFile(this._bulkPath.Value(), base._asUser.Value(), this._save.HasValue(),
                                                  this._filePath.Value(), this._fileFormat.Value());
                 return;
             }
@@ -67,9 +67,14 @@ namespace BoxCLI.Commands.FolderSubCommands
                 folderRequest.Parent.Id = this._parentFolderId.Value;
                 folderRequest.Name = this._name.Value;
                 var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
-                if(this._idOnly.HasValue())
+                if (this._idOnly.HasValue())
                 {
                     Reporter.WriteInformation(folder.Id);
+                    return;
+                }
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(folder);
                     return;
                 }
                 base.PrintFolder(folder);

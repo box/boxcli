@@ -39,6 +39,11 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             base.CheckForFileId(this._fileId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var fileVersions = await boxClient.FilesManager.ViewVersionsAsync(this._fileId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(fileVersions);
+                return;
+            }
             foreach(var version in fileVersions.Entries)
             {
                 base.PrintFileVersion(version);

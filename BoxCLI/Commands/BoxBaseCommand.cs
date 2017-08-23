@@ -31,6 +31,7 @@ namespace BoxCLI.Commands
         protected readonly BoxEnvironments _environments;
         protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
+        protected CommandOption _json;
 
         public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
         {
@@ -44,6 +45,7 @@ namespace BoxCLI.Commands
         public override void Configure(CommandLineApplication command)
         {
             base.Configure(command);
+            _json = OutputJsonOption.ConfigureOption(command);
         }
 
         protected virtual void CheckForId(string id, CommandLineApplication app, string message = "")
@@ -183,7 +185,7 @@ namespace BoxCLI.Commands
         protected virtual void OutputJson<T>(T entity)
         {
             var converter = new BoxJsonConverter();
-            Reporter.WriteInformation(converter.Serialize<T>(entity));
+            Reporter.WriteInformation(JValue.Parse(converter.Serialize<T>(entity)).ToString(Formatting.Indented));
         }
 
         protected virtual bool WriteResultsToReport<T>(T entity, string fileName, string filePath = "", string fileFormat = "")
@@ -337,49 +339,49 @@ namespace BoxCLI.Commands
                 throw new Exception($"File format {fileFormat} is not currently supported.");
             }
         }
-		protected virtual bool WriteEventListResultsToReport(List<BoxEnterpriseEvent> entity, string fileName, string filePath = "", string fileFormat = "")
-		{
-			System.Console.WriteLine("Starting writer...");
-			fileFormat = this.ProcessReportsFileFormat(fileFormat);
-			filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
-			if (fileFormat == _settings.FILE_FORMAT_JSON)
-			{
-				try
-				{
-					System.Console.WriteLine("Writing JSON file...");
-					var converter = new BoxJsonConverter();
-					File.WriteAllText(filePath, converter.Serialize<List<BoxEnterpriseEvent>>(entity));
-					return true;
-				}
-				catch (Exception e)
-				{
-					Reporter.WriteError(e.Message);
-					return false;
-				}
-			}
-			else if (fileFormat == _settings.FILE_FORMAT_CSV)
-			{
-				try
-				{
-					using (StreamWriter fs = File.CreateText(filePath))
-					using (var csv = new CsvWriter(fs))
-					{
-						csv.Configuration.RegisterClassMap(typeof(BoxEventMap));
-						csv.WriteRecords(entity);
-					}
-					return true;
-				}
-				catch (Exception e)
-				{
-					Reporter.WriteError(e.Message);
-					return false;
-				}
-			}
-			else
-			{
-				throw new Exception($"File format {fileFormat} is not currently supported.");
-			}
-		}
+        protected virtual bool WriteEventListResultsToReport(List<BoxEnterpriseEvent> entity, string fileName, string filePath = "", string fileFormat = "")
+        {
+            System.Console.WriteLine("Starting writer...");
+            fileFormat = this.ProcessReportsFileFormat(fileFormat);
+            filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
+            if (fileFormat == _settings.FILE_FORMAT_JSON)
+            {
+                try
+                {
+                    System.Console.WriteLine("Writing JSON file...");
+                    var converter = new BoxJsonConverter();
+                    File.WriteAllText(filePath, converter.Serialize<List<BoxEnterpriseEvent>>(entity));
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else if (fileFormat == _settings.FILE_FORMAT_CSV)
+            {
+                try
+                {
+                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (var csv = new CsvWriter(fs))
+                    {
+                        csv.Configuration.RegisterClassMap(typeof(BoxEventMap));
+                        csv.WriteRecords(entity);
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError(e.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+        }
 
         protected virtual bool WriteListResultsToReport<T, M>(List<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()

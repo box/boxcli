@@ -76,8 +76,14 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                 {
                     taskAssignmentUpdate.Message = this._message.Value();
                 }
+                var taskAssignment = await boxClient.TasksManager.UpdateTaskAssignmentAsync(taskAssignmentUpdate);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(taskAssignment);
+                    return;
+                }
                 Reporter.WriteSuccess("Updated task assignment.");
-                base.PrintTaskAssignment(await boxClient.TasksManager.UpdateTaskAssignmentAsync(taskAssignmentUpdate));
+                base.PrintTaskAssignment(taskAssignment);
             }
             catch (Exception e)
             {

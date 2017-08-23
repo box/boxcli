@@ -100,6 +100,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             collabRequest.Role = role;
             
             var result = await boxClient.CollaborationsManager.EditCollaborationAsync(collabRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(result);
+                return;
+            }
             base.PrintCollaboration(result);
         }
     }

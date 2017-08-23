@@ -84,9 +84,14 @@ namespace BoxCLI.Commands.WebhooksSubComands
             webhookRequest.Triggers = triggers;
             webhookRequest.Address = this._address.Value;
             var createdWebhook = await boxClient.WebhooksManager.CreateWebhookAsync(webhookRequest);
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(createdWebhook.Id);
+                return;
+            }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(createdWebhook);
                 return;
             }
             Reporter.WriteSuccess("Created new webhook...");

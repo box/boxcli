@@ -42,6 +42,11 @@ namespace BoxCLI.Commands.FileSubCommand
         {
             base.CheckForFileId(this._fileId.Value, this._app);
             var copy = await base.CopyFile(this._fileId.Value, this._parentFolderId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(copy);
+                return;
+            }
             Reporter.WriteSuccess($"Copied file {this._fileId.Value} to folder {this._parentFolderId.Value}");
             base.PrintFile(copy);
         }

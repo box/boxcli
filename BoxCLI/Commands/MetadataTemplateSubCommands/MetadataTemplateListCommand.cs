@@ -60,6 +60,11 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                 return;
             }
             var collection = await boxClient.MetadataManager.GetEnterpriseMetadataAsync();
+            if (base._json.HasValue())
+            {
+                base.OutputJson(collection);
+                return;
+            }
             foreach (var template in collection.Entries)
             {
                 base.PrintMetadataTemplate(template);

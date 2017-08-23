@@ -46,7 +46,11 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
 
             var alias = await boxClient.UsersManager.AddEmailAliasAsync(this._userId.Value, this._userEmail.Value);
-
+            if (base._json.HasValue())
+            {
+                base.OutputJson(alias);
+                return;
+            }
             Reporter.WriteSuccess($"Added alias {this._userEmail.Value} to user {this._userId.Value}");
         }
     }

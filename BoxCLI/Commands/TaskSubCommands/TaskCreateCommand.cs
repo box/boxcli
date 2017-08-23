@@ -69,6 +69,11 @@ namespace BoxCLI.Commands.TaskSubCommands
                 Reporter.WriteInformation(createdTask.Id);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(createdTask);
+                return;
+            }
             base.PrintTask(createdTask);
         }
     }

@@ -60,15 +60,33 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             };
             if (base._t == BoxType.file)
             {
-                base.PrintSharedLink((await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
+                var item = (await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(item);
+                    return;
+                }
+                base.PrintSharedLink(item);
             }
             else if (base._t == BoxType.folder)
             {
-                base.PrintSharedLink((await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink);
+                var item = (await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(item);
+                    return;
+                }
+                base.PrintSharedLink(item);
             }
             else if (base._t == BoxType.enterprise)
             {
-                base.PrintItem(await boxClient.SharedItemsManager.SharedItemsAsync(this._url.Value, this._password.Value()));
+                var item = await boxClient.SharedItemsManager.SharedItemsAsync(this._url.Value, this._password.Value());
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(item);
+                    return;
+                }
+                base.PrintItem(item);
             }
             else
             {

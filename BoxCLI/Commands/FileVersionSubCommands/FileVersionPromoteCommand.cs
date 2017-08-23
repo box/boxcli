@@ -42,7 +42,13 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForFileVersionId(this._fileVersionId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintFileVersion(await boxClient.FilesManager.PromoteVersionAsync(this._fileId.Value, this._fileVersionId.Value));
+            var promotedFile = await boxClient.FilesManager.PromoteVersionAsync(this._fileId.Value, this._fileVersionId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(promotedFile);
+                return;
+            }
+            base.PrintFileVersion(promotedFile);
         }
     }
 }

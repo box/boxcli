@@ -39,7 +39,13 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         {
             base.CheckForValue(this._membershipId.Value, this._app, "A group memebership ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintGroupMember(await boxClient.GroupsManager.GetGroupMembershipAsync(_membershipId.Value));
+            var membership = await boxClient.GroupsManager.GetGroupMembershipAsync(_membershipId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(membership);
+                return;
+            }
+            base.PrintGroupMember(membership);
         }
     }
 }

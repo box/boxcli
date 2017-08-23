@@ -11,7 +11,7 @@ namespace BoxCLI.Commands
         {
             var noColor = command.Option("--no-color", "Turn off colors for logging", CommandOptionType.NoValue);
             var prefixOutput = command.Option("--prefix-output", "Show prefix information for logging.", CommandOptionType.NoValue);
-
+            
             command.OnExecute(
                 async () =>
                 {

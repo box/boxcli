@@ -49,9 +49,16 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID or user ID is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+
             var BoxCollectionsIterators = base.GetIterators();
             if (this._listGroups.HasValue())
             {
+                if (base._json.HasValue())
+                {
+                    var memberships = boxClient.GroupsManager.GetAllGroupMembershipsForUserAsync(this._id.Value, autoPaginate: true);
+                    base.OutputJson(memberships);
+                    return;
+                }
                 await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroupMembership>((offset) =>
                 {
                     return boxClient.GroupsManager.GetAllGroupMembershipsForUserAsync(this._id.Value, offset: (int)offset);
@@ -59,6 +66,12 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             }
             else if (this._listCollab.HasValue())
             {
+                if (base._json.HasValue())
+                {
+                    var memberships = boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true);
+                    base.OutputJson(memberships);
+                    return;
+                }
                 await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxCollaboration>((offset) =>
                 {
                     return boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, offset: (int)offset);
@@ -66,6 +79,12 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             }
             else
             {
+                if (base._json.HasValue())
+                {
+                    var memberships = boxClient.GroupsManager.GetAllGroupMembershipsForGroupAsync(this._id.Value, autoPaginate: true);
+                    base.OutputJson(memberships);
+                    return;
+                }
                 await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroupMembership>((offset) =>
                 {
                     return boxClient.GroupsManager.GetAllGroupMembershipsForGroupAsync(this._id.Value, offset: (int)offset);

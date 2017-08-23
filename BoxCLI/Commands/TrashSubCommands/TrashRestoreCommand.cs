@@ -45,12 +45,23 @@ namespace BoxCLI.Commands.TrashSubCommands
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             if (this._type.Value == base._names.CommandNames.Files)
             {
-                base.PrintItem(await boxClient.FilesManager.RestoreTrashedAsync(new BoxFileRequest() { Id = this._itemId.Value }));
-
+                var item = await boxClient.FilesManager.RestoreTrashedAsync(new BoxFileRequest() { Id = this._itemId.Value });
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(item);
+                    return;
+                }
+                base.PrintItem(item);
             }
             else if (this._type.Value == base._names.CommandNames.Folders)
             {
-                base.PrintItem(await boxClient.FoldersManager.RestoreTrashedFolderAsync(new BoxFolderRequest() { Id = this._itemId.Value }));
+                var item = await boxClient.FoldersManager.RestoreTrashedFolderAsync(new BoxFolderRequest() { Id = this._itemId.Value });
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(item);
+                    return;
+                }
+                base.PrintItem(item);
             }
             else
             {

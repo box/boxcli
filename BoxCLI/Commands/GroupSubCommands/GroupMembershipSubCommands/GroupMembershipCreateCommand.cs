@@ -66,7 +66,13 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             memberRequest.User = new BoxRequestEntity();
             memberRequest.User.Id = this._userId.Value;
             memberRequest.Role = role;
-            base.PrintGroupMember(await boxClient.GroupsManager.AddMemberToGroupAsync(memberRequest));
+            var membership = await boxClient.GroupsManager.AddMemberToGroupAsync(memberRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(membership);
+                return;
+            }
+            base.PrintGroupMember(membership);
         }
     }
 }

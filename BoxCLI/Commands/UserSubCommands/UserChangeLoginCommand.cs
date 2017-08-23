@@ -46,7 +46,11 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
 
             var user = await boxClient.UsersManager.ChangeUsersLoginAsync(this._userId.Value, this._userEmail.Value);
-
+            if (base._json.HasValue())
+            {
+                base.OutputJson(user);
+                return;
+            }
             Reporter.WriteSuccess($"Changed user {this._userId.Value} primary email to {this._userEmail.Value} ");
             base.PrintUserInfo(user);
         }

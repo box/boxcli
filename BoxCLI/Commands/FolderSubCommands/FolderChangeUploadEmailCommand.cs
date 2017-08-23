@@ -53,6 +53,11 @@ namespace BoxCLI.Commands.FolderSubCommands
                 }
             };
             var changedEmail = await boxClient.FoldersManager.UpdateInformationAsync(email, etag: this._etag.Value());
+            if (base._json.HasValue())
+            {
+                base.OutputJson(changedEmail);
+                return;
+            }
             Reporter.WriteSuccess($"Updated folder's upload email {this._folderId.Value}");
             base.PrintFolder(changedEmail);
         }

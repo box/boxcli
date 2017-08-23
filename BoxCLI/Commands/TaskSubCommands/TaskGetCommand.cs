@@ -40,7 +40,13 @@ namespace BoxCLI.Commands.TaskSubCommands
         {
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintTask(await boxClient.TasksManager.GetTaskAsync(this._taskId.Value));
+            var task = await boxClient.TasksManager.GetTaskAsync(this._taskId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(task);
+                return;
+            }
+            base.PrintTask(task);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace BoxCLI.Commands.EventSubCommands
         protected async virtual Task PollEnterpriseEvents()
         {
             var boxClient = base.ConfigureBoxClient(this._asUser.Value());
-            var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-5));
+            var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-15));
             foreach (var evt in events.Entries)
             {
                 this.PrintEvent(evt);

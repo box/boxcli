@@ -52,17 +52,17 @@ namespace BoxCLI.Commands.FolderSubCommands
             try
             {
                 var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                if(this._save.HasValue())
+                if (this._save.HasValue())
                 {
                     Reporter.WriteInformation("Saving file...");
                     var foldersFileName = $"{base._names.CommandNames.Folders}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                     var filesFileName = $"{base._names.CommandNames.Files}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                     var collection = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
-					var folders = collection.Entries.FindAll(x => x.Type == "folder").Cast<BoxFolder>().ToList();
+                    var folders = collection.Entries.FindAll(x => x.Type == "folder").Cast<BoxFolder>().ToList();
                     var files = collection.Entries.FindAll(x => x.Type == "file").Cast<BoxFile>().ToList();
                     var savedFolders = base.WriteListResultsToReport<BoxFolder, BoxFolderMap>(folders, foldersFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
                     var savedFiles = base.WriteListResultsToReport<BoxFile, BoxFileMap>(files, filesFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
-                    if(savedFiles && savedFolders)
+                    if (savedFiles && savedFolders)
                     {
                         Reporter.WriteSuccess("Saved file.");
                     }
@@ -70,6 +70,12 @@ namespace BoxCLI.Commands.FolderSubCommands
                     {
                         Reporter.WriteError("Couldn't save file.");
                     }
+                    return;
+                }
+                if (base._json.HasValue())
+                {
+                    var result = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
+                    base.OutputJson(result);
                     return;
                 }
                 var BoxCollectionsIterators = base.GetIterators();

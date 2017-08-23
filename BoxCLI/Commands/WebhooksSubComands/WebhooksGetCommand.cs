@@ -40,13 +40,13 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private async Task RunGet(string id, string asUser)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
-            var collection = await boxClient.WebhooksManager.GetWebhooksAsync();
+            var webhook = await boxClient.WebhooksManager.GetWebhookAsync(id);
             if (base._json.HasValue())
             {
-                base.OutputJson(collection);
+                base.OutputJson(webhook);
                 return;
             }
-            base.PrintWebhook(await boxClient.WebhooksManager.GetWebhookAsync(id));
+            base.PrintWebhook(webhook);
         }
     }
 }

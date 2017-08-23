@@ -48,9 +48,9 @@ namespace BoxCLI.Commands.UserSubCommands
             _syncEnable = command.Option("--sync-enable", "Enable Sync for this user", CommandOptionType.NoValue);
             _syncDisable = command.Option("--sync-disable", "Disable Box Sync for this user", CommandOptionType.NoValue);
             _jobTitle = command.Option("-j|--job-title", "Job title of the user", CommandOptionType.SingleValue);
-            _phoneNumber = command.Option("-p|--phone-number","Phone number of the user", CommandOptionType.SingleValue);
+            _phoneNumber = command.Option("-p|--phone-number", "Phone number of the user", CommandOptionType.SingleValue);
             _address = command.Option("-a|--address", "Address of the user", CommandOptionType.SingleValue);
-            _spaceAmount = command.Option("-d|--disk-space","User's available storage in bytes. Value of -1 grants unlimited storage", CommandOptionType.SingleValue);
+            _spaceAmount = command.Option("-d|--disk-space", "User's available storage in bytes. Value of -1 grants unlimited storage", CommandOptionType.SingleValue);
             _status = command.Option("-s|--status", "User status. Enter active, inactive, cannot_delete_edit, or cannot_delete_edit_upload", CommandOptionType.SingleValue);
             _isExemptFromDeviceLimits = command.Option("--is-exempt-from-device-limits", "Exempt user from device limits", CommandOptionType.NoValue);
             _notExemptFromDeviceLimits = command.Option("--not-exempt-from-device-limits", "User is not exempt from device limits", CommandOptionType.NoValue);
@@ -74,16 +74,21 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            var userRequest = base.CreateUserRequest(this._name.Value(), this._userId.Value, this._role.Value(), this._enterprise.HasValue(), 
-            this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(), 
-            this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(), 
+            var userRequest = base.CreateUserRequest(this._name.Value(), this._userId.Value, this._role.Value(), this._enterprise.HasValue(),
+            this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(),
+            this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(),
             this._notExemptFromDeviceLimits.HasValue(), this._isExemptFromLoginVerificaton.HasValue(), this._notExemptFromLoginVerification.HasValue(),
             this._isPasswordResetRequired.HasValue());
 
             BoxUser updatedUser = await boxClient.UsersManager.UpdateUserInformationAsync(userRequest);
 
-            if(updatedUser.Id == this._userId.Value)
+            if (updatedUser.Id == this._userId.Value)
             {
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(updatedUser);
+                    return;
+                }
                 Reporter.WriteSuccess($"Updated user {this._userId.Value}");
                 base.PrintUserInfo(updatedUser);
             }

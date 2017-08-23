@@ -52,6 +52,11 @@ namespace BoxCLI.Commands.FolderSubCommands
                 Reporter.WriteInformation(move.Id);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(move);
+                return;
+            }
             Reporter.WriteSuccess($"Moved folder {this._folderId.Value} to folder {this._parentFolderId.Value}");
             base.PrintFolder(move);
         }
