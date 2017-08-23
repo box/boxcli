@@ -70,13 +70,18 @@ namespace BoxCLI.Commands.WebhooksSubComands
                 webhookRequest.Triggers = triggers;
             }
 
-            if(this._address.HasValue())
+            if (this._address.HasValue())
             {
-				webhookRequest.Address = this._address.Value();
+                webhookRequest.Address = this._address.Value();
             }
-
+            var webhook = await boxClient.WebhooksManager.UpdateWebhookAsync(webhookRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(webhook);
+                return;
+            }
             Reporter.WriteSuccess("Updated webhook...");
-            base.PrintWebhook(await boxClient.WebhooksManager.UpdateWebhookAsync(webhookRequest));
+            base.PrintWebhook(webhook);
         }
     }
 }

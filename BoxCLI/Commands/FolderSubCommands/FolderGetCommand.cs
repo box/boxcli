@@ -41,6 +41,11 @@ namespace BoxCLI.Commands.FolderSubCommands
             base.CheckForId(this._folderId.Value, this._app);
             var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
             var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(folder);
+                return;
+            }
             base.PrintFolder(folder);
         }
 

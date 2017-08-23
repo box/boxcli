@@ -146,6 +146,11 @@ namespace BoxCLI.Commands.FolderSubCommands
                 folderUpdateRequest.Tags = this._tags.Value().Split(',');
             }
             var updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(updated);
+                return;
+            }
             Reporter.WriteSuccess($"Updated folder {this._folderId.Value}");
             base.PrintFolder(updated);
         }

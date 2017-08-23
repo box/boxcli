@@ -48,7 +48,12 @@ namespace BoxCLI.Commands.TrashSubCommands
             {
                 var boxClient = base.ConfigureBoxClient(base._asUser.Value());
                 var BoxCollectionsIterators = base.GetIterators();
-
+                if (base._json.HasValue())
+                {
+                    var items = boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, autoPaginate: true);
+                    base.OutputJson(items);
+                    return;
+                }
                 await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
                 {
                     return boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, offset: (int)offset);

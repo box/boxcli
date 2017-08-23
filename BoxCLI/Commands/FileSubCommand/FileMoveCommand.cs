@@ -45,6 +45,11 @@ namespace BoxCLI.Commands.FileSubCommand
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForParentFolderId(this._parentFolderId.Value, this._app);
             var move = await base.MoveFile(this._fileId.Value, this._parentFolderId.Value, this._etag.Value());
+            if (base._json.HasValue())
+            {
+                base.OutputJson(move);
+                return;
+            }
             Reporter.WriteSuccess($"Moved file {this._fileId.Value} to folder {this._parentFolderId.Value}");
             base.PrintFile(move);
         }

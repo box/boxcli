@@ -58,6 +58,11 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 updatedFile = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(updatedFile);
+                return;
+            }
             Reporter.WriteSuccess($"Updated file {this._fileId.Value}");
             base.PrintFile(updatedFile);
         }

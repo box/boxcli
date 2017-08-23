@@ -17,7 +17,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         private CommandArgument _template;
         private CommandOption _bulkFilePath;
         private CommandLineApplication _app;
-        public MetadataCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t) 
+        public MetadataCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
         }
@@ -48,7 +48,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
         private async Task RunCreate()
         {
-            if(this._bulkFilePath.HasValue())
+            if (this._bulkFilePath.HasValue())
             {
                 await base.AddMetadataToItemFromFile(this._bulkFilePath.Value());
                 return;
@@ -69,6 +69,11 @@ namespace BoxCLI.Commands.MetadataSubCommands
             else
             {
                 throw new Exception("This item doesn't currently support metadata.");
+            }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(metadata);
+                return;
             }
             Reporter.WriteSuccess("Created metadata.");
             base.PrintMetadata(metadata);

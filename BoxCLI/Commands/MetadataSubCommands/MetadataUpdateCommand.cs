@@ -82,6 +82,12 @@ namespace BoxCLI.Commands.MetadataSubCommands
             {
                 throw new Exception("This item doesn't currently support metadata.");
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(metadata);
+                return;
+            }
+            base.PrintMetadata(metadata);
         }
 
         private List<BoxMetadataUpdate> ProcessMetadataUpdate()

@@ -104,6 +104,11 @@ namespace BoxCLI.Commands.UserSubCommands
                 Reporter.WriteInformation(user.Id);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(user);
+                return;
+            }
             Reporter.WriteSuccess("Created user.");
             base.PrintUserInfo(user);
         }

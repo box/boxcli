@@ -42,7 +42,13 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         {
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            base.PrintCollaboration(await boxClient.CollaborationsManager.GetCollaborationAsync(this._id.Value));
+            var result = await boxClient.CollaborationsManager.GetCollaborationAsync(this._id.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(result);
+                return;
+            }
+            base.PrintCollaboration(result);
         }
     }
 }

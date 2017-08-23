@@ -83,6 +83,11 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                 Reporter.WriteInformation(createdTemplate.TemplateKey);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(createdTemplate);
+                return;
+            }
             base.PrintMetadataTemplate(createdTemplate);
         }
     }

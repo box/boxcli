@@ -82,9 +82,14 @@ namespace BoxCLI.Commands.CommentSubCommands
                 {
                     commentCreate.TaggedMessage = this._taggedMessage.Value();
                 }
-
+                var newComment = await boxClient.CommentsManager.AddCommentAsync(commentCreate);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(newComment);
+                    return;
+                }
                 Reporter.WriteSuccess("Created comment.");
-                base.PrintComment(await boxClient.CommentsManager.AddCommentAsync(commentCreate));
+                base.PrintComment(newComment);
             }
             catch (Exception e)
             {

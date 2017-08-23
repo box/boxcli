@@ -33,8 +33,8 @@ namespace BoxCLI.Commands.EventSubCommands
             _createdBefore = command.Option("--created-before", "Return enterprise events that occured before a time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks", CommandOptionType.SingleValue);
             _createdAfter = command.Option("--created-after", "Return enterprise events that occured before a time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks", CommandOptionType.SingleValue);
             _save = SaveOption.ConfigureOption(command);
-			_path = FilePathOption.ConfigureOption(command);
-			_fileFormat = FileFormatOption.ConfigureOption(command);
+            _path = FilePathOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
 
             command.OnExecute(async () =>
             {
@@ -80,14 +80,20 @@ namespace BoxCLI.Commands.EventSubCommands
                         createdAfter = DateTime.Parse(this._createdAfter.Value());
                     }
                 }
-				if (this._save.HasValue())
-				{
-					var fileName = $"{base._names.CommandNames.Events}-{base._names.SubCommandNames.Get}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-					Reporter.WriteInformation("Saving file...");
-					var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore);
+                if (this._save.HasValue())
+                {
+                    var fileName = $"{base._names.CommandNames.Events}-{base._names.SubCommandNames.Get}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    Reporter.WriteInformation("Saving file...");
+                    var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore);
                     base.WriteEventListResultsToReport(events.Entries, fileName, _path.Value(), _fileFormat.Value());
-					return;
-				}
+                    return;
+                }
+                if (base._json.HasValue())
+                {
+                    var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore);
+                    base.OutputJson(events);
+                    return;
+                }
                 await BoxCollectionsIterators.ListEventCollectionToConsole((position) =>
                 {
                     return boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position);
@@ -95,18 +101,18 @@ namespace BoxCLI.Commands.EventSubCommands
             }
             else
             {
-				if (this._save.HasValue())
-				{
-					var fileName = $"{base._names.CommandNames.Events}-{base._names.SubCommandNames.Get}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-					Reporter.WriteInformation("Saving file...");
-					var events = await boxClient.EventsManager.UserEventsAsync();
-					base.WriteEventListResultsToReport(events.Entries, fileName, _path.Value(), _fileFormat.Value());
-					return;
-				}
-				await BoxCollectionsIterators.ListEventCollectionToConsole((position) =>
-				{
-					return boxClient.EventsManager.UserEventsAsync(streamPosition: position);
-				}, base.PrintEvent);
+                if (this._save.HasValue())
+                {
+                    var fileName = $"{base._names.CommandNames.Events}-{base._names.SubCommandNames.Get}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    Reporter.WriteInformation("Saving file...");
+                    var events = await boxClient.EventsManager.UserEventsAsync();
+                    base.WriteEventListResultsToReport(events.Entries, fileName, _path.Value(), _fileFormat.Value());
+                    return;
+                }
+                await BoxCollectionsIterators.ListEventCollectionToConsole((position) =>
+                {
+                    return boxClient.EventsManager.UserEventsAsync(streamPosition: position);
+                }, base.PrintEvent);
             }
         }
     }

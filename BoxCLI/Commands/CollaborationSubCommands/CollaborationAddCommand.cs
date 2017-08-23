@@ -149,6 +149,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 Reporter.WriteInformation(result.Id);
                 return;
             }
+            if(base._json.HasValue())
+            {
+                base.OutputJson(result);
+                return;
+            }
             base.PrintCollaboration(result);
         }
     }

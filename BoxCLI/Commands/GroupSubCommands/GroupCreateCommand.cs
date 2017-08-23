@@ -77,6 +77,11 @@ namespace BoxCLI.Commands.GroupSubCommands
                 Reporter.WriteInformation(createdGroup.Id);
                 return;
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(createdGroup);
+                return;
+            }
             base.PrintGroup(createdGroup);
         }
     }

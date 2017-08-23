@@ -53,7 +53,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 Reporter.WriteInformation($"File saved: {saved}");
                 return;
             }
-
+            if (base._json.HasValue())
+            {
+                base.OutputJson(collabs);
+                return;
+            }
 
             base.PrintCollaborations(collabs);
         }

@@ -15,7 +15,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _expires;
         private CommandOption _preventDownload;
         private CommandLineApplication _app;
-        public FileLockCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) 
+        public FileLockCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
         }
@@ -27,7 +27,7 @@ namespace BoxCLI.Commands.FileSubCommand
             _fileId = command.Argument("fileId",
                                "Id of file to lock");
             _expires = command.Option("--expires",
-                               "Make the lock expire from a timespan set from now. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s.", 
+                               "Make the lock expire from a timespan set from now. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s.",
                                CommandOptionType.SingleValue);
             _preventDownload = command.Option("--prevent-download",
                                "Prevent download of locked file", CommandOptionType.NoValue);
@@ -50,16 +50,22 @@ namespace BoxCLI.Commands.FileSubCommand
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var lockRequest = new BoxFileLockRequest();
             var boxLock = new BoxFileLock();
-            if(this._preventDownload.HasValue())
+            if (this._preventDownload.HasValue())
             {
                 boxLock.IsDownloadPrevented = true;
-            } 
-            if(this._expires.HasValue())
+            }
+            if (this._expires.HasValue())
             {
                 boxLock.ExpiresAt = GeneralUtilities.GetDateTimeFromString(this._expires.Value());
-            }  
+            }
             lockRequest.Lock = boxLock;
-            base.PrintFileLock(await boxClient.FilesManager.LockAsync(lockRequest, this._fileId.Value));
+            var boxLocked = await boxClient.FilesManager.LockAsync(lockRequest, this._fileId.Value);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(boxLocked);
+                return;
+            }
+            base.PrintFileLock(boxLocked);
         }
     }
 }

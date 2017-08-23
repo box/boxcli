@@ -42,7 +42,11 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
 
             var alias = await boxClient.UsersManager.GetEmailAliasesAsync(this._userId.Value);
-
+            if (base._json.HasValue())
+            {
+                base.OutputJson(alias);
+                return;
+            }
             Reporter.WriteSuccess($"Retrieved email alises for user {this._userId.Value}");
             base.PrintAliases(alias);
         }

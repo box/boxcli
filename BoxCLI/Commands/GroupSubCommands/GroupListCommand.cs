@@ -54,6 +54,12 @@ namespace BoxCLI.Commands.GroupSubCommands
 				Reporter.WriteInformation($"File saved: {saved}");
 				return;
 			}
+            if (base._json.HasValue())
+            {
+                var saveGroups = await boxClient.GroupsManager.GetAllGroupsAsync(autoPaginate: true);
+                base.OutputJson(saveGroups);
+                return;
+            }
             var BoxCollectionsIterators = base.GetIterators();
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroup>((offset) =>
             {

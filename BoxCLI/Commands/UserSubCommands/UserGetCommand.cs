@@ -55,6 +55,11 @@ namespace BoxCLI.Commands.UserSubCommands
             try
             {
                 var user = await boxClient.UsersManager.GetUserInformationAsync(id);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(user);
+                    return;
+                }
                 base.PrintUserInfo(user);
             }
             catch (Exception e)

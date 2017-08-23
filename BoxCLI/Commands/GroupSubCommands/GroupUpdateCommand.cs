@@ -60,8 +60,13 @@ namespace BoxCLI.Commands.GroupSubCommands
             {
                 groupRequest.MemberViewabilityLevel = base.CheckViewMembersLevel(this._viewMembershipLevel.Value());
             }
-
-            base.PrintGroup(await boxClient.GroupsManager.UpdateAsync(this._id.Value, groupRequest));
+            var updatedGroup = await boxClient.GroupsManager.UpdateAsync(this._id.Value, groupRequest);
+            if (base._json.HasValue())
+            {
+                base.OutputJson(updatedGroup);
+                return;
+            }
+            base.PrintGroup(updatedGroup);
         }
     }
 }

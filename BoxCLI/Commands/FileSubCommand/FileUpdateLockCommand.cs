@@ -59,7 +59,13 @@ namespace BoxCLI.Commands.FileSubCommand
                 boxLock.ExpiresAt = GeneralUtilities.GetDateTimeFromString(this._expires.Value());
             }  
             lockRequest.Lock = boxLock;
-            base.PrintFileLock(await boxClient.FilesManager.UpdateLockAsync(lockRequest, this._fileId.Value));
+            var boxUnlocked = await boxClient.FilesManager.UpdateLockAsync(lockRequest, this._fileId.Value)
+            if (base._json.HasValue())
+            {
+                base.OutputJson(boxUnlocked);
+                return;
+            }
+            base.PrintFileLock(boxUnlocked);
         }
     }
 }

@@ -66,9 +66,14 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                 {
                     taskAssignmentCreate.AssignTo.Login = this._assignToUserLogin.Value();
                 }
-
+                var taskAssignment = await boxClient.TasksManager.CreateTaskAssignmentAsync(taskAssignmentCreate);
+                if (base._json.HasValue())
+                {
+                    base.OutputJson(taskAssignment);
+                    return;
+                }
                 Reporter.WriteSuccess("Created task assignment.");
-                base.PrintTaskAssignment(await boxClient.TasksManager.CreateTaskAssignmentAsync(taskAssignmentCreate));
+                base.PrintTaskAssignment(taskAssignment);
             }
             catch (Exception e)
             {

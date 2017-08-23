@@ -57,6 +57,11 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 renamedFile = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
             }
+            if (base._json.HasValue())
+            {
+                base.OutputJson(renamedFile);
+                return;
+            }
             Reporter.WriteSuccess($"Renamed file {this._fileId.Value}");
             base.PrintFile(renamedFile);
         }
