@@ -42,7 +42,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _app = command;
             command.Description = "Create a new Box User";
             _name = command.Argument("name", "The user's name");
-            _login = command.Argument("name", "The user's email address, not required when creating app users.");
+            _login = command.Argument("login", "The user's email address, not required when creating app users.");
             _path = BulkFilePathOption.ConfigureOption(command);
             _appUser = command.Option("--app-user", "Set this user as an app user", CommandOptionType.NoValue);
             _idOnly = IdOnlyOption.ConfigureOption(command);
@@ -78,7 +78,7 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             if (this._path.HasValue())
             {
-                await base.CreateUsersFromFile(this._path.Value());
+                await base.CreateUsersFromFile(this._path.Value(), json: this._json.HasValue());
                 return;
             }
             base.CheckForValue(this._name.Value, this._app, "A name is required for this command.");
