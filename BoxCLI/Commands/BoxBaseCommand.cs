@@ -554,9 +554,7 @@ namespace BoxCLI.Commands
 
         protected virtual List<T> ReadFile<T, M>(string path) where T : class, new()
         {
-            System.Console.WriteLine("Inside reader...");
             var fileFormat = this.ProcessFileFormatFromPath(path);
-            System.Console.WriteLine($"File is {fileFormat}");
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 var jsonString = File.ReadAllText(path);

@@ -30,6 +30,7 @@ namespace BoxCLI.Commands
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
         private IBoxHome _home;
+        private CommandOption _version;
 
         public RootCommand(UserCommand user, ConfigureCommand config,
             FolderCommand folder, FileCommand file, WebhooksCommand webhooks,
@@ -81,7 +82,7 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Task, _tsk.Configure);
             app.Command(_names.CommandNames.TaskAssignment, _tskAsgn.Configure);
             app.Command(_names.CommandNames.Comment, _cmt.Configure);
-
+            _version = app.Option("-v|--version", "Box CLI Version", CommandOptionType.NoValue);
             app.OnExecute(() =>
             {
                 try
@@ -99,8 +100,13 @@ namespace BoxCLI.Commands
 
         protected override int Execute()
         {
-            Reporter.WriteInformation($"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}");
+            if (this._version.HasValue())
+            {
+                Reporter.WriteInformation($"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}");
+                return base.Execute();
+            }
             _app.ShowHelp();
+            Reporter.WriteInformation($"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}");
             var envs = this._home.GetBoxEnvironments();
             if (envs.GetAllEnvironments().Count <= 0)
             {

@@ -106,26 +106,23 @@ namespace BoxCLI.Commands.UserSubCommands
         }
 
         protected async Task CreateUsersFromFile(string path, string asUser = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             path = GeneralUtilities.TranslatePath(path);
-            System.Console.WriteLine($"Path: {path}");
             try
             {
-                System.Console.WriteLine("Reading file...");
                 var userRequests = base.ReadFile<BoxUserRequest, BoxUserRequestMap>(path);
-                System.Console.WriteLine($"User Requests: {userRequests}");
-                System.Console.WriteLine($"User Requests: {userRequests.Count}");
-                System.Console.WriteLine($"User Requests: {userRequests.FirstOrDefault().Name}");
                 foreach (var userRequest in userRequests)
                 {
-                    System.Console.WriteLine($"Processing a user request: {userRequest.Name}");
-                    System.Console.WriteLine($"Processing a user request: {userRequest.Type}");
                     var createdUser = await boxClient.UsersManager.CreateEnterpriseUserAsync(userRequest);
+                    if(json)
+                    {
+                        base.OutputJson(createdUser);
+                        continue;
+                    }
                     PrintUserInfo(createdUser);
                 }
-                System.Console.WriteLine("Created all users...");
             }
             catch (Exception e)
             {

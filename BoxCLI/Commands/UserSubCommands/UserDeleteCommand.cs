@@ -16,6 +16,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _notify;
         private CommandOption _force;
         private CommandOption _dontPrompt;
+        private CommandOption _path;
         private CommandLineApplication _app;
         public UserDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -31,6 +32,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _notify = command.Option("--notify", "The user should be notified", CommandOptionType.NoValue);
             _force = command.Option("-f|--force", "Delete user even if they own files", CommandOptionType.NoValue);
             _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
+            _path = BulkFilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,8 +48,29 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunDelete()
         {
-            base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            if (this._path.HasValue())
+            {
+                var path = GeneralUtilities.TranslatePath(this._path.Value());
+                var ids = base.ReadFileForIds(path);
+                foreach (var id in ids)
+                {
+                    BoxUser result;
+                    try
+                    {
+                        result = await boxClient.UsersManager.DeleteEnterpriseUserAsync(id, notify: false, force: true);
+                        Reporter.WriteSuccess($"Deleted user {id}");
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError($"Error deleting user {id}.");
+                        Reporter.WriteError(e.Message);
+                    }
+                }
+                Reporter.WriteInformation("Finished deleting users...");
+                return;
+            }
+            base.CheckForUserId(this._userId.Value, this._app);
             var userDeleted = new BoxUser();
             if (this._dontPrompt.HasValue())
             {

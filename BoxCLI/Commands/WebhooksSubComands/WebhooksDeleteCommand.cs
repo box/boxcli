@@ -48,7 +48,6 @@ namespace BoxCLI.Commands.WebhooksSubComands
             if (!string.IsNullOrEmpty(_path.Value()))
             {
                 var path = GeneralUtilities.TranslatePath(_path.Value());
-                System.Console.WriteLine(path);
                 var ids = base.ReadFileForIds(path);
                 foreach (var id in ids)
                 {
