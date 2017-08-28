@@ -13,9 +13,12 @@ namespace BoxCLI.Commands.FolderSubCommands
     {
         private CommandArgument _folderId;
         private CommandLineApplication _app;
-        public FolderGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public FolderGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -41,7 +44,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             base.CheckForId(this._folderId.Value, this._app);
             var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
             var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(folder);
                 return;

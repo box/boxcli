@@ -14,9 +14,12 @@ namespace BoxCLI.Commands.CommentSubCommands
         private CommandArgument _commentId;
         private CommandOption _message;
         private CommandLineApplication _app;
-        public CommentUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public CommentUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
 
@@ -53,7 +56,7 @@ namespace BoxCLI.Commands.CommentSubCommands
                     commentUpdate.Message = this._message.Value();
                 }
                 var updatedComment = await boxClient.CommentsManager.UpdateAsync(this._commentId.Value, commentUpdate);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(updatedComment);
                     return;

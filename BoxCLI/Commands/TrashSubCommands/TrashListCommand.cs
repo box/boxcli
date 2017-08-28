@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.TrashSubCommands
         private CommandOption _path;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TrashListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
 
@@ -48,7 +51,7 @@ namespace BoxCLI.Commands.TrashSubCommands
             {
                 var boxClient = base.ConfigureBoxClient(base._asUser.Value());
                 var BoxCollectionsIterators = base.GetIterators();
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var items = boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, autoPaginate: true);
                     base.OutputJson(items);
@@ -58,7 +61,7 @@ namespace BoxCLI.Commands.TrashSubCommands
                 {
                     return boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, offset: (int)offset);
                 }, PrintItem);
-                System.Console.WriteLine("Finished...");
+                Reporter.WriteInformation("Finished...");
             }
             catch (Exception e)
             {

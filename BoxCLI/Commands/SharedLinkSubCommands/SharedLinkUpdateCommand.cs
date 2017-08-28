@@ -17,10 +17,12 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
         private CommandOption _unsharedAt;
         private CommandOption _canDownload;
         private CommandLineApplication _app;
+        private IBoxHome _home;
 
         public SharedLinkUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -73,7 +75,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     fileRequest.SharedLink.Permissions.Download = true;
                 }
                 var result = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(result);
                     return;
@@ -103,7 +105,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     folderUpdateRequest.SharedLink.Permissions.Download = true;
                 }
                 var updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(updated);
                     return;

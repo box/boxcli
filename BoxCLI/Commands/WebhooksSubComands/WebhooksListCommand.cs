@@ -18,9 +18,12 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private CommandOption _path;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public WebhooksListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
 
@@ -59,7 +62,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                     var saved = base.WriteMarkerCollectionResultsToReport<BoxWebhook, BoxWebhookMap>(webhooks, fileName, _path.Value(), _fileFormat.Value());
                     System.Console.WriteLine($"File saved: {saved}");
                 }
-                else if (base._json.HasValue())
+                else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
                     base.OutputJson(webhooks);
@@ -72,7 +75,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                         return boxClient.WebhooksManager.GetWebhooksAsync(nextMarker: marker);
                     }, base.PrintWebhook);
                 }
-                System.Console.WriteLine("Finished...");
+                Reporter.WriteInformation("Finished...");
             }
             catch (Exception e)
             {

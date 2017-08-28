@@ -17,9 +17,12 @@ namespace BoxCLI.Commands.TaskSubCommands
         private CommandOption _due;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TaskCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -69,7 +72,7 @@ namespace BoxCLI.Commands.TaskSubCommands
                 Reporter.WriteInformation(createdTask.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(createdTask);
                 return;

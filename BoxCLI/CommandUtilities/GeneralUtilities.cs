@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Box.V2.Converter;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BoxCLI.CommandUtilities
 {
@@ -204,6 +206,37 @@ namespace BoxCLI.CommandUtilities
         public static string GetDateFormatString()
         {
             return "yyyy-MM-ddTHH_mm_ss";
+        }
+
+        public static string FormatErrorResponseFromAPI(Exception ex)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                {
+                    return JValue.Parse(ex.InnerException.Message).ToString(Formatting.Indented);
+                }
+                else
+                {
+                    return JValue.Parse(ex.Message).ToString(Formatting.Indented);
+                }
+
+            }
+            catch
+            {
+                if (ex == null)
+                {
+                    return string.Empty;
+                }
+                if (!string.IsNullOrEmpty(ex.Message) && ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message))
+                {
+                    return ex.InnerException.Message;
+                }
+                else
+                {
+                    return ex.Message;
+                }
+            }
         }
     }
 }

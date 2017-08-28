@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.GroupSubCommands
         private CommandOption _save;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public GroupListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -43,18 +46,18 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task RunList()
         {
-            
+
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-			if (_save.HasValue())
-			{
-				var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-				Reporter.WriteInformation("Saving file...");
+            if (_save.HasValue())
+            {
+                var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                Reporter.WriteInformation("Saving file...");
                 var saveGroups = await boxClient.GroupsManager.GetAllGroupsAsync(autoPaginate: true);
-				var saved = base.WriteOffsetCollectionResultsToReport<BoxGroup, BoxGroupMap>(saveGroups, fileName, fileFormat: this._fileFormat.Value());
-				Reporter.WriteInformation($"File saved: {saved}");
-				return;
-			}
-            if (base._json.HasValue())
+                var saved = base.WriteOffsetCollectionResultsToReport<BoxGroup, BoxGroupMap>(saveGroups, fileName, fileFormat: this._fileFormat.Value());
+                Reporter.WriteInformation($"File saved: {saved}");
+                return;
+            }
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 var saveGroups = await boxClient.GroupsManager.GetAllGroupsAsync(autoPaginate: true);
                 base.OutputJson(saveGroups);

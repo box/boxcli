@@ -23,8 +23,11 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private CommandOption _save;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public WebhooksCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -89,7 +92,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                 Reporter.WriteInformation(createdWebhook.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(createdWebhook);
                 return;

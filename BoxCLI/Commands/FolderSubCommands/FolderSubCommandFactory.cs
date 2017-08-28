@@ -6,9 +6,9 @@ using BoxCLI.CommandUtilities.Globalization;
 
 namespace BoxCLI.Commands.FolderSubCommands
 {
-    public class FolderSubCommandFactory : AbstractBoxSubCommandFactory 
+    public class FolderSubCommandFactory : AbstractBoxSubCommandFactory
     {
-        public FolderSubCommandFactory(IBoxPlatformServiceBuilder builder, IBoxHome boxHome, LocalizedStringsResource names) 
+        public FolderSubCommandFactory(IBoxPlatformServiceBuilder builder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(builder, boxHome, names)
         {
         }
@@ -43,10 +43,14 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 return new FolderChangeUploadEmailCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
-			else if (commandName == base._names.SubCommandNames.Update)
-			{
-				return new FolderUpdateCommand(base._boxPlatformBuilder, base._boxHome, base._names);
-			}
+            else if (commandName == base._names.SubCommandNames.Update)
+            {
+                return new FolderUpdateCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
+            else if (commandName == base._names.SubCommandNames.Download)
+            {
+                return new FolderDownloadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

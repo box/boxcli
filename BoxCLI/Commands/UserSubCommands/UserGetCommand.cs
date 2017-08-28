@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandArgument _userId;
         private CommandOption _asUser;
         private CommandLineApplication _app;
-        public UserGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public UserGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -55,7 +58,7 @@ namespace BoxCLI.Commands.UserSubCommands
             try
             {
                 var user = await boxClient.UsersManager.GetUserInformationAsync(id);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(user);
                     return;

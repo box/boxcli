@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         private CommandOption _admin;
         private CommandOption _member;
         private CommandLineApplication _app;
-        public GroupMembershipCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public GroupMembershipCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -67,7 +70,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             memberRequest.User.Id = this._userId.Value;
             memberRequest.Role = role;
             var membership = await boxClient.GroupsManager.AddMemberToGroupAsync(memberRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(membership);
                 return;

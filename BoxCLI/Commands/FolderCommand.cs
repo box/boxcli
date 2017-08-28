@@ -22,6 +22,7 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.Move, _subCommands.CreateSubCommand(_names.SubCommandNames.Move).Configure);
             command.Command(_names.SubCommandNames.Copy, _subCommands.CreateSubCommand(_names.SubCommandNames.Copy).Configure);
             command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
+            command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
             command.Command(_names.SubCommandNames.ChangeUploadEmail, _subCommands.CreateSubCommand(_names.SubCommandNames.ChangeUploadEmail).Configure);
             command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
             command.Command(_names.CommandNames.Collaborations, new CollaborationOnItemCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
@@ -41,7 +42,7 @@ namespace BoxCLI.Commands
 
         private readonly ISubCommandFactory _subCommands;
         private readonly SubCommandFactory _factory;
-        public FolderCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names) 
+        public FolderCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
             _factory = factory;

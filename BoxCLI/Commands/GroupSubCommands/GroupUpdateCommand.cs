@@ -14,8 +14,11 @@ namespace BoxCLI.Commands.GroupSubCommands
         private CommandOption _inviteLevel;
         private CommandOption _viewMembershipLevel;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public GroupUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -61,7 +64,7 @@ namespace BoxCLI.Commands.GroupSubCommands
                 groupRequest.MemberViewabilityLevel = base.CheckViewMembersLevel(this._viewMembershipLevel.Value());
             }
             var updatedGroup = await boxClient.GroupsManager.UpdateAsync(this._id.Value, groupRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(updatedGroup);
                 return;

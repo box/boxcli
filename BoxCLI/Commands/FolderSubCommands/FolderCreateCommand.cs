@@ -20,9 +20,12 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _save;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FolderCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -72,7 +75,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                     Reporter.WriteInformation(folder.Id);
                     return;
                 }
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(folder);
                     return;

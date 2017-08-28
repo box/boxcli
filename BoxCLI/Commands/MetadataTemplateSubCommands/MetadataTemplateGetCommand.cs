@@ -12,9 +12,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         private CommandArgument _scope;
         private CommandArgument _template;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public MetadataTemplateGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -45,7 +48,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             base.CheckForTemplate(this._template.Value, this._app);
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             var template = await boxClient.MetadataManager.GetMetadataTemplate(this._scope.Value, this._template.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(template);
                 return;

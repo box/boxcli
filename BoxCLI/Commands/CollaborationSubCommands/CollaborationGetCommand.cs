@@ -13,9 +13,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
     {
         private CommandArgument _id;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public CollaborationGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -43,7 +46,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var result = await boxClient.CollaborationsManager.GetCollaborationAsync(this._id.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(result);
                 return;

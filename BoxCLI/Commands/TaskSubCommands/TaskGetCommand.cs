@@ -11,9 +11,12 @@ namespace BoxCLI.Commands.TaskSubCommands
     {
         private CommandArgument _taskId;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TaskGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -41,7 +44,7 @@ namespace BoxCLI.Commands.TaskSubCommands
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var task = await boxClient.TasksManager.GetTaskAsync(this._taskId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(task);
                 return;

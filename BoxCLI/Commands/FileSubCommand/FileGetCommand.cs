@@ -11,9 +11,12 @@ namespace BoxCLI.Commands.FileSubCommand
     {
         private CommandArgument _fileId;
         private CommandLineApplication _app;
-        public FileGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public FileGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -39,7 +42,7 @@ namespace BoxCLI.Commands.FileSubCommand
             base.CheckForFileId(this._fileId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var fileInfo = await boxClient.FilesManager.GetInformationAsync(this._fileId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(fileInfo);
                 return;

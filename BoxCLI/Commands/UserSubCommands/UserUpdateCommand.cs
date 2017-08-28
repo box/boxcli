@@ -30,9 +30,12 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _notExemptFromLoginVerification;
         private CommandOption _isPasswordResetRequired;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public UserUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -84,7 +87,7 @@ namespace BoxCLI.Commands.UserSubCommands
 
             if (updatedUser.Id == this._userId.Value)
             {
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(updatedUser);
                     return;

@@ -11,9 +11,12 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         private CommandArgument _fileId;
         private CommandArgument _fileVersionId;
         private CommandLineApplication _app;
-        public FileVersionPromoteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names) 
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public FileVersionPromoteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -43,7 +46,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             base.CheckForFileVersionId(this._fileVersionId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var promotedFile = await boxClient.FilesManager.PromoteVersionAsync(this._fileId.Value, this._fileVersionId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(promotedFile);
                 return;

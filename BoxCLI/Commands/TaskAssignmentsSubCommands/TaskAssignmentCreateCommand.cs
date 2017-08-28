@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private CommandOption _assignToUserLogin;
 
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TaskAssignmentCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -67,7 +70,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                     taskAssignmentCreate.AssignTo.Login = this._assignToUserLogin.Value();
                 }
                 var taskAssignment = await boxClient.TasksManager.CreateTaskAssignmentAsync(taskAssignmentCreate);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(taskAssignment);
                     return;

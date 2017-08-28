@@ -552,6 +552,39 @@ namespace BoxCLI.Commands
             return ids;
         }
 
+        protected virtual List<BoxBulkDownload> ReadFileForIdsAndVersionIds(string path)
+        {
+            var fileFormat = this.ProcessFileFormatFromPath(path);
+            var downloads = new List<BoxBulkDownload>();
+            if (fileFormat == _settings.FILE_FORMAT_JSON)
+            {
+                var jsonString = File.ReadAllText(path);
+                downloads.AddRange(JsonConvert.DeserializeObject<BoxBulkDownloads>(jsonString).Entries);
+            }
+            else if (fileFormat == _settings.FILE_FORMAT_CSV)
+            {
+                using (var fs = File.OpenText(path))
+                using (var csv = new CsvReader(fs))
+                {
+                    while (csv.Read())
+                    {
+                        var id = csv.GetField<string>("Id");
+                        var versionId = csv.GetField<string>("VersionId");
+                        downloads.Add(new BoxBulkDownload
+                        {
+                            Id = id,
+                            VersionId = versionId
+                        });
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception($"File format {fileFormat} is not currently supported.");
+            }
+            return downloads;
+        }
+
         protected virtual List<T> ReadFile<T, M>(string path) where T : class, new()
         {
             var fileFormat = this.ProcessFileFormatFromPath(path);

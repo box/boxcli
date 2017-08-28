@@ -10,9 +10,12 @@ namespace BoxCLI.Commands.FileVersionSubCommands
     {
         private CommandLineApplication _app;
         private CommandArgument _fileId;
-        public FileVersionListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public FileVersionListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -39,12 +42,12 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             base.CheckForFileId(this._fileId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var fileVersions = await boxClient.FilesManager.ViewVersionsAsync(this._fileId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(fileVersions);
                 return;
             }
-            foreach(var version in fileVersions.Entries)
+            foreach (var version in fileVersions.Entries)
             {
                 base.PrintFileVersion(version);
             }

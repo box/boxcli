@@ -14,9 +14,12 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _managedUsers;
         private CommandArgument _userName;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public UserSearchCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -56,7 +59,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 {
                     return user.Login.Contains("AppUser");
                 });
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(users);
                     return;
@@ -69,7 +72,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 System.Console.WriteLine("Finished...");
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(filterTerm: userName, autoPaginate: true);
                 base.OutputJson(users);

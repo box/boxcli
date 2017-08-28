@@ -19,7 +19,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             _boxHome = home;
             _boxHomeSettingsFileName = fileName;
-            var defaultSettings = new BoxHomeDefaultSettings();
+            var defaultSettings = DeserializeBoxHomeSettingsFile();
             SetBoxReportsFolderPathIfNull(defaultSettings);
             SetBoxDownloadsFolderPathIfNull(defaultSettings);
             SerializeBoxHomeSettingsFile(defaultSettings);
@@ -80,6 +80,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             var currentSettings = DeserializeBoxHomeSettingsFile();
             currentSettings.BoxDownloadsFolderName = name;
+            currentSettings.BoxDownloadsFolderPath = string.Empty;
             try
             {
                 SerializeBoxHomeSettingsFile(currentSettings);
@@ -94,8 +95,10 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         public bool SetBoxDownloadsFolderPath(string path)
         {
             path = GeneralUtilities.TranslatePath(path);
+            var newName = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
             var currentSettings = DeserializeBoxHomeSettingsFile();
             currentSettings.BoxDownloadsFolderPath = path;
+            currentSettings.BoxDownloadsFolderName = newName;
             try
             {
                 SerializeBoxHomeSettingsFile(currentSettings);
@@ -111,6 +114,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             var currentSettings = DeserializeBoxHomeSettingsFile();
             currentSettings.BoxReportsFolderName = name;
+            currentSettings.BoxReportsFolderPath = string.Empty;
             try
             {
                 SerializeBoxHomeSettingsFile(currentSettings);
@@ -125,8 +129,10 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         public bool SetBoxReportsFolderPath(string path)
         {
             path = GeneralUtilities.TranslatePath(path);
+            var newName = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
             var currentSettings = DeserializeBoxHomeSettingsFile();
             currentSettings.BoxReportsFolderPath = path;
+            currentSettings.BoxReportsFolderName = newName;
             try
             {
                 SerializeBoxHomeSettingsFile(currentSettings);
@@ -201,11 +207,19 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
 
         private BoxHomeDefaultSettings DeserializeBoxHomeSettingsFile()
         {
-            var path = GetBoxHomeSettingsFilePath();
-            using (var fs = File.OpenText(path))
+            try
             {
-                var serializer = new JsonSerializer();
-                return (BoxHomeDefaultSettings)serializer.Deserialize(fs, typeof(BoxHomeDefaultSettings));
+                var path = GetBoxHomeSettingsFilePath();
+                using (var fs = File.OpenText(path))
+                {
+
+                    var serializer = new JsonSerializer();
+                    return (BoxHomeDefaultSettings)serializer.Deserialize(fs, typeof(BoxHomeDefaultSettings));
+                }
+            }
+            catch
+            {
+                return new BoxHomeDefaultSettings();
             }
         }
 
@@ -216,6 +230,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             if (!File.Exists(path))
             {
                 File.Create(path).Dispose();
+                SerializeBoxHomeSettingsFile(new BoxHomeDefaultSettings());
                 return path;
             }
             else
@@ -252,14 +267,12 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         }
         private string CreateBoxReportsFolder()
         {
-            System.Console.WriteLine("Creating Box Reports folder...");
+            Reporter.WriteInformation("Checking for Box Reports folder...");
             var path = GetBoxReportsFolderPathSetting();
-            System.Console.WriteLine($"Box Reports Folder Path: {path}");
+            Reporter.WriteInformation($"Box Reports Folder Path: {path}");
             if (!CheckIfBoxReportsFolderExists())
             {
-                System.Console.WriteLine("Box Reports folder doesn't exist...");
                 var created = Directory.CreateDirectory(path);
-                System.Console.WriteLine("created box reports folder...");
                 return path;
             }
             else
@@ -271,13 +284,12 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
 
         private string CreateBoxDownloadsFolder()
         {
-            System.Console.WriteLine("Creating Box Downloads folder...");
+            Reporter.WriteInformation("Checking for Box Downloads folder...");
             var path = GetBoxDownloadsFolderPathSetting();
-            System.Console.WriteLine($"Box Downloads Folder Path: {path}");
+            Reporter.WriteInformation($"Box Downloads Folder Path: {path}");
             if (!CheckIfBoxDownloadsFolderExists())
             {
                 Directory.CreateDirectory(path);
-                System.Console.WriteLine("created box downloads folder...");
                 return path;
             }
             else

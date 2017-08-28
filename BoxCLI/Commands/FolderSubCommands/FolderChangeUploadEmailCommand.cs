@@ -14,9 +14,12 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandArgument _access;
         private CommandOption _etag;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FolderChangeUploadEmailCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -53,7 +56,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 }
             };
             var changedEmail = await boxClient.FoldersManager.UpdateInformationAsync(email, etag: this._etag.Value());
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(changedEmail);
                 return;

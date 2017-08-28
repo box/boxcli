@@ -18,9 +18,12 @@ namespace BoxCLI.Commands.CommentSubCommands
 		private CommandOption _path;
 		private CommandOption _fileFormat;
 		private CommandLineApplication _app;
-		public CommentListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+        private IBoxHome _home;
+
+        public CommentListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+			_home = home;
 		}
 
 		public override void Configure(CommandLineApplication command)
@@ -60,7 +63,7 @@ namespace BoxCLI.Commands.CommentSubCommands
 					var saved = base.WriteListResultsToReport<BoxComment, BoxCommentMap>(comments.Entries, fileName, _path.Value(), _fileFormat.Value());
 					Reporter.WriteSuccess($"File saved: {saved}");
 				}
-				else if (base._json.HasValue())
+				else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
 				{
 					base.OutputJson(comments);
 					return;

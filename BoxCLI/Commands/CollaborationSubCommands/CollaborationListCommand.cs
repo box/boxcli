@@ -18,9 +18,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _save;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public CollaborationListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -88,7 +91,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 throw new Exception("This item doesn't currently support collaborations.");
             }
 
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(collabs);
                 return;

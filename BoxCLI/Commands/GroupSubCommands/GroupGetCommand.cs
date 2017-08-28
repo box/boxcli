@@ -10,9 +10,12 @@ namespace BoxCLI.Commands.GroupSubCommands
     {
         private CommandArgument _groupId;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public GroupGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -40,7 +43,7 @@ namespace BoxCLI.Commands.GroupSubCommands
             base.CheckForValue(this._groupId.Value, this._app, "A group ID is required for this command");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var group = await boxClient.GroupsManager.GetGroupAsync(_groupId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(group);
                 return;
