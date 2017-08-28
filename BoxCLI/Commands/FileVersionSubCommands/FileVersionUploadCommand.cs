@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         private CommandOption _name;
         private CommandOption _bulkPath;
         private CommandLineApplication _app;
-        public FileVersionUploadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public FileVersionUploadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -32,7 +35,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             _name = command.Option("-n|--name",
                                         "Provide different name for local file", CommandOptionType.SingleValue);
             _parentFolderId = command.Option("-p|--parent-folder",
-                                        "Id of folder to upload file to, defaults to the root folder", 
+                                        "Id of folder to upload file to, defaults to the root folder",
                                         CommandOptionType.SingleValue);
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
@@ -50,7 +53,6 @@ namespace BoxCLI.Commands.FileVersionSubCommands
 
         private async Task RunUpload()
         {
-            Reporter.WriteInformation("new file versions...");
             if (this._bulkPath.HasValue())
             {
                 Reporter.WriteInformation("Using bulk for new file versions...");
@@ -59,7 +61,13 @@ namespace BoxCLI.Commands.FileVersionSubCommands
             }
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForFilePath(this._path.Value, this._app);
-            base.PrintFile(await base.UploadFile(this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value(), isNewVersion: true));
+            var newVersion = await base.UploadFile(this._path.Value, fileId: this._fileId.Value, fileName: this._name.Value(), isNewVersion: true);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(newVersion);
+                return;
+            }
+            base.PrintFile(newVersion);
         }
     }
 }

@@ -21,9 +21,12 @@ namespace BoxCLI.Commands.EventSubCommands
         private CommandOption _path;
         private CommandOption _createdBefore;
         private CommandLineApplication _app;
-        public EventGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public EventGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -88,7 +91,7 @@ namespace BoxCLI.Commands.EventSubCommands
                     base.WriteEventListResultsToReport(events.Entries, fileName, _path.Value(), _fileFormat.Value());
                     return;
                 }
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore);
                     base.OutputJson(events);

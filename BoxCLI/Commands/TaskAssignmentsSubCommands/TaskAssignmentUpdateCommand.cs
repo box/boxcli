@@ -18,9 +18,12 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private CommandOption _approved;
         private CommandOption _rejected;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TaskAssignmentUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -77,7 +80,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                     taskAssignmentUpdate.Message = this._message.Value();
                 }
                 var taskAssignment = await boxClient.TasksManager.UpdateTaskAssignmentAsync(taskAssignmentUpdate);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(taskAssignment);
                     return;

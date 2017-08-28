@@ -10,9 +10,12 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
     {
         private CommandArgument _membershipId;
         private CommandLineApplication _app;
-        public GroupMemberGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public GroupMemberGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -40,7 +43,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             base.CheckForValue(this._membershipId.Value, this._app, "A group memebership ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
             var membership = await boxClient.GroupsManager.GetGroupMembershipAsync(_membershipId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(membership);
                 return;

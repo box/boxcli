@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _bulkPath;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FileUploadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -56,9 +59,14 @@ namespace BoxCLI.Commands.FileSubCommand
             }
             base.CheckForFilePath(this._path.Value, this._app);
             var file = await base.UploadFile(path: this._path.Value, parentId: this._parentFolderId.Value(), fileName: this._name.Value(), idOnly: this._idOnly.HasValue());
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(file.Id);
+                return;
+            }
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(file);
                 return;
             }
             base.PrintFile(file);

@@ -16,9 +16,12 @@ namespace BoxCLI.Commands.CommentSubCommands
         private CommandOption _message;
         private CommandOption _taggedMessage;
         private CommandLineApplication _app;
-        public CommentCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public CommentCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -83,7 +86,7 @@ namespace BoxCLI.Commands.CommentSubCommands
                     commentCreate.TaggedMessage = this._taggedMessage.Value();
                 }
                 var newComment = await boxClient.CommentsManager.AddCommentAsync(commentCreate);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(newComment);
                     return;

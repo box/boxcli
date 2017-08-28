@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _description;
         private CommandOption _etag;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FileRenameCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -57,7 +60,7 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 renamedFile = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(renamedFile);
                 return;

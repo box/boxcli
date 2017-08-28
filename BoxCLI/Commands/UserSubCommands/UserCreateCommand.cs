@@ -34,8 +34,11 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _appUser;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public UserCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -104,7 +107,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 Reporter.WriteInformation(user.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(user);
                 return;

@@ -12,9 +12,12 @@ namespace BoxCLI.Commands.WebhooksSubComands
     {
         private CommandArgument _webhookId;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public WebhooksGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -41,7 +44,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             var webhook = await boxClient.WebhooksManager.GetWebhookAsync(id);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(webhook);
                 return;

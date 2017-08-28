@@ -20,9 +20,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         private CommandOption _bulkFilePath;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
-        public MetadataTemplateCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public MetadataTemplateCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -35,8 +38,8 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                                    "The display name of the template.");
             _templateKey = command.Option("--template-key", "A unique identifier for the template.", CommandOptionType.SingleValue);
             _hidden = command.Option("--hidden", "Whether this template is hidden in the UI.", CommandOptionType.NoValue);
-            _bulkFilePaths = command.Option("--bulk-file-path-csv", 
-                                    "Provide file paths for the metadata temple CSV file and metadata template fields CSV file", 
+            _bulkFilePaths = command.Option("--bulk-file-path-csv",
+                                    "Provide file paths for the metadata temple CSV file and metadata template fields CSV file",
                                     CommandOptionType.MultipleValue);
             _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
             _idOnly = IdOnlyOption.ConfigureOption(command);
@@ -57,7 +60,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         {
             if (this._bulkFilePaths.HasValue())
             {
-                if(this._bulkFilePaths.Values.Count != 2)
+                if (this._bulkFilePaths.Values.Count != 2)
                 {
                     throw new Exception("CSV bulk upload requires 2 files");
                 }
@@ -78,12 +81,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             template.TemplateKey = this._templateKey.Value();
             template.Fields = base.BuildTemplateFromConsole();
             var createdTemplate = await boxClient.MetadataManager.CreateMetadataTemplate(template);
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(createdTemplate.TemplateKey);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(createdTemplate);
                 return;

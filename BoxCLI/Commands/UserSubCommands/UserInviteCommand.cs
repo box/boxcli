@@ -14,9 +14,12 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandArgument _userEmail;
         private CommandArgument _enterpriseId;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public UserInviteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -57,7 +60,7 @@ namespace BoxCLI.Commands.UserSubCommands
             };
 
             var userInvite = await boxClient.UsersManager.InviteUserToEnterpriseAsync(userInviteRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(userInvite);
                 return;

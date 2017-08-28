@@ -20,9 +20,12 @@ namespace BoxCLI.Commands.GroupSubCommands
         private CommandOption _bulkPath;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public GroupCreateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -54,7 +57,7 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task RunCreate()
         {
-            if(this._bulkPath.HasValue())
+            if (this._bulkPath.HasValue())
             {
                 await base.CreateGroupsFromFile(this._bulkPath.Value(), this._asUser.Value(), this._save.HasValue());
                 return;
@@ -72,12 +75,12 @@ namespace BoxCLI.Commands.GroupSubCommands
                 groupRequest.MemberViewabilityLevel = base.CheckViewMembersLevel(this._viewMembershipLevel.Value());
             }
             var createdGroup = await boxClient.GroupsManager.CreateAsync(groupRequest);
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(createdGroup.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(createdGroup);
                 return;

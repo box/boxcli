@@ -20,6 +20,7 @@ using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.Globalization.Models;
 using BoxCLI.Commands.ConfigureSubCommands;
 using BoxCLI.CommandUtilities.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace BoxCLI
 {
@@ -48,9 +49,9 @@ namespace BoxCLI
             }
             catch (Exception ex)
             {
-                if (!string.IsNullOrEmpty(ex.Message))
+                if (ex != null && !string.IsNullOrEmpty(ex.Message))
                 {
-                    Reporter.WriteError(ex.Message);
+                    Reporter.WriteError(GeneralUtilities.FormatErrorResponseFromAPI(ex));
                 }
                 if (ex.InnerException != null)
                 {
@@ -69,10 +70,10 @@ namespace BoxCLI
             serviceCollection
               .AddMemoryCache()
               .Configure<LocalizedStrings>(Configuration.GetSection("LocalizedStrings"))
-              .AddTransient<IBoxHome, BoxHomeDirectory>()
-              .AddTransient<IBoxPlatformCache, BoxPlatformCache>()
-              .AddTransient<IBoxCollectionsIterators, BoxCollectionsIterators>()
-              .AddTransient<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
+              .AddSingleton<IBoxHome, BoxHomeDirectory>()
+              .AddSingleton<IBoxPlatformCache, BoxPlatformCache>()
+              .AddSingleton<IBoxCollectionsIterators, BoxCollectionsIterators>()
+              .AddSingleton<IBoxPlatformServiceBuilder, BoxPlatformServiceBuilder>()
               .AddSingleton<LocalizedStringsResource>()
               .AddSingleton<SubCommandFactory>()
               .AddSingleton<ConfigureCommand>()

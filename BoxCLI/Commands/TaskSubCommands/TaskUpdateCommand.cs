@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.TaskSubCommands
         private CommandOption _message;
         private CommandOption _due;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public TaskUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -55,7 +58,7 @@ namespace BoxCLI.Commands.TaskSubCommands
                 taskRequest.DueAt = GeneralUtilities.GetDateTimeFromString(this._due.Value());
             }
             var task = await boxClient.TasksManager.UpdateTaskAsync(taskRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(task);
                 return;

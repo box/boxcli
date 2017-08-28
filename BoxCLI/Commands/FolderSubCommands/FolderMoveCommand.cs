@@ -15,8 +15,11 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _etag;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FolderMoveCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -47,12 +50,12 @@ namespace BoxCLI.Commands.FolderSubCommands
             base.CheckForId(this._folderId.Value, this._app);
             base.CheckForParentId(this._parentFolderId.Value, this._app);
             var move = await base.MoveFolder(this._folderId.Value, this._parentFolderId.Value, this._etag.Value());
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(move.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(move);
                 return;

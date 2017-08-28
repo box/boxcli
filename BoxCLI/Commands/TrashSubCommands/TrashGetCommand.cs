@@ -13,9 +13,12 @@ namespace BoxCLI.Commands.TrashSubCommands
         private CommandLineApplication _app;
         private CommandArgument _itemId;
         private CommandArgument _type;
-        public TrashGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public TrashGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -46,7 +49,7 @@ namespace BoxCLI.Commands.TrashSubCommands
             if (this._type.Value == base._names.CommandNames.Files)
             {
                 var item = await boxClient.FilesManager.GetTrashedAsync(this._itemId.Value);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(item);
                     return;
@@ -56,7 +59,7 @@ namespace BoxCLI.Commands.TrashSubCommands
             else if (this._type.Value == base._names.CommandNames.Folders)
             {
                 var item = await boxClient.FoldersManager.GetTrashedFolderAsync(this._itemId.Value);
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(item);
                     return;

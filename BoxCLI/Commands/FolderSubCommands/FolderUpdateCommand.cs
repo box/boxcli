@@ -31,9 +31,12 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _tags;
         private CommandOption _etag;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FolderUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -80,9 +83,9 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         private async Task RunUpdate()
         {
-            if(this._bulkFilePath.HasValue())
+            if (this._bulkFilePath.HasValue())
             {
-                await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), base._asUser.Value(), this._save.HasValue(), 
+                await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), base._asUser.Value(), this._save.HasValue(),
                                                  this._filePath.Value(), this._fileFormat.Value());
                 return;
             }
@@ -146,7 +149,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 folderUpdateRequest.Tags = this._tags.Value().Split(',');
             }
             var updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(updated);
                 return;

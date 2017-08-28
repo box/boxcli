@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
@@ -18,6 +20,8 @@ using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
 using Microsoft.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
+using SharpCompress.Common;
+using System.Dynamic;
 
 namespace BoxCLI.Commands
 {
@@ -320,7 +324,7 @@ namespace BoxCLI.Commands
                     Reporter.WriteInformation($"Processing {fileName}");
                     ProgressBar.UpdateProgress($"Processing ", 0, numberOfParts);
                 }
-                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong, 
+                var boxSessionParts = await UploadPartsInSessionAsync(uploadPartUri, numberOfParts, partSizeLong,
                                                       fileInMemoryStream, client: boxClient, fileSize: fileSize, idOnly: idOnly);
 
                 BoxSessionParts sessionPartsForCommit = new BoxSessionParts() { Parts = boxSessionParts };
@@ -467,6 +471,89 @@ namespace BoxCLI.Commands
             }
 
             return ret;
+        }
+
+        protected async Task ProcessBulkDownload(string path, string asUser = "", bool isNewVersion = false)
+        {
+            try
+            {
+                path = GeneralUtilities.TranslatePath(path);
+                var downloads = this.ReadFileForIdsAndVersionIds(path);
+                await BulkDownload(downloads);
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+            }
+        }
+        protected async Task ProcessFolderBulkDownload(string path, string asUser = "", string fileName = "")
+        {
+            try
+            {
+                var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+                path = GeneralUtilities.TranslatePath(path);
+                var idsList = this.ReadFileForIds(path);
+                var fileList = new List<BoxBulkDownload>();
+                foreach (var id in idsList)
+                {
+                    var tempItems = await boxClient.FoldersManager.GetFolderItemsAsync(id, 1000, autoPaginate: true);
+                    var folderFiles = tempItems.Entries.Where(i => i.Type == "file");
+                    foreach (var file in folderFiles)
+                    {
+                        fileList.Add(new BoxBulkDownload()
+                        {
+                            Id = file.Id
+                        });
+
+                    }
+                }
+                await BulkDownload(fileList, fileName);
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+            }
+        }
+        protected async Task BulkDownload(List<BoxBulkDownload> files, string fileName = "")
+        {
+            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            using (var archive = ZipArchive.Create())
+            {
+                Reporter.WriteInformation("Created zip archive...");
+                foreach (var file in files)
+                {
+                    var fileInfo = await boxClient.FilesManager.GetInformationAsync(file.Id);
+                    Reporter.WriteInformation($"Downloading {fileInfo.Name}...");
+                    using (Stream stream = (!string.IsNullOrEmpty(file.VersionId)) ? await boxClient.FilesManager.DownloadStreamAsync(file.Id, file.VersionId) : await boxClient.FilesManager.DownloadStreamAsync(file.Id))
+                    {
+                        Reporter.WriteInformation("About to add entry...");
+                        try
+                        {
+                            var ms = new MemoryStream();
+                            await stream.CopyToAsync(ms);
+                            Reporter.WriteInformation("Adding entry...");
+                            archive.AddEntry(fileInfo.Name, ms, true, ms.Length);
+                        }
+                        catch (Exception e)
+                        {
+                            Reporter.WriteInformation("Failed.");
+                            Reporter.WriteError(e.Message);
+                            Reporter.WriteError(e.InnerException.Message);
+                            Reporter.WriteError(e.StackTrace);
+                        }
+                    }
+
+                }
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    fileName = $"{base._names.CommandNames.Files}-{base._names.SubCommandNames.Download}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                }
+                Reporter.WriteInformation("Processed files..");
+                var downloadPath = base.ConstructDownloadsPath(fileName);
+                Reporter.WriteInformation($"Saving to ${downloadPath}");
+                archive.SaveTo($"{downloadPath}.zip", CompressionType.Deflate);
+                Reporter.WriteSuccess("Downloaded files.");
+            }
         }
     }
 }

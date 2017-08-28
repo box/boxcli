@@ -22,7 +22,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.IsExemptFromLoginVerification);
             Map(m => m.IsPasswordResetRequired);
             Map(m => m.CanSeeManagedUsers);
-            Map(m => m.TrackingCodes).TypeConverter<TrackingCodesConverter>();
+            // Map(m => m.TrackingCodes).TypeConverter<TrackingCodesConverter>();
         }
     }
 }

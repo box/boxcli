@@ -30,9 +30,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _idOnly;
         private CommandArgument _type;
         private CommandLineApplication _app;
+        private IBoxHome _home;
         public CollaborationAddCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -144,12 +146,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             collabRequest.Item.Id = this._id.Value;
             collabRequest.Role = role;
             var result = await boxClient.CollaborationsManager.AddCollaborationAsync(collabRequest);
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(result.Id);
                 return;
             }
-            if(base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(result);
                 return;

@@ -14,9 +14,12 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         private CommandOption _listGroups;
         private CommandOption _listCollab;
         private CommandLineApplication _app;
-        public GroupMembershipListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public GroupMembershipListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -53,7 +56,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             var BoxCollectionsIterators = base.GetIterators();
             if (this._listGroups.HasValue())
             {
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var memberships = boxClient.GroupsManager.GetAllGroupMembershipsForUserAsync(this._id.Value, autoPaginate: true);
                     base.OutputJson(memberships);
@@ -66,7 +69,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             }
             else if (this._listCollab.HasValue())
             {
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var memberships = boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true);
                     base.OutputJson(memberships);
@@ -79,7 +82,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
             }
             else
             {
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var memberships = boxClient.GroupsManager.GetAllGroupMembershipsForGroupAsync(this._id.Value, autoPaginate: true);
                     base.OutputJson(memberships);

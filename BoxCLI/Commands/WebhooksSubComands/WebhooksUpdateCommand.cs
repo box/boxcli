@@ -20,8 +20,11 @@ namespace BoxCLI.Commands.WebhooksSubComands
         private CommandOption _triggers;
         private CommandOption _address;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public WebhooksUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -75,7 +78,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                 webhookRequest.Address = this._address.Value();
             }
             var webhook = await boxClient.WebhooksManager.UpdateWebhookAsync(webhookRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(webhook);
                 return;

@@ -10,16 +10,18 @@ namespace BoxCLI.Commands.FolderSubCommands
 {
     public class FolderCopyCommand : FolderSubCommandBase
     {
-        public FolderCopyCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, home, names)
-        {
-        }
 
         private CommandArgument _folderId;
         private CommandArgument _parentFolderId;
         private CommandOption _name;
         private CommandOption _idOnly;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+        public FolderCopyCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
+        {
+            _home = home;
+        }
 
         public override void Configure(CommandLineApplication command)
         {
@@ -49,12 +51,12 @@ namespace BoxCLI.Commands.FolderSubCommands
             base.CheckForId(this._folderId.Value, this._app);
             base.CheckForParentId(this._parentFolderId.Value, this._app);
             var copy = await base.CopyFolder(this._folderId.Value, this._parentFolderId.Value, this._name.Value());
-            if(this._idOnly.HasValue())
+            if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(copy.Id);
                 return;
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(copy);
                 return;

@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _description;
         private CommandOption _etag;
         private CommandLineApplication _app;
-        public FileUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) 
+        private IBoxHome _home;
+
+        public FileUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
 
@@ -58,7 +61,7 @@ namespace BoxCLI.Commands.FileSubCommand
             {
                 updatedFile = await boxClient.FilesManager.UpdateInformationAsync(fileRequest);
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(updatedFile);
                 return;

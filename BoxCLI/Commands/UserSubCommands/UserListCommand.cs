@@ -21,9 +21,12 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _appUsers;
         private CommandOption _limit;
         private CommandLineApplication _app;
-        public UserListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public UserListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -97,7 +100,7 @@ namespace BoxCLI.Commands.UserSubCommands
                     {
                         return user.Login.Contains("AppUser");
                     });
-                    if (base._json.HasValue())
+                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                     {
                         base.OutputJson(users);
                         return;
@@ -113,7 +116,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 else if (this._appUsers.HasValue())
                 {
                     var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
-                    if (base._json.HasValue())
+                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                     {
                         base.OutputJson(users);
                         return;
@@ -128,7 +131,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 }
                 else
                 {
-                    if (base._json.HasValue())
+                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                     {
                         var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
                         base.OutputJson(users);

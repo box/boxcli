@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandOption _expires;
         private CommandOption _preventDownload;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FileLockCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -60,7 +63,7 @@ namespace BoxCLI.Commands.FileSubCommand
             }
             lockRequest.Lock = boxLock;
             var boxLocked = await boxClient.FilesManager.LockAsync(lockRequest, this._fileId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(boxLocked);
                 return;

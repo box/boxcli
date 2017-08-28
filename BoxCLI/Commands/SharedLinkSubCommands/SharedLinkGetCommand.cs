@@ -15,9 +15,12 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
         private CommandArgument _url;
         private CommandOption _password;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public SharedLinkGetCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -61,7 +64,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             if (base._t == BoxType.file)
             {
                 var item = (await boxClient.FilesManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(item);
                     return;
@@ -71,7 +74,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             else if (base._t == BoxType.folder)
             {
                 var item = (await boxClient.FoldersManager.GetInformationAsync(this._id.Value, fields)).SharedLink;
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(item);
                     return;
@@ -81,7 +84,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             else if (base._t == BoxType.enterprise)
             {
                 var item = await boxClient.SharedItemsManager.SharedItemsAsync(this._url.Value, this._password.Value());
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(item);
                     return;

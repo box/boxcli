@@ -19,9 +19,12 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _path;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public FolderListItemsCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -72,7 +75,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                     }
                     return;
                 }
-                if (base._json.HasValue())
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     var result = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
                     base.OutputJson(result);

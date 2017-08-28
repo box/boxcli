@@ -10,41 +10,44 @@ using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 namespace BoxCLI.Commands.TaskAssignmentsSubCommands
 {
-	public class TaskAssignmentListCommand : TaskAssignmentSubCommandBase
-	{
+    public class TaskAssignmentListCommand : TaskAssignmentSubCommandBase
+    {
 
-		private CommandArgument _taskId;
+        private CommandArgument _taskId;
         private CommandOption _save;
         private CommandOption _path;
         private CommandOption _fileFormat;
-		private CommandLineApplication _app;
-		public TaskAssignmentListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+        private CommandLineApplication _app;
+        private IBoxHome _home;
+
+        public TaskAssignmentListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
-		}
+            _home = home;
+        }
 
-		public override void Configure(CommandLineApplication command)
-		{
-			_app = command;
-			command.Description = "List all task assignments on a task.";
-			_taskId = command.Argument("taskId",
-								   "Id of task");
+        public override void Configure(CommandLineApplication command)
+        {
+            _app = command;
+            command.Description = "List all task assignments on a task.";
+            _taskId = command.Argument("taskId",
+                                   "Id of task");
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
 
             command.OnExecute(async () =>
-			{
-				return await this.Execute();
-			});
-			base.Configure(command);
-		}
+            {
+                return await this.Execute();
+            });
+            base.Configure(command);
+        }
 
-		protected async override Task<int> Execute()
-		{
-			await this.RunList();
-			return await base.Execute();
-		}
+        protected async override Task<int> Execute()
+        {
+            await this.RunList();
+            return await base.Execute();
+        }
 
         private async Task RunList()
         {
@@ -60,7 +63,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                     var saved = base.WriteListResultsToReport<BoxTaskAssignment, BoxTaskAssignmentMap>(taskAssignments.Entries, fileName, _path.Value(), _fileFormat.Value());
                     Reporter.WriteSuccess($"File saved: {saved}");
                 }
-                else if (base._json.HasValue())
+                else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(taskAssignments);
                     return;

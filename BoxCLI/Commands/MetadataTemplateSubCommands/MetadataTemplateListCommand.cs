@@ -20,9 +20,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         private CommandOption _save;
         private CommandOption _fileFormat;
         private CommandLineApplication _app;
-        public MetadataTemplateListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
-            : base(boxPlatformBuilder, boxHome, names)
+        private IBoxHome _home;
+
+        public MetadataTemplateListCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
+            : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -60,7 +63,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                 return;
             }
             var collection = await boxClient.MetadataManager.GetEnterpriseMetadataAsync();
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(collection);
                 return;

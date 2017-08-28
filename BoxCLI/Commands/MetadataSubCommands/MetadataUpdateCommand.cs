@@ -24,9 +24,12 @@ namespace BoxCLI.Commands.MetadataSubCommands
         private CommandOption _value;
         private CommandOption _from;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public MetadataUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -82,7 +85,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
             {
                 throw new Exception("This item doesn't currently support metadata.");
             }
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(metadata);
                 return;

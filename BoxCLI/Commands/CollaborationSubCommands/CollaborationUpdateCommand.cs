@@ -25,9 +25,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _coowner;
         private CommandOption _canViewPath;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public CollaborationUpdateCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
             : base(boxPlatformBuilder, home, names, t)
         {
+            _home = home;
         }
 
         public override void Configure(CommandLineApplication command)
@@ -98,9 +101,9 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 collabRequest.Status = _status.Value();
             }
             collabRequest.Role = role;
-            
+
             var result = await boxClient.CollaborationsManager.EditCollaborationAsync(collabRequest);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(result);
                 return;

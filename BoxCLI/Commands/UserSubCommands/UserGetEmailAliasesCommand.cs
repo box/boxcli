@@ -13,9 +13,12 @@ namespace BoxCLI.Commands.UserSubCommands
     {
         private CommandArgument _userId;
         private CommandLineApplication _app;
+        private IBoxHome _home;
+
         public UserGetEmailAliasesCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
+            _home = home;
         }
         public override void Configure(CommandLineApplication command)
         {
@@ -42,7 +45,7 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
 
             var alias = await boxClient.UsersManager.GetEmailAliasesAsync(this._userId.Value);
-            if (base._json.HasValue())
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(alias);
                 return;
