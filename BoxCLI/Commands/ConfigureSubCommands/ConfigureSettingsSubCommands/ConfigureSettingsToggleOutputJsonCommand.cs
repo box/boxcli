@@ -33,11 +33,19 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
             var outputJson = base._settings.ToggleOutputJsonSetting();
             if (outputJson)
             {
-                Reporter.WriteInformation($"Output JSON now turned on.");
+                var setting = base._settings.GetOutputJsonSetting();
+                if (setting)
+                {
+                    Reporter.WriteInformation($"Output JSON now turned on.");
+                }
+                else
+                {
+                    Reporter.WriteInformation($"Output JSON now turned off.");
+                }
             }
             else
             {
-                Reporter.WriteInformation($"Output JSON now turned off.");
+                Reporter.WriteError($"Couldn't update the output JSON setting.");
             }
         }
     }

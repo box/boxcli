@@ -70,6 +70,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 			{
 				var newDefault = base._environments.GetAllEnvironments().First();
 				base._environments.SetDefaultEnvironment(newDefault.Value.Name);
+				base._boxHome.BustCache();
 				Reporter.WriteInformation($"Set {newDefault.Value.Name} as the current environment.");
 			}
 			else

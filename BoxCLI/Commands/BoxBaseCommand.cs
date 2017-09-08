@@ -5,8 +5,10 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Converter;
+using Box.V2.Exceptions;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxHome.BoxHomeFiles;
@@ -671,6 +673,43 @@ namespace BoxCLI.Commands
                 fileFormat = fileFormat.Substring(1);
             }
             return fileFormat;
+        }
+
+        public async Task<BoxFolder> CreateFolderWithIncreasingCount(BoxClient client, string name, string parentId, bool isIdOnly = false)
+        {
+            var finished = false;
+            BoxFolder createdFolder = new BoxFolder();
+            var count = 0;
+            while (!finished)
+            {
+                try
+                {
+                    if (count > 0)
+                    {
+                        createdFolder = await client.FoldersManager.CreateAsync(new BoxFolderRequest() { Parent = new BoxRequestEntity() { Id = parentId }, Name = $"{name} ({count})" });
+                    }
+                    else
+                    {
+                        createdFolder = await client.FoldersManager.CreateAsync(new BoxFolderRequest() { Parent = new BoxRequestEntity() { Id = parentId }, Name = name });
+                    }
+                    finished = true;
+                }
+                catch (BoxConflictException<BoxFolder>)
+                {
+                    count++;
+                    if (!isIdOnly)
+                    {
+                        Reporter.WriteInformation("Found existing folder with that name.");
+                        Reporter.WriteInformation($"Adding {count} to the name and trying again");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Reporter.WriteError($"Couldn't create this folder.");
+                    throw e;
+                }
+            }
+            return createdFolder;
         }
     }
 }
