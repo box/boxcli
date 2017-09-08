@@ -80,6 +80,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             if (this._setAsCurrent.HasValue())
             {
                 base._environments.SetDefaultEnvironment(environmentName);
+                base._boxHome.BustCache();
             }
         }
     }

@@ -84,6 +84,15 @@ namespace BoxCLI.CommandUtilities
             return containerPath.Substring(0, containerPath.LastIndexOf(Path.DirectorySeparatorChar));
         }
 
+        public static string ResolveItemName(string path)
+        {
+            if(path.Last() == Path.DirectorySeparatorChar)
+            {
+                path = path.Substring(0, path.Length - 1);
+            }
+            return path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+        }
+
         public static string TranslateDependentPath(string path, string containerPath)
         {
             var pathContents = new List<string>();

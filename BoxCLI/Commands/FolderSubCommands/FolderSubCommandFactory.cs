@@ -51,6 +51,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 return new FolderDownloadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
             }
+            else if (commandName == base._names.SubCommandNames.Upload)
+            {
+                return new FolderUploadCommand(base._boxPlatformBuilder, base._boxHome, base._names);
+            }
             else
             {
                 throw new Exception("Command not registered.");
