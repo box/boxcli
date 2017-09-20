@@ -50,6 +50,21 @@ namespace BoxCLI.Commands.MetadataSubCommands
             }
         }
 
+        protected virtual Dictionary<string, object> MetadataKeyValuesFromCommandOption(string option)
+        {
+            var keyVals = option.Split('&');
+            var metadata = new Dictionary<string, object>();
+            foreach (var keyVal in keyVals)
+            {
+                var splitKeyVal = keyVal.Split('=');
+                if (splitKeyVal.Length == 2)
+                {
+                    metadata.Add(splitKeyVal[0], splitKeyVal[1]);
+                }
+            }
+            return metadata;
+        }
+
         protected virtual Dictionary<string, object> MetadataKeyValuesFromConsole()
         {
             var q = "";
@@ -94,40 +109,40 @@ namespace BoxCLI.Commands.MetadataSubCommands
             }
         }
 
-		protected virtual List<BoxMetadataForCsv> ReadMetadataCsvFile(string filePath)
-		{
-			var allMetadataOnItem = new List<BoxMetadataForCsv>();
-			using (var fs = File.OpenText(filePath))
-			using (var csv = new CsvReader(fs))
-			{
-				System.Console.WriteLine("Processing csv...");
+        protected virtual List<BoxMetadataForCsv> ReadMetadataCsvFile(string filePath)
+        {
+            var allMetadataOnItem = new List<BoxMetadataForCsv>();
+            using (var fs = File.OpenText(filePath))
+            using (var csv = new CsvReader(fs))
+            {
+                System.Console.WriteLine("Processing csv...");
 
-				csv.Configuration.RegisterClassMap(typeof(BoxMetadataRequestMap));
-				allMetadataOnItem = csv.GetRecords<BoxMetadataForCsv>().ToList();
-			}
-			
-			return allMetadataOnItem;
-		}
+                csv.Configuration.RegisterClassMap(typeof(BoxMetadataRequestMap));
+                allMetadataOnItem = csv.GetRecords<BoxMetadataForCsv>().ToList();
+            }
 
-		protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", string type = "",
-			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
-		{
-			var boxClient = base.ConfigureBoxClient(asUser);
-			if (!string.IsNullOrEmpty(path))
-			{
-				path = GeneralUtilities.TranslatePath(path);
-			}
-			try
-			{
-				Reporter.WriteInformation("Reading file...");
+            return allMetadataOnItem;
+        }
+
+        protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", string type = "",
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+        {
+            var boxClient = base.ConfigureBoxClient(asUser);
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = GeneralUtilities.TranslatePath(path);
+            }
+            try
+            {
+                Reporter.WriteInformation("Reading file...");
                 var metadataRequests = this.ReadMetadataCsvFile(path);
-				var saveCreated = new List<BoxMetadataForCsv>();
+                var saveCreated = new List<BoxMetadataForCsv>();
 
-				foreach (var metadataRequest in metadataRequests)
-				{
-					Reporter.WriteInformation($"Processing a metadata request: {metadataRequest.TemplateKey}");
-					Dictionary<string, object> createdMetadata = null;
-                    if(metadataRequest.ItemType != null)
+                foreach (var metadataRequest in metadataRequests)
+                {
+                    Reporter.WriteInformation($"Processing a metadata request: {metadataRequest.TemplateKey}");
+                    Dictionary<string, object> createdMetadata = null;
+                    if (metadataRequest.ItemType != null)
                     {
                         type = metadataRequest.ItemType;
                     }
@@ -135,10 +150,10 @@ namespace BoxCLI.Commands.MetadataSubCommands
                     {
                         throw new Exception("Must have a Box Item type of file or folder");
                     }
-					try
-					{
+                    try
+                    {
                         Reporter.WriteInformation("Attempting create metadata...");
-                        foreach(var kv in metadataRequest.Metadata)
+                        foreach (var kv in metadataRequest.Metadata)
                         {
                             Reporter.WriteInformation($"Key: {kv.Key} Value: {kv.Value}");
                         }
@@ -154,19 +169,19 @@ namespace BoxCLI.Commands.MetadataSubCommands
                         {
                             throw new Exception("Metadata currently only supported on files and folders.");
                         }
-					}
-					catch (Exception e)
-					{
-						Reporter.WriteError("Couldn't add metadata...");
-						Reporter.WriteError(e.Message);
-					}
-					Reporter.WriteSuccess("Added metadata:");
-					if (createdMetadata != null)
-					{
-						this.PrintMetadata(createdMetadata);
-						if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
-						{
-                            saveCreated.Add(new BoxMetadataForCsv() 
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError("Couldn't add metadata...");
+                        Reporter.WriteError(e.Message);
+                    }
+                    Reporter.WriteSuccess("Added metadata:");
+                    if (createdMetadata != null)
+                    {
+                        this.PrintMetadata(createdMetadata);
+                        if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                        {
+                            saveCreated.Add(new BoxMetadataForCsv()
                             {
                                 TemplateKey = metadataRequest.TemplateKey,
                                 Scope = metadataRequest.Scope,
@@ -174,32 +189,32 @@ namespace BoxCLI.Commands.MetadataSubCommands
                                 ItemType = metadataRequest.ItemType,
                                 Metadata = createdMetadata
                             });
-						}
-					}
-				}
-				Reporter.WriteInformation("Finished processing metadata...");
-				if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
-				{
-					var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
-					if (!string.IsNullOrEmpty(overrideSaveFileFormat))
-					{
-						fileFormat = overrideSaveFileFormat;
-					}
-					var savePath = base._settings.GetBoxReportsFolderPath();
-					if (!string.IsNullOrEmpty(overrideSavePath))
-					{
-						savePath = overrideSavePath;
-					}
-					var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.Create}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-					base.WriteMetadataCollectionResultsToReport(saveCreated, fileName, savePath, fileFormat);
-				}
-			}
-			catch (Exception e)
-			{
-				System.Console.WriteLine(e.Message);
-				Reporter.WriteError(e.Message);
-			}
-		}
+                        }
+                    }
+                }
+                Reporter.WriteInformation("Finished processing metadata...");
+                if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                {
+                    var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+                    if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+                    {
+                        fileFormat = overrideSaveFileFormat;
+                    }
+                    var savePath = base._settings.GetBoxReportsFolderPath();
+                    if (!string.IsNullOrEmpty(overrideSavePath))
+                    {
+                        savePath = overrideSavePath;
+                    }
+                    var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.Create}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    base.WriteMetadataCollectionResultsToReport(saveCreated, fileName, savePath, fileFormat);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                Reporter.WriteError(e.Message);
+            }
+        }
 
 
         //protected virtual bool ProcessMetadataTemplates(string path, string asUser = "",

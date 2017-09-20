@@ -30,10 +30,12 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureSettingsSubCommands
         private void RunSettingsList()
         {
             var settings = base._settings.GetAllSettings();
+            var outputJson = (settings.OutputJson) ? "on" : "off";
             Reporter.WriteInformation("Current settings:");
             Reporter.WriteInformation($"Path to store Box Reports: {settings.BoxReportsFolderPath}");
             Reporter.WriteInformation($"Box Reports folder name: {settings.BoxReportsFolderName}");
             Reporter.WriteInformation($"Default file format for Box Reports: {settings.BoxReportsFileFormat}");
+            Reporter.WriteInformation($"JSON output currently {outputJson}");
         }
 
     }
