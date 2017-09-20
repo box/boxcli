@@ -16,6 +16,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         private CommandArgument _scope;
         private CommandArgument _template;
         private CommandOption _bulkFilePath;
+        private CommandOption _keyVal;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -36,6 +37,9 @@ namespace BoxCLI.Commands.MetadataSubCommands
             _template = command.Argument("template",
                                    "The key of the template");
             _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
+            _keyVal = command.Option("--kv <KEYVALS>",
+                "Keys and values for metadata. Format like key1|val1&key2|val2",
+                CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -60,7 +64,15 @@ namespace BoxCLI.Commands.MetadataSubCommands
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForTemplate(this._template.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var metadata = base.MetadataKeyValuesFromConsole();
+            Dictionary<string, object> metadata;
+            if (this._keyVal.HasValue())
+            {
+                metadata = base.MetadataKeyValuesFromCommandOption(this._keyVal.Value());
+            }
+            else
+            {
+                metadata = base.MetadataKeyValuesFromConsole();
+            }
             if (base._t == BoxType.file)
             {
                 metadata = await boxClient.MetadataManager.CreateFileMetadataAsync(this._id.Value, metadata, this._scope.Value, this._template.Value);

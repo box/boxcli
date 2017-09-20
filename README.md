@@ -90,6 +90,46 @@
 4. Check that the CLI is configured correctly and working with the following command:
     * `box users get me`
 
+## Settings
+The Box CLI has several settings you use to change its default behavior.
+
+Access the Box CLI settings with the `box configure settings` command.
+
+* `box configure settings list`
+    * Use this command to see all current settings
+
+### Box Reports and Box Downloads
+One of the Box CLI settings is for the folders that the CLI uses to generate reports and to download files.
+
+The reports folder is named `Box Reports` and stored in the appropriate `Documents` area for your OS and current user.
+
+The downloads folder is named `Box Downloads` and stored in the appropriate `Downloads` area for your OS and current user.
+
+* `get-folder-name`
+    * Use the `-r|--reports` or `-d|--downloads` flag to see the current name of the Box Reports and Box Downloads folders
+* `set-folder-name`
+    * Use the `-r|--reports` or `-d|--downloads` flag change the default name of the Box Reports and Box Downloads folders
+* `get-folder-path`
+    * Use the `-r|--reports` or `-d|--downloads` flag to see the current path of the Box Reports and Box Downloads folders
+* `set-folder-path`
+    * Use the `-r|--reports` or `-d|--downloads` flag change the default path of the Box Reports and Box Downloads folders
+
+### Toggle JSON Output
+The CLI will print responses to the commands you use in plain text with informative messages. 
+
+If you'd prefer to instead receive the direct JSON response from the API for all calls, you can toggle this setting instead of including `--json` on every individual call.
+
+* `toggle-output-json`
+    * Sets every command to print the JSON response from the API.
+
+### Box Reports File Format
+When you use `--save` with a command, the CLI defaults to JSON for the file format. You can change this to CSV to automatically save as CSV files instead.
+
+* `get-file-format`
+    * Get the current file format for reports.
+* `set-file-format`
+    * Set the current file format for reports. Use `-j|json` or `-c|--csv`.
+
 ## Common CLI Commands and Options
 * `-h|--help`
     * The help option will list more instructions on using commands and subcommands.
@@ -117,7 +157,7 @@
 * `box configure environments set-current NEWENV`
 * `box users list`
 * `box users search allenmichael -m`
-    * Searches across usesrs for this keyword and only returns Managed Users in the results
+    * Searches across users for this keyword and only returns Managed Users in the results
 * `box folders list-items 0 --save --as-user 275111793`
     * This command will list files and folders under the root folder for a user.
     * If you use this command without `--as-user`, the CLI lists files and folders owned by the Service Account. 
@@ -139,6 +179,8 @@
     * Returns a token for this user. Your application must have the "Generate User Access Tokens" setting turned on.
 * `box tokens exchange base_explorer -t hrc8tDs2fIeNuXDvMmtLksFRzBC1m0xx --folder-id 34250344135`
     * Utilizes token exchange to get a downscoped token.
+* `box folders metadata create 36173775345 enterprise cli --kv "settings=one, two, three&home=2002-10-02T10:00:00-05:00&env=app"`
+    * Creates metadata on a folder using the Enterprise scope, a metadata template with the key `cli`, and the `--kv` flag to enter fields for `settings` (a string data type), `home` (a date data type), and `env` (an enum data type).
 
 ## Bulk Actions
 The CLI supports bulk actions for several commands. Each bulk action requires a file containing the Box objects you're performing bulk actions against.
