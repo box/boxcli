@@ -35,7 +35,9 @@
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER" Source="..\BoxCLI\bin\Release\netcoreapp2.0\win10-x64\publish">
-      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <Component Id="INSTALLFOLDER" Guid="{19B46D20-BBA3-47F8-8A9F-626BCC5CE3F6}">
+        <RemoveFile Id="INSTALLFOLDER" Name="*.*" On="uninstall" />
+      </Component>
       <Component Id="ProductComponent" Guid="{882DB6AA-1363-4724-8C43-2950E7ABECD4}">
         <Environment Id="Path"
             Permanent="yes"
@@ -85,6 +87,7 @@
         <File Name="api-ms-win-crt-string-l1-1-0.dll" />
         <File Name="api-ms-win-crt-time-l1-1-0.dll" />
         <File Name="api-ms-win-crt-utility-l1-1-0.dll" />
+        <File Name="BouncyCastle.Crypto.dll" />
         <File Name="box.deps.json" />
         <File Name="box.dll" />
         <File Name="box.exe" />
@@ -95,7 +98,6 @@
         <File Name="clretwrc.dll" />
         <File Name="clrjit.dll" />
         <File Name="coreclr.dll" />
-        <File Name="crypto.dll" />
         <File Name="CsvHelper.dll" />
         <File Name="dbgshim.dll" />
         <File Name="hostfxr.dll" />
@@ -134,9 +136,6 @@
         <File Name="mscorrc.dll" />
         <File Name="netstandard.dll" />
         <File Name="Newtonsoft.Json.dll" />
-        <File Name="Nito.AsyncEx.Coordination.dll" />
-        <File Name="Nito.AsyncEx.Tasks.dll" />
-        <File Name="Nito.Collections.Deque.dll" />
         <File Name="SharpCompress.dll" />
         <File Name="sos.dll" />
         <File Name="SOS.NETCore.dll" />
