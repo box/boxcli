@@ -52,45 +52,38 @@ namespace BoxCLI.Commands.FolderSubCommands
         protected async Task RunGetItems()
         {
             base.CheckForId(this._folderId.Value, this._app);
-            try
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            if (this._save.HasValue())
             {
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                if (this._save.HasValue())
+                Reporter.WriteInformation("Saving file...");
+                var foldersFileName = $"{base._names.CommandNames.Folders}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                var filesFileName = $"{base._names.CommandNames.Files}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                var collection = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
+                var folders = collection.Entries.FindAll(x => x.Type == "folder").Cast<BoxFolder>().ToList();
+                var files = collection.Entries.FindAll(x => x.Type == "file").Cast<BoxFile>().ToList();
+                var savedFolders = base.WriteListResultsToReport<BoxFolder, BoxFolderMap>(folders, foldersFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
+                var savedFiles = base.WriteListResultsToReport<BoxFile, BoxFileMap>(files, filesFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
+                if (savedFiles && savedFolders)
                 {
-                    Reporter.WriteInformation("Saving file...");
-                    var foldersFileName = $"{base._names.CommandNames.Folders}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    var filesFileName = $"{base._names.CommandNames.Files}-{base._names.SubCommandNames.List}-folder-id-{this._folderId.Value}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    var collection = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
-                    var folders = collection.Entries.FindAll(x => x.Type == "folder").Cast<BoxFolder>().ToList();
-                    var files = collection.Entries.FindAll(x => x.Type == "file").Cast<BoxFile>().ToList();
-                    var savedFolders = base.WriteListResultsToReport<BoxFolder, BoxFolderMap>(folders, foldersFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
-                    var savedFiles = base.WriteListResultsToReport<BoxFile, BoxFileMap>(files, filesFileName, fileFormat: this._fileFormat.Value(), filePath: this._path.Value());
-                    if (savedFiles && savedFolders)
-                    {
-                        Reporter.WriteSuccess("Saved file.");
-                    }
-                    else
-                    {
-                        Reporter.WriteError("Couldn't save file.");
-                    }
-                    return;
+                    Reporter.WriteSuccess("Saved file.");
                 }
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                else
                 {
-                    var result = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
-                    base.OutputJson(result);
-                    return;
+                    Reporter.WriteError("Couldn't save file.");
                 }
-                var BoxCollectionsIterators = base.GetIterators();
-                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
-                {
-                    return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, offset: (int)offset);
-                }, base.PrintItem);
+                return;
             }
-            catch (Exception e)
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                Reporter.WriteError(e.Message);
+                var result = await boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, autoPaginate: true, fields: base._fields);
+                base.OutputJson(result);
+                return;
             }
+            var BoxCollectionsIterators = base.GetIterators();
+            await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
+            {
+                return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, offset: (int)offset);
+            }, base.PrintItem);
         }
     }
 }

@@ -36,14 +36,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             {
                 path = GeneralUtilities.TranslatePath(path);
             }
-            System.Console.WriteLine($"Path: {path}");
             try
             {
-                System.Console.WriteLine("Reading file...");
                 var collaborationRequests = base.ReadFile<BoxCollaborationRequest, BoxCollaborationRequestMap>(path);
                 foreach (var collaborationRequest in collaborationRequests)
                 {
-                    System.Console.WriteLine($"Processing a collaboration request: {collaborationRequest.Item.Id}");
                     if (collaborationRequest.Item.Type != BoxType.file || collaborationRequest.Item.Type != BoxType.folder)
                     {
                         collaborationRequest.Item.Type = this._t;
@@ -51,7 +48,6 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                     var createdCollaboration = await boxClient.CollaborationsManager.AddCollaborationAsync(collaborationRequest);
                     this.PrintCollaboration(createdCollaboration);
                 }
-                System.Console.WriteLine("Created all collaborations...");
             }
             catch (Exception e)
             {

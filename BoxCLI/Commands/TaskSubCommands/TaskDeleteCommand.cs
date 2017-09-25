@@ -46,25 +46,25 @@ namespace BoxCLI.Commands.TaskSubCommands
             bool deleted;
             try
             {
-				if (this._dontPrompt.HasValue())
-				{
-					deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
-				}
-				else
-				{
-					Reporter.WriteWarningNoNewLine("Are you sure you want to delete this task? y/N ");
-					var yNKey = "n";
-					yNKey = Console.ReadLine().ToLower();
-					if (yNKey != "y")
-					{
-						Reporter.WriteInformation("Aborted task deletion.");
-						return;
-					}
-					else
-					{
-						deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
-					}
-				}
+                if (this._dontPrompt.HasValue())
+                {
+                    deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
+                }
+                else
+                {
+                    Reporter.WriteWarningNoNewLine("Are you sure you want to delete this task? y/N ");
+                    var yNKey = "n";
+                    yNKey = Console.ReadLine().ToLower();
+                    if (yNKey != "y")
+                    {
+                        Reporter.WriteInformation("Aborted task deletion.");
+                        return;
+                    }
+                    else
+                    {
+                        deleted = await boxClient.TasksManager.DeleteTaskAsync(this._taskId.Value);
+                    }
+                }
 
                 if (deleted)
                 {
@@ -78,7 +78,7 @@ namespace BoxCLI.Commands.TaskSubCommands
             catch (Exception e)
             {
                 Reporter.WriteError("Couldn't delete task.");
-                Reporter.WriteError(e.Message);
+                Reporter.WriteError(GeneralUtilities.FormatErrorResponseFromAPI(e));
             }
         }
     }

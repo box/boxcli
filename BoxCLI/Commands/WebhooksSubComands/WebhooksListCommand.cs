@@ -49,38 +49,31 @@ namespace BoxCLI.Commands.WebhooksSubComands
 
         public async Task RunList()
         {
-            try
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxCollectionsIterators = base.GetIterators();
+            if (_save.HasValue())
             {
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var BoxCollectionsIterators = base.GetIterators();
-                if (_save.HasValue())
-                {
-                    var fileName = $"{base._names.CommandNames.Webhooks}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    System.Console.WriteLine("Saving file...");
-                    System.Console.WriteLine(_fileFormat.Value());
-                    var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
-                    var saved = base.WriteMarkerCollectionResultsToReport<BoxWebhook, BoxWebhookMap>(webhooks, fileName, _path.Value(), _fileFormat.Value());
-                    System.Console.WriteLine($"File saved: {saved}");
-                }
-                else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
-                    base.OutputJson(webhooks);
-                    return;
-                }
-                else
-                {
-                    await BoxCollectionsIterators.ListMarkerCollectionToConsole<BoxWebhook>((marker) =>
-                    {
-                        return boxClient.WebhooksManager.GetWebhooksAsync(nextMarker: marker);
-                    }, base.PrintWebhook);
-                }
-                Reporter.WriteInformation("Finished...");
+                var fileName = $"{base._names.CommandNames.Webhooks}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                System.Console.WriteLine("Saving file...");
+                System.Console.WriteLine(_fileFormat.Value());
+                var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
+                var saved = base.WriteMarkerCollectionResultsToReport<BoxWebhook, BoxWebhookMap>(webhooks, fileName, _path.Value(), _fileFormat.Value());
+                System.Console.WriteLine($"File saved: {saved}");
             }
-            catch (Exception e)
+            else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                Reporter.WriteError(e.Message);
+                var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
+                base.OutputJson(webhooks);
+                return;
             }
+            else
+            {
+                await BoxCollectionsIterators.ListMarkerCollectionToConsole<BoxWebhook>((marker) =>
+                {
+                    return boxClient.WebhooksManager.GetWebhooksAsync(nextMarker: marker);
+                }, base.PrintWebhook);
+            }
+            Reporter.WriteInformation("Finished...");
         }
     }
 }

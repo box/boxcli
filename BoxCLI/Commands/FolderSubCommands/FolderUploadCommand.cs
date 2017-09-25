@@ -63,45 +63,38 @@ namespace BoxCLI.Commands.FolderSubCommands
             //     return;
             // }
             base.CheckForValue(this._folderPath.Value, _app, "A path to a local folder is required");
-            try
+            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            string name;
+            if (this._alternativeFolderName.HasValue())
             {
-                var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
-                string name;
-                if (this._alternativeFolderName.HasValue())
-                {
-                    name = this._alternativeFolderName.Value();
-                }
-                else
-                {
-                    name = GeneralUtilities.ResolveItemName(this._folderPath.Value);
-                }
-                var parentFolder = (this._parentFolderId.HasValue()) ? this._parentFolderId.Value() : "0";
-                var createdFolder = await base.CreateFolderWithIncreasingCount(BoxClient, name, parentFolder, this._idOnly.HasValue());
-                if (!string.IsNullOrEmpty(createdFolder.Id))
-                {
-
-                    await base.UploadFolder(this._folderPath.Value, createdFolder.Id);
-                    var finishedFolder = await BoxClient.FoldersManager.GetInformationAsync(createdFolder.Id);
-                    if (this._idOnly.HasValue())
-                    {
-                        Reporter.WriteInformation(finishedFolder.Id);
-                        return;
-                    }
-                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                    {
-                        base.OutputJson(finishedFolder);
-                        return;
-                    }
-                    base.PrintFolder(finishedFolder);
-                }
-                else
-                {
-                    throw new Exception("There was a problem creating the folder.");
-                }
+                name = this._alternativeFolderName.Value();
             }
-            catch (Exception e)
+            else
             {
-                Reporter.WriteError(e.Message);
+                name = GeneralUtilities.ResolveItemName(this._folderPath.Value);
+            }
+            var parentFolder = (this._parentFolderId.HasValue()) ? this._parentFolderId.Value() : "0";
+            var createdFolder = await base.CreateFolderWithIncreasingCount(BoxClient, name, parentFolder, this._idOnly.HasValue());
+            if (!string.IsNullOrEmpty(createdFolder.Id))
+            {
+
+                await base.UploadFolder(this._folderPath.Value, createdFolder.Id);
+                var finishedFolder = await BoxClient.FoldersManager.GetInformationAsync(createdFolder.Id);
+                if (this._idOnly.HasValue())
+                {
+                    Reporter.WriteInformation(finishedFolder.Id);
+                    return;
+                }
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    base.OutputJson(finishedFolder);
+                    return;
+                }
+                base.PrintFolder(finishedFolder);
+            }
+            else
+            {
+                throw new Exception("There was a problem creating the folder.");
             }
         }
     }

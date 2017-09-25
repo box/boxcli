@@ -62,30 +62,23 @@ namespace BoxCLI.Commands.FolderSubCommands
                 return;
             }
             base.CheckForParentId(this._parentFolderId.Value, this._app);
-            try
+            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var folderRequest = new BoxFolderRequest();
+            folderRequest.Parent = new BoxItemRequest();
+            folderRequest.Parent.Id = this._parentFolderId.Value;
+            folderRequest.Name = this._name.Value;
+            var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
+            if (this._idOnly.HasValue())
             {
-                var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var folderRequest = new BoxFolderRequest();
-                folderRequest.Parent = new BoxItemRequest();
-                folderRequest.Parent.Id = this._parentFolderId.Value;
-                folderRequest.Name = this._name.Value;
-                var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
-                if (this._idOnly.HasValue())
-                {
-                    Reporter.WriteInformation(folder.Id);
-                    return;
-                }
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(folder);
-                    return;
-                }
-                base.PrintFolder(folder);
+                Reporter.WriteInformation(folder.Id);
+                return;
             }
-            catch (Exception e)
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                Reporter.WriteError(e.Message);
+                base.OutputJson(folder);
+                return;
             }
+            base.PrintFolder(folder);
         }
     }
 }

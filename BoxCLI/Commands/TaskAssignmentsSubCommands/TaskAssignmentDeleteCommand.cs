@@ -57,7 +57,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
             catch (Exception e)
             {
                 Reporter.WriteError("Couldn't delete task.");
-                Reporter.WriteError(e.Message);
+                Reporter.WriteError(GeneralUtilities.FormatErrorResponseFromAPI(e));
             }
         }
     }

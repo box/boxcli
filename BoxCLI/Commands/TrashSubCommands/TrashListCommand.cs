@@ -47,26 +47,19 @@ namespace BoxCLI.Commands.TrashSubCommands
 
         public async Task RunList()
         {
-            try
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxCollectionsIterators = base.GetIterators();
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var BoxCollectionsIterators = base.GetIterators();
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    var items = boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, autoPaginate: true);
-                    base.OutputJson(items);
-                    return;
-                }
-                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
-                {
-                    return boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, offset: (int)offset);
-                }, PrintItem);
-                Reporter.WriteInformation("Finished...");
+                var items = boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, autoPaginate: true);
+                base.OutputJson(items);
+                return;
             }
-            catch (Exception e)
+            await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
             {
-                Reporter.WriteError(e.Message);
-            }
+                return boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, offset: (int)offset);
+            }, PrintItem);
+            Reporter.WriteInformation("Finished...");
         }
     }
 }

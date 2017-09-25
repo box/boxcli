@@ -51,54 +51,46 @@ namespace BoxCLI.Commands.CommentSubCommands
 
         private async Task RunCreate()
         {
-            try
+            base.CheckForValue(this._itemId.Value, this._app, "An item ID is required for this command");
+            var type = this._itemType.Value.ToLower();
+            if (!string.IsNullOrEmpty(this._itemType.Value))
             {
-                base.CheckForValue(this._itemId.Value, this._app, "An item ID is required for this command");
-                var type = this._itemType.Value.ToLower();
-                if (!string.IsNullOrEmpty(this._itemType.Value))
-                {
-                    type = "file";
-                }
-                if (type != "file" || type != "comment")
-                {
-                    throw new Exception("The type must be either file or comment for this command.");
-                }
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var commentCreate = new BoxCommentRequest();
-                commentCreate.Item = new BoxRequestEntity()
-                {
-                    Id = this._itemId.Value
-                };
-                if (type == "file")
-                {
-                    commentCreate.Item.Type = BoxType.file;
-                }
-                else if (type == "comment")
-                {
-                    commentCreate.Item.Type = BoxType.comment;
-                }
-                if (this._message.HasValue())
-                {
-                    commentCreate.Message = this._message.Value();
-                }
-                if (this._taggedMessage.HasValue())
-                {
-                    commentCreate.TaggedMessage = this._taggedMessage.Value();
-                }
-                var newComment = await boxClient.CommentsManager.AddCommentAsync(commentCreate);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(newComment);
-                    return;
-                }
-                Reporter.WriteSuccess("Created comment.");
-                base.PrintComment(newComment);
+                type = "file";
             }
-            catch (Exception e)
+            if (type != "file" || type != "comment")
             {
-                Reporter.WriteError("Couldn't create comment.");
-                Reporter.WriteError(e.Message);
+                throw new Exception("The type must be either file or comment for this command.");
             }
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var commentCreate = new BoxCommentRequest();
+            commentCreate.Item = new BoxRequestEntity()
+            {
+                Id = this._itemId.Value
+            };
+            if (type == "file")
+            {
+                commentCreate.Item.Type = BoxType.file;
+            }
+            else if (type == "comment")
+            {
+                commentCreate.Item.Type = BoxType.comment;
+            }
+            if (this._message.HasValue())
+            {
+                commentCreate.Message = this._message.Value();
+            }
+            if (this._taggedMessage.HasValue())
+            {
+                commentCreate.TaggedMessage = this._taggedMessage.Value();
+            }
+            var newComment = await boxClient.CommentsManager.AddCommentAsync(commentCreate);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(newComment);
+                return;
+            }
+            Reporter.WriteSuccess("Created comment.");
+            base.PrintComment(newComment);
         }
     }
 }
