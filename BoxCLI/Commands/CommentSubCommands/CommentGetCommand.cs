@@ -45,20 +45,13 @@ namespace BoxCLI.Commands.CommentSubCommands
         {
             base.CheckForValue(this._id.Value, this._app, "A comment ID is required for this call.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            try
+            var comment = await boxClient.CommentsManager.GetInformationAsync(this._id.Value);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                var comment = await boxClient.CommentsManager.GetInformationAsync(this._id.Value);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(comment);
-                    return;
-                }
-                base.PrintComment(comment);
+                base.OutputJson(comment);
+                return;
             }
-            catch (Exception e)
-            {
-                Reporter.WriteError(e.Message);
-            }
+            base.PrintComment(comment);
         }
     }
 }

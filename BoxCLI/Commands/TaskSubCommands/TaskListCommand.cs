@@ -52,36 +52,29 @@ namespace BoxCLI.Commands.TaskSubCommands
         public async Task RunList()
         {
             base.CheckForId(this._fileId.Value, this._app);
-            try
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxCollectionsIterators = base.GetIterators();
+            var tasks = await boxClient.FilesManager.GetFileTasks(this._fileId.Value);
+            if (_save.HasValue())
             {
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var BoxCollectionsIterators = base.GetIterators();
-                var tasks = await boxClient.FilesManager.GetFileTasks(this._fileId.Value);
-                if (_save.HasValue())
-                {
-                    var fileName = $"{base._names.CommandNames.Task}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    var saved = base.WriteListResultsToReport<BoxTask, BoxTaskMap>(tasks.Entries, fileName, _path.Value(), _fileFormat.Value());
-                    Reporter.WriteSuccess($"File saved: {saved}");
-                }
-                else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(tasks);
-                    return;
-                }
-                else
-                {
-                    var showNext = "";
-                    while (tasks.Entries.Count > 0 && showNext != "q")
-                    {
-                        showNext = BoxCollectionsIterators.PageInConsole<BoxTask>(base.PrintTask, tasks);
-                    }
-                }
-                Reporter.WriteInformation("Finished...");
+                var fileName = $"{base._names.CommandNames.Task}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                var saved = base.WriteListResultsToReport<BoxTask, BoxTaskMap>(tasks.Entries, fileName, _path.Value(), _fileFormat.Value());
+                Reporter.WriteSuccess($"File saved: {saved}");
             }
-            catch (Exception e)
+            else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                Reporter.WriteError(e.Message);
+                base.OutputJson(tasks);
+                return;
             }
+            else
+            {
+                var showNext = "";
+                while (tasks.Entries.Count > 0 && showNext != "q")
+                {
+                    showNext = BoxCollectionsIterators.PageInConsole<BoxTask>(base.PrintTask, tasks);
+                }
+            }
+            Reporter.WriteInformation("Finished...");
         }
     }
 }

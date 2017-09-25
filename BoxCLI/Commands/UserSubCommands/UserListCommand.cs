@@ -59,104 +59,97 @@ namespace BoxCLI.Commands.UserSubCommands
             var BoxCollectionsIterators = base.GetIterators();
             var fileName = $"{base._names.CommandNames.Users}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
             var fields = base.ProcessFields(this._fieldsOption.Value(), base._fields);
-            try
+            if (this._save.HasValue())
             {
-                if (this._save.HasValue())
+                Reporter.WriteInformation("Saving file...");
+                BoxCollection<BoxUser> users;
+                if (this._appUsers.HasValue())
                 {
-                    Reporter.WriteInformation("Saving file...");
-                    BoxCollection<BoxUser> users;
-                    if (this._appUsers.HasValue())
-                    {
-                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
-                    }
-                    else if (this._managedUsers.HasValue())
-                    {
-                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
-                        users.Entries.RemoveAll(user =>
-                        {
-                            return user.Login.Contains("AppUser");
-                        });
-                    }
-                    else
-                    {
-                        users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
-                    }
-
-                    var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, this._path.Value(), this._fileFormat.Value());
-                    if (saved)
-                    {
-                        Reporter.WriteSuccess("File saved.");
-                    }
-                    else
-                    {
-                        Reporter.WriteError("Error while saving file.");
-                    }
-                    return;
+                    users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
                 }
-                if (this._managedUsers.HasValue())
+                else if (this._managedUsers.HasValue())
                 {
-                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                    users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
                     users.Entries.RemoveAll(user =>
                     {
                         return user.Login.Contains("AppUser");
                     });
-                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                    {
-                        base.OutputJson(users);
-                        return;
-                    }
-                    var showNext = "";
-                    while (users.Entries.Count > 0 && showNext != "q")
-                    {
-                        showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
-                    }
-                    Reporter.WriteInformation("Finished...");
-                    return;
-                }
-                else if (this._appUsers.HasValue())
-                {
-                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
-                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                    {
-                        base.OutputJson(users);
-                        return;
-                    }
-                    var showNext = "";
-                    while (users.Entries.Count > 0 && showNext != "q")
-                    {
-                        showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
-                    }
-                    Reporter.WriteInformation("Finished...");
-                    return;
                 }
                 else
                 {
-                    if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                    {
-                        var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
-                        base.OutputJson(users);
-                        return;
-                    }
-                    int limit = -1;
-                    if (this._limit.HasValue())
-                    {
-                        try
-                        {
-                            limit = Convert.ToInt32(this._limit.Value());
-                        }
-                        catch { }
-                    }
-                    await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
-                    {
-                        return boxClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
-                    }, PrintUserInfo, limit);
+                    users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                }
+
+                var saved = base.WriteOffsetCollectionResultsToReport<BoxUser, BoxUserMap>(users, fileName, this._path.Value(), this._fileFormat.Value());
+                if (saved)
+                {
+                    Reporter.WriteSuccess("File saved.");
+                }
+                else
+                {
+                    Reporter.WriteError("Error while saving file.");
+                }
+                return;
+            }
+            if (this._managedUsers.HasValue())
+            {
+                var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                users.Entries.RemoveAll(user =>
+                {
+                    return user.Login.Contains("AppUser");
+                });
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    base.OutputJson(users);
+                    return;
+                }
+                var showNext = "";
+                while (users.Entries.Count > 0 && showNext != "q")
+                {
+                    showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
                 }
                 Reporter.WriteInformation("Finished...");
+                return;
             }
-            catch (Exception e)
+            else if (this._appUsers.HasValue())
             {
-                Reporter.WriteError(e.Message);
+                var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true, filterTerm: "AppUser");
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    base.OutputJson(users);
+                    return;
+                }
+                var showNext = "";
+                while (users.Entries.Count > 0 && showNext != "q")
+                {
+                    showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(PrintUserInfo, users);
+                }
+                Reporter.WriteInformation("Finished...");
+                return;
             }
+            else
+            {
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    var users = await boxClient.UsersManager.GetEnterpriseUsersAsync(fields: fields, autoPaginate: true);
+                    base.OutputJson(users);
+                    return;
+                }
+                int limit = -1;
+                if (this._limit.HasValue())
+                {
+                    try
+                    {
+                        limit = Convert.ToInt32(this._limit.Value());
+                    }
+                    catch { }
+                }
+                await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxUser>((offset) =>
+                {
+                    return boxClient.UsersManager.GetEnterpriseUsersAsync(offset: offset);
+                }, PrintUserInfo, limit);
+            }
+            Reporter.WriteInformation("Finished...");
         }
     }
 }

@@ -45,30 +45,22 @@ namespace BoxCLI.Commands.CommentSubCommands
 
         private async Task RunUpdate()
         {
-            try
-            {
-                base.CheckForValue(this._commentId.Value, this._app, "A comment ID is required for this command");
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var commentUpdate = new BoxCommentRequest();
+            base.CheckForValue(this._commentId.Value, this._app, "A comment ID is required for this command");
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var commentUpdate = new BoxCommentRequest();
 
-                if (this._message.HasValue())
-                {
-                    commentUpdate.Message = this._message.Value();
-                }
-                var updatedComment = await boxClient.CommentsManager.UpdateAsync(this._commentId.Value, commentUpdate);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(updatedComment);
-                    return;
-                }
-                Reporter.WriteSuccess("Updated comment.");
-                base.PrintComment(updatedComment);
-            }
-            catch (Exception e)
+            if (this._message.HasValue())
             {
-                Reporter.WriteError("Couldn't update comment.");
-                Reporter.WriteError(e.Message);
+                commentUpdate.Message = this._message.Value();
             }
+            var updatedComment = await boxClient.CommentsManager.UpdateAsync(this._commentId.Value, commentUpdate);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(updatedComment);
+                return;
+            }
+            Reporter.WriteSuccess("Updated comment.");
+            base.PrintComment(updatedComment);
         }
     }
 }

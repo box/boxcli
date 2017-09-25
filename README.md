@@ -85,8 +85,8 @@
 1. Download the version of the CLI for your OS.
 2. The Box CLI supports configuring multiple environments each with their own JSON configuration files. 
 3. To set your first environment, run the following command and provide the file path to your JSON configuration file:
-    * `box configure environments add ~/Downloads/954218_4lvitde1_config.json --name AMSXBGCLI`
-    * To set the private key PEM file path separately, use the following command: `box configure environments add ~/Downloads/954218_4lvitde1_config.json --name AMSXBGCLI --private-key-path ./private_key.pem`
+    * `box configure environments add ~/Downloads/config.json --name CLI`
+    * To set the private key PEM file path separately, use the following command: `box configure environments add ~/Downloads/config.json --name CLI --private-key-path ./private_key.pem`
 4. Check that the CLI is configured correctly and working with the following command:
     * `box users get me`
 
@@ -144,11 +144,19 @@ When you use `--save` with a command, the CLI defaults to JSON for the file form
     * Using this option sends back the API's JSON response directly to stdout. It's useful to pair this option to create files from stdout: `box folders list-items 0 --json > ~/Documents/folders-list-items-0.json`.
 * `--id-only`
     * Using this option is useful for chaining commands together based on stdout.
-    * For example:
+    * For example, with Bash:
     ```sh
     USER_ID="$(box users create otis --app-user --id-only)" && \
     FOLDER_ID="$(box folders create 0 first-folder --as-user $USER_ID --id-only)" && \
     box files upload ~/Documents/Welcome.pptx --as-user $USER_ID -p $FOLDER_ID
+    ```
+    * Or, with PowerShell:
+    ```
+    # Change this file path
+    $FILE_PATH = "C:\Users\AM\Documents\Welcome.pptx"
+    $USER_ID = box users create otis --app-user --id-only;
+    $FOLDER_ID = box folders create 0 first-folder --as-user $USER_ID --id-only;
+    box files upload $FILE_PATH --as-user $USER_ID -p $FOLDER_ID;
     ```
     * The previous command creates a new App User, creates a folder within that App User's root folder, and uploads a "Welcome.pptx" file to this new folder.
 * `--bulk-file-path`

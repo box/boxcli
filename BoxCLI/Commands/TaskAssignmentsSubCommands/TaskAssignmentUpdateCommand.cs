@@ -52,47 +52,39 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
 
         private async Task RunUpdate()
         {
-            try
+            base.CheckForValue(this._taskAssignmentId.Value, this._app, "A task assignment ID is required for this command");
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var taskAssignmentUpdate = new BoxTaskAssignmentUpdateRequest();
+            taskAssignmentUpdate.Id = this._taskAssignmentId.Value;
+            if (this._completed.HasValue())
             {
-                base.CheckForValue(this._taskAssignmentId.Value, this._app, "A task assignment ID is required for this command");
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var taskAssignmentUpdate = new BoxTaskAssignmentUpdateRequest();
-                taskAssignmentUpdate.Id = this._taskAssignmentId.Value;
-                if (this._completed.HasValue())
-                {
-                    taskAssignmentUpdate.ResolutionState = ResolutionStateType.completed;
-                }
-                else if (this._incomplete.HasValue())
-                {
-                    taskAssignmentUpdate.ResolutionState = ResolutionStateType.incomplete;
-                }
-                else if (this._approved.HasValue())
-                {
-                    taskAssignmentUpdate.ResolutionState = ResolutionStateType.approved;
-                }
-                else if (this._rejected.HasValue())
-                {
-                    taskAssignmentUpdate.ResolutionState = ResolutionStateType.rejected;
-                }
+                taskAssignmentUpdate.ResolutionState = ResolutionStateType.completed;
+            }
+            else if (this._incomplete.HasValue())
+            {
+                taskAssignmentUpdate.ResolutionState = ResolutionStateType.incomplete;
+            }
+            else if (this._approved.HasValue())
+            {
+                taskAssignmentUpdate.ResolutionState = ResolutionStateType.approved;
+            }
+            else if (this._rejected.HasValue())
+            {
+                taskAssignmentUpdate.ResolutionState = ResolutionStateType.rejected;
+            }
 
-                if (this._message.HasValue())
-                {
-                    taskAssignmentUpdate.Message = this._message.Value();
-                }
-                var taskAssignment = await boxClient.TasksManager.UpdateTaskAssignmentAsync(taskAssignmentUpdate);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(taskAssignment);
-                    return;
-                }
-                Reporter.WriteSuccess("Updated task assignment.");
-                base.PrintTaskAssignment(taskAssignment);
-            }
-            catch (Exception e)
+            if (this._message.HasValue())
             {
-                Reporter.WriteError("Couldn't update task assignment.");
-                Reporter.WriteError(e.Message);
+                taskAssignmentUpdate.Message = this._message.Value();
             }
+            var taskAssignment = await boxClient.TasksManager.UpdateTaskAssignmentAsync(taskAssignmentUpdate);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(taskAssignment);
+                return;
+            }
+            Reporter.WriteSuccess("Updated task assignment.");
+            base.PrintTaskAssignment(taskAssignment);
         }
     }
 }

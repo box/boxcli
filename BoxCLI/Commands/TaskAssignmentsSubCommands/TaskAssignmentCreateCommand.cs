@@ -47,42 +47,34 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
 
         private async Task RunCreate()
         {
-            try
+            base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
+            if (!this._assignToUserId.HasValue() && !this._assignToUserLogin.HasValue())
             {
-                base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
-                if (!this._assignToUserId.HasValue() && !this._assignToUserLogin.HasValue())
-                {
-                    this._app.ShowHelp();
-                    Reporter.WriteError("You must include a user ID or login for this command.");
-                    return;
-                }
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var taskAssignmentCreate = new BoxTaskAssignmentRequest();
-                taskAssignmentCreate.Task = new BoxTaskRequest();
-                taskAssignmentCreate.Task.Id = this._taskId.Value;
-                taskAssignmentCreate.AssignTo = new BoxAssignmentRequest();
-                if (this._assignToUserId.HasValue())
-                {
-                    taskAssignmentCreate.AssignTo.Id = this._assignToUserId.Value();
-                }
-                else if (this._assignToUserLogin.HasValue())
-                {
-                    taskAssignmentCreate.AssignTo.Login = this._assignToUserLogin.Value();
-                }
-                var taskAssignment = await boxClient.TasksManager.CreateTaskAssignmentAsync(taskAssignmentCreate);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(taskAssignment);
-                    return;
-                }
-                Reporter.WriteSuccess("Created task assignment.");
-                base.PrintTaskAssignment(taskAssignment);
+                this._app.ShowHelp();
+                Reporter.WriteError("You must include a user ID or login for this command.");
+                return;
             }
-            catch (Exception e)
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var taskAssignmentCreate = new BoxTaskAssignmentRequest();
+            taskAssignmentCreate.Task = new BoxTaskRequest();
+            taskAssignmentCreate.Task.Id = this._taskId.Value;
+            taskAssignmentCreate.AssignTo = new BoxAssignmentRequest();
+            if (this._assignToUserId.HasValue())
             {
-                Reporter.WriteError("Couldn't create task assignment.");
-                Reporter.WriteError(e.Message);
+                taskAssignmentCreate.AssignTo.Id = this._assignToUserId.Value();
             }
+            else if (this._assignToUserLogin.HasValue())
+            {
+                taskAssignmentCreate.AssignTo.Login = this._assignToUserLogin.Value();
+            }
+            var taskAssignment = await boxClient.TasksManager.CreateTaskAssignmentAsync(taskAssignmentCreate);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+            {
+                base.OutputJson(taskAssignment);
+                return;
+            }
+            Reporter.WriteSuccess("Created task assignment.");
+            base.PrintTaskAssignment(taskAssignment);
         }
     }
 }

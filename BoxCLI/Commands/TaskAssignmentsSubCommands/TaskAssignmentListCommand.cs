@@ -52,36 +52,29 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
-            try
+            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxCollectionsIterators = base.GetIterators();
+            var taskAssignments = await boxClient.TasksManager.GetAssignmentsAsync(this._taskId.Value);
+            if (_save.HasValue())
             {
-                var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-                var BoxCollectionsIterators = base.GetIterators();
-                var taskAssignments = await boxClient.TasksManager.GetAssignmentsAsync(this._taskId.Value);
-                if (_save.HasValue())
-                {
-                    var fileName = $"{base._names.CommandNames.TaskAssignment}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                    var saved = base.WriteListResultsToReport<BoxTaskAssignment, BoxTaskAssignmentMap>(taskAssignments.Entries, fileName, _path.Value(), _fileFormat.Value());
-                    Reporter.WriteSuccess($"File saved: {saved}");
-                }
-                else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(taskAssignments);
-                    return;
-                }
-                else
-                {
-                    var showNext = "";
-                    while (taskAssignments.Entries.Count > 0 && showNext != "q")
-                    {
-                        showNext = BoxCollectionsIterators.PageInConsole<BoxTaskAssignment>(base.PrintTaskAssignment, taskAssignments);
-                    }
-                }
-                Reporter.WriteInformation("Finished...");
+                var fileName = $"{base._names.CommandNames.TaskAssignment}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                var saved = base.WriteListResultsToReport<BoxTaskAssignment, BoxTaskAssignmentMap>(taskAssignments.Entries, fileName, _path.Value(), _fileFormat.Value());
+                Reporter.WriteSuccess($"File saved: {saved}");
             }
-            catch (Exception e)
+            else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                Reporter.WriteError(e.Message);
+                base.OutputJson(taskAssignments);
+                return;
             }
+            else
+            {
+                var showNext = "";
+                while (taskAssignments.Entries.Count > 0 && showNext != "q")
+                {
+                    showNext = BoxCollectionsIterators.PageInConsole<BoxTaskAssignment>(base.PrintTaskAssignment, taskAssignments);
+                }
+            }
+            Reporter.WriteInformation("Finished...");
         }
     }
 }
