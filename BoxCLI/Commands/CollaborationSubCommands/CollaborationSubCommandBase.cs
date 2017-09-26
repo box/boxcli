@@ -70,7 +70,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         protected virtual string ProcessRoleOptions(Dictionary<string, bool> possibleRoles)
         {
             var result = possibleRoles.First(x => x.Value == true);
-            return result.Key;
+            return result.Key.ToLower();
         }
     }
 }

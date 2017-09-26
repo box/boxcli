@@ -92,11 +92,20 @@ namespace BoxCLI.Commands.UserSubCommands
                     throw new Exception("A login is required for this command.");
                 }
             }
-            var userRequest = base.CreateUserRequest(this._name.Value, "", this._role.Value(), false,
+            string role;
+            if (this._role.HasValue())
+            {
+                role = this._role.Value();
+            }
+            else
+            {
+                role = "user";
+            }
+            var userRequest = base.CreateUserRequest(this._name.Value, "", role, false,
             this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(),
             this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(),
             this._notExemptFromDeviceLimits.HasValue(), this._isExemptFromLoginVerificaton.HasValue(), this._notExemptFromLoginVerification.HasValue(),
-            this._isPasswordResetRequired.HasValue());
+            this._isPasswordResetRequired.HasValue(), login: this._login.Value);
             if (this._appUser.HasValue())
             {
                 userRequest.IsPlatformAccessOnly = true;

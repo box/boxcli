@@ -23,6 +23,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _previewerUploader;
         private CommandOption _viewerUploader;
         private CommandOption _coowner;
+        private CommandOption _owner;
         private CommandOption _userId;
         private CommandOption _groupId;
         private CommandOption _login;
@@ -49,6 +50,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             _previewerUploader = command.Option("--previewer-uploader", "Set the role to previewer uploader.", CommandOptionType.NoValue);
             _viewerUploader = command.Option("--viewer-uploader", "Set the role to viewer uploader.", CommandOptionType.NoValue);
             _coowner = command.Option("--co-owner", "Set the role to co-owner.", CommandOptionType.NoValue);
+            _owner = command.Option("--owner", "Set the role to owner.", CommandOptionType.NoValue);
             _role = command.Option("-r|--role", "An option to manually enter the role", CommandOptionType.SingleValue);
             _userId = command.Option("--user-id", "Id for user to collaborate", CommandOptionType.SingleValue);
             _groupId = command.Option("--group-id", "Id for group to collaborate", CommandOptionType.SingleValue);
@@ -107,10 +109,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                     {"previewer uploader", this._previewerUploader.HasValue()},
                     {"viewer uploader", this._viewerUploader.HasValue()},
                     {"co-owner", this._coowner.HasValue()},
+                    {"owner", this._owner.HasValue()},
                 };
                 role = base.ProcessRoleOptions(roles);
             }
-
             var collabRequest = new BoxCollaborationRequest();
             if (this._canViewPath.HasValue())
             {

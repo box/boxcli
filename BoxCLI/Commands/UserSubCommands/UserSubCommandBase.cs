@@ -116,7 +116,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 foreach (var userRequest in userRequests)
                 {
                     var createdUser = await boxClient.UsersManager.CreateEnterpriseUserAsync(userRequest);
-                    if(json)
+                    if (json)
                     {
                         base.OutputJson(createdUser);
                         continue;
@@ -134,7 +134,7 @@ namespace BoxCLI.Commands.UserSubCommands
         protected BoxUserRequest CreateUserRequest(string name = "", string userId = "", string role = "", bool removeFromEnterprise = false,
             string language = "", string jobTitle = "", string phoneNumber = "", string address = "", string spaceAmount = "", string status = "",
             bool syncDisable = false, bool syncEnable = false, bool isExemptFromDeviceLimits = false, bool notExemptFromDeviceLimits = false,
-            bool isExemptFromLoginVerificaton = false, bool notExemptFromLoginVerification = false, bool isPasswordResetRequired = false)
+            bool isExemptFromLoginVerificaton = false, bool notExemptFromLoginVerification = false, bool isPasswordResetRequired = false, string login = "")
         {
             if (syncDisable && syncEnable)
             {
@@ -150,6 +150,7 @@ namespace BoxCLI.Commands.UserSubCommands
             }
 
             BoxUserRequest userRequest = new BoxUserRequest();
+            if (!string.IsNullOrEmpty(login)) { userRequest.Login = login; }
             if (!string.IsNullOrEmpty(userId)) { userRequest.Id = userId; }
             if (removeFromEnterprise) { userRequest.Enterprise = "null"; }
             if (!string.IsNullOrEmpty(name)) { userRequest.Name = name; }
