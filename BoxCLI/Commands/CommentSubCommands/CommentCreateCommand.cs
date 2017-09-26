@@ -52,12 +52,9 @@ namespace BoxCLI.Commands.CommentSubCommands
         private async Task RunCreate()
         {
             base.CheckForValue(this._itemId.Value, this._app, "An item ID is required for this command");
+            base.CheckForValue(this._itemType.Value, this._app, "An item type is required for this command");
             var type = this._itemType.Value.ToLower();
-            if (!string.IsNullOrEmpty(this._itemType.Value))
-            {
-                type = "file";
-            }
-            if (type != "file" || type != "comment")
+            if (type != "file" && type != "comment")
             {
                 throw new Exception("The type must be either file or comment for this command.");
             }
