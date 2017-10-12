@@ -35,8 +35,6 @@ namespace BoxCLI.CommandUtilities.CsvModels
 
         public object ConvertFromString(TypeConverterOptions options, string text)
         {
-            System.Console.WriteLine("Text from file...");
-            System.Console.WriteLine(text);
             return JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
         }
 

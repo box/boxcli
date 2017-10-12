@@ -54,7 +54,12 @@ namespace BoxCLI.Commands.FileSubCommand
         {
             if (this._bulkPath.HasValue())
             {
-                await base.ProcessFileUploadsFromFile(this._bulkPath.Value(), this._asUser.Value());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.ProcessFileUploadsFromFile(this._bulkPath.Value(), this._asUser.Value(), json: json);
                 return;
             }
             base.CheckForFilePath(this._path.Value, this._app);

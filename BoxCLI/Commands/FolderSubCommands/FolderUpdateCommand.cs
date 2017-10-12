@@ -85,8 +85,13 @@ namespace BoxCLI.Commands.FolderSubCommands
         {
             if (this._bulkFilePath.HasValue())
             {
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
                 await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), base._asUser.Value(), this._save.HasValue(),
-                                                 this._filePath.Value(), this._fileFormat.Value());
+                                                 this._filePath.Value(), this._fileFormat.Value(), json: json);
                 return;
             }
             base.CheckForId(this._folderId.Value, this._app);

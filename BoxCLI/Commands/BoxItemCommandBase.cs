@@ -74,7 +74,18 @@ namespace BoxCLI.Commands
             return fileRequest;
         }
 
-
+        protected void PrintFile(BoxFile file, bool json = false)
+        {
+            if (json)
+            {
+                base.OutputJson(file);
+                return;
+            }
+            else
+            {
+                this.PrintFile(file);
+            }
+        }
 
         protected void PrintFile(BoxFile file)
         {
@@ -82,6 +93,19 @@ namespace BoxCLI.Commands
             Reporter.WriteInformation($"File Name: {file.Name}");
             Reporter.WriteInformation($"File Size: {file.Size}");
         }
+        protected void PrintFolder(BoxFolder folder, bool json)
+        {
+            if (json)
+            {
+                base.OutputJson(folder);
+                return;
+            }
+            else
+            {
+                this.PrintFolder(folder);
+            }
+        }
+
         protected void PrintFolder(BoxFolder folder)
         {
             Reporter.WriteInformation($"Folder ID: {folder.Id}");
@@ -124,7 +148,6 @@ namespace BoxCLI.Commands
         protected List<T> ReadCustomFile<T, M>(string path)
         {
             var fileFormat = base.ProcessFileFormatFromPath(path);
-            System.Console.WriteLine($"File is {fileFormat}");
             if (fileFormat == base._settings.FILE_FORMAT_JSON)
             {
                 using (var fs = File.OpenText(path))
@@ -135,11 +158,9 @@ namespace BoxCLI.Commands
             }
             else if (fileFormat == base._settings.FILE_FORMAT_CSV)
             {
-                System.Console.WriteLine("Found csv file...");
                 using (var fs = File.OpenText(path))
                 using (var csv = new CsvReader(fs))
                 {
-                    System.Console.WriteLine("Processing csv...");
                     csv.Configuration.RegisterClassMap(typeof(M));
                     return csv.GetRecords<T>().ToList();
                 }
@@ -237,7 +258,7 @@ namespace BoxCLI.Commands
             }
         }
 
-        protected async Task ProcessFileUploadsFromFile(string path, string asUser = "", bool isNewVersion = false)
+        protected async Task ProcessFileUploadsFromFile(string path, string asUser = "", bool isNewVersion = false, bool json = false)
         {
             try
             {
@@ -250,7 +271,7 @@ namespace BoxCLI.Commands
                         try
                         {
                             var uploadedFile = await this.UploadFile(path: fileRequest.Path, parentId: fileRequest.Parent.Id, fileName: fileRequest.Name);
-                            this.PrintFile(uploadedFile);
+                            this.PrintFile(uploadedFile, json);
                         }
                         catch (Exception e)
                         {
@@ -265,7 +286,7 @@ namespace BoxCLI.Commands
                         try
                         {
                             var uploadedFile = await this.UploadFile(path: fileRequest.Path, fileId: fileRequest.Id, fileName: fileRequest.Name, isNewVersion: true);
-                            this.PrintFile(uploadedFile);
+                            this.PrintFile(uploadedFile, json);
                         }
                         catch (Exception e)
                         {

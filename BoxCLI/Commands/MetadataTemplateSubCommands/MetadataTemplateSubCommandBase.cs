@@ -160,14 +160,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             using (var fs = File.OpenText(filePathTemplate))
             using (var csv = new CsvReader(fs))
             {
-                System.Console.WriteLine("Processing csv...");
                 csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateMap));
                 templates = csv.GetRecords<BoxMetadataTemplate>().ToList();
             }
             using (var fs = File.OpenText(filePathFields))
             using (var csv = new CsvReader(fs))
             {
-                System.Console.WriteLine("Processing csv...");
                 csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateFieldMap));
                 fields = csv.GetRecords<BoxMetadataTemplateFieldForCsv>().ToList();
             }
@@ -205,7 +203,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         }
 
         protected async virtual Task CreateMetadataTemplatesFromFile(string filePath, string filePathFields = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             if (!string.IsNullOrEmpty(filePath))
@@ -237,7 +235,6 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
 
                 foreach (var templateRequest in templateRequests)
                 {
-                    Reporter.WriteInformation($"Processing a metadata template request: {templateRequest.DisplayName}");
                     BoxMetadataTemplate createdTemplate = null;
                     try
                     {
@@ -248,17 +245,15 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                         Reporter.WriteError("Couldn't create metadata template...");
                         Reporter.WriteError(e.Message);
                     }
-                    Reporter.WriteSuccess("Created a metadata template:");
                     if (createdTemplate != null)
                     {
-                        this.PrintMetadataTemplate(createdTemplate);
+                        this.PrintMetadataTemplate(createdTemplate, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveCreated.Add(createdTemplate);
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing metadata templates...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var saveFileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -283,6 +278,18 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             }
         }
 
+        protected virtual void PrintMetadataTemplate(BoxMetadataTemplate mdt, bool json)
+        {
+            if (json)
+            {
+                base.OutputJson(mdt);
+                return;
+            }
+            else
+            {
+                this.PrintMetadataTemplate(mdt);
+            }
+        }
         protected virtual void PrintMetadataTemplate(BoxMetadataTemplate mdt)
         {
             Reporter.WriteInformation($"Template Name: {mdt.DisplayName}");

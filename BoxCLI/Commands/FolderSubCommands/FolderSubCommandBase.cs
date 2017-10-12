@@ -96,7 +96,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         }
 
         protected async virtual Task CreateFoldersFromFile(string path, string asUser = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
@@ -110,7 +110,6 @@ namespace BoxCLI.Commands.FolderSubCommands
 
                 foreach (var folderRequest in folderRequests)
                 {
-                    Reporter.WriteInformation($"Processing a folder request: {folderRequest.Name}");
                     BoxFolder createdFolder = null;
                     try
                     {
@@ -121,17 +120,15 @@ namespace BoxCLI.Commands.FolderSubCommands
                         Reporter.WriteError("Couldn't create folder...");
                         Reporter.WriteError(e.Message);
                     }
-                    Reporter.WriteSuccess("Created a folder:");
                     if (createdFolder != null)
                     {
-                        this.PrintFolder(createdFolder);
+                        this.PrintFolder(createdFolder, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveCreated.Add(createdFolder);
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing updates...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -150,13 +147,12 @@ namespace BoxCLI.Commands.FolderSubCommands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
                 Reporter.WriteError(e.Message);
             }
         }
 
         protected async virtual Task UpdateFoldersFromFile(string path, string asUser = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
@@ -170,7 +166,6 @@ namespace BoxCLI.Commands.FolderSubCommands
 
                 foreach (var folderRequest in folderRequests)
                 {
-                    Reporter.WriteInformation($"Processing a folder request: {folderRequest.Name}");
                     BoxFolder updatedFolder = null;
                     try
                     {
@@ -181,17 +176,15 @@ namespace BoxCLI.Commands.FolderSubCommands
                         Reporter.WriteError("Couldn't update folder...");
                         Reporter.WriteError(e.Message);
                     }
-                    Reporter.WriteSuccess("Updated a folder:");
                     if (updatedFolder != null)
                     {
-                        this.PrintFolder(updatedFolder);
+                        this.PrintFolder(updatedFolder, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveUpdated.Add(updatedFolder);
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing updates...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -210,7 +203,6 @@ namespace BoxCLI.Commands.FolderSubCommands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
                 Reporter.WriteError(e.Message);
             }
         }

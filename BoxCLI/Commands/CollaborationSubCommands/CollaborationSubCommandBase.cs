@@ -29,7 +29,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             base.Configure(command);
         }
 
-        protected async Task ProcessCollaborationsFromFile(string id, string path, BoxType t, string asUser = "")
+        protected async Task ProcessCollaborationsFromFile(string id, string path, BoxType t, string asUser = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                         collaborationRequest.Item.Type = this._t;
                     }
                     var createdCollaboration = await boxClient.CollaborationsManager.AddCollaborationAsync(collaborationRequest);
-                    this.PrintCollaboration(createdCollaboration);
+                    this.PrintCollaboration(createdCollaboration, json);
                 }
             }
             catch (Exception e)

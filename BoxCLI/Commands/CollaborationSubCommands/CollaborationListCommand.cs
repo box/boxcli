@@ -58,12 +58,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 BoxCollection<BoxCollaboration> saveCollabs;
                 if (base._t == BoxType.file)
                 {
-                    System.Console.WriteLine($"Looking for Collaborations on this file {this._id.Value}...");
                     saveCollabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
                 }
                 else if (base._t == BoxType.folder)
                 {
-                    System.Console.WriteLine($"Looking for Collaborations on this folder {this._id.Value}...");
                     saveCollabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
                 }
                 else
@@ -78,12 +76,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             BoxCollection<BoxCollaboration> collabs;
             if (base._t == BoxType.file)
             {
-                System.Console.WriteLine($"Looking for Collaborations on this file {this._id.Value}...");
                 collabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
             }
             else if (base._t == BoxType.folder)
             {
-                System.Console.WriteLine($"Looking for Collaborations on this folder {this._id.Value}...");
                 collabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
             }
             else

@@ -57,7 +57,12 @@ namespace BoxCLI.Commands.MetadataSubCommands
         {
             if (this._bulkFilePath.HasValue())
             {
-                await base.AddMetadataToItemFromFile(this._bulkFilePath.Value());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.AddMetadataToItemFromFile(this._bulkFilePath.Value(), json: json);
                 return;
             }
             base.CheckForId(this._id.Value, this._app);

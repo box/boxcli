@@ -54,7 +54,12 @@ namespace BoxCLI.Commands.WebhooksSubComands
         {
             if (!string.IsNullOrEmpty(_path.Value()))
             {
-                await base.UpdateWebhooksFromFile(_path.Value(), _asUser.Value(), this._save.HasValue());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.UpdateWebhooksFromFile(_path.Value(), _asUser.Value(), this._save.HasValue(), json: json);
                 return;
             }
             base.CheckForValue(this._id.Value, this._app, "A webhook ID is required for this call.");

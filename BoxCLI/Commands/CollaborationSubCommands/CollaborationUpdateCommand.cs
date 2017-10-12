@@ -69,7 +69,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         {
             if (!string.IsNullOrEmpty(_path.Value()))
             {
-                await base.ProcessCollaborationsFromFile(_id.Value, _path.Value(), base._t, _asUser.Value());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.ProcessCollaborationsFromFile(_id.Value, _path.Value(), base._t, _asUser.Value(), json: json);
             }
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());

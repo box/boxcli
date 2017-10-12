@@ -13,21 +13,21 @@ namespace BoxCLI.BoxPlatform.Utilities
         {
             print(collection.Entries[0]);
             collection.Entries.RemoveAt(0);
-            System.Console.Write("Show next? Enter q to quit. ");
+            Reporter.WriteInformation("Show next? Enter q to quit. ");
             return System.Console.ReadLine().Trim().ToLower();
         }
         public string PageInConsole<T>(Action<T> print, BoxCollectionMarkerBased<T> collection) where T : class, new()
         {
             print(collection.Entries[0]);
             collection.Entries.RemoveAt(0);
-            System.Console.Write("Show next? Enter q to quit. ");
+            Reporter.WriteInformation("Show next? Enter q to quit. ");
             return System.Console.ReadLine().Trim().ToLower();
         }
 		public string PageInConsole(Action<BoxEnterpriseEvent> print, BoxEventCollection<BoxEnterpriseEvent> collection)
 		{
 			print(collection.Entries[0]);
 			collection.Entries.RemoveAt(0);
-			System.Console.Write("Show next? Enter q to quit. ");
+			Reporter.WriteInformation("Show next? Enter q to quit. ");
 			return System.Console.ReadLine().Trim().ToLower();
 		}
 

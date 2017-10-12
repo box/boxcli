@@ -277,7 +277,6 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             else
             {
-                System.Console.WriteLine("Found existing box reports folder...");
                 return path;
             }
         }

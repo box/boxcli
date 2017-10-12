@@ -55,8 +55,12 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         {
             if (this._bulkPath.HasValue())
             {
-                Reporter.WriteInformation("Using bulk for new file versions...");
-                await base.ProcessFileUploadsFromFile(this._bulkPath.Value(), this._asUser.Value(), true);
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.ProcessFileUploadsFromFile(this._bulkPath.Value(), this._asUser.Value(), true, json: json);
                 return;
             }
             base.CheckForFileId(this._fileId.Value, this._app);

@@ -81,7 +81,12 @@ namespace BoxCLI.Commands.UserSubCommands
             var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
             if (this._path.HasValue())
             {
-                await base.CreateUsersFromFile(this._path.Value(), json: this._json.HasValue());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.CreateUsersFromFile(this._path.Value(), json: json);
                 return;
             }
             base.CheckForValue(this._name.Value, this._app, "A name is required for this command.");

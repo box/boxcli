@@ -57,7 +57,13 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
         {
             if (!string.IsNullOrEmpty(_path.Value()))
             {
-                await base.ProcessSharedLinksFromFile(_id.Value, _path.Value(), base._t, _asUser.Value());
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.ProcessSharedLinksFromFile(_id.Value, _path.Value(), base._t, _asUser.Value(), json: json);
+                return;
             }
             base.CheckForId(this._id.Value, this._app);
             var boxClient = base.ConfigureBoxClient(base._asUser.Value());

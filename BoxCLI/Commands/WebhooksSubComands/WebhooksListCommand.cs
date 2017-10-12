@@ -54,11 +54,8 @@ namespace BoxCLI.Commands.WebhooksSubComands
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Webhooks}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
-                System.Console.WriteLine("Saving file...");
-                System.Console.WriteLine(_fileFormat.Value());
                 var webhooks = await boxClient.WebhooksManager.GetWebhooksAsync(autoPaginate: true);
                 var saved = base.WriteMarkerCollectionResultsToReport<BoxWebhook, BoxWebhookMap>(webhooks, fileName, _path.Value(), _fileFormat.Value());
-                System.Console.WriteLine($"File saved: {saved}");
             }
             else if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

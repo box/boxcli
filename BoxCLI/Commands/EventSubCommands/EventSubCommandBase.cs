@@ -55,7 +55,6 @@ namespace BoxCLI.Commands.EventSubCommands
             var nextStream = events.NextStreamPosition;
             while (true)
             {
-                System.Console.WriteLine($"Trying stream postion: {nextStream}");
                 nextStream = await PollForMoreEnterpriseEvents(nextStream);
             }
         }

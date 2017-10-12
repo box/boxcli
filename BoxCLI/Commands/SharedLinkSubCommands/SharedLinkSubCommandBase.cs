@@ -27,33 +27,29 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             base.Configure(command);
         }
 
-        protected async Task ProcessSharedLinksFromFile(string id, string path, BoxType t, string asUser = "")
+        protected async Task ProcessSharedLinksFromFile(string id, string path, BoxType t, string asUser = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);
             }
-            System.Console.WriteLine($"Path: {path}");
             try
             {
-                System.Console.WriteLine("Reading file...");
                 var sharedLinkRequests = base.ReadFile<BoxSharedLinkRequest, BoxSharedLinkRequestMap>(path);
                 foreach (var sharedLinkRequest in sharedLinkRequests)
                 {
-                    System.Console.WriteLine($"Processing a shared link request: {sharedLinkRequest.Access}");
                     if (t == BoxType.file)
                     {
                         var createdSharedLink = await boxClient.FilesManager.CreateSharedLinkAsync(id, sharedLinkRequest);
-                        this.PrintSharedLink(createdSharedLink.SharedLink);
+                        this.PrintSharedLink(createdSharedLink.SharedLink, json);
                     }
                     else if (t == BoxType.folder)
                     {
                         var createdSharedLink = await boxClient.FoldersManager.CreateSharedLinkAsync(id, sharedLinkRequest);
-                        this.PrintSharedLink(createdSharedLink.SharedLink);
+                        this.PrintSharedLink(createdSharedLink.SharedLink, json);
                     }
                 }
-                System.Console.WriteLine("Created all shared links...");
             }
             catch (Exception e)
             {
@@ -61,6 +57,18 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             }
         }
 
+        protected virtual void PrintSharedLink(BoxSharedLink link, bool json)
+        {
+            if (json)
+            {
+                base.OutputJson(link);
+                return;
+            }
+            else
+            {
+                this.PrintSharedLink(link);
+            }
+        }
         protected virtual void PrintSharedLink(BoxSharedLink link)
         {
             if (link == null)

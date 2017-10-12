@@ -64,7 +64,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                 {
                     throw new Exception("CSV bulk upload requires 2 files");
                 }
-                await base.CreateMetadataTemplatesFromFile(this._bulkFilePaths.Values[0], this._bulkFilePaths.Values[1]);
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.CreateMetadataTemplatesFromFile(this._bulkFilePaths.Values[0], this._bulkFilePaths.Values[1], json: json);
                 return;
             }
             if (this._bulkFilePath.HasValue())

@@ -60,6 +60,19 @@ namespace BoxCLI.Commands
             }
         }
 
+        protected virtual void PrintCollaboration(BoxCollaboration c, bool json = false)
+        {
+            if (json)
+            {
+                this.OutputJson(c);
+                return;
+            }
+            else 
+            {
+                this.PrintCollaboration(c);
+            }
+        }
+
         protected virtual void PrintCollaboration(BoxCollaboration c)
         {
             Reporter.WriteInformation($"Collaboration ID: {c.Id}");
@@ -343,14 +356,12 @@ namespace BoxCLI.Commands
         }
         protected virtual bool WriteEventListResultsToReport(List<BoxEnterpriseEvent> entity, string fileName, string filePath = "", string fileFormat = "")
         {
-            System.Console.WriteLine("Starting writer...");
             fileFormat = this.ProcessReportsFileFormat(fileFormat);
             filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
                 {
-                    System.Console.WriteLine("Writing JSON file...");
                     var converter = new BoxJsonConverter();
                     File.WriteAllText(filePath, converter.Serialize<List<BoxEnterpriseEvent>>(entity));
                     return true;
@@ -388,14 +399,12 @@ namespace BoxCLI.Commands
         protected virtual bool WriteListResultsToReport<T, M>(List<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
-            System.Console.WriteLine("Starting writer...");
             fileFormat = this.ProcessReportsFileFormat(fileFormat);
             filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
                 {
-                    System.Console.WriteLine("Writing JSON file...");
                     var converter = new BoxJsonConverter();
                     var collection = new BoxCollection<T>();
                     collection.Entries = new List<T>();
@@ -436,14 +445,12 @@ namespace BoxCLI.Commands
         protected virtual bool WriteOffsetCollectionResultsToReport<T, M>(BoxCollection<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
-            System.Console.WriteLine("Starting writer...");
             fileFormat = this.ProcessReportsFileFormat(fileFormat);
             filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
                 {
-                    System.Console.WriteLine("Writing JSON file...");
                     var converter = new BoxJsonConverter();
                     File.WriteAllText(filePath, converter.Serialize<BoxCollection<T>>(entity));
                     return true;
@@ -480,14 +487,12 @@ namespace BoxCLI.Commands
         protected virtual bool WriteMarkerCollectionResultsToReport<T, M>(BoxCollectionMarkerBased<T> entity, string fileName, string filePath = "", string fileFormat = "")
             where T : BoxEntity, new()
         {
-            System.Console.WriteLine("Starting writer...");
             fileFormat = this.ProcessReportsFileFormat(fileFormat);
             filePath = this.ProcessReportsFilePathForWriters(filePath, fileName, fileFormat);
             if (fileFormat == _settings.FILE_FORMAT_JSON)
             {
                 try
                 {
-                    System.Console.WriteLine("Writing JSON file...");
                     var converter = new BoxJsonConverter();
                     File.WriteAllText(filePath, converter.Serialize<BoxCollectionMarkerBased<T>>(entity));
                     return true;
@@ -599,11 +604,9 @@ namespace BoxCLI.Commands
             }
             else if (fileFormat == _settings.FILE_FORMAT_CSV)
             {
-                System.Console.WriteLine("Found csv file...");
                 using (var fs = File.OpenText(path))
                 using (var csv = new CsvReader(fs))
                 {
-                    System.Console.WriteLine("Processing csv...");
                     csv.Configuration.RegisterClassMap(typeof(M));
                     return csv.GetRecords<T>().ToList();
                 }
@@ -658,9 +661,7 @@ namespace BoxCLI.Commands
         {
             if (string.IsNullOrEmpty(fileFormat))
             {
-                System.Console.WriteLine("Finding default file format...");
                 fileFormat = _settings.GetBoxReportsFileFormatSetting();
-                System.Console.WriteLine($"Default file format: {fileFormat}");
             }
             return fileFormat.ToLower();
         }

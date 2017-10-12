@@ -28,23 +28,20 @@ namespace BoxCLI.Commands.WebhooksSubComands
         }
 
         protected async Task CreateWebhooksFromFile(string path, string asUser = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);
             }
-            System.Console.WriteLine($"Path: {path}");
             try
             {
-                System.Console.WriteLine("Reading file...");
                 var webhookRequests = base.ReadFile<BoxWebhookRequest, BoxWebhookRequestMap>(path);
                 List<BoxWebhook> saveCreated = new List<BoxWebhook>();
 
                 foreach (var webhookRequest in webhookRequests)
                 {
-                    Reporter.WriteInformation($"Processing a webhook request: {webhookRequest.Address}");
                     BoxWebhook createdWebhook = null;
                     try
                     {
@@ -55,10 +52,9 @@ namespace BoxCLI.Commands.WebhooksSubComands
                         Reporter.WriteError("Couldn't create webhook...");
                         Reporter.WriteError(e.Message);
                     }
-                    Reporter.WriteSuccess("Created a webhook:");
                     if (createdWebhook != null)
                     {
-                        this.PrintWebhook(createdWebhook);
+                        this.PrintWebhook(createdWebhook, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveCreated.Add(createdWebhook);
@@ -84,29 +80,25 @@ namespace BoxCLI.Commands.WebhooksSubComands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
                 Reporter.WriteError(e.Message);
             }
         }
 
 		protected async Task UpdateWebhooksFromFile(string path, string asUser = "",
-			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
 		{
 			var boxClient = base.ConfigureBoxClient(asUser);
 			if (!string.IsNullOrEmpty(path))
 			{
 				path = GeneralUtilities.TranslatePath(path);
 			}
-			System.Console.WriteLine($"Path: {path}");
 			try
 			{
-				System.Console.WriteLine("Reading file...");
 				var webhookRequests = base.ReadFile<BoxWebhookRequest, BoxWebhookRequestMap>(path);
 				List<BoxWebhook> saveUpdated = new List<BoxWebhook>();
 
 				foreach (var webhookRequest in webhookRequests)
 				{
-					Reporter.WriteInformation($"Processing a webhook request: {webhookRequest.Address}");
                     BoxWebhook updatedWebhook = null;
 					try
 					{
@@ -117,17 +109,15 @@ namespace BoxCLI.Commands.WebhooksSubComands
 						Reporter.WriteError("Couldn't update webhook...");
 						Reporter.WriteError(e.Message);
 					}
-					Reporter.WriteSuccess("Updated a webhook:");
 					if (updatedWebhook != null)
 					{
-						this.PrintWebhook(updatedWebhook);
+						this.PrintWebhook(updatedWebhook, json);
 						if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
 						{
 							saveUpdated.Add(updatedWebhook);
 						}
 					}
 				}
-				Reporter.WriteInformation("Finished processing webhooks...");
 				if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
 				{
 					var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -146,10 +136,22 @@ namespace BoxCLI.Commands.WebhooksSubComands
 			}
 			catch (Exception e)
 			{
-				System.Console.WriteLine(e.Message);
 				Reporter.WriteError(e.Message);
 			}
 		}
+
+        protected void PrintWebhook(BoxWebhook wh, bool json = false)
+        {
+            if (json)
+            {
+                base.OutputJson(wh);
+                return;
+            }
+            else 
+            {
+                this.PrintWebhook(wh);
+            }
+        }
 
         protected void PrintWebhook(BoxWebhook wh)
         {

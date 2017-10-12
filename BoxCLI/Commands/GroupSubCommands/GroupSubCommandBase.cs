@@ -50,6 +50,18 @@ namespace BoxCLI.Commands.GroupSubCommands
             }
             return m;
         }
+        protected virtual void PrintGroup(BoxGroup g, bool json)
+        {
+            if (json)
+            {
+                base.OutputJson(g);
+                return;
+            }
+            else
+            {
+                this.PrintGroup(g);
+            }
+        }
         protected virtual void PrintGroup(BoxGroup g)
         {
             Reporter.WriteInformation($"ID: {g.Id}");
@@ -57,7 +69,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         }
 
         protected async Task CreateGroupsFromFile(string path, string asUser = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
@@ -66,13 +78,11 @@ namespace BoxCLI.Commands.GroupSubCommands
             }
             try
             {
-                Reporter.WriteInformation("Reading file...");
                 var groupRequests = base.ReadFile<BoxGroupRequest, BoxGroupRequestMap>(path);
                 List<BoxGroup> saveCreated = new List<BoxGroup>();
 
                 foreach (var groupRequest in groupRequests)
                 {
-                    Reporter.WriteInformation($"Processing a group request: {groupRequest.Name}");
                     BoxGroup createdGroup = null;
                     try
                     {
@@ -85,15 +95,13 @@ namespace BoxCLI.Commands.GroupSubCommands
                     }
                     if (createdGroup != null)
                     {
-                        Reporter.WriteSuccess("Created a group:");
-                        this.PrintGroup(createdGroup);
+                        this.PrintGroup(createdGroup, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveCreated.Add(createdGroup);
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing groups...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var fileFormat = base._settings.GetBoxReportsFileFormatSetting();

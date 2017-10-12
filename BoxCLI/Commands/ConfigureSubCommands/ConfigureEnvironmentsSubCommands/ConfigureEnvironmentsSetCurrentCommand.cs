@@ -47,10 +47,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         protected virtual void GetCurrent()
         {
             var defaultEnv = _environments.GetDefaultEnvironment();
-            System.Console.WriteLine("Current default environment:");
-            System.Console.WriteLine($"Name: {defaultEnv.Name}");
-            System.Console.WriteLine($"Client ID: {defaultEnv.ClientId}");
-            System.Console.WriteLine($"Enterprise ID: {defaultEnv.EnterpriseId}");
+            Reporter.WriteInformation("Current default environment:");
+            Reporter.WriteInformation($"Name: {defaultEnv.Name}");
+            Reporter.WriteInformation($"Client ID: {defaultEnv.ClientId}");
+            Reporter.WriteInformation($"Enterprise ID: {defaultEnv.EnterpriseId}");
         }
     }
 }

@@ -101,6 +101,18 @@ namespace BoxCLI.Commands.MetadataSubCommands
                 this.PrintMetadata(md);
             }
         }
+        protected virtual void PrintMetadata(Dictionary<string, object> md, bool json)
+        {
+            if (json)
+            {
+                base.OutputJson(md);
+                return;
+            }
+            else
+            {
+                this.PrintMetadata(md);
+            }
+        }
         protected virtual void PrintMetadata(Dictionary<string, object> md)
         {
             foreach (var key in md.Keys)
@@ -115,8 +127,6 @@ namespace BoxCLI.Commands.MetadataSubCommands
             using (var fs = File.OpenText(filePath))
             using (var csv = new CsvReader(fs))
             {
-                System.Console.WriteLine("Processing csv...");
-
                 csv.Configuration.RegisterClassMap(typeof(BoxMetadataRequestMap));
                 allMetadataOnItem = csv.GetRecords<BoxMetadataForCsv>().ToList();
             }
@@ -125,7 +135,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         }
 
         protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", string type = "",
-            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "")
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
             var boxClient = base.ConfigureBoxClient(asUser);
             if (!string.IsNullOrEmpty(path))
@@ -134,13 +144,11 @@ namespace BoxCLI.Commands.MetadataSubCommands
             }
             try
             {
-                Reporter.WriteInformation("Reading file...");
                 var metadataRequests = this.ReadMetadataCsvFile(path);
                 var saveCreated = new List<BoxMetadataForCsv>();
 
                 foreach (var metadataRequest in metadataRequests)
                 {
-                    Reporter.WriteInformation($"Processing a metadata request: {metadataRequest.TemplateKey}");
                     Dictionary<string, object> createdMetadata = null;
                     if (metadataRequest.ItemType != null)
                     {
@@ -152,11 +160,6 @@ namespace BoxCLI.Commands.MetadataSubCommands
                     }
                     try
                     {
-                        Reporter.WriteInformation("Attempting create metadata...");
-                        foreach (var kv in metadataRequest.Metadata)
-                        {
-                            Reporter.WriteInformation($"Key: {kv.Key} Value: {kv.Value}");
-                        }
                         if (type == "file")
                         {
                             createdMetadata = await boxClient.MetadataManager.CreateFileMetadataAsync(metadataRequest.ItemId, metadataRequest.Metadata, metadataRequest.Scope, metadataRequest.TemplateKey);
@@ -175,10 +178,9 @@ namespace BoxCLI.Commands.MetadataSubCommands
                         Reporter.WriteError("Couldn't add metadata...");
                         Reporter.WriteError(e.Message);
                     }
-                    Reporter.WriteSuccess("Added metadata:");
                     if (createdMetadata != null)
                     {
-                        this.PrintMetadata(createdMetadata);
+                        this.PrintMetadata(createdMetadata, json);
                         if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                         {
                             saveCreated.Add(new BoxMetadataForCsv()
@@ -192,7 +194,6 @@ namespace BoxCLI.Commands.MetadataSubCommands
                         }
                     }
                 }
-                Reporter.WriteInformation("Finished processing metadata...");
                 if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
                 {
                     var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
@@ -211,7 +212,6 @@ namespace BoxCLI.Commands.MetadataSubCommands
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
                 Reporter.WriteError(e.Message);
             }
         }

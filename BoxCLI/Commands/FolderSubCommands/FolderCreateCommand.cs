@@ -57,8 +57,13 @@ namespace BoxCLI.Commands.FolderSubCommands
         {
             if (this._bulkPath.HasValue())
             {
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
                 await this.CreateFoldersFromFile(this._bulkPath.Value(), base._asUser.Value(), this._save.HasValue(),
-                                                 this._filePath.Value(), this._fileFormat.Value());
+                                                 this._filePath.Value(), this._fileFormat.Value(), json: json);
                 return;
             }
             base.CheckForParentId(this._parentFolderId.Value, this._app);

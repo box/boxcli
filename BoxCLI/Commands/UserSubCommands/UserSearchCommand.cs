@@ -69,7 +69,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 {
                     showNext = BoxCollectionsIterators.PageInConsole<BoxUser>(base.PrintUserInfo, users);
                 }
-                System.Console.WriteLine("Finished...");
+                Reporter.WriteInformation("Finished...");
                 return;
             }
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
@@ -82,7 +82,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 {
                     return boxClient.UsersManager.GetEnterpriseUsersAsync(offset: offset, filterTerm: userName);
                 }, base.PrintUserInfo);
-            System.Console.WriteLine("Finished...");
+            Reporter.WriteInformation("Finished...");
         }
     }
 }

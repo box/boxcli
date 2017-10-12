@@ -21,7 +21,6 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxWebhookTargetMap()
         {
-            System.Console.WriteLine("Mapping target...");
             Map(m => m.Id).Name("TargetId");
             Map(m => m.Type).Name("TargetType");
         }
