@@ -25,6 +25,7 @@ namespace BoxCLI.Commands
             command.Command(_names.SubCommandNames.Download, _subCommands.CreateSubCommand(_names.SubCommandNames.Download).Configure);
             command.Command(_names.SubCommandNames.Upload, _subCommands.CreateSubCommand(_names.SubCommandNames.Upload).Configure);
             command.Command(_names.SubCommandNames.ChangeUploadEmail, _subCommands.CreateSubCommand(_names.SubCommandNames.ChangeUploadEmail).Configure);
+            command.Command(_names.SubCommandNames.Rename, _subCommands.CreateSubCommand(_names.SubCommandNames.Rename).Configure);
             command.Command(_names.CommandNames.Metadata, new MetadataCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
             command.Command(_names.CommandNames.Collaborations, new CollaborationOnItemCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
             command.Command(_names.CommandNames.SharedLinks, new SharedLinkCommand(base._boxPlatformBuilder, base._boxHome, this._factory, base._names, BoxType.folder).Configure);
