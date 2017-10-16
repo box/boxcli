@@ -153,7 +153,26 @@ namespace BoxCLI.Commands.FolderSubCommands
             {
                 folderUpdateRequest.Tags = this._tags.Value().Split(',');
             }
-            var updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
+
+            if (this._name.HasValue())
+            {
+                folderUpdateRequest.Name = this._name.Value();
+            }
+
+            if (this._description.HasValue())
+            {
+                folderUpdateRequest.Description = this._description.Value();
+            }
+
+            BoxFolder updated;
+            if (this._etag.HasValue())
+            {
+                updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest, etag: this._etag.Value());
+            }
+            else
+            {
+                updated = await boxClient.FoldersManager.UpdateInformationAsync(folderUpdateRequest);
+            }
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(updated);
