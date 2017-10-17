@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="BoxCLI" Language="1033" Version="1.0.0.0" Manufacturer="Box" UpgradeCode="4c6ec143-4c4b-4c0e-bf14-4e0fa8e1101b">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Product Id="*" Name="BoxCLI" Language="1033" Version="1.0.1" Manufacturer="Box" UpgradeCode="4c6ec143-4c4b-4c0e-bf14-4e0fa8e1101b">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
     <UI>
       <UIRef Id="WixUI_InstallDir" />
       <Publish Dialog="WelcomeDlg"
@@ -17,9 +17,8 @@
     </UI>
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <WixVariable Id="WixUIBannerBmp" Value="White_square.jpg"/>
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
-
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <Feature Id="ProductFeature" Title="BoxCLI" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
@@ -27,7 +26,7 @@
 
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="BoxCLI" />
       </Directory>
     </Directory>
@@ -35,10 +34,8 @@
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER" Source="..\BoxCLI\bin\Release\netcoreapp2.0\win10-x64\publish">
-      <Component Id="INSTALLFOLDER" Guid="{19B46D20-BBA3-47F8-8A9F-626BCC5CE3F6}">
-        <RemoveFile Id="INSTALLFOLDER" Name="*.*" On="uninstall" />
-      </Component>
-      <Component Id="ProductComponent" Guid="{882DB6AA-1363-4724-8C43-2950E7ABECD4}">
+      <Component Id="ProductComponent" Guid="{882DB6AA-1363-4724-8C43-2950E7ABECD4}" Win64="yes">
+        <RemoveFile Directory="INSTALLFOLDER" Name="*.*" On="both" Id="REMOVEINSTALL" />
         <Environment Id="Path"
             Permanent="yes"
             Name="Path"
