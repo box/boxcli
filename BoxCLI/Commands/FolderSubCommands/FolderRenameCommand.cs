@@ -31,8 +31,8 @@ namespace BoxCLI.Commands.FolderSubCommands
             command.Description = "Rename a folder.";
             _folderId = command.Argument("folderId",
                                "Id of folder to rename");
-            _folderName = command.Argument("fileName",
-                               "New name of file");
+            _folderName = command.Argument("folderName",
+                               "New name of folder");
             _description = command.Option("--description", "Change the folder description", CommandOptionType.SingleValue);
             _etag = command.Option("--etag", "Only rename if etag value matches", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
