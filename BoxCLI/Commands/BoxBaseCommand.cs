@@ -67,7 +67,7 @@ namespace BoxCLI.Commands
                 this.OutputJson(c);
                 return;
             }
-            else 
+            else
             {
                 this.PrintCollaboration(c);
             }
@@ -217,7 +217,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.WriteRecord(entity);
@@ -258,7 +258,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(BoxMetadataMap));
@@ -329,13 +329,13 @@ namespace BoxCLI.Commands
                             }
                         }
                     }
-                    using (StreamWriter fs = File.CreateText(filePathTemplate))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePathTemplate, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateMap));
                         csv.WriteRecords(entity);
                     }
-                    using (StreamWriter fs = File.CreateText(filePathFields))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePathFields, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(BoxMetadataTemplateFieldMap));
@@ -376,7 +376,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(BoxEventMap));
@@ -423,7 +423,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(M));
@@ -465,7 +465,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(M));
@@ -507,7 +507,7 @@ namespace BoxCLI.Commands
             {
                 try
                 {
-                    using (StreamWriter fs = File.CreateText(filePath))
+                    using (StreamWriter fs = new StreamWriter(File.Open(filePath, FileMode.OpenOrCreate), System.Text.Encoding.UTF8))
                     using (var csv = new CsvWriter(fs))
                     {
                         csv.Configuration.RegisterClassMap(typeof(M));

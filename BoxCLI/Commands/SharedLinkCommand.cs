@@ -15,15 +15,10 @@ namespace BoxCLI.Commands
             _app = command;
             command.Description = "Manage your shared links.";
             command.ExtendedHelpText = "You can use this command to create, update, delete, and get information about shared links in your Enterprise.";
-            if (this._t == BoxType.enterprise)
-            {
-                command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
-            }
-            else
-            {
-                command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
-                command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
-            }
+            command.Command(base._names.SubCommandNames.Get, _subCommands.CreateSubCommand(_names.SubCommandNames.Get).Configure);
+            command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
+            command.Command(base._names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
+            command.Command(base._names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
 
             command.OnExecute(async () =>
             {
@@ -40,7 +35,7 @@ namespace BoxCLI.Commands
         private readonly ISubCommandFactory _subCommands;
         private readonly BoxType _t;
 
-        public SharedLinkCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, 
+        public SharedLinkCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory,
             LocalizedStringsResource names, BoxType t = BoxType.enterprise)
             : base(boxPlatformBuilder, boxHome, names)
         {

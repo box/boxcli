@@ -13,6 +13,8 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
 {
     public class SharedLinkSubCommandBase : BoxBaseCommand
     {
+        protected const string BOX_FILE = "file";
+        protected const string BOX_FOLDER = "folder";
         protected CommandOption _asUser;
         protected readonly BoxType _t;
         public SharedLinkSubCommandBase(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names, BoxType t)
@@ -75,10 +77,12 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             {
                 Reporter.WriteInformation("This item has no shared links.");
             }
+            Reporter.WriteInformation($"URL: {link.Url}");
             Reporter.WriteInformation($"Access level: {link.Access.Value}");
             Reporter.WriteInformation($"Download URL: {link.DownloadUrl}");
             Reporter.WriteInformation($"Download count: {link.DownloadCount}");
             Reporter.WriteInformation($"Preview count: {link.PreviewCount}");
+            Reporter.WriteInformation($"Vanity URL: {link.VanityUrl}");
         }
     }
 }
