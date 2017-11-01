@@ -23,8 +23,12 @@ namespace BoxCLI.CommandUtilities
                     return DateTime.Now.AddHours(span);
                 case 'd':
                     return DateTime.Now.AddDays(span);
+                case 'w':
+                    return DateTime.Now.AddDays(span * 7);
                 case 'M':
                     return DateTime.Now.AddMonths(Convert.ToInt32(span));
+                case 'n':
+                    return DateTime.Now;
                 default:
                     throw new Exception("Time format unrecognized.");
             }
@@ -32,8 +36,9 @@ namespace BoxCLI.CommandUtilities
         public static DateTime GetDateTimeFromString(string t, bool allowNegativeTime = false)
         {
             t = t.Trim();
-            var pattern = @"^[0-6][0-9]{1}[s,m,h,d,M]$";
-            var negativePattern = @"^-[0-6][0-9]{1}[s,m,h,d,M]$";
+            var now = "now";
+            var pattern = @"^[0-6][0-9]{1}[s,m,h,d,w,M]$";
+            var negativePattern = @"^-[0-6][0-9]{1}[s,m,h,d,w,M]$";
             var regex = new Regex(pattern);
             var negativeRegex = new Regex(negativePattern);
             if (regex.Match(t).Success)
@@ -49,6 +54,10 @@ namespace BoxCLI.CommandUtilities
                 double span;
                 double.TryParse(t.Substring(0, 3), out span);
                 return ResolveTimeUnit(span, unit);
+            }
+            else if (now == t)
+            {
+                return ResolveTimeUnit(0, 'n');
             }
             else
             {
@@ -86,7 +95,7 @@ namespace BoxCLI.CommandUtilities
 
         public static string ResolveItemName(string path)
         {
-            if(path.Last() == Path.DirectorySeparatorChar)
+            if (path.Last() == Path.DirectorySeparatorChar)
             {
                 path = path.Substring(0, path.Length - 1);
             }

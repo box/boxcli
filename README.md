@@ -1,5 +1,5 @@
 # Box CLI
-## Current Version: 1.0.1
+## Current Version: 1.0.2
 ## Prerequisites for Building from Source
 * [.Net Core SDK v2.0](https://www.microsoft.com/net/core)
 
