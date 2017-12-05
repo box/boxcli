@@ -43,7 +43,7 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForId(this._aliasId.Value, this._app);
             base.CheckForId(this._userId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 
             var alias = await boxClient.UsersManager.DeleteEmailAliasAsync(this._userId.Value, this._aliasId.Value);
 

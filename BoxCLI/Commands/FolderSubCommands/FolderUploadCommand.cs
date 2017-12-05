@@ -63,7 +63,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             //     return;
             // }
             base.CheckForValue(this._folderPath.Value, _app, "A path to a local folder is required");
-            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             string name;
             if (this._alternativeFolderName.HasValue())
             {

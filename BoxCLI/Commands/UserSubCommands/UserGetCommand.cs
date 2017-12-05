@@ -13,7 +13,6 @@ namespace BoxCLI.Commands.UserSubCommands
     public class UserGetCommand : UserSubCommandBase
     {
         private CommandArgument _userId;
-        private CommandOption _asUser;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -29,7 +28,6 @@ namespace BoxCLI.Commands.UserSubCommands
             command.Description = "Get information about a Box user.";
             _userId = command.Argument("userId",
                                    "Id of user to manage, use 'me' for the current user");
-            _asUser = AsUserOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,29 +44,14 @@ namespace BoxCLI.Commands.UserSubCommands
         public async Task RunGet()
         {
             var id = this._userId.Value;
-            BoxClient boxClient;
-            if (id == "me")
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var user = await boxClient.UsersManager.GetUserInformationAsync(id);
+            if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                boxClient = base.ConfigureBoxClient(this._asUser.Value());
+                base.OutputJson(user);
+                return;
             }
-            else
-            {
-                boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            }
-            try
-            {
-                var user = await boxClient.UsersManager.GetUserInformationAsync(id);
-                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
-                {
-                    base.OutputJson(user);
-                    return;
-                }
-                base.PrintUserInfo(user);
-            }
-            catch (Exception e)
-            {
-                Reporter.WriteError(e.Message);
-            }
+            base.PrintUserInfo(user);
         }
     }
 }

@@ -64,11 +64,11 @@ namespace BoxCLI.Commands.GroupSubCommands
                 {
                     json = true;
                 }
-                await base.CreateGroupsFromFile(this._bulkPath.Value(), this._asUser.Value(), this._save.HasValue(), json: json);
+                await base.CreateGroupsFromFile(this._bulkPath.Value(), this._save.HasValue(), json: json);
                 return;
             }
             base.CheckForValue(this._name.Value, this._app, "A group name is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var groupRequest = new BoxGroupRequest();
             groupRequest.Name = this._name.Value;
             if (this._inviteLevel.HasValue())

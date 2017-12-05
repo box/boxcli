@@ -45,7 +45,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         private async Task RunGetPending()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var collabs = await boxClient.CollaborationsManager.GetPendingCollaborationAsync();
             if (_save.HasValue())
             {

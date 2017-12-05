@@ -34,6 +34,7 @@ namespace BoxCLI.Commands
         protected readonly IBoxPlatformServiceBuilder _boxPlatformBuilder;
         protected readonly LocalizedStringsResource _names;
         protected CommandOption _json;
+        protected CommandOption _oneUseToken;
 
         public BoxBaseCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
         {
@@ -48,6 +49,7 @@ namespace BoxCLI.Commands
         {
             base.Configure(command);
             _json = OutputJsonOption.ConfigureOption(command);
+            _oneUseToken = ProvideTokenOption.ConfigureOption(command);
         }
 
         protected virtual void CheckForId(string id, CommandLineApplication app, string message = "")
@@ -132,14 +134,18 @@ namespace BoxCLI.Commands
         }
 
         protected virtual BoxClient ConfigureBoxClient(string oneCallAsUserId = null,
-        bool returnServiceAccount = false, bool asAdmin = false)
+            bool asAdmin = false, string oneCallWithToken = null)
         {
-            var Box = _boxPlatformBuilder.Build();
-            if (!string.IsNullOrEmpty(oneCallAsUserId) && !returnServiceAccount)
+            var Box = _boxPlatformBuilder.Build(!string.IsNullOrEmpty(oneCallWithToken));
+            if (!string.IsNullOrEmpty(oneCallWithToken))
+            {
+                return Box.ClientFromToken(oneCallWithToken);
+            }
+            else if (!string.IsNullOrEmpty(oneCallAsUserId))
             {
                 return Box.AsUserClient(oneCallAsUserId);
             }
-            else if (asAdmin && !returnServiceAccount)
+            else if (asAdmin)
             {
                 if (string.IsNullOrEmpty(this._environments.GetAdminAsUserIdSetting()))
                 {
@@ -147,7 +153,7 @@ namespace BoxCLI.Commands
                 }
                 return Box.AsUserClient(this._environments.GetAdminAsUserIdSetting());
             }
-            else if (this._environments.GetUserSessionEnabledSetting() && !returnServiceAccount)
+            else if (this._environments.GetUserSessionEnabledSetting())
             {
                 Reporter.WriteInformation("User session enabled...");
                 var expiresAt = this._environments.GetUserSessionExpirationSetting();
@@ -175,9 +181,9 @@ namespace BoxCLI.Commands
             }
         }
 
-        protected virtual IBoxCollectionsIterators GetIterators()
+        protected virtual IBoxCollectionsIterators GetIterators(bool isTokenCall = false)
         {
-            var box = _boxPlatformBuilder.Build();
+            var box = _boxPlatformBuilder.Build(isTokenCall);
             return box.BoxCollectionsIterators;
         }
 

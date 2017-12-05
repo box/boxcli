@@ -70,7 +70,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
             base.CheckForId(this._id.Value, this._app);
             base.CheckForScope(this._scope.Value, this._app);
             base.CheckForTemplate(this._template.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var updates = ProcessMetadataUpdate();
             Dictionary<string, object> metadata;
             if (base._t == BoxType.file)

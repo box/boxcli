@@ -44,7 +44,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunGet()
         {
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var result = await boxClient.CollaborationsManager.GetCollaborationAsync(this._id.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

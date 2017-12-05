@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
@@ -44,8 +45,8 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunSearch(string userName, bool managedOnly = false)
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             if (string.IsNullOrEmpty(userName))
             {
                 Reporter.WriteWarning("A user name is required to search.");

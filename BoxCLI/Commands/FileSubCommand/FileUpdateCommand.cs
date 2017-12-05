@@ -50,7 +50,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private async Task RunUpdate()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileRequest = base.ConfigureFileRequest(this._fileId.Value, fileName: this._fileName.Value(), description: this._description.Value());
             BoxFile updatedFile;
             if (this._etag.HasValue())

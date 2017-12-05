@@ -76,7 +76,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private async Task RunUpdate()
         {
             base.CheckForUserId(this._userId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var userRequest = base.CreateUserRequest(this._name.Value(), this._userId.Value, this._role.Value(), this._enterprise.HasValue(),
             this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(),
             this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(),

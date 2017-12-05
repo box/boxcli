@@ -134,10 +134,10 @@ namespace BoxCLI.Commands.MetadataSubCommands
             return allMetadataOnItem;
         }
 
-        protected async virtual Task AddMetadataToItemFromFile(string path, string asUser = "", string type = "",
+        protected async virtual Task AddMetadataToItemFromFile(string path, string type = "",
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);

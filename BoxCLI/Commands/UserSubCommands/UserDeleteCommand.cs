@@ -48,7 +48,7 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunDelete()
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._path.HasValue())
             {
                 var path = GeneralUtilities.TranslatePath(this._path.Value());

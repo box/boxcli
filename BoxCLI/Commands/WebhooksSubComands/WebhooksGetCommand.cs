@@ -36,14 +36,14 @@ namespace BoxCLI.Commands.WebhooksSubComands
 
         protected async override Task<int> Execute()
         {
-            await this.RunGet(_webhookId.Value, base._asUser.Value());
+            await this.RunGet();
             return await base.Execute();
         }
 
-        private async Task RunGet(string id, string asUser)
+        private async Task RunGet()
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
-            var webhook = await boxClient.WebhooksManager.GetWebhookAsync(id);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var webhook = await boxClient.WebhooksManager.GetWebhookAsync(this._webhookId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 base.OutputJson(webhook);

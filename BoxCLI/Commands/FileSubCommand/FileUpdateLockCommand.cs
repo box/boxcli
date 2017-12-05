@@ -50,7 +50,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private async Task RunLock()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var lockRequest = new BoxFileLockRequest();
             var boxLock = new BoxFileLock();
             if (this._preventDownload.HasValue())

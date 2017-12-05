@@ -74,7 +74,7 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task<bool> DeleteGroup()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             return await boxClient.GroupsManager.DeleteAsync(this._groupId.Value);
         }
     }

@@ -50,7 +50,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
 
         private async Task RunList()
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._save.HasValue())
             {
                 var dateString = DateTime.Now.ToString(GeneralUtilities.GetDateFormatString());

@@ -66,7 +66,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                 {
                     json = true;
                 }
-                await base.ProcessSharedLinksFromFile(_id.Value, _path.Value(), base._t, _asUser.Value(), json: json);
+                await base.ProcessSharedLinksFromFile(_id.Value, _path.Value(), base._t, json: json);
                 return;
             }
             base.CheckForId(this._id.Value, this._app);
@@ -78,7 +78,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     throw new Exception("You must provide an item type for this command: choose file or folder");
                 }
             }
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var sharedLinkRequest = new BoxSharedLinkRequest();
             if (this._access.HasValue())
             {

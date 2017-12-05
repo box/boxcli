@@ -56,7 +56,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
 
         private async Task RunGet()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fields = new List<string>()
             {
                 "shared_link"

@@ -54,7 +54,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 await base.ProcessFolderBulkDownload(this._bulkPath.Value(), this._asUser.Value(), fileName);
                 return;
             }
-            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._multiId.HasValue())
             {
                 var ids = this._folderId.Value;

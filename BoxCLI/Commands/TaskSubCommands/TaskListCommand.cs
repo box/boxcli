@@ -52,8 +52,8 @@ namespace BoxCLI.Commands.TaskSubCommands
         public async Task RunList()
         {
             base.CheckForId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             var tasks = await boxClient.FilesManager.GetFileTasks(this._fileId.Value);
             if (_save.HasValue())
             {

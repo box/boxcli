@@ -29,9 +29,9 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
             base.Configure(command);
         }
 
-        protected async Task ProcessSharedLinksFromFile(string id, string path, BoxType t, string asUser = "", bool json = false)
+        protected async Task ProcessSharedLinksFromFile(string id, string path, BoxType t, bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);

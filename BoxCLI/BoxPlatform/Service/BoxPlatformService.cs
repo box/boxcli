@@ -34,8 +34,8 @@ namespace BoxCLI.BoxPlatform.Service
         }
         public BoxClient ClientFromToken(string token)
         {
-            var auth = new OAuthSession(token, "", 3600, "bearer");
-            return new BoxClient(this.BoxPlatformConfig, auth);
+            var auth = new OAuthSession(token, "1", 3600, "bearer");
+            return new BoxClient(new BoxConfig("", "", new Uri("http://localhost")), auth);
         }
 
         public async Task<bool> BustCache()

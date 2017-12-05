@@ -79,7 +79,7 @@ namespace BoxCLI.Commands.TrashSubCommands
 
         private async Task<bool> DeleteItem()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 			if (this._type.Value == base._names.CommandNames.Files)
 			{
 				return await boxClient.FilesManager.PurgeTrashedAsync(this._itemId.Value);

@@ -52,7 +52,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         protected async Task RunGetItems()
         {
             base.CheckForId(this._folderId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._save.HasValue())
             {
                 Reporter.WriteInformation("Saving file...");
@@ -79,7 +79,7 @@ namespace BoxCLI.Commands.FolderSubCommands
                 base.OutputJson(result);
                 return;
             }
-            var BoxCollectionsIterators = base.GetIterators();
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxItem>((offset) =>
             {
                 return boxClient.FoldersManager.GetFolderItemsAsync(this._folderId.Value, 1000, offset: (int)offset);

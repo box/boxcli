@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.CommentSubCommands
         private async Task RunUpdate()
         {
             base.CheckForValue(this._commentId.Value, this._app, "A comment ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var commentUpdate = new BoxCommentRequest();
 
             if (this._message.HasValue())

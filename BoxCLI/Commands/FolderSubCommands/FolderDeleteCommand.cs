@@ -83,7 +83,7 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         private async Task<bool> DeleteFolder()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folderDeleted = await boxClient.FoldersManager.DeleteAsync(this._folderId.Value, this._recursive.HasValue(), this._etag.Value());
             if (this._force.HasValue())
             {

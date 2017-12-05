@@ -38,7 +38,7 @@ namespace BoxCLI.Commands.EventSubCommands
         {
             Reporter.WriteSuccess("Poll started...");
             Reporter.WriteInformation("Press Ctrl+C to stop polling.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._enterprise.HasValue())
             {
                 await base.PollEnterpriseEvents();

@@ -42,7 +42,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private async Task RunGetEmailAliases()
         {
             base.CheckForId(this._userId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 
             var alias = await boxClient.UsersManager.GetEmailAliasesAsync(this._userId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())

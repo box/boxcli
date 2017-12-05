@@ -47,8 +47,8 @@ namespace BoxCLI.Commands.TrashSubCommands
 
         public async Task RunList()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
                 var items = boxClient.FoldersManager.GetTrashItemsAsync(limit: 1000, autoPaginate: true);

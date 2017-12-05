@@ -40,7 +40,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         private async Task RunList()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileVersions = await boxClient.FilesManager.ViewVersionsAsync(this._fileId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

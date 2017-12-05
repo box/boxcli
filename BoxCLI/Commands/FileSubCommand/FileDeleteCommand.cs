@@ -80,7 +80,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private async Task<bool> DeleteFile()
         {
             var fileDeleted = false;
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._force.HasValue())
             {
                 fileDeleted = await boxClient.FilesManager.DeleteAsync(this._fileId.Value, this._etag.Value());

@@ -13,7 +13,10 @@ namespace BoxCLI.CommandUtilities
             lock (_sync)
             {
                 Console.CursorLeft = 0;
-                Console.Write(item + " [" + new string('=', percentage / 2) + "] " + percentage + "%");
+                var spaces = new string(' ', 100 - percentage);
+                var equals = new string('=', percentage);
+                var output = $"{item} [{equals}{spaces}] {percentage}%";
+                Console.Write(output);
             }
         }
     }

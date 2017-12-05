@@ -50,7 +50,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._id.Value, this._app, "An ID is required for this command.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Collaborations}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";

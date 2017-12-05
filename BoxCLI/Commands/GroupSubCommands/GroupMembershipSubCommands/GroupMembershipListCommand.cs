@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
@@ -51,9 +52,9 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID or user ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 
-            var BoxCollectionsIterators = base.GetIterators();
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             if (this._listGroups.HasValue())
             {
                 if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())

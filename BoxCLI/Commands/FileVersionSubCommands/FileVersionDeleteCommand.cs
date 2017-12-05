@@ -82,7 +82,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
 
         private async Task<bool> DeleteFileVersion()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 			if (this._etag.HasValue())
 			{
 				return await boxClient.FilesManager.DeleteOldVersionAsync(this._fileId.Value, this._fileVersionId.Value, this._etag.Value());

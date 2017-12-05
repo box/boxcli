@@ -11,6 +11,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         private CommandOption _environmentName;
         private CommandOption _pemPath;
         private CommandOption _setAsCurrent;
+        private CommandOption _disableFilePathTranslation;
         private CommandLineApplication _app;
         public ConfigureEnvironmentsAddCommand(IBoxHome boxHome) : base(boxHome)
         {
@@ -31,6 +32,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             _setAsCurrent = command.Option("--set-as-current",
                            "Set this new environment as your current environment.",
                            CommandOptionType.NoValue);
+            _disableFilePathTranslation = command.Option("--disable-file-path-translation",
+                           "Disable file path translation.",
+                           CommandOptionType.NoValue);
             command.OnExecute(() =>
             {
                 return this.Execute();
@@ -46,9 +50,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 
         private void SetConfigFile(string filePath, string environmentName)
         {
-            if (base._environments.VerifyBoxConfigFile(filePath))
+            if (base._environments.VerifyBoxConfigFile(filePath, this._disableFilePathTranslation.HasValue()))
             {
-                var env = base._environments.TranslateConfigFileToEnvironment(filePath, this._pemPath.Value());
+                var env = base._environments.TranslateConfigFileToEnvironment(filePath, this._pemPath.Value(), this._disableFilePathTranslation.HasValue());
                 env.Name = environmentName;
                 var set = base._environments.AddNewEnvironment(env);
                 if (set == true)

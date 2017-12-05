@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
         private async Task RunGetAll()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Metadata}-{base._names.SubCommandNames.GetAll}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";

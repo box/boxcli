@@ -44,7 +44,7 @@ namespace BoxCLI.Commands.FileVersionSubCommands
         {
             base.CheckForFileId(this._fileId.Value, this._app);
             base.CheckForFileVersionId(this._fileVersionId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var promotedFile = await boxClient.FilesManager.PromoteVersionAsync(this._fileId.Value, this._fileVersionId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

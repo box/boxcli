@@ -55,8 +55,8 @@ namespace BoxCLI.Commands.UserSubCommands
 
         public async Task RunList()
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             var fileName = $"{base._names.CommandNames.Users}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
             var fields = base.ProcessFields(this._fieldsOption.Value(), base._fields);
             if (this._save.HasValue())

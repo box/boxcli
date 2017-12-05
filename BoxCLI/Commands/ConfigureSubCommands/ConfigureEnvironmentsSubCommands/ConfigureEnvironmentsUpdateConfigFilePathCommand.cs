@@ -9,6 +9,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         private CommandArgument _existingName;
         private CommandArgument _newPath;
         private CommandOption _pemPath;
+        private CommandOption _disableFilePathTranslation;
         private CommandLineApplication _app;
         public ConfigureEnvironmentsUpdateConfigFilePathCommand(IBoxHome boxHome) : base(boxHome)
         {
@@ -25,6 +26,9 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             _pemPath = command.Option("--private-key-path <PATH>",
                            "Provide a path to your application private key.",
                            CommandOptionType.SingleValue);
+            _disableFilePathTranslation = command.Option("--disable-file-path-translation",
+                           "Disable file path translation.",
+                           CommandOptionType.NoValue);
             command.OnExecute(() =>
             {
                 return this.Execute();
@@ -42,12 +46,13 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
         {
             base.CheckForValue(this._existingName.Value, this._app, "An existing environment name is required for this command.");
             base.CheckForValue(this._newPath.Value, this._app, "A new Box configuration file path is required for this command.");
-            var result = base._environments.UpdateConfigFilePath(this._existingName.Value, this._newPath.Value, this._pemPath.Value());
+            var result = base._environments.UpdateConfigFilePath(this._existingName.Value, this._newPath.Value,
+                this._pemPath.Value(), ignoreFilePathTranslation: this._disableFilePathTranslation.HasValue());
             if (result)
             {
                 Reporter.WriteSuccess("Successfully updated the Box configuration file path.");
             }
-            else 
+            else
             {
                 Reporter.WriteError("Couldn't update the Box configuration file path.");
             }

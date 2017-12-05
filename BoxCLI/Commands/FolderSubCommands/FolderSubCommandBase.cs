@@ -53,7 +53,7 @@ namespace BoxCLI.Commands.FolderSubCommands
 
         protected async virtual Task<BoxFolder> MoveFolder(string folderId, string parentFolderId, string etag = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folderRequest = new BoxFolderRequest()
             {
                 Id = folderId,
@@ -66,7 +66,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         }
         protected async virtual Task<BoxFolder> CopyFolder(string folderId, string parentFolderId, string name = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folderRequest = new BoxFolderRequest()
             {
                 Id = folderId,
@@ -95,10 +95,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             await Task.WhenAll(taskList);
         }
 
-        protected async virtual Task CreateFoldersFromFile(string path, string asUser = "",
+        protected async virtual Task CreateFoldersFromFile(string path,
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);
@@ -151,10 +151,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             }
         }
 
-        protected async virtual Task UpdateFoldersFromFile(string path, string asUser = "",
+        protected async virtual Task UpdateFoldersFromFile(string path,
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);

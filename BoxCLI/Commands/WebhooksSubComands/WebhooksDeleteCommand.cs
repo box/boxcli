@@ -44,7 +44,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
 
         private async Task RunDelete()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(_path.Value()))
             {
                 var path = GeneralUtilities.TranslatePath(_path.Value());

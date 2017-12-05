@@ -44,7 +44,7 @@ namespace BoxCLI.Commands.CommentSubCommands
         private async Task RunGet()
         {
             base.CheckForValue(this._id.Value, this._app, "A comment ID is required for this call.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var comment = await boxClient.CommentsManager.GetInformationAsync(this._id.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

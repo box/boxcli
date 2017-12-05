@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         private async Task RunUpdate()
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var groupRequest = new BoxGroupRequest();
             if (this._name.HasValue())
             {

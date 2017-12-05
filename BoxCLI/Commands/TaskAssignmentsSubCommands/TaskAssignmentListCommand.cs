@@ -52,8 +52,8 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             var taskAssignments = await boxClient.TasksManager.GetAssignmentsAsync(this._taskId.Value);
             if (_save.HasValue())
             {

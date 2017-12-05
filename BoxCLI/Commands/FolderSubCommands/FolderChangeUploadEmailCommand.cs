@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         private async Task RunChange()
         {
             base.CheckForId(this._folderId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var email = new BoxFolderRequest()
             {
                 Id = this._folderId.Value,
