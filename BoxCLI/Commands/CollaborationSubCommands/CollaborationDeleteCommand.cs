@@ -44,26 +44,26 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
             bool collabDeleted = false;
-			if (this._dontPrompt.HasValue())
-			{
-				collabDeleted = await this.DeleteCollaboration();
-			}
-			else
-			{
-				Reporter.WriteWarningNoNewLine("Are you sure you want to delete this collaboration? y/N ");
-				var yNKey = "n";
-				yNKey = Console.ReadLine().ToLower();
-				if (yNKey != "y")
-				{
-					Reporter.WriteInformation("Aborted collaboration deletion.");
-					return;
-				}
-				else
-				{
-					collabDeleted = await this.DeleteCollaboration();
-				}
-			}
-            if(collabDeleted)
+            if (this._dontPrompt.HasValue())
+            {
+                collabDeleted = await this.DeleteCollaboration();
+            }
+            else
+            {
+                Reporter.WriteWarningNoNewLine("Are you sure you want to delete this collaboration? y/N ");
+                var yNKey = "n";
+                yNKey = Console.ReadLine().ToLower();
+                if (yNKey != "y")
+                {
+                    Reporter.WriteInformation("Aborted collaboration deletion.");
+                    return;
+                }
+                else
+                {
+                    collabDeleted = await this.DeleteCollaboration();
+                }
+            }
+            if (collabDeleted)
             {
                 Reporter.WriteSuccess($"Collaboration {this._id.Value} successfully removed");
             }
@@ -75,7 +75,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         private async Task<bool> DeleteCollaboration()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             return await boxClient.CollaborationsManager.RemoveCollaborationAsync(this._id.Value);
         }
     }

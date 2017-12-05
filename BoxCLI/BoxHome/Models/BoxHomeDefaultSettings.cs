@@ -18,6 +18,6 @@ namespace BoxCLI.BoxHome.Models
         [JsonProperty(PropertyName = "autoSave")]
         public bool AutoSave { get; set; } = false;
         [JsonProperty(PropertyName = "outputJson")]
-        public bool OutputJson { get; set; } = false;
+        public bool OutputJson { get; set; } = true;
     }
 }

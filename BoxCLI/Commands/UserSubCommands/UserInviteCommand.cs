@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForValue(this._userEmail.Value, this._app, "A user email is required for this command");
             base.CheckForValue(this._enterpriseId.Value, this._app, "An enterprise id is required for this command");
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             BoxUserInviteRequest userInviteRequest = new BoxUserInviteRequest()
             {
                 Enterprise = new BoxRequestEntity()

@@ -90,12 +90,12 @@ namespace BoxCLI.Commands.FolderSubCommands
                 {
                     json = true;
                 }
-                await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), base._asUser.Value(), this._save.HasValue(),
+                await this.UpdateFoldersFromFile(this._bulkFilePath.Value(), this._save.HasValue(),
                                                  this._filePath.Value(), this._fileFormat.Value(), json: json);
                 return;
             }
             base.CheckForId(this._folderId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folderUpdateRequest = new BoxFolderRequest();
             folderUpdateRequest.Id = this._folderId.Value;
             if (this._parentFolderId.HasValue())

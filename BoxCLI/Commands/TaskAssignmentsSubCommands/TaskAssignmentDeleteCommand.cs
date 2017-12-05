@@ -40,7 +40,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
         private async Task RunDelete()
         {
             base.CheckForValue(this._taskAssignmentId.Value, this._app, "A task assignment ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             bool deleted;
             try
             {

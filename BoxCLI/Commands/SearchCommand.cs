@@ -166,7 +166,7 @@ namespace BoxCLI.Commands
                     mdFilters.Add(mdRequest);
                 }
             }
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             BoxCollection<BoxItem> result;
             if (mdFilters.Count() > 0)
             {

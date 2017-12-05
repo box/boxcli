@@ -19,6 +19,7 @@ namespace BoxCLI.Commands
             command.Command(base._names.SubCommandNames.List, _subCommands.CreateSubCommand(_names.SubCommandNames.List).Configure);
             command.Command(base._names.SubCommandNames.Add, _subCommands.CreateSubCommand(_names.SubCommandNames.Add).Configure);
             command.Command(base._names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
+            command.Command(base._names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
 
             command.OnExecute(async () =>
             {
@@ -34,7 +35,7 @@ namespace BoxCLI.Commands
         }
         private readonly ISubCommandFactory _subCommands;
 
-        public CollaborationOnItemCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory, 
+        public CollaborationOnItemCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, SubCommandFactory factory,
             LocalizedStringsResource names, BoxType t = BoxType.enterprise)
             : base(boxPlatformBuilder, boxHome, names)
         {

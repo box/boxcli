@@ -62,12 +62,12 @@ namespace BoxCLI.Commands.FolderSubCommands
                 {
                     json = true;
                 }
-                await this.CreateFoldersFromFile(this._bulkPath.Value(), base._asUser.Value(), this._save.HasValue(),
+                await this.CreateFoldersFromFile(this._bulkPath.Value(), this._save.HasValue(),
                                                  this._filePath.Value(), this._fileFormat.Value(), json: json);
                 return;
             }
             base.CheckForParentId(this._parentFolderId.Value, this._app);
-            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folderRequest = new BoxFolderRequest();
             folderRequest.Parent = new BoxItemRequest();
             folderRequest.Parent.Id = this._parentFolderId.Value;

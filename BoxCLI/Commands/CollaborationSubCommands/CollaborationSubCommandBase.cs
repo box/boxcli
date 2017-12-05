@@ -29,9 +29,9 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             base.Configure(command);
         }
 
-        protected async Task ProcessCollaborationsFromFile(string id, string path, BoxType t, string asUser = "", bool json = false)
+        protected async Task ProcessCollaborationsFromFile(string id, string path, BoxType t, bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);
@@ -67,9 +67,27 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             }
         }
 
-        protected virtual string ProcessRoleOptions(Dictionary<string, bool> possibleRoles)
+        protected virtual string ProcessRoleOptions(CommandOption editor, CommandOption viewer,
+            CommandOption uploader, CommandOption previewerUploader, CommandOption viewerUploader,
+            CommandOption coOwner, CommandOption previewer, CommandOption owner = null)
         {
-            var result = possibleRoles.First(x => x.Value == true);
+            bool isOwnerRole = false;
+            if (owner != null)
+            {
+                isOwnerRole = owner.HasValue();
+            }
+            var roles = new Dictionary<string, bool>()
+                {
+                    {BoxCollaborationRoles.Editor, editor.HasValue()},
+                    {BoxCollaborationRoles.Viewer, viewer.HasValue()},
+                    {BoxCollaborationRoles.Uploader, uploader.HasValue()},
+                    {BoxCollaborationRoles.PreviewerUploader, previewerUploader.HasValue()},
+                    {BoxCollaborationRoles.ViewerUploader, viewerUploader.HasValue()},
+                    {BoxCollaborationRoles.CoOwner, coOwner.HasValue()},
+                    {BoxCollaborationRoles.Owner, isOwnerRole},
+                    {BoxCollaborationRoles.Previewer, previewer.HasValue()},
+                };
+            var result = roles.First(x => x.Value == true);
             return result.Key.ToLower();
         }
     }

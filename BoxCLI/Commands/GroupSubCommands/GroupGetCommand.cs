@@ -41,7 +41,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         private async Task RunGet()
         {
             base.CheckForValue(this._groupId.Value, this._app, "A group ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var group = await boxClient.GroupsManager.GetGroupAsync(_groupId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

@@ -38,7 +38,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private async Task RunUnlock()
         {
             base.CheckForFileId(this._fileId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var unlocked = await boxClient.FilesManager.UnLock(this._fileId.Value);
             if(unlocked)
             {

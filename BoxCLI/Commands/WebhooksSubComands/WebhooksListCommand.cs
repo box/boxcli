@@ -49,8 +49,8 @@ namespace BoxCLI.Commands.WebhooksSubComands
 
         public async Task RunList()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
-            var BoxCollectionsIterators = base.GetIterators();
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Webhooks}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";

@@ -60,7 +60,7 @@ namespace BoxCLI.Commands.FileSubCommand
 
         protected async Task<BoxFile> MoveFile(string fileId, string parentId, string etag = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileRequest = this.ConfigureFileRequest(fileId, parentId);
             if (!string.IsNullOrEmpty(etag))
             {
@@ -74,14 +74,14 @@ namespace BoxCLI.Commands.FileSubCommand
 
         protected async Task<BoxFile> CopyFile(string fileId, string parentId, string fileVersionId = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileRequest = this.ConfigureFileRequest(fileId, parentId);
             return await boxClient.FilesManager.CopyAsync(fileRequest);
         }
 
         protected async Task DownloadFile(string fileId, string fileVersionId = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileInfo = await boxClient.FilesManager.GetInformationAsync(fileId);
             Stream boxFileStream;
             if (!string.IsNullOrEmpty(fileVersionId))

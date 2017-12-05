@@ -174,7 +174,7 @@ namespace BoxCLI.Commands
         protected async Task<BoxFile> UploadFile(string path, string parentId = "", string fileName = "",
             string fileId = "", bool isNewVersion = false, bool idOnly = false)
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             path = GeneralUtilities.TranslatePath(path);
 
             var file = new FileInfo(path);
@@ -189,11 +189,11 @@ namespace BoxCLI.Commands
 
             if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE && isNewVersion)
             {
-                return await this.ChunkedUpload(path, fileName, parentId, file.Length, fileId, true, idOnly: idOnly);
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length, boxClient, fileId, true, idOnly: idOnly);
             }
             else if (file.Length >= MINIUMUM_CHUNKED_UPLOAD_FILE_SIZE)
             {
-                return await this.ChunkedUpload(path, fileName, parentId, file.Length, idOnly: idOnly);
+                return await this.ChunkedUpload(path, fileName, parentId, file.Length, boxClient, idOnly: idOnly);
             }
             else
             {
@@ -302,9 +302,8 @@ namespace BoxCLI.Commands
         }
 
         private async Task<BoxFile> ChunkedUpload(string path, string fileName, string parentFolderId,
-            long fileSize, string fileId = "", bool isNewVersion = false, bool idOnly = false)
+            long fileSize, BoxClient boxClient, string fileId = "", bool isNewVersion = false, bool idOnly = false)
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
             using (var fileInMemoryStream = File.Open(path, FileMode.Open))
             {
                 if (!idOnly)
@@ -354,31 +353,17 @@ namespace BoxCLI.Commands
                     Reporter.WriteInformation("");
                     Reporter.WriteInformation("Attempting to commit...");
                 }
-                const int retryCount = 5;
-                var retryInterval = boxSessionParts.Count() * 100;
+                // const int retryCount = 5;
+                // var retryInterval = boxSessionParts.Count() * 100;
 
                 // Commit
                 if (!string.IsNullOrEmpty(fileId))
                 {
-                    //TODO: Fix after SDK update
-                    var command = boxClient.ResourcePlugins.Get<BoxFileManagerCommand>();
-                    var response =
-                    await Box.V2.Utility.Retry.ExecuteAsync(
-                        async () =>
-                            await command.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit),
-                        TimeSpan.FromMilliseconds(retryInterval), retryCount);
-
-                    return response;
+                    return await boxClient.FilesManager.CommitFileVersionSessionAsync(commitUri, completeFileSha, sessionPartsForCommit);
                 }
                 else
                 {
-                    var response =
-                    await Box.V2.Utility.Retry.ExecuteAsync(
-                        async () =>
-                            await boxClient.FilesManager.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit),
-                        TimeSpan.FromMilliseconds(retryInterval), retryCount);
-
-                    return response;
+                    return await boxClient.FilesManager.CommitSessionAsync(commitUri, completeFileSha, sessionPartsForCommit);
                 }
             }
         }
@@ -494,7 +479,7 @@ namespace BoxCLI.Commands
             return ret;
         }
 
-        protected async Task ProcessBulkDownload(string path, string asUser = "", bool isNewVersion = false)
+        protected async Task ProcessBulkDownload(string path, bool isNewVersion = false)
         {
             try
             {
@@ -511,7 +496,7 @@ namespace BoxCLI.Commands
         {
             try
             {
-                var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+                var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
                 path = GeneralUtilities.TranslatePath(path);
                 var idsList = this.ReadFileForIds(path);
                 var fileList = new List<BoxBulkDownload>();
@@ -537,7 +522,7 @@ namespace BoxCLI.Commands
         }
         protected async Task BulkDownload(List<BoxBulkDownload> files, string fileName = "")
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             using (var archive = ZipArchive.Create())
             {
                 Reporter.WriteInformation("Created zip archive...");

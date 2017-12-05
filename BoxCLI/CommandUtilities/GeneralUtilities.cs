@@ -129,6 +129,11 @@ namespace BoxCLI.CommandUtilities
                 path = path.Substring(match.Length - 1);
             }
 
+            if (path.StartsWith("/"))
+            {
+                return path;
+            }
+
             if (!path.StartsWith(Path.DirectorySeparatorChar.ToString()) && !path.StartsWith("~") && !path.StartsWith("..") &&
             !path.StartsWith($".{Path.DirectorySeparatorChar}") && !winDirectoryRegex.IsMatch(path))
             {
@@ -186,6 +191,11 @@ namespace BoxCLI.CommandUtilities
                 var match = winDirectoryRegex.Match(path);
                 winDirectory = match.Value;
                 path = path.Substring(match.Length - 1);
+            }
+
+            if (path.StartsWith("/"))
+            {
+                return path;
             }
 
             if (!path.StartsWith(Path.DirectorySeparatorChar.ToString()) && !path.StartsWith("~") && !path.StartsWith("..") &&

@@ -45,7 +45,7 @@ namespace BoxCLI.Commands.TrashSubCommands
         {
             base.CheckForId(this._itemId.Value, this._app);
             base.CheckForType(this._type.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._type.Value == base._names.CommandNames.Files)
             {
                 var item = await boxClient.FilesManager.RestoreTrashedAsync(new BoxFileRequest() { Id = this._itemId.Value });

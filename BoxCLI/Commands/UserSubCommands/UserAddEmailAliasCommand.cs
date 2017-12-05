@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForValue(this._userEmail.Value, this._app, "A user email is required for this command");
             base.CheckForId(this._userId.Value, this._app);
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 
             var alias = await boxClient.UsersManager.AddEmailAliasAsync(this._userId.Value, this._userEmail.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())

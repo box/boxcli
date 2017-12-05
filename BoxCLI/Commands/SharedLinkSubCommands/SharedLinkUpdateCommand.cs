@@ -64,7 +64,7 @@ namespace BoxCLI.Commands.SharedLinkSubCommands
                     throw new Exception("You must provide an item type for this command: choose file or folder");
                 }
             }
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (base._t == BoxType.file || (this._type != null && this._type.Value == SharedLinkSubCommandBase.BOX_FILE))
             {
                 var fileRequest = new BoxFileRequest();

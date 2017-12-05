@@ -25,9 +25,12 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             _boxHome = home;
             _boxHomeEnvironmentsFileName = fileName;
         }
-        public bool VerifyBoxConfigFile(string filePath)
+        public bool VerifyBoxConfigFile(string filePath, bool ignoreFilePathTranslation = false)
         {
-            filePath = GeneralUtilities.TranslatePath(filePath);
+            if (!ignoreFilePathTranslation)
+            {
+                filePath = GeneralUtilities.TranslatePath(filePath);
+            }
             Reporter.WriteInformation($"Looking for file at this path {filePath}");
             if (File.Exists(filePath))
             {
@@ -71,6 +74,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             else
             {
+                Reporter.WriteError($"Couldn't open config file at this path: {filePath}");
                 return false;
             }
         }
@@ -95,28 +99,35 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
         {
             return TranslateConfigFileToEnvironment(filePath, privateKeyPath);
         }
-        public BoxHomeConfigModel TranslateConfigFileToEnvironment(string filePath, string privateKeyPath = "")
+        public BoxHomeConfigModel TranslateConfigFileToEnvironment(string filePath, string privateKeyPath = "", bool ignoreFilePathTranslation = false)
         {
-            filePath = GeneralUtilities.TranslatePath(filePath);
+            if (!ignoreFilePathTranslation)
+            {
+                filePath = GeneralUtilities.TranslatePath(filePath);
+            }
             var translatedConfig = new BoxHomeConfigModel();
             if (File.Exists(filePath))
             {
                 var config = DeserializeBoxConfigFile(filePath);
                 if (!string.IsNullOrEmpty(privateKeyPath))
                 {
-                    var potentialPathFromOptions = GeneralUtilities.TranslatePath(privateKeyPath);
-                    if (File.Exists(potentialPathFromOptions))
+                    if (!ignoreFilePathTranslation)
                     {
-                        translatedConfig.PrivateKeyPath = potentialPathFromOptions;
+                        privateKeyPath = GeneralUtilities.TranslatePath(privateKeyPath);
+                    }
+                    if (File.Exists(privateKeyPath))
+                    {
+                        translatedConfig.PrivateKeyPath = privateKeyPath;
                     }
                     else
                     {
-                        throw new Exception("Couldn't access the private key file from the path provided.");
+                        throw new Exception($"Couldn't access the private key file from the path provided: {privateKeyPath}.");
                     }
                 }
                 else if (!string.IsNullOrEmpty(config.AppSettings.AppAuth.PrivateKey))
                 {
                     Reporter.WriteInformation("Detected private key value in config...");
+                    Reporter.WriteInformation("Calculating between in-line private key or separate private key file...");
                     var pattern = @"^-----BEGIN ENCRYPTED PRIVATE KEY-----\n";
                     var regex = new Regex(pattern);
                     if (regex.IsMatch(config.AppSettings.AppAuth.PrivateKey))
@@ -127,11 +138,19 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                     else
                     {
                         Reporter.WriteInformation("Attempting to resolve file path for private key.");
-                        var potentialPath = GeneralUtilities.TranslateDependentPath(config.AppSettings.AppAuth.PrivateKey, filePath);
-                        Reporter.WriteInformation($"Found {potentialPath}.");
-                        if (File.Exists(potentialPath))
+                        var privateKeyPathInline = config.AppSettings.AppAuth.PrivateKey;
+                        if (!ignoreFilePathTranslation)
                         {
-                            translatedConfig.PrivateKeyPath = potentialPath;
+                            privateKeyPathInline = GeneralUtilities.TranslateDependentPath(privateKeyPathInline, filePath);
+                        }
+                        Reporter.WriteInformation($"Path to private key file identified: {privateKeyPathInline}.");
+                        if (File.Exists(privateKeyPathInline))
+                        {
+                            translatedConfig.PrivateKeyPath = privateKeyPathInline;
+                        }
+                        else
+                        {
+                            throw new Exception($"Unable to open private key file at {privateKeyPathInline}");
                         }
                     }
                 }
@@ -145,7 +164,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             else
             {
-                Reporter.WriteError("Couldn't open file...");
+                throw new Exception($"Couldn't open config file at {filePath}");
             }
             return translatedConfig;
         }
@@ -303,7 +322,8 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             this.SerializeBoxEnvironmentFile(environments);
             return true;
         }
-        public bool UpdateConfigFilePath(string existingName, string newPath, string newPemPath = "")
+        public bool UpdateConfigFilePath(string existingName, string newPath, string newPemPath = "",
+            bool ignoreFilePathTranslation = false)
         {
             var environments = DeserializeBoxEnvironmentFile();
             var foundEnv = new BoxHomeConfigModel();
@@ -312,18 +332,24 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             {
                 throw new Exception("Couldn't find that environment");
             }
-            var translatePath = GeneralUtilities.TranslatePath(newPath);
-            if (this.VerifyBoxConfigFile(translatePath))
+            if (!ignoreFilePathTranslation)
+            {
+                newPath = GeneralUtilities.TranslatePath(newPath);
+            }
+            if (this.VerifyBoxConfigFile(newPath))
             {
                 BoxHomeConfigModel env;
                 if (!string.IsNullOrEmpty(newPemPath))
                 {
-                    var translatePemPath = GeneralUtilities.TranslatePath(newPemPath);
-                    env = this.TranslateConfigFileToEnvironment(translatePath, translatePemPath);
+                    if (!ignoreFilePathTranslation)
+                    {
+                        newPemPath = GeneralUtilities.TranslatePath(newPemPath);
+                    }
+                    env = this.TranslateConfigFileToEnvironment(newPath, newPemPath, ignoreFilePathTranslation: ignoreFilePathTranslation);
                 }
                 else
                 {
-                    env = this.TranslateConfigFileToEnvironment(translatePath);
+                    env = this.TranslateConfigFileToEnvironment(newPath, ignoreFilePathTranslation: ignoreFilePathTranslation);
                 }
                 foundEnv.BoxConfigFilePath = env.BoxConfigFilePath;
                 foundEnv.ClientId = env.ClientId;
@@ -500,7 +526,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
                 throw new Exception("Couldn't find this environment.");
             }
         }
-        public bool UpdateEnvironmentFilePath(string path, string envName)
+        public bool UpdateEnvironmentFilePath(string path, string envName, bool ignoreFilePathTranslation = false)
         {
             var environments = DeserializeBoxEnvironmentFile();
             var foundEnv = new BoxHomeConfigModel();
@@ -511,7 +537,7 @@ namespace BoxCLI.BoxHome.BoxHomeFiles
             }
             if (this.VerifyBoxConfigFile(path))
             {
-                var newEnv = this.TranslateConfigFileToEnvironment(path);
+                var newEnv = this.TranslateConfigFileToEnvironment(path, ignoreFilePathTranslation: ignoreFilePathTranslation);
                 newEnv.AdminAsUserId = (string.IsNullOrEmpty(foundEnv.AdminAsUserId)) ? "" : foundEnv.AdminAsUserId;
                 newEnv.DefaultAsUserId = (string.IsNullOrEmpty(foundEnv.DefaultAsUserId)) ? "" : foundEnv.DefaultAsUserId;
                 newEnv.UseDefaultAsUser = foundEnv.UseDefaultAsUser;

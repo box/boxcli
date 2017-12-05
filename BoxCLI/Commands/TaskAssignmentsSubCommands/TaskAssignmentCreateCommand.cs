@@ -54,7 +54,7 @@ namespace BoxCLI.Commands.TaskAssignmentsSubCommands
                 Reporter.WriteError("You must include a user ID or login for this command.");
                 return;
             }
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var taskAssignmentCreate = new BoxTaskAssignmentRequest();
             taskAssignmentCreate.Task = new BoxTaskRequest();
             taskAssignmentCreate.Task.Id = this._taskId.Value;

@@ -59,12 +59,12 @@ namespace BoxCLI.Commands.WebhooksSubComands
                 {
                     json = true;
                 }
-                await base.UpdateWebhooksFromFile(_path.Value(), _asUser.Value(), this._save.HasValue(), json: json);
+                await base.UpdateWebhooksFromFile(_path.Value(), this._save.HasValue(), json: json);
                 return;
             }
             base.CheckForValue(this._id.Value, this._app, "A webhook ID is required for this call.");
 
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var webhookRequest = new BoxWebhookRequest();
             webhookRequest.Id = this._id.Value;
             if (this._triggers.HasValue())

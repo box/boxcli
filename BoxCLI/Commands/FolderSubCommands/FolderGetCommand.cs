@@ -42,7 +42,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         protected async Task RunGet()
         {
             base.CheckForId(this._folderId.Value, this._app);
-            var BoxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var folder = await BoxClient.FoldersManager.GetInformationAsync(this._folderId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

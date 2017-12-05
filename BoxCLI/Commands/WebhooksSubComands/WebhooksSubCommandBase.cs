@@ -27,10 +27,10 @@ namespace BoxCLI.Commands.WebhooksSubComands
             base.Configure(command);
         }
 
-        protected async Task CreateWebhooksFromFile(string path, string asUser = "",
+        protected async Task CreateWebhooksFromFile(string path,
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);
@@ -84,10 +84,10 @@ namespace BoxCLI.Commands.WebhooksSubComands
             }
         }
 
-		protected async Task UpdateWebhooksFromFile(string path, string asUser = "",
+		protected async Task UpdateWebhooksFromFile(string path,
 			bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
 		{
-			var boxClient = base.ConfigureBoxClient(asUser);
+			var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 			if (!string.IsNullOrEmpty(path))
 			{
 				path = GeneralUtilities.TranslatePath(path);

@@ -42,7 +42,7 @@ namespace BoxCLI.Commands.TaskSubCommands
         private async Task RunGet()
         {
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var task = await boxClient.TasksManager.GetTaskAsync(this._taskId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

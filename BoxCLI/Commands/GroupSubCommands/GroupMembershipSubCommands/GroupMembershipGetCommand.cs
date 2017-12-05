@@ -41,7 +41,7 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         private async Task RunGet()
         {
             base.CheckForValue(this._membershipId.Value, this._app, "A group memebership ID is required for this command.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var membership = await boxClient.GroupsManager.GetGroupMembershipAsync(_membershipId.Value);
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {

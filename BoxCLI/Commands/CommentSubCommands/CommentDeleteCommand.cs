@@ -83,7 +83,7 @@ namespace BoxCLI.Commands.CommentSubCommands
 
         private async Task<bool> DeleteComment()
         {
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             return await boxClient.CommentsManager.DeleteAsync(this._commentId.Value);
         }
     }

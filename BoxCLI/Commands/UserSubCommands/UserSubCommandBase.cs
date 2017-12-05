@@ -22,6 +22,8 @@ namespace BoxCLI.Commands.UserSubCommands
     public class UserSubCommandBase : BoxBaseCommand
     {
         protected readonly List<string> _fields;
+        protected CommandOption _asUser;
+        private CommandLineApplication _app;
 
         public UserSubCommandBase(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
@@ -52,6 +54,13 @@ namespace BoxCLI.Commands.UserSubCommands
             };
         }
 
+        public override void Configure(CommandLineApplication command)
+        {
+            _app = command;
+            _asUser = AsUserOption.ConfigureOption(command);
+            base.Configure(command);
+        }
+
         public virtual void PrintUserInfo(BoxUser user, bool json = false)
         {
             if (json)
@@ -59,7 +68,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 base.OutputJson(user);
                 return;
             }
-            else 
+            else
             {
                 this.PrintUserInfo(user);
             }
@@ -121,7 +130,7 @@ namespace BoxCLI.Commands.UserSubCommands
         protected async Task CreateUsersFromFile(string path, string asUser = "",
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             path = GeneralUtilities.TranslatePath(path);
             try
             {

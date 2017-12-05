@@ -51,8 +51,8 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunListGroups()
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID is required for this command.");
-            var BoxCollectionsIterators = base.GetIterators();
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (_save.HasValue())
             {
                 BoxCollection<BoxCollaboration> collabs;

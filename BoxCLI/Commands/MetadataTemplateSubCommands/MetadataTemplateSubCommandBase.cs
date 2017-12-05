@@ -9,6 +9,7 @@ using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
 using BoxCLI.CommandUtilities.CommandModels;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
@@ -18,9 +19,19 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
 {
     public class MetadataTemplateSubCommandBase : BoxBaseCommand
     {
+        private CommandLineApplication _app;
+        protected CommandOption _asUser;
+
         public MetadataTemplateSubCommandBase(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
         {
+        }
+
+        public override void Configure(CommandLineApplication command)
+        {
+            _app = command;
+            _asUser = AsUserOption.ConfigureOption(command);
+            base.Configure(command);
         }
 
         protected virtual void CheckForScope(string scope, CommandLineApplication app)
@@ -205,7 +216,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
         protected async virtual Task CreateMetadataTemplatesFromFile(string filePath, string filePathFields = "",
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(filePath))
             {
                 filePath = GeneralUtilities.TranslatePath(filePath);

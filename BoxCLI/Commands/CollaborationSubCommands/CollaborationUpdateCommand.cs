@@ -74,10 +74,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 {
                     json = true;
                 }
-                await base.ProcessCollaborationsFromFile(_id.Value, _path.Value(), base._t, _asUser.Value(), json: json);
+                await base.ProcessCollaborationsFromFile(_id.Value, _path.Value(), base._t, json: json);
             }
             base.CheckForValue(this._id.Value, this._app, "A collaboration ID is required for this command.");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             string role;
             if (this._role.HasValue())
             {
@@ -85,17 +85,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             }
             else
             {
-                var roles = new Dictionary<string, bool>()
-                {
-                    {"editor", this._editor.HasValue()},
-                    {"viewer", this._viewer.HasValue()},
-                    {"uploader", this._uploader.HasValue()},
-                    {"previewer uploader", this._previewerUploader.HasValue()},
-                    {"viewer uploader", this._viewerUploader.HasValue()},
-                    {"co-owner", this._coowner.HasValue()},
-                    {"owner", this._owner.HasValue()},
-                };
-                role = base.ProcessRoleOptions(roles);
+                role = base.ProcessRoleOptions(editor: this._editor, viewer: this._viewer,
+                    uploader: this._uploader, previewerUploader: this._previewerUploader,
+                    viewerUploader: this._viewerUploader, coOwner: this._coowner, owner: this._owner,
+                    previewer: this._previewer);
             }
 
             var collabRequest = new BoxCollaborationRequest();

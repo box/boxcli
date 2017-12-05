@@ -4,6 +4,6 @@ namespace BoxCLI.BoxPlatform.Service
 {
     public interface IBoxPlatformServiceBuilder
     {
-         IBoxPlatformService Build();   
+        IBoxPlatformService Build(bool isTokenCall = false);
     }
 }

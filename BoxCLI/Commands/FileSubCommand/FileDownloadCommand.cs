@@ -49,7 +49,7 @@ namespace BoxCLI.Commands.FileSubCommand
         {
             if(this._bulkPath.HasValue())
             {
-                await base.ProcessBulkDownload(this._bulkPath.Value(), this._asUser.Value());
+                await base.ProcessBulkDownload(this._bulkPath.Value());
                 return;
             }
             if (this._multiId.HasValue())

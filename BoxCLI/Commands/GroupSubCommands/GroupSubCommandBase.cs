@@ -68,10 +68,10 @@ namespace BoxCLI.Commands.GroupSubCommands
             Reporter.WriteInformation($"Name: {g.Name}");
         }
 
-        protected async Task CreateGroupsFromFile(string path, string asUser = "",
+        protected async Task CreateGroupsFromFile(string path,
             bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
         {
-            var boxClient = base.ConfigureBoxClient(asUser);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (!string.IsNullOrEmpty(path))
             {
                 path = GeneralUtilities.TranslatePath(path);

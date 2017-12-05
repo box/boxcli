@@ -95,12 +95,15 @@ namespace BoxCLI.BoxPlatform.Service
             BoxService.BoxCollectionsIterators = BoxIterators;
         }
 
-        public IBoxPlatformService Build()
+        public IBoxPlatformService Build(bool isTokenCall = false)
         {
-            SetConfig();
-            SetCache();
-            SetAuthorizedClient();
-            SetIterators();
+            if (!isTokenCall)
+            {
+                SetConfig();
+                SetCache();
+                SetAuthorizedClient();
+                SetIterators();
+            }
             return BoxService;
         }
     }

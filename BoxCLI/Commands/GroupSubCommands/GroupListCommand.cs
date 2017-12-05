@@ -47,7 +47,7 @@ namespace BoxCLI.Commands.GroupSubCommands
         private async Task RunList()
         {
 
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.List}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
@@ -63,7 +63,7 @@ namespace BoxCLI.Commands.GroupSubCommands
                 base.OutputJson(saveGroups);
                 return;
             }
-            var BoxCollectionsIterators = base.GetIterators();
+            var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxGroup>((offset) =>
             {
                 return boxClient.GroupsManager.GetAllGroupsAsync(limit: 100, offset: (int)offset);

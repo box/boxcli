@@ -21,6 +21,7 @@ using BoxCLI.CommandUtilities.Globalization.Models;
 using BoxCLI.Commands.ConfigureSubCommands;
 using BoxCLI.CommandUtilities.Exceptions;
 using Newtonsoft.Json.Linq;
+using Box.V2.Exceptions;
 
 namespace BoxCLI
 {
@@ -28,6 +29,8 @@ namespace BoxCLI
     {
         static public IConfigurationRoot Configuration { get; set; }
         static public IServiceProvider Services { get; set; }
+
+        static private CommandLineApplication _app;
 
         static int Main(string[] args)
         {
@@ -38,14 +41,36 @@ namespace BoxCLI
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
 
-
             try
             {
                 var app = new CommandLineApplication();
                 var root = Services.GetService<RootCommand>();
+                _app = app;
 
                 root.Configure(app);
                 return app.Execute(args);
+            }
+            catch (AggregateException aggEx)
+            {
+                if (aggEx.InnerException.GetType() == typeof(BoxSessionInvalidatedException))
+                {
+                    Reporter.WriteError("Token not valid.");
+                    Reporter.WriteError("Please try another token with the --token option.");
+                }
+                else if (aggEx != null && !string.IsNullOrEmpty(aggEx.Message))
+                {
+                    Reporter.WriteError(GeneralUtilities.FormatErrorResponseFromAPI(aggEx.InnerException));
+                }
+                if (aggEx.InnerException != null)
+                {
+                    if (aggEx.InnerException.GetType() == typeof(NoEnvironmentsFoundException))
+                    {
+                        Reporter.WriteError("It looks like you haven't configured the Box CLI yet.");
+                        Reporter.WriteError("Use this command to start using the CLI: box configure environments add");
+                        Reporter.WriteError("Or, supply a token with your command with --token.");
+                    }
+                }
+                return 1;
             }
             catch (Exception ex)
             {

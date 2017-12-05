@@ -33,6 +33,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _isPasswordResetRequired;
         private CommandOption _appUser;
         private CommandOption _idOnly;
+        
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -78,7 +79,7 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunCreate()
         {
-            var boxClient = base.ConfigureBoxClient(returnServiceAccount: true);
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._path.HasValue())
             {
                 var json = false;

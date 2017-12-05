@@ -47,7 +47,7 @@ namespace BoxCLI.Commands.TaskSubCommands
         private async Task RunUpdate()
         {
             base.CheckForValue(this._taskId.Value, this._app, "A task ID is required for this command");
-            var boxClient = base.ConfigureBoxClient(base._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var taskRequest = new BoxTaskUpdateRequest();
             if (this._message.HasValue())
             {

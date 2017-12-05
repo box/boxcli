@@ -64,7 +64,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
                 {
                     json = true;
                 }
-                await base.CreateWebhooksFromFile(_path.Value(), _asUser.Value(), this._save.HasValue(), json: json);
+                await base.CreateWebhooksFromFile(_path.Value(), this._save.HasValue(), json: json);
                 return;
             }
             base.CheckForValue(this._id.Value, this._app, "A Box item ID is required for this call.");
@@ -72,7 +72,7 @@ namespace BoxCLI.Commands.WebhooksSubComands
             base.CheckForValue(this._triggers.Value, this._app, "Triggers are required for this call.");
             base.CheckForValue(this._address.Value, this._app, "A webhook handler URL is required for this call.");
 
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
 
             var type = base.ProcessType(this._type.Value);
             var webhookRequest = new BoxWebhookRequest();

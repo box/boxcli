@@ -46,7 +46,7 @@ namespace BoxCLI.Commands.EventSubCommands
 
         protected async virtual Task PollEnterpriseEvents()
         {
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-15));
             foreach (var evt in events.Entries)
             {
@@ -62,7 +62,7 @@ namespace BoxCLI.Commands.EventSubCommands
         protected async virtual Task<string> PollForMoreEnterpriseEvents(string nextStream)
         {
             await Task.Delay(60000);
-            var boxClient = base.ConfigureBoxClient(this._asUser.Value());
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var moreEvents = await boxClient.EventsManager.EnterpriseEventsAsync(streamPosition: nextStream);
             foreach (var evt in moreEvents.Entries)
             {
