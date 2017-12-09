@@ -74,6 +74,7 @@ namespace BoxCLI.Commands.UserSubCommands
                     {
                         return user.Login.Contains("AppUser");
                     });
+                    users.TotalCount = users.Entries.Count;
                 }
                 else
                 {
@@ -98,6 +99,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 {
                     return user.Login.Contains("AppUser");
                 });
+                users.TotalCount = users.Entries.Count;
                 if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     base.OutputJson(users);

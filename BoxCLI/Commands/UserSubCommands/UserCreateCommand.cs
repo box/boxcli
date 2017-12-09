@@ -107,11 +107,16 @@ namespace BoxCLI.Commands.UserSubCommands
             {
                 role = "user";
             }
-            var userRequest = base.CreateUserRequest(this._name.Value, "", role, false,
-            this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(),
-            this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(),
-            this._notExemptFromDeviceLimits.HasValue(), this._isExemptFromLoginVerificaton.HasValue(), this._notExemptFromLoginVerification.HasValue(),
-            this._isPasswordResetRequired.HasValue(), login: this._login.Value);
+            var userRequest = base.CreateUserRequest(name: this._name.Value, role: role,
+            language: this._language.Value(), jobTitle: this._jobTitle.Value(), 
+            phoneNumber: this._phoneNumber.Value(), address: this._address.Value(), 
+            spaceAmount: this._spaceAmount.Value(), status: this._status.Value(), 
+            syncDisable: this._syncDisable.HasValue(), syncEnable: this._syncEnable.HasValue(), 
+            isExemptFromDeviceLimits: this._isExemptFromDeviceLimits.HasValue(),
+            notExemptFromDeviceLimits: this._notExemptFromDeviceLimits.HasValue(), 
+            isExemptFromLoginVerificaton: this._isExemptFromLoginVerificaton.HasValue(), 
+            notExemptFromLoginVerification: this._notExemptFromLoginVerification.HasValue(),
+            isPasswordResetRequired: this._isPasswordResetRequired.HasValue(), login: this._login.Value);
             if (this._appUser.HasValue())
             {
                 userRequest.IsPlatformAccessOnly = true;
