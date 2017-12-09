@@ -4,6 +4,7 @@ using Box.V2.Models;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
+using BoxCLI.CommandUtilities.CommandModels;
 using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
@@ -29,6 +30,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _isExemptFromLoginVerificaton;
         private CommandOption _notExemptFromLoginVerification;
         private CommandOption _isPasswordResetRequired;
+        private CommandOption _dontPrompt;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -60,6 +62,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _isExemptFromLoginVerificaton = command.Option("--is-exempt-login-verification", "Exempt user from two-factor auth", CommandOptionType.NoValue);
             _notExemptFromLoginVerification = command.Option("--not-exempt-login-verification", "User is not exempt from two-factor auth", CommandOptionType.NoValue);
             _isPasswordResetRequired = command.Option("--password-reset", "Force the user to reset password", CommandOptionType.NoValue);
+            _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -77,12 +80,46 @@ namespace BoxCLI.Commands.UserSubCommands
         {
             base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
-            var userRequest = base.CreateUserRequest(this._name.Value(), this._userId.Value, this._role.Value(), this._enterprise.HasValue(),
-            this._language.Value(), this._jobTitle.Value(), this._phoneNumber.Value(), this._address.Value(), this._spaceAmount.Value(),
-            this._status.Value(), this._syncDisable.HasValue(), this._syncEnable.HasValue(), this._isExemptFromDeviceLimits.HasValue(),
-            this._notExemptFromDeviceLimits.HasValue(), this._isExemptFromLoginVerificaton.HasValue(), this._notExemptFromLoginVerification.HasValue(),
-            this._isPasswordResetRequired.HasValue());
+            // TODO: Update after SDK is fixed
+            if (this._enterprise.HasValue())
+            {
+                boxClient.AddResourcePlugin<BoxUsersManagerCommand>();
+                var command = boxClient.ResourcePlugins.Get<BoxUsersManagerCommand>();
+                BoxUser userRemoved;
+                if (this._dontPrompt.HasValue())
+                {
+                    userRemoved = await command.RemoveFromEnterprise(this._userId.Value);
+                    Reporter.WriteSuccess($"Removed user {userRemoved.Id} from your Enterprise.");
+                    return;
+                }
+                else
+                {
+                    Reporter.WriteWarningNoNewLine("Are you sure you want to remove this user from your Enterprise? y/N ");
+                    var yNKey = "n";
+                    yNKey = Console.ReadLine().ToLower();
+                    if (yNKey != "y")
+                    {
+                        Reporter.WriteInformation("Aborted removing user.");
+                        return;
+                    }
+                    else
+                    {
+                        userRemoved = await command.RemoveFromEnterprise(this._userId.Value);
+                        Reporter.WriteSuccess($"Removed user {userRemoved.Id} from your Enterprise.");
+                        return;
+                    }
+                }
 
+            }
+            var userRequest = base.CreateUserRequest(name: this._name.Value(), userId: this._userId.Value,
+            role: this._role.Value(), language: this._language.Value(), jobTitle: this._jobTitle.Value(),
+            phoneNumber: this._phoneNumber.Value(), address: this._address.Value(), spaceAmount: this._spaceAmount.Value(),
+            status: this._status.Value(), syncDisable: this._syncDisable.HasValue(), syncEnable: this._syncEnable.HasValue(),
+            isExemptFromDeviceLimits: this._isExemptFromDeviceLimits.HasValue(),
+            notExemptFromDeviceLimits: this._notExemptFromDeviceLimits.HasValue(),
+            isExemptFromLoginVerificaton: this._isExemptFromLoginVerificaton.HasValue(),
+            notExemptFromLoginVerification: this._notExemptFromLoginVerification.HasValue(),
+            isPasswordResetRequired: this._isPasswordResetRequired.HasValue());
             BoxUser updatedUser = await boxClient.UsersManager.UpdateUserInformationAsync(userRequest);
 
             if (updatedUser.Id == this._userId.Value)
