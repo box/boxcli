@@ -10,7 +10,6 @@ namespace BoxCLI.CommandUtilities.CsvModels
         {
             Map(m => m.Name);
             Map(m => m.Description);
-            Map(m => m.SyncState);
             References<BoxFolderRequestParentMap>(m => m.Parent);
         }
     }

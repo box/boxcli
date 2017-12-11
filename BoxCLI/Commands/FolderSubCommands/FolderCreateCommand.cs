@@ -19,6 +19,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _fileFormat;
         private CommandOption _save;
         private CommandOption _idOnly;
+        private CommandOption _description;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -40,6 +41,8 @@ namespace BoxCLI.Commands.FolderSubCommands
             _parentFolderId = command.Argument("parentFolderId",
                                "Id of parent folder to add new folder to, use '0' for the root folder");
             _name = command.Argument("name", "Name of new folder");
+            _description = command.Option("--description",
+                                        "A description for folder <DESCRIPTION>", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -73,6 +76,13 @@ namespace BoxCLI.Commands.FolderSubCommands
             folderRequest.Parent.Id = this._parentFolderId.Value;
             folderRequest.Name = this._name.Value;
             var folder = await BoxClient.FoldersManager.CreateAsync(folderRequest);
+            var update = new BoxFolderRequest();
+            if (this._description.HasValue())
+            {
+                update.Description = this._description.Value();
+                update.Id = folder.Id;
+                folder = await BoxClient.FoldersManager.UpdateInformationAsync(update);
+            }
             if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(folder.Id);
