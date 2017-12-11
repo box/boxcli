@@ -4,6 +4,8 @@
 - Fixed bug preventing removal of a user from an Enterprise and conversion to a free user account.
 - Fixed bug that returned incorrect total count when using `box list users -m` to only list managed users.
 - Added CreatedAt field to CSV output for events.
+- Removed SyncState from CSV for creating folders.
+- Enabled setting a description for a folder when creating the folder.
 
 ## 1.1.0
 - Added new feature on all commands for using an individual token. Add the `--token` option to perform an individual command with the Box CLI using a specific token you provide. The feature is most useful when paired with the Developer Token you can generate through the Box Developer Console. When working with an application you create in the Box Developer Console, you will not need to authorize the application into a Box Enterprise before working with the Developer Token. For example usage: `box users get me --token <token_string>`. Certain commands may fail based on the permissions of the user to which the token you use belongs.

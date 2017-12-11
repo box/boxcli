@@ -114,6 +114,13 @@ namespace BoxCLI.Commands.FolderSubCommands
                     try
                     {
                         createdFolder = await boxClient.FoldersManager.CreateAsync(folderRequest);
+                        var update = new BoxFolderRequest();
+                        if (!string.IsNullOrEmpty(folderRequest.Description))
+                        {
+                            update.Description = folderRequest.Description;
+                            update.Id = createdFolder.Id;
+                            createdFolder = await boxClient.FoldersManager.UpdateInformationAsync(update);
+                        }
                     }
                     catch (Exception e)
                     {
