@@ -7,7 +7,8 @@ namespace BoxCLI.CommandUtilities.CsvModels
     public class BoxEventMap : CsvClassMap<BoxEnterpriseEvent>
     {
         public BoxEventMap()
-        {   Map(m => m.CreatedAt);
+        {   
+            Map(m => m.CreatedAt);
             Map(m => m.EventId);
             Map(m => m.EventType);
             Map(m => m.IPAddress);
