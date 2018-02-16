@@ -30,6 +30,10 @@ namespace BoxCLI.Commands.MetadataSubCommands
             {
                 return new MetadataUpdateCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
             }
+            else if (commandName == base._names.SubCommandNames.Delete)
+            {
+                return new MetadataDeleteCommand(_boxPlatformBuilder, _boxHome, _names, BoxType.file);
+            }
             else
             {
                 throw new Exception("Command not registered.");

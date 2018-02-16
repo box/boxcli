@@ -23,6 +23,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
         private CommandOption _path;
         private CommandOption _value;
         private CommandOption _from;
+        private CommandOption _isFloat;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -44,13 +45,14 @@ namespace BoxCLI.Commands.MetadataSubCommands
                                    "The key of the template");
             _add = command.Option("-a|--add", "Add operation", CommandOptionType.NoValue);
             _copy = command.Option("-c|--copy", "Copy operation", CommandOptionType.NoValue);
-            _from = command.Option("-f|--from", "Required for move or copy. The path that designates the source key, in the format of a JSON-Pointer.", CommandOptionType.SingleValue);
+            _from = command.Option("-f|--from <KEY>", "Required for move or copy. The path that designates the source key, in the format of a JSON-Pointer, for example /key", CommandOptionType.SingleValue);
             _move = command.Option("-m|--move", "Move operation", CommandOptionType.NoValue);
-            _path = command.Option("-p|--path", "The path that designates the key, in the format of a JSON-Pointer", CommandOptionType.SingleValue);
+            _path = command.Option("-p|--path <KEY>", "The path that designates the key, in the format of a JSON-Pointer, for example /key", CommandOptionType.SingleValue);
             _remove = command.Option("--remove", "Remove operation", CommandOptionType.NoValue);
             _replace = command.Option("--replace", "Replace operation", CommandOptionType.NoValue);
             _test = command.Option("-t|--test", "Test operation", CommandOptionType.NoValue);
             _value = command.Option("-v|--value", "The value to be set or tested. Required for add, replace, and test operations.", CommandOptionType.SingleValue);
+            _isFloat = command.Option("--is-float", "Treat the value as float type.", CommandOptionType.NoValue);
 
             command.OnExecute(async () =>
             {
@@ -128,7 +130,14 @@ namespace BoxCLI.Commands.MetadataSubCommands
 
             update.Path = this._path.Value();
             update.From = this._from.Value();
-            update.Value = this._value.Value();
+            if (this._isFloat.HasValue())
+            {
+                update.Value = Decimal.Parse(this._value.Value());
+            }
+            else
+            {
+                update.Value = this._value.Value();
+            }
             updates.Add(update);
             return updates;
         }
