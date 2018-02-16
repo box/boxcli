@@ -38,7 +38,7 @@ namespace BoxCLI.Commands.MetadataSubCommands
                                    "The key of the template");
             _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
             _keyVal = command.Option("--kv <KEYVALS>",
-                "Keys and values for metadata. Format like key1|val1&key2|val2",
+                "Metadata keys and values. Usage: key1=val1&key2=val2 Note: For float type, use \"f\" on end of digits, key1=1234f&key2=1234.50f",
                 CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {

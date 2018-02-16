@@ -20,6 +20,7 @@ namespace BoxCLI.Commands
             command.Command(base._names.SubCommandNames.GetAll, _subCommands.CreateSubCommand(_names.SubCommandNames.GetAll).Configure);
             command.Command(base._names.SubCommandNames.Create, _subCommands.CreateSubCommand(_names.SubCommandNames.Create).Configure);
             command.Command(base._names.SubCommandNames.Update, _subCommands.CreateSubCommand(_names.SubCommandNames.Update).Configure);
+            command.Command(base._names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
 
             command.OnExecute(async () =>
             {

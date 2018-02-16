@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Box.V2.Models;
 using BoxCLI.BoxHome;
@@ -59,7 +60,18 @@ namespace BoxCLI.Commands.MetadataSubCommands
                 var splitKeyVal = keyVal.Split('=');
                 if (splitKeyVal.Length == 2)
                 {
-                    metadata.Add(splitKeyVal[0], splitKeyVal[1]);
+                    // Check for series of digits, optional decimal portion, and "f" 
+                    // signifying this is a "float" type.
+                    var regex = new Regex(@"^[0-9]*\.?[0-9]*f{1}$");
+                    if (regex.IsMatch(splitKeyVal[1]))
+                    {
+                        var parseNum = splitKeyVal[1].Substring(0, splitKeyVal[1].Length - 1);
+                        metadata.Add(splitKeyVal[0], Decimal.Parse(parseNum));
+                    }
+                    else
+                    {
+                        metadata.Add(splitKeyVal[0], splitKeyVal[1]);
+                    }
                 }
             }
             return metadata;
@@ -85,7 +97,17 @@ namespace BoxCLI.Commands.MetadataSubCommands
                 key = Console.ReadLine();
                 Reporter.WriteInformation("Enter the metadata value:");
                 val = Console.ReadLine();
-                md.Add(key, val);
+                Reporter.WriteInformation("Is metadata value a float? y/N");
+                var yesNoVal = "n";
+                yesNoVal = Console.ReadLine();
+                if (yesNoVal == "y")
+                {
+                    md.Add(key, Decimal.Parse(val));
+                }
+                else
+                {
+                    md.Add(key, val);
+                }
                 Reporter.WriteInformation("Enter to continue, q to quit.");
                 q = Console.ReadLine().ToLower();
             }
