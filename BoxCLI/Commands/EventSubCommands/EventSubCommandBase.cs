@@ -44,10 +44,11 @@ namespace BoxCLI.Commands.EventSubCommands
             Reporter.WriteInformation($"***********************");
         }
 
-        protected async virtual Task PollEnterpriseEvents()
+        protected async virtual Task PollEnterpriseEvents(string[] eventTypes = null)
         {
+            eventTypes = eventTypes ?? new string[0];
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
-            var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-15));
+            var events = await boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: DateTime.Now.AddMinutes(-15), eventTypes: eventTypes);
             foreach (var evt in events.Entries)
             {
                 this.PrintEvent(evt);
@@ -55,15 +56,15 @@ namespace BoxCLI.Commands.EventSubCommands
             var nextStream = events.NextStreamPosition;
             while (true)
             {
-                nextStream = await PollForMoreEnterpriseEvents(nextStream);
+                nextStream = await PollForMoreEnterpriseEvents(nextStream, eventTypes);
             }
         }
 
-        protected async virtual Task<string> PollForMoreEnterpriseEvents(string nextStream)
+        protected async virtual Task<string> PollForMoreEnterpriseEvents(string nextStream, string[] eventTypes)
         {
             await Task.Delay(60000);
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
-            var moreEvents = await boxClient.EventsManager.EnterpriseEventsAsync(streamPosition: nextStream);
+            var moreEvents = await boxClient.EventsManager.EnterpriseEventsAsync(streamPosition: nextStream, eventTypes: eventTypes);
             foreach (var evt in moreEvents.Entries)
             {
                 this.PrintEvent(evt);

@@ -20,6 +20,7 @@ namespace BoxCLI.Commands.EventSubCommands
         private CommandOption _fileFormat;
         private CommandOption _path;
         private CommandOption _createdBefore;
+        private CommandOption _eventTypes;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -35,6 +36,7 @@ namespace BoxCLI.Commands.EventSubCommands
             _enterprise = command.Option("-e|--enterprise", "Get enterprise events", CommandOptionType.NoValue);
             _createdBefore = command.Option("--created-before", "Return enterprise events that occured before a time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now.", CommandOptionType.SingleValue);
             _createdAfter = command.Option("--created-after", "Return enterprise events that occured before a time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to 5 days ago.", CommandOptionType.SingleValue);
+            _eventTypes = command.Option("--event-types", "Return enterprise events filtered by event types. Format using a comma delimited list: NEW_USER,DELETE_USER,EDIT_USER", CommandOptionType.SingleValue);
             _save = SaveOption.ConfigureOption(command);
             _path = FilePathOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
@@ -56,6 +58,7 @@ namespace BoxCLI.Commands.EventSubCommands
         {
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
+            var eventTypes = this._eventTypes.HasValue() ? this._eventTypes.Value().Split(',') : new string[0];
             if (this._enterprise.HasValue())
             {
                 var createdBefore = DateTime.Now;
@@ -89,7 +92,7 @@ namespace BoxCLI.Commands.EventSubCommands
                     Reporter.WriteInformation("Saving file...");
                     var events = await BoxCollectionsIterators.ReturnAllEvents((position) =>
                     {
-                        return boxClient.EventsManager.EnterpriseEventsAsync(limit: 1000, createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position);
+                        return boxClient.EventsManager.EnterpriseEventsAsync(limit: 1000, createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position, eventTypes: eventTypes);
                     });
                     base.WriteEventListResultsToReport(events.Entries, fileName, _path.Value(), _fileFormat.Value());
                     return;
@@ -98,18 +101,22 @@ namespace BoxCLI.Commands.EventSubCommands
                 {
                     var events = await BoxCollectionsIterators.ReturnAllEvents((position) =>
                     {
-                        return boxClient.EventsManager.EnterpriseEventsAsync(limit: 1000, createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position);
+                        return boxClient.EventsManager.EnterpriseEventsAsync(limit: 1000, createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position, eventTypes: eventTypes);
                     });
                     base.OutputJson(events);
                     return;
                 }
                 await BoxCollectionsIterators.ListEventCollectionToConsole((position) =>
                 {
-                    return boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position);
+                    return boxClient.EventsManager.EnterpriseEventsAsync(createdAfter: createdAfter, createdBefore: createdBefore, streamPosition: position, eventTypes: eventTypes);
                 }, base.PrintEvent);
             }
             else
             {
+                if (this._eventTypes.HasValue())
+                {
+                    throw new Exception("Cannot use --event-types with the user event stream.");
+                }
                 if (this._save.HasValue())
                 {
                     var fileName = $"{base._names.CommandNames.Events}-user-{base._names.SubCommandNames.Get}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
