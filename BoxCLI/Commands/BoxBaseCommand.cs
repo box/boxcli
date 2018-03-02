@@ -20,6 +20,7 @@ using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.CsvModels;
 using BoxCLI.CommandUtilities.Globalization;
 using CsvHelper;
+using CsvHelper.TypeConversion;
 using Microsoft.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -614,7 +615,18 @@ namespace BoxCLI.Commands
                 using (var csv = new CsvReader(fs))
                 {
                     csv.Configuration.RegisterClassMap(typeof(M));
-                    return csv.GetRecords<T>().ToList();
+                    try
+                    {
+                        return csv.GetRecords<T>().ToList();
+                    }
+                    catch (CsvTypeConverterException e)
+                    {
+                        foreach (var value in e.Data.Values)
+                        {
+                            Reporter.WriteError(value.ToString());
+                        }
+                        throw e;
+                    }
                 }
             }
             else

@@ -31,6 +31,7 @@ namespace BoxCLI.Commands.UserSubCommands
         private CommandOption _notExemptFromLoginVerification;
         private CommandOption _isPasswordResetRequired;
         private CommandOption _dontPrompt;
+        private CommandOption _bulkFilePath;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -63,6 +64,7 @@ namespace BoxCLI.Commands.UserSubCommands
             _notExemptFromLoginVerification = command.Option("--not-exempt-login-verification", "User is not exempt from two-factor auth", CommandOptionType.NoValue);
             _isPasswordResetRequired = command.Option("--password-reset", "Force the user to reset password", CommandOptionType.NoValue);
             _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
+            _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -78,8 +80,18 @@ namespace BoxCLI.Commands.UserSubCommands
 
         private async Task RunUpdate()
         {
-            base.CheckForUserId(this._userId.Value, this._app);
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            if (this._bulkFilePath.HasValue())
+            {
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.UpdateUsersFromFile(this._bulkFilePath.Value(), json: json);
+                return;
+            }
+            base.CheckForUserId(this._userId.Value, this._app);
             // TODO: Update after SDK is fixed
             if (this._enterprise.HasValue())
             {

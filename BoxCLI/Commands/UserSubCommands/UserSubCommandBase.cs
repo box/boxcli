@@ -190,5 +190,60 @@ namespace BoxCLI.Commands.UserSubCommands
 
             return userRequest;
         }
+        protected async Task UpdateUsersFromFile(string path,
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
+        {
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = GeneralUtilities.TranslatePath(path);
+            }
+            try
+            {
+                var userRequests = base.ReadFile<BoxUserRequest, BoxUserUpdateRequestMap>(path);
+                List<BoxUser> saveUpdated = new List<BoxUser>();
+
+                foreach (var userRequest in userRequests)
+                {
+                    BoxUser updatedUser = null;
+                    try
+                    {
+                        updatedUser = await boxClient.UsersManager.UpdateUserInformationAsync(userRequest);
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError("Couldn't update user...");
+                        Reporter.WriteError(e.Message);
+                    }
+                    if (updatedUser != null)
+                    {
+                        this.PrintUserInfo(updatedUser, json);
+                        if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                        {
+                            saveUpdated.Add(updatedUser);
+                        }
+                    }
+                }
+                if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                {
+                    var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+                    if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+                    {
+                        fileFormat = overrideSaveFileFormat;
+                    }
+                    var savePath = base._settings.GetBoxReportsFolderPath();
+                    if (!string.IsNullOrEmpty(overrideSavePath))
+                    {
+                        savePath = overrideSavePath;
+                    }
+                    var fileName = $"{base._names.CommandNames.Users}-{base._names.SubCommandNames.Update}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    base.WriteListResultsToReport<BoxUser, BoxUserMap>(saveUpdated, fileName, savePath, fileFormat);
+                }
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+            }
+        }
     }
 }
