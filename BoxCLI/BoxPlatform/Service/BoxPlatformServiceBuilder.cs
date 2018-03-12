@@ -34,7 +34,6 @@ namespace BoxCLI.BoxPlatform.Service
                 using (FileStream fs = new FileStream(defaultEnv.BoxConfigFilePath, FileMode.Open))
                 {
                     BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
-                    BoxService.BoxPlatformConfig = BoxPlatformConfig;
                 }
             }
             else if (!string.IsNullOrEmpty(defaultEnv.PrivateKeyPath))
@@ -44,7 +43,6 @@ namespace BoxCLI.BoxPlatform.Service
                 BoxPlatformConfig = new BoxCLIConfig(config.AppSettings.ClientId, config.AppSettings.ClientSecret,
                                                     config.EnterpriseId, pem, config.AppSettings.AppAuth.Passphrase,
                                                     config.AppSettings.AppAuth.PublicKeyId);
-                BoxService.BoxPlatformConfig = BoxPlatformConfig;
             }
             else
             {
@@ -60,8 +58,7 @@ namespace BoxCLI.BoxPlatform.Service
                 {
                     using (FileStream fs = new FileStream(existing.BoxConfigFilePath, FileMode.Open))
                     {
-                        BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);
-                        BoxService.BoxPlatformConfig = BoxPlatformConfig;
+                        BoxPlatformConfig = BoxCLIConfig.CreateFromJsonFile(fs);       
                     }
                 }
                 else if (!string.IsNullOrEmpty(existing.PrivateKeyPath))
@@ -71,13 +68,14 @@ namespace BoxCLI.BoxPlatform.Service
                     BoxPlatformConfig = new BoxCLIConfig(config.AppSettings.ClientId, config.AppSettings.ClientSecret,
                                                         config.EnterpriseId, pem, config.AppSettings.AppAuth.Passphrase,
                                                         config.AppSettings.AppAuth.PublicKeyId);
-                    BoxService.BoxPlatformConfig = BoxPlatformConfig;
                 }
                 else
                 {
                     throw new Exception("An unknown error occured.");
                 }
             }
+            BoxPlatformConfig.UserAgent = $"{BoxCLIInfo.ProductTitle} v{BoxCLIInfo.Version}";
+            BoxService.BoxPlatformConfig = BoxPlatformConfig;
         }
 
         public void SetCache()

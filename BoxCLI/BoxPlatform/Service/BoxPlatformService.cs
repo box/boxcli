@@ -8,6 +8,7 @@ using BoxCLI.BoxPlatform.Cache;
 using BoxCLI.BoxPlatform.Utilities;
 using System.Threading.Tasks;
 using Box.V2.Auth;
+using BoxCLI.BoxPlatform.Models;
 
 namespace BoxCLI.BoxPlatform.Service
 {
@@ -17,6 +18,7 @@ namespace BoxCLI.BoxPlatform.Service
         public IBoxPlatformCache BoxPlatformCache { get; set; }
         public IBoxConfig BoxPlatformConfig { get; set; }
         public IBoxCollectionsIterators BoxCollectionsIterators { get; set; }
+        private static readonly Uri redirect = new Uri("http://localhost");
         public BoxPlatformService()
         {
         }
@@ -35,7 +37,7 @@ namespace BoxCLI.BoxPlatform.Service
         public BoxClient ClientFromToken(string token)
         {
             var auth = new OAuthSession(token, "1", 3600, "bearer");
-            return new BoxClient(new BoxConfig("", "", new Uri("http://localhost")), auth);
+            return new BoxClient(new BoxCLIConfig("", "", redirect: redirect), auth);
         }
 
         public async Task<bool> BustCache()
