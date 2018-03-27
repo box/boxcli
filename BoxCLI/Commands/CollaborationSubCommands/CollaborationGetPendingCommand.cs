@@ -15,6 +15,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
     {
         private CommandOption _save;
         private CommandOption _fileFormat;
+        private CommandOption _fieldsOption;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -30,6 +31,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             command.Description = "List all pending collaborations for a user.";
             _save = SaveOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
+            _fieldsOption = FieldsOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -46,7 +48,8 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunGetPending()
         {
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
-            var collabs = await boxClient.CollaborationsManager.GetPendingCollaborationAsync();
+            var fields = base.ProcessFields(this._fieldsOption.Value(), CollaborationSubCommandBase._fields);
+            var collabs = await boxClient.CollaborationsManager.GetPendingCollaborationAsync(fields: fields);
             if (_save.HasValue())
             {
                 var fileName = $"{base._names.CommandNames.Collaborations}-{base._names.SubCommandNames.GetPending}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";

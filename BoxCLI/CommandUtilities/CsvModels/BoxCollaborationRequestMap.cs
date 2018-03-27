@@ -1,3 +1,4 @@
+using System;
 using Box.V2.Models;
 using CsvHelper.Configuration;
 
@@ -18,9 +19,24 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxCollaborationUserRequestMap()
         {
-            Map(m => m.Type).Name("UserGroupType");
-            Map(m => m.Id).Name("UserGroupId");
-            Map(m => m.Login).Default("");
+            Map(m => m.Id).Name("AccessibleById");
+            Map(m => m.Type).Name("AccessibleByType").ConvertUsing<BoxType>(row =>
+            {
+                var field = row.GetField("AccessibleByType");
+                if (field.ToLower() == "user")
+                {
+                    return BoxType.user;
+                }
+                else if (field.ToLower() == "group")
+                {
+                    return BoxType.group;
+                }
+                else
+                {
+                    throw new Exception("Must provide user or group as AccessibleByType.");
+                }
+            });
+            Map(m => m.Login).Name("AccessibleByLogin");
         }
     }
 
@@ -29,7 +45,22 @@ namespace BoxCLI.CommandUtilities.CsvModels
         public BoxCollaborationItemRequestMap()
         {
             Map(m => m.Id).Name("ItemId");
-            Map(m => m.Type).Name("ItemType").Default("enterprise");
+            Map(m => m.Type).Name("ItemType").ConvertUsing<BoxType>(row =>
+            {
+                var field = row.GetField("ItemType");
+                if (field.ToLower() == "file")
+                {
+                    return BoxType.file;
+                }
+                else if (field.ToLower() == "folder")
+                {
+                    return BoxType.folder;
+                }
+                else
+                {
+                    throw new Exception("Must provide file or folder as ItemType.");
+                }
+            });
         }
     }
 }

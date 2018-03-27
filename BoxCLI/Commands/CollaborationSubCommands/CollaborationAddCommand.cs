@@ -13,8 +13,12 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 {
     public class CollaborationAddCommand : CollaborationSubCommandBase
     {
+        public static readonly string commandName = "add";
         private CommandArgument _id;
         private CommandOption _path;
+        private CommandOption _bulkPath;
+        private CommandOption _save;
+        private CommandOption _fileFormat;
         private CommandOption _role;
         private CommandOption _editor;
         private CommandOption _viewer;
@@ -28,6 +32,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _login;
         private CommandOption _canViewPath;
         private CommandOption _idOnly;
+        private CommandOption _fieldsOption;
         private CommandArgument _type;
         private CommandLineApplication _app;
         private IBoxHome _home;
@@ -42,6 +47,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             _app = command;
             command.Description = "Create a collaboration for a Box item.";
             _path = FilePathOption.ConfigureOption(command);
+            _bulkPath = BulkFilePathOption.ConfigureOption(command);
+            _save = SaveOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
+            _fieldsOption = FieldsOption.ConfigureOption(command);
             _editor = command.Option("--editor", "Set the role to editor.", CommandOptionType.NoValue);
             _viewer = command.Option("--viewer", "Set the role to viewer.", CommandOptionType.NoValue);
             _previewer = command.Option("--previewer", "Set the role to previewer.", CommandOptionType.NoValue);
@@ -77,14 +86,18 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 
         private async Task RunCreate()
         {
-            if (!string.IsNullOrEmpty(_path.Value()))
+            var fields = base.ProcessFields(this._fieldsOption.Value(), CollaborationSubCommandBase._fields);
+            if (!string.IsNullOrEmpty(this._bulkPath.Value()))
             {
                 var json = false;
                 if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
                 {
                     json = true;
                 }
-                await base.ProcessCollaborationsFromFile(_id.Value, _path.Value(), base._t, json: json);
+                await base.ProcessAddCollaborationsFromFile(_bulkPath.Value(), base._t, commandName, fields: fields,
+                    save: this._save.HasValue(), overrideSavePath: this._path.Value(),
+                    overrideSaveFileFormat: this._fileFormat.Value(), json: json);
+                return;
             }
             base.CheckForValue(this._id.Value, this._app, "An ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
@@ -143,7 +156,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             collabRequest.Item.Type = type;
             collabRequest.Item.Id = this._id.Value;
             collabRequest.Role = role;
-            var result = await boxClient.CollaborationsManager.AddCollaborationAsync(collabRequest);
+            var result = await boxClient.CollaborationsManager.AddCollaborationAsync(collabRequest, fields: fields);
             if (this._idOnly.HasValue())
             {
                 Reporter.WriteInformation(result.Id);
