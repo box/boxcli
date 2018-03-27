@@ -17,6 +17,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandArgument _id;
         private CommandOption _save;
         private CommandOption _fileFormat;
+        private CommandOption _fieldsOption;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -34,6 +35,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                                    "Id of the Box item");
             _save = SaveOption.ConfigureOption(command);
             _fileFormat = FileFormatOption.ConfigureOption(command);
+            _fieldsOption = FieldsOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -50,6 +52,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunList()
         {
             base.CheckForValue(this._id.Value, this._app, "An ID is required for this command.");
+            var fields = base.ProcessFields(this._fieldsOption.Value(), CollaborationSubCommandBase._fields);
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (_save.HasValue())
             {
@@ -58,11 +61,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 BoxCollection<BoxCollaboration> saveCollabs;
                 if (base._t == BoxType.file)
                 {
-                    saveCollabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
+                    saveCollabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value, fields: fields);
                 }
                 else if (base._t == BoxType.folder)
                 {
-                    saveCollabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
+                    saveCollabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value, fields: fields);
                 }
                 else
                 {
@@ -76,11 +79,11 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             BoxCollection<BoxCollaboration> collabs;
             if (base._t == BoxType.file)
             {
-                collabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value);
+                collabs = await boxClient.FilesManager.GetCollaborationsAsync(this._id.Value, fields: fields);
             }
             else if (base._t == BoxType.folder)
             {
-                collabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value);
+                collabs = await boxClient.FoldersManager.GetCollaborationsAsync(this._id.Value, fields: fields);
             }
             else
             {

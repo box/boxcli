@@ -17,6 +17,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _save;
         private CommandOption _fileFormat;
         private CommandOption _limit;
+        private CommandOption _fieldsOption;
         private CommandLineApplication _app;
         private IBoxHome _home;
 
@@ -35,6 +36,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             _id = command.Argument("groupId",
                                    "Id of the group");
             _limit = LimitOption.ConfigureOption(command);
+            _fieldsOption = FieldsOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -51,6 +53,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private async Task RunListGroups()
         {
             base.CheckForValue(this._id.Value, this._app, "A group ID is required for this command.");
+            var fields = base.ProcessFields(this._fieldsOption.Value(), CollaborationSubCommandBase._fields);
             var BoxCollectionsIterators = base.GetIterators(!String.IsNullOrEmpty(base._oneUseToken.Value()));
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (_save.HasValue())
@@ -58,14 +61,14 @@ namespace BoxCLI.Commands.CollaborationSubCommands
                 BoxCollection<BoxCollaboration> collabs;
                 var fileName = $"{base._names.CommandNames.Collaborations}-{base._names.SubCommandNames.GetPending}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
                 Reporter.WriteInformation("Saving file...");
-                collabs = await boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true);
+                collabs = await boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true, fields: fields);
                 var saved = base.WriteOffsetCollectionResultsToReport<BoxCollaboration, BoxCollaborationMap>(collabs, fileName, fileFormat: this._fileFormat.Value());
                 Reporter.WriteInformation($"File saved: {saved}");
                 return;
             }
             if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
             {
-                var result = await boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true);
+                var result = await boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, autoPaginate: true, fields: fields);
                 base.OutputJson(result);
                 return;
             }
@@ -80,7 +83,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
 			}
             await BoxCollectionsIterators.ListOffsetCollectionToConsole<BoxCollaboration>((offset) =>
             {
-                return boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, offset: (int)offset);
+                return boxClient.GroupsManager.GetCollaborationsForGroupAsync(this._id.Value, offset: (int)offset, fields: fields);
             }, base.PrintCollaboration, limit);
         }
     }
