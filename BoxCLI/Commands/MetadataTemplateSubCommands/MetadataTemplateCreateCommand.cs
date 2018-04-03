@@ -39,7 +39,7 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             _templateKey = command.Option("--template-key", "A unique identifier for the template.", CommandOptionType.SingleValue);
             _hidden = command.Option("--hidden", "Whether this template is hidden in the UI.", CommandOptionType.NoValue);
             _bulkFilePaths = command.Option("--bulk-file-path-csv",
-                                    "Provide file paths for the metadata temple CSV file and metadata template fields CSV file",
+                                    "Provide file paths for the metadata template CSV file and metadata template fields CSV file, ex: box metadata-templates create --bulk-file-path-csv /path/to/template.csv --bulk-file-path-csv /path/to/fields.csv",
                                     CommandOptionType.MultipleValue);
             _bulkFilePath = BulkFilePathOption.ConfigureOption(command);
             _idOnly = IdOnlyOption.ConfigureOption(command);
@@ -74,6 +74,12 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
             }
             if (this._bulkFilePath.HasValue())
             {
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.CreateMetadataTemplatesFromFile(this._bulkFilePath.Value(), json: json);
                 return;
             }
             base.CheckForScope(this._scope.Value, this._app);
