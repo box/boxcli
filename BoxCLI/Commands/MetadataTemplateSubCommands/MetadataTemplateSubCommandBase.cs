@@ -231,6 +231,10 @@ namespace BoxCLI.Commands.MetadataTemplateSubCommands
                 List<BoxMetadataTemplate> templateRequests;
                 if (fileFormat.ToLower() == base._settings.FILE_FORMAT_CSV)
                 {
+                    if (string.IsNullOrEmpty(filePathFields))
+                    {
+                        throw new Exception("You must use the --bulk-file-path-csv option with metadata templates and provide file paths to CSV files for the tempate and the template fields.");
+                    }
                     templateRequests = this.ReadMetadataTemplateCsvFile(filePath, filePathFields);
                 }
                 else if (fileFormat.ToLower() == base._settings.FILE_FORMAT_JSON)
