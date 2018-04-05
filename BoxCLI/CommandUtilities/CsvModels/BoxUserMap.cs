@@ -31,7 +31,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.IsExemptFromDeviceLimits);
             Map(m => m.IsExemptFromLoginVerification);
             Map(m => m.CanSeeManagedUsers);
-            // Map(m => m.TrackingCodes).TypeConverter<TrackingCodesConverter>();
+            Map(m => m.TrackingCodes);
         }
     }
 
@@ -44,17 +44,4 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.Type).Ignore();
         }
     }
-
-    // public class TrackingCodesConverter : DefaultTypeConverter
-    // {
-    //     public override string ConvertToString(TypeConverterOptions options, object value)
-    //     {
-    //         var stringVal = (string[])value;
-    //         if(stringVal == null)
-    //         {
-    //             stringVal = new string[0];
-    //         }
-    //         return string.Join("\n", stringVal);
-    //     }
-    // }
 }
