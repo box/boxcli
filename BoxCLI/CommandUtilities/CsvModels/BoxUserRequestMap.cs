@@ -7,7 +7,6 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxUserRequestMap()
         {
-            Map(m => m.Id);
             Map(m => m.Login);
             Map(m => m.Name);
             Map(m => m.IsPlatformAccessOnly);

@@ -45,7 +45,7 @@ namespace BoxCLI.Commands.UserSubCommands
                 "max_upload_size",
                 "space_amount",
                 "space_used",
-                // "tracking_codes",
+                "tracking_codes",
                 "is_platform_access_only",
                 "is_sync_enabled",
                 "is_exempt_from_login_verification",
@@ -187,7 +187,7 @@ namespace BoxCLI.Commands.UserSubCommands
             if (isExemptFromLoginVerificaton) { userRequest.IsExemptFromLoginVerification = true; }
             if (notExemptFromLoginVerification) { userRequest.IsExemptFromLoginVerification = false; }
             if (isPasswordResetRequired) { userRequest.IsPasswordResetRequired = true; }
-
+            
             return userRequest;
         }
         protected async Task UpdateUsersFromFile(string path,
