@@ -123,5 +123,60 @@ namespace BoxCLI.Commands.GroupSubCommands
                 Reporter.WriteError(e.Message);
             }
         }
+        protected async Task UpdateGroupsFromFile(string path,
+            bool save = false, string overrideSavePath = "", string overrideSaveFileFormat = "", bool json = false)
+        {
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: this._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = GeneralUtilities.TranslatePath(path);
+            }
+            try
+            {
+                var groupRequests = base.ReadFile<BoxGroupRequest, BoxGroupUpdateRequestMap>(path);
+                List<BoxGroup> saveCreated = new List<BoxGroup>();
+
+                foreach (var groupRequest in groupRequests)
+                {
+                    BoxGroup updatedGroup = null;
+                    try
+                    {
+                        updatedGroup = await boxClient.GroupsManager.UpdateAsync(groupRequest.Id, groupRequest);
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError("Couldn't update group...");
+                        Reporter.WriteError(e.Message);
+                    }
+                    if (updatedGroup != null)
+                    {
+                        this.PrintGroup(updatedGroup, json);
+                        if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                        {
+                            saveCreated.Add(updatedGroup);
+                        }
+                    }
+                }
+                if (save || !string.IsNullOrEmpty(overrideSavePath) || base._settings.GetAutoSaveSetting())
+                {
+                    var fileFormat = base._settings.GetBoxReportsFileFormatSetting();
+                    if (!string.IsNullOrEmpty(overrideSaveFileFormat))
+                    {
+                        fileFormat = overrideSaveFileFormat;
+                    }
+                    var savePath = base._settings.GetBoxReportsFolderPath();
+                    if (!string.IsNullOrEmpty(overrideSavePath))
+                    {
+                        savePath = overrideSavePath;
+                    }
+                    var fileName = $"{base._names.CommandNames.Groups}-{base._names.SubCommandNames.Update}-{DateTime.Now.ToString(GeneralUtilities.GetDateFormatString())}";
+                    base.WriteListResultsToReport<BoxGroup, BoxGroupMap>(saveCreated, fileName, savePath, fileFormat);
+                }
+            }
+            catch (Exception e)
+            {
+                Reporter.WriteError(e.Message);
+            }
+        }
     }
 }

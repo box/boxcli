@@ -3,6 +3,7 @@ using Box.V2.Models;
 using Box.V2.Models.Request;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
+using BoxCLI.CommandUtilities.CommandOptions;
 using BoxCLI.CommandUtilities.Globalization;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -12,6 +13,9 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
     {
         private CommandArgument _userId;
         private CommandArgument _groupId;
+        private CommandOption _save;
+        private CommandOption _bulkPath;
+        private CommandOption _fileFormat;
         private CommandOption _admin;
         private CommandOption _member;
         private CommandLineApplication _app;
@@ -27,6 +31,9 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
         {
             _app = command;
             command.Description = "Add a user to a group.";
+            _bulkPath = BulkFilePathOption.ConfigureOption(command);
+            _save = SaveOption.ConfigureOption(command);
+            _fileFormat = FileFormatOption.ConfigureOption(command);
             _userId = command.Argument("userId",
                                    "Id of user");
             _groupId = command.Argument("groupId",
@@ -51,6 +58,17 @@ namespace BoxCLI.Commands.GroupSubCommands.GroupMembershipSubCommands
 
         private async Task RunCreate()
         {
+            if (this._bulkPath.HasValue())
+            {
+                var json = false;
+                if (base._json.HasValue() || this._home.GetBoxHomeSettings().GetOutputJsonSetting())
+                {
+                    json = true;
+                }
+                await base.CreateGroupMembershipsFromFile(this._bulkPath.Value(), this._save.HasValue(),
+                json: json, overrideSaveFileFormat: this._fileFormat.Value());
+                return;
+            }
             base.CheckForValue(this._userId.Value, this._app, "A user ID is required for this command.");
             base.CheckForValue(this._groupId.Value, this._app, "A group ID is required for this command.");
             var role = "";

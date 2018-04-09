@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Box.V2;
 using BoxCLI.BoxHome;
 using BoxCLI.BoxPlatform.Service;
 using BoxCLI.CommandUtilities;
@@ -12,9 +13,12 @@ namespace BoxCLI.Commands.GroupSubCommands
     public class GroupDeleteCommand : GroupSubCommandBase
     {
         private CommandArgument _groupId;
+
+        private CommandOption _bulkPath;
+
         private CommandOption _dontPrompt;
         private CommandLineApplication _app;
-        public GroupDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names) 
+        public GroupDeleteCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome home, LocalizedStringsResource names)
             : base(boxPlatformBuilder, home, names)
         {
         }
@@ -24,6 +28,7 @@ namespace BoxCLI.Commands.GroupSubCommands
             command.Description = "Delete a group.";
             _groupId = command.Argument("groupId",
                                    "Id of group");
+            _bulkPath = BulkFilePathOption.ConfigureOption(command);
             _dontPrompt = SuppressDeletePromptOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
@@ -40,29 +45,52 @@ namespace BoxCLI.Commands.GroupSubCommands
 
         private async Task RunDelete()
         {
+            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
+            if (this._bulkPath.HasValue())
+            {
+                var path = GeneralUtilities.TranslatePath(this._bulkPath.Value());
+                var ids = base.ReadFileForIds(path);
+                foreach (var id in ids)
+                {
+                    try
+                    {
+                        if (await this.DeleteGroup(boxClient, id))
+                        {
+                            Reporter.WriteSuccess($"Deleted group {id}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Reporter.WriteError($"Error deleting group {id}.");
+                        Reporter.WriteError(e.Message);
+                    }
+                }
+                Reporter.WriteInformation("Finished deleting groups...");
+                return;
+            }
             base.CheckForValue(this._groupId.Value, this._app, "A group ID is required for this command");
 
             bool result;
-			if (this._dontPrompt.HasValue())
-			{
-				result = await this.DeleteGroup();
-			}
-			else
-			{
-				Reporter.WriteWarningNoNewLine("Are you sure you want to delete this group? y/N ");
-				var yNKey = "n";
-				yNKey = Console.ReadLine().ToLower();
-				if (yNKey != "y")
-				{
-					Reporter.WriteInformation("Aborted group deletion.");
-					return;
-				}
-				else
-				{
-					result = await this.DeleteGroup();
-				}
-			}
-            if(result)
+            if (this._dontPrompt.HasValue())
+            {
+                result = await this.DeleteGroup(boxClient, this._groupId.Value);
+            }
+            else
+            {
+                Reporter.WriteWarningNoNewLine("Are you sure you want to delete this group? y/N ");
+                var yNKey = "n";
+                yNKey = Console.ReadLine().ToLower();
+                if (yNKey != "y")
+                {
+                    Reporter.WriteInformation("Aborted group deletion.");
+                    return;
+                }
+                else
+                {
+                    result = await this.DeleteGroup(boxClient, this._groupId.Value);
+                }
+            }
+            if (result)
             {
                 Reporter.WriteSuccess($"Deleted group {this._groupId.Value}");
             }
@@ -72,10 +100,9 @@ namespace BoxCLI.Commands.GroupSubCommands
             }
         }
 
-        private async Task<bool> DeleteGroup()
+        private async Task<bool> DeleteGroup(BoxClient boxClient, string groupId)
         {
-            var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
-            return await boxClient.GroupsManager.DeleteAsync(this._groupId.Value);
+            return await boxClient.GroupsManager.DeleteAsync(groupId);
         }
     }
 }
