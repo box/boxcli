@@ -1,6 +1,6 @@
 # Box CLI
 ## Current Version: 1.1.1
-## [Download the latest version of the CLI](https://developer.box.com/docs/box-cli)
+## [Download the latest version of the CLI](https://developer.box.com/docs/installation-and-setup)
 ## Prerequisites for Building from Source
 * [.Net Core SDK v2.0](https://www.microsoft.com/net/core)
 
