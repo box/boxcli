@@ -1,5 +1,5 @@
 # Box CLI
-## Current Version: 1.1.1
+## Current Version: 1.2.0
 ## [Download the latest version of the CLI](https://developer.box.com/docs/installation-and-setup)
 ## Prerequisites for Building from Source
 * [.Net Core SDK v2.0](https://www.microsoft.com/net/core)
@@ -25,7 +25,7 @@ Need to contact us directly?
 Copyright and License
 ---------------------
 
-Copyright 2017 Box, Inc. All rights reserved.
+Copyright 2018 Box, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
