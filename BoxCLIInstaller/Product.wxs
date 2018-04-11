@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="BoxCLI" Language="1033" Version="1.0.2" Manufacturer="Box" UpgradeCode="4c6ec143-4c4b-4c0e-bf14-4e0fa8e1101b">
+  <Product Id="*" Name="BoxCLI" Language="1033" Version="1.2.0" Manufacturer="Box" UpgradeCode="4c6ec143-4c4b-4c0e-bf14-4e0fa8e1101b">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
     <UI>
       <UIRef Id="WixUI_InstallDir" />
