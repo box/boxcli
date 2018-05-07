@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using Box.V2.Models;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
@@ -31,7 +33,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.IsExemptFromDeviceLimits);
             Map(m => m.IsExemptFromLoginVerification);
             Map(m => m.CanSeeManagedUsers);
-            Map(m => m.TrackingCodes);
+            Map(m => m.TrackingCodes).TypeConverter<BoxUsersTrackingCodeConverter>();
         }
     }
 
@@ -42,6 +44,28 @@ namespace BoxCLI.CommandUtilities.CsvModels
             Map(m => m.Id).Name("EnterpriseId");
             Map(m => m.Name).Name("EnterpriseName");
             Map(m => m.Type).Ignore();
+        }
+    }
+    public class BoxUsersTrackingCodeConverter : DefaultTypeConverter
+    {
+        public override string ConvertToString(TypeConverterOptions options, object value)
+        {
+            var list = (List<BoxTrackingCode>)value;
+            if (list == null)
+            {
+                list = new List<BoxTrackingCode>();
+            }
+            var trackingCodeStrings = new StringBuilder();
+            for (var i = 0; i < list.Count; i++)
+            {
+                var trackingCode = list[i];
+                trackingCodeStrings.Append($"name:{trackingCode.Name},value:{trackingCode.Value}");
+                if (i != list.Count - 1)
+                {
+                    trackingCodeStrings.Append(Environment.NewLine);
+                }
+            }
+            return trackingCodeStrings.ToString();
         }
     }
 }
