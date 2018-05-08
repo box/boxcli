@@ -19,7 +19,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             command.Description = "Dump the current environment config information as one string; meant for copying value into environment variable or property setting.";
 
             _escapeQuotes = command.Option("--escape-quotes",
-                           "Add escape character for all double quotes.  Typically used when copying value into a JSON config file.",
+                           "Add escape character for all double quotes.  Typically used when copying the output into a JSON config file.",
                            CommandOptionType.NoValue);
 
             command.OnExecute(() =>
