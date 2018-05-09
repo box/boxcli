@@ -45,7 +45,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
                 return;
             }
             var configInfo = File.ReadAllText(path);
-            configInfo = Regex.Replace(configInfo, @"\r\n?|\n|  *", string.Empty);
+            configInfo = Regex.Replace(configInfo, @"\r\n?|\n| {2,}", string.Empty);
 
             if (_escapeQuotes.HasValue())
             {
