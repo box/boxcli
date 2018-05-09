@@ -16,7 +16,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 
         public override void Configure(CommandLineApplication command)
         {
-            command.Description = "Dump the current environment config information as one string; meant for copying value into environment variable or property setting.";
+            command.Description = "Dump the current environment config information as one string; typically used for copying the config info into an environment variable or property setting.";
 
             _escapeQuotes = command.Option("--escape-quotes",
                            "Add escape character for all double quotes.  Typically used when copying the output into a JSON config file.",
