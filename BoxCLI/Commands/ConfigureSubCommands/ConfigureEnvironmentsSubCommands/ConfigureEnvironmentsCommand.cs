@@ -28,6 +28,7 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
             command.Command(_names.SubCommandNames.Delete, _subCommands.CreateSubCommand(_names.SubCommandNames.Delete).Configure);
             command.Command(_names.SubCommandNames.UpdatePrivateKeyPath, _subCommands.CreateSubCommand(_names.SubCommandNames.UpdatePrivateKeyPath).Configure);
             command.Command(_names.SubCommandNames.UpdateConfigFilePath, _subCommands.CreateSubCommand(_names.SubCommandNames.UpdateConfigFilePath).Configure);
+            command.Command(_names.SubCommandNames.DumpConfig, _subCommands.CreateSubCommand(_names.SubCommandNames.DumpConfig).Configure);
             base.Configure(command);
         }
         protected override int Execute()

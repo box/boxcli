@@ -64,6 +64,10 @@ namespace BoxCLI.Commands.ConfigureSubCommands.ConfigureEnvironmentsSubCommands
 			{
 				return new ConfigureEnvironmentsUpdateConfigFilePathCommand(_boxHome);
 			}
+            else if(commandName == _names.SubCommandNames.DumpConfig)
+            {
+                return new ConfigureEnvironmentsDumpConfigCommand(_boxHome);
+            }
             else
             {
                 throw new Exception("Command not registered.");
