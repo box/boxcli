@@ -56,5 +56,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string UpdatePrivateKeyPath { get; set; } = "update-private-key-path";
         public string UpdateConfigFilePath { get; set; } = "update-config-file-path";
         public string DumpConfig { get; set; } = "dump-config";
+        public string Assign { get; set; } = "assign";
+        public string Lookup { get; set; } = "lookup";
     }
 }
