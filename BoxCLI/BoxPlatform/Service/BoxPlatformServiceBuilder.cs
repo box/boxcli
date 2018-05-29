@@ -100,8 +100,8 @@ namespace BoxCLI.BoxPlatform.Service
                 SetConfig();
                 SetCache();
                 SetAuthorizedClient();
-                SetIterators();
             }
+            SetIterators();
             return BoxService;
         }
     }
