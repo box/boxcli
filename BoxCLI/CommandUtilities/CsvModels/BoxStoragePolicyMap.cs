@@ -8,8 +8,7 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxStoragePolicyMap()
         {
-            Map(m => m.Id);
-            Map(m => m.Name);
+            Map(m => m.Id).Name("StoragePolicyId");
         }
     }
 }

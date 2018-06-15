@@ -30,7 +30,7 @@ namespace BoxCLI.Commands.StoragePolicySubCommands
 
         protected virtual void PrintStoragePolicy(BoxStoragePolicy sp)
         {
-            Reporter.WriteInformation($"ID: {sp.Id}");
+            Reporter.WriteInformation($"Storage Policy ID: {sp.Id}");
             Reporter.WriteInformation($"Name: {sp.Name}");
         }
 
@@ -43,7 +43,7 @@ namespace BoxCLI.Commands.StoragePolicySubCommands
             }
             else
             {
-                Reporter.WriteInformation($"ID: {a.Id}");
+                Reporter.WriteInformation($"Storage Policy Assignment ID: {a.Id}");
                 Reporter.WriteInformation($"Storage Policy ID: {a.BoxStoragePolicy.Id}");
                 Reporter.WriteInformation($"Assigned To: {a.AssignedTo.Type} {a.AssignedTo.Id}");
             }

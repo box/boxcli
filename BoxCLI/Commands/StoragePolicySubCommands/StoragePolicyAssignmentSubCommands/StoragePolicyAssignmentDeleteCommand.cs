@@ -45,7 +45,6 @@ namespace BoxCLI.Commands.StoragePolicySubCommands.StoragePolicyAssignmentSubCom
 
         private async Task RunDelete()
         {
-            base.CheckForValue(this._assignmentId.Value, this._app, "A storage policy assignment ID is required for this command.");
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             if (this._bulkPath.HasValue())
             {
@@ -69,6 +68,7 @@ namespace BoxCLI.Commands.StoragePolicySubCommands.StoragePolicyAssignmentSubCom
                 Reporter.WriteInformation("Finished deleting storage policy assignments...");
                 return;
             }
+
             base.CheckForValue(this._assignmentId.Value, this._app, "A storage policy assignment ID is required for this command.");
             var result = await boxClient.StoragePoliciesManager.DeleteAssignmentAsync(this._assignmentId.Value);
             if (result)

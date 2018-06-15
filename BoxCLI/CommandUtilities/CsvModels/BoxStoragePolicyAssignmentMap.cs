@@ -8,8 +8,8 @@ namespace BoxCLI.CommandUtilities.CsvModels
     {
         public BoxStoragePolicyAssignmentMap()
         {
-            Map(m => m.Id);
-            References<BoxUserOnObjectMap>(m => m.AssignedTo);
+            Map(m => m.Id).Name("StoragePolicyAssignmentId");
+            References<BoxUserOnStoragePolicyAssignmentMap>(m => m.AssignedTo);
             References<BoxStoragePolicyMap>(m => m.BoxStoragePolicy);
         }
     }
