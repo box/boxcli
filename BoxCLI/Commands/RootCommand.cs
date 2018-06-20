@@ -27,6 +27,7 @@ namespace BoxCLI.Commands
         private readonly TaskCommand _tsk;
         private readonly TaskAssignmentCommand _tskAsgn;
         private readonly CommentCommand _cmt;
+        private readonly StoragePolicyCommand _sp;
         private readonly LocalizedStringsResource _names;
         private CommandLineApplication _app;
         private IBoxHome _home;
@@ -38,7 +39,8 @@ namespace BoxCLI.Commands
             CollaborationCommand collab, SharedLinkCommand sl, TrashCommand trsh,
             SessionCommand ssn, TokenCommand tk, SearchCommand srch,
             TaskCommand tsk, TaskAssignmentCommand tskAsgn, CommentCommand cmt,
-            LocalizedStringsResource names, IBoxHome home)
+            StoragePolicyCommand sp, LocalizedStringsResource names,
+            IBoxHome home)
         {
             _user = user;
             _config = config;
@@ -57,6 +59,7 @@ namespace BoxCLI.Commands
             _tsk = tsk;
             _tskAsgn = tskAsgn;
             _cmt = cmt;
+            _sp = sp;
             _names = names;
             _home = home;
         }
@@ -82,6 +85,7 @@ namespace BoxCLI.Commands
             app.Command(_names.CommandNames.Task, _tsk.Configure);
             app.Command(_names.CommandNames.TaskAssignment, _tskAsgn.Configure);
             app.Command(_names.CommandNames.Comment, _cmt.Configure);
+            app.Command(_names.CommandNames.StoragePolicy, _sp.Configure);
             _version = app.Option("-v|--version", "Box CLI Version", CommandOptionType.NoValue);
             app.OnExecute(() =>
             {
