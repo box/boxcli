@@ -33,5 +33,7 @@ namespace BoxCLI.CommandUtilities.Globalization.Models
         public string FileTask { get; set; } = "file-tasks";
         public string TaskAssignment { get; set; } = "task-assignments";
         public string Comment { get; set; } = "comments";
+        public string StoragePolicy { get; set; } = "storage-policies";
+        public string StoragePolicyAssignment { get; set; } = "assignments";
     }
 }

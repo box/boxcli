@@ -23,6 +23,8 @@ using BoxCLI.Commands.TokenSubCommands;
 using BoxCLI.Commands.TrashSubCommands;
 using BoxCLI.Commands.UserSubCommands;
 using BoxCLI.Commands.WebhooksSubComands;
+using BoxCLI.Commands.StoragePolicySubCommands;
+using BoxCLI.Commands.StoragePolicySubCommands.StoragePolicyAssignmentSubCommands;
 using BoxCLI.CommandUtilities.Globalization;
 
 namespace BoxCLI.Commands
@@ -134,22 +136,30 @@ namespace BoxCLI.Commands
             {
                 return new TokenSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
             }
-			else if (factoryName == _names.CommandNames.Task)
-			{
-				return new TaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
-			}
-			else if (factoryName == _names.CommandNames.FileTask)
-			{
-				return new FileTaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
-			}
-			else if (factoryName == _names.CommandNames.TaskAssignment)
-			{
-				return new TaskAssignmentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
-			}
-			else if (factoryName == _names.CommandNames.Comment)
-			{
-				return new CommentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
-			}
+            else if (factoryName == _names.CommandNames.Task)
+            {
+                return new TaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.FileTask)
+            {
+                return new FileTaskSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.TaskAssignment)
+            {
+                return new TaskAssignmentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.Comment)
+            {
+                return new CommentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.StoragePolicy)
+            {
+                return new StoragePolicySubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
+            else if (factoryName == _names.CommandNames.StoragePolicyAssignment)
+            {
+                return new StoragePolicyAssignmentSubCommandFactory(_boxPlatformBuilder, _boxHome, _names);
+            }
             else
             {
                 throw new Exception("Command not registered.");

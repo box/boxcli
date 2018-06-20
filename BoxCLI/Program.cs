@@ -118,6 +118,7 @@ namespace BoxCLI
               .AddSingleton<TaskCommand>()
               .AddSingleton<TaskAssignmentCommand>()
               .AddSingleton<CommentCommand>()
+              .AddSingleton<StoragePolicyCommand>()
               .AddSingleton<RootCommand>();
         }
     }
