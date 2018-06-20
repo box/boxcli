@@ -28,6 +28,7 @@ namespace BoxCLI.Commands.FolderSubCommands
         private CommandOption _sharedLinkPassword;
         private CommandOption _sharedLinkUnsharedAt;
         private CommandOption _sharedLinkCanDownload;
+        private CommandOption _onlyOwnersCanInvite;
         private CommandOption _tags;
         private CommandOption _etag;
         private CommandLineApplication _app;
@@ -66,6 +67,7 @@ namespace BoxCLI.Commands.FolderSubCommands
             _sharedLinkPassword = command.Option("--shared-link-password <PASSWORD>", "Shared link password", CommandOptionType.SingleValue);
             _sharedLinkUnsharedAt = command.Option("--shared-link-unshared-at <TIME>", "Time that this link will become disabled, use formatting like 03w for 3 weeks.", CommandOptionType.SingleValue);
             _sharedLinkCanDownload = command.Option("--shared-link-can-download", "Whether the shared link allows downloads", CommandOptionType.NoValue);
+            _onlyOwnersCanInvite = command.Option("--only-owners-can-invite", "Whether non-owners can invite other users to collaborate on the folder.", CommandOptionType.NoValue);
             _tags = command.Option("--tags <TAGS>", "Comma seperated tags", CommandOptionType.SingleValue);
             _etag = command.Option("--etag <ETAG>", "Only move if etag value matches", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
@@ -162,6 +164,10 @@ namespace BoxCLI.Commands.FolderSubCommands
             if (this._description.HasValue())
             {
                 folderUpdateRequest.Description = this._description.Value();
+            }
+            if (this._onlyOwnersCanInvite.HasValue())
+            {
+                folderUpdateRequest.CanNonOwnersInvite = false;
             }
 
             BoxFolder updated;

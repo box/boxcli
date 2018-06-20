@@ -17,10 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.0" />
     <PackageReference Include="sharpcompress" Version="0.18.1" />
-    <PackageReference Include="Box.V2.Core" Version="3.9.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\StoragePolicySubCommands\" />
-    <Folder Include="Commands\StoragePolicySubCommands\StoragePolicyAssignmentSubCommands\" />
+    <PackageReference Include="Box.V2.Core" Version="3.9.2" />
   </ItemGroup>
 </Project>
