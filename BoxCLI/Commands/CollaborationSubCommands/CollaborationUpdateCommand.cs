@@ -29,6 +29,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
         private CommandOption _coowner;
         private CommandOption _owner;
         private CommandOption _canViewPath;
+        private CommandOption _expiresAt;
         private CommandOption _fieldsOption;
         private CommandLineApplication _app;
         private IBoxHome _home;
@@ -61,6 +62,7 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             _role = command.Option("-r|--role", "An option to manually enter the role", CommandOptionType.SingleValue);
             _status = command.Option("--status", "Update the collaboration status", CommandOptionType.SingleValue);
             _canViewPath = command.Option("--can-view-path", "Whether view path collaboration feature is enabled or not.", CommandOptionType.NoValue);
+            _expiresAt = command.Option("--expires-at", "When the collaboration should expire.", CommandOptionType.SingleValue);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -113,6 +115,10 @@ namespace BoxCLI.Commands.CollaborationSubCommands
             if (this._status.HasValue())
             {
                 collabRequest.Status = _status.Value();
+            }
+            if (this._expiresAt.HasValue())
+            {
+                collabRequest.ExpiresAt = GeneralUtilities.GetDateTimeFromString(this._expiresAt.Value());
             }
             collabRequest.Role = role;
 
