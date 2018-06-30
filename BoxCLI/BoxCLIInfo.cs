@@ -4,6 +4,6 @@ namespace BoxCLI
     {
         public const string ProductTitle = "Box CLI";
 
-        public const string Version = "1.3.0";
+        public const string Version = "1.3.1";
     }
 }

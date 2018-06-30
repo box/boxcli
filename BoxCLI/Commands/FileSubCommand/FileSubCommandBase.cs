@@ -79,7 +79,7 @@ namespace BoxCLI.Commands.FileSubCommand
             return await boxClient.FilesManager.CopyAsync(fileRequest);
         }
 
-        protected async Task DownloadFile(string fileId, string fileVersionId = "")
+        protected async Task DownloadFile(string fileId, string filePath, string fileVersionId = "")
         {
             var boxClient = base.ConfigureBoxClient(oneCallAsUserId: base._asUser.Value(), oneCallWithToken: base._oneUseToken.Value());
             var fileInfo = await boxClient.FilesManager.GetInformationAsync(fileId);
@@ -94,12 +94,12 @@ namespace BoxCLI.Commands.FileSubCommand
                 Reporter.WriteInformation($"Downloading {fileInfo.Name}...");
                 boxFileStream = await boxClient.FilesManager.DownloadStreamAsync(fileId);
             }
-            var downloadPath = base.ConstructDownloadsPath(fileInfo.Name);
-            Reporter.WriteInformation($"Saving to ${downloadPath}");
+            var downloadPath = base.ConstructDownloadsPath(fileInfo.Name, filePath);
+            Reporter.WriteInformation($"Saving to {downloadPath}");
             using (var fileStream = File.Open($"{downloadPath}", FileMode.Create))
             {
                 boxFileStream.CopyTo(fileStream);
-                Reporter.WriteSuccess("Copied file...");
+                Reporter.WriteSuccess("File Sucessfully downloaded");
             }
         }
     }

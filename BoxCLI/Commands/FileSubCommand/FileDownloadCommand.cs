@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace BoxCLI.Commands.FileSubCommand
         private CommandArgument _fileId;
         private CommandOption _multiId;
         private CommandOption _bulkPath;
+        private CommandOption _filePath;
         private CommandLineApplication _app;
         public FileDownloadCommand(IBoxPlatformServiceBuilder boxPlatformBuilder, IBoxHome boxHome, LocalizedStringsResource names)
             : base(boxPlatformBuilder, boxHome, names)
@@ -32,6 +34,7 @@ namespace BoxCLI.Commands.FileSubCommand
                                "Download multiple files with a comma separated list of IDs.",
                                CommandOptionType.NoValue);
             _bulkPath = BulkFilePathOption.ConfigureOption(command);
+            _filePath = FilePathOption.ConfigureOption(command);
             command.OnExecute(async () =>
             {
                 return await this.Execute();
@@ -69,7 +72,7 @@ namespace BoxCLI.Commands.FileSubCommand
                 return;
             }
             base.CheckForFileId(this._fileId.Value, this._app);
-            await base.DownloadFile(this._fileId.Value);
+            await base.DownloadFile(this._fileId.Value, this._filePath.Value());
         }
     }
 }
