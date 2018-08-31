@@ -9,12 +9,14 @@
 2. Navigate to the `BoxCLI/BoxCLI` folder
 3. Run the following command to create a build:
     * `dotnet build -r <target-runtime>`
-    * Replace `<target-runtime>` with the OS you're building for, such as osx.10.12-x64
+    * Replace `<target-runtime>` with the [runtime ID][rid-docs] you're building for, such as osx.10.12-x64
     * The binary will be located in `./bin/Debug/netcoreapp2.0/<target-runtime>/box`
 4. If you're building for production, run the following command instead:
     * `dotnet publish --configuration Release --runtime <target-runtime>`
     * The binary will now be located in `./bin/Release/netcoreapp2.0/<target-runtime>/publish`
     * You'll need the entire contents of the publish folder
+    
+[rid-docs]: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 
 Support
 -------
