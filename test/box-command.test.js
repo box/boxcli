@@ -53,7 +53,7 @@ describe('BoxCommand', () => {
 			.it('should send correct analytics and identification headers with API requests');
 	});
 
-	describe('getDateFromString()', () => {
+	describe.skip('getDateFromString()', () => {
 
 		beforeEach(() => {
 			// Start clocks at 2018-07-13T12:00:00-08:00 for all tests
