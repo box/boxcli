@@ -1,0 +1,15 @@
+{
+    "entries": [
+        {
+            "$type": "testTemplate-2890e928-874d-4959-afb7-6a778b3ad75c",
+            "$parent": "folder_11111",
+            "$id": "ff8cb88e-de80-467c-aa02-412c1cdaee48",
+            "$version": 1,
+            "$typeVersion": 0,
+            "testEnum": "foo",
+            "$template": "testTemplate",
+            "$scope": "enterprise_22222"
+        }
+    ],
+    "limit": 100
+}

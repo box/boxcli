@@ -1,0 +1,20 @@
+ID: 1ba96432-c223-4797-95a9-1636b59c3f7b
+Type: metadata_template
+Template Key: testTemplate
+Scope: enterprise_12345
+Display Name: Test Template
+Hidden: false
+Fields:
+    -
+        ID: 1f2f29a6-00e2-4b56-b246-b50d5494b2ca
+        Type: enum
+        Key: testEnum
+        Display Name: Test Enum
+        Hidden: false
+        Options:
+            -
+                ID: c84b76d2-db68-4fc2-9a75-4b7820845fa8
+                Key: foo
+            -
+                ID: 6ee108f2-41f0-43e2-1584-06316c37badf
+                Key: bar

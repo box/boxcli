@@ -1,0 +1,9 @@
+{
+    "type": "user",
+    "id": "1234",
+    "enterprise": {
+        "type": "enterprise",
+        "id": "123456",
+        "name": "Box"
+    }
+}

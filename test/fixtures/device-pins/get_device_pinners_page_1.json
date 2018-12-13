@@ -1,0 +1,35 @@
+{
+  "next_marker": "ZDEF67",  
+	"entries": [
+        {
+            "type": "device_pinner",
+            "id": "788804",
+            "owned_by": {
+                "type": "user",
+                "id": "222276603",
+                "name": "Ted Blosser",
+                "login": "ted+boxworks2@example.com"
+            },
+            "product_name": "iPad"
+        },
+
+        {
+            "type": "device_pinner",
+            "id": "1003086",
+            "owned_by": {
+                "type": "user",
+                "id": "222276603",
+                "name": "Ted Blosser",
+                "login": "ted+boxworks2@example.com"
+            },
+            "product_name": "iPhone"
+        }
+    ],
+    "limit": 100,
+    "order": [
+        {
+            "by": "id",
+            "direction": "ASC"
+        }
+    ]
+}

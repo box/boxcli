@@ -1,0 +1,7 @@
+type,id,item.type,item.id,item.file_version.type,item.file_version.id,item.file_version.sha1,item.sequence_id,item.etag,item.sha1,item.name
+task,11111,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt
+task,111112,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt
+task,11111,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt
+task,111112,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt
+task,11111,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt
+task,111112,file,1234567890,file_version,22222,6afc05eae22e994f1c7dd48e58f8895dd9028223,0,0,6afc05eae22e994f1c7dd48e58f8895dd9028223,Tasks file.txt

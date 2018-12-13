@@ -1,0 +1,20 @@
+{
+    "type": "legal_hold",
+    "id": "99999",
+    "file_version": {
+        "type": "file_version",
+        "id": "77777"
+    },
+    "file": {
+        "type": "file",
+        "id": "88888",
+        "etag": "0"
+    },
+    "legal_hold_policy_assignments": [
+        {
+            "type": "legal_hold_policy_assignment",
+            "id": "12345"
+        }
+    ],
+    "deleted_at": null
+}

@@ -1,0 +1,17 @@
+[
+    {
+        "itemID": "11111",
+        "itemType": "folder",
+        "can-view-path": true
+    },
+    {
+        "itemid": "22222",
+        "itemtype": "folder",
+        "login": "roger.federer@example.com"
+    },
+    {
+        "itemtype": "file",
+        "can-view-path": false,
+        "login": "dominic.toretto@example.com"
+    }
+]

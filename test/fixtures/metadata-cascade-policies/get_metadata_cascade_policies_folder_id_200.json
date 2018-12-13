@@ -1,0 +1,21 @@
+{
+    "limit": 100,
+    "entries": [
+        {
+            "id": "84113349-794d-445c-b93c-d8481b223434",
+            "type": "metadata_cascade_policy",
+            "owner_enterprise": {
+                "type": "enterprise",
+                "id": "11111"
+            },
+            "parent": {
+                "type": "folder",
+                "id": "22222"
+            },
+            "scope": "enterprise_11111",
+            "templateKey": "testTemplate"
+        }
+    ],
+    "next_marker": null,
+    "prev_marker": null
+}

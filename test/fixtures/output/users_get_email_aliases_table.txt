@@ -1,0 +1,11 @@
+----- Email Alias 1234 -----
+Type: email_alias
+ID: '1234'
+Is Confirmed: true
+Email: dglover2@example.com
+
+----- Email Alias 1235 -----
+Type: email_alias
+ID: '1235'
+Is Confirmed: true
+Email: dglover3@example.com

@@ -1,0 +1,30 @@
+{
+    "total_count": 2,
+    "entries": [
+        {
+            "type": "collaboration",
+            "id": "1234567890",
+            "created_by": {
+                "type": "user",
+                "id": "9087654321",
+                "name": "Some Other User",
+                "login": "otheruser@example.com"
+            },
+            "created_at": "2016-11-16T20:52:34-08:00",
+            "modified_at": "2016-11-16T20:52:34-08:00",
+            "expires_at": null,
+            "status": "pending",
+            "accessible_by": {
+                "type": "user",
+                "id": "132467469",
+                "name": "Current User",
+                "login": "me@example.com"
+            },
+            "role": "editor",
+            "acknowledged_at": null,
+            "item": null
+        }
+    ],
+    "limit": 1,
+    "offset": 0
+}

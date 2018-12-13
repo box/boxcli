@@ -1,0 +1,21 @@
+Type: retention_policy
+ID: '11111'
+Policy Name: Retained Financial Records
+Policy Type: finite
+Retention Length: '365'
+Disposition Action: remove_retention
+Can Owner Extend Retention: false
+Status: active
+Are Owners Notified: false
+Custom Notification Recipients: []
+Assignment Counts:
+    Enterprise: 0
+    Folder: 0
+    Metadata Template: 0
+Created By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Created At: '2018-04-25T18:29:40-07:00'
+Modified At: '2018-04-25T18:29:40-07:00'

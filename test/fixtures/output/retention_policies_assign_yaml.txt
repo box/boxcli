@@ -1,0 +1,16 @@
+Type: retention_policy_assignment
+ID: '12345'
+Retention Policy:
+    Type: retention_policy
+    ID: '11111'
+    Policy Name: Retained Financial Records
+Assigned To:
+    Type: folder
+    ID: '22222'
+Filter Fields: []
+Assigned By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Assigned At: '2018-04-25T20:19:16-07:00'

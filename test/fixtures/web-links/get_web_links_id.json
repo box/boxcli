@@ -1,0 +1,59 @@
+{
+    "type": "web_link",
+    "id": "6742981",
+    "sequence_id": "0",
+    "etag": "0",
+    "name": "Box Website",
+    "url": "https://www.box.com",
+    "created_by": {
+        "type": "user",
+        "id": "10523870",
+        "name": "Ted Blosser",
+        "login": "ted+demo@example.com"
+    },
+    "created_at": "2015-05-07T14:31:16-07:00",
+    "modified_at": "2015-05-07T14:31:16-07:00",
+    "parent": {
+        "type": "folder",
+        "id": "848123342",
+        "sequence_id": "1",
+        "etag": "1",
+        "name": "Documentation"
+    },
+    "description": "Cloud Content Management",
+    "item_status": "active",
+    "trashed_at": null,
+    "purged_at": null,
+    "shared_link": null,
+    "path_collection": {
+        "total_count": 2,
+        "entries": [
+            {
+                "type": "folder",
+                "id": "0",
+                "sequence_id": null,
+                "etag": null,
+                "name": "All Files"
+            },
+            {
+                "type": "folder",
+                "id": "848123342",
+                "sequence_id": "1",
+                "etag": "1",
+                "name": "Documentation"
+            }
+        ]
+    },
+    "modified_by": {
+        "type": "user",
+        "id": "10523870",
+        "name": "Ted Blosser",
+        "login": "ted+demo@example.com"
+    },
+    "owned_by": {
+        "type": "user",
+        "id": "10523870",
+        "name": "Ted Blosser",
+        "login": "ted+demo@example.com"
+    }
+}

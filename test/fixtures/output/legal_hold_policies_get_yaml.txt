@@ -1,0 +1,21 @@
+Type: legal_hold_policy
+ID: '11111'
+Policy Name: Trial Documents
+Description: ''
+Status: active
+Assignment Counts:
+    User: 0
+    Folder: 0
+    File: 0
+    File Version: 0
+Is Ongoing: true
+Created By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Created At: '2018-04-25T16:37:05-07:00'
+Modified At: '2018-04-25T16:37:05-07:00'
+Deleted At: null
+Filter Started At: null
+Filter Ended At: null

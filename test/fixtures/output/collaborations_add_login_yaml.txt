@@ -1,0 +1,24 @@
+Type: collaboration
+ID: '1234567890'
+Created By:
+    Type: user
+    ID: '9753108642'
+    Name: Inviting User
+    Login: invites@example.com
+Created At: '2016-11-16T21:33:31-08:00'
+Modified At: '2016-11-16T21:33:31-08:00'
+Expires At: null
+Status: accepted
+Accessible By:
+    Type: user
+    ID: '987654321'
+    Name: My New Friend
+    Login: newfriend@example.com
+Role: previewer
+Acknowledged At: '2016-11-16T21:33:31-08:00'
+Item:
+    Type: file
+    ID: '1234567890'
+    Sequence ID: '0'
+    ETag: '0'
+    Name: Collaborated File

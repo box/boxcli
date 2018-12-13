@@ -1,0 +1,67 @@
+{
+    "next_marker": "",
+    "limit": 3,
+    "order": {
+        "by": "interacted_at",
+        "direction": "DESC"
+    },
+    "entries": [
+        {
+            "type": "recent_item",
+            "interaction_type": "item_preview",
+            "interacted_at": "2018-04-25T17:07:44-07:00",
+            "item": {
+                "type": "file",
+                "id": "11112",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "111110",
+                    "sha1": "3c0b046ef81f262cb5b2e417b45c7aaa507a5628"
+                },
+                "sequence_id": "0",
+                "etag": "0",
+                "sha1": "3c0b046ef81f262cb5b2e417b45c7aaa507a5628",
+                "name": "Instruction Manual.pdf"
+            },
+            "interaction_shared_link": null
+        },
+        {
+            "type": "recent_item",
+            "interaction_type": "item_preview",
+            "interacted_at": "2018-04-24T17:22:11-07:00",
+            "item": {
+                "type": "file",
+                "id": "22223",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "222220",
+                    "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+                },
+                "sequence_id": "9",
+                "etag": "9",
+                "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+                "name": "test file.txt"
+            },
+            "interaction_shared_link": null
+        },
+        {
+            "type": "recent_item",
+            "interaction_type": "item_preview",
+            "interacted_at": "2018-04-24T16:49:13-07:00",
+            "item": {
+                "type": "file",
+                "id": "44445",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "444440",
+                    "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+                },
+                "sequence_id": "0",
+                "etag": "0",
+                "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+                "name": "Copied file.txt"
+            },
+            "interaction_shared_link": null
+        }
+    ]
+}

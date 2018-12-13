@@ -1,0 +1,8 @@
+{
+    "type": "error",
+    "status": 409,
+    "code": "conflict",
+    "help_url": "http://developers.box.com/docs/#errors",
+    "message": "Terms of Service User status already exists.",
+    "request_id": "8888"
+}

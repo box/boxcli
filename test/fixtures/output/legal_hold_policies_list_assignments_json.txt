@@ -1,0 +1,10 @@
+[
+    {
+        "type": "legal_hold_policy_assignment",
+        "id": "12345"
+    },
+    {
+        "type": "legal_hold_policy_assignment",
+        "id": "123456"
+    }
+]

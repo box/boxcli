@@ -1,0 +1,16 @@
+{
+    "next_marker": "ZDE789",
+    "limit": 1000,
+    "entries": [
+        {
+            "type": "storage_policy",
+            "id": "456",
+            "name": "Azure"
+        },
+        {
+            "type": "storage_policy",
+            "id": "123",
+            "name": "AWS"
+        }
+    ]
+}

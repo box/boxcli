@@ -1,0 +1,26 @@
+{
+	"entries": [
+		{
+			"type": "retention_policy",
+			"id": "44444",
+			"policy_name": "My Policy"
+        },
+		{
+			"type": "retention_policy",
+			"id": "33333",
+			"policy_name": "Retain Forever"
+        },
+		{
+			"type": "retention_policy",
+			"id": "11111",
+			"policy_name": "Retained Financial Records"
+        },
+		{
+			"type": "retention_policy",
+			"id": "22222",
+			"policy_name": "Very Short Retention"
+        }
+    ],
+	"next_marker": "ZDE345",
+	"limit": 1000
+}

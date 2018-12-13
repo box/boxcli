@@ -1,0 +1,21 @@
+{
+    "type": "retention_policy_assignment",
+    "id": "12345",
+    "retention_policy": {
+        "type": "retention_policy",
+        "id": "11111",
+        "policy_name": "Retained Financial Records"
+    },
+    "assigned_to": {
+        "type": "folder",
+        "id": "22222"
+    },
+    "filter_fields": [],
+    "assigned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "assigned_at": "2018-04-25T20:19:16-07:00"
+}

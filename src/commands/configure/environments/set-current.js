@@ -1,0 +1,53 @@
+'use strict';
+
+const BoxCommand = require('../../../box-command');
+const inquirer = require('inquirer');
+
+class EnvironmentsSetCurrentCommand extends BoxCommand {
+	async run() {
+		const { flags, args } = this.parse(EnvironmentsSetCurrentCommand);
+		let environmentsObj = this.getEnvironments();
+		let name = args.name;
+
+		if (!name) {
+			let answers = await inquirer.prompt([
+				{
+					type: 'list',
+					name: 'environment',
+					message: 'Which environment?',
+					choices: Object.keys(environmentsObj.environments),
+				}
+			]);
+			name = answers.environment;
+		}
+
+		if (environmentsObj.environments.hasOwnProperty(name)) {
+			environmentsObj.default = name;
+			this.updateEnvironments(environmentsObj);
+			this.info(`The ${name} environment has been set as the default`);
+		} else {
+			this.error(`The ${name} environment does not exist`);
+		}
+	}
+}
+
+// @NOTE: This command does not require a client to be set up
+EnvironmentsSetCurrentCommand.noClient = true;
+
+EnvironmentsSetCurrentCommand.aliases = [ 'configure:environments:select' ];
+EnvironmentsSetCurrentCommand.description = 'Set your current Box environment to use';
+
+EnvironmentsSetCurrentCommand.flags = {
+	...BoxCommand.minFlags,
+};
+
+EnvironmentsSetCurrentCommand.args = [
+	{
+		name: 'name',
+		required: false,
+		hidden: false,
+		description: 'Name of the environment'
+	}
+];
+
+module.exports = EnvironmentsSetCurrentCommand;

@@ -1,0 +1,12 @@
+[
+    {
+        "type": "legal_hold_policy",
+        "id": "22222",
+        "policy_name": "IRS Audit"
+    },
+    {
+        "type": "legal_hold_policy",
+        "id": "11111",
+        "policy_name": "Trial Documents"
+    }
+]

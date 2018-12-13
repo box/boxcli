@@ -1,0 +1,42 @@
+[
+    {
+        "type": "retention_policy",
+        "id": "44444",
+        "policy_name": "My Policy"
+    },
+    {
+        "type": "retention_policy",
+        "id": "33333",
+        "policy_name": "Retain Forever"
+    },
+    {
+        "type": "retention_policy",
+        "id": "11111",
+        "policy_name": "Retained Financial Records"
+    },
+    {
+        "type": "retention_policy",
+        "id": "22222",
+        "policy_name": "Very Short Retention"
+    },
+    {
+        "type": "retention_policy",
+        "id": "44445",
+        "policy_name": "My Policy"
+    },
+    {
+        "type": "retention_policy",
+        "id": "33334",
+        "policy_name": "Retain Forever"
+    },
+    {
+        "type": "retention_policy",
+        "id": "11112",
+        "policy_name": "Retained Financial Records"
+    },
+    {
+        "type": "retention_policy",
+        "id": "22223",
+        "policy_name": "Very Short Retention"
+    }
+]

@@ -1,0 +1,28 @@
+{
+	"next_marker": "ZAD345",
+	"entries": [
+		{
+			"type": "file_version_retention",
+			"id": "111111"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "222222"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "333333"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "444444"
+        }
+    ],
+	"limit": 100,
+	"order": [
+		{
+			"by": "file_version_id",
+			"direction": "ASC"
+        }
+    ]
+}

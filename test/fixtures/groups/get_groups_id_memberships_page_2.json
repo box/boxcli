@@ -1,0 +1,24 @@
+{
+    "offset": 1,
+    "limit": 1,
+    "total_count": 2,
+    "entries": [
+        {
+            "type": "group_membership",
+            "id": "123456",
+            "user": {
+                "type": "user",
+                "id": "444445",
+                "name": "Test User 2",
+                "login": "testuser2@example.com"
+            },
+            "group": {
+                "type": "group",
+                "id": "11111",
+                "name": "Remote Employees",
+                "group_type": "managed_group"
+            },
+            "role": "member"
+        }
+    ]
+}

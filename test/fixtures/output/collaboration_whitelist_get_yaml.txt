@@ -1,0 +1,10 @@
+Type: collaboration_whitelist_entry
+ID: '11111'
+Domain: box.com
+Direction: both
+Enterprise:
+    Type: enterprise
+    ID: '22222'
+    Name: Test Enterprise
+Created At: '2018-04-23T21:31:07-07:00'
+Modified At: '2018-04-23T21:31:07-07:00'

@@ -1,0 +1,69 @@
+{
+    "total_count": 6,
+    "entries": [
+        {
+            "type": "folder",
+            "id": "111112",
+            "sequence_id": "1",
+            "etag": "1",
+            "name": "Collab Folder"
+        },
+        {
+            "type": "folder",
+            "id": "222223",
+            "sequence_id": "0",
+            "etag": "0",
+            "name": "Copied Folder"
+        },
+        {
+            "type": "folder",
+            "id": "33333",
+            "sequence_id": "0",
+            "etag": "0",
+            "name": "SDK Test Folder"
+        },
+        {
+            "type": "folder",
+            "id": "444445",
+            "sequence_id": "1",
+            "etag": "1",
+            "name": "Test Folder"
+        },
+        {
+            "type": "file",
+            "id": "55555",
+            "file_version": {
+                "type": "file_version",
+                "id": "555550",
+                "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+            },
+            "sequence_id": "0",
+            "etag": "0",
+            "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+            "name": "Copied file.txt"
+        },
+        {
+            "type": "file",
+            "id": "66666",
+            "file_version": {
+                "type": "file_version",
+                "id": "666660",
+                "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+            },
+            "sequence_id": "9",
+            "etag": "9",
+            "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+            "name": "test file.txt"
+        }
+    ],
+    "order": [
+        {
+            "by": "type",
+            "direction": "ASC"
+        },
+        {
+            "by": "name",
+            "direction": "ASC"
+        }
+    ]
+}

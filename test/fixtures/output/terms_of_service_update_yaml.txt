@@ -1,0 +1,11 @@
+Type: terms_of_service
+ID: '12345'
+Status: enabled
+Enterprise:
+    Type: enterprise
+    ID: '1111'
+    Name: Test
+ToS Type: managed
+Text: test
+Created At: '2015-06-03T18:01:29-07:00'
+Modified At: '2018-04-18T17:44:10-07:00'

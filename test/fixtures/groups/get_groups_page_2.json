@@ -1,0 +1,19 @@
+{
+    "total_count": 4,
+    "entries": [
+        {
+            "type": "group",
+            "id": "222223",
+            "name": "Employees",
+            "group_type": "managed_group"
+        },
+        {
+            "type": "group",
+            "id": "11112",
+            "name": "Remote Employees",
+            "group_type": "managed_group"
+        }
+    ],
+    "limit": 2,
+    "offset": 2
+}

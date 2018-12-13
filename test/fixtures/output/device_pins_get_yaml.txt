@@ -1,0 +1,10 @@
+Type: device_pinner
+ID: '123456789'
+Owned By:
+    Type: user
+    ID: '987654321'
+    Name: Device User
+    Login: iphone@example.com
+Product Name: iPhone
+Created At: '2016-11-16T19:05:05-08:00'
+Modified At: '2016-11-16T19:05:05-08:00'

@@ -1,0 +1,28 @@
+{
+    "total_count": 1,
+    "entries": [
+        {
+            "type": "task_assignment",
+            "id": "12345",
+            "item": {
+                "type": "file",
+                "id": "22222",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "222220",
+                    "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+                },
+                "sequence_id": "0",
+                "etag": "0",
+                "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+                "name": "Copied file.txt"
+            },
+            "assigned_to": {
+                "type": "user",
+                "id": "33333",
+                "name": "Test User",
+                "login": "testuser@example.com"
+            }
+        }
+    ]
+}

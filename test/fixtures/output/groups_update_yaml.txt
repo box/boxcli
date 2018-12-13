@@ -1,0 +1,6 @@
+Type: group
+ID: '11111'
+Name: Remote Employees
+Group Type: managed_group
+Created At: '2018-04-25T15:25:07-07:00'
+Modified At: '2018-04-25T15:31:02-07:00'
