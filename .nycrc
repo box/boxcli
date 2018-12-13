@@ -3,6 +3,13 @@
     "all": true,
     "reporter": [
         "text-summary",
+        "lcov",
         "html"
-    ]
+    ],
+    "check-coverage": true,
+    "lines": 90,
+    "statements": 90,
+    "functions": 91,
+    "branches": 78,
+    "report-dir": "./coverage"
 }
