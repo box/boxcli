@@ -298,7 +298,7 @@ describe('Bulk', () => {
 		let entriesInputFilePath = path.join(__dirname, '../fixtures/bulk/input_entries.json'),
 			bareArrayInputFilePath = path.join(__dirname, '../fixtures/bulk/input_array.json'),
 			singleObjectInputFilePath = path.join(__dirname, '../fixtures/bulk/input_object.json'),
-			wrongExtensionInputFilePath = path.join(__dirname, '../fixtures/bulk/input.log'),
+			wrongExtensionInputFilePath = path.join(__dirname, '../fixtures/bulk/input.txt'),
 			invalidInputFilePath = path.join(__dirname, '../fixtures/bulk/input_invalid.json'),
 			multipleFlagValuesInputFilePath = path.join(__dirname, '../fixtures/bulk/input_multiple_same_flag.json'),
 			metadataUpdateInputFilePath = path.join(__dirname, '../fixtures/bulk/input_metadata_update.json'),
@@ -415,7 +415,7 @@ describe('Bulk', () => {
 			])
 			.it('should output error when input file does not have appropriate extension', ctx => {
 				assert.equal(ctx.stdout, '');
-				assert.include(ctx.stderr, `Input file had extension ".log", but only .json and .csv are supported${os.EOL}`);
+				assert.include(ctx.stderr, `Input file had extension ".txt", but only .json and .csv are supported${os.EOL}`);
 			});
 
 		test
@@ -518,7 +518,7 @@ describe('Bulk', () => {
 				let savedFileContents = fs.readFileSync(saveFilePath, 'utf8');
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
-				assert.include(ctx.stdout, `? File ${saveFilePath} already exists — overwrite? (y/N) y`);
+				assert.include(ctx.stdout, '(y/N) y');
 				assert.equal(ctx.stderr, `Output written to ${saveFilePath}${os.EOL}`);
 			});
 
