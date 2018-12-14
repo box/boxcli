@@ -1,6 +1,5 @@
 {
 	"name": "box-cli",
-	"private": true,
 	"description": "Official command line interface for the Box API",
 	"keywords": [
 		"box",
