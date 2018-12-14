@@ -795,7 +795,7 @@ describe('Folders', () => {
 		describe(command, () => {
 			let folderId = '0',
 				createSharedLinkFixture = getFixture('folders/put_folders_id_shared_link'),
-				unshareDate = '2030-03-04T12:34:56-08:00',
+				unshareDate = '2030-03-04T12:34:56-00:00',
 				jsonOutput = getFixture('output/folders_share_json.txt'),
 				yamlOutput = getFixture('output/folders_share_yaml.txt');
 

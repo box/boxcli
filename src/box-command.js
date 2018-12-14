@@ -914,8 +914,14 @@ class BoxCommand extends Command {
 			}
 		}
 
+		// Dates are always in the user's local timezone, but for
+		// consistency we move them all to UTC
+
+
 		// Format the timezone to RFC3339 format for the Box API
-		return dateTime.format(newDate, 'YYYY-MM-DDTHH:mm:ssZ');
+		// Also always use UTC for consistency
+		return newDate.toISOString().replace(/\.\d{3}Z$/u, '-00:00');
+		// return dateTime.format(newDate, 'YYYY-MM-DDTHH:mm:ssZ');
 	}
 
 	/**

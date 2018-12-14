@@ -13,8 +13,8 @@ describe('Events', () => {
 	], function(command) {
 
 		describe(command, () => {
-			let createdBefore = '2014-05-17T13:35:01-07:00',
-				createdAfter = '2015-05-15T13:35:01-07:00',
+			let createdBefore = '2014-05-17T13:35:01-00:00',
+				createdAfter = '2015-05-15T13:35:01-00:00',
 				eventType = 'NEW_USER,DELETE_USER,EDIT_USER',
 				streamPosition = '122333',
 				fixture = getFixture('events/get_events'),

@@ -525,12 +525,12 @@ describe('Retention Policies', () => {
 				{policy_id: '4444'}
 			],
 			'disposition after flag': [
-				'--disposition-after=2024-11-07T12:34:56-08:00',
-				{disposition_after: '2024-11-07T12:34:56-08:00'}
+				'--disposition-after=2024-11-07T12:34:56-00:00',
+				{disposition_after: '2024-11-07T12:34:56-00:00'}
 			],
 			'disposition before flag': [
-				'--disposition-before=2024-11-07T12:34:56-08:00',
-				{disposition_before: '2024-11-07T12:34:56-08:00'}
+				'--disposition-before=2024-11-07T12:34:56-00:00',
+				{disposition_before: '2024-11-07T12:34:56-00:00'}
 			],
 		}, function(flag, queryParams) {
 
