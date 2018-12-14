@@ -7,9 +7,9 @@
         "html"
     ],
     "check-coverage": true,
-    "lines": 90,
-    "statements": 90,
+    "lines": 89,
+    "statements": 89,
     "functions": 91,
-    "branches": 78,
+    "branches": 77,
     "report-dir": "./coverage"
 }
