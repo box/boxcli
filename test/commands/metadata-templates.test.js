@@ -344,7 +344,8 @@ describe('Metadata Templates', () => {
 				.command([
 					'metadata-templates:create',
 					`--display-name=${displayName}`,
-					...flags
+					...flags,
+					'--token=test'
 				])
 				.it('should output correct error message', ctx => {
 					assert.equal(ctx.stderr, `${expectedErrorMessage}${os.EOL}`);
@@ -561,7 +562,8 @@ describe('Metadata Templates', () => {
 					'metadata-templates:update',
 					templateKey,
 					`--scope=${scope}`,
-					...flags
+					...flags,
+					'--token=test'
 				])
 				.it('should output correct error message', ctx => {
 					assert.equal(ctx.stderr, `${expectedErrorMessage}${os.EOL}`);
