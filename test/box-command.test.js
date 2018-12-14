@@ -32,7 +32,7 @@ describe('BoxCommand', () => {
 			.it('should enable framework debugging when verbose flag is passed', ctx => {
 				debug.disable();
 				let debugLines = ctx.stderr.split(os.EOL);
-				assert.include(debugLines[0], 'box:box-cli:hooks:init');
+				assert.include(debugLines[0], 'box:@box/cli:hooks:init');
 				assert.include(debugLines[1], 'box:help');
 			});
 

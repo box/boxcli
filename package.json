@@ -1,5 +1,5 @@
 {
-	"name": "box-cli",
+	"name": "@box/cli",
 	"description": "Official command line interface for the Box API",
 	"keywords": [
 		"box",
