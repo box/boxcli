@@ -1,0 +1,18 @@
+{
+    "type": "comment",
+    "id": "9988776655",
+    "is_reply_comment": false,
+    "message": "Other User Looks good!",
+    "created_by": {
+        "type": "user",
+        "id": "123456789",
+        "name": "Matt Willer",
+        "login": "matt.r.willer+boxadmin@gmail.com"
+    },
+    "created_at": "2016-11-16T22:08:08-08:00",
+    "item": {
+        "id": "987654321",
+        "type": "file"
+    },
+    "modified_at": "2016-11-16T22:08:08-08:00"
+}

@@ -1,0 +1,14 @@
+[
+    {
+        "type": "email_alias",
+        "id": "1234",
+        "is_confirmed": true,
+        "email": "dglover2@example.com"
+    },
+    {
+        "type": "email_alias",
+        "id": "1235",
+        "is_confirmed": true,
+        "email": "dglover3@example.com"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "type": "file_version_retention",
+        "id": "111111"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "222222"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "333333"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "444444"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "111112"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "222223"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "333334"
+    },
+    {
+        "type": "file_version_retention",
+        "id": "444445"
+    }
+]

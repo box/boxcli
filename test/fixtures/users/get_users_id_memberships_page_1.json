@@ -1,0 +1,23 @@
+{
+    "total_count": 2,
+    "entries": [
+        {
+            "type": "group_membership",
+            "id": "1560354",
+            "user": {
+                "type": "user",
+                "id": "13130406",
+                "name": "Alison Wonderland",
+                "login": "alice@gmail.com"
+            },
+            "group": {
+                "type": "group",
+                "id": "119720",
+                "name": "family"
+            },
+            "role": "member"
+        }
+    ],
+    "limit": 1,
+    "offset": 0
+}

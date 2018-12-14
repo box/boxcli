@@ -1,0 +1,4 @@
+Item_Id,Item_Type,canViewPath,LogiN
+11111,folder,TRUE,
+22222,folder,,roger.federer@example.com
+,file,FALSE,dominic.toretto@example.com

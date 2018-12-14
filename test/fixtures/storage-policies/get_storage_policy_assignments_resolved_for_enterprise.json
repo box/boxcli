@@ -1,0 +1,18 @@
+{
+    "next_marker": "",
+    "limit": 1,
+    "entries": [
+        {
+            "type": "storage_policy_assignment",
+            "id": "enterprise_77777",
+            "storage_policy": {
+                "type": "storage_policy",
+                "id": "123"
+            },
+            "assigned_to": {
+                "type": "enterprise",
+                "id": "77777"
+            }
+        }
+    ]
+}

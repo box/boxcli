@@ -1,0 +1,58 @@
+{
+    "limit": 2,
+    "entries": [
+        {
+            "id": "81274d65-cf63-40dc-b119-d4da31071492",
+            "type": "metadata_template",
+            "templateKey": "mymetadata",
+            "scope": "enterprise_12345",
+            "displayName": "MyMetadata",
+            "hidden": false,
+            "fields": [
+                {
+                    "id": "6ff16602-0119-4619-ae15-f02b1ecdd811",
+                    "type": "string",
+                    "key": "data",
+                    "displayName": "Data",
+                    "hidden": false
+                },
+                {
+                    "id": "5c16d86c-6554-4278-814e-356211215807",
+                    "type": "date",
+                    "key": "when",
+                    "displayName": "When",
+                    "hidden": false
+                }
+            ]
+        },
+        {
+            "id": "8ba164d2-c223-4797-92a9-1616b29c3f72",
+            "type": "metadata_template",
+            "templateKey": "testTemplate",
+            "scope": "enterprise_12345",
+            "displayName": "Test Template",
+            "hidden": false,
+            "fields": [
+                {
+                    "id": "1f1f29a6-00e2-4b56-b446-b50d5491b0ca",
+                    "type": "enum",
+                    "key": "testEnum",
+                    "displayName": "Test Enum",
+                    "hidden": false,
+                    "options": [
+                        {
+                            "id": "c84b16d2-db68-4fc2-9a85-4b8820841fa8",
+                            "key": "foo"
+                        },
+                        {
+                            "id": "6ee108f2-47f0-43e2-9584-06311c37badf",
+                            "key": "bar"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "next_marker": null,
+    "prev_marker": null
+}

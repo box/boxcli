@@ -1,0 +1,44 @@
+[
+    {
+        "source": {
+            "type": "user",
+            "id": "222853849",
+            "name": "Nick Lee",
+            "login": "nlee+demo4@example.com"
+        },
+        "created_by": {
+            "type": "user",
+            "id": "222853849",
+            "name": "sean rose",
+            "login": "sean+awesome@example.com"
+        },
+        "created_at": "2015-12-02T09:41:31-08:00",
+        "event_id": "b9a2393a-20cf-4307-90f5-004110dec209",
+        "event_type": "ADD_LOGIN_ACTIVITY_DEVICE",
+        "ip_address": "Unknown IP",
+        "type": "event",
+        "session_id": null,
+        "additional_details": null
+    },
+    {
+        "source": {
+            "type": "user",
+            "id": "222853849",
+            "name": "sean rose",
+            "login": "sean+awesome@example.com"
+        },
+        "created_by": {
+            "type": "user",
+            "id": "222853849",
+            "name": "Nick Lee",
+            "login": "nlee+demo4@example.com"
+        },
+        "created_at": "2015-12-02T09:41:31-08:00",
+        "event_id": "1a4ade15-b1ff-4cc3-89a8-955e1522557c",
+        "event_type": "LOGIN",
+        "ip_address": "Unknown IP",
+        "type": "event",
+        "session_id": null,
+        "additional_details": null
+    }
+]

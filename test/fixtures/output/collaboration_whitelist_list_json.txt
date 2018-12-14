@@ -1,0 +1,14 @@
+[
+    {
+        "type": "collaboration_whitelist_entry",
+        "id": "11111",
+        "domain": "box.com",
+        "direction": "both"
+    },
+    {
+        "type": "collaboration_whitelist_entry",
+        "id": "111112",
+        "domain": "box.com",
+        "direction": "both"
+    }
+]

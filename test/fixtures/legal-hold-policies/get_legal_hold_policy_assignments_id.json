@@ -1,0 +1,22 @@
+{
+    "type": "legal_hold_policy_assignment",
+    "id": "12345",
+    "legal_hold_policy": {
+        "type": "legal_hold_policy",
+        "id": "11111",
+        "policy_name": "Trial Documents"
+    },
+    "assigned_to": {
+        "type": "folder",
+        "id": "55555"
+    },
+    "assigned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "assigned_at": "2018-04-25T17:07:56-07:00",
+    "deleted_at": null,
+    "modified_at": "2018-04-25T17:07:57-07:00"
+}

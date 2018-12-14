@@ -1,0 +1,8 @@
+Type: storage_policy_assignment
+ID: enterprise_77777
+Storage Policy:
+    Type: storage_policy
+    ID: '123'
+Assigned To:
+    Type: enterprise
+    ID: '77777'

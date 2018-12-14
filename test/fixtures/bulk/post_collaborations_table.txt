@@ -1,0 +1,77 @@
+----- Collaboration 1234567890 -----
+Type: collaboration
+ID: '1234567890'
+Created By:
+    Type: user
+    ID: '9753108642'
+    Name: Inviting User
+    Login: invites@example.com
+Created At: '2016-11-16T21:33:31-08:00'
+Modified At: '2016-11-16T21:33:31-08:00'
+Expires At: null
+Status: accepted
+Accessible By:
+    Type: user
+    ID: '987654321'
+    Name: Steve Jobs
+    Login: steve.jobs@example.com
+Role: previewer
+Acknowledged At: '2016-11-16T21:33:31-08:00'
+Item:
+    Type: file
+    ID: '11111'
+    Sequence ID: '0'
+    ETag: '0'
+    Name: Collaborated File
+
+----- Collaboration 1234567891 -----
+Type: collaboration
+ID: '1234567891'
+Created By:
+    Type: user
+    ID: '9753108642'
+    Name: Inviting User
+    Login: invites@example.com
+Created At: '2016-11-16T21:33:31-08:00'
+Modified At: '2016-11-16T21:33:31-08:00'
+Expires At: null
+Status: accepted
+Accessible By:
+    Type: user
+    ID: '987654322'
+    Name: Roger Federer
+    Login: roger.federer@example.com
+Role: previewer
+Acknowledged At: '2016-11-16T21:33:31-08:00'
+Item:
+    Type: file
+    ID: '22222'
+    Sequence ID: '0'
+    ETag: '0'
+    Name: Collaborated File
+
+----- Collaboration 1234567892 -----
+Type: collaboration
+ID: '1234567892'
+Created By:
+    Type: user
+    ID: '9753108642'
+    Name: Inviting User
+    Login: invites@example.com
+Created At: '2016-11-16T21:33:31-08:00'
+Modified At: '2016-11-16T21:33:31-08:00'
+Expires At: null
+Status: accepted
+Accessible By:
+    Type: user
+    ID: '987654323'
+    Name: Dominic Toretto
+    Login: dominic.toretto@example.com
+Role: previewer
+Acknowledged At: '2016-11-16T21:33:31-08:00'
+Item:
+    Type: file
+    ID: '33333'
+    Sequence ID: '0'
+    ETag: '0'
+    Name: Collaborated File

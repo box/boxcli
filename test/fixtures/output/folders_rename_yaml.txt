@@ -1,0 +1,58 @@
+Type: folder
+ID: '0'
+Sequence ID: '1'
+ETag: '1'
+Name: New Folder Name
+Created At: '2018-04-25T13:11:51-07:00'
+Modified At: '2018-04-25T14:06:20-07:00'
+Description: My new folder
+Size: 0
+Path Collection:
+    Total Count: 1
+    Entries:
+        -
+            Type: folder
+            ID: '0'
+            Sequence ID: null
+            ETag: null
+            Name: All Files
+Created By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Modified By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Trashed At: null
+Purged At: null
+Content Created At: '2018-04-25T13:11:51-07:00'
+Content Modified At: '2018-04-25T14:06:20-07:00'
+Owned By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Shared Link: null
+Folder Upload Email: null
+Parent:
+    Type: folder
+    ID: '987654321'
+    Sequence ID: null
+    ETag: null
+    Name: All Files
+Item Status: active
+Item Collection:
+    Total Count: 0
+    Entries: []
+    Offset: 0
+    Limit: 100
+    Order:
+        -
+            By: type
+            Direction: ASC
+        -
+            By: name
+            Direction: ASC

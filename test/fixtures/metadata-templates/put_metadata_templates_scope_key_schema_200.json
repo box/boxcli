@@ -1,0 +1,48 @@
+{
+    "templateKey": "employeeRecord",
+    "scope": "enterprise_11111",
+    "displayName": "New Display Name",
+    "hidden": true,
+    "fields": [
+        {
+            "type": "string",
+            "key": "key3",
+            "displayName": "Third Field",
+            "hidden": true
+        },
+        {
+            "type": "enum",
+            "key": "key1",
+            "displayName": "First Key",
+            "options": [
+                {
+                    "key": "optionKey0"
+                },
+                {
+                    "key": "optionKey1"
+                }
+            ]
+        },
+        {
+            "type": "multiSelect",
+            "displayName": "foo",
+            "hidden": false,
+            "options": [
+                {
+                    "key": "bar"
+                },
+                {
+                    "key": "baz"
+                }
+            ]
+        },
+        {
+            "type": "float",
+            "displayName": "Count"
+        },
+        {
+            "type": "date",
+            "displayName": "Date"
+        }
+    ]
+}

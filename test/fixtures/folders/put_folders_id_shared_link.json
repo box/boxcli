@@ -1,0 +1,126 @@
+{
+    "type": "folder",
+    "id": "0",
+    "sequence_id": null,
+    "etag": null,
+    "name": "All Files",
+    "created_at": null,
+    "modified_at": null,
+    "description": "",
+    "size": 8183737,
+    "path_collection": {
+        "total_count": 0,
+        "entries": []
+    },
+    "created_by": {
+        "type": "user",
+        "id": "",
+        "name": "",
+        "login": ""
+    },
+    "modified_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "trashed_at": null,
+    "purged_at": null,
+    "content_created_at": null,
+    "content_modified_at": null,
+    "owned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "shared_link": {
+        "url": "https://blosserdemoaccount.box.com/s/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p",
+        "download_url": "https://blosserdemoaccount.box.com/shared/static/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p.png",
+        "vanity_url": null,
+        "effective_access": "open",
+        "is_password_enabled": true,
+        "unshared_at": null,
+        "download_count": 0,
+        "preview_count": 0,
+        "access": "test",
+        "permissions": {
+            "can_download": true,
+            "can_preview": true
+        }
+    },
+    "folder_upload_email": null,
+    "parent": null,
+    "item_status": "active",
+    "item_collection": {
+        "total_count": 6,
+        "entries": [
+            {
+                "type": "folder",
+                "id": "44444",
+                "sequence_id": "1",
+                "etag": "1",
+                "name": "Collab Folder"
+            },
+            {
+                "type": "folder",
+                "id": "55555",
+                "sequence_id": "0",
+                "etag": "0",
+                "name": "Copied Folder"
+            },
+            {
+                "type": "folder",
+                "id": "66666",
+                "sequence_id": "0",
+                "etag": "0",
+                "name": "SDK Test Folder"
+            },
+            {
+                "type": "folder",
+                "id": "77777",
+                "sequence_id": "1",
+                "etag": "1",
+                "name": "Test Folder"
+            },
+            {
+                "type": "file",
+                "id": "88888",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "888880",
+                    "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+                },
+                "sequence_id": "0",
+                "etag": "0",
+                "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+                "name": "Copied file.txt"
+            },
+            {
+                "type": "file",
+                "id": "99999",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "999990",
+                    "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+                },
+                "sequence_id": "9",
+                "etag": "9",
+                "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+                "name": "test file.txt"
+            }
+        ],
+        "offset": 0,
+        "limit": 100,
+        "order": [
+            {
+                "by": "type",
+                "direction": "ASC"
+            },
+            {
+                "by": "name",
+                "direction": "ASC"
+            }
+        ]
+    }
+}

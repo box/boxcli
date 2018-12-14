@@ -1,0 +1,14 @@
+Type: comment
+ID: '123456789'
+Is Reply Comment: false
+Message: Looks great!
+Created By:
+    Type: user
+    ID: '9078563412'
+    Name: Commenting User
+    Login: comments@example.com
+Created At: '2016-11-16T22:03:56-08:00'
+Item:
+    ID: '987654321'
+    Type: file
+Modified At: '2016-11-16T22:03:56-08:00'

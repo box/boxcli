@@ -1,0 +1,27 @@
+{
+    "id": "1ba96432-c223-4797-95a9-1636b59c3f7b",
+    "type": "metadata_template",
+    "templateKey": "testTemplate",
+    "scope": "enterprise_12345",
+    "displayName": "Test Template",
+    "hidden": false,
+    "fields": [
+        {
+            "id": "1f2f29a6-00e2-4b56-b246-b50d5494b2ca",
+            "type": "enum",
+            "key": "testEnum",
+            "displayName": "Test Enum",
+            "hidden": false,
+            "options": [
+                {
+                    "id": "c84b76d2-db68-4fc2-9a75-4b7820845fa8",
+                    "key": "foo"
+                },
+                {
+                    "id": "6ee108f2-41f0-43e2-1584-06316c37badf",
+                    "key": "bar"
+                }
+            ]
+        }
+    ]
+}

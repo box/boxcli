@@ -1,0 +1,10 @@
+Type: collaboration_whitelist_entry
+ID: '1234'
+Domain: test.com
+Direction: both
+Enterprise:
+    Type: enterprise
+    ID: '12345678'
+    Name: Box
+Created At: '2017-12-06T15:05:28-08:00'
+Modified At: '2017-12-06T15:05:28-08:00'

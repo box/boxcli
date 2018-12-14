@@ -1,0 +1,8 @@
+Type: storage_policy_assignment
+ID: user_987654321
+Storage Policy:
+    Type: storage_policy
+    ID: '123'
+Assigned To:
+    Type: user
+    ID: '987654321'

@@ -1,0 +1,93 @@
+Type: folder
+ID: '0'
+Sequence ID: null
+ETag: null
+Name: All Files
+Created At: null
+Modified At: null
+Description: ''
+Size: 8183737
+Path Collection:
+    Total Count: 0
+    Entries: []
+Created By:
+    Type: user
+    ID: ''
+    Name: ''
+    Login: ''
+Modified By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Trashed At: null
+Purged At: null
+Content Created At: null
+Content Modified At: null
+Owned By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Shared Link: null
+Folder Upload Email: null
+Parent: null
+Item Status: active
+Item Collection:
+    Total Count: 6
+    Entries:
+        -
+            Type: folder
+            ID: '44444'
+            Sequence ID: '1'
+            ETag: '1'
+            Name: Collab Folder
+        -
+            Type: folder
+            ID: '55555'
+            Sequence ID: '0'
+            ETag: '0'
+            Name: Copied Folder
+        -
+            Type: folder
+            ID: '66666'
+            Sequence ID: '0'
+            ETag: '0'
+            Name: SDK Test Folder
+        -
+            Type: folder
+            ID: '77777'
+            Sequence ID: '1'
+            ETag: '1'
+            Name: Test Folder
+        -
+            Type: file
+            ID: '88888'
+            File Version:
+                Type: file_version
+                ID: '888880'
+                SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+            Sequence ID: '0'
+            ETag: '0'
+            SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+            Name: Copied file.txt
+        -
+            Type: file
+            ID: '99999'
+            File Version:
+                Type: file_version
+                ID: '999990'
+                SHA1: 97cc02de7c356f94e3beeb1e0c63f78a6edb01fd
+            Sequence ID: '9'
+            ETag: '9'
+            SHA1: 97cc02de7c356f94e3beeb1e0c63f78a6edb01fd
+            Name: test file.txt
+    Offset: 0
+    Limit: 100
+    Order:
+        -
+            By: type
+            Direction: ASC
+        -
+            By: name
+            Direction: ASC

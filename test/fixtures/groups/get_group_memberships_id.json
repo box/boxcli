@@ -1,0 +1,25 @@
+{
+    "type": "group_membership",
+    "id": "12345",
+    "user": {
+        "type": "user",
+        "id": "44444",
+        "name": "Test User 2",
+        "login": "testuser2@example.com"
+    },
+    "group": {
+        "type": "group",
+        "id": "11111",
+        "name": "Remote Employees",
+        "group_type": "managed_group"
+    },
+    "role": "admin",
+    "configurable_permissions": {
+        "can_create_accounts": true,
+        "can_edit_accounts": true,
+        "can_instant_login": true,
+        "can_run_reports": true
+    },
+    "created_at": "2018-04-25T15:39:35-07:00",
+    "modified_at": "2018-04-25T15:39:35-07:00"
+}

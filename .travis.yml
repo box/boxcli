@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+    - "10.10.0"
+
+branches:
+    only:
+        - master
+
+script: "npm test"
+after_script: "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"

@@ -1,0 +1,9 @@
+test: test123
+number: 1.9
+$type: testTemplate-2890e938-874d-4959-bbc7-6a778b3ad75c
+$parent: file_11111
+$id: 89b3a698-7705-3152-9c25-73f789a1b924
+$version: 0
+$typeVersion: 0
+$template: testTemplate
+$scope: enterprise_22222

@@ -1,0 +1,33 @@
+{
+    "total_count": 4,
+    "offset": 0,
+    "limit": 2,
+    "entries": [
+        {
+            "type": "comment",
+            "id": "111111",
+            "is_reply_comment": false,
+            "message": "Hello Nadal",
+            "created_by": {
+                "type": "user",
+                "id": "274664201",
+                "name": "Roger Federer",
+                "login": "roger.federer@example.com"
+            },
+            "created_at": "2018-06-06T13:18:08-07:00"
+        },
+        {
+            "type": "comment",
+            "id": "222222",
+            "is_reply_comment": false,
+            "message": "Hello Roger",
+            "created_by": {
+                "type": "user",
+                "id": "274664201",
+                "name": "Rafa Nadal",
+                "login": "rafa.nadal@example.com"
+            },
+            "created_at": "2018-06-06T13:18:22-07:00"
+        }
+    ]
+}

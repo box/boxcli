@@ -1,0 +1,28 @@
+Type: task_assignment
+ID: '12345'
+Item:
+    Type: file
+    ID: '22222'
+    File Version:
+        Type: file_version
+        ID: '222220'
+        SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+    Sequence ID: '0'
+    ETag: '0'
+    SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+    Name: Copied file.txt
+Assigned To:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Message: Looks good to me!
+Completed At: '2018-04-26T19:26:23-07:00'
+Assigned At: '2018-04-26T19:12:18-07:00'
+Reminded At: null
+Resolution State: completed
+Assigned By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com

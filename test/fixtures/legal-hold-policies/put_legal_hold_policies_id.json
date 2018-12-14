@@ -1,0 +1,25 @@
+{
+    "type": "legal_hold_policy",
+    "id": "11111",
+    "policy_name": "Trial Documents",
+    "description": "Documents related to our ongoing litigation",
+    "status": "active",
+    "assignment_counts": {
+        "user": 0,
+        "folder": 0,
+        "file": 0,
+        "file_version": 0
+    },
+    "is_ongoing": true,
+    "created_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "created_at": "2018-04-25T16:37:05-07:00",
+    "modified_at": "2018-04-25T16:45:55-07:00",
+    "deleted_at": null,
+    "filter_started_at": null,
+    "filter_ended_at": null
+}

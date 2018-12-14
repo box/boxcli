@@ -1,0 +1,15 @@
+{ 
+	"entries": [
+        {
+            "type": "legal_hold_policy_assignment",
+            "id": "123456"
+        }
+    ],
+    "limit": 1,
+    "order": [
+        {
+            "by": "retention_policy_id, retention_policy_object_id",
+            "direction": "ASC"
+        }
+    ]
+}

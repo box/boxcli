@@ -1,0 +1,14 @@
+Type: comment
+ID: '191969'
+Is Reply Comment: true
+Message: These tigers are cool!
+Created By:
+    Type: user
+    ID: '17738362'
+    Name: sean rose
+    Login: sean@example.com
+Created At: '2012-12-12T11:25:01-08:00'
+Item:
+    ID: '5000948880'
+    Type: comment
+Modified At: '2012-12-12T11:25:01-08:00'

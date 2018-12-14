@@ -1,0 +1,17 @@
+{
+    "type": "file_version",
+    "id": "1234567890",
+    "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+    "name": "test file.txt",
+    "size": 16,
+    "created_at": "2018-04-24T15:08:58-07:00",
+    "modified_at": "2018-04-24T15:08:58-07:00",
+    "modified_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "trashed_at": null,
+    "purged_at": null
+}

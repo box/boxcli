@@ -1,0 +1,15 @@
+{ 
+	"entries": [
+        {
+            "type": "legal_hold",
+            "id": "99990"
+        }
+    ],
+    "limit": 100,
+    "order": [
+        {
+            "by": "retention_policy_set_id, file_version_id",
+            "direction": "ASC"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "entries": [
+        {
+            "type": "collaboration_whitelist_entry",
+            "id": "111112",
+            "domain": "box.com",
+            "direction": "both"
+        }
+    ],
+    "limit": 100,
+    "order": [
+        {
+            "by": "id",
+            "direction": "ASC"
+        }
+    ]
+}

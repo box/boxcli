@@ -1,0 +1,4 @@
+Type: email_alias
+ID: '1234'
+Is Confirmed: true
+Email: dglover2@example.com

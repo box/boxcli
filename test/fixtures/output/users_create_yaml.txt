@@ -1,0 +1,16 @@
+Type: user
+ID: '77777'
+Name: Another Test User
+Login: anothertestuser@example.com
+Created At: '2018-04-26T20:19:51-07:00'
+Modified At: '2018-04-26T20:19:52-07:00'
+Language: en
+Timezone: America/Los_Angeles
+Space Amount: 10737418240
+Space Used: 0
+Max Upload Size: 5368709120
+Status: active
+Job Title: ''
+Phone: '1234567890'
+Address: ''
+Avatar URL: 'https://app.box.com/api/avatar/large/deprecated'
