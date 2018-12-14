@@ -130,6 +130,7 @@
 		"lint": "eslint --fix ./src ./test",
 		"prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap && git checkout origin/master -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
-		"version": "oclif-dev readme && git add README.md"
+		"version": "oclif-dev readme && git add README.md",
+		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/"
 	}
 }
