@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (Upcoming)
+
+- Fixed an issue where the `--fields` flag was not always requesting additional fields from the API
+
 ## 2.0.0
 
 ### Features and Enhancements
