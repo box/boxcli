@@ -4,10 +4,14 @@ const BoxCommand = require('../../box-command');
 
 class CollaborationWhitelistListCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(CollaborationWhitelistListCommand);
-		const { args } = this.parse(CollaborationWhitelistListCommand);
+		const { flags, args } = this.parse(CollaborationWhitelistListCommand);
+		let options = {};
 
-		let whitelistEntries = await this.client.collaborationWhitelist.getAllWhitelistedDomains();
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let whitelistEntries = await this.client.collaborationWhitelist.getAllWhitelistedDomains(options);
 		await this.output(whitelistEntries);
 	}
 }

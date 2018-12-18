@@ -12,6 +12,10 @@ class LegalHoldPoliciesListCommand extends BoxCommand {
 			options.policy_name = flags['policy-name'];
 		}
 
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		let policies = await this.client.legalHoldPolicies.getAll(options);
 		await this.output(policies);
 	}

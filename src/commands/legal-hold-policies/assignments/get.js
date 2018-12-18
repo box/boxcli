@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class LegalHoldPoliciesGetAssignmentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(LegalHoldPoliciesGetAssignmentCommand);
+		let options = {};
 
-		let assignment = await this.client.legalHoldPolicies.getAssignment(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let assignment = await this.client.legalHoldPolicies.getAssignment(args.id, options);
 		await this.output(assignment);
 	}
 }

@@ -40,7 +40,6 @@ describe('Collections', () => {
 			.it('should get your collections (Table Output)', ctx => {
 				assert.equal(ctx.stdout, tableOutput);
 			});
-
 	});
 
 	describe('collections:items', () => {
@@ -69,6 +68,28 @@ describe('Collections', () => {
 			.it('should get items in a collection (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/collections/${collectionId}/items`)
+				.query({fields: 'name'})
+				.reply(200, fixture)
+				.get(`/2.0/collections/${collectionId}/items`)
+				.query({
+					fields: 'name',
+					offset: 2
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'collections:items',
+				collectionId,
+				'--fields=name',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('collections:remove', () => {

@@ -30,5 +30,26 @@ describe('Recent Items', () => {
 			.it('should list information about files accessed in the past 90 days up to a 1000 items (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/recent_items')
+				.query({fields: 'name'})
+				.reply(200, fixture)
+				.get('/2.0/recent_items')
+				.query({
+					fields: 'name',
+					marker: 'ZDF123'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'recent-items',
+				'--fields=name',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 });

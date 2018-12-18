@@ -5,8 +5,13 @@ const BoxCommand = require('../../box-command');
 class CollectionsListItemsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CollectionsListItemsCommand);
+		let options = {};
 
-		let items = await this.client.collections.getItems(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let items = await this.client.collections.getItems(args.id, options);
 		await this.output(items);
 	}
 }

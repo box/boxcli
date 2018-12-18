@@ -5,8 +5,13 @@ const BoxCommand = require('../box-command');
 class RecentItems extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RecentItems);
+		let options = {};
 
-		let recentItems = await this.client.recentItems.get();
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let recentItems = await this.client.recentItems.get(options);
 		await this.output(recentItems);
 	}
 }

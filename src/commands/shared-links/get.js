@@ -6,8 +6,13 @@ const { flags } = require('@oclif/command');
 class SharedLinksGetCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SharedLinksGetCommand);
+		let options = {};
 
-		let sharedItem = await this.client.sharedItems.get(args.url, args.password);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let sharedItem = await this.client.sharedItems.get(args.url, args.password, options);
 		await this.output(sharedItem);
 	}
 }

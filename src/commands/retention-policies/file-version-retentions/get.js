@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class RetentionPoliciesGetVersionRetentionCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RetentionPoliciesGetVersionRetentionCommand);
+		let options = {};
 
-		let retention = await this.client.retentionPolicies.getFileVersionRetention(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let retention = await this.client.retentionPolicies.getFileVersionRetention(args.id, options);
 		await this.output(retention);
 	}
 }

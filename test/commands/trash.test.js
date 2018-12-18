@@ -64,6 +64,27 @@ describe('Trash', () => {
 				.it('should list all items in trash (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/folders/trash/items')
+					.query({fields: 'name'})
+					.reply(200, fixture)
+					.get('/2.0/folders/trash/items')
+					.query({
+						fields: 'name',
+						offset: 2
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					'--fields=name',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fiels flag is passed');
 		});
 	});
 });

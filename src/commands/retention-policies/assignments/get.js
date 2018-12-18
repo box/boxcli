@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class RetentionPoliciesGetAssignmentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RetentionPoliciesGetAssignmentCommand);
+		let options = {};
 
-		let assignment = await this.client.retentionPolicies.getAssignment(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let assignment = await this.client.retentionPolicies.getAssignment(args.id, options);
 		await this.output(assignment);
 	}
 }

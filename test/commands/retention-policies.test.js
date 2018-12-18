@@ -218,6 +218,21 @@ describe('Retention Policies', () => {
 			.it('should get information about a retention policy (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/retention_policies/${policyId}`)
+				.query({fields: 'disposition_action'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:get',
+				policyId,
+				'--fields=disposition_action',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('retention-policies', () => {
@@ -252,6 +267,7 @@ describe('Retention Policies', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/retention_policies')
 				.query({
+					fields: 'policy_name',
 					policy_name: policyName,
 					policy_type: policyType,
 					created_by_user_id: creatorID,
@@ -259,6 +275,7 @@ describe('Retention Policies', () => {
 				.reply(200, fixture)
 				.get('/2.0/retention_policies')
 				.query({
+					fields: 'policy_name',
 					policy_name: policyName,
 					policy_type: policyType,
 					created_by_user_id: creatorID,
@@ -272,12 +289,14 @@ describe('Retention Policies', () => {
 				`--policy-name=${policyName}`,
 				`--policy-type=${policyType}`,
 				`--created-by-user-id=${creatorID}`,
+				'--fields=policy_name',
 				'--json',
 				'--token=test'
 			])
 			.it('should send optional params when flags are passed', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
 	});
 
 	describe('retention-policies:assignments:get', () => {
@@ -315,6 +334,21 @@ describe('Retention Policies', () => {
 			.it('should get information about a retention policy assignment (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/retention_policy_assignments/${assignmentId}`)
+				.query({fields: 'assigned_to'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:assignments:get',
+				assignmentId,
+				'--fields=assigned_to',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('retention-policies:assign', () => {
@@ -416,7 +450,7 @@ describe('Retention Policies', () => {
 				'--json',
 				'--token=test'
 			])
-			.it('should list all retention policies for your enterprise (JSON Output)', ctx => {
+			.it('should list all assignments for retention policy (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 
@@ -443,6 +477,28 @@ describe('Retention Policies', () => {
 			.it('should send type param when --type flag is passed', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/retention_policies/${policyId}/assignments`)
+				.query({fields: 'assigned_to'})
+				.reply(200, fixture)
+				.get(`/2.0/retention_policies/${policyId}/assignments`)
+				.query({
+					fields: 'assigned_to',
+					marker: 'ZDE456'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'retention-policies:assignments',
+				policyId,
+				'--fields=assigned_to',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('retention-policies:file-version-retentions:get', () => {
@@ -480,6 +536,21 @@ describe('Retention Policies', () => {
 			.it('should get information about a file version retention policy (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/file_version_retentions/${retentionId}`)
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:file-version-retentions:get',
+				retentionId,
+				'--fields=id',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('retention-policies:file-version-retentions', () => {
@@ -532,6 +603,10 @@ describe('Retention Policies', () => {
 				'--disposition-before=2024-11-07T12:34:56-00:00',
 				{disposition_before: '2024-11-07T12:34:56-00:00'}
 			],
+			'fields flag': [
+				'--fields=id',
+				{fields: 'id'}
+			]
 		}, function(flag, queryParams) {
 
 			test

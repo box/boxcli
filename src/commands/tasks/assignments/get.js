@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class TaskAssignmentsGetCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(TaskAssignmentsGetCommand);
+		let options = {};
 
-		let assignment = await this.client.tasks.getAssignment(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let assignment = await this.client.tasks.getAssignment(args.id, options);
 		await this.output(assignment);
 	}
 }

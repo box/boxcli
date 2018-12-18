@@ -42,6 +42,21 @@ describe('Comments', () => {
 			.it('should get information about a comment (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/comments/${commentId}`)
+				.query({fields: 'tagged_message'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'comments:get',
+				commentId,
+				'--fields=tagged_message',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('comments:update', () => {

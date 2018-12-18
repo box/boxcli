@@ -5,8 +5,13 @@ const BoxCommand = require('../../box-command');
 class CommentsListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CommentsListCommand);
+		let options = {};
 
-		let comments = await this.client.files.getComments(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let comments = await this.client.files.getComments(args.id, options);
 		await this.output(comments);
 	}
 }

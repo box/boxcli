@@ -42,6 +42,21 @@ describe('Legal Hold Policies', () => {
 			.it('should get information about a legal hold policy (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/legal_hold_policies/${policyId}`)
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies:get',
+				policyId,
+				'--fields=id',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('legal-hold-policies:create', () => {
@@ -267,6 +282,21 @@ describe('Legal Hold Policies', () => {
 			.it('should send policy name filter when --policy-name flag is passed', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/legal_hold_policies')
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies',
+				'--fields=id',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('legal-hold-policies:assignments', () => {
@@ -332,6 +362,32 @@ describe('Legal Hold Policies', () => {
 			.it('should send assignment filter params when --assign-to-* flags are passed', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/legal_hold_policy_assignments')
+				.query({
+					fields: 'id',
+					policy_id: policyId
+				})
+				.reply(200, fixture)
+				.get('/2.0/legal_hold_policy_assignments')
+				.query({
+					fields: 'id',
+					policy_id: policyId,
+					marker: 'ZDCE3'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies:assignments',
+				policyId,
+				'--fields=id',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('legal-hold-policies:assignments:get', () => {
@@ -370,6 +426,21 @@ describe('Legal Hold Policies', () => {
 			.it('should get information about a policy assignment (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/legal_hold_policy_assignments/${assignmentId}`)
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies:assignments:get',
+				assignmentId,
+				'--fields=id',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('legal-hold-policies:assign', () => {
@@ -477,6 +548,21 @@ describe('Legal Hold Policies', () => {
 			.it('should get information about a file version legal hold (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/file_version_legal_holds/${holdId}`)
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies:file-version-holds:get',
+				holdId,
+				'--fields=id',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('legal-hold-policies:file-version-holds', () => {
@@ -509,5 +595,31 @@ describe('Legal Hold Policies', () => {
 			.it('should list file version legal holds for a legal hold policy (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/file_version_legal_holds')
+				.query({
+					fields: 'id',
+					policy_id: policyId
+				})
+				.reply(200, fixture)
+				.get('/2.0/file_version_legal_holds')
+				.query({
+					fields: 'id',
+					policy_id: policyId,
+					marker: 'ZDCE3'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'legal-hold-policies:file-version-holds',
+				policyId,
+				'--fields=id',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 });

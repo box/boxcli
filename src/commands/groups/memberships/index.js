@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class GroupsListMembershipCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(GroupsListMembershipCommand);
+		let options = {};
 
-		let members = await this.client.groups.getMemberships(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let members = await this.client.groups.getMemberships(args.id, options);
 		await this.output(members);
 	}
 }

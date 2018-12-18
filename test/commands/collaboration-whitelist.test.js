@@ -42,6 +42,21 @@ describe('Collaboration-Whitelist', () => {
 			.it('should get a collaboration whitelist entry (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryId}`)
+				.query({fields: 'direction'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'collaboration-whitelist:get',
+				whitelistEntryId,
+				'--fields=direction',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('collaboration-whitelist:add', () => {
@@ -132,6 +147,27 @@ describe('Collaboration-Whitelist', () => {
 			.it('should list collaboration whitelist entries (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/collaboration_whitelist_entries')
+				.query({fields: 'direction'})
+				.reply(200, fixture)
+				.get('/2.0/collaboration_whitelist_entries')
+				.query({
+					fields: 'direction',
+					marker: 'ZEDFO9'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'collaboration-whitelist',
+				'--fields=direction',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('collaboration-whitelist:exemptions:get', () => {
@@ -169,6 +205,21 @@ describe('Collaboration-Whitelist', () => {
 			.it('should get a collaboration whitelist exemption (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/collaboration_whitelist_exempt_targets/${exemptionId}`)
+				.query({fields: 'id'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'collaboration-whitelist:exemptions:get',
+				exemptionId,
+				'--fields=id',
+				'--token=test'
+			])
+			.it('should send the fields param to the API when --fields flag is passed');
 	});
 
 	describe('collaboration-whitelist:exemptions:create', () => {
@@ -239,6 +290,27 @@ describe('Collaboration-Whitelist', () => {
 			.it('should list collaboration whitelist exemptions (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/collaboration_whitelist_exempt_targets')
+				.query({fields: 'id'})
+				.reply(200, fixture)
+				.get('/2.0/collaboration_whitelist_exempt_targets')
+				.query({
+					fields: 'id',
+					marker: 'ZDEH786'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'collaboration-whitelist:exemptions',
+				'--fields=id',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('collaboration-whitelist:exemptions:delete', () => {

@@ -45,6 +45,21 @@ describe('Files', () => {
 			.it('should get a file\'s information (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.query({fields: 'comment_count'})
+				.reply(200, getFileFixture)
+			)
+			.stdout()
+			.command([
+				'files:get',
+				fileId,
+				'--fields=comment_count',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('files:copy', () => {
@@ -458,6 +473,28 @@ describe('Files', () => {
 				.it('should list all comments on a file (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/files/${fileId}/comments`)
+					.query({fields: 'message'})
+					.reply(200, fixture)
+					.get(`/2.0/files/${fileId}/comments`)
+					.query({
+						fields: 'message',
+						offset: 2
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					fileId,
+					'--fields=message',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -492,6 +529,28 @@ describe('Files', () => {
 				.it('should list all collaborations on a Box item (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/files/${fileId}/collaborations`)
+					.query({fields: 'accessible_by'})
+					.reply(200, fixture)
+					.get(`/2.0/files/${fileId}/collaborations`)
+					.query({
+						fields: 'accessible_by',
+						marker: 'ZAED53D'
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					fileId,
+					'--fields=accessible_by',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -1112,6 +1171,28 @@ describe('Files', () => {
 				.it('should list all tasks on this file (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/files/${fileId}/tasks`)
+					.query({fields: 'id'})
+					.reply(200, fixture)
+					.get(`/2.0/files/${fileId}/tasks`)
+					.query({
+						fields: 'id',
+						offset: 1
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					fileId,
+					'--fields=id',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -1146,6 +1227,28 @@ describe('Files', () => {
 				.it('should get a list of file versions (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/files/${fileId}/versions`)
+					.query({fields: 'sha1'})
+					.reply(200, fixture)
+					.get(`/2.0/files/${fileId}/versions`)
+					.query({
+						fields: 'sha1',
+						offset: 2
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					fileId,
+					'--fields=sha1',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 

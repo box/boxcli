@@ -44,6 +44,34 @@ describe('Search', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/search')
 				.query({
+					query,
+					fields: 'name',
+					limit: 100,
+				})
+				.reply(200, fixture)
+				.get('/2.0/search')
+				.query({
+					query,
+					fields: 'name',
+					limit: 100,
+					offset: 5
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'search',
+				query,
+				'--fields=name',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/search')
+				.query({
 					limit: 100,
 					query: '',
 					mdfilters: '[{"scope":"enterprise","templateKey":"marketingCollateral","filters":{"key":"value"}}]',

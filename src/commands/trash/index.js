@@ -5,8 +5,13 @@ const BoxCommand = require('../../box-command');
 class TrashListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(TrashListCommand);
+		let options = {};
 
-		let trashedItems = await this.client.trash.get();
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let trashedItems = await this.client.trash.get(options);
 		await this.output(trashedItems);
 	}
 }

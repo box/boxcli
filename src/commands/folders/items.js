@@ -10,6 +10,10 @@ class FoldersListItemsCommand extends BoxCommand {
 			usemarker: true,
 		};
 
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		if (flags.direction) {
 			options.direction = flags.direction;
 		}
