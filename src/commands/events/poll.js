@@ -10,7 +10,7 @@ class EventsPollCommand extends BoxCommand {
 		let options = {};
 
 		if (flags['event-types']) {
-			options.event_type = (flags['event-types']).split(',');
+			options.event_type = flags['event-types'];
 		}
 		if (flags['start-date']) {
 			options.startDate = this.getDateFromString(flags['start-date']);
