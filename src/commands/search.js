@@ -126,6 +126,10 @@ class SearchCommand extends BoxCommand {
 			options.size_range = `${_.get(flags, 'size-from', '')},${_.get(flags, 'size-to', '')}`;
 		}
 
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		let results = await this.client.search.query(args.query || null, options);
 
 		// Hard limit the search results to avoid slamming the API

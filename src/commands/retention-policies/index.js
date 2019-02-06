@@ -5,8 +5,7 @@ const { flags } = require('@oclif/command');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(RetentionPoliciesListCommand);
-		const { args } = this.parse(RetentionPoliciesListCommand);
+		const { flags, args } = this.parse(RetentionPoliciesListCommand);
 		let options = {};
 
 		if (flags['policy-name']) {
@@ -17,6 +16,10 @@ class RetentionPoliciesListCommand extends BoxCommand {
 		}
 		if (flags['created-by-user-id']) {
 			options.created_by_user_id = flags['created-by-user-id'];
+		}
+
+		if (flags.fields) {
+			options.fields = flags.fields;
 		}
 
 		let policies = await this.client.retentionPolicies.getAll(options);

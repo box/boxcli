@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class CollaborationWhitelistGetExemptionCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CollaborationWhitelistGetExemptionCommand);
+		let options = {};
 
-		let exemption = await this.client.collaborationWhitelist.getExemption(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let exemption = await this.client.collaborationWhitelist.getExemption(args.id, options);
 		await this.output(exemption);
 	}
 }

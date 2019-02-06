@@ -11,6 +11,11 @@ class RetentionPoliciesListCommand extends BoxCommand {
 		if (flags.type) {
 			options.type = flags.type;
 		}
+
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		let assignments = await this.client.retentionPolicies.getAssignments(args.id, options);
 		await this.output(assignments);
 	}

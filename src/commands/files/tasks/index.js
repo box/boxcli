@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class FilesListTasksCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FilesListTasksCommand);
+		let options = {};
 
-		let tasks = await this.client.files.getTasks(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let tasks = await this.client.files.getTasks(args.id, options);
 		await this.output(tasks);
 	}
 }

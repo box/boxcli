@@ -187,6 +187,21 @@ describe('Tasks', () => {
 			.it('should get information about a task (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/tasks/${taskId}`)
+				.query({fields: 'action'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'tasks:get',
+				taskId,
+				'--fields=action',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	describe('tasks:delete', () => {
@@ -352,6 +367,21 @@ describe('Tasks', () => {
 				.it('should get information about a task assignment (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/task_assignments/${assignmentId}`)
+					.query({fields: 'id'})
+					.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					assignmentId,
+					'--fields=id',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -381,6 +411,21 @@ describe('Tasks', () => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
 
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/tasks/${taskId}/assignments`)
+					.query({fields: 'id'})
+					.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					taskId,
+					'--fields=id',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 

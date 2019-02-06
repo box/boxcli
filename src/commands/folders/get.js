@@ -5,8 +5,13 @@ const BoxCommand = require('../../box-command');
 class FoldersGetCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FoldersGetCommand);
+		let options = {};
 
-		let folder = await this.client.folders.get(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let folder = await this.client.folders.get(args.id, options);
 		await this.output(folder);
 	}
 }

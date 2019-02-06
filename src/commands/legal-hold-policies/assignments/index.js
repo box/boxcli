@@ -15,6 +15,10 @@ class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 			options.assign_to_id = flags['assign-to-id'];
 		}
 
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		let assignments = await this.client.legalHoldPolicies.getAssignments(args.id, options);
 		await this.output(assignments);
 	}

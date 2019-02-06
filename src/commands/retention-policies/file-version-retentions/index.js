@@ -27,6 +27,10 @@ class RetentionPoliciesListVersionRetentionCommand extends BoxCommand {
 			options.policy_id = flags['policy-id'];
 		}
 
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
 		let retentions = await this.client.retentionPolicies.getAllFileVersionRetentions(options);
 		await this.output(retentions);
 	}

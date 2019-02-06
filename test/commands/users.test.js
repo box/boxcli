@@ -165,6 +165,21 @@ describe('Users', () => {
 			.it('should get information about a Box user (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/users/${userId}`)
+				.query({fields: 'name,address'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'users:get',
+				userId,
+				'--fields=name,address',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	leche.withData([
@@ -199,6 +214,27 @@ describe('Users', () => {
 				.it('should list all Box users with the app-users flag passed (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/users')
+					.query({fields: 'name,address'})
+					.reply(200, fixture)
+					.get('/2.0/users')
+					.query({
+						fields: 'name,address',
+						offset: 3
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					'--fields=name,address',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -233,6 +269,28 @@ describe('Users', () => {
 				.it('should list groups a user belongs to (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/users/${userId}/memberships`)
+					.query({fields: 'name'})
+					.reply(200, fixture)
+					.get(`/2.0/users/${userId}/memberships`)
+					.query({
+						fields: 'name',
+						offset: 1
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					userId,
+					'--fields=name',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -267,6 +325,32 @@ describe('Users', () => {
 			.it('should search for Box users (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/users')
+				.query({
+					fields: 'name,address',
+					filter_term: userName,
+				})
+				.reply(200, fixture)
+				.get('/2.0/users')
+				.query({
+					fields: 'name,address',
+					filter_term: userName,
+					offset: 3
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'users:search',
+				userName,
+				'--fields=name,address',
+				'--json',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 
 		test
 			.nock(TEST_API_ROOT, api => api

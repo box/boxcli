@@ -43,6 +43,21 @@ describe('Groups', () => {
 			.it('should get information about a group (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/groups/${groupId}`)
+				.query({fields: 'id,name'})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'groups:get',
+				groupId,
+				'--fields=id,name',
+				'--token=test'
+			])
+			.it('should send fields param to the API when --fields flag is passed');
 	});
 
 	leche.withData([
@@ -74,6 +89,27 @@ describe('Groups', () => {
 				.it('should list all groups (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/groups')
+					.query({fields: 'id,name'})
+					.reply(200, fixture)
+					.get('/2.0/groups')
+					.query({
+						fields: 'id,name',
+						offset: 2
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					'--fields=id,name',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -109,6 +145,28 @@ describe('Groups', () => {
 				.it('should list collaborations for a group (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/groups/${groupId}/collaborations`)
+					.query({fields: 'item'})
+					.reply(200, fixture)
+					.get(`/2.0/groups/${groupId}/collaborations`)
+					.query({
+						fields: 'item',
+						offset: 1
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					groupId,
+					'--fields=item',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -327,6 +385,21 @@ describe('Groups', () => {
 				.it('should get information about a group membership (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/group_memberships/${membershipId}`)
+					.query({fields: 'id'})
+					.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					membershipId,
+					'--fields=id',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 
@@ -361,6 +434,28 @@ describe('Groups', () => {
 				.it('should list members of a group (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/groups/${groupId}/memberships`)
+					.query({fields: 'user'})
+					.reply(200, fixture)
+					.get(`/2.0/groups/${groupId}/memberships`)
+					.query({
+						fields: 'user',
+						offset: 1
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					groupId,
+					'--fields=user',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 

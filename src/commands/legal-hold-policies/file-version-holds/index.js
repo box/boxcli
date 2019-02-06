@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class LegalHoldPoliciesListVersionHoldsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(LegalHoldPoliciesListVersionHoldsCommand);
+		let options = {};
 
-		let fileVersionHolds = await this.client.legalHoldPolicies.getAllFileVersionLegalHolds(args.id);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let fileVersionHolds = await this.client.legalHoldPolicies.getAllFileVersionLegalHolds(args.id, options);
 		await this.output(fileVersionHolds);
 	}
 }

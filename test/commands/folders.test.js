@@ -968,6 +968,32 @@ describe('Folders', () => {
 				.it('should send sorting params when --sort and --direction flags are passed', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/folders/${folderId}/items`)
+					.query({
+						fields: 'created_at',
+						usemarker: true,
+					})
+					.reply(200, fixture)
+					.get(`/2.0/folders/${folderId}/items`)
+					.query({
+						fields: 'created_at',
+						usemarker: true,
+						marker: 'page_1_marker',
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					folderId,
+					'--fields=created_at',
+					'--json',
+					'--token=test'
+				])
+				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
 

@@ -5,8 +5,13 @@ const BoxCommand = require('../../../box-command');
 class FilesListVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FilesListVersionsCommand);
+		let options = {};
 
-		let versions = await this.client.files.getVersions(args.fileID);
+		if (flags.fields) {
+			options.fields = flags.fields;
+		}
+
+		let versions = await this.client.files.getVersions(args.fileID, options);
 		await this.output(versions);
 	}
 }
