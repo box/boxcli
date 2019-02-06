@@ -24,7 +24,7 @@ class EventsGetCommand extends BoxCommand {
 			options.created_before = this.getDateFromString(flags['created-before']);
 		}
 		if (flags['event-types']) {
-			options.event_type = (flags['event-types']).split(',');
+			options.event_type = flags['event-types'];
 		}
 
 		// Default values for backward compatibility
