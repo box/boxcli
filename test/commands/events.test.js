@@ -30,6 +30,8 @@ describe('Events', () => {
 				eventType = 'NEW_USER,DELETE_USER,EDIT_USER',
 				streamPosition = '122333',
 				fixture = getFixture('events/get_events'),
+				fixture2 = getFixture('events/get_events_second_page'),
+				endFixture = getFixture('events/get_events_end'),
 				jsonOutput = getFixture('output/events_get_json.txt');
 
 			test
@@ -42,6 +44,24 @@ describe('Events', () => {
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
+					.get('/2.0/events')
+					.query({
+						created_before: createdBefore,
+						created_after: createdAfter,
+						event_type: eventType,
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture).next_stream_position,
+					})
+					.reply(200, fixture2)
+					.get('/2.0/events')
+					.query({
+						created_before: createdBefore,
+						created_after: createdAfter,
+						event_type: eventType,
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture2).next_stream_position,
+					})
+					.reply(200, endFixture)
 				)
 				.stdout()
 				.command([
@@ -75,7 +95,7 @@ describe('Events', () => {
 					'--token=test'
 				])
 				.it('should get user events from given stream position when --stream-position flag is passed', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
+					assert.equal(ctx.stdout, fixture);
 				});
 
 			test
@@ -87,6 +107,22 @@ describe('Events', () => {
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
+					.get('/2.0/events')
+					.query({
+						created_before: '2018-07-13T19:00:00-00:00',
+						created_after: '2018-07-08T19:00:00-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture).next_stream_position,
+					})
+					.reply(200, fixture2)
+					.get('/2.0/events')
+					.query({
+						created_before: '2018-07-13T19:00:00-00:00',
+						created_after: '2018-07-08T19:00:00-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture2).next_stream_position,
+					})
+					.reply(200, endFixture)
 				)
 				.stdout()
 				.command([
@@ -108,6 +144,22 @@ describe('Events', () => {
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
+					.get('/2.0/events')
+					.query({
+						created_before: '2019-02-11T12:34:56-00:00',
+						created_after: '2019-02-06T12:34:56-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture).next_stream_position,
+					})
+					.reply(200, fixture2)
+					.get('/2.0/events')
+					.query({
+						created_before: '2019-02-11T12:34:56-00:00',
+						created_after: '2019-02-06T12:34:56-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture2).next_stream_position,
+					})
+					.reply(200, endFixture)
 				)
 				.stdout()
 				.command([
@@ -130,6 +182,22 @@ describe('Events', () => {
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
+					.get('/2.0/events')
+					.query({
+						created_before: '2018-07-13T19:00:00-00:00',
+						created_after: '2018-01-01T12:34:56-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture).next_stream_position,
+					})
+					.reply(200, fixture2)
+					.get('/2.0/events')
+					.query({
+						created_before: '2018-07-13T19:00:00-00:00',
+						created_after: '2018-01-01T12:34:56-00:00',
+						stream_type: 'admin_logs',
+						stream_position: JSON.parse(fixture2).next_stream_position,
+					})
+					.reply(200, endFixture)
 				)
 				.stdout()
 				.command([

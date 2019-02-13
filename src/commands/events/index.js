@@ -48,7 +48,9 @@ class EventsGetCommand extends BoxCommand {
 			// reached, but does appear to return a "next stream position" that's the same as the one passed in
 			while (options.stream_position !== events.next_stream_position) {
 				options.stream_position = events.next_stream_position;
+				/* eslint-disable no-await-in-loop */
 				events = await this.client.events.get(options);
+				/* eslint-enable no-await-in-loop */
 				events.entries.forEach(event => allEvents.push(event));
 			}
 
