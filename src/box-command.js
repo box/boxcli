@@ -45,6 +45,8 @@ const KEY_MAPPINGS = {
 	defaultAsUserId: 'Default As-User ID',
 	useDefaultAsUser: 'Use Default As-User',
 	cacheTokens: 'Cache Tokens',
+	ip: 'IP',
+	operationParams: 'Operation Params',
 };
 
 const REQUIRED_FIELDS = [

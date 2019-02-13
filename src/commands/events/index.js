@@ -38,7 +38,22 @@ class EventsGetCommand extends BoxCommand {
 		}
 
 		let events = await this.client.events.get(options);
-		await this.output(events);
+
+		if (options.stream_position) {
+			await this.output(events);
+		} else {
+			let allEvents = [].concat(events.entries); // Copy the first page of events
+
+			// @NOTE: The Events API doesn't return any of the usual indications that the end of paging has been
+			// reached, but does appear to return a "next stream position" that's the same as the one passed in
+			while (options.stream_position !== events.next_stream_position) {
+				options.stream_position = events.next_stream_position;
+				events = await this.client.events.get(options);
+				events.entries.forEach(event => allEvents.push(event));
+			}
+
+			await this.output(allEvents);
+		}
 	}
 }
 
