@@ -39,7 +39,8 @@
 		"js-yaml": "^3.12.0",
 		"lodash": "^4.17.10",
 		"object-path": "^0.11.4",
-		"ora": "^3.0.0"
+		"ora": "^3.0.0",
+		"p-event": "^2.3.1"
 	},
 	"devDependencies": {
 		"@oclif/dev-cli": "^1.19.5",
