@@ -1,0 +1,19 @@
+rules:
+    # Most commands are classes with just a run method that don't need documentation
+    require-jsdoc:
+      - error
+      - 
+          require:
+              ClassDeclaration: false
+              MethodDefinition: false
+    # `flags` is currently shadowed in most commands, not a big deal
+    no-shadow:
+        - error
+        - 
+            allow:
+                - flags
+    # It's common practice to parse out flags and args in commands, even if they're not used
+    no-unused-vars:
+        - error
+        - 
+            varsIgnorePattern: "args|flags"

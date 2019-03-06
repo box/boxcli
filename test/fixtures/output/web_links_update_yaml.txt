@@ -1,0 +1,49 @@
+Type: web_link
+ID: '6742981'
+Sequence ID: '2'
+ETag: '2'
+Name: Box Marketing Web Page
+URL: 'https://www.box.com'
+Created By:
+    Type: user
+    ID: '10523870'
+    Name: Ted Blosser
+    Login: ted+demo@example.com
+Created At: '2015-05-07T14:31:16-07:00'
+Modified At: '2015-05-07T15:45:04-07:00'
+Parent:
+    Type: folder
+    ID: '848123342'
+    Sequence ID: '1'
+    ETag: '1'
+    Name: Documentation
+Description: Cloud Content Management
+Item Status: active
+Trashed At: null
+Purged At: null
+Shared Link: null
+Path Collection:
+    Total Count: 2
+    Entries:
+        -
+            Type: folder
+            ID: '0'
+            Sequence ID: null
+            ETag: null
+            Name: All Files
+        -
+            Type: folder
+            ID: '848123342'
+            Sequence ID: '1'
+            ETag: '1'
+            Name: Documentation
+Modified By:
+    Type: user
+    ID: '10523870'
+    Name: Ted Blosser
+    Login: ted+demo@example.com
+Owned By:
+    Type: user
+    ID: '10523870'
+    Name: Ted Blosser
+    Login: ted+demo@example.com

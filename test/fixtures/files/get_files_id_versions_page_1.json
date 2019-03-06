@@ -1,0 +1,41 @@
+{
+    "total_count": 4,
+    "entries": [
+        {
+            "type": "file_version",
+            "id": "11111",
+            "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+            "name": "test file.txt",
+            "size": 16,
+            "created_at": "2016-12-07T15:59:32-08:00",
+            "modified_at": "2016-12-07T15:59:32-08:00",
+            "modified_by": {
+                "type": "user",
+                "id": "33333",
+                "name": "Test User",
+                "login": "testuser@example.com"
+            },
+            "trashed_at": null,
+            "purged_at": null
+        },
+        {
+            "type": "file_version",
+            "id": "22222",
+            "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+            "name": "test file.txt",
+            "size": 9,
+            "created_at": "2016-12-07T15:53:59-08:00",
+            "modified_at": "2016-12-07T15:53:59-08:00",
+            "modified_by": {
+                "type": "user",
+                "id": "33333",
+                "name": "Test User",
+                "login": "testuser@example.com"
+            },
+            "trashed_at": null,
+            "purged_at": null
+        }
+    ],
+    "limit": 2,
+    "offset": 0
+}

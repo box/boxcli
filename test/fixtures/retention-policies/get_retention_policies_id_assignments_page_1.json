@@ -1,0 +1,10 @@
+{
+    "entries": [
+        {
+            "type": "retention_policy_assignment",
+            "id": "12345"
+        }
+    ],
+		"next_marker": "ZDE456",
+    "limit": 1000
+}

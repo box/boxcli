@@ -1,0 +1,9 @@
+{
+    "entries": [
+        {
+            "type": "retention_policy_assignment",
+            "id": "123456"
+        }
+    ],
+    "limit": 1000
+}

@@ -1,0 +1,24 @@
+Type: collaboration
+ID: '1234567890'
+Created By:
+    Type: user
+    ID: '834098476'
+    Name: Inviting User
+    Login: inviter@example.com
+Created At: '2015-11-03T18:36:37-08:00'
+Modified At: '2016-11-16T21:01:19-08:00'
+Expires At: null
+Status: accepted
+Accessible By:
+    Type: user
+    ID: '6789234576'
+    Name: Collaborated User
+    Login: collaborator@example.com
+Role: viewer
+Acknowledged At: '2015-11-03T18:36:37-08:00'
+Item:
+    Type: folder
+    ID: '9087654321'
+    Sequence ID: '1'
+    ETag: '1'
+    Name: Collaborated Folder

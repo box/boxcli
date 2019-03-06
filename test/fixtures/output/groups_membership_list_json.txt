@@ -1,0 +1,36 @@
+[
+    {
+        "type": "group_membership",
+        "id": "12345",
+        "user": {
+            "type": "user",
+            "id": "44444",
+            "name": "Test User 2",
+            "login": "testuser2@example.com"
+        },
+        "group": {
+            "type": "group",
+            "id": "11111",
+            "name": "Remote Employees",
+            "group_type": "managed_group"
+        },
+        "role": "member"
+    },
+    {
+        "type": "group_membership",
+        "id": "123456",
+        "user": {
+            "type": "user",
+            "id": "444445",
+            "name": "Test User 2",
+            "login": "testuser2@example.com"
+        },
+        "group": {
+            "type": "group",
+            "id": "11111",
+            "name": "Remote Employees",
+            "group_type": "managed_group"
+        },
+        "role": "member"
+    }
+]

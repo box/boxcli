@@ -1,0 +1,14 @@
+Type: legal_hold
+ID: '99999'
+File Version:
+    Type: file_version
+    ID: '77777'
+File:
+    Type: file
+    ID: '88888'
+    ETag: '0'
+Legal Hold Policy Assignments:
+    -
+        Type: legal_hold_policy_assignment
+        ID: '12345'
+Deleted At: null

@@ -1,0 +1,5 @@
+{
+    // JSON doesn't allow comments, so this line is invalid!
+    "foo": "bar",
+    "baz": "quux"
+}

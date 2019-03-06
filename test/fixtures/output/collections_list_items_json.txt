@@ -1,0 +1,30 @@
+[
+    {
+        "type": "folder",
+        "id": "192429928",
+        "sequence_id": "1",
+        "etag": "1",
+        "name": "Stephen Curry Three Pointers"
+    },
+    {
+        "type": "file",
+        "id": "818853862",
+        "sequence_id": "0",
+        "etag": "0",
+        "name": "Warriors.jpg"
+    },
+    {
+        "type": "folder",
+        "id": "192429928",
+        "sequence_id": "1",
+        "etag": "1",
+        "name": "Roger Federer Grandslams"
+    },
+    {
+        "type": "file",
+        "id": "818853862",
+        "sequence_id": "0",
+        "etag": "0",
+        "name": "Basel.jpg"
+    }
+]

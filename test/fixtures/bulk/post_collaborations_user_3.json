@@ -1,0 +1,29 @@
+{
+    "type": "collaboration",
+    "id": "1234567892",
+    "created_by": {
+        "type": "user",
+        "id": "9753108642",
+        "name": "Inviting User",
+        "login": "invites@example.com"
+    },
+    "created_at": "2016-11-16T21:33:31-08:00",
+    "modified_at": "2016-11-16T21:33:31-08:00",
+    "expires_at": null,
+    "status": "accepted",
+    "accessible_by": {
+        "type": "user",
+        "id": "987654323",
+        "name": "Dominic Toretto",
+        "login": "dominic.toretto@example.com"
+    },
+    "role": "previewer",
+    "acknowledged_at": "2016-11-16T21:33:31-08:00",
+    "item": {
+        "type": "file",
+        "id": "33333",
+        "sequence_id": "0",
+        "etag": "0",
+        "name": "Collaborated File"
+    }
+}

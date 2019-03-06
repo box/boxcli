@@ -1,0 +1,41 @@
+{
+    "id": "687735ca-1325-4e50-8f30-6d4683997fa4",
+    "type": "metadata_template",
+    "templateKey": "newMetadata",
+    "scope": "enterprise_12345",
+    "displayName": "New Metadata Template",
+    "hidden": true,
+    "fields": [
+        {
+            "id": "3c7ba014-e136-49e3-a0aa-f48588ddd223",
+            "type": "string",
+            "key": "name",
+            "displayName": "Name",
+            "hidden": false
+        },
+        {
+            "id": "eb30bfc1-a165-4439-bec3-53e349ee7671",
+            "type": "enum",
+            "key": "location",
+            "displayName": "Location",
+            "hidden": false,
+            "options": [
+                {
+                    "id": "b8435f07-e332-4493-9add-18aeaed73551",
+                    "key": "US"
+                },
+                {
+                    "id": "4cdb3b26-5bba-4433-b8b8-22b89f372735",
+                    "key": "EU"
+                }
+            ]
+        },
+        {
+            "id": "6e311d0e-7133-4b72-a3aa-199c723796e3",
+            "type": "date",
+            "key": "date",
+            "displayName": "Date",
+            "hidden": false
+        }
+    ]
+}

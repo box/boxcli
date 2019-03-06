@@ -1,0 +1,68 @@
+{
+	"type": "file",
+	"id": "1234567890",
+	"file_version": {
+		"type": "file_version",
+		"id": "11223344556677",
+		"sha1": "97b3dbba6eab7ad0f058240744c8636b7c7bea93"
+	},
+	"sequence_id": "1",
+	"etag": "1",
+	"sha1": "97b3dbba6eab7ad0f058240744c8636b7c7bea93",
+	"name": "test_file_download.txt",
+	"description": "",
+	"size": 106833,
+	"path_collection": {
+		"total_count": 2,
+		"entries": [
+			{
+				"type": "folder",
+				"id": "0",
+				"sequence_id": null,
+				"etag": null,
+				"name": "All Files"
+            },
+			{
+				"type": "folder",
+				"id": "987654321",
+				"sequence_id": "0",
+				"etag": "0",
+				"name": "Collaborated Folder"
+            }
+        ]
+	},
+	"created_at": "2016-11-16T22:01:44-08:00",
+	"modified_at": "2016-11-16T22:01:51-08:00",
+	"trashed_at": null,
+	"purged_at": null,
+	"content_created_at": "2016-10-29T18:33:50-07:00",
+	"content_modified_at": "2016-10-29T18:33:50-07:00",
+	"created_by": {
+		"type": "user",
+		"id": "1357924680",
+		"name": "Owner",
+		"login": "owner@example.com"
+	},
+	"modified_by": {
+		"type": "user",
+		"id": "1357924680",
+		"name": "Owner",
+		"login": "owner@example.com"
+	},
+	"owned_by": {
+		"type": "user",
+		"id": "1357924680",
+		"name": "Owner",
+		"login": "owner@example.com"
+	},
+	"shared_link": null,
+	"parent": {
+		"type": "folder",
+		"id": "987654321",
+		"sequence_id": "0",
+		"etag": "0",
+		"name": "Collaborated Folder"
+	},
+	"item_status": "active",
+	"collections": [{ "id": "1234567890" }]
+}

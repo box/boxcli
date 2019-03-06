@@ -1,0 +1,6 @@
+Type: collaboration
+ID: '1234567890'
+Acceptance Requirements:
+    Terms Of Service:
+        Type: terms_of_service
+        ID: '456'

@@ -1,0 +1,34 @@
+{
+    "type": "task_assignment",
+    "id": "12345",
+    "item": {
+        "type": "file",
+        "id": "22222",
+        "file_version": {
+            "type": "file_version",
+            "id": "222220",
+            "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+        },
+        "sequence_id": "0",
+        "etag": "0",
+        "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+        "name": "Copied file.txt"
+    },
+    "assigned_to": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "message": "",
+    "completed_at": null,
+    "assigned_at": "2018-04-26T19:12:18-07:00",
+    "reminded_at": null,
+    "resolution_state": "incomplete",
+    "assigned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    }
+}

@@ -1,0 +1,14 @@
+[
+    {
+        "itemID": "11111",
+        "itemType": "folder",
+        "can_view_path": true,
+        "foo": "bar",
+        "baz": [
+            "quux"
+        ],
+        "nested": {
+            "blah": "ugh"
+        }
+    }
+]

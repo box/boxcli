@@ -1,0 +1,26 @@
+[
+    {
+        "type": "group",
+        "id": "22222",
+        "name": "Employees",
+        "group_type": "managed_group"
+    },
+    {
+        "type": "group",
+        "id": "11111",
+        "name": "Remote Employees",
+        "group_type": "managed_group"
+    },
+    {
+        "type": "group",
+        "id": "222223",
+        "name": "Employees",
+        "group_type": "managed_group"
+    },
+    {
+        "type": "group",
+        "id": "11112",
+        "name": "Remote Employees",
+        "group_type": "managed_group"
+    }
+]

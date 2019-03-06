@@ -1,0 +1,101 @@
+{
+    "type": "folder",
+    "id": "11111",
+    "sequence_id": "0",
+    "etag": "0",
+    "name": "DownloadFolderTest",
+    "created_at": "2018-09-19T09:20:37-07:00",
+    "modified_at": "2018-09-19T09:20:37-07:00",
+    "description": "",
+    "size": 8183737,
+    "path_collection": {
+        "total_count": 1,
+        "entries": [
+            {
+                "type": "folder",
+                "id": "0",
+                "name": "All Files"
+            }
+        ]
+    },
+    "created_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "modified_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "trashed_at": null,
+    "purged_at": null,
+    "content_created_at": null,
+    "content_modified_at": null,
+    "owned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "shared_link": null,
+    "folder_upload_email": null,
+    "parent": {
+        "type": "folder",
+        "id": "0",
+        "name": "All Files"
+    },
+    "item_status": "active",
+    "item_collection": {
+        "total_count": 200,
+        "entries": [
+            {
+                "type": "folder",
+                "id": "22222",
+                "sequence_id": "1",
+                "etag": "1",
+                "name": "subfolder"
+            },
+            {
+                "type": "file",
+                "id": "44444",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "444441",
+                    "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+                },
+                "sequence_id": "0",
+                "etag": "0",
+                "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+                "name": "file 1.txt"
+            },
+            {
+                "type": "file",
+                "id": "55555",
+                "file_version": {
+                    "type": "file_version",
+                    "id": "555551",
+                    "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+                },
+                "sequence_id": "9",
+                "etag": "9",
+                "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+                "name": "file 2.txt"
+            }
+        ],
+        "offset": 0,
+        "limit": 3,
+        "order": [
+            {
+                "by": "type",
+                "direction": "ASC"
+            },
+            {
+                "by": "name",
+                "direction": "ASC"
+            }
+        ]
+    }
+}

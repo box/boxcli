@@ -1,0 +1,18 @@
+[
+    {
+        "ops": [
+            {
+                "add": "foo=bar"
+            },
+            {
+                "test": "baz=[stuff,nonsense]"
+            },
+            {
+                "add": "/anotherOne=#-2.5"
+            },
+            {
+                "copy": "sou\\/rce[0]>destination"
+            }
+        ]
+    }
+]

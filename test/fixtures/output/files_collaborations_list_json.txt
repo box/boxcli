@@ -1,0 +1,142 @@
+[
+    {
+        "type": "collaboration",
+        "id": "13421432143",
+        "created_by": {
+            "type": "user",
+            "id": "11111",
+            "name": "Bob Dylan",
+            "login": "bob.dylan@gmail.com"
+        },
+        "created_at": "2018-06-08T11:48:21-07:00",
+        "modified_at": "2018-06-11T13:03:45-07:00",
+        "expires_at": null,
+        "status": "accepted",
+        "accessible_by": {
+            "type": "user",
+            "id": "22222",
+            "name": "Steve Jobs",
+            "login": "steve.jobs@microsoft.com"
+        },
+        "role": "editor",
+        "acknowledged_at": "2018-06-08T11:48:21-07:00",
+        "item": {
+            "type": "file",
+            "id": "1234567890",
+            "file_version": {
+                "type": "file_version",
+                "id": "32132131431",
+                "sha1": "34134214j321h432j14h321"
+            },
+            "sequence_id": "234",
+            "etag": "234",
+            "sha1": "32413h214j32141h32",
+            "name": "Collab.boxnote"
+        }
+    },
+    {
+        "type": "collaboration",
+        "id": "13421432143",
+        "created_by": {
+            "type": "user",
+            "id": "11111",
+            "name": "Bob Dylan",
+            "login": "bob.dylan@gmail.com"
+        },
+        "created_at": "2018-06-08T11:48:21-07:00",
+        "modified_at": "2018-06-11T13:03:45-07:00",
+        "expires_at": null,
+        "status": "accepted",
+        "accessible_by": {
+            "type": "user",
+            "id": "22222",
+            "name": "Steve Jobs",
+            "login": "steve.jobs@microsoft.com"
+        },
+        "role": "editor",
+        "acknowledged_at": "2018-06-08T11:48:21-07:00",
+        "item": {
+            "type": "file",
+            "id": "1234567890",
+            "file_version": {
+                "type": "file_version",
+                "id": "32132131431",
+                "sha1": "34134214j321h432j14h321"
+            },
+            "sequence_id": "234",
+            "etag": "234",
+            "sha1": "32413h214j32141h32",
+            "name": "Collab.boxnote"
+        }
+    },
+    {
+        "type": "collaboration",
+        "id": "1342143214678",
+        "created_by": {
+            "type": "user",
+            "id": "11111",
+            "name": "Bob Dylan",
+            "login": "bob.dylan@gmail.com"
+        },
+        "created_at": "2018-06-08T11:48:21-07:00",
+        "modified_at": "2018-06-11T13:03:45-07:00",
+        "expires_at": null,
+        "status": "accepted",
+        "accessible_by": {
+            "type": "user",
+            "id": "22222",
+            "name": "Steve Jobs",
+            "login": "steve.jobs@microsoft.com"
+        },
+        "role": "editor",
+        "acknowledged_at": "2018-06-08T11:48:21-07:00",
+        "item": {
+            "type": "file",
+            "id": "1234567890",
+            "file_version": {
+                "type": "file_version",
+                "id": "32132131431",
+                "sha1": "34134214j321h432j14h321"
+            },
+            "sequence_id": "234",
+            "etag": "234",
+            "sha1": "32413h214j32141h32",
+            "name": "Collab.boxnote"
+        }
+    },
+    {
+        "type": "collaboration",
+        "id": "134214321764",
+        "created_by": {
+            "type": "user",
+            "id": "11111",
+            "name": "Bob Dylan",
+            "login": "bob.dylan@gmail.com"
+        },
+        "created_at": "2018-06-08T11:48:21-07:00",
+        "modified_at": "2018-06-11T13:03:45-07:00",
+        "expires_at": null,
+        "status": "accepted",
+        "accessible_by": {
+            "type": "user",
+            "id": "22222",
+            "name": "Steve Jobs",
+            "login": "steve.jobs@microsoft.com"
+        },
+        "role": "editor",
+        "acknowledged_at": "2018-06-08T11:48:21-07:00",
+        "item": {
+            "type": "file",
+            "id": "1234567890",
+            "file_version": {
+                "type": "file_version",
+                "id": "32132131431",
+                "sha1": "34134214j321h432j14h321"
+            },
+            "sequence_id": "234",
+            "etag": "234",
+            "sha1": "32413h214j32141h32",
+            "name": "Collab.boxnote"
+        }
+    }
+]

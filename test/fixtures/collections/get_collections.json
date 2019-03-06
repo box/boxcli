@@ -1,0 +1,13 @@
+{
+    "total_count": 1,
+    "entries": [
+        {
+            "type": "collection",
+            "id": "123456789",
+            "name": "Favorites",
+            "collection_type": "favorites"
+        }
+    ],
+    "limit": 100,
+    "offset": 0
+}

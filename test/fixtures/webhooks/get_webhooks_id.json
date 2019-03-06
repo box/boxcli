@@ -1,0 +1,19 @@
+{
+    "id": "1234",
+    "type": "webhook",
+    "target": {
+        "id": "5018848529",
+        "type": "file"
+    },
+    "created_by": {
+        "type": "user",
+        "id": "2030392653",
+        "name": "John Q. Developer",
+        "login": "johnq@example.net"
+    },
+    "created_at": "2016-05-04T18:51:45-07:00",
+    "address": "https://example.net/actions/file_changed",
+    "triggers": [
+        "FILE.PREVIEWED"
+    ]
+}

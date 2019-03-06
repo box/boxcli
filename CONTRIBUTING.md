@@ -6,9 +6,13 @@ All contributions are welcome to this project.
 
 Before a contribution can be merged into this project, please fill out the Contributor License Agreement (CLA) located at:
 
-http://box.github.io/cla
+http://opensource.box.com/cla
 
 To learn more about CLAs and why they are important to open source projects, please see the [Wikipedia entry](http://en.wikipedia.org/wiki/Contributor_License_Agreement).
+
+## Code of Conduct
+
+This project adheres to the [Box Open Code of Conduct](http://opensource.box.com/code-of-conduct/). By participating, you are expected to uphold this code.
 
 ## How to contribute
 
@@ -32,7 +36,7 @@ This will create your own copy of our repository.
 The upstream source is the project under the Box organization on GitHub. To add an upstream source for this project, type:
 
 ```
-git remote add upstream git@github.com:Box/boxcli.git
+git remote add upstream git@github.com:box/box-node-sdk.git
 ```
 
 This will come in useful later.

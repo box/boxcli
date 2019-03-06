@@ -1,0 +1,8 @@
+[
+    {
+        "type": "collection",
+        "id": "123456789",
+        "name": "Favorites",
+        "collection_type": "favorites"
+    }
+]

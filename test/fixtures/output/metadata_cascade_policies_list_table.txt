@@ -1,0 +1,11 @@
+----- Metadata Cascade Policy 84113349-794d-445c-b93c-d8481b223434 -----
+ID: 84113349-794d-445c-b93c-d8481b223434
+Type: metadata_cascade_policy
+Owner Enterprise:
+    Type: enterprise
+    ID: '11111'
+Parent:
+    Type: folder
+    ID: '22222'
+Scope: enterprise_11111
+Template Key: testTemplate

@@ -1,0 +1,13 @@
+Type: terms_of_service_user_status
+ID: '5678'
+ToS:
+    Type: terms_of_service
+    ID: '1234'
+User:
+    Type: user
+    ID: '7777'
+    Name: Test User
+    Login: test@example.com
+Is Accepted: true
+Created At: '2015-06-03T18:01:31-07:00'
+Modified At: '2017-11-01T13:39:36-07:00'

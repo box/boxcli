@@ -1,0 +1,50 @@
+Type: file
+ID: '1234567890'
+File Version:
+    Type: file_version
+    ID: '22222'
+    SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+Sequence ID: '0'
+ETag: '0'
+SHA1: 6afc05eae22e994f1c7dd48e58f8895dd9028223
+Name: Lock file.txt
+Description: ''
+Size: 9
+Path Collection:
+    Total Count: 1
+    Entries:
+        -
+            Type: folder
+            ID: '0'
+            Sequence ID: null
+            ETag: null
+            Name: All Files
+Created At: '2016-12-07T15:56:54-08:00'
+Modified At: '2016-12-07T15:56:54-08:00'
+Trashed At: null
+Purged At: null
+Content Created At: '2016-12-07T15:53:59-08:00'
+Content Modified At: '2016-12-07T15:53:59-08:00'
+Created By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Modified By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Owned By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Shared Link: null
+Parent:
+    Type: folder
+    ID: '0'
+    Sequence ID: null
+    ETag: null
+    Name: All Files
+Item Status: active

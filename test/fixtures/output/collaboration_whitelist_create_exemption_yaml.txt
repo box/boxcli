@@ -1,0 +1,13 @@
+Type: collaboration_whitelist_exempt_target
+ID: '1234'
+User:
+    Type: user
+    ID: '5678'
+    Name: example user
+    Login: test@example.com
+Enterprise:
+    Type: enterprise
+    ID: '12345678'
+    Name: Box
+Created At: '2017-12-06T16:57:17-08:00'
+Modified At: '2017-12-06T16:57:17-08:00'

@@ -1,0 +1,60 @@
+{
+    "type": "file",
+    "id": "1234567890",
+    "file_version": {
+        "type": "file_version",
+        "id": "22222",
+        "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+    },
+    "sequence_id": "0",
+    "etag": "0",
+    "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+    "name": "Lock file.txt",
+    "description": "",
+    "size": 9,
+    "path_collection": {
+        "total_count": 1,
+        "entries": [
+            {
+                "type": "folder",
+                "id": "0",
+                "sequence_id": null,
+                "etag": null,
+                "name": "All Files"
+            }
+        ]
+    },
+    "created_at": "2016-12-07T15:56:54-08:00",
+    "modified_at": "2016-12-07T15:56:54-08:00",
+    "trashed_at": null,
+    "purged_at": null,
+    "content_created_at": "2016-12-07T15:53:59-08:00",
+    "content_modified_at": "2016-12-07T15:53:59-08:00",
+    "created_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "modified_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "owned_by": {
+        "type": "user",
+        "id": "33333",
+        "name": "Test User",
+        "login": "testuser@example.com"
+    },
+    "shared_link": null,
+    "parent": {
+        "type": "folder",
+        "id": "0",
+        "sequence_id": null,
+        "etag": null,
+        "name": "All Files"
+    },
+    "item_status": "active"
+}

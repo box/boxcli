@@ -1,0 +1,56 @@
+Type: file
+ID: '1234567890'
+File Version:
+    Type: file_version
+    ID: '11223344556677'
+    SHA1: 97b3dbba6eab7ad0f058240744c8636b7c7bea93
+Sequence ID: '1'
+ETag: '1'
+SHA1: 97b3dbba6eab7ad0f058240744c8636b7c7bea93
+Name: test_file_download.txt
+Description: ''
+Size: 106833
+Path Collection:
+    Total Count: 2
+    Entries:
+        -
+            Type: folder
+            ID: '0'
+            Sequence ID: null
+            ETag: null
+            Name: All Files
+        -
+            Type: folder
+            ID: '987654321'
+            Sequence ID: '0'
+            ETag: '0'
+            Name: Collaborated Folder
+Created At: '2016-11-16T22:01:44-08:00'
+Modified At: '2016-11-16T22:01:51-08:00'
+Trashed At: null
+Purged At: null
+Content Created At: '2016-10-29T18:33:50-07:00'
+Content Modified At: '2016-10-29T18:33:50-07:00'
+Created By:
+    Type: user
+    ID: '1357924680'
+    Name: Owner
+    Login: owner@example.com
+Modified By:
+    Type: user
+    ID: '1357924680'
+    Name: Owner
+    Login: owner@example.com
+Owned By:
+    Type: user
+    ID: '1357924680'
+    Name: Owner
+    Login: owner@example.com
+Shared Link: null
+Parent:
+    Type: folder
+    ID: '987654321'
+    Sequence ID: '0'
+    ETag: '0'
+    Name: Collaborated Folder
+Item Status: active

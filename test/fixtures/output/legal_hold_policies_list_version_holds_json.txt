@@ -1,0 +1,10 @@
+[
+    {
+        "type": "legal_hold",
+        "id": "99999"
+    },
+    {
+        "type": "legal_hold",
+        "id": "99990"
+    }
+]

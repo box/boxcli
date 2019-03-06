@@ -1,0 +1,14 @@
+Type: file_version
+ID: '1234567890'
+SHA1: 97cc02de7c356f94e3beeb1e0c63f78a6edb01fd
+Name: test file.txt
+Size: 16
+Created At: '2018-04-24T15:08:58-07:00'
+Modified At: '2018-04-24T15:08:58-07:00'
+Modified By:
+    Type: user
+    ID: '33333'
+    Name: Test User
+    Login: testuser@example.com
+Trashed At: null
+Purged At: null

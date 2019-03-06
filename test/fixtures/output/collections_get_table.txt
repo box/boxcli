@@ -1,0 +1,5 @@
+----- Collection 123456789 -----
+Type: collection
+ID: '123456789'
+Name: Favorites
+Collection Type: favorites

@@ -1,0 +1,21 @@
+{
+	"entries": [
+		{
+			"type": "collaboration_whitelist_exempt_target",
+			"id": "111112",
+			"user": {
+				"type": "user",
+				"id": "22222",
+				"name": "Test User",
+				"login": "testuser@example.com"
+			}
+        }
+    ],
+	"limit": 100,
+	"order": [
+		{
+			"by": "id",
+			"direction": "ASC"
+        }
+    ]
+}

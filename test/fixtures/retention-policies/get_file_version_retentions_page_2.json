@@ -1,0 +1,27 @@
+{
+	"entries": [
+		{
+			"type": "file_version_retention",
+			"id": "111112"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "222223"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "333334"
+        },
+		{
+			"type": "file_version_retention",
+			"id": "444445"
+        }
+    ],
+	"limit": 100,
+	"order": [
+		{
+			"by": "file_version_id",
+			"direction": "ASC"
+        }
+    ]
+}

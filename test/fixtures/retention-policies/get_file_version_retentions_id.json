@@ -1,0 +1,21 @@
+{
+    "type": "file_version_retention",
+    "id": "444444",
+    "applied_at": "2016-12-08T11:22:18-08:00",
+    "disposition_at": "2106-02-06T22:28:15-08:00",
+    "winning_retention_policy": {
+        "type": "retention_policy",
+        "id": "22222",
+        "policy_name": "Retain Times Infinity"
+    },
+    "file_version": {
+        "type": "file_version",
+        "id": "111110",
+        "sha1": null
+    },
+    "file": {
+        "type": "file",
+        "id": "11111",
+        "etag": "0"
+    }
+}

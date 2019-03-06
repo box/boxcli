@@ -1,0 +1,8 @@
+[
+    {
+        "mdfilter": [
+            "enterprise.myTemplate.name=Matt",
+            "enterprise.myTemplate.age=30f"
+        ]
+    }
+]

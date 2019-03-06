@@ -1,0 +1,15 @@
+ID: '1234'
+Type: webhook
+Target:
+    ID: '5016243669'
+    Type: file
+Created By:
+    Type: user
+    ID: '2030392653'
+    Name: John Q. Developer
+    Login: johnq@dev.name
+Created At: '2016-05-09T17:41:27-07:00'
+Address: 'https://dev.name/actions/file_changed'
+Triggers:
+    - FILE.DOWNLOADED
+    - FILE.UPLOADED

@@ -1,0 +1,10 @@
+{
+    "$type": "testTemplate-2890e938-874d-4059-afc7-6a778b3ad75c",
+    "$parent": "folder_11111",
+    "$id": "ff8ab88e-de80-567c-aa02-412c1cdaee36",
+    "$version": 1,
+    "$typeVersion": 0,
+    "testEnum": "foo",
+    "$template": "testTemplate",
+    "$scope": "enterprise_22222"
+}

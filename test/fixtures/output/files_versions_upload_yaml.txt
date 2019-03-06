@@ -1,0 +1,49 @@
+Type: file
+ID: '1234567890'
+File Version:
+    Type: file_version
+    ID: 098765432109
+    SHA1: 0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33
+Sequence ID: '0'
+ETag: '0'
+SHA1: 0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33
+Name: file.txt
+Description: ''
+Size: 3
+Path Collection:
+    Total Count: 1
+    Entries:
+        -
+            Type: folder
+            ID: '0'
+            Sequence ID: null
+            ETag: null
+            Name: All Files
+Created At: '2017-05-16T15:18:02-07:00'
+Modified At: '2017-05-16T15:18:02-07:00'
+Trashed At: null
+Purged At: null
+Content Created At: '2017-05-16T15:18:02-07:00'
+Content Modified At: '2017-05-16T15:18:02-07:00'
+Created By:
+    Type: user
+    ID: '123456789'
+    Name: Test User
+    Login: test@example.com
+Modified By:
+    Type: user
+    ID: '123456789'
+    Name: Test User
+    Login: test@example.com
+Owned By:
+    Type: user
+    ID: '123456789'
+    Name: Test User
+    Login: test@example.com
+Shared Link: null
+Parent:
+    Type: user
+    ID: '123456789'
+    Name: Test User
+    Login: test@example.com
+Item Status: active

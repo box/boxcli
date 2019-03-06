@@ -1,0 +1,16 @@
+Type: user
+ID: '33333'
+Name: Test User
+Login: testuser@example.com
+Created At: '2016-11-09T15:57:20-08:00'
+Modified At: '2018-04-25T17:07:47-07:00'
+Language: en
+Timezone: America/Los_Angeles
+Space Amount: 1000000000000000
+Space Used: 38243356
+Max Upload Size: 5368709120
+Status: active
+Job Title: CEO
+Phone: (555) 555-5555
+Address: ''
+Avatar URL: 'https://app.box.com/api/avatar/large/deprecated'

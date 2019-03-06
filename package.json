@@ -1,0 +1,136 @@
+{
+	"name": "@box/cli",
+	"description": "Official command line interface for the Box API",
+	"keywords": [
+		"box",
+		"cli",
+		"platform",
+		"api",
+		"upload",
+		"download"
+	],
+	"version": "2.0.0",
+	"author": "Box <oss@box.com>",
+	"license": "Apache-2.0",
+	"main": "src/index.js",
+	"bin": {
+		"box": "./bin/run"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/box/boxcli.git"
+	},
+	"bugs": "https://github.com/box/boxcli/issues",
+	"dependencies": {
+		"@oclif/command": "^1.5.5",
+		"@oclif/config": "^1.7.6",
+		"@oclif/plugin-autocomplete": "^0.1.0",
+		"@oclif/plugin-help": "^2.1.4",
+		"@oclif/plugin-not-found": "^1.2.0",
+		"archiver": "^3.0.0",
+		"box-node-sdk": "^1.24.0",
+		"chalk": "^2.4.1",
+		"cli-progress": "^2.1.0",
+		"csv": "^3.1.0",
+		"date-fns": "^1.29.0",
+		"debug": "^4.1.0",
+		"fs-extra": "^7.0.0",
+		"inquirer": "^6.2.0",
+		"js-yaml": "^3.12.0",
+		"lodash": "^4.17.10",
+		"object-path": "^0.11.4",
+		"ora": "^3.0.0"
+	},
+	"devDependencies": {
+		"@oclif/dev-cli": "^1.19.5",
+		"@oclif/test": "^1.1.0",
+		"chai": "^4.1.2",
+		"coveralls": "^3.0.2",
+		"eslint": "^5.3.0",
+		"eslint-plugin-node": "^7.0.1",
+		"eslint-plugin-promise": "^3.8.0",
+		"eslint-plugin-unicorn": "^5.0.0",
+		"jsonwebtoken": "^8.3.0",
+		"leche": "^2.2.3",
+		"mocha": "^5.2.0",
+		"mockery": "^2.1.0",
+		"nock": "^10.0.0",
+		"nyc": "^12.0.2",
+		"pkg": "^4.3.4",
+		"sinon": "^6.1.5"
+	},
+	"engines": {
+		"node": ">=10.0.0"
+	},
+	"files": [
+		"/bin",
+		"/npm-shrinkwrap.json",
+		"/oclif.manifest.json",
+		"/src"
+	],
+	"oclif": {
+		"commands": "./src/commands",
+		"bin": "box",
+		"hooks": {
+			"init": [
+				"./src/hooks/init/verbose"
+			]
+		},
+		"macos": {
+			"identifier": "com.box.cli",
+			"sign": "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+		},
+		"plugins": [
+			"@oclif/plugin-help",
+			"@oclif/plugin-not-found",
+			"@oclif/plugin-autocomplete"
+		],
+		"topics": {
+			"autocomplete": {
+				"description": "Display autocomplete installation instructions"
+			},
+			"collaborations": {
+				"description": "Manage collaborations"
+			},
+			"comments": {
+				"description": "Manage comments on files"
+			},
+			"configure": {
+				"description": "Configure the Box CLI"
+			},
+			"configure:environments": {
+				"description": "Manage your CLI environments"
+			},
+			"files": {
+				"description": "Manage files"
+			},
+			"folders": {
+				"description": "Manage folders"
+			},
+			"help": {
+				"description": "Display help for the Box CLI"
+			},
+			"shared-links": {
+				"description": "Manage shared links"
+			},
+			"tasks": {
+				"description": "Manage tasks"
+			},
+			"web-links": {
+				"description": "Manage web links"
+			}
+		}
+	},
+	"pkg": {
+		"scripts": "./src/**/*.js"
+	},
+	"scripts": {
+		"test": "nyc mocha \"test/**/*.test.js\"",
+		"posttest": "npm run lint",
+		"lint": "eslint --fix ./src ./test",
+		"prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap && git checkout origin/master -- package-lock.json",
+		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
+		"version": "oclif-dev readme && git add README.md",
+		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/"
+	}
+}

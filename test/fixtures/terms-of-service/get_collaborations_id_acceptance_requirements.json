@@ -1,0 +1,10 @@
+{
+    "type": "collaboration",
+    "id": "1234567890",
+    "acceptance_requirements": {
+        "terms_of_service": {
+            "type": "terms_of_service",
+            "id": "456"
+        }
+    }
+}

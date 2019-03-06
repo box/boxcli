@@ -1,0 +1,32 @@
+ID: 687735ca-1325-4e50-8f30-6d4683997fa4
+Type: metadata_template
+Template Key: newMetadata
+Scope: enterprise_12345
+Display Name: New Metadata Template
+Hidden: true
+Fields:
+    -
+        ID: 3c7ba014-e136-49e3-a0aa-f48588ddd223
+        Type: string
+        Key: name
+        Display Name: Name
+        Hidden: false
+    -
+        ID: eb30bfc1-a165-4439-bec3-53e349ee7671
+        Type: enum
+        Key: location
+        Display Name: Location
+        Hidden: false
+        Options:
+            -
+                ID: b8435f07-e332-4493-9add-18aeaed73551
+                Key: US
+            -
+                ID: 4cdb3b26-5bba-4433-b8b8-22b89f372735
+                Key: EU
+    -
+        ID: 6e311d0e-7133-4b72-a3aa-199c723796e3
+        Type: date
+        Key: date
+        Display Name: Date
+        Hidden: false
