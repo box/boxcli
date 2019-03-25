@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const pEvent = require('p-event');
 
 class EventsPollCommand extends BoxCommand {
 	async run() {
@@ -28,11 +29,13 @@ class EventsPollCommand extends BoxCommand {
 		} else {
 			stream = await this.client.events.getEventStream(options);
 		}
-		stream.on('data', async event => {
-			await this.output(event);
-			await this.output('***********************');
-		});
 
+		let events = pEvent.iterator(stream, 'data');
+
+		for await (let event of events) {
+			await this.output(event);
+			await this.output('**************************');
+		}
 	}
 }
 
