@@ -310,7 +310,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/index.js)_
+_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/index.js)_
 
 ## `box collaboration-whitelist:add DOMAIN`
 
@@ -339,7 +339,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/add.js)_
+_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/add.js)_
 
 ## `box collaboration-whitelist:delete ID`
 
@@ -367,7 +367,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/delete.js)_
+_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/delete.js)_
 
 ## `box collaboration-whitelist:exemptions`
 
@@ -392,7 +392,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/exemptions/index.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/exemptions/index.js)_
 
 ## `box collaboration-whitelist:exemptions:create USERID`
 
@@ -420,7 +420,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/exemptions/create.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/exemptions/create.js)_
 
 ## `box collaboration-whitelist:exemptions:delete ID`
 
@@ -448,7 +448,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
 
 ## `box collaboration-whitelist:exemptions:get ID`
 
@@ -476,7 +476,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/exemptions/get.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/exemptions/get.js)_
 
 ## `box collaboration-whitelist:get ID`
 
@@ -504,7 +504,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaboration-whitelist/get.js)_
+_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaboration-whitelist/get.js)_
 
 ## `box collaborations:delete ID`
 
@@ -536,7 +536,7 @@ ALIASES
   $ box folders:collaborations:delete
 ```
 
-_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaborations/delete.js)_
+_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaborations/delete.js)_
 
 ## `box collaborations:get ID`
 
@@ -564,7 +564,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaborations/get.js)_
+_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaborations/get.js)_
 
 ## `box collaborations:pending`
 
@@ -592,7 +592,7 @@ ALIASES
   $ box collaborations:get-pending
 ```
 
-_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaborations/pending.js)_
+_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaborations/pending.js)_
 
 ## `box collaborations:update ID`
 
@@ -659,7 +659,7 @@ ALIASES
   $ box folders:collaborations:update
 ```
 
-_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collaborations/update.js)_
+_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collaborations/update.js)_
 
 ## `box collections`
 
@@ -687,7 +687,7 @@ ALIASES
   $ box collections:list
 ```
 
-_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collections/index.js)_
+_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collections/index.js)_
 
 ## `box collections:add ITEMTYPE ITEMID COLLECTIONID`
 
@@ -717,7 +717,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collections/add.js)_
+_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collections/add.js)_
 
 ## `box collections:items ID`
 
@@ -745,7 +745,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collections/items.js)_
+_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collections/items.js)_
 
 ## `box collections:remove ITEMTYPE ITEMID COLLECTIONID`
 
@@ -775,7 +775,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/collections/remove.js)_
+_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/collections/remove.js)_
 
 ## `box comments:create FILEID`
 
@@ -807,7 +807,7 @@ OPTIONS
                                          to mention the user
 ```
 
-_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/comments/create.js)_
+_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/comments/create.js)_
 
 ## `box comments:delete ID`
 
@@ -835,7 +835,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/comments/delete.js)_
+_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/comments/delete.js)_
 
 ## `box comments:get ID`
 
@@ -863,7 +863,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/comments/get.js)_
+_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/comments/get.js)_
 
 ## `box comments:reply ID`
 
@@ -895,7 +895,7 @@ OPTIONS
                                          to mention the user
 ```
 
-_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/comments/reply.js)_
+_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/comments/reply.js)_
 
 ## `box comments:update ID`
 
@@ -925,7 +925,7 @@ OPTIONS
   --tagged-message=tagged-message        The tagged text of the comment
 ```
 
-_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/comments/update.js)_
+_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/comments/update.js)_
 
 ## `box configure:environments:add PATH`
 
@@ -947,7 +947,7 @@ OPTIONS
   --set-as-current                     Set this new environment as your current environment
 ```
 
-_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/add.js)_
+_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/add.js)_
 
 ## `box configure:environments:delete [NAME]`
 
@@ -966,7 +966,7 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/delete.js)_
+_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/delete.js)_
 
 ## `box configure:environments:get`
 
@@ -984,7 +984,7 @@ OPTIONS
   --no-color       Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/get.js)_
+_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/get.js)_
 
 ## `box configure:environments:set-current [NAME]`
 
@@ -1006,7 +1006,7 @@ ALIASES
   $ box configure:environments:select
 ```
 
-_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/set-current.js)_
+_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/set-current.js)_
 
 ## `box configure:environments:switch-user [USERID]`
 
@@ -1035,7 +1035,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/switch-user.js)_
+_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/switch-user.js)_
 
 ## `box configure:environments:update [NAME]`
 
@@ -1061,7 +1061,7 @@ OPTIONS
                                        be stored for each Box environment
 ```
 
-_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/environments/update.js)_
+_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/environments/update.js)_
 
 ## `box configure:settings`
 
@@ -1081,7 +1081,7 @@ OPTIONS
   --reports-folder-path=reports-folder-path      Set folder path for the reports folder
 ```
 
-_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/configure/settings.js)_
+_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/configure/settings.js)_
 
 ## `box device-pins`
 
@@ -1107,7 +1107,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/device-pins/index.js)_
+_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/device-pins/index.js)_
 
 ## `box device-pins:delete ID`
 
@@ -1135,7 +1135,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/device-pins/delete.js)_
+_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/device-pins/delete.js)_
 
 ## `box device-pins:get ID`
 
@@ -1163,7 +1163,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/device-pins/get.js)_
+_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/device-pins/get.js)_
 
 ## `box events`
 
@@ -1184,7 +1184,8 @@ OPTIONS
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
 
   --created-after=created-after          Return enterprise events that occured after a time. Use a timestamp or
-                                         shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days ago
+                                         shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days
+                                         before the end date
 
   --created-before=created-before        Return enterprise events that occured before a time. Use a timestamp or
                                          shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to now
@@ -1210,7 +1211,7 @@ ALIASES
   $ box events:get
 ```
 
-_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/events/index.js)_
+_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/events/index.js)_
 
 ## `box events:poll`
 
@@ -1251,7 +1252,7 @@ OPTIONS
                                          shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now
 ```
 
-_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/events/poll.js)_
+_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/events/poll.js)_
 
 ## `box files:collaborations ID`
 
@@ -1282,7 +1283,7 @@ ALIASES
   $ box files:collaborations:list
 ```
 
-_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/collaborations/index.js)_
+_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/collaborations/index.js)_
 
 ## `box files:collaborations:add ID`
 
@@ -1348,7 +1349,7 @@ OPTIONS
   --user-id=user-id                                                                        Id for user to collaborate
 ```
 
-_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/collaborations/add.js)_
+_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/collaborations/add.js)_
 
 ## `box files:comments ID`
 
@@ -1379,7 +1380,7 @@ ALIASES
   $ box comments:list
 ```
 
-_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/comments.js)_
+_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/comments.js)_
 
 ## `box files:copy ID PARENTID`
 
@@ -1411,7 +1412,7 @@ OPTIONS
   --version=version                      File version ID if you want to copy a specific file version
 ```
 
-_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/copy.js)_
+_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/copy.js)_
 
 ## `box files:delete ID`
 
@@ -1441,7 +1442,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/delete.js)_
+_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/delete.js)_
 
 ## `box files:download ID`
 
@@ -1471,7 +1472,7 @@ OPTIONS
   --version=version                      File version ID of the specific file version to download
 ```
 
-_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/download.js)_
+_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/download.js)_
 
 ## `box files:get ID`
 
@@ -1499,7 +1500,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/get.js)_
+_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/get.js)_
 
 ## `box files:lock ID`
 
@@ -1540,7 +1541,7 @@ ALIASES
   $ box files:update-lock
 ```
 
-_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/lock.js)_
+_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/lock.js)_
 
 ## `box files:metadata ID`
 
@@ -1571,7 +1572,7 @@ ALIASES
   $ box files:metadata:get-all
 ```
 
-_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/metadata/index.js)_
+_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/metadata/index.js)_
 
 ## `box files:metadata:add ID`
 
@@ -1613,7 +1614,7 @@ ALIASES
   $ box files:metadata:create
 ```
 
-_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/metadata/add.js)_
+_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/metadata/add.js)_
 
 ## `box files:metadata:get ID`
 
@@ -1643,7 +1644,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to retrieve
 ```
 
-_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/metadata/get.js)_
+_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/metadata/get.js)_
 
 ## `box files:metadata:remove ID`
 
@@ -1676,7 +1677,7 @@ ALIASES
   $ box files:metadata:delete
 ```
 
-_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/metadata/remove.js)_
+_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/metadata/remove.js)_
 
 ## `box files:metadata:update ID`
 
@@ -1734,7 +1735,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to update against
 ```
 
-_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/metadata/update.js)_
+_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/metadata/update.js)_
 
 ## `box files:move ID PARENTID`
 
@@ -1764,7 +1765,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/move.js)_
+_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/move.js)_
 
 ## `box files:rename ID NAME`
 
@@ -1795,7 +1796,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/rename.js)_
+_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/rename.js)_
 
 ## `box files:share ID`
 
@@ -1834,7 +1835,7 @@ ALIASES
   $ box files:shared-links:update
 ```
 
-_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/share.js)_
+_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/share.js)_
 
 ## `box files:tasks ID`
 
@@ -1865,7 +1866,7 @@ ALIASES
   $ box files:tasks:list
 ```
 
-_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/tasks/index.js)_
+_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/tasks/index.js)_
 
 ## `box files:unlock ID`
 
@@ -1893,7 +1894,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/unlock.js)_
+_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/unlock.js)_
 
 ## `box files:unshare ID`
 
@@ -1924,7 +1925,7 @@ ALIASES
   $ box files:shared-links:delete
 ```
 
-_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/unshare.js)_
+_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/unshare.js)_
 
 ## `box files:update ID`
 
@@ -1956,7 +1957,7 @@ OPTIONS
   --tags=tags                            Set tags on the file, specified as comma-separated tags
 ```
 
-_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/update.js)_
+_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/update.js)_
 
 ## `box files:upload PATH`
 
@@ -2007,7 +2008,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/upload.js)_
+_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/upload.js)_
 
 ## `box files:versions FILEID`
 
@@ -2038,7 +2039,7 @@ ALIASES
   $ box files:versions:list
 ```
 
-_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/versions/index.js)_
+_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/versions/index.js)_
 
 ## `box files:versions:delete FILEID FILEVERSIONID`
 
@@ -2068,7 +2069,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/versions/delete.js)_
+_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/versions/delete.js)_
 
 ## `box files:versions:download FILEID FILEVERSIONID`
 
@@ -2098,7 +2099,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/versions/download.js)_
+_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/versions/download.js)_
 
 ## `box files:versions:promote FILEID FILEVERSIONID`
 
@@ -2127,7 +2128,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/versions/promote.js)_
+_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/versions/promote.js)_
 
 ## `box files:versions:upload FILEID PATH`
 
@@ -2165,7 +2166,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/files/versions/upload.js)_
+_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/files/versions/upload.js)_
 
 ## `box folders:collaborations ID`
 
@@ -2196,7 +2197,7 @@ ALIASES
   $ box folders:collaborations:list
 ```
 
-_See code: [src/commands/folders/collaborations/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/collaborations/index.js)_
+_See code: [src/commands/folders/collaborations/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/collaborations/index.js)_
 
 ## `box folders:collaborations:add ID`
 
@@ -2262,7 +2263,7 @@ OPTIONS
   --user-id=user-id                                                                        Id for user to collaborate
 ```
 
-_See code: [src/commands/folders/collaborations/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/collaborations/add.js)_
+_See code: [src/commands/folders/collaborations/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/collaborations/add.js)_
 
 ## `box folders:copy ID PARENTID`
 
@@ -2293,7 +2294,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/copy.js)_
+_See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/copy.js)_
 
 ## `box folders:create PARENTID NAME`
 
@@ -2324,7 +2325,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/create.js)_
+_See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/create.js)_
 
 ## `box folders:delete ID`
 
@@ -2355,7 +2356,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/delete.js)_
+_See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/delete.js)_
 
 ## `box folders:download ID`
 
@@ -2386,7 +2387,7 @@ OPTIONS
   --zip                                  Download the folder into a single .zip archive
 ```
 
-_See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/download.js)_
+_See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/download.js)_
 
 ## `box folders:get ID`
 
@@ -2414,7 +2415,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/get.js)_
+_See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/get.js)_
 
 ## `box folders:items ID`
 
@@ -2447,7 +2448,7 @@ ALIASES
   $ box folders:list-items
 ```
 
-_See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/items.js)_
+_See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/items.js)_
 
 ## `box folders:metadata ID`
 
@@ -2478,7 +2479,7 @@ ALIASES
   $ box folders:metadata:get-all
 ```
 
-_See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/metadata/index.js)_
+_See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/metadata/index.js)_
 
 ## `box folders:metadata:add ID`
 
@@ -2520,7 +2521,7 @@ ALIASES
   $ box folders:metadata:create
 ```
 
-_See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/metadata/add.js)_
+_See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/metadata/add.js)_
 
 ## `box folders:metadata:get ID`
 
@@ -2550,7 +2551,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to retrieve
 ```
 
-_See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/metadata/get.js)_
+_See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/metadata/get.js)_
 
 ## `box folders:metadata:remove ID`
 
@@ -2583,7 +2584,7 @@ ALIASES
   $ box folders:metadata:delete
 ```
 
-_See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/metadata/remove.js)_
+_See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/metadata/remove.js)_
 
 ## `box folders:metadata:update ID`
 
@@ -2641,7 +2642,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to update against
 ```
 
-_See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/metadata/update.js)_
+_See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/metadata/update.js)_
 
 ## `box folders:move ID PARENTID`
 
@@ -2671,7 +2672,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/move.js)_
+_See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/move.js)_
 
 ## `box folders:rename ID NAME`
 
@@ -2702,7 +2703,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/rename.js)_
+_See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/rename.js)_
 
 ## `box folders:share ID`
 
@@ -2741,7 +2742,7 @@ ALIASES
   $ box folders:shared-links:update
 ```
 
-_See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/share.js)_
+_See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/share.js)_
 
 ## `box folders:unshare ID`
 
@@ -2772,7 +2773,7 @@ ALIASES
   $ box folders:shared-links:delete
 ```
 
-_See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/unshare.js)_
+_See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/unshare.js)_
 
 ## `box folders:update ID`
 
@@ -2807,7 +2808,7 @@ OPTIONS
   --upload-email-access=open|collaborators  Upload email access level
 ```
 
-_See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/update.js)_
+_See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/update.js)_
 
 ## `box folders:upload PATH`
 
@@ -2838,7 +2839,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/upload.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/folders/upload.js)_
+_See code: [src/commands/folders/upload.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/folders/upload.js)_
 
 ## `box groups`
 
@@ -2866,7 +2867,7 @@ ALIASES
   $ box groups:list
 ```
 
-_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/index.js)_
+_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/index.js)_
 
 ## `box groups:collaborations ID`
 
@@ -2898,7 +2899,7 @@ ALIASES
   $ box collaborations:list-for-group
 ```
 
-_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/collaborations.js)_
+_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/collaborations.js)_
 
 ## `box groups:create NAME`
 
@@ -2949,7 +2950,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path                                Override default file path to save report
 ```
 
-_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/create.js)_
+_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/create.js)_
 
 ## `box groups:delete ID`
 
@@ -2977,7 +2978,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/delete.js)_
+_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/delete.js)_
 
 ## `box groups:get ID`
 
@@ -3005,7 +3006,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/get.js)_
+_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/get.js)_
 
 ## `box groups:memberships ID`
 
@@ -3036,7 +3037,7 @@ ALIASES
   $ box groups:membership:list
 ```
 
-_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/memberships/index.js)_
+_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/memberships/index.js)_
 
 ## `box groups:memberships:add USERID GROUPID`
 
@@ -3073,7 +3074,7 @@ ALIASES
   $ box groups:membership:add
 ```
 
-_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/memberships/add.js)_
+_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/memberships/add.js)_
 
 ## `box groups:memberships:get ID`
 
@@ -3104,7 +3105,7 @@ ALIASES
   $ box groups:membership:get
 ```
 
-_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/memberships/get.js)_
+_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/memberships/get.js)_
 
 ## `box groups:memberships:remove ID`
 
@@ -3135,7 +3136,7 @@ ALIASES
   $ box groups:membership:remove
 ```
 
-_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/memberships/remove.js)_
+_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/memberships/remove.js)_
 
 ## `box groups:memberships:update ID`
 
@@ -3171,7 +3172,7 @@ ALIASES
   $ box groups:membership:update
 ```
 
-_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/memberships/update.js)_
+_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/memberships/update.js)_
 
 ## `box groups:update ID`
 
@@ -3221,7 +3222,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path                                Override default file path to save report
 ```
 
-_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/groups/update.js)_
+_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/groups/update.js)_
 
 ## `box help [COMMAND]`
 
@@ -3264,7 +3265,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/index.js)_
+_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/index.js)_
 
 ## `box legal-hold-policies:assign POLICYID`
 
@@ -3294,7 +3295,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path           Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/assign.js)_
+_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/assign.js)_
 
 ## `box legal-hold-policies:assignments ID`
 
@@ -3324,7 +3325,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path           Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/assignments/index.js)_
+_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/assignments/index.js)_
 
 ## `box legal-hold-policies:assignments:delete ID`
 
@@ -3352,7 +3353,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/assignments/delete.js)_
+_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/assignments/delete.js)_
 
 ## `box legal-hold-policies:assignments:get ID`
 
@@ -3380,7 +3381,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/assignments/get.js)_
+_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/assignments/get.js)_
 
 ## `box legal-hold-policies:create POLICYNAME`
 
@@ -3423,7 +3424,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/create.js)_
+_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/create.js)_
 
 ## `box legal-hold-policies:delete ID`
 
@@ -3451,7 +3452,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/delete.js)_
+_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/delete.js)_
 
 ## `box legal-hold-policies:file-version-holds ID`
 
@@ -3479,7 +3480,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
 
 ## `box legal-hold-policies:file-version-holds:get ID`
 
@@ -3507,7 +3508,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
 
 ## `box legal-hold-policies:get ID`
 
@@ -3535,7 +3536,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/get.js)_
+_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/get.js)_
 
 ## `box legal-hold-policies:update ID`
 
@@ -3566,7 +3567,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/legal-hold-policies/update.js)_
+_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/legal-hold-policies/update.js)_
 
 ## `box metadata-cascade-policies FOLDERID`
 
@@ -3595,7 +3596,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-cascade-policies/index.js)_
+_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-cascade-policies/index.js)_
 
 ## `box metadata-cascade-policies:delete ID`
 
@@ -3623,7 +3624,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-cascade-policies/delete.js)_
+_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-cascade-policies/delete.js)_
 
 ## `box metadata-cascade-policies:force-apply ID`
 
@@ -3652,7 +3653,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-cascade-policies/force-apply.js)_
+_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-cascade-policies/force-apply.js)_
 
 ## `box metadata-cascade-policies:get ID`
 
@@ -3680,7 +3681,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-cascade-policies/get.js)_
+_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-cascade-policies/get.js)_
 
 ## `box metadata-templates`
 
@@ -3708,7 +3709,7 @@ ALIASES
   $ box metadata-templates:list
 ```
 
-_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/index.js)_
+_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/index.js)_
 
 ## `box metadata-templates:cascade TEMPLATEKEY`
 
@@ -3739,7 +3740,7 @@ OPTIONS
   --scope=scope                          [default: enterprise] The scope of the metadata template to cascade
 ```
 
-_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/cascade.js)_
+_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/cascade.js)_
 
 ## `box metadata-templates:create`
 
@@ -3779,7 +3780,7 @@ OPTIONS
                                          the display name
 ```
 
-_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/create.js)_
+_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/create.js)_
 
 ## `box metadata-templates:delete TEMPLATEKEY`
 
@@ -3808,7 +3809,7 @@ OPTIONS
   --scope=scope                          [default: enterprise] The scope of the metadata template to delete
 ```
 
-_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/delete.js)_
+_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/delete.js)_
 
 ## `box metadata-templates:get TEMPLATEKEY`
 
@@ -3837,7 +3838,7 @@ OPTIONS
   --scope=scope                          [default: enterprise] The scope of the metadata template to get
 ```
 
-_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/get.js)_
+_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/get.js)_
 
 ## `box metadata-templates:update TEMPLATEKEY`
 
@@ -3911,7 +3912,7 @@ OPTIONS
   --string=string                              Add a string field with the provided name
 ```
 
-_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/metadata-templates/update.js)_
+_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/metadata-templates/update.js)_
 
 ## `box recent-items`
 
@@ -3936,7 +3937,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/recent-items.js)_
+_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/recent-items.js)_
 
 ## `box request RESOURCE`
 
@@ -3968,7 +3969,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path     Override default file path to save report
 ```
 
-_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/request.js)_
+_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/request.js)_
 
 ## `box retention-policies`
 
@@ -3996,7 +3997,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path        Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -4034,7 +4035,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path                 Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -4063,7 +4064,7 @@ OPTIONS
   --type=folder|enterprise|metadata_template  The type of the retention policy assignment to retrieve
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -4091,7 +4092,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -4141,7 +4142,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path                     Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/create.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -4183,7 +4184,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path                     Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -4211,7 +4212,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -4239,7 +4240,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -4292,7 +4293,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path        Override default file path to save report
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/retention-policies/update.js)_
 
 ## `box search [QUERY]`
 
@@ -4363,7 +4364,7 @@ OPTIONS
                                                  0t, like 5w for 5 weeks
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/search.js)_
 
 ## `box shared-links:get URL`
 
@@ -4392,7 +4393,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/shared-links/get.js)_
+_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/shared-links/get.js)_
 
 ## `box storage-policies`
 
@@ -4420,7 +4421,7 @@ ALIASES
   $ box storage-policies:list
 ```
 
-_See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/index.js)_
+_See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/index.js)_
 
 ## `box storage-policies:assign STORAGEPOLICYID USERID`
 
@@ -4449,7 +4450,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/assign.js)_
+_See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/assign.js)_
 
 ## `box storage-policies:assignments:get ID`
 
@@ -4477,7 +4478,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/assignments/get.js)_
+_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/assignments/get.js)_
 
 ## `box storage-policies:assignments:lookup ID`
 
@@ -4506,7 +4507,7 @@ OPTIONS
   --type=user|enterprise                 (required) [default: user] Type of object to look up the storage policy for
 ```
 
-_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/assignments/lookup.js)_
+_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/assignments/lookup.js)_
 
 ## `box storage-policies:assignments:remove ID`
 
@@ -4534,7 +4535,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/assignments/remove.js)_
+_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/assignments/remove.js)_
 
 ## `box storage-policies:get ID`
 
@@ -4562,7 +4563,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/storage-policies/get.js)_
+_See code: [src/commands/storage-policies/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/storage-policies/get.js)_
 
 ## `box tasks:assign TASKID`
 
@@ -4595,7 +4596,7 @@ ALIASES
   $ box task-assignments:create
 ```
 
-_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/assign.js)_
+_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/assign.js)_
 
 ## `box tasks:assignments ID`
 
@@ -4626,7 +4627,7 @@ ALIASES
   $ box task-assignments:list
 ```
 
-_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/assignments/index.js)_
+_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/assignments/index.js)_
 
 ## `box tasks:assignments:delete ID`
 
@@ -4657,7 +4658,7 @@ ALIASES
   $ box task-assignments:delete
 ```
 
-_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/assignments/delete.js)_
+_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/assignments/delete.js)_
 
 ## `box tasks:assignments:get ID`
 
@@ -4688,7 +4689,7 @@ ALIASES
   $ box task-assignments:get
 ```
 
-_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/assignments/get.js)_
+_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/assignments/get.js)_
 
 ## `box tasks:assignments:update ID`
 
@@ -4721,7 +4722,7 @@ ALIASES
   $ box task-assignments:update
 ```
 
-_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/assignments/update.js)_
+_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/assignments/update.js)_
 
 ## `box tasks:create FILEID`
 
@@ -4752,7 +4753,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/create.js)_
+_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/create.js)_
 
 ## `box tasks:delete ID`
 
@@ -4780,7 +4781,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/delete.js)_
+_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/delete.js)_
 
 ## `box tasks:get ID`
 
@@ -4808,7 +4809,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/get.js)_
+_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/get.js)_
 
 ## `box tasks:update ID`
 
@@ -4838,7 +4839,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tasks/update.js)_
+_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tasks/update.js)_
 
 ## `box terms-of-service`
 
@@ -4864,7 +4865,7 @@ OPTIONS
   --type=managed|external                Filter by terms of service type
 ```
 
-_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/index.js)_
+_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/index.js)_
 
 ## `box terms-of-service:create`
 
@@ -4892,7 +4893,7 @@ OPTIONS
   --type=managed|external                (required) Type of terms of service
 ```
 
-_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/create.js)_
+_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/create.js)_
 
 ## `box terms-of-service:get ID`
 
@@ -4920,7 +4921,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/get.js)_
+_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/get.js)_
 
 ## `box terms-of-service:get-user-status TOSID`
 
@@ -4949,7 +4950,7 @@ OPTIONS
   --user-id=user-id                      ID for a user to get status for; defaults to the current user ID
 ```
 
-_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/get-user-status.js)_
+_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/get-user-status.js)_
 
 ## `box terms-of-service:set-user-status ID`
 
@@ -4980,7 +4981,7 @@ OPTIONS
   --user-id=user-id                      ID of the user to set status for; defaults to the current user
 ```
 
-_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/set-user-status.js)_
+_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/set-user-status.js)_
 
 ## `box terms-of-service:update ID`
 
@@ -5010,7 +5011,7 @@ OPTIONS
   --text=text                            Text for the terms of service
 ```
 
-_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/terms-of-service/update.js)_
+_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/terms-of-service/update.js)_
 
 ## `box tokens:exchange SCOPE`
 
@@ -5033,7 +5034,7 @@ OPTIONS
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tokens/exchange.js)_
+_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tokens/exchange.js)_
 
 ## `box tokens:get`
 
@@ -5050,7 +5051,7 @@ OPTIONS
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tokens/get.js)_
+_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tokens/get.js)_
 
 ## `box tokens:revoke TOKEN`
 
@@ -5069,7 +5070,7 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/tokens/revoke.js)_
+_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/tokens/revoke.js)_
 
 ## `box trash`
 
@@ -5097,7 +5098,7 @@ ALIASES
   $ box trash:list
 ```
 
-_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/trash/index.js)_
+_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/trash/index.js)_
 
 ## `box trash:delete TYPE ID`
 
@@ -5126,7 +5127,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/trash/delete.js)_
+_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/trash/delete.js)_
 
 ## `box users`
 
@@ -5159,7 +5160,7 @@ ALIASES
   $ box users:list
 ```
 
-_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/index.js)_
+_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/index.js)_
 
 ## `box users:create NAME [LOGIN]`
 
@@ -5241,7 +5242,7 @@ OPTIONS
                                                                              tz database timezones
 ```
 
-_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/create.js)_
+_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/create.js)_
 
 ## `box users:delete ID`
 
@@ -5271,7 +5272,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/delete.js)_
+_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/delete.js)_
 
 ## `box users:email-aliases USERID`
 
@@ -5302,7 +5303,7 @@ ALIASES
   $ box users:get-email-aliases
 ```
 
-_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/email-aliases/index.js)_
+_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/email-aliases/index.js)_
 
 ## `box users:email-aliases:add USERID EMAIL`
 
@@ -5334,7 +5335,7 @@ ALIASES
   $ box users:add-email-alias
 ```
 
-_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/email-aliases/add.js)_
+_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/email-aliases/add.js)_
 
 ## `box users:email-aliases:remove USERID ALIASID`
 
@@ -5366,7 +5367,7 @@ ALIASES
   $ box users:delete-email-alias
 ```
 
-_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/email-aliases/remove.js)_
+_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/email-aliases/remove.js)_
 
 ## `box users:get [ID]`
 
@@ -5394,7 +5395,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/get.js)_
+_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/get.js)_
 
 ## `box users:groups ID`
 
@@ -5425,7 +5426,7 @@ ALIASES
   $ box users:list-groups
 ```
 
-_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/groups.js)_
+_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/groups.js)_
 
 ## `box users:invite EMAIL ENTERPRISEID`
 
@@ -5457,7 +5458,7 @@ ALIASES
   $ box users:invite-user
 ```
 
-_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/invite.js)_
+_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/invite.js)_
 
 ## `box users:transfer-content USERID NEWUSERID`
 
@@ -5490,7 +5491,7 @@ ALIASES
   $ box users:move-root-content
 ```
 
-_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/transfer-content.js)_
+_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/transfer-content.js)_
 
 ## `box users:update ID`
 
@@ -5577,7 +5578,7 @@ OPTIONS
                                                                              tz database timezones
 ```
 
-_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/users/update.js)_
+_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/users/update.js)_
 
 ## `box watermarking:apply ITEMTYPE ITEMID`
 
@@ -5606,7 +5607,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/watermarking/apply.js)_
+_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/watermarking/apply.js)_
 
 ## `box watermarking:get ITEMTYPE ITEMID`
 
@@ -5635,7 +5636,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/watermarking/get.js)_
+_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/watermarking/get.js)_
 
 ## `box watermarking:remove ITEMTYPE ITEMID`
 
@@ -5664,7 +5665,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/watermarking/remove.js)_
+_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/watermarking/remove.js)_
 
 ## `box web-links:create URL`
 
@@ -5695,7 +5696,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/web-links/create.js)_
+_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/web-links/create.js)_
 
 ## `box web-links:delete ID`
 
@@ -5723,7 +5724,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/web-links/delete.js)_
+_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/web-links/delete.js)_
 
 ## `box web-links:get ID`
 
@@ -5751,7 +5752,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/web-links/get.js)_
+_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/web-links/get.js)_
 
 ## `box web-links:move ID PARENTID`
 
@@ -5780,7 +5781,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/web-links/move.js)_
+_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/web-links/move.js)_
 
 ## `box web-links:update ID`
 
@@ -5811,7 +5812,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/web-links/update.js)_
+_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/web-links/update.js)_
 
 ## `box webhooks`
 
@@ -5839,7 +5840,7 @@ ALIASES
   $ box webhooks:list
 ```
 
-_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/webhooks/index.js)_
+_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/webhooks/index.js)_
 
 ## `box webhooks:create TARGETTYPE TARGETID`
 
@@ -5886,7 +5887,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/webhooks/create.js)_
+_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/webhooks/create.js)_
 
 ## `box webhooks:delete ID`
 
@@ -5914,7 +5915,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/webhooks/delete.js)_
+_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/webhooks/delete.js)_
 
 ## `box webhooks:get ID`
 
@@ -5942,7 +5943,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/webhooks/get.js)_
+_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/webhooks/get.js)_
 
 ## `box webhooks:update ID`
 
@@ -5986,7 +5987,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v2.0.0/src/commands/webhooks/update.js)_
+_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v2.1.0/src/commands/webhooks/update.js)_
 <!-- commandsstop -->
 
 Questions, Bugs, and Feature Requests?
