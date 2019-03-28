@@ -1,8 +1,15 @@
 # Changelog
 
-## 2.0.1 (Upcoming)
+## 2.1.0 [2019-03-28]
 
 - Fixed an issue where the `--fields` flag was not always requesting additional fields from the API
+- Fixed the `--event-types` flag for the `box events` and `box events:poll` commands
+- Updated to`lodash@4.17.11` to address a potential prototype pollution vulnerability
+- Fixed paging in both the `box events` and `box events:poll` commands:
+    - The `box events` command now requires either a closed date range (defaults to last five days), or a stream
+      position.  If given a date range, all events in that range will be returned.  If given a stream position,
+      up to `limit` events will be returned along with the next stream position
+    - `box events:poll` now correctly polls for new events
 
 ## 2.0.0
 
