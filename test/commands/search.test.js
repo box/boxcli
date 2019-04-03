@@ -163,6 +163,16 @@ describe('Search', () => {
 				],
 				{size_range: '1024,4096'}
 			],
+			'sort order flags': [
+				[
+					'--sort=modified_at',
+					'--direction=asc'
+				],
+				{
+					sort: 'modified_at',
+					direction: 'asc',
+				}
+			],
 			'multitple metadata filters': [
 				[
 					'--md-filter-scope=global',

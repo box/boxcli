@@ -130,6 +130,14 @@ class SearchCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
+		if (flags.sort) {
+			options.sort = flags.sort;
+		}
+
+		if (flags.direction) {
+			options.direction = flags.direction;
+		}
+
 		let results = await this.client.search.query(args.query || null, options);
 
 		// Hard limit the search results to avoid slamming the API
@@ -239,6 +247,17 @@ SearchCommand.flags = {
 	}),
 	'size-to': flags.integer({
 		description: 'Upper bound for file size, in bytes',
+	}),
+	sort: flags.string({
+		description: 'The field to sort results by'
+	}),
+	direction: flags.string({
+		description: 'The direction to sort results (ascending or descending)',
+		dependsOn: ['sort'],
+		options: [
+			'asc',
+			'desc'
+		]
 	})
 };
 
