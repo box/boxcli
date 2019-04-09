@@ -12,6 +12,8 @@ class CollectionsAddCommand extends BoxCommand {
 			item = await this.client.files.addToCollection(args.itemID, args.collectionID);
 		} else if (args.itemType === 'folder') {
 			item = await this.client.folders.addToCollection(args.itemID, args.collectionID);
+		} else if (args.itemType === 'web_link') {
+			item = await this.client.weblinks.addToCollection(args.itemID, args.collectionID);
 		}
 
 		this.info(chalk`{green Added ${args.itemType} "${item.name}" to collection ${args.collectionID}}`);
