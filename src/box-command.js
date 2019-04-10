@@ -398,11 +398,14 @@ class BoxCommand extends Command {
 			// Include flag values from command line first; they'll automatically
 			// be overwritten/combined with later values by the oclif parser
 			Object.keys(this.flags)
+				.filter(flag => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
 				.forEach(flag => this._addFlagToArgv(flag, this.flags[flag]));
 
 			// Include all flag values from bulk input, which will override earlier ones
 			// from the command line
-			bulkData.filter(o => o.type === 'flag')
+			bulkData
+				// Remove the bulk file path flag so we don't recurse!
+				.filter(o => o.type === 'flag' && o.fieldKey !== 'bulk-file-path')
 				.forEach(o => this._addFlagToArgv(o.fieldKey, o.value));
 
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);

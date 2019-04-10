@@ -292,6 +292,51 @@ describe('Bulk', () => {
 				'--token=test'
 			])
 			.it('should ignore CSV keys that do not map to valid args or flags');
+
+		let folderCollabInput = path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input.csv');
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '11111',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'mario@example.com',
+					}
+				})
+				.reply(200, {})
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '22222',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'wario@example.com'
+					}
+				})
+				.reply(200, {})
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '33333',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'peach@example.com'
+					}
+				})
+				.reply(200, {})
+			)
+			.stdout()
+			.command([
+				'folders:collaborations:add', // @NOTE: This command delegates to collaborations:add
+				`--bulk-file-path=${folderCollabInput}`,
+				'--token=test'
+			])
+			.it('should not run duplicate commands when delegating to another command');
 	});
 
 	describe('JSON Input', () => {
