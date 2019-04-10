@@ -4,6 +4,7 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 const os = require('os');
+const leche = require('leche');
 
 describe('Collections', () => {
 
@@ -131,8 +132,7 @@ describe('Collections', () => {
 	});
 
 	describe('collections:add', () => {
-		let itemType = 'file',
-			fileId = '1234567890',
+		let itemID = '1234567890',
 			collectionId = '1234567890',
 			getFileFixture = getFixture('collections/get_files_id'),
 			updatedFileFixture = getFixture('collections/put_files_id');
@@ -141,29 +141,36 @@ describe('Collections', () => {
 			collections: [{ id: collectionId }]
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/files/${fileId}`)
-				.query({
-					fields: 'collections'
-				})
-				.reply(200, getFileFixture)
-				.put(`/2.0/files/${fileId}`, expectedBody)
-				.reply(200, updatedFileFixture)
-			)
-			.stdout()
-			.stderr()
-			.command([
-				'collections:add',
-				itemType,
-				fileId,
-				collectionId,
-				'--json',
-				'--token=test'
-			])
-			.it('should add an item to a collection (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, '');
-				assert.equal(ctx.stderr, `Added file "test_file_download.txt" to collection ${collectionId}${os.EOL}`);
-			});
+		leche.withData({
+			file: [ 'file' ],
+			folder: [ 'folder' ],
+			'web link': [ 'web_link' ],
+		}, function(itemType) {
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/${itemType}s/${itemID}`)
+					.query({
+						fields: 'collections'
+					})
+					.reply(200, getFileFixture)
+					.put(`/2.0/${itemType}s/${itemID}`, expectedBody)
+					.reply(200, updatedFileFixture)
+				)
+				.stdout()
+				.stderr()
+				.command([
+					'collections:add',
+					itemType,
+					itemID,
+					collectionId,
+					'--json',
+					'--token=test'
+				])
+				.it('should add an item to a collection (JSON Output)', ctx => {
+					assert.equal(ctx.stdout, '');
+					assert.equal(ctx.stderr, `Added ${itemType} "test_file_download.txt" to collection ${collectionId}${os.EOL}`);
+				});
+		});
 	});
 });
