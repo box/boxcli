@@ -254,6 +254,7 @@ class BoxCommand extends Command {
 			this.constructor.args = originalArgs;
 			this.constructor.flags = originalFlags;
 			this.bulkOutputList = [];
+			this.bulkErrors = [];
 			this._singleRun = this.run;
 			this.run = this.bulkOutputRun;
 		}
@@ -379,8 +380,10 @@ class BoxCommand extends Command {
 		bulkCalls = bulkCalls.map(args => args.filter(o => o !== undefined));
 		DEBUG.execute('Read %d entries from bulk file %s', bulkCalls.length, this.flags['bulk-file-path']);
 
+		let bulkEntryIndex = 0;
 		for (let bulkData of bulkCalls) {
 			this.argv = [];
+			bulkEntryIndex += 1;
 
 			// For each possible arg, find the correct value between bulk input
 			// and values given on the command line
@@ -411,13 +414,33 @@ class BoxCommand extends Command {
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
 			/* eslint-disable no-await-in-loop */
-			await this._singleRun();
+			try {
+				await this._singleRun();
+			} catch (err) {
+				// In bulk mode, we don't want to write directly to console and kill the command
+				// Instead, we should buffer the error output so subsequent commands might be able to succeed
+				DEBUG.execute('Caught error from bulk input entry %d', bulkEntryIndex);
+				this.bulkErrors.push({index: bulkEntryIndex, error: err});
+			}
 			/* eslint-enable no-await-in-loop */
 		}
 
 		this.isBulk = false;
 		DEBUG.execute('Leaving bulk mode and writing final output');
 		await this.output(this.bulkOutputList);
+		let numErrors = this.bulkErrors.length;
+		if (numErrors > 0) {
+			this.info(chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`);
+			this.bulkErrors.forEach(errorInfo => {
+				this.info(chalk`{dim ----------}`);
+				this.info(chalk`{redBright Entry ${errorInfo.index} failed with error:}`);
+				let err = errorInfo.error;
+				let errMsg = chalk`{redBright ${this.flags && this.flags.verbose ? err.stack : err.message}${os.EOL}}`;
+				this.info(errMsg);
+			});
+		} else {
+			this.info(chalk`{green All bulk input entries processed successfully.}`);
+		}
 	}
 
 	/**
@@ -773,7 +796,7 @@ class BoxCommand extends Command {
 		/* eslint-disable no-shadow,no-catch-shadow */
 		} catch (err) {
 			// The oclif default catch handler rethrows most errors; handle those here
-			DEBUG.execute('Handling re-thrown error in handler');
+			DEBUG.execute('Handling re-thrown error in base command handler');
 
 			if (err.code === 'EEXIT') {
 				// oclif throws this when it handled the error itself and wants to exit, so just let it do that
@@ -781,13 +804,14 @@ class BoxCommand extends Command {
 				return;
 			}
 
-			let errorMsg = this.flags && this.flags.verbose ? err.stack : err.message;
+			let errorMsg = chalk`{redBright ${this.flags && this.flags.verbose ? err.stack : err.message}${os.EOL}}`;
 
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!
 			/* eslint-disable no-process-exit,unicorn/no-process-exit */
-			process.stderr.write(chalk`{redBright ${errorMsg}${os.EOL}}`, 'utf8', () => process.exit(2));
+			process.stderr.write(errorMsg, 'utf8', () => process.exit(2));
 			/* eslint-enable no-process-exit,unicorn/no-process-exit */
+
 		}
 
 	}

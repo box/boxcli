@@ -2,62 +2,15 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const CollaborationModule = require('../../modules/collaboration');
 
 class CollaborationsAddCommand extends BoxCommand {
 
 	async run() {
 		const { flags, args } = this.parse(CollaborationsAddCommand);
-		let params = {
-			body: {
-				item: {
-					type: args.itemType,
-					id: args.itemID,
-				},
-				accessible_by: {}
-			},
-			qs: {}
-		};
 
-		if (flags.fields) {
-			params.qs.fields = flags.fields;
-		}
-		if (flags.hasOwnProperty('notify')) {
-			params.qs.notify = flags.notify;
-		}
-		if (flags.hasOwnProperty('can-view-path')) {
-			params.body.can_view_path = flags['can-view-path'];
-		}
-		if (flags.role) {
-			params.body.role = flags.role.replace('_', ' ');
-		} else if (flags.editor) {
-			params.body.role = this.client.collaborationRoles.EDITOR;
-		} else if (flags.viewer) {
-			params.body.role = this.client.collaborationRoles.VIEWER;
-		} else if (flags.previewer) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER;
-		} else if (flags.uploader) {
-			params.body.role = this.client.collaborationRoles.UPLOADER;
-		} else if (flags['previewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER_UPLOADER;
-		} else if (flags['viewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.VIEWER_UPLOADER;
-		} else if (flags['co-owner']) {
-			params.body.role = this.client.collaborationRoles.CO_OWNER;
-		}
-
-		if (flags['user-id']) {
-			params.body.accessible_by.type = 'user';
-			params.body.accessible_by.id = flags['user-id'];
-		} else if (flags['group-id']) {
-			params.body.accessible_by.type = 'group';
-			params.body.accessible_by.id = flags['group-id'];
-		} else if (flags.login) {
-			params.body.accessible_by.type = 'user';
-			params.body.accessible_by.login = flags.login;
-		}
-
-		// @TODO (2018-07-07): Should implement this using the Node SDK
-		let collaboration = await this.client.wrapWithDefaultHandler(this.client.post)('/collaborations', params);
+		let collabModule = new CollaborationModule(this.client);
+		let collaboration = await collabModule.createCollaboration(args, flags);
 		await this.output(collaboration);
 	}
 }

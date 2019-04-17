@@ -77,6 +77,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -84,10 +85,12 @@ describe('Bulk', () => {
 				`--login=${login}`,
 				`--bulk-file-path=${inputFilePath}`,
 				'--json',
+				'--no-color',
 				'--token=test'
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
+				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
 			});
 
 		test
@@ -100,6 +103,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -107,10 +111,12 @@ describe('Bulk', () => {
 				`--login=${login}`,
 				`--bulk-file-path=${inputFilePath}`,
 				'--csv',
+				'--no-color',
 				'--token=test'
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (CSV Output)', ctx => {
 				assert.equal(ctx.stdout, csvOutput);
+				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
 			});
 
 		test
@@ -123,16 +129,19 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
 				`--bulk-file-path=${inputFilePath}`,
+				'--no-color',
 				'--token=test'
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (Table Output)', ctx => {
 				assert.equal(ctx.stdout, tableOutput);
+				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
 			});
 
 		test
@@ -155,6 +164,7 @@ describe('Bulk', () => {
 				`--save-to-file-path=${saveFilePath}`,
 				'-y',
 				'--json',
+				'--no-color',
 				'--token=test'
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (Save JSON Output To File)', ctx => {
@@ -162,7 +172,10 @@ describe('Bulk', () => {
 				let savedFileContents = fs.readFileSync(saveFilePath, 'utf8');
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
-				assert.equal(ctx.stderr, `Output written to ${saveFilePath}${os.EOL}`);
+
+				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -175,6 +188,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -197,6 +211,7 @@ describe('Bulk', () => {
 				.reply(200, { entries: [] })
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'search',
 				`--bulk-file-path=${multipleFlagValuesInputFilePath}`,
@@ -237,6 +252,7 @@ describe('Bulk', () => {
 				.reply(200, {})
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:metadata:update',
 				'1234',
@@ -270,6 +286,7 @@ describe('Bulk', () => {
 				})
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:rename',
 				`--bulk-file-path=${emptyStringInputFilePath}`,
@@ -284,6 +301,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture1)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
@@ -295,6 +313,7 @@ describe('Bulk', () => {
 
 		let folderCollabInput = path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input.csv');
 		test
+			.skip()
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', {
 					item: {
@@ -331,12 +350,101 @@ describe('Bulk', () => {
 				.reply(200, {})
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'folders:collaborations:add', // @NOTE: This command delegates to collaborations:add
 				`--bulk-file-path=${folderCollabInput}`,
 				'--token=test'
 			])
 			.it('should not run duplicate commands when delegating to another command');
+
+		let fakeCollab1 = {
+			type: 'collaboration',
+			id: '12345',
+		};
+		let fakeCollab2 = {
+			type: 'collaboration',
+			id: '54321',
+		};
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '11111',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'mario@example.com',
+					}
+				})
+				.query({ fields: 'id' })
+				.reply(200, fakeCollab1)
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '22222',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'wario@example.com'
+					}
+				})
+				.query({ fields: 'id' })
+				.reply(409, {
+					type: 'error',
+					status: 409,
+					code: 'collaboration_already_exists',
+					context_info: {
+						conflicts: [
+							{
+								type: 'collaboration',
+								id: '871642494',
+							}
+						]
+					},
+					help_url: 'http://developers.box.com/docs/#errors',
+					message: '',
+					request_id: '170397861659135cc65a65'
+				})
+				.post('/2.0/collaborations', {
+					item: {
+						type: 'folder',
+						id: '33333',
+					},
+					accessible_by: {
+						type: 'user',
+						login: 'peach@example.com'
+					}
+				})
+				.query({ fields: 'id' })
+				.reply(200, fakeCollab2)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				`--bulk-file-path=${folderCollabInput}`,
+				'--json',
+				'--fields=id',
+				'--no-color',
+				'--token=test'
+			])
+			.it('should catch and report errors in subcommands without stopping bulk execution', ctx => {
+				let expectedOutput = JSON.stringify([
+					fakeCollab1,
+					fakeCollab2
+				], null, 4);
+
+				let expectedErrorOutput = `1 entry failed!${os.EOL}`;
+				expectedErrorOutput += `----------${os.EOL}`;
+				expectedErrorOutput += `Entry 2 failed with error:${os.EOL}`;
+				expectedErrorOutput += `Unexpected API Response [409 Conflict | 170397861659135cc65a65] collaboration_already_exists${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+
+				assert.equal(ctx.stdout, expectedOutput + os.EOL);
+				assert.equal(ctx.stderr, expectedErrorOutput);
+			});
 	});
 
 	describe('JSON Input', () => {
@@ -393,6 +501,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -400,10 +509,12 @@ describe('Bulk', () => {
 				`--login=${login}`,
 				`--bulk-file-path=${entriesInputFilePath}`,
 				'--json',
+				'--no-color',
 				'--token=test'
 			])
 			.it('should process multiple inputs from JSON file with entries property (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
+				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
 			});
 
 		test
@@ -416,6 +527,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -423,10 +535,12 @@ describe('Bulk', () => {
 				`--login=${login}`,
 				`--bulk-file-path=${bareArrayInputFilePath}`,
 				'--json',
+				'--no-color',
 				'--token=test'
 			])
 			.it('should process multiple inputs from JSON file with top-level array', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
+				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
 			});
 
 		test
@@ -527,7 +641,10 @@ describe('Bulk', () => {
 				let savedFileContents = fs.readFileSync(saveFilePath, 'utf8');
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
-				assert.equal(ctx.stderr, `Output written to ${saveFilePath}${os.EOL}`);
+
+				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -564,7 +681,10 @@ describe('Bulk', () => {
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
 				assert.include(ctx.stdout, '(y/N) y');
-				assert.equal(ctx.stderr, `Output written to ${saveFilePath}${os.EOL}`);
+
+				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -602,7 +722,10 @@ describe('Bulk', () => {
 				fs.unlinkSync(filePath);
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
-				assert.equal(ctx.stderr, `Output written to ${filePath}${os.EOL}`);
+
+				let expectedMessage = `Output written to ${filePath}${os.EOL}`;
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -615,6 +738,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				boxItemId,
@@ -637,6 +761,7 @@ describe('Bulk', () => {
 				.reply(200, { entries: [] })
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'search',
 				`--bulk-file-path=${multipleFlagValuesInputFilePath}`,
@@ -677,6 +802,7 @@ describe('Bulk', () => {
 				.reply(200, {})
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:metadata:update',
 				'1234',
@@ -693,6 +819,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture1)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
@@ -708,6 +835,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture1)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
@@ -752,6 +880,7 @@ describe('Bulk', () => {
 				.reply(200, fixture2)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:tasks:list',
 				`--bulk-file-path=${inputFilePath}`,
@@ -787,6 +916,7 @@ describe('Bulk', () => {
 				.reply(200, fixture2)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:tasks:list',
 				`--bulk-file-path=${inputFilePath}`,
@@ -821,6 +951,7 @@ describe('Bulk', () => {
 				.reply(200, fixture2)
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'files:tasks:list',
 				`--bulk-file-path=${inputFilePath}`,
