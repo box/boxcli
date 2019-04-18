@@ -2,31 +2,14 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const UserModule = require('../../modules/user');
 
 class UsersListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(UsersListCommand);
-		let options = {};
 
-		if (flags.fields) {
-			options.fields = flags.fields;
-		}
-
-		if (flags['all-users']) {
-			options.user_type = 'all';
-		} else if (flags['managed-users']) {
-			options.user_type = 'managed';
-		} else if (flags['app-users']) {
-			options.filter_term = 'AppUser_';
-		} else if (flags['external-users']) {
-			options.user_type = 'external';
-		}
-
-		if (flags.filter) {
-			options.filter_term = flags.filter;
-		}
-
-		let users = await this.client.enterprise.getUsers(options);
+		let userModule = new UserModule(this.client);
+		let users = await userModule.listUsers(flags);
 		await this.output(users);
 	}
 }
