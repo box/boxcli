@@ -2,18 +2,14 @@
 
 const BoxCommand = require('../../box-command');
 const chalk = require('chalk');
+const SharedLinksModule = require('../../modules/shared-links');
 
 class SharedLinksDeleteCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SharedLinksDeleteCommand);
-		let updates = { shared_link: null };
-		let item;
 
-		if (args.itemType === 'file') {
-			item = await this.client.files.update(args.itemID, updates);
-		} else if (args.itemType === 'folder') {
-			item = await this.client.folders.update(args.itemID, updates);
-		}
+		let sharedLinksModule = new SharedLinksModule(this.client);
+		let item = await sharedLinksModule.removeSharedLink(args);
 		this.info(chalk`{green Removed shared link from ${args.itemType} "${item.name}"}`);
 	}
 }
