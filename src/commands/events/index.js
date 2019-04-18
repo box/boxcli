@@ -25,15 +25,15 @@ class EventsGetCommand extends BoxCommand {
 		if (flags['stream-position']) {
 			options.stream_position = flags['stream-position'];
 		} else if (options.stream_type === 'admin_logs') {
-			options.created_before = this.getDateFromString(flags['created-before'] || DEFAULT_END_TIME);
+			options.created_before = flags['created-before'] || BoxCommand.normalizeDateString(DEFAULT_END_TIME);
 
 			if (flags['created-before'] && !flags['created-after']) {
 				// If the user specified an end time but no start time, recompute the default start time as
 				// the specified end time minus five days
 				let endTime = date.addDays(date.parse(options.created_before), -5);
-				options.created_after = endTime.toISOString().replace(/\.\d{3}Z$/u, '-00:00');
+				options.created_after = endTime.toISOString().replace(/\.\d{3}Z$/u, '+00:00');
 			} else {
-				options.created_after = this.getDateFromString(flags['created-after'] || DEFAULT_START_TIME);
+				options.created_after = flags['created-after'] || BoxCommand.normalizeDateString(DEFAULT_START_TIME);
 			}
 		}
 
@@ -70,14 +70,16 @@ EventsGetCommand.flags = {
 		description: 'Get enterprise events'
 	}),
 	'created-after': flags.string({
-		description: 'Return enterprise events that occured after a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days before the end date',
+		description: 'Return enterprise events that occurred after a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days before the end date',
 		exclusive: ['stream_position'],
 		dependsOn: ['enterprise'],
+		parse: input => BoxCommand.normalizeDateString(input),
 	}),
 	'created-before': flags.string({
-		description: 'Return enterprise events that occured before a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to now',
+		description: 'Return enterprise events that occurred before a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to now',
 		exclusive: ['stream_position'],
 		dependsOn: ['enterprise'],
+		parse: input => BoxCommand.normalizeDateString(input),
 	}),
 	'event-types': flags.string({
 		description: 'Return enterprise events filtered by event types. Format using a comma delimited list: NEW_USER,DELETE_USER,EDIT_USER',

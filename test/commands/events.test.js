@@ -25,8 +25,8 @@ describe('Events', () => {
 	], function(command) {
 
 		describe(command, () => {
-			let createdBefore = '2014-05-17T13:35:01-00:00',
-				createdAfter = '2015-05-15T13:35:01-00:00',
+			let createdBefore = '2014-05-17T13:35:01+00:00',
+				createdAfter = '2015-05-15T13:35:01+00:00',
 				eventType = 'NEW_USER,DELETE_USER,EDIT_USER',
 				streamPosition = '122333',
 				fixture = getFixture('events/get_events'),
@@ -102,23 +102,23 @@ describe('Events', () => {
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-07-08T19:00:00-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-07-08T19:00:00+00:00',
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-07-08T19:00:00-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-07-08T19:00:00+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture).next_stream_position,
 					})
 					.reply(200, fixture2)
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-07-08T19:00:00-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-07-08T19:00:00+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture2).next_stream_position,
 					})
@@ -139,23 +139,23 @@ describe('Events', () => {
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/events')
 					.query({
-						created_before: '2019-02-11T12:34:56-00:00',
-						created_after: '2019-02-06T12:34:56-00:00',
+						created_before: '2019-02-11T12:34:56+00:00',
+						created_after: '2019-02-06T12:34:56+00:00',
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
 					.get('/2.0/events')
 					.query({
-						created_before: '2019-02-11T12:34:56-00:00',
-						created_after: '2019-02-06T12:34:56-00:00',
+						created_before: '2019-02-11T12:34:56+00:00',
+						created_after: '2019-02-06T12:34:56+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture).next_stream_position,
 					})
 					.reply(200, fixture2)
 					.get('/2.0/events')
 					.query({
-						created_before: '2019-02-11T12:34:56-00:00',
-						created_after: '2019-02-06T12:34:56-00:00',
+						created_before: '2019-02-11T12:34:56+00:00',
+						created_after: '2019-02-06T12:34:56+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture2).next_stream_position,
 					})
@@ -165,7 +165,7 @@ describe('Events', () => {
 				.command([
 					command,
 					'--enterprise',
-					'--created-before=2019-02-11T12:34:56-00:00',
+					'--created-before=2019-02-11T12:34:56+00:00',
 					'--json',
 					'--token=test'
 				])
@@ -177,23 +177,23 @@ describe('Events', () => {
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-01-01T12:34:56-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-01-01T12:34:56+00:00',
 						stream_type: 'admin_logs'
 					})
 					.reply(200, fixture)
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-01-01T12:34:56-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-01-01T12:34:56+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture).next_stream_position,
 					})
 					.reply(200, fixture2)
 					.get('/2.0/events')
 					.query({
-						created_before: '2018-07-13T19:00:00-00:00',
-						created_after: '2018-01-01T12:34:56-00:00',
+						created_before: '2018-07-13T19:00:00+00:00',
+						created_after: '2018-01-01T12:34:56+00:00',
 						stream_type: 'admin_logs',
 						stream_position: JSON.parse(fixture2).next_stream_position,
 					})
@@ -203,7 +203,7 @@ describe('Events', () => {
 				.command([
 					command,
 					'--enterprise',
-					'--created-after=2018-01-01T12:34:56-00:00',
+					'--created-after=2018-01-01T12:34:56+00:00',
 					'--json',
 					'--token=test'
 				])

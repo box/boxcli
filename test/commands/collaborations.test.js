@@ -231,7 +231,7 @@ describe('Collaborations', () => {
 					});
 			});
 
-			let expiresAt = '2020-01-01T08:00:00-00:00';
+			let expiresAt = '2020-01-01T08:00:00+00:00';
 
 			test
 				.nock(TEST_API_ROOT, api => api

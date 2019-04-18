@@ -12,7 +12,7 @@ describe('Tasks', () => {
 		let type = 'file',
 			id = '22222',
 			message = 'Please review',
-			dueDate = '2019-01-01T09:00:00-00:00',
+			dueDate = '2019-01-01T09:00:00+00:00',
 			fixture = getFixture('tasks/post_tasks'),
 			yamlOutput = getFixture('output/tasks_create_yaml.txt');
 
@@ -97,7 +97,7 @@ describe('Tasks', () => {
 	describe('tasks:update', () => {
 		let taskId = '11111',
 			message = 'Could you please review this?',
-			dueDate = '2019-01-01T09:00:00-00:00',
+			dueDate = '2019-01-01T09:00:00+00:00',
 			fixture = getFixture('tasks/put_tasks_id'),
 			yamlOutput = getFixture('output/tasks_update_yaml.txt');
 

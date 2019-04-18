@@ -355,7 +355,7 @@ describe('Files', () => {
 
 		describe(command, () => {
 			let fileId = '1234567890',
-				expireTime = '2030-01-01T08:00:00-00:00',
+				expireTime = '2030-01-01T08:00:00+00:00',
 				lockFixture = getFixture('files/put_files_id_lock'),
 				yamlOutput = getFixture('output/files_lock_yaml.txt');
 
@@ -991,7 +991,7 @@ describe('Files', () => {
 
 		describe(command, () => {
 			let fileId = '1234567890',
-				unsharedDate = '2030-11-18T19:44:17-00:00',
+				unsharedDate = '2030-11-18T19:44:17+00:00',
 				createSharedLinkFixture = getFixture('files/put_files_id_shared_link'),
 				jsonOutput = getFixture('output/files_share_json.txt'),
 				yamlOutput = getFixture('output/files_share_yaml.txt');
@@ -1444,7 +1444,7 @@ describe('Files', () => {
 		let fileId = '1234567890',
 			testFileName = 'test_file.txt',
 			testFileContent = 'hello',
-			contentModifiedAt = '2012-12-20T20:20:12-00:00',
+			contentModifiedAt = '2012-12-20T20:20:12+00:00',
 			testFilePath = path.join(__dirname, '..', `fixtures/files/${testFileName}`),
 			uploadFileFixture = getFixture('files/post_files_content'),
 			jsonOutput = getFixture('output/files_versions_upload_json.txt'),
@@ -1559,8 +1559,8 @@ describe('Files', () => {
 			testFileName = 'test_file.txt',
 			newFileName = 'renamed_file.txt',
 			testFileContent = 'hello',
-			contentCreatedAt = '2017-02-03T12:34:56-00:00',
-			contentModifiedAt = '2017-11-18T09:12:44-00:00',
+			contentCreatedAt = '2017-02-03T12:34:56+00:00',
+			contentModifiedAt = '2017-11-18T09:12:44+00:00',
 			testFilePath = path.join(__dirname, '..', `fixtures/files/${testFileName}`),
 			uploadFileFixture = getFixture('files/post_files_content'),
 			jsonOutput = getFixture('output/files_upload_json.txt'),

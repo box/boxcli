@@ -907,12 +907,13 @@ class BoxCommand extends Command {
 	}
 
 	/**
-	 * Converts time interval shorthands like 5w, -3d, etc to timestamps. It also ensures any timestamp
-	 * passed in is properly formatted for API calls
+	 * Converts time interval shorthand like 5w, -3d, etc to timestamps. It also ensures any timestamp
+	 * passed in is properly formatted for API calls.
+	 *
 	 * @param {string} time The command lint input string for the datetime
-	 * @returns {string} The full RFC3339-formatted datetime string
+	 * @returns {string} The full RFC3339-formatted datetime string in UTC
 	 */
-	getDateFromString(time) {
+	static normalizeDateString(time) {
 		// Attempt to parse date as timestamp or string
 		let newDate = time.match(/^\d+$/u) ? dateTime.parse(parseInt(time, 10) * 1000) : dateTime.parse(time);
 		if (!dateTime.isValid(newDate)) {
@@ -939,18 +940,13 @@ class BoxCommand extends Command {
 				newDate = new Date();
 			} else {
 
-				this.error(`Cannot parse date format "${time}"`);
+				throw new BoxCLIError(`Cannot parse date format "${time}"`);
 			}
 		}
 
-		// Dates are always in the user's local timezone, but for
-		// consistency we move them all to UTC
-
-
 		// Format the timezone to RFC3339 format for the Box API
-		// Also always use UTC for consistency
-		return newDate.toISOString().replace(/\.\d{3}Z$/u, '-00:00');
-		// return dateTime.format(newDate, 'YYYY-MM-DDTHH:mm:ssZ');
+		// Also always use UTC timezone for consistency in tests
+		return newDate.toISOString().replace(/\.\d{3}Z$/u, '+00:00');
 	}
 
 	/**
