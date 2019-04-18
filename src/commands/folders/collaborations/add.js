@@ -8,11 +8,7 @@ class FoldersCollaborationsAddCommand extends BoxCommand {
 	async run() {
 		const { args, flags } = this.parse(FoldersCollaborationsAddCommand);
 
-		// Clone the args and insert the "folder" type at the correct position for the generic command
-		// let argv = this.argv.slice();
-		// argv.splice(argv.indexOf(args.id) + 1, 0, 'folder');
-		// return CollaborationsCreateCommand.run(argv);
-
+		// Transform arguments for generic module
 		args.itemType = 'folder';
 		args.itemID = args.id;
 		delete args.id;

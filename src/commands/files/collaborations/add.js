@@ -9,11 +9,7 @@ class FilesCollaborationsAddCommand extends BoxCommand {
 	async run() {
 		const { args, flags } = this.parse(FilesCollaborationsAddCommand);
 
-		// Clone the args and insert the "file" type at the correct position for the generic command
-		// let argv = this.argv.slice();
-		// argv.splice(argv.indexOf(args.id) + 1, 0, 'file');
-		// return CollaborationsCreateCommand.run(argv);
-
+		// Transform arguments for generic module
 		args.itemType = 'file';
 		args.itemID = args.id;
 		delete args.id;
