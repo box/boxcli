@@ -420,7 +420,7 @@ class BoxCommand extends Command {
 				// In bulk mode, we don't want to write directly to console and kill the command
 				// Instead, we should buffer the error output so subsequent commands might be able to succeed
 				DEBUG.execute('Caught error from bulk input entry %d', bulkEntryIndex);
-				this.bulkErrors.push({index: bulkEntryIndex, error: err});
+				this.bulkErrors.push({index: bulkEntryIndex, data: bulkData, error: err});
 			}
 			/* eslint-enable no-await-in-loop */
 		}
@@ -433,7 +433,10 @@ class BoxCommand extends Command {
 			this.info(chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`);
 			this.bulkErrors.forEach(errorInfo => {
 				this.info(chalk`{dim ----------}`);
-				this.info(chalk`{redBright Entry ${errorInfo.index} failed with error:}`);
+				let entryData = errorInfo.data
+					.map(o => `    ${o.fieldKey}=${o.value}`)
+					.join(os.EOL);
+				this.info(chalk`{redBright Entry ${errorInfo.index} (${os.EOL + entryData + os.EOL}) failed with error:}`);
 				let err = errorInfo.error;
 				let errMsg = chalk`{redBright ${this.flags && this.flags.verbose ? err.stack : err.message}${os.EOL}}`;
 				this.info(errMsg);
