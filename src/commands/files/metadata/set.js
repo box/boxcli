@@ -17,7 +17,7 @@ class FilesSetMetadataCommand extends BoxCommand {
 
 }
 
-FilesSetMetadataCommand.description = 'Set metadata on a folder';
+FilesSetMetadataCommand.description = 'Set metadata on a file';
 
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,
@@ -42,7 +42,7 @@ FilesSetMetadataCommand.args = [
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the folder to add metadata to',
+		description: 'ID of the file to add metadata to',
 	}
 ];
 
