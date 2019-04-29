@@ -983,6 +983,100 @@ describe('Files', () => {
 		});
 	});
 
+	describe('files:metadata:set', () => {
+		let fileID = '11111',
+			metadataScope = 'enterprise',
+			metadataTemplate = 'testTemplate',
+			addMetadataFixture = getFixture('files/post_files_id_metadata_scope_template'),
+			yamlOutput = getFixture('output/files_metadata_create_yaml.txt');
+
+		let createMetadataBody = {
+			test: 'test123',
+			number: 1.9,
+			arr: [
+				'foo',
+				'bar'
+			]
+		};
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
+				.reply(201, addMetadataFixture)
+			)
+			.stdout()
+			.command([
+				'files:metadata:set',
+				fileID,
+				`--template-key=${metadataTemplate}`,
+				'--data=test=test123',
+				'--data=number=#1.9',
+				'--data=arr=[foo,bar]',
+				'--json',
+				'--token=test'
+			])
+			.it('should add metadata object with key/value pairs passed as a flag (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, addMetadataFixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
+				.reply(201, addMetadataFixture)
+			)
+			.stdout()
+			.command([
+				'files:metadata:set',
+				fileID,
+				`--template-key=${metadataTemplate}`,
+				'--data=test=test123',
+				'--data=number=#1.9',
+				'--data=arr=[foo,bar]',
+				'--token=test'
+			])
+			.it('should add metadata object with key/value pairs passed as a flag (YAML Output)', ctx => {
+				assert.equal(ctx.stdout, yamlOutput);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
+				.reply(409)
+				.put(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, [
+					{
+						op: 'add',
+						path: '/test',
+						value: 'test123',
+					},
+					{
+						op: 'add',
+						path: '/number',
+						value: 1.9,
+					},
+					{
+						op: 'add',
+						path: '/arr',
+						value: [ 'foo', 'bar' ],
+					}
+				])
+				.reply(200, addMetadataFixture)
+			)
+			.stdout()
+			.command([
+				'files:metadata:set',
+				fileID,
+				`--template-key=${metadataTemplate}`,
+				'--data=test=test123',
+				'--data=number=#1.9',
+				'--data=arr=[foo,bar]',
+				'--json',
+				'--token=test'
+			])
+			.it('should update metadata object with key/value pairs passed as a flag when creation conflicts', ctx => {
+				assert.equal(ctx.stdout, addMetadataFixture);
+			});
+	});
+
 	leche.withData([
 		'files:share',
 		'files:shared-links:create',
