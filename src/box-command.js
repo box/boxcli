@@ -12,7 +12,6 @@ const csv = require('csv');
 const csvParse = util.promisify(csv.parse);
 const csvStringify = util.promisify(csv.stringify);
 const dateTime = require('date-fns');
-const objectPath = require('object-path');
 const BoxSDK = require('box-node-sdk');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
@@ -868,7 +867,7 @@ class BoxCommand extends Command {
 			let row = [];
 			if (typeof (object) === 'object') {
 				for (let keyPath of keyPaths) {
-					let value = objectPath.get(object, keyPath);
+					let value = _.get(object, keyPath);
 					if (Array.isArray(value)) {
 						row.push('Array');
 					} else if (value === null || value === undefined) {
