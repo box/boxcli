@@ -254,6 +254,7 @@ class BoxCommand extends Command {
 			this.constructor.args = originalArgs;
 			this.constructor.flags = originalFlags;
 			this.bulkOutputList = [];
+			this.bulkErrors = [];
 			this._singleRun = this.run;
 			this.run = this.bulkOutputRun;
 		}
@@ -379,8 +380,10 @@ class BoxCommand extends Command {
 		bulkCalls = bulkCalls.map(args => args.filter(o => o !== undefined));
 		DEBUG.execute('Read %d entries from bulk file %s', bulkCalls.length, this.flags['bulk-file-path']);
 
+		let bulkEntryIndex = 0;
 		for (let bulkData of bulkCalls) {
 			this.argv = [];
+			bulkEntryIndex += 1;
 
 			// For each possible arg, find the correct value between bulk input
 			// and values given on the command line
@@ -411,13 +414,36 @@ class BoxCommand extends Command {
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
 			/* eslint-disable no-await-in-loop */
-			await this._singleRun();
+			try {
+				await this._singleRun();
+			} catch (err) {
+				// In bulk mode, we don't want to write directly to console and kill the command
+				// Instead, we should buffer the error output so subsequent commands might be able to succeed
+				DEBUG.execute('Caught error from bulk input entry %d', bulkEntryIndex);
+				this.bulkErrors.push({index: bulkEntryIndex, data: bulkData, error: err});
+			}
 			/* eslint-enable no-await-in-loop */
 		}
 
 		this.isBulk = false;
 		DEBUG.execute('Leaving bulk mode and writing final output');
 		await this.output(this.bulkOutputList);
+		let numErrors = this.bulkErrors.length;
+		if (numErrors > 0) {
+			this.info(chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`);
+			this.bulkErrors.forEach(errorInfo => {
+				this.info(chalk`{dim ----------}`);
+				let entryData = errorInfo.data
+					.map(o => `    ${o.fieldKey}=${o.value}`)
+					.join(os.EOL);
+				this.info(chalk`{redBright Entry ${errorInfo.index} (${os.EOL + entryData + os.EOL}) failed with error:}`);
+				let err = errorInfo.error;
+				let errMsg = chalk`{redBright ${this.flags && this.flags.verbose ? err.stack : err.message}${os.EOL}}`;
+				this.info(errMsg);
+			});
+		} else {
+			this.info(chalk`{green All bulk input entries processed successfully.}`);
+		}
 	}
 
 	/**
@@ -773,7 +799,7 @@ class BoxCommand extends Command {
 		/* eslint-disable no-shadow,no-catch-shadow */
 		} catch (err) {
 			// The oclif default catch handler rethrows most errors; handle those here
-			DEBUG.execute('Handling re-thrown error in handler');
+			DEBUG.execute('Handling re-thrown error in base command handler');
 
 			if (err.code === 'EEXIT') {
 				// oclif throws this when it handled the error itself and wants to exit, so just let it do that
@@ -781,13 +807,14 @@ class BoxCommand extends Command {
 				return;
 			}
 
-			let errorMsg = this.flags && this.flags.verbose ? err.stack : err.message;
+			let errorMsg = chalk`{redBright ${this.flags && this.flags.verbose ? err.stack : err.message}${os.EOL}}`;
 
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!
 			/* eslint-disable no-process-exit,unicorn/no-process-exit */
-			process.stderr.write(chalk`{redBright ${errorMsg}${os.EOL}}`, 'utf8', () => process.exit(2));
+			process.stderr.write(errorMsg, 'utf8', () => process.exit(2));
 			/* eslint-enable no-process-exit,unicorn/no-process-exit */
+
 		}
 
 	}
@@ -883,12 +910,13 @@ class BoxCommand extends Command {
 	}
 
 	/**
-	 * Converts time interval shorthands like 5w, -3d, etc to timestamps. It also ensures any timestamp
-	 * passed in is properly formatted for API calls
+	 * Converts time interval shorthand like 5w, -3d, etc to timestamps. It also ensures any timestamp
+	 * passed in is properly formatted for API calls.
+	 *
 	 * @param {string} time The command lint input string for the datetime
-	 * @returns {string} The full RFC3339-formatted datetime string
+	 * @returns {string} The full RFC3339-formatted datetime string in UTC
 	 */
-	getDateFromString(time) {
+	static normalizeDateString(time) {
 		// Attempt to parse date as timestamp or string
 		let newDate = time.match(/^\d+$/u) ? dateTime.parse(parseInt(time, 10) * 1000) : dateTime.parse(time);
 		if (!dateTime.isValid(newDate)) {
@@ -915,18 +943,13 @@ class BoxCommand extends Command {
 				newDate = new Date();
 			} else {
 
-				this.error(`Cannot parse date format "${time}"`);
+				throw new BoxCLIError(`Cannot parse date format "${time}"`);
 			}
 		}
 
-		// Dates are always in the user's local timezone, but for
-		// consistency we move them all to UTC
-
-
 		// Format the timezone to RFC3339 format for the Box API
-		// Also always use UTC for consistency
-		return newDate.toISOString().replace(/\.\d{3}Z$/u, '-00:00');
-		// return dateTime.format(newDate, 'YYYY-MM-DDTHH:mm:ssZ');
+		// Also always use UTC timezone for consistency in tests
+		return newDate.toISOString().replace(/\.\d{3}Z$/u, '+00:00');
 	}
 
 	/**

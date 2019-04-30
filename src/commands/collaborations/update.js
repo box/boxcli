@@ -37,7 +37,7 @@ class CollaborationsUpdateCommand extends BoxCommand {
 			params.body.role = this.client.collaborationRoles.OWNER;
 		}
 		if (flags['expires-at']) {
-			params.body.expires_at = this.getDateFromString(flags['expires-at']);
+			params.body.expires_at = flags['expires-at'];
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
@@ -205,6 +205,7 @@ CollaborationsUpdateCommand.flags = {
 	}),
 	'expires-at': flags.string({
 		description: 'When the collaboration should expire',
+		parse: input => BoxCommand.normalizeDateString(input),
 	})
 };
 

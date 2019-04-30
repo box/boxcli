@@ -62,8 +62,8 @@ describe('Legal Hold Policies', () => {
 	describe('legal-hold-policies:create', () => {
 		let name = 'Trial Documents',
 			description = 'Documents for the litigation proceedings',
-			startDate = '2011-08-14T05:11:00-00:00',
-			endDate = '2014-08-14T05:11:00-00:00',
+			startDate = '2011-08-14T05:11:00+00:00',
+			endDate = '2014-08-14T05:11:00+00:00',
 			fixture = getFixture('legal-hold-policies/post_legal_hold_policies'),
 			yamlOutput = getFixture('output/legal_hold_policies_create_yaml.txt');
 

@@ -12,10 +12,10 @@ class LegalHoldPoliciesCreateCommand extends BoxCommand {
 			options.description = flags.description;
 		}
 		if (flags['filter-started-at']) {
-			options.filter_started_at = this.getDateFromString(flags['filter-started-at']);
+			options.filter_started_at = flags['filter-started-at'];
 		}
 		if (flags['filter-ended-at']) {
-			options.filter_ended_at = this.getDateFromString(flags['filter-ended-at']);
+			options.filter_ended_at = flags['filter-ended-at'];
 		}
 		if (flags.hasOwnProperty('ongoing')) {
 			options.is_ongoing = true;
@@ -34,12 +34,14 @@ LegalHoldPoliciesCreateCommand.flags = {
 	'filter-started-at': flags.string({
 		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
 		dependsOn: ['filter-ended-at'],
-		exclusive: ['is-ongoing']
+		exclusive: ['is-ongoing'],
+		parse: input => BoxCommand.normalizeDateString(input),
 	}),
 	'filter-ended-at': flags.string({
 		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
 		dependsOn: ['filter-started-at'],
-		exclusive: ['is-ongoing']
+		exclusive: ['is-ongoing'],
+		parse: input => BoxCommand.normalizeDateString(input),
 	}),
 	ongoing: flags.boolean({
 		description: 'Assignments under this policy will continue applying to files based on events, indefinitely',

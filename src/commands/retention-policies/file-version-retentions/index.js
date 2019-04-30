@@ -12,10 +12,10 @@ class RetentionPoliciesListVersionRetentionCommand extends BoxCommand {
 			options.disposition_action = flags['disposition-action'];
 		}
 		if (flags['disposition-after']) {
-			options.disposition_after = this.getDateFromString(flags['disposition-after']);
+			options.disposition_after = flags['disposition-after'];
 		}
 		if (flags['disposition-before']) {
-			options.disposition_before = this.getDateFromString(flags['disposition-before']);
+			options.disposition_before = flags['disposition-before'];
 		}
 		if (flags['file-id']) {
 			options.file_id = flags['file-id'];
@@ -47,8 +47,14 @@ RetentionPoliciesListVersionRetentionCommand.flags = {
 			'remove_retention'
 		]
 	}),
-	'disposition-after': flags.string({ description: 'A date to filter retention policies that complete after a certain time' }),
-	'disposition-before': flags.string({ description: 'A date to filter retention policies that complete before a certain time' }),
+	'disposition-after': flags.string({
+		description: 'A date to filter retention policies that complete after a certain time',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
+	'disposition-before': flags.string({
+		description: 'A date to filter retention policies that complete before a certain time',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
 	'file-id': flags.string({ description: 'A file id to filter the file version retentions by' }),
 	'file-version-id': flags.string({ description: 'A file version id to filter the file version retentions by' }),
 	'policy-id': flags.string({ description: 'A policy id to filter the file version retentions by' })

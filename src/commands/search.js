@@ -99,24 +99,24 @@ class SearchCommand extends BoxCommand {
 			options.owner_user_ids = flags['owner-user-ids'];
 		}
 		if (flags['created-at-from']) {
-			options.created_at_range = `${this.getDateFromString(flags['created-at-from'])},`;
+			options.created_at_range = `${flags['created-at-from']},`;
 		}
 		if (flags['created-at-to']) {
 			if (options.created_at_range) {
-				options.created_at_range += this.getDateFromString(flags['created-at-to']);
+				options.created_at_range += flags['created-at-to'];
 
 			} else {
-				options.created_at_range = `,${this.getDateFromString(flags['created-at-to'])}`;
+				options.created_at_range = `,${flags['created-at-to']}`;
 			}
 		}
 		if (flags['updated-at-from']) {
-			options.updated_at_range = `${this.getDateFromString(flags['updated-at-from'])},`;
+			options.updated_at_range = `${flags['updated-at-from']},`;
 		}
 		if (flags['updated-at-to']) {
 			if (options.updated_at_range) {
-				options.updated_at_range += this.getDateFromString(flags['updated-at-to']);
+				options.updated_at_range += flags['updated-at-to'];
 			} else {
-				options.updated_at_range = `,${this.getDateFromString(flags['updated-at-to'])}`;
+				options.updated_at_range = `,${flags['updated-at-to']}`;
 			}
 		}
 		if (flags['trash-content']) {
@@ -231,10 +231,22 @@ SearchCommand.flags = {
 	'content-types': flags.string({ description: 'Search for objects of specified content types. Requires a content type or a set of comma-delimited content types' }),
 	'ancestor-folder-ids': flags.string({ description: 'Search for the contents of specific folders (and folders within them). Requires a folder ID or a set of comma-delimited folder IDs' }),
 	'owner-user-ids': flags.string({ description: 'Search for objects by owner. Requires a user ID or a set of comma-delimited user IDs' }),
-	'created-at-from': flags.string({ description: 'Start of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
-	'created-at-to': flags.string({ description: 'End of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
-	'updated-at-from': flags.string({ description: 'Start of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
-	'updated-at-to': flags.string({ description: 'End of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
+	'created-at-from': flags.string({
+		description: 'Start of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
+	'created-at-to': flags.string({
+		description: 'End of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
+	'updated-at-from': flags.string({
+		description: 'Start of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
+	'updated-at-to': flags.string({
+		description: 'End of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
 	'trash-content': flags.string({
 		description: 'Controls whether to search in the trash. Defaults to non_trashed_only',
 		options: [

@@ -12,7 +12,7 @@ class TasksCreateCommand extends BoxCommand {
 			options.message = flags.message;
 		}
 		if (flags['due-at']) {
-			options.due_at = this.getDateFromString(flags['due-at']);
+			options.due_at = flags['due-at'];
 		}
 
 		let task = await this.client.tasks.create(args.fileID, options);
@@ -25,7 +25,10 @@ TasksCreateCommand.description = 'Create a task on a file';
 TasksCreateCommand.flags = {
 	...BoxCommand.flags,
 	message: flags.string({ description: 'Message for task' }),
-	'due-at': flags.string({ description: 'When this task is due, use format 05h for 5 hours for example' }),
+	'due-at': flags.string({
+		description: 'When this task is due, use format 05h for 5 hours for example',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command'
 	})

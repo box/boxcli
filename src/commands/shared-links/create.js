@@ -2,31 +2,14 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const SharedLinksModule = require('../../modules/shared-links');
 
 class SharedLinksCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SharedLinksCreateCommand);
-		let updates = { shared_link: { permissions: {} } };
-		let updatedItem;
 
-		if (flags.access) {
-			updates.shared_link.access = flags.access;
-		}
-		if (flags.password) {
-			updates.shared_link.password = flags.password;
-		}
-		if (flags['unshared-at']) {
-			updates.shared_link.unshared_at = this.getDateFromString(flags['unshared-at']);
-		}
-		if (flags.hasOwnProperty('can-download')) {
-			updates.shared_link.permissions.can_download = flags['can-download'];
-		}
-
-		if (args.itemType === 'file') {
-			updatedItem = await this.client.files.update(args.itemID, updates);
-		} else if (args.itemType === 'folder') {
-			updatedItem = await this.client.folders.update(args.itemID, updates);
-		}
+		let sharedLinksModule = new SharedLinksModule(this.client);
+		let updatedItem = await sharedLinksModule.createSharedLink(args, flags);
 		await this.output(updatedItem.shared_link);
 	}
 }
@@ -41,7 +24,10 @@ SharedLinksCreateCommand.flags = {
 	...BoxCommand.flags,
 	access: flags.string({ description: 'Shared link access level' }),
 	password: flags.string({ description: 'Shared link password' }),
-	'unshared-at': flags.string({ description: 'Time that this link will become disabled. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s from now.' }),
+	'unshared-at': flags.string({
+		description: 'Time that this link will become disabled. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s from now.',
+		parse: input => BoxCommand.normalizeDateString(input),
+	}),
 	'can-download': flags.boolean({
 		description: 'Whether the shared link allows downloads',
 		allowNo: true

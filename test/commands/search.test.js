@@ -163,6 +163,18 @@ describe('Search', () => {
 				],
 				{size_range: '1024,4096'}
 			],
+			'created and updated timestamp flags': [
+				[
+					'--created-at-from=2018-01-01T00:00:00+00:00',
+					'--created-at-to=2018-12-31T23:59:59+00:00',
+					'--updated-at-from=2019-01-01T00:00:00+00:00',
+					'--updated-at-to=2019-12-31T23:59:59+00:00'
+				],
+				{
+					created_at_range: '2018-01-01T00:00:00+00:00,2018-12-31T23:59:59+00:00',
+					updated_at_range: '2019-01-01T00:00:00+00:00,2019-12-31T23:59:59+00:00',
+				}
+			],
 			'sort order flags': [
 				[
 					'--sort=modified_at',

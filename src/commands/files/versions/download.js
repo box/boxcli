@@ -2,15 +2,52 @@
 
 const BoxCommand = require('../../../box-command');
 const FilesDownloadCommand = require('../download');
+const BoxCLIError = require('../../../cli-error');
 const _ = require('lodash');
+const path = require('path');
+const fs = require('fs');
 
 class FilesVersionsDownloadCommand extends BoxCommand {
-	run() {
-		const { args } = this.parse(FilesVersionsDownloadCommand);
-		// Clone the args and replace the versionID arg with the --version flag
-		let argv = this.argv.slice();
-		argv.splice(argv.indexOf(args.fileVersionID), 1, `--version=${args.fileVersionID}`);
-		return FilesDownloadCommand.run(argv);
+	async run() {
+
+		const { flags, args } = this.parse(FilesVersionsDownloadCommand);
+
+		let file = await this.client.files.get(args.fileID);
+		let fileName = file.name;
+
+		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
+
+		/* eslint-disable no-sync */
+		if (fs.existsSync(filePath)) {
+		/* eslint-enable no-sync */
+
+			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
+
+			if (!shouldOverwrite) {
+				return;
+			}
+		}
+
+		let options = {};
+		options.version = args.fileVersionID;
+
+		let stream = await this.client.files.getReadStream(args.fileID, options);
+		try {
+			let output = fs.createWriteStream(filePath);
+			stream.pipe(output);
+		} catch (ex) {
+			throw new BoxCLIError(`Could not download to destination file ${filePath}`, ex);
+		}
+
+		// @TODO(2018-09-18): Add progress bar for large downloads
+
+		/* eslint-disable promise/avoid-new */
+		// We need to await the end of the stream to avoid a race condition here
+		await new Promise((resolve, reject) => {
+			stream.on('end', resolve);
+			stream.on('error', reject);
+		});
+		this.info(`Downloaded file ${fileName}`);
 	}
 }
 
