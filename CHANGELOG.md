@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.2.0 [2019-04-30]
+
+- Added `--sort` and `--direction` flags to `box search` to control the sort order of the search results
+- Fixed `box collections:add` to work correctly with `web_link` items
+- Fixed an issue where some commands including `box folders:collaborations:add` could incorrectly interpret bulk
+  input entries and produce unintended API requests
+- Added `box folders:metadata:set` and `box files:metadata:set` commands to apply metadata keys and values, overwriting
+  existing metadata under those keys
+- Errors encountered during bulk input are now caught within the CLI, skipping that entry and continuing bulk input.
+  The CLI should now run all bulk input entries to completion and report entries that produced errors after all entries
+  have been processed.
+
 ## 2.1.0 [2019-03-28]
 
 - Fixed an issue where the `--fields` flag was not always requesting additional fields from the API
