@@ -859,7 +859,10 @@ describe('Folders', () => {
 					{
 						op: 'add',
 						path: '/arr',
-						value: [ 'foo', 'bar' ],
+						value: [
+							'foo',
+							'bar'
+						],
 					}
 				])
 				.reply(200, addMetadataFixture)
@@ -879,7 +882,7 @@ describe('Folders', () => {
 				assert.equal(ctx.stdout, addMetadataFixture);
 			});
 
-		
+
 	});
 
 	leche.withData([

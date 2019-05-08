@@ -1056,7 +1056,10 @@ describe('Files', () => {
 					{
 						op: 'add',
 						path: '/arr',
-						value: [ 'foo', 'bar' ],
+						value: [
+							'foo',
+							'bar'
+						],
 					}
 				])
 				.reply(200, addMetadataFixture)
