@@ -38,7 +38,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/web-links/create.js)_
+_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/web-links/create.js)_
 
 ## `box web-links:delete ID`
 
@@ -66,7 +66,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/web-links/delete.js)_
+_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/web-links/delete.js)_
 
 ## `box web-links:get ID`
 
@@ -94,7 +94,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/web-links/get.js)_
+_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/web-links/get.js)_
 
 ## `box web-links:move ID PARENTID`
 
@@ -123,7 +123,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/move.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/web-links/move.js)_
+_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/web-links/move.js)_
 
 ## `box web-links:update ID`
 
@@ -154,4 +154,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/web-links/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/web-links/update.js)_
+_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/web-links/update.js)_

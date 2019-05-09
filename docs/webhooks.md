@@ -35,7 +35,7 @@ ALIASES
   $ box webhooks:list
 ```
 
-_See code: [src/commands/webhooks/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/webhooks/index.js)_
+_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/webhooks/index.js)_
 
 ## `box webhooks:create TARGETTYPE TARGETID`
 
@@ -82,7 +82,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/webhooks/create.js)_
+_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/webhooks/create.js)_
 
 ## `box webhooks:delete ID`
 
@@ -110,7 +110,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/webhooks/delete.js)_
+_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/webhooks/delete.js)_
 
 ## `box webhooks:get ID`
 
@@ -138,7 +138,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/webhooks/get.js)_
+_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/webhooks/get.js)_
 
 ## `box webhooks:update ID`
 
@@ -182,4 +182,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/webhooks/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/webhooks/update.js)_
+_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/webhooks/update.js)_

@@ -44,7 +44,7 @@ ALIASES
   $ box task-assignments:create
 ```
 
-_See code: [src/commands/tasks/assign.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/assign.js)_
+_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/assign.js)_
 
 ## `box tasks:assignments ID`
 
@@ -75,7 +75,7 @@ ALIASES
   $ box task-assignments:list
 ```
 
-_See code: [src/commands/tasks/assignments/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/assignments/index.js)_
+_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/assignments/index.js)_
 
 ## `box tasks:assignments:delete ID`
 
@@ -106,7 +106,7 @@ ALIASES
   $ box task-assignments:delete
 ```
 
-_See code: [src/commands/tasks/assignments/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/assignments/delete.js)_
+_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/assignments/delete.js)_
 
 ## `box tasks:assignments:get ID`
 
@@ -137,7 +137,7 @@ ALIASES
   $ box task-assignments:get
 ```
 
-_See code: [src/commands/tasks/assignments/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/assignments/get.js)_
+_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/assignments/get.js)_
 
 ## `box tasks:assignments:update ID`
 
@@ -170,7 +170,7 @@ ALIASES
   $ box task-assignments:update
 ```
 
-_See code: [src/commands/tasks/assignments/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/assignments/update.js)_
+_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/assignments/update.js)_
 
 ## `box tasks:create FILEID`
 
@@ -201,7 +201,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/create.js)_
+_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/create.js)_
 
 ## `box tasks:delete ID`
 
@@ -229,7 +229,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/delete.js)_
+_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/delete.js)_
 
 ## `box tasks:get ID`
 
@@ -257,7 +257,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/get.js)_
+_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/get.js)_
 
 ## `box tasks:update ID`
 
@@ -287,4 +287,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/tasks/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/tasks/update.js)_
+_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/tasks/update.js)_

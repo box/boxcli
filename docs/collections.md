@@ -34,7 +34,7 @@ ALIASES
   $ box collections:list
 ```
 
-_See code: [src/commands/collections/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/collections/index.js)_
+_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collections/index.js)_
 
 ## `box collections:add ITEMTYPE ITEMID COLLECTIONID`
 
@@ -64,7 +64,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/add.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/collections/add.js)_
+_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collections/add.js)_
 
 ## `box collections:items ID`
 
@@ -92,7 +92,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/items.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/collections/items.js)_
+_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collections/items.js)_
 
 ## `box collections:remove ITEMTYPE ITEMID COLLECTIONID`
 
@@ -122,4 +122,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collections/remove.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/collections/remove.js)_
+_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collections/remove.js)_

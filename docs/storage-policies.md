@@ -36,7 +36,7 @@ ALIASES
   $ box storage-policies:list
 ```
 
-_See code: [src/commands/storage-policies/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/index.js)_
+_See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/index.js)_
 
 ## `box storage-policies:assign STORAGEPOLICYID USERID`
 
@@ -65,7 +65,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assign.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/assign.js)_
+_See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/assign.js)_
 
 ## `box storage-policies:assignments:get ID`
 
@@ -93,7 +93,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/assignments/get.js)_
+_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/assignments/get.js)_
 
 ## `box storage-policies:assignments:lookup ID`
 
@@ -122,7 +122,7 @@ OPTIONS
   --type=user|enterprise                 (required) [default: user] Type of object to look up the storage policy for
 ```
 
-_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/assignments/lookup.js)_
+_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/assignments/lookup.js)_
 
 ## `box storage-policies:assignments:remove ID`
 
@@ -150,7 +150,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/assignments/remove.js)_
+_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/assignments/remove.js)_
 
 ## `box storage-policies:get ID`
 
@@ -178,4 +178,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/storage-policies/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/storage-policies/get.js)_
+_See code: [src/commands/storage-policies/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/storage-policies/get.js)_

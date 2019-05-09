@@ -34,7 +34,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/apply.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/watermarking/apply.js)_
+_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/watermarking/apply.js)_
 
 ## `box watermarking:get ITEMTYPE ITEMID`
 
@@ -63,7 +63,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/watermarking/get.js)_
+_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/watermarking/get.js)_
 
 ## `box watermarking:remove ITEMTYPE ITEMID`
 
@@ -92,4 +92,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/watermarking/remove.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/watermarking/remove.js)_
+_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/watermarking/remove.js)_

@@ -15,6 +15,7 @@ Manage files
 * [`box files:metadata:add ID`](#box-filesmetadataadd-id)
 * [`box files:metadata:get ID`](#box-filesmetadataget-id)
 * [`box files:metadata:remove ID`](#box-filesmetadataremove-id)
+* [`box files:metadata:set ID`](#box-filesmetadataset-id)
 * [`box files:metadata:update ID`](#box-filesmetadataupdate-id)
 * [`box files:move ID PARENTID`](#box-filesmove-id-parentid)
 * [`box files:rename ID NAME`](#box-filesrename-id-name)
@@ -59,7 +60,7 @@ ALIASES
   $ box files:collaborations:list
 ```
 
-_See code: [src/commands/files/collaborations/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/collaborations/index.js)_
+_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/collaborations/index.js)_
 
 ## `box files:collaborations:add ID`
 
@@ -125,7 +126,7 @@ OPTIONS
   --user-id=user-id                                                                        Id for user to collaborate
 ```
 
-_See code: [src/commands/files/collaborations/add.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/collaborations/add.js)_
+_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/collaborations/add.js)_
 
 ## `box files:comments ID`
 
@@ -156,7 +157,7 @@ ALIASES
   $ box comments:list
 ```
 
-_See code: [src/commands/files/comments.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/comments.js)_
+_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/comments.js)_
 
 ## `box files:copy ID PARENTID`
 
@@ -188,7 +189,7 @@ OPTIONS
   --version=version                      File version ID if you want to copy a specific file version
 ```
 
-_See code: [src/commands/files/copy.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/copy.js)_
+_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/copy.js)_
 
 ## `box files:delete ID`
 
@@ -218,7 +219,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/delete.js)_
+_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/delete.js)_
 
 ## `box files:download ID`
 
@@ -248,7 +249,7 @@ OPTIONS
   --version=version                      File version ID of the specific file version to download
 ```
 
-_See code: [src/commands/files/download.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/download.js)_
+_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/download.js)_
 
 ## `box files:get ID`
 
@@ -276,7 +277,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/get.js)_
+_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/get.js)_
 
 ## `box files:lock ID`
 
@@ -317,7 +318,7 @@ ALIASES
   $ box files:update-lock
 ```
 
-_See code: [src/commands/files/lock.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/lock.js)_
+_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/lock.js)_
 
 ## `box files:metadata ID`
 
@@ -348,7 +349,7 @@ ALIASES
   $ box files:metadata:get-all
 ```
 
-_See code: [src/commands/files/metadata/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/metadata/index.js)_
+_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/index.js)_
 
 ## `box files:metadata:add ID`
 
@@ -390,7 +391,7 @@ ALIASES
   $ box files:metadata:create
 ```
 
-_See code: [src/commands/files/metadata/add.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/metadata/add.js)_
+_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/add.js)_
 
 ## `box files:metadata:get ID`
 
@@ -420,7 +421,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to retrieve
 ```
 
-_See code: [src/commands/files/metadata/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/metadata/get.js)_
+_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/get.js)_
 
 ## `box files:metadata:remove ID`
 
@@ -453,7 +454,46 @@ ALIASES
   $ box files:metadata:delete
 ```
 
-_See code: [src/commands/files/metadata/remove.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/metadata/remove.js)_
+_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/remove.js)_
+
+## `box files:metadata:set ID`
+
+Set metadata on a file
+
+```
+USAGE
+  $ box files:metadata:set ID
+
+ARGUMENTS
+  ID  ID of the file to add metadata to
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+
+  --data=data                            (required) Metadata key and value, in the form "key=value".  Note: For float
+                                         type, use "f" on end of digits: key2=1234.50f
+
+  --fields=fields                        Comma separated list of fields to show
+
+  --json                                 Output formatted JSON
+
+  --no-color                             Turn off colors for logging
+
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+  --scope=scope                          [default: enterprise] The scope of the metadata template to use
+
+  --template-key=template-key            (required) The key of the metadata template to use
+```
+
+_See code: [src/commands/files/metadata/set.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/set.js)_
 
 ## `box files:metadata:update ID`
 
@@ -511,7 +551,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to update against
 ```
 
-_See code: [src/commands/files/metadata/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/metadata/update.js)_
+_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/metadata/update.js)_
 
 ## `box files:move ID PARENTID`
 
@@ -541,7 +581,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/move.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/move.js)_
+_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/move.js)_
 
 ## `box files:rename ID NAME`
 
@@ -572,7 +612,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/rename.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/rename.js)_
+_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/rename.js)_
 
 ## `box files:share ID`
 
@@ -611,7 +651,7 @@ ALIASES
   $ box files:shared-links:update
 ```
 
-_See code: [src/commands/files/share.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/share.js)_
+_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/share.js)_
 
 ## `box files:tasks ID`
 
@@ -642,7 +682,7 @@ ALIASES
   $ box files:tasks:list
 ```
 
-_See code: [src/commands/files/tasks/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/tasks/index.js)_
+_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/tasks/index.js)_
 
 ## `box files:unlock ID`
 
@@ -670,7 +710,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/unlock.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/unlock.js)_
+_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/unlock.js)_
 
 ## `box files:unshare ID`
 
@@ -701,7 +741,7 @@ ALIASES
   $ box files:shared-links:delete
 ```
 
-_See code: [src/commands/files/unshare.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/unshare.js)_
+_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/unshare.js)_
 
 ## `box files:update ID`
 
@@ -733,7 +773,7 @@ OPTIONS
   --tags=tags                            Set tags on the file, specified as comma-separated tags
 ```
 
-_See code: [src/commands/files/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/update.js)_
+_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/update.js)_
 
 ## `box files:upload PATH`
 
@@ -784,7 +824,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/files/upload.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/upload.js)_
+_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/upload.js)_
 
 ## `box files:versions FILEID`
 
@@ -815,7 +855,7 @@ ALIASES
   $ box files:versions:list
 ```
 
-_See code: [src/commands/files/versions/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/versions/index.js)_
+_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/versions/index.js)_
 
 ## `box files:versions:delete FILEID FILEVERSIONID`
 
@@ -845,7 +885,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/versions/delete.js)_
+_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/versions/delete.js)_
 
 ## `box files:versions:download FILEID FILEVERSIONID`
 
@@ -875,7 +915,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/download.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/versions/download.js)_
+_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/versions/download.js)_
 
 ## `box files:versions:promote FILEID FILEVERSIONID`
 
@@ -904,7 +944,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/promote.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/versions/promote.js)_
+_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/versions/promote.js)_
 
 ## `box files:versions:upload FILEID PATH`
 
@@ -942,4 +982,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/files/versions/upload.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/files/versions/upload.js)_
+_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/files/versions/upload.js)_

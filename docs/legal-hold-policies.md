@@ -39,7 +39,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/index.js)_
+_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/index.js)_
 
 ## `box legal-hold-policies:assign POLICYID`
 
@@ -69,7 +69,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path           Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assign.js)_
+_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/assign.js)_
 
 ## `box legal-hold-policies:assignments ID`
 
@@ -99,7 +99,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path           Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/index.js)_
+_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/assignments/index.js)_
 
 ## `box legal-hold-policies:assignments:delete ID`
 
@@ -127,7 +127,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/delete.js)_
+_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/assignments/delete.js)_
 
 ## `box legal-hold-policies:assignments:get ID`
 
@@ -155,7 +155,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/get.js)_
+_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/assignments/get.js)_
 
 ## `box legal-hold-policies:create POLICYNAME`
 
@@ -198,7 +198,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/create.js)_
+_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/create.js)_
 
 ## `box legal-hold-policies:delete ID`
 
@@ -226,7 +226,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/delete.js)_
+_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/delete.js)_
 
 ## `box legal-hold-policies:file-version-holds ID`
 
@@ -254,7 +254,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
 
 ## `box legal-hold-policies:file-version-holds:get ID`
 
@@ -282,7 +282,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
 
 ## `box legal-hold-policies:get ID`
 
@@ -310,7 +310,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/get.js)_
+_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/get.js)_
 
 ## `box legal-hold-policies:update ID`
 
@@ -341,4 +341,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/legal-hold-policies/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/update.js)_
+_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/legal-hold-policies/update.js)_
