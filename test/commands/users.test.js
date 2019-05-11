@@ -56,6 +56,27 @@ describe('Users', () => {
 				.it('should add a new email alias to a user (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.post(`/2.0/users/${userId}/email_aliases`, {
+						...expectedBody,
+						is_confirmed: true,
+					})
+					.reply(201, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					userId,
+					email,
+					'--confirm',
+					'--json',
+					'--token=test'
+				])
+				.it('should auto-confirm email alias when --confirm flag is passed', ctx => {
+					assert.equal(ctx.stdout, fixture);
+				});
 		});
 	});
 
