@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.0 [2019-05-23]
+
+- Added `--confirm` flag to the `box users:email-aliases:add` command to automatically confirm the email alias
+- Added `--restrict-to-enterprise` flag to the `box folders:update` command to restrict collaboration on the folder
+  to the owner's enterprise
+- Fixed a bug in the `box folders:update` command where the `--upload-email-access` flag would not correctly set
+  the folder upload email access level
+
 ## 2.2.0 [2019-04-30]
 
 - Added `--sort` and `--direction` flags to `box search` to control the sort order of the search results
@@ -23,7 +31,7 @@
       up to `limit` events will be returned along with the next stream position
     - `box events:poll` now correctly polls for new events
 
-## 2.0.0
+## 2.0.0 [2018-12-13]
 
 ### Features and Enhancements
 - __Full API parity:__ The new version of the CLI supports all available API endpoints and parameters
@@ -146,7 +154,7 @@
 - Added new feature on all commands for using an individual token. Add the `--token` option to perform an individual command with the Box CLI using a specific token you provide. The feature is most useful when paired with the Developer Token you can generate through the Box Developer Console. When working with an application you create in the Box Developer Console, you will not need to authorize the application into a Box Enterprise before working with the Developer Token. For example usage: `box users get me --token <token_string>`. Certain commands may fail based on the permissions of the user to which the token you use belongs.
 - Fixed a bug preventing `previewer` being used when adding or updating a collaboration.
 - Added the following commands: `box collaborations delete`, `box folders collaborations delete`, `box files collaborations delete`.
-- Improved error messaging for failure on registering a configuration file and private key file with the Box CLI when creating a new CLI `environment`. 
+- Improved error messaging for failure on registering a configuration file and private key file with the Box CLI when creating a new CLI `environment`.
 - Added `--disable-file-path-translation` to the following commands: `box configure environments add`, `box configure environments update-config-file-path`, `box configure environments update-private-key-path`. This option ignores any additional processing on trying to resolve the file paths you provide when creating and updating Box CLI `environments`.
 - Fixed visual bug with upload progress tracker.
 - Updated Box .Net SDK to v3.3.0.
