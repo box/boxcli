@@ -46,7 +46,7 @@ ALIASES
   $ box users:list
 ```
 
-_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/index.js)_
+_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/index.js)_
 
 ## `box users:create NAME [LOGIN]`
 
@@ -128,7 +128,7 @@ OPTIONS
                                                                              tz database timezones
 ```
 
-_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/create.js)_
+_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/create.js)_
 
 ## `box users:delete ID`
 
@@ -158,7 +158,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/delete.js)_
+_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/delete.js)_
 
 ## `box users:email-aliases USERID`
 
@@ -189,7 +189,7 @@ ALIASES
   $ box users:get-email-aliases
 ```
 
-_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/email-aliases/index.js)_
+_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/email-aliases/index.js)_
 
 ## `box users:email-aliases:add USERID EMAIL`
 
@@ -211,17 +211,25 @@ OPTIONS
   -y, --yes                              Automatically respond yes to all confirmation prompts
   --as-user=as-user                      Provide an ID for a user
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+
+  --[no-]confirm                         Whether or not to confirm the email alias.  Only Admins may automatically
+                                         confirm an alias.
+
   --csv                                  Output formatted CSV
+
   --fields=fields                        Comma separated list of fields to show
+
   --json                                 Output formatted JSON
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 ALIASES
   $ box users:add-email-alias
 ```
 
-_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/email-aliases/add.js)_
+_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/email-aliases/add.js)_
 
 ## `box users:email-aliases:remove USERID ALIASID`
 
@@ -253,7 +261,7 @@ ALIASES
   $ box users:delete-email-alias
 ```
 
-_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/email-aliases/remove.js)_
+_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/email-aliases/remove.js)_
 
 ## `box users:get [ID]`
 
@@ -281,7 +289,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/get.js)_
+_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/get.js)_
 
 ## `box users:groups ID`
 
@@ -312,7 +320,7 @@ ALIASES
   $ box users:list-groups
 ```
 
-_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/groups.js)_
+_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/groups.js)_
 
 ## `box users:invite EMAIL ENTERPRISEID`
 
@@ -344,7 +352,7 @@ ALIASES
   $ box users:invite-user
 ```
 
-_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/invite.js)_
+_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/invite.js)_
 
 ## `box users:transfer-content USERID NEWUSERID`
 
@@ -377,7 +385,7 @@ ALIASES
   $ box users:move-root-content
 ```
 
-_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/transfer-content.js)_
+_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/transfer-content.js)_
 
 ## `box users:update ID`
 
@@ -464,4 +472,4 @@ OPTIONS
                                                                              tz database timezones
 ```
 
-_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/users/update.js)_
+_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/users/update.js)_

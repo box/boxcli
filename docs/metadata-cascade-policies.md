@@ -35,7 +35,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path      Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/metadata-cascade-policies/index.js)_
+_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-cascade-policies/index.js)_
 
 ## `box metadata-cascade-policies:delete ID`
 
@@ -63,7 +63,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/metadata-cascade-policies/delete.js)_
+_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-cascade-policies/delete.js)_
 
 ## `box metadata-cascade-policies:force-apply ID`
 
@@ -92,7 +92,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/metadata-cascade-policies/force-apply.js)_
+_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-cascade-policies/force-apply.js)_
 
 ## `box metadata-cascade-policies:get ID`
 
@@ -120,4 +120,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/metadata-cascade-policies/get.js)_
+_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-cascade-policies/get.js)_

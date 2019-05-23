@@ -32,7 +32,7 @@ ALIASES
   $ box trash:list
 ```
 
-_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/trash/index.js)_
+_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/trash/index.js)_
 
 ## `box trash:delete TYPE ID`
 
@@ -61,4 +61,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/trash/delete.js)_
+_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/trash/delete.js)_

@@ -38,7 +38,7 @@ ALIASES
   $ box folders:collaborations:delete
 ```
 
-_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collaborations/delete.js)_
+_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaborations/delete.js)_
 
 ## `box collaborations:get ID`
 
@@ -66,7 +66,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collaborations/get.js)_
+_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaborations/get.js)_
 
 ## `box collaborations:pending`
 
@@ -94,7 +94,7 @@ ALIASES
   $ box collaborations:get-pending
 ```
 
-_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collaborations/pending.js)_
+_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaborations/pending.js)_
 
 ## `box collaborations:update ID`
 
@@ -161,4 +161,4 @@ ALIASES
   $ box folders:collaborations:update
 ```
 
-_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/collaborations/update.js)_
+_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaborations/update.js)_

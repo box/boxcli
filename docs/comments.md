@@ -39,7 +39,7 @@ OPTIONS
                                          to mention the user
 ```
 
-_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/comments/create.js)_
+_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/create.js)_
 
 ## `box comments:delete ID`
 
@@ -67,7 +67,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/comments/delete.js)_
+_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/delete.js)_
 
 ## `box comments:get ID`
 
@@ -95,7 +95,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/comments/get.js)_
+_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/get.js)_
 
 ## `box comments:reply ID`
 
@@ -127,7 +127,7 @@ OPTIONS
                                          to mention the user
 ```
 
-_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/comments/reply.js)_
+_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/reply.js)_
 
 ## `box comments:update ID`
 
@@ -157,4 +157,4 @@ OPTIONS
   --tagged-message=tagged-message        The tagged text of the comment
 ```
 
-_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/comments/update.js)_
+_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/update.js)_

@@ -53,7 +53,7 @@ ALIASES
   $ box folders:collaborations:list
 ```
 
-_See code: [src/commands/folders/collaborations/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/collaborations/index.js)_
+_See code: [src/commands/folders/collaborations/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/collaborations/index.js)_
 
 ## `box folders:collaborations:add ID`
 
@@ -119,7 +119,7 @@ OPTIONS
   --user-id=user-id                                                                        Id for user to collaborate
 ```
 
-_See code: [src/commands/folders/collaborations/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/collaborations/add.js)_
+_See code: [src/commands/folders/collaborations/add.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/collaborations/add.js)_
 
 ## `box folders:copy ID PARENTID`
 
@@ -150,7 +150,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/copy.js)_
+_See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/copy.js)_
 
 ## `box folders:create PARENTID NAME`
 
@@ -181,7 +181,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/create.js)_
+_See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/create.js)_
 
 ## `box folders:delete ID`
 
@@ -212,7 +212,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/delete.js)_
+_See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/delete.js)_
 
 ## `box folders:download ID`
 
@@ -243,7 +243,7 @@ OPTIONS
   --zip                                  Download the folder into a single .zip archive
 ```
 
-_See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/download.js)_
+_See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/download.js)_
 
 ## `box folders:get ID`
 
@@ -271,7 +271,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/get.js)_
+_See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/get.js)_
 
 ## `box folders:items ID`
 
@@ -304,7 +304,7 @@ ALIASES
   $ box folders:list-items
 ```
 
-_See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/items.js)_
+_See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/items.js)_
 
 ## `box folders:metadata ID`
 
@@ -335,7 +335,7 @@ ALIASES
   $ box folders:metadata:get-all
 ```
 
-_See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/index.js)_
+_See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/index.js)_
 
 ## `box folders:metadata:add ID`
 
@@ -377,7 +377,7 @@ ALIASES
   $ box folders:metadata:create
 ```
 
-_See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/add.js)_
+_See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/add.js)_
 
 ## `box folders:metadata:get ID`
 
@@ -407,7 +407,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to retrieve
 ```
 
-_See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/get.js)_
+_See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/get.js)_
 
 ## `box folders:metadata:remove ID`
 
@@ -440,7 +440,7 @@ ALIASES
   $ box folders:metadata:delete
 ```
 
-_See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/remove.js)_
+_See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/remove.js)_
 
 ## `box folders:metadata:set ID`
 
@@ -479,7 +479,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to use
 ```
 
-_See code: [src/commands/folders/metadata/set.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/set.js)_
+_See code: [src/commands/folders/metadata/set.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/set.js)_
 
 ## `box folders:metadata:update ID`
 
@@ -537,7 +537,7 @@ OPTIONS
   --template-key=template-key            (required) The key of the metadata template to update against
 ```
 
-_See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/metadata/update.js)_
+_See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/metadata/update.js)_
 
 ## `box folders:move ID PARENTID`
 
@@ -567,7 +567,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/move.js)_
+_See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/move.js)_
 
 ## `box folders:rename ID NAME`
 
@@ -598,7 +598,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/rename.js)_
+_See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/rename.js)_
 
 ## `box folders:share ID`
 
@@ -637,7 +637,7 @@ ALIASES
   $ box folders:shared-links:update
 ```
 
-_See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/share.js)_
+_See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/share.js)_
 
 ## `box folders:unshare ID`
 
@@ -668,7 +668,7 @@ ALIASES
   $ box folders:shared-links:delete
 ```
 
-_See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/unshare.js)_
+_See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/unshare.js)_
 
 ## `box folders:update ID`
 
@@ -697,13 +697,20 @@ OPTIONS
   --name=name                               New name for folder
   --no-color                                Turn off colors for logging
   --[no-]restrict-collaboration             Restrict collaboration so only owners can invite new collaborators
+
+  --[no-]restrict-to-enterprise             Restrict collaboration so only users in the folder owner's enterprise can be
+                                            added
+
   --save-to-file-path=save-to-file-path     Override default file path to save report
+
   --[no-]sync                               Whether the folder is synced to desktop
+
   --tags=tags                               Comma seperated tags
+
   --upload-email-access=open|collaborators  Upload email access level
 ```
 
-_See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/update.js)_
+_See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/update.js)_
 
 ## `box folders:upload PATH`
 
@@ -734,4 +741,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/folders/upload.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/folders/upload.js)_
+_See code: [src/commands/folders/upload.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/folders/upload.js)_

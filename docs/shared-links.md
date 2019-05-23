@@ -32,4 +32,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/shared-links/get.js)_
+_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/shared-links/get.js)_

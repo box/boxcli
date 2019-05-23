@@ -78,4 +78,4 @@ OPTIONS
                                                  0t, like 5w for 5 weeks
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/search.js)_

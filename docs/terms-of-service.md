@@ -34,7 +34,7 @@ OPTIONS
   --type=managed|external                Filter by terms of service type
 ```
 
-_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/index.js)_
+_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/index.js)_
 
 ## `box terms-of-service:create`
 
@@ -62,7 +62,7 @@ OPTIONS
   --type=managed|external                (required) Type of terms of service
 ```
 
-_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/create.js)_
+_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/create.js)_
 
 ## `box terms-of-service:get ID`
 
@@ -90,7 +90,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/get.js)_
+_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/get.js)_
 
 ## `box terms-of-service:get-user-status TOSID`
 
@@ -119,7 +119,7 @@ OPTIONS
   --user-id=user-id                      ID for a user to get status for; defaults to the current user ID
 ```
 
-_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/get-user-status.js)_
+_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/get-user-status.js)_
 
 ## `box terms-of-service:set-user-status ID`
 
@@ -150,7 +150,7 @@ OPTIONS
   --user-id=user-id                      ID of the user to set status for; defaults to the current user
 ```
 
-_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/set-user-status.js)_
+_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/set-user-status.js)_
 
 ## `box terms-of-service:update ID`
 
@@ -180,4 +180,4 @@ OPTIONS
   --text=text                            Text for the terms of service
 ```
 
-_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.2.0/src/commands/terms-of-service/update.js)_
+_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/terms-of-service/update.js)_
