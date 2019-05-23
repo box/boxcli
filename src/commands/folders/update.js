@@ -14,13 +14,16 @@ class FoldersUpdateCommand extends BoxCommand {
 		if (flags.hasOwnProperty('description')) {
 			updates.description = flags.description;
 		}
-		if (flags['folder-upload-email-access']) {
+		if (flags['upload-email-access']) {
 			updates.folder_upload_email = {
-				access: flags['folder-upload-email-access']
+				access: flags['upload-email-access']
 			};
 		}
 		if (flags.hasOwnProperty('restrict-collaboration')) {
 			updates.can_non_owners_invite = flags['restrict-collaboration'];
+		}
+		if (flags.hasOwnProperty('restrict-to-enterprise')) {
+			updates.is_collaboration_restricted_to_enterprise = flags['restrict-to-enterprise'];
 		}
 		if (flags.tags) {
 			updates.tags = (flags.tags).split(',');
@@ -59,6 +62,10 @@ FoldersUpdateCommand.flags = {
 	'restrict-collaboration': flags.boolean({
 		description: 'Restrict collaboration so only owners can invite new collaborators',
 		allowNo: true
+	}),
+	'restrict-to-enterprise': flags.boolean({
+		description: 'Restrict collaboration so only users in the folder owner\'s enterprise can be added',
+		allowNo: true,
 	}),
 	etag: flags.string({ description: 'Only apply updates if the etag value matches' }),
 };
