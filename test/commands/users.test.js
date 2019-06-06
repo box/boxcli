@@ -722,7 +722,7 @@ describe('Users', () => {
 				'--id-only',
 				'--token=test'
 			])
-			.it('should create a new app user with external ID when App User flags flag is passed', ctx => {
+			.it('should create a new app user with external ID when App User flags are passed', ctx => {
 				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
 			});
 
