@@ -62,6 +62,9 @@ class UsersUpdateCommand extends BoxCommand {
 		if (flags.name) {
 			updates.name = flags.name;
 		}
+		if (flags['external-id']) {
+			updates.external_app_user_id = flags['external-id'];
+		}
 
 		let user = await this.client.users.update(args.id, updates);
 		await this.output(user);
@@ -143,6 +146,9 @@ UsersUpdateCommand.flags = {
 	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
 	'avatar-url': flags.string({ description: 'URL of the user\'s avatar image' }),
 	login: flags.string({ description: 'Change the user\'s primary email address used for logging into Box '}),
+	'external-id': flags.string({
+		description: 'External ID for app users',
+	}),
 };
 
 UsersUpdateCommand.args = [

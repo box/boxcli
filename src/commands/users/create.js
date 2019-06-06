@@ -55,6 +55,9 @@ class UsersCreateCommand extends BoxCommand {
 		if (flags['avatar-url']) {
 			options.avatar_url = flags['avatar-url'];
 		}
+		if (flags['external-id']) {
+			options.external_app_user_id = flags['external-id'];
+		}
 
 		if (flags['app-user']) {
 			user = await this.client.enterprise.addAppUser(args.name, options);
@@ -74,12 +77,16 @@ UsersCreateCommand.flags = {
 	'app-user': flags.boolean({
 		description: 'Set this user as an app user'
 	}),
+	'external-id': flags.string({
+		description: 'External ID for app users',
+		dependsOn: ['app-user'],
+	}),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command'
 	}),
 	'sync-enable': flags.boolean({
 		description: 'Enable Box Sync for this user',
-		exclusion: ['sync-disable'],
+		exclusive: ['sync-disable'],
 		allowNo: true
 	}),
 	'exempt-from-device-limits': flags.boolean({
