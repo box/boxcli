@@ -706,7 +706,11 @@ describe('Users', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/users', { name, is_platform_access_only: true })
+				.post('/2.0/users', {
+					name,
+					is_platform_access_only: true,
+					external_app_user_id: 'foo',
+				})
 				.reply(201, fixture)
 			)
 			.stdout()
@@ -714,10 +718,11 @@ describe('Users', () => {
 				'users:create',
 				name,
 				'--app-user',
+				'--external-id=foo',
 				'--id-only',
 				'--token=test'
 			])
-			.it('should create a new app user when --app-user flag is passed', ctx => {
+			.it('should create a new app user with external ID when App User flags are passed', ctx => {
 				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
 			});
 
@@ -863,6 +868,10 @@ describe('Users', () => {
 			'name flag': [
 				'--name=Bob Smith',
 				{name: 'Bob Smith'}
+			],
+			'external ID flag': [
+				'--external-id=foo',
+				{external_app_user_id: 'foo'}
 			]
 		}, function(flag, body) {
 
