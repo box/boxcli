@@ -16,6 +16,7 @@ List collaboration whitelist entries
 
 List collaboration whitelist entries
 
+<!-- sample get_collaboration_whitelist_entries -->
 ```
 USAGE
   $ box collaboration-whitelist
@@ -41,6 +42,7 @@ _See code: [src/commands/collaboration-whitelist/index.js](https://github.com/bo
 
 Add a collaboration whitelist entry
 
+<!-- sample post_collaboration_whitelist_entries -->
 ```
 USAGE
   $ box collaboration-whitelist:add DOMAIN
@@ -70,6 +72,7 @@ _See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/
 
 Delete a collaboration whitelist entry
 
+<!-- sample delete_collaboration_whitelist_entries_id -->
 ```
 USAGE
   $ box collaboration-whitelist:delete ID
@@ -98,6 +101,7 @@ _See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/b
 
 List collaboration whitelist exemptions
 
+<!-- sample get_collaboration_whitelist_exempt_targets -->
 ```
 USAGE
   $ box collaboration-whitelist:exemptions
@@ -123,6 +127,7 @@ _See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://gi
 
 Exempt a user from the collaboration whitelist
 
+<!-- sample post_collaboration_whitelist_exempt_targets -->
 ```
 USAGE
   $ box collaboration-whitelist:exemptions:create USERID
@@ -151,6 +156,7 @@ _See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://g
 
 Delete a collaboration whitelist exemption
 
+<!-- sample delete_collaboration_whitelist_exempt_targets_id -->
 ```
 USAGE
   $ box collaboration-whitelist:exemptions:delete ID
@@ -179,6 +185,7 @@ _See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://g
 
 Get a collaboration whitelist exemption
 
+<!-- sample get_collaboration_whitelist_exempt_targets_id -->
 ```
 USAGE
   $ box collaboration-whitelist:exemptions:get ID
@@ -207,6 +214,7 @@ _See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://gith
 
 Get a collaboration whitelist entry
 
+<!-- sample get_collaboration_whitelist_entries_id -->
 ```
 USAGE
   $ box collaboration-whitelist:get ID

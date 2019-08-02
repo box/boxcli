@@ -14,6 +14,7 @@ List storage policies
 
 List storage policies
 
+<!-- sample get_storage_policies -->
 ```
 USAGE
   $ box storage-policies
@@ -42,6 +43,7 @@ _See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcl
 
 Assign a storage policy
 
+<!-- sample post_storage_policy_assignments -->
 ```
 USAGE
   $ box storage-policies:assign STORAGEPOLICYID USERID
@@ -71,6 +73,7 @@ _See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxc
 
 Get information on a storage policy assignment
 
+<!-- sample get_storage_policy_assignments_id -->
 ```
 USAGE
   $ box storage-policies:assignments:get ID
@@ -99,6 +102,7 @@ _See code: [src/commands/storage-policies/assignments/get.js](https://github.com
 
 Look up which storage policy an object is assigned to
 
+<!-- sample get_storage_policy_assignments_id get_storage_policy -->
 ```
 USAGE
   $ box storage-policies:assignments:lookup ID
@@ -128,6 +132,7 @@ _See code: [src/commands/storage-policies/assignments/lookup.js](https://github.
 
 Delete a storage policy assignment
 
+<!-- sample delete_storage_policy_assignments_id -->
 ```
 USAGE
   $ box storage-policies:assignments:remove ID
@@ -156,6 +161,7 @@ _See code: [src/commands/storage-policies/assignments/remove.js](https://github.
 
 Get information on a storage policy
 
+<!-- sample get_storage_policies_id -->
 ```
 USAGE
   $ box storage-policies:get ID

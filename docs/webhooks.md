@@ -13,6 +13,7 @@ List all webhooks
 
 List all webhooks
 
+<!-- sample get_webhooks -->
 ```
 USAGE
   $ box webhooks
@@ -41,6 +42,7 @@ _See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v
 
 Create a new webhook
 
+<!-- sample post_webhooks -->
 ```
 USAGE
   $ box webhooks:create TARGETTYPE TARGETID
@@ -88,6 +90,7 @@ _See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/
 
 Delete a webhook
 
+<!-- sample delete_webhooks_id -->
 ```
 USAGE
   $ box webhooks:delete ID
@@ -116,6 +119,7 @@ _See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/
 
 Get information about a webhook
 
+<!-- sample get_webhooks_id -->
 ```
 USAGE
   $ box webhooks:get ID
@@ -144,6 +148,7 @@ _See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.
 
 Update a webhook
 
+<!-- sample put_webhooks_id -->
 ```
 USAGE
   $ box webhooks:update ID

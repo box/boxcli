@@ -28,6 +28,7 @@ Manage folders
 
 List all collaborations on a folder
 
+<!-- sample get_folders_id_collaborations -->
 ```
 USAGE
   $ box folders:collaborations ID
@@ -59,6 +60,7 @@ _See code: [src/commands/folders/collaborations/index.js](https://github.com/box
 
 Create a collaboration for a folder
 
+<!-- sample post_collaborations create_folder_collaboration -->
 ```
 USAGE
   $ box folders:collaborations:add ID
@@ -125,6 +127,7 @@ _See code: [src/commands/folders/collaborations/add.js](https://github.com/box/b
 
 Copy a folder to a different folder
 
+<!-- sample post_folders_id_copy -->
 ```
 USAGE
   $ box folders:copy ID PARENTID
@@ -156,6 +159,7 @@ _See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.
 
 Create a new folder
 
+<!-- sample post_folders -->
 ```
 USAGE
   $ box folders:create PARENTID NAME
@@ -187,6 +191,7 @@ _See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v
 
 Delete a folder
 
+<!-- sample delete_folders_id -->
 ```
 USAGE
   $ box folders:delete ID
@@ -218,6 +223,7 @@ _See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v
 
 Download a folder
 
+<!-- sample get_files_id_content download_folder -->
 ```
 USAGE
   $ box folders:download ID
@@ -249,6 +255,7 @@ _See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob
 
 Get information about a folder
 
+<!-- sample get_folders_id -->
 ```
 USAGE
   $ box folders:get ID
@@ -277,6 +284,7 @@ _See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.3
 
 List items in a folder
 
+<!-- sample get_folders_id_items -->
 ```
 USAGE
   $ box folders:items ID
@@ -310,6 +318,7 @@ _See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2
 
 Get all metadata on a folder
 
+<!-- sample get_folders_id_metadata -->
 ```
 USAGE
   $ box folders:metadata ID
@@ -341,6 +350,7 @@ _See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcl
 
 Add metadata to a folder
 
+<!-- sample post_folders_id_metadata_id_id -->
 ```
 USAGE
   $ box folders:metadata:add ID
@@ -383,6 +393,7 @@ _See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/
 
 Get information about a metadata object
 
+<!-- sample get_folders_id_metadata_id_id -->
 ```
 USAGE
   $ box folders:metadata:get ID
@@ -413,6 +424,7 @@ _See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/
 
 Delete metadata from a folder
 
+<!-- sample delete_folders_id_metadata_id_id -->
 ```
 USAGE
   $ box folders:metadata:remove ID
@@ -446,6 +458,7 @@ _See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxc
 
 Set metadata on a folder
 
+<!-- sample post_folders_id_metadata_id_id set_field -->
 ```
 USAGE
   $ box folders:metadata:set ID
@@ -485,6 +498,7 @@ _See code: [src/commands/folders/metadata/set.js](https://github.com/box/boxcli/
 
 Update the metadata attached to a folder
 
+<!-- sample put_folders_id_metadata_id_id -->
 ```
 USAGE
   $ box folders:metadata:update ID
@@ -543,6 +557,7 @@ _See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxc
 
 Move a folder to a different folder
 
+<!-- sample put_folders_id move -->
 ```
 USAGE
   $ box folders:move ID PARENTID
@@ -573,6 +588,7 @@ _See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.
 
 Rename a folder
 
+<!-- sample put_folders_id rename -->
 ```
 USAGE
   $ box folders:rename ID NAME
@@ -604,6 +620,7 @@ _See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v
 
 Create a shared link for a folder
 
+<!-- sample put_folders_id create_shared_link -->
 ```
 USAGE
   $ box folders:share ID
@@ -643,6 +660,7 @@ _See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2
 
 Delete a shared link for a folder
 
+<!-- sample put_folders_id remove_shared_link -->
 ```
 USAGE
   $ box folders:unshare ID
@@ -674,6 +692,7 @@ _See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/
 
 Update a folder
 
+<!-- sample put_folders_id -->
 ```
 USAGE
   $ box folders:update ID
@@ -716,6 +735,7 @@ _See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v
 
 Upload a folder
 
+<!-- sample put_files_content upload_folder -->
 ```
 USAGE
   $ box folders:upload PATH

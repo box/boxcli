@@ -14,6 +14,7 @@ Get all metadata templates in your Enterprise
 
 Get all metadata templates in your Enterprise
 
+<!-- sample get_metadata_templates_enterprise -->
 ```
 USAGE
   $ box metadata-templates
@@ -42,6 +43,7 @@ _See code: [src/commands/metadata-templates/index.js](https://github.com/box/box
 
 Create a new metadata cascade policy on a folder
 
+<!-- sample post_folders_id_metadata_id_id -->
 ```
 USAGE
   $ box metadata-templates:cascade TEMPLATEKEY
@@ -73,6 +75,7 @@ _See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/b
 
 Create a new metadata template
 
+<!-- sample post_metadata_templates_schema -->
 ```
 USAGE
   $ box metadata-templates:create
@@ -113,6 +116,7 @@ _See code: [src/commands/metadata-templates/create.js](https://github.com/box/bo
 
 Delete a metadata template
 
+<!-- sample delete_metadata_templates_id_id_schema -->
 ```
 USAGE
   $ box metadata-templates:delete TEMPLATEKEY
@@ -142,6 +146,7 @@ _See code: [src/commands/metadata-templates/delete.js](https://github.com/box/bo
 
 Get information about a metadata template
 
+<!-- sample get_metadata_templates_id_id_schema -->
 ```
 USAGE
   $ box metadata-templates:get TEMPLATEKEY
@@ -171,6 +176,7 @@ _See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcl
 
 Update a metadata template
 
+<!-- sample put_metadata_templates_id_id_schema -->
 ```
 USAGE
   $ box metadata-templates:update TEMPLATEKEY

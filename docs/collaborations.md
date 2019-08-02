@@ -12,6 +12,7 @@ Manage collaborations
 
 Remove a collaboration
 
+<!-- sample delete_collaborations_id -->
 ```
 USAGE
   $ box collaborations:delete ID
@@ -44,6 +45,7 @@ _See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli
 
 Get an individual collaboration
 
+<!-- sample get_collaborations_id -->
 ```
 USAGE
   $ box collaborations:get ID
@@ -72,6 +74,7 @@ _See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/bl
 
 List all pending collaborations for a user
 
+<!-- sample get_collaborations -->
 ```
 USAGE
   $ box collaborations:pending
@@ -100,6 +103,7 @@ _See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcl
 
 Update a collaboration
 
+<!-- sample put_collaborations_id -->
 ```
 USAGE
   $ box collaborations:update ID

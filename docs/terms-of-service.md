@@ -14,6 +14,7 @@ List terms of services for your enterprise
 
 List terms of services for your enterprise
 
+<!-- sample get_terms_of_services -->
 ```
 USAGE
   $ box terms-of-service
@@ -40,6 +41,7 @@ _See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcl
 
 Create a terms of service
 
+<!-- sample post_terms_of_services -->
 ```
 USAGE
   $ box terms-of-service:create
@@ -68,6 +70,7 @@ _See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxc
 
 Get information on a terms of service
 
+<!-- sample get_terms_of_services_id -->
 ```
 USAGE
   $ box terms-of-service:get ID
@@ -96,6 +99,7 @@ _See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/
 
 Get a user's status on a terms of service
 
+<!-- sample get_terms_of_service_user_statuses -->
 ```
 USAGE
   $ box terms-of-service:get-user-status TOSID
@@ -125,6 +129,7 @@ _See code: [src/commands/terms-of-service/get-user-status.js](https://github.com
 
 Set a user's status on a terms of service with a terms of service Id
 
+<!-- sample post_terms_of_service_user_statuses -->
 ```
 USAGE
   $ box terms-of-service:set-user-status ID
@@ -156,6 +161,7 @@ _See code: [src/commands/terms-of-service/set-user-status.js](https://github.com
 
 Update a terms of service
 
+<!-- sample put_terms_of_services_id -->
 ```
 USAGE
   $ box terms-of-service:update ID

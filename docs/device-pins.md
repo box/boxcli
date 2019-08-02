@@ -11,6 +11,7 @@ List all the device pins for your enterprise
 
 List all the device pins for your enterprise
 
+<!-- sample get_enterprises_id_device_pinners -->
 ```
 USAGE
   $ box device-pins
@@ -37,6 +38,7 @@ _See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blo
 
 Delete individual device pin
 
+<!-- sample delete_device_pinners_id -->
 ```
 USAGE
   $ box device-pins:delete ID
@@ -65,6 +67,7 @@ _See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/bl
 
 Get information about an individual device pin
 
+<!-- sample get_device_pinners_id -->
 ```
 USAGE
   $ box device-pins:get ID

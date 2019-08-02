@@ -13,6 +13,7 @@ Manage web links
 
 Create a new web link
 
+<!-- sample post_web_links -->
 ```
 USAGE
   $ box web-links:create URL
@@ -44,6 +45,7 @@ _See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob
 
 Delete a web link
 
+<!-- sample delete_web_links_id -->
 ```
 USAGE
   $ box web-links:delete ID
@@ -72,6 +74,7 @@ _See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob
 
 Get information about a web link
 
+<!-- sample get_web_links_id -->
 ```
 USAGE
   $ box web-links:get ID
@@ -100,6 +103,7 @@ _See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2
 
 Move a web link
 
+<!-- sample put_web_links_id move -->
 ```
 USAGE
   $ box web-links:move ID PARENTID
@@ -129,6 +133,7 @@ _See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v
 
 Update a web link
 
+<!-- sample put_web_links_id -->
 ```
 USAGE
   $ box web-links:update ID

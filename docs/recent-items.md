@@ -9,6 +9,7 @@ List information about files accessed in the past 90 days up to a 1000 items
 
 List information about files accessed in the past 90 days up to a 1000 items
 
+<!-- sample get_recent_items -->
 ```
 USAGE
   $ box recent-items

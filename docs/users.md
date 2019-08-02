@@ -19,6 +19,7 @@ List all Box users
 
 List all Box users
 
+<!-- sample get_users -->
 ```
 USAGE
   $ box users
@@ -52,6 +53,7 @@ _See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.3
 
 Create a new Box User
 
+<!-- sample post_users -->
 ```
 USAGE
   $ box users:create NAME [LOGIN]
@@ -134,6 +136,7 @@ _See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.
 
 Delete a Box User
 
+<!-- sample delete_users_id -->
 ```
 USAGE
   $ box users:delete ID
@@ -164,6 +167,7 @@ _See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.
 
 Get all Email Aliases for a User
 
+<!-- sample get_users_id_email_aliases -->
 ```
 USAGE
   $ box users:email-aliases USERID
@@ -195,6 +199,7 @@ _See code: [src/commands/users/email-aliases/index.js](https://github.com/box/bo
 
 Add a new email alias to a user
 
+<!-- sample post_users_id_email_aliases -->
 ```
 USAGE
   $ box users:email-aliases:add USERID EMAIL
@@ -235,6 +240,7 @@ _See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxc
 
 Delete an email alias from a user
 
+<!-- sample delete_users_id_email_aliases_id -->
 ```
 USAGE
   $ box users:email-aliases:remove USERID ALIASID
@@ -267,6 +273,7 @@ _See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/b
 
 Get information about a Box user
 
+<!-- sample get_users_id -->
 ```
 USAGE
   $ box users:get [ID]
@@ -295,6 +302,7 @@ _See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.3.0
 
 List groups a user belongs to
 
+<!-- sample get_users_id_memberships -->
 ```
 USAGE
   $ box users:groups ID
@@ -326,6 +334,7 @@ _See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.
 
 Invite an Existing Box User to Your Enterprise
 
+<!-- sample post_invites -->
 ```
 USAGE
   $ box users:invite EMAIL ENTERPRISEID
@@ -358,6 +367,7 @@ _See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.
 
 Move a user's root content to another user
 
+<!-- sample put_users_id_folders_id -->
 ```
 USAGE
   $ box users:transfer-content USERID NEWUSERID
@@ -391,6 +401,7 @@ _See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcl
 
 Update a Box User
 
+<!-- sample put_users_id -->
 ```
 USAGE
   $ box users:update ID

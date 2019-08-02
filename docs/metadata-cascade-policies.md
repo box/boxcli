@@ -12,6 +12,7 @@ List the metadata cascade policies on a folder
 
 List the metadata cascade policies on a folder
 
+<!-- sample get_metadata_cascade_policies -->
 ```
 USAGE
   $ box metadata-cascade-policies FOLDERID
@@ -41,6 +42,7 @@ _See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/
 
 Delete a metadata cascade policy
 
+<!-- sample delete_metadata_cascade_policies_id -->
 ```
 USAGE
   $ box metadata-cascade-policies:delete ID
@@ -69,6 +71,7 @@ _See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com
 
 Force apply a cascade policy to the existing items in a folder
 
+<!-- sample post_metadata_cascade_policies_id_apply -->
 ```
 USAGE
   $ box metadata-cascade-policies:force-apply ID
@@ -98,6 +101,7 @@ _See code: [src/commands/metadata-cascade-policies/force-apply.js](https://githu
 
 Get information about a metadata cascade policy
 
+<!-- sample get_metadata_cascade_policies_id -->
 ```
 USAGE
   $ box metadata-cascade-policies:get ID

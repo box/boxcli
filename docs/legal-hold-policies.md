@@ -19,6 +19,7 @@ List legal hold policies
 
 List legal hold policies
 
+<!-- sample get_legal_hold_policies -->
 ```
 USAGE
   $ box legal-hold-policies
@@ -45,6 +46,7 @@ _See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/bo
 
 Create a new policy assignment
 
+<!-- sample post_legal_hold_policies -->
 ```
 USAGE
   $ box legal-hold-policies:assign POLICYID
@@ -75,6 +77,7 @@ _See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/b
 
 List policy assignments
 
+<!-- sample get_legal_hold_policy_assignments -->
 ```
 USAGE
   $ box legal-hold-policies:assignments ID
@@ -105,6 +108,7 @@ _See code: [src/commands/legal-hold-policies/assignments/index.js](https://githu
 
 Delete a policy assignment
 
+<!-- sample delete_legal_hold_policy_assignments_id -->
 ```
 USAGE
   $ box legal-hold-policies:assignments:delete ID
@@ -133,6 +137,7 @@ _See code: [src/commands/legal-hold-policies/assignments/delete.js](https://gith
 
 Get information about a policy assignment
 
+<!-- sample get_legal_hold_policy_assignments_id -->
 ```
 USAGE
   $ box legal-hold-policies:assignments:get ID
@@ -161,6 +166,7 @@ _See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.
 
 Create a new legal hold policy
 
+<!-- sample post_legal_hold_policies -->
 ```
 USAGE
   $ box legal-hold-policies:create POLICYNAME
@@ -204,6 +210,7 @@ _See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/b
 
 Delete a legal hold policy
 
+<!-- sample delete_legal_hold_policies_id -->
 ```
 USAGE
   $ box legal-hold-policies:delete ID
@@ -232,6 +239,7 @@ _See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/b
 
 List file version legal holds for a legal hold policy
 
+<!-- sample get_file_version_legal_holds -->
 ```
 USAGE
   $ box legal-hold-policies:file-version-holds ID
@@ -260,6 +268,7 @@ _See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https:
 
 Get information about a file version legal hold
 
+<!-- sample get_file_version_legal_holds_id -->
 ```
 USAGE
   $ box legal-hold-policies:file-version-holds:get ID
@@ -288,6 +297,7 @@ _See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://
 
 Get information about a legal hold policy
 
+<!-- sample get_legal_hold_policies_id -->
 ```
 USAGE
   $ box legal-hold-policies:get ID
@@ -316,6 +326,7 @@ _See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxc
 
 Update a legal hold policy
 
+<!-- sample put_legal_hold_policies_id -->
 ```
 USAGE
   $ box legal-hold-policies:update ID

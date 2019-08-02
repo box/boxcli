@@ -19,6 +19,7 @@ List all groups
 
 List all groups
 
+<!-- sample get_groups -->
 ```
 USAGE
   $ box groups
@@ -47,6 +48,7 @@ _See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v2.
 
 List collaborations for a group
 
+<!-- sample get_groups_id_collaborations -->
 ```
 USAGE
   $ box groups:collaborations ID
@@ -79,6 +81,7 @@ _See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli
 
 Create a group
 
+<!-- sample post_groups -->
 ```
 USAGE
   $ box groups:create NAME
@@ -130,6 +133,7 @@ _See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v2
 
 Delete a group
 
+<!-- sample delete_groups_id -->
 ```
 USAGE
   $ box groups:delete ID
@@ -158,6 +162,7 @@ _See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v2
 
 Get information about a group
 
+<!-- sample get_groups_id -->
 ```
 USAGE
   $ box groups:get ID
@@ -186,6 +191,7 @@ _See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v2.3.
 
 List members of a group
 
+<!-- sample get_groups_id_memberships -->
 ```
 USAGE
   $ box groups:memberships ID
@@ -217,6 +223,7 @@ _See code: [src/commands/groups/memberships/index.js](https://github.com/box/box
 
 Add a user to a group
 
+<!-- sample post_group_memberships -->
 ```
 USAGE
   $ box groups:memberships:add USERID GROUPID
@@ -254,6 +261,7 @@ _See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcl
 
 Get information about a group membership
 
+<!-- sample get_group_memberships_id -->
 ```
 USAGE
   $ box groups:memberships:get ID
@@ -285,6 +293,7 @@ _See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcl
 
 Remove a user from a group
 
+<!-- sample delete_group_memberships_id -->
 ```
 USAGE
   $ box groups:memberships:remove ID
@@ -316,6 +325,7 @@ _See code: [src/commands/groups/memberships/remove.js](https://github.com/box/bo
 
 Update a user's membership to a group
 
+<!-- sample put_group_memberships_id -->
 ```
 USAGE
   $ box groups:memberships:update ID
@@ -352,6 +362,7 @@ _See code: [src/commands/groups/memberships/update.js](https://github.com/box/bo
 
 Update a group
 
+<!-- sample put_groups -->
 ```
 USAGE
   $ box groups:update ID

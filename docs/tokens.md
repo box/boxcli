@@ -11,6 +11,7 @@ Get a token. Returns the service account token by default
 
 Get a token. Returns the service account token by default
 
+<!-- sample post_oauth2_token exchange -->
 ```
 USAGE
   $ box tokens:exchange SCOPE
@@ -34,6 +35,7 @@ _See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/
 
 Get a token. Returns the service account token by default
 
+<!-- sample post_oauth2_token service_account -->
 ```
 USAGE
   $ box tokens:get
@@ -51,6 +53,7 @@ _See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v2.3.
 
 Revoke a token.  The token will no longer be valid for making API calls.
 
+<!-- sample post_oauth2_revoke -->
 ```
 USAGE
   $ box tokens:revoke TOKEN

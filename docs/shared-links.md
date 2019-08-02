@@ -9,6 +9,7 @@ Manage shared links
 
 Get information from a shared item URL
 
+<!-- sample get_shared_items -->
 ```
 USAGE
   $ box shared-links:get URL

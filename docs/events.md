@@ -10,6 +10,7 @@ Get events
 
 Get events
 
+<!-- sample get_events -->
 ```
 USAGE
   $ box events
@@ -58,6 +59,7 @@ _See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v2.
 
 Poll the event stream
 
+<!-- sample options_events -->
 ```
 USAGE
   $ box events:poll

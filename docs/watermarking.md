@@ -11,6 +11,7 @@ Apply a watermark on an item
 
 Apply a watermark on an item
 
+<!-- sample put_files_id_watermark -->
 ```
 USAGE
   $ box watermarking:apply ITEMTYPE ITEMID
@@ -40,6 +41,7 @@ _See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/bl
 
 Get the watermark on an item
 
+<!-- sample get_files_id_watermark -->
 ```
 USAGE
   $ box watermarking:get ITEMTYPE ITEMID
@@ -69,6 +71,7 @@ _See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob
 
 Remove a watermark from an item
 
+<!-- sample delete_files_id_watermark -->
 ```
 USAGE
   $ box watermarking:remove ITEMTYPE ITEMID

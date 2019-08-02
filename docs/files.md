@@ -35,6 +35,7 @@ Manage files
 
 List all collaborations on a file
 
+<!-- sample get_files_id_collaborations -->
 ```
 USAGE
   $ box files:collaborations ID
@@ -66,6 +67,7 @@ _See code: [src/commands/files/collaborations/index.js](https://github.com/box/b
 
 Create a collaboration for a file
 
+<!-- sample post_collaborations create_file_collaboration -->
 ```
 USAGE
   $ box files:collaborations:add ID
@@ -132,6 +134,7 @@ _See code: [src/commands/files/collaborations/add.js](https://github.com/box/box
 
 List all comments on a file
 
+<!-- sample get_files_id_comments -->
 ```
 USAGE
   $ box files:comments ID
@@ -163,6 +166,7 @@ _See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v
 
 Copy a file to a different folder
 
+<!-- sample post_files_id_copy -->
 ```
 USAGE
   $ box files:copy ID PARENTID
@@ -195,6 +199,7 @@ _See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.3.
 
 Delete a file
 
+<!-- sample delete_files_id -->
 ```
 USAGE
   $ box files:delete ID
@@ -225,6 +230,7 @@ _See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.
 
 Download a file
 
+<!-- sample get_files_id_content -->
 ```
 USAGE
   $ box files:download ID
@@ -255,6 +261,7 @@ _See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v
 
 Get information about a file
 
+<!-- sample get_files_id -->
 ```
 USAGE
   $ box files:get ID
@@ -283,6 +290,7 @@ _See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.3.0
 
 Lock a file
 
+<!-- sample put_files_id create_lock -->
 ```
 USAGE
   $ box files:lock ID
@@ -324,6 +332,7 @@ _See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.3.
 
 Get all metadata on a file
 
+<!-- sample get_files_id_metadata -->
 ```
 USAGE
   $ box files:metadata ID
@@ -355,6 +364,7 @@ _See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/
 
 Add metadata to a file
 
+<!-- sample post_files_id_metadata_id_id -->
 ```
 USAGE
   $ box files:metadata:add ID
@@ -397,6 +407,7 @@ _See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/bl
 
 Get information about a metadata object
 
+<!-- sample get_files_id_metadata_id_id -->
 ```
 USAGE
   $ box files:metadata:get ID
@@ -427,6 +438,7 @@ _See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/bl
 
 Delete metadata from a file
 
+<!-- sample delete_files_id_metadata_id_id -->
 ```
 USAGE
   $ box files:metadata:remove ID
@@ -460,6 +472,7 @@ _See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli
 
 Set metadata on a file
 
+<!-- sample post_files_id_metadata_id_id set_field -->
 ```
 USAGE
   $ box files:metadata:set ID
@@ -499,6 +512,7 @@ _See code: [src/commands/files/metadata/set.js](https://github.com/box/boxcli/bl
 
 Update the metadata attached to a file
 
+<!-- sample put_files_id_metadata_id_id -->
 ```
 USAGE
   $ box files:metadata:update ID
@@ -557,6 +571,7 @@ _See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli
 
 Move a file to a different folder
 
+<!-- sample put_files_id move -->
 ```
 USAGE
   $ box files:move ID PARENTID
@@ -587,6 +602,7 @@ _See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.3.
 
 Rename a file
 
+<!-- sample put_files_id rename -->
 ```
 USAGE
   $ box files:rename ID NAME
@@ -618,6 +634,7 @@ _See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.
 
 Create a shared link for a file
 
+<!-- sample put_files_id create_shared_link -->
 ```
 USAGE
   $ box files:share ID
@@ -657,6 +674,7 @@ _See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.3
 
 List all tasks on this file
 
+<!-- sample get_files_id_tasks -->
 ```
 USAGE
   $ box files:tasks ID
@@ -688,6 +706,7 @@ _See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blo
 
 Unlock a file
 
+<!-- sample put_files_id remove_lock -->
 ```
 USAGE
   $ box files:unlock ID
@@ -716,6 +735,7 @@ _See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.
 
 Delete a shared link for a file
 
+<!-- sample put_files_id remove_shared_link -->
 ```
 USAGE
   $ box files:unshare ID
@@ -747,6 +767,7 @@ _See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2
 
 Update a file record
 
+<!-- sample put_files_id -->
 ```
 USAGE
   $ box files:update ID
@@ -779,6 +800,7 @@ _See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.
 
 Upload a file
 
+<!-- sample post_files_content -->
 ```
 USAGE
   $ box files:upload PATH
@@ -830,6 +852,7 @@ _See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.
 
 Get a list of file versions
 
+<!-- sample get_files_id_versions -->
 ```
 USAGE
   $ box files:versions FILEID
@@ -861,6 +884,7 @@ _See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/
 
 Delete a file version
 
+<!-- sample delete_files_id_versions_id -->
 ```
 USAGE
   $ box files:versions:delete FILEID FILEVERSIONID
@@ -891,6 +915,7 @@ _See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli
 
 Download a specific version of a file
 
+<!-- sample get_files_id_content get_version -->
 ```
 USAGE
   $ box files:versions:download FILEID FILEVERSIONID
@@ -921,6 +946,7 @@ _See code: [src/commands/files/versions/download.js](https://github.com/box/boxc
 
 Promote a file version
 
+<!-- sample post_files_id_versions_current -->
 ```
 USAGE
   $ box files:versions:promote FILEID FILEVERSIONID
@@ -950,6 +976,7 @@ _See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcl
 
 Upload a new version of a file
 
+<!-- sample post_files_id_contents_id -->
 ```
 USAGE
   $ box files:versions:upload FILEID PATH

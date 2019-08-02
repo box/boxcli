@@ -13,6 +13,7 @@ Manage comments on files
 
 Create a comment on a file
 
+<!-- sample post_comments -->
 ```
 USAGE
   $ box comments:create FILEID
@@ -45,6 +46,7 @@ _See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/
 
 Delete a comment
 
+<!-- sample delete_comments_id -->
 ```
 USAGE
   $ box comments:delete ID
@@ -73,6 +75,7 @@ _See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/
 
 Get information about a comment
 
+<!-- sample get_comments_id -->
 ```
 USAGE
   $ box comments:get ID
@@ -101,6 +104,7 @@ _See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.
 
 Reply to a comment
 
+<!-- sample post_comments create_reply -->
 ```
 USAGE
   $ box comments:reply ID
@@ -133,6 +137,7 @@ _See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v
 
 Update a comment
 
+<!-- sample put_comments_id -->
 ```
 USAGE
   $ box comments:update ID

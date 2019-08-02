@@ -3,7 +3,6 @@
 
 List all retention policies for your enterprise
 
-* [`box retention-policies`](#box-retention-policies)
 * [`box retention-policies:assign POLICYID`](#box-retention-policiesassign-policyid)
 * [`box retention-policies:assignments ID`](#box-retention-policiesassignments-id)
 * [`box retention-policies:assignments:get ID`](#box-retention-policiesassignmentsget-id)
@@ -17,6 +16,7 @@ List all retention policies for your enterprise
 
 List all retention policies for your enterprise
 
+<!-- sample get_retention_policies -->
 ```
 USAGE
   $ box retention-policies
@@ -45,6 +45,7 @@ _See code: [src/commands/retention-policies/index.js](https://github.com/box/box
 
 Assign a retention policy assignment
 
+<!-- sample post_retention_policy_assignments -->
 ```
 USAGE
   $ box retention-policies:assign POLICYID
@@ -81,8 +82,9 @@ _See code: [src/commands/retention-policies/assign.js](https://github.com/box/bo
 
 ## `box retention-policies:assignments ID`
 
-List all retention policies for your enterprise
+List all retention policy assignments for your enterprise
 
+<!-- sample get_retention_policy_assignments -->
 ```
 USAGE
   $ box retention-policies:assignments ID
@@ -112,6 +114,7 @@ _See code: [src/commands/retention-policies/assignments/index.js](https://github
 
 Get information about a retention policy assignment
 
+<!-- sample get_retention_policy_assignments_id -->
 ```
 USAGE
   $ box retention-policies:assignments:get ID
@@ -140,6 +143,7 @@ _See code: [src/commands/retention-policies/assignments/get.js](https://github.c
 
 Create a new retention policy
 
+<!-- sample post_retention_policies -->
 ```
 USAGE
   $ box retention-policies:create POLICYNAME
@@ -190,6 +194,7 @@ _See code: [src/commands/retention-policies/create.js](https://github.com/box/bo
 
 List all file version retentions for your enterprise
 
+<!-- sample get_file_version_retentions -->
 ```
 USAGE
   $ box retention-policies:file-version-retentions
@@ -232,6 +237,7 @@ _See code: [src/commands/retention-policies/file-version-retentions/index.js](ht
 
 Get information about a file version retention policy
 
+<!-- sample get_file_version_retentions_id -->
 ```
 USAGE
   $ box retention-policies:file-version-retentions:get ID
@@ -260,6 +266,7 @@ _See code: [src/commands/retention-policies/file-version-retentions/get.js](http
 
 Get information about a retention policy
 
+<!-- sample get_retention_policies_id -->
 ```
 USAGE
   $ box retention-policies:get ID
@@ -288,6 +295,7 @@ _See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcl
 
 Update a retention policy
 
+<!-- sample put_retention_policies_id -->
 ```
 USAGE
   $ box retention-policies:update ID

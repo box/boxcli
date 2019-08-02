@@ -9,6 +9,7 @@ Search for files and folders in your Enterprise
 
 Search for files and folders in your Enterprise
 
+<!-- sample get_search -->
 ```
 USAGE
   $ box search [QUERY]

@@ -10,6 +10,7 @@ List all items in trash
 
 List all items in trash
 
+<!-- sample get_folders_trash_items -->
 ```
 USAGE
   $ box trash
@@ -38,6 +39,7 @@ _See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.3
 
 Permanently delete an item
 
+<!-- sample delete_files_id_trash -->
 ```
 USAGE
   $ box trash:delete TYPE ID

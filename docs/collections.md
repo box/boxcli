@@ -12,6 +12,7 @@ List your collections
 
 List your collections
 
+<!-- sample get_collections -->
 ```
 USAGE
   $ box collections
@@ -40,6 +41,7 @@ _See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blo
 
 Add an item to a collection
 
+<!-- sample put_items_id add_to_collection -->
 ```
 USAGE
   $ box collections:add ITEMTYPE ITEMID COLLECTIONID
@@ -70,6 +72,7 @@ _See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/
 
 Get items in a collection
 
+<!-- sample get_collections_id_items -->
 ```
 USAGE
   $ box collections:items ID
@@ -98,6 +101,7 @@ _See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blo
 
 Remove an item from a collection
 
+<!-- sample put_items_id remove_from_collection -->
 ```
 USAGE
   $ box collections:remove ITEMTYPE ITEMID COLLECTIONID

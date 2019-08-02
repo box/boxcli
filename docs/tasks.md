@@ -17,6 +17,7 @@ Manage tasks
 
 Create a task assignment
 
+<!-- sample post_task_assignments -->
 ```
 USAGE
   $ box tasks:assign TASKID
@@ -50,6 +51,7 @@ _See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.
 
 List all task assignments on a task
 
+<!-- sample get_tasks_id_assignments -->
 ```
 USAGE
   $ box tasks:assignments ID
@@ -81,6 +83,7 @@ _See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxc
 
 Delete a task assignment
 
+<!-- sample delete_task_assignments_id -->
 ```
 USAGE
   $ box tasks:assignments:delete ID
@@ -112,6 +115,7 @@ _See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/box
 
 Get information about a task assignment
 
+<!-- sample get_task_assignments_id -->
 ```
 USAGE
   $ box tasks:assignments:get ID
@@ -143,6 +147,7 @@ _See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli
 
 Update a task assignment
 
+<!-- sample put_task_assignments_id -->
 ```
 USAGE
   $ box tasks:assignments:update ID
@@ -176,6 +181,7 @@ _See code: [src/commands/tasks/assignments/update.js](https://github.com/box/box
 
 Create a task on a file
 
+<!-- sample post_tasks -->
 ```
 USAGE
   $ box tasks:create FILEID
@@ -207,6 +213,7 @@ _See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.
 
 Delete a task
 
+<!-- sample delete_tasks_id -->
 ```
 USAGE
   $ box tasks:delete ID
@@ -235,6 +242,7 @@ _See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.
 
 Get information about a task
 
+<!-- sample get_tasks_id -->
 ```
 USAGE
   $ box tasks:get ID
@@ -263,6 +271,7 @@ _See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.3.0
 
 Update a task on a file
 
+<!-- sample put_tasks_id -->
 ```
 USAGE
   $ box tasks:update ID
