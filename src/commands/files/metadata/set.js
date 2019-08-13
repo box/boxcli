@@ -18,6 +18,9 @@ class FilesSetMetadataCommand extends BoxCommand {
 }
 
 FilesSetMetadataCommand.description = 'Set metadata on a file';
+FilesCreateMetadataCommand.examples = [
+	'box files:metadata:set 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales'
+];
 
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,

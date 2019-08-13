@@ -18,6 +18,9 @@ class CollectionsRemoveCommand extends BoxCommand {
 }
 
 CollectionsRemoveCommand.description = 'Remove an item from a collection';
+CollectionsRemoveCommand.examples = [
+	'box collections:remove file 11111 12345'
+];
 
 CollectionsRemoveCommand.flags = {
 	...BoxCommand.flags

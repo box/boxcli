@@ -54,6 +54,10 @@ class FilesUploadVersionsCommand extends BoxCommand {
 }
 
 FilesUploadVersionsCommand.description = 'Upload a new version of a file';
+FilesUploadVersionsCommand.examples = [
+	'box files:versions:upload 11111 /path/to/file.pdf'
+];
+FilesUploadVersionsCommand._endpoint = 'post_files_id_content';
 
 FilesUploadVersionsCommand.flags = {
 	...BoxCommand.flags,

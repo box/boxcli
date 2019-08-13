@@ -13,6 +13,10 @@ class CollaborationWhitelistAddCommand extends BoxCommand {
 }
 
 CollaborationWhitelistAddCommand.description = 'Add a collaboration whitelist entry';
+CollaborationWhitelistAddCommand.examples = [
+	'box collaboration-whitelist:add example.com --direction outbound'
+];
+CollaborationWhitelistAddCommand._endpoint = 'post_collaboration_whitelist_entries';
 
 CollaborationWhitelistAddCommand.flags = {
 	...BoxCommand.flags,

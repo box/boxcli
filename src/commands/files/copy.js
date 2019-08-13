@@ -21,6 +21,10 @@ class FilesCopyCommand extends BoxCommand {
 }
 
 FilesCopyCommand.description = 'Copy a file to a different folder';
+FilesCopyCommand.examples = [
+	'box files:copy 11111 22222'
+];
+FilesCopyCommand._endpoint = 'post_files_id_copy';
 
 FilesCopyCommand.flags = {
 	...BoxCommand.flags,

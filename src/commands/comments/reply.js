@@ -28,6 +28,11 @@ class CommentsReplyCommand extends BoxCommand {
 }
 
 CommentsReplyCommand.description = 'Reply to a comment';
+CommentsReplyCommand.examples = [
+	'box comments:reply 12345 --message "No problem!"'
+];
+// TODO: Determine if this is the correct variant ID
+// CommentsReplyCommand._endpoint = 'post_comments reply';
 
 CommentsReplyCommand.flags = {
 	...BoxCommand.flags,

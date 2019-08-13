@@ -30,6 +30,10 @@ class FilesUpdateMetadataCommand extends BoxCommand {
 }
 
 FilesUpdateMetadataCommand.description = 'Update the metadata attached to a file';
+FilesUpdateMetadataCommand.examples = [
+	'box files:metadata:update 11111 --template-key employeeRecord --replace department=Finance'
+];
+FilesUpdateMetadataCommand._endpoint = 'put_files_id_metadata_id_id';
 
 FilesUpdateMetadataCommand.flags = {
 	...BoxCommand.flags,

@@ -12,6 +12,10 @@ class DevicePinsDeleteCommand extends BoxCommand {
 }
 
 DevicePinsDeleteCommand.description = 'Delete individual device pin';
+DevicePinsDeleteCommand.examples = [
+	'box device-pins:delete 12345'
+];
+DevicePinsDeleteCommand._endpoint = 'delete_device_pinners_id';
 
 DevicePinsDeleteCommand.flags = {
 	...BoxCommand.flags

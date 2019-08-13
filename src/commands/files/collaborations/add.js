@@ -21,6 +21,9 @@ class FilesCollaborationsAddCommand extends BoxCommand {
 }
 
 FilesCollaborationsAddCommand.description = 'Create a collaboration for a file';
+FilesCollaborationsAddCommand.examples = [
+	'box files:collaborations:add 11111 --role editor --user-id 22222'
+];
 
 FilesCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,

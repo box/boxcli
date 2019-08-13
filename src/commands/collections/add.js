@@ -21,6 +21,9 @@ class CollectionsAddCommand extends BoxCommand {
 }
 
 CollectionsAddCommand.description = 'Add an item to a collection';
+CollectionsAddCommand.examples = [
+	'box collections:add file 11111 12345'
+];
 
 CollectionsAddCommand.flags = {
 	...BoxCommand.flags

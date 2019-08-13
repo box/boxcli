@@ -21,6 +21,10 @@ class CommentsUpdateCommand extends BoxCommand {
 }
 
 CommentsUpdateCommand.description = 'Update a comment';
+CommentsUpdateCommand.examples = [
+	'box comments:update 12345 --message "Thank you for the update!"'
+];
+CommentsUpdateCommand._endpoint = 'put_comments_id';
 
 CommentsUpdateCommand.flags = {
 	...BoxCommand.flags,

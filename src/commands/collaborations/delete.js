@@ -17,6 +17,10 @@ CollaborationsDeleteCommand.aliases = [
 ];
 
 CollaborationsDeleteCommand.description = 'Remove a collaboration';
+CollaborationsDeleteCommand.examples = [
+	'box collaborations:delete 12345'
+];
+CollaborationsDeleteCommand._endpoint = 'delete_collaborations_id';
 
 CollaborationsDeleteCommand.flags = {
 	...BoxCommand.flags

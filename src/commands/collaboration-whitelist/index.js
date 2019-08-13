@@ -17,6 +17,10 @@ class CollaborationWhitelistListCommand extends BoxCommand {
 }
 
 CollaborationWhitelistListCommand.description = 'List collaboration whitelist entries';
+CollaborationWhitelistListCommand.examples = [
+	'box collaboration-whitelist'
+];
+CollaborationWhitelistListCommand._endpoint = 'get_collaboration_whitelist_entries';
 
 CollaborationWhitelistListCommand.flags = {
 	...BoxCommand.flags

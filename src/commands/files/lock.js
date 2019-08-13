@@ -23,6 +23,9 @@ class FilesLockCommand extends BoxCommand {
 FilesLockCommand.aliases = ['files:update-lock'];
 
 FilesLockCommand.description = 'Lock a file';
+FilesLockCommand.examples = [
+	'box files:lock 11111'
+];
 
 FilesLockCommand.flags = {
 	...BoxCommand.flags,
