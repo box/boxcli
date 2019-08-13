@@ -25,7 +25,7 @@
 		"@oclif/command": "^1.5.5",
 		"@oclif/config": "^1.7.6",
 		"@oclif/plugin-autocomplete": "^0.1.0",
-		"@oclif/plugin-help": "^2.1.4",
+		"@oclif/plugin-help": "^2.2.1",
 		"@oclif/plugin-not-found": "^1.2.0",
 		"archiver": "^3.0.0",
 		"box-node-sdk": "^1.29.0",
