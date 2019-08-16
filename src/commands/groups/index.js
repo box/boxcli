@@ -19,6 +19,10 @@ class GroupsListCommand extends BoxCommand {
 GroupsListCommand.aliases = [ 'groups:list' ];
 
 GroupsListCommand.description = 'List all groups';
+GroupsListCommand.examples = [
+	'box groups'
+];
+GroupsListCommand._endpoint = 'get_groups';
 
 GroupsListCommand.flags = {
 	...BoxCommand.flags

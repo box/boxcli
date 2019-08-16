@@ -22,6 +22,10 @@ class LegalHoldPoliciesListCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesListCommand.description = 'List legal hold policies';
+LegalHoldPoliciesListCommand.examples = [
+	'box legal-hold-policies'
+];
+LegalHoldPoliciesListCommand._endpoint = 'get_legal_hold_policies';
 
 LegalHoldPoliciesListCommand.flags = {
 	...BoxCommand.flags,

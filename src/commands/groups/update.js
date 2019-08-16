@@ -33,6 +33,10 @@ class GroupsUpdateCommand extends BoxCommand {
 }
 
 GroupsUpdateCommand.description = 'Update a group';
+GroupsUpdateCommand.examples = [
+	'box groups:update 12345 --name "U.S. Employees"'
+];
+GroupsUpdateCommand._endpoint = 'put_groups_id';
 
 GroupsUpdateCommand.flags = {
 	...BoxCommand.flags,

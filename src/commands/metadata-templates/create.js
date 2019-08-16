@@ -135,6 +135,10 @@ class MetadataTemplatesCreateCommand extends BoxCommand {
 }
 
 MetadataTemplatesCreateCommand.description = 'Create a new metadata template';
+MetadataTemplatesCreateCommand.examples = [
+	'box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales'
+];
+MetadataTemplatesCreateCommand._endpoint = 'post_metadata_templates_schema';
 
 MetadataTemplatesCreateCommand.flags = {
 	...BoxCommand.flags,

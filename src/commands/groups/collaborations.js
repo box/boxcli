@@ -22,6 +22,10 @@ GroupsListCollaborationsCommand.aliases = [
 ];
 
 GroupsListCollaborationsCommand.description = 'List collaborations for a group';
+GroupsListCollaborationsCommand.examples = [
+	'box groups:collaborations 12345'
+];
+GroupsListCollaborationsCommand._endpoint = 'get_groups_id_collaborations';
 
 GroupsListCollaborationsCommand.flags = {
 	...BoxCommand.flags

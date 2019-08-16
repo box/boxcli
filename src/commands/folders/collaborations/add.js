@@ -20,6 +20,9 @@ class FoldersCollaborationsAddCommand extends BoxCommand {
 }
 
 FoldersCollaborationsAddCommand.description = 'Create a collaboration for a folder';
+FoldersCollaborationsAddCommand.examples = [
+	'box folders:collaborations:add 22222 --role editor --user-id 33333'
+];
 
 FoldersCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,

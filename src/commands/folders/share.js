@@ -26,6 +26,9 @@ FoldersShareCommand.aliases = [
 ];
 
 FoldersShareCommand.description = 'Create a shared link for a folder';
+FoldersShareCommand.examples = [
+	'box folders:share 22222 --access company'
+];
 
 FoldersShareCommand.flags = {
 	...SharedLinksCreateCommand.flags,

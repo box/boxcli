@@ -26,6 +26,10 @@ class FoldersCreateCommand extends BoxCommand {
 }
 
 FoldersCreateCommand.description = 'Create a new folder';
+FoldersCreateCommand.examples = [
+	'box folders:create 22222 "New Subfolder"'
+];
+FoldersCreateCommand._endpoint = 'post_folders';
 
 FoldersCreateCommand.flags = {
 	...BoxCommand.flags,

@@ -20,6 +20,10 @@ class FoldersCreateMetadataCommand extends BoxCommand {
 FoldersCreateMetadataCommand.aliases = [ 'folders:metadata:create' ];
 
 FoldersCreateMetadataCommand.description = 'Add metadata to a folder';
+FoldersCreateMetadataCommand.examples = [
+	'box folders:metadata:add 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales'
+];
+FoldersCreateMetadataCommand._endpoint = 'post_folders_id_metadata_id_id';
 
 FoldersCreateMetadataCommand.flags = {
 	...BoxCommand.flags,

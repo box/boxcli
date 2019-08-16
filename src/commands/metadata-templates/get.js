@@ -14,6 +14,10 @@ class MetadataTemplatesGetCommand extends BoxCommand {
 }
 
 MetadataTemplatesGetCommand.description = 'Get information about a metadata template';
+MetadataTemplatesGetCommand.examples = [
+	'box metadata-templates:get employeeRecord'
+];
+MetadataTemplatesGetCommand._endpoint = 'get_metadata_templates_id_id_schema';
 
 MetadataTemplatesGetCommand.flags = {
 	...BoxCommand.flags,

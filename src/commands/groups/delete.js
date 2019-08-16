@@ -13,6 +13,10 @@ class GroupsDeleteCommand extends BoxCommand {
 }
 
 GroupsDeleteCommand.description = 'Delete a group';
+GroupsDeleteCommand.examples = [
+	'box groups:delete 12345'
+];
+GroupsDeleteCommand._endpoint = 'delete_groups_id';
 
 GroupsDeleteCommand.flags = {
 	...BoxCommand.flags
