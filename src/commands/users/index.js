@@ -17,6 +17,10 @@ class UsersListCommand extends BoxCommand {
 UsersListCommand.aliases = [ 'users:list' ];
 
 UsersListCommand.description = 'List all Box users';
+UsersListCommand.examples = [
+	'box users'
+];
+UsersListCommand._endpoint = 'get_users';
 
 UsersListCommand.flags = {
 	...BoxCommand.flags,

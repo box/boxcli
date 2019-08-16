@@ -15,6 +15,10 @@ class WebhooksCreateCommand extends BoxCommand {
 }
 
 WebhooksCreateCommand.description = 'Create a new webhook';
+WebhooksCreateCommand.examples = [
+	'box webhooks:create folder 22222 --triggers FILE.DELETED --address https://example.com/webhook/deletion'
+];
+WebhooksCreateCommand._endpoint = 'post_webhooks';
 
 WebhooksCreateCommand.flags = {
 	...BoxCommand.flags,

@@ -28,6 +28,10 @@ class RetentionPoliciesListCommand extends BoxCommand {
 }
 
 RetentionPoliciesListCommand.description = 'List all retention policies for your enterprise';
+RetentionPoliciesListCommand.examples = [
+	'box retention-policies'
+];
+RetentionPoliciesListCommand._endpoint = 'get_retention_policies';
 
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,

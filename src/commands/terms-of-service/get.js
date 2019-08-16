@@ -12,6 +12,10 @@ class TermsOfServiceGetCommand extends BoxCommand {
 }
 
 TermsOfServiceGetCommand.description = 'Get information on a terms of service';
+TermsOfServiceGetCommand.examples = [
+	'box terms-of-service:get 55555'
+];
+TermsOfServiceGetCommand._endpoint = 'get_terms_of_services_id';
 
 TermsOfServiceGetCommand.flags = {
 	...BoxCommand.flags

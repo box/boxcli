@@ -25,6 +25,10 @@ class RetentionPoliciesAssignCommand extends BoxCommand {
 }
 
 RetentionPoliciesAssignCommand.description = 'Assign a retention policy assignment';
+RetentionPoliciesAssignCommand.examples = [
+	'box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222'
+];
+RetentionPoliciesAssignCommand._endpoint = 'post_retention_policy_assignments';
 
 RetentionPoliciesAssignCommand.flags = {
 	...BoxCommand.flags,

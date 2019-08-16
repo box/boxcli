@@ -32,6 +32,10 @@ class TaskAssignmentsUpdateCommand extends BoxCommand {
 TaskAssignmentsUpdateCommand.aliases = [ 'task-assignments:update' ];
 
 TaskAssignmentsUpdateCommand.description = 'Update a task assignment';
+TaskAssignmentsUpdateCommand.examples = [
+	'box tasks:assignments:update 12345 --status approved'
+];
+TaskAssignmentsUpdateCommand._endpoint = 'put_task_assignments_id';
 
 TaskAssignmentsUpdateCommand.flags = {
 	...BoxCommand.flags,

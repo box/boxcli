@@ -28,6 +28,9 @@ class TermsOfServiceSetUserStatusCommand extends BoxCommand {
 }
 
 TermsOfServiceSetUserStatusCommand.description = 'Set a user\'s status on a terms of service with a terms of service Id';
+TermsOfServiceSetUserStatusCommand.examples = [
+	'box terms-of-service:set-user-status 55555 --accept'
+];
 
 TermsOfServiceSetUserStatusCommand.flags = {
 	...BoxCommand.flags,

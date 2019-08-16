@@ -21,6 +21,10 @@ class UsersDeleteCommand extends BoxCommand {
 }
 
 UsersDeleteCommand.description = 'Delete a Box User';
+UsersDeleteCommand.examples = [
+	'box users:delete 33333'
+];
+UsersDeleteCommand._endpoint = 'delete_users_id';
 
 UsersDeleteCommand.flags = {
 	...BoxCommand.flags,

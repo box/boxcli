@@ -21,6 +21,10 @@ class WebhooksUpdateCommand extends BoxCommand {
 }
 
 WebhooksUpdateCommand.description = 'Update a webhook';
+WebhooksUpdateCommand.examples = [
+	'box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED'
+];
+WebhooksUpdateCommand._endpoint = 'put_webhooks_id';
 
 WebhooksUpdateCommand.flags = {
 	...BoxCommand.flags,

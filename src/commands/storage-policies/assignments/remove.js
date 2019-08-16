@@ -12,6 +12,10 @@ class StoragePoliciesDeleteAssignmentCommand extends BoxCommand {
 }
 
 StoragePoliciesDeleteAssignmentCommand.description = 'Delete a storage policy assignment';
+StoragePoliciesDeleteAssignmentCommand.examples = [
+	'box storage-policies:assignments:remove 12345'
+];
+StoragePoliciesDeleteAssignmentCommand._endpoint = 'delete_storage_policy_assignments_id';
 
 StoragePoliciesDeleteAssignmentCommand.flags = {
 	...BoxCommand.flags

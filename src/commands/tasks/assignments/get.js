@@ -19,6 +19,10 @@ class TaskAssignmentsGetCommand extends BoxCommand {
 TaskAssignmentsGetCommand.aliases = [ 'task-assignments:get' ];
 
 TaskAssignmentsGetCommand.description = 'Get information about a task assignment';
+TaskAssignmentsGetCommand.examples = [
+	'box tasks:assignments:get 12345'
+];
+TaskAssignmentsGetCommand._endpoint = 'get_task_assignments_id';
 
 TaskAssignmentsGetCommand.flags = {
 	...BoxCommand.flags

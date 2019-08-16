@@ -29,6 +29,10 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 }
 
 RetentionPoliciesCreateCommand.description = 'Create a new retention policy';
+RetentionPoliciesCreateCommand.examples = [
+	'box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action permanently_delete'
+];
+RetentionPoliciesCreateCommand._endpoint = 'post_retention_policies';
 
 RetentionPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,

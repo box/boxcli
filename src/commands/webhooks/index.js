@@ -14,6 +14,10 @@ class WebhooksListCommand extends BoxCommand {
 WebhooksListCommand.aliases = [ 'webhooks:list' ];
 
 WebhooksListCommand.description = 'List all webhooks';
+WebhooksListCommand.examples = [
+	'box webhooks'
+];
+WebhooksListCommand._endpoint = 'get_webhooks';
 
 WebhooksListCommand.flags = {
 	...BoxCommand.flags

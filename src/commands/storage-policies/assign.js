@@ -12,6 +12,9 @@ class StoragePoliciesAssignCommand extends BoxCommand {
 }
 
 StoragePoliciesAssignCommand.description = 'Assign a storage policy';
+StoragePoliciesAssignCommand.examples = [
+	'box storage-policies:assign 12345 33333'
+];
 
 StoragePoliciesAssignCommand.flags = {
 	...BoxCommand.flags

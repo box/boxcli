@@ -17,6 +17,10 @@ class UsersGetCommand extends BoxCommand {
 }
 
 UsersGetCommand.description = 'Get information about a Box user';
+UsersGetCommand.examples = [
+	'box users:get 33333'
+];
+UsersGetCommand._endpoint = 'get_users_id';
 
 UsersGetCommand.flags = {
 	...BoxCommand.flags

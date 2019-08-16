@@ -20,6 +20,9 @@ class UsersSearchCommand extends BoxCommand {
 UsersSearchCommand.hidden = true;
 
 UsersSearchCommand.description = 'Search for Box users';
+UsersSearchCommand.examples = [
+	'box users:search "John Doe"'
+];
 
 UsersSearchCommand.flags = {
 	...BoxCommand.flags,

@@ -19,6 +19,10 @@ class TaskAssignmentsListCommand extends BoxCommand {
 TaskAssignmentsListCommand.aliases = [ 'task-assignments:list' ];
 
 TaskAssignmentsListCommand.description = 'List all task assignments on a task';
+TaskAssignmentsListCommand.examples = [
+	'box tasks:assignments 88888'
+];
+TaskAssignmentsListCommand._endpoint = 'get_tasks_id_assignments';
 
 TaskAssignmentsListCommand.flags = {
 	...BoxCommand.flags

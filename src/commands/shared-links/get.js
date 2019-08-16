@@ -18,6 +18,10 @@ class SharedLinksGetCommand extends BoxCommand {
 }
 
 SharedLinksGetCommand.description = 'Get information from a shared item URL';
+SharedLinksGetCommand.examples = [
+	'box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3'
+];
+SharedLinksGetCommand._endpoint = 'get_shared_items';
 
 SharedLinksGetCommand.flags = {
 	...BoxCommand.flags,

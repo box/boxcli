@@ -12,6 +12,10 @@ class WebhooksGetCommand extends BoxCommand {
 }
 
 WebhooksGetCommand.description = 'Get information about a webhook';
+WebhooksGetCommand.examples = [
+	'box webhooks:get 12345'
+];
+WebhooksGetCommand._endpoint = 'get_webhooks_id';
 
 WebhooksGetCommand.flags = {
 	...BoxCommand.flags

@@ -12,6 +12,10 @@ class TasksDeleteCommand extends BoxCommand {
 }
 
 TasksDeleteCommand.description = 'Delete a task';
+TasksDeleteCommand.examples = [
+	'box tasks:delete 88888'
+];
+TasksDeleteCommand._endpoint = 'delete_tasks_id';
 
 TasksDeleteCommand.flags = {
 	...BoxCommand.flags

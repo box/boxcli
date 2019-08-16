@@ -71,6 +71,10 @@ class UsersCreateCommand extends BoxCommand {
 }
 
 UsersCreateCommand.description = 'Create a new Box User';
+UsersCreateCommand.examples = [
+	'box users:create "John Doe" jdoe@example.com'
+];
+UsersCreateCommand._endpoint = 'post_users';
 
 UsersCreateCommand.flags = {
 	...BoxCommand.flags,
