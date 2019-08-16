@@ -20,9 +20,7 @@ class FilesCollaborationsListCommand extends BoxCommand {
 FilesCollaborationsListCommand.aliases = [ 'files:collaborations:list' ];
 
 FilesCollaborationsListCommand.description = 'List all collaborations on a file';
-FilesCollaborationsListCommand.examples = [
-	'box files:collaborations 11111'
-];
+FilesCollaborationsListCommand.examples = ['box files:collaborations 11111'];
 FilesCollaborationsListCommand._endpoint = 'get_files_id_collaborations';
 
 FilesCollaborationsListCommand.flags = {

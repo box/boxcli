@@ -20,9 +20,7 @@ class FoldersCollaborationsListCommand extends BoxCommand {
 FoldersCollaborationsListCommand.aliases = [ 'folders:collaborations:list' ];
 
 FoldersCollaborationsListCommand.description = 'List all collaborations on a folder';
-FoldersCollaborationsListCommand.examples = [
-	'box folders:collaborations 22222'
-];
+FoldersCollaborationsListCommand.examples = ['box folders:collaborations 22222'];
 FoldersCollaborationsListCommand._endpoint = 'get_folders_id_collaborations';
 
 FoldersCollaborationsListCommand.flags = {

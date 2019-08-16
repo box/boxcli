@@ -17,9 +17,7 @@ class LegalHoldPoliciesGetAssignmentCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesGetAssignmentCommand.description = 'Get information about a policy assignment';
-LegalHoldPoliciesGetAssignmentCommand.examples = [
-	'box legal-hold-policies:assignments:get 99999'
-];
+LegalHoldPoliciesGetAssignmentCommand.examples = ['box legal-hold-policies:assignments:get 99999'];
 LegalHoldPoliciesGetAssignmentCommand._endpoint = 'get_legal_hold_policy_assignments_id';
 
 LegalHoldPoliciesGetAssignmentCommand.flags = {

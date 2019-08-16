@@ -27,9 +27,7 @@ class FilesDeleteCommand extends BoxCommand {
 }
 
 FilesDeleteCommand.description = 'Delete a file';
-FilesDeleteCommand.examples = [
-	'box files:delete 11111'
-];
+FilesDeleteCommand.examples = ['box files:delete 11111'];
 FilesDeleteCommand._endpoint = 'delete_files_id';
 
 FilesDeleteCommand.flags = {

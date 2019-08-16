@@ -12,9 +12,7 @@ class CollaborationWhitelistDeleteCommand extends BoxCommand {
 }
 
 CollaborationWhitelistDeleteCommand.description = 'Delete a collaboration whitelist entry';
-CollaborationWhitelistDeleteCommand.examples = [
-	'box collaboration-whitelist:delete 12345'
-];
+CollaborationWhitelistDeleteCommand.examples = ['box collaboration-whitelist:delete 12345'];
 CollaborationWhitelistDeleteCommand._endpoint = 'delete_collaboration_whitelist_entries_id';
 
 CollaborationWhitelistDeleteCommand.flags = {

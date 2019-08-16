@@ -14,9 +14,7 @@ class UsersDeleteEmailAliasCommand extends BoxCommand {
 UsersDeleteEmailAliasCommand.aliases = [ 'users:delete-email-alias' ];
 
 UsersDeleteEmailAliasCommand.description = 'Delete an email alias from a user';
-UsersDeleteEmailAliasCommand.examples = [
-	'box users:email-aliases:remove 33333 12345'
-];
+UsersDeleteEmailAliasCommand.examples = ['box users:email-aliases:remove 33333 12345'];
 UsersDeleteEmailAliasCommand._endpoint = 'delete_users_id_email_aliases_id';
 
 UsersDeleteEmailAliasCommand.flags = {

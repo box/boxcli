@@ -12,9 +12,7 @@ class FilesUnlockCommand extends BoxCommand {
 }
 
 FilesUnlockCommand.description = 'Unlock a file';
-FilesUnlockCommand.examples = [
-	'box files:unlock 11111'
-];
+FilesUnlockCommand.examples = ['box files:unlock 11111'];
 
 FilesUnlockCommand.flags = {
 	...BoxCommand.flags

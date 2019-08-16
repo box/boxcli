@@ -17,9 +17,7 @@ class CollectionsListItemsCommand extends BoxCommand {
 }
 
 CollectionsListItemsCommand.description = 'Get items in a collection';
-CollectionsListItemsCommand.examples = [
-	'box collections:items 12345'
-];
+CollectionsListItemsCommand.examples = ['box collections:items 12345'];
 CollectionsListItemsCommand._endpoint = 'get_collections_id_items';
 
 CollectionsListItemsCommand.flags = {

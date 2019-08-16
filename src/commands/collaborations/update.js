@@ -52,9 +52,7 @@ CollaborationsUpdateCommand.aliases = [
 ];
 
 CollaborationsUpdateCommand.description = 'Update a collaboration';
-CollaborationsUpdateCommand.examples = [
-	'box collaborations:update 12345 --role viewer'
-];
+CollaborationsUpdateCommand.examples = ['box collaborations:update 12345 --role viewer'];
 CollaborationsUpdateCommand._endpoint = 'put_collaborations_id';
 
 CollaborationsUpdateCommand.flags = {

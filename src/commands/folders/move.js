@@ -22,9 +22,7 @@ class FoldersMoveCommand extends BoxCommand {
 }
 
 FoldersMoveCommand.description = 'Move a folder to a different folder';
-FoldersMoveCommand.examples = [
-	'box folders:move 22222 44444'
-];
+FoldersMoveCommand.examples = ['box folders:move 22222 44444'];
 
 FoldersMoveCommand.flags = {
 	...BoxCommand.flags,

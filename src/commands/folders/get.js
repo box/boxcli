@@ -17,9 +17,7 @@ class FoldersGetCommand extends BoxCommand {
 }
 
 FoldersGetCommand.description = 'Get information about a folder';
-FoldersGetCommand.examples = [
-	'box folders:get 22222'
-];
+FoldersGetCommand.examples = ['box folders:get 22222'];
 FoldersGetCommand._endpoint = 'get_folders_id';
 
 FoldersGetCommand.flags = {

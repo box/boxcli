@@ -13,9 +13,7 @@ class CommentsDeleteCommand extends BoxCommand {
 }
 
 CommentsDeleteCommand.description = 'Delete a comment';
-CommentsDeleteCommand.examples = [
-	'box comments:delete 12345'
-];
+CommentsDeleteCommand.examples = ['box comments:delete 12345'];
 CommentsDeleteCommand._endpoint = 'delete_comments_id';
 
 CommentsDeleteCommand.flags = {

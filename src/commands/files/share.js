@@ -26,9 +26,7 @@ FilesShareCommand.aliases = [
 ];
 
 FilesShareCommand.description = 'Create a shared link for a file';
-FilesShareCommand.examples = [
-	'box files:share 11111 --access company'
-];
+FilesShareCommand.examples = ['box files:share 11111 --access company'];
 
 FilesShareCommand.flags = {
 	...SharedLinksCreateCommand.flags,

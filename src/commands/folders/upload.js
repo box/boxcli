@@ -63,9 +63,7 @@ class FoldersUploadCommand extends BoxCommand {
 }
 
 FoldersUploadCommand.description = 'Upload a folder';
-FoldersUploadCommand.examples = [
-	'box folders:upload /path/to/folder'
-];
+FoldersUploadCommand.examples = ['box folders:upload /path/to/folder'];
 
 FoldersUploadCommand.flags = {
 	...BoxCommand.flags,

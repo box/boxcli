@@ -17,9 +17,7 @@ class RetentionPoliciesGetAssignmentCommand extends BoxCommand {
 }
 
 RetentionPoliciesGetAssignmentCommand.description = 'Get information about a retention policy assignment';
-RetentionPoliciesGetAssignmentCommand.examples = [
-	'box retention-policies:assignments:get 1235'
-];
+RetentionPoliciesGetAssignmentCommand.examples = ['box retention-policies:assignments:get 1235'];
 RetentionPoliciesGetAssignmentCommand._endpoint = 'get_retention_policy_assignments_id';
 
 RetentionPoliciesGetAssignmentCommand.flags = {

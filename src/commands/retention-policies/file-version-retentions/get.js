@@ -17,9 +17,7 @@ class RetentionPoliciesGetVersionRetentionCommand extends BoxCommand {
 }
 
 RetentionPoliciesGetVersionRetentionCommand.description = 'Get information about a file version retention policy';
-RetentionPoliciesGetVersionRetentionCommand.examples = [
-	'box retention-policies:file-version-retentions:get 77777'
-];
+RetentionPoliciesGetVersionRetentionCommand.examples = ['box retention-policies:file-version-retentions:get 77777'];
 RetentionPoliciesGetVersionRetentionCommand._endpoint = 'get_file_version_retentions_id';
 
 RetentionPoliciesGetVersionRetentionCommand.flags = {

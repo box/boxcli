@@ -19,9 +19,7 @@ class FilesListVersionsCommand extends BoxCommand {
 FilesListVersionsCommand.aliases = [ 'files:versions:list' ];
 
 FilesListVersionsCommand.description = 'Get a list of file versions';
-FilesListVersionsCommand.examples = [
-	'box files:versions 11111'
-];
+FilesListVersionsCommand.examples = ['box files:versions 11111'];
 FilesListVersionsCommand._endpoint = 'get_files_id_versions';
 
 FilesListVersionsCommand.flags = {

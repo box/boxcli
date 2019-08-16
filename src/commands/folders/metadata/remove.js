@@ -15,9 +15,7 @@ class FoldersDeleteMetadataCommand extends BoxCommand {
 FoldersDeleteMetadataCommand.aliases = [ 'folders:metadata:delete' ];
 
 FoldersDeleteMetadataCommand.description = 'Delete metadata from a folder';
-FoldersDeleteMetadataCommand.examples = [
-	'box folders:metadata:remove 22222 --scope global --template-key properties'
-];
+FoldersDeleteMetadataCommand.examples = ['box folders:metadata:remove 22222 --scope global --template-key properties'];
 FoldersDeleteMetadataCommand._endpoint = 'delete_folders_id_metadata_id_id';
 
 FoldersDeleteMetadataCommand.flags = {

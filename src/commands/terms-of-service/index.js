@@ -18,9 +18,7 @@ class TermsOfServiceListCommand extends BoxCommand {
 }
 
 TermsOfServiceListCommand.description = 'List terms of services for your enterprise';
-TermsOfServiceListCommand.examples = [
-	'box terms-of-service'
-];
+TermsOfServiceListCommand.examples = ['box terms-of-service'];
 TermsOfServiceListCommand._endpoint = 'get_terms_of_services';
 
 TermsOfServiceListCommand.flags = {

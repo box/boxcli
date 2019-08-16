@@ -21,9 +21,7 @@ class TasksCreateCommand extends BoxCommand {
 }
 
 TasksCreateCommand.description = 'Create a task on a file';
-TasksCreateCommand.examples = [
-	'box tasks:create 11111 --message "Please proofread this document"'
-];
+TasksCreateCommand.examples = ['box tasks:create 11111 --message "Please proofread this document"'];
 TasksCreateCommand._endpoint = 'post_tasks';
 
 TasksCreateCommand.flags = {

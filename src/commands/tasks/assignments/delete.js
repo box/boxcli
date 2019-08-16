@@ -15,9 +15,7 @@ class TaskAssignmentsDeleteCommand extends BoxCommand {
 TaskAssignmentsDeleteCommand.aliases = [ 'task-assignments:delete' ];
 
 TaskAssignmentsDeleteCommand.description = 'Delete a task assignment';
-TaskAssignmentsDeleteCommand.examples = [
-	'box tasks:assignments:delete 12345'
-];
+TaskAssignmentsDeleteCommand.examples = ['box tasks:assignments:delete 12345'];
 TaskAssignmentsDeleteCommand._endpoint = 'delete_task_assignments_id';
 
 TaskAssignmentsDeleteCommand.flags = {

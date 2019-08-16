@@ -12,9 +12,7 @@ class WebhooksDeleteCommand extends BoxCommand {
 }
 
 WebhooksDeleteCommand.description = 'Delete a webhook';
-WebhooksDeleteCommand.examples = [
-	'box webhooks:delete 12345'
-];
+WebhooksDeleteCommand.examples = ['box webhooks:delete 12345'];
 WebhooksDeleteCommand._endpoint = 'delete_webhooks_id';
 
 WebhooksDeleteCommand.flags = {

@@ -18,9 +18,7 @@ class FoldersCopyCommand extends BoxCommand {
 }
 
 FoldersCopyCommand.description = 'Copy a folder to a different folder';
-FoldersCopyCommand.examples = [
-	'box folders:copy 22222 44444'
-];
+FoldersCopyCommand.examples = ['box folders:copy 22222 44444'];
 FoldersCopyCommand._endpoint = 'post_folders_id_copy';
 
 FoldersCopyCommand.flags = {

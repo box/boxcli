@@ -37,9 +37,7 @@ class RetentionPoliciesUpdateCommand extends BoxCommand {
 }
 
 RetentionPoliciesUpdateCommand.description = 'Update a retention policy';
-RetentionPoliciesUpdateCommand.examples = [
-	'box retention-policies:update 12345'
-];
+RetentionPoliciesUpdateCommand.examples = ['box retention-policies:update 12345'];
 RetentionPoliciesUpdateCommand._endpoint = 'put_retention_policies_id';
 
 RetentionPoliciesUpdateCommand.flags = {

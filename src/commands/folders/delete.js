@@ -34,9 +34,7 @@ class FoldersDeleteCommand extends BoxCommand {
 }
 
 FoldersDeleteCommand.description = 'Delete a folder';
-FoldersDeleteCommand.examples = [
-	'box folders:delete 22222'
-];
+FoldersDeleteCommand.examples = ['box folders:delete 22222'];
 FoldersDeleteCommand._endpoint = 'delete_folders_id';
 
 FoldersDeleteCommand.flags = {

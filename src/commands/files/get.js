@@ -17,9 +17,7 @@ class FilesGetCommand extends BoxCommand {
 }
 
 FilesGetCommand.description = 'Get information about a file';
-FilesGetCommand.examples = [
-	'box files:get 11111'
-];
+FilesGetCommand.examples = ['box files:get 11111'];
 FilesGetCommand._endpoint = 'get_files_id';
 
 FilesGetCommand.flags = {

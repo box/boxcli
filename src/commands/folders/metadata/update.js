@@ -32,9 +32,7 @@ class FoldersUpdateMetadataCommand extends BoxCommand {
 }
 
 FoldersUpdateMetadataCommand.description = 'Update the metadata attached to a folder';
-FoldersUpdateMetadataCommand.examples = [
-	'box folders:metadata:update 22222 --template-key employeeRecord --replace department=Finance'
-];
+FoldersUpdateMetadataCommand.examples = ['box folders:metadata:update 22222 --template-key employeeRecord --replace department=Finance'];
 FoldersUpdateMetadataCommand._endpoint = 'put_folders_id_metadata_id_id';
 
 FoldersUpdateMetadataCommand.flags = {

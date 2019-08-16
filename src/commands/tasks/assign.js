@@ -20,9 +20,7 @@ class TaskAssignmentsCreateCommand extends BoxCommand {
 TaskAssignmentsCreateCommand.aliases = [ 'task-assignments:create' ];
 
 TaskAssignmentsCreateCommand.description = 'Create a task assignment';
-TaskAssignmentsCreateCommand.examples = [
-	'box tasks:assign 88888 --assign-to-user-id 33333'
-];
+TaskAssignmentsCreateCommand.examples = ['box tasks:assign 88888 --assign-to-user-id 33333'];
 TaskAssignmentsCreateCommand._endpoint = 'post_task_assignments';
 
 TaskAssignmentsCreateCommand.flags = {

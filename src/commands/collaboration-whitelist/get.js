@@ -17,9 +17,7 @@ class CollaborationWhitelistGetCommand extends BoxCommand {
 }
 
 CollaborationWhitelistGetCommand.description = 'Get a collaboration whitelist entry';
-CollaborationWhitelistGetCommand.examples = [
-	'box collaboration-whitelist:get 12345'
-];
+CollaborationWhitelistGetCommand.examples = ['box collaboration-whitelist:get 12345'];
 CollaborationWhitelistGetCommand._endpoint = 'get_collaboration_whitelist_entries_id';
 
 CollaborationWhitelistGetCommand.flags = {

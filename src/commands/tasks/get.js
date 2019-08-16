@@ -17,9 +17,7 @@ class TasksGetCommand extends BoxCommand {
 }
 
 TasksGetCommand.description = 'Get information about a task';
-TasksGetCommand.examples = [
-	'box tasks:get 88888'
-];
+TasksGetCommand.examples = ['box tasks:get 88888'];
 TasksGetCommand._endpoint = 'get_tasks_id';
 
 TasksGetCommand.flags = {

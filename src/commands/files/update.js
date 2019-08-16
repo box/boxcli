@@ -28,9 +28,7 @@ class FileUpdateCommand extends BoxCommand {
 }
 
 FileUpdateCommand.description = 'Update a file record';
-FileUpdateCommand.examples = [
-	'box files:update 11111 --name "New File Name.pdf"'
-];
+FileUpdateCommand.examples = ['box files:update 11111 --name "New File Name.pdf"'];
 FileUpdateCommand._endpoint = 'put_files_id';
 
 FileUpdateCommand.flags = {

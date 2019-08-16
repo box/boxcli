@@ -12,9 +12,7 @@ class LegalHoldPoliciesDeleteCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesDeleteCommand.description = 'Delete a legal hold policy';
-LegalHoldPoliciesDeleteCommand.examples = [
-	'box legal-hold-policies:delete 99999'
-];
+LegalHoldPoliciesDeleteCommand.examples = ['box legal-hold-policies:delete 99999'];
 LegalHoldPoliciesDeleteCommand._endpoint = 'delete_legal_hold_policies_id';
 
 LegalHoldPoliciesDeleteCommand.flags = {

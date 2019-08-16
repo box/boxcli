@@ -23,9 +23,7 @@ class FoldersUnshareCommand extends BoxCommand {
 FoldersUnshareCommand.aliases = [ 'folders:shared-links:delete' ];
 
 FoldersUnshareCommand.description = 'Delete a shared link for a folder';
-FoldersUnshareCommand.examples = [
-	'box folders:unshare 22222'
-];
+FoldersUnshareCommand.examples = ['box folders:unshare 22222'];
 
 FoldersUnshareCommand.flags = {
 	...SharedLinksDeleteCommand.flags,

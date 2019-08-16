@@ -179,9 +179,7 @@ class FoldersDownloadCommand extends BoxCommand {
 }
 
 FoldersDownloadCommand.description = 'Download a folder';
-FoldersDownloadCommand.examples = [
-	'box folders:download 22222'
-];
+FoldersDownloadCommand.examples = ['box folders:download 22222'];
 
 FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,

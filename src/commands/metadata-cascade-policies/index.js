@@ -18,9 +18,7 @@ class MetadataCascadePoliciesListCommand extends BoxCommand {
 }
 
 MetadataCascadePoliciesListCommand.description = 'List the metadata cascade policies on a folder';
-MetadataCascadePoliciesListCommand.examples = [
-	'box metadata-cascade-policies 22222'
-];
+MetadataCascadePoliciesListCommand.examples = ['box metadata-cascade-policies 22222'];
 MetadataCascadePoliciesListCommand._endpoint = 'get_metadata_cascade_policies';
 
 MetadataCascadePoliciesListCommand.flags = {

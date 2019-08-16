@@ -38,9 +38,7 @@ class GroupsAddMembershipCommand extends BoxCommand {
 GroupsAddMembershipCommand.aliases = [ 'groups:membership:add' ];
 
 GroupsAddMembershipCommand.description = 'Add a user to a group';
-GroupsAddMembershipCommand.examples = [
-	'box groups:memberships:add 33333 12345'
-];
+GroupsAddMembershipCommand.examples = ['box groups:memberships:add 33333 12345'];
 GroupsAddMembershipCommand._endpoint = 'post_group_memberships';
 
 GroupsAddMembershipCommand.flags = {

@@ -18,9 +18,7 @@ class CollaborationsGetCommand extends BoxCommand {
 }
 
 CollaborationsGetCommand.description = 'Get an individual collaboration';
-CollaborationsGetCommand.examples = [
-	'box collaborations:get 12345'
-];
+CollaborationsGetCommand.examples = ['box collaborations:get 12345'];
 CollaborationsGetCommand._endpoint = 'get_collaborations_id';
 
 CollaborationsGetCommand.flags = {

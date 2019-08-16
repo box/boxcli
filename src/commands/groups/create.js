@@ -30,9 +30,7 @@ class GroupsCreateCommand extends BoxCommand {
 }
 
 GroupsCreateCommand.description = 'Create a group';
-GroupsCreateCommand.examples = [
-	'box groups:create "US Employees"'
-];
+GroupsCreateCommand.examples = ['box groups:create "US Employees"'];
 GroupsCreateCommand._endpoint = 'post_groups';
 
 GroupsCreateCommand.flags = {

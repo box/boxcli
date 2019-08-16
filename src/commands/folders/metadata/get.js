@@ -13,9 +13,7 @@ class FoldersGetMetadataCommand extends BoxCommand {
 }
 
 FoldersGetMetadataCommand.description = 'Get information about a metadata object';
-FoldersGetMetadataCommand.examples = [
-	'box folders:metadata:get 22222 --template-key employeeRecord'
-];
+FoldersGetMetadataCommand.examples = ['box folders:metadata:get 22222 --template-key employeeRecord'];
 FoldersGetMetadataCommand._endpoint = 'get_folders_id_metadata_id_id';
 
 FoldersGetMetadataCommand.flags = {

@@ -12,9 +12,7 @@ class MetadataCascadePoliciesGetCommand extends BoxCommand {
 }
 
 MetadataCascadePoliciesGetCommand.description = 'Get information about a metadata cascade policy';
-MetadataCascadePoliciesGetCommand.examples = [
-	'box metadata-cascade-policies:get 12345'
-];
+MetadataCascadePoliciesGetCommand.examples = ['box metadata-cascade-policies:get 12345'];
 MetadataCascadePoliciesGetCommand._endpoint = 'get_metadata_cascade_policies_id';
 
 MetadataCascadePoliciesGetCommand.flags = {

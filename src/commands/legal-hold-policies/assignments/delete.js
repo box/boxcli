@@ -12,9 +12,7 @@ class LegalHoldPoliciesDeleteAssignmentCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesDeleteAssignmentCommand.description = 'Delete a policy assignment';
-LegalHoldPoliciesDeleteAssignmentCommand.examples = [
-	'box legal-hold-policies:assignments:delete 99999'
-];
+LegalHoldPoliciesDeleteAssignmentCommand.examples = ['box legal-hold-policies:assignments:delete 99999'];
 LegalHoldPoliciesDeleteAssignmentCommand._endpoint = 'delete_legal_hold_policy_assignments_id';
 
 LegalHoldPoliciesDeleteAssignmentCommand.flags = {

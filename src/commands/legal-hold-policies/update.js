@@ -24,9 +24,7 @@ class LegalHoldPoliciesUpdateCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesUpdateCommand.description = 'Update a legal hold policy';
-LegalHoldPoliciesUpdateCommand.examples = [
-	'box legal-hold-policies:update 99999 --description "Files related to the ongoing class action suit"'
-];
+LegalHoldPoliciesUpdateCommand.examples = ['box legal-hold-policies:update 99999 --description "Files related to the ongoing class action suit"'];
 LegalHoldPoliciesUpdateCommand._endpoint = 'put_legal_hold_policies_id';
 
 LegalHoldPoliciesUpdateCommand.flags = {

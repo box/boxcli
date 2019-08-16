@@ -15,9 +15,7 @@ class FilesDeleteMetadataCommand extends BoxCommand {
 FilesDeleteMetadataCommand.aliases = [ 'files:metadata:delete' ];
 
 FilesDeleteMetadataCommand.description = 'Delete metadata from a file';
-FilesDeleteMetadataCommand.examples = [
-	'box files:metadata:remove 11111 --scope global --template-key properties'
-];
+FilesDeleteMetadataCommand.examples = ['box files:metadata:remove 11111 --scope global --template-key properties'];
 FilesDeleteMetadataCommand._endpoint = 'delete_files_id_metadata_id_id';
 
 FilesDeleteMetadataCommand.flags = {

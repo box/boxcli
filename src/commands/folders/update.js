@@ -42,9 +42,7 @@ class FoldersUpdateCommand extends BoxCommand {
 }
 
 FoldersUpdateCommand.description = 'Update a folder';
-FoldersUpdateCommand.examples = [
-	'box folders:update 22222 --name "New Folder Name"'
-];
+FoldersUpdateCommand.examples = ['box folders:update 22222 --name "New Folder Name"'];
 FoldersUpdateCommand._endpoint = 'put_folders_id';
 
 FoldersUpdateCommand.flags = {

@@ -19,9 +19,7 @@ class GroupsGetMembershipCommand extends BoxCommand {
 GroupsGetMembershipCommand.aliases = [ 'groups:membership:get' ];
 
 GroupsGetMembershipCommand.description = 'Get information about a group membership';
-GroupsGetMembershipCommand.examples = [
-	'box groups:memberships:get 12345'
-];
+GroupsGetMembershipCommand.examples = ['box groups:memberships:get 12345'];
 GroupsGetMembershipCommand._endpoint = 'get_group_memberships_id';
 
 GroupsGetMembershipCommand.flags = {

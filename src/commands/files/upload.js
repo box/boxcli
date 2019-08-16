@@ -63,9 +63,7 @@ class FilesUploadCommand extends BoxCommand {
 }
 
 FilesUploadCommand.description = 'Upload a file';
-FilesUploadCommand.examples = [
-	'box files:upload /path/to/file.pdf --parent-id 22222'
-];
+FilesUploadCommand.examples = ['box files:upload /path/to/file.pdf --parent-id 22222'];
 FilesUploadCommand._endpoint = 'post_files_content';
 
 FilesUploadCommand.flags = {

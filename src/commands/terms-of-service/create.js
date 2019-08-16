@@ -13,9 +13,7 @@ class TermsOfServiceCreateCommand extends BoxCommand {
 }
 
 TermsOfServiceCreateCommand.description = 'Create a terms of service';
-TermsOfServiceCreateCommand.examples = [
-	'box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."'
-];
+TermsOfServiceCreateCommand.examples = ['box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."'];
 TermsOfServiceCreateCommand._endpoint = 'post_terms_of_services';
 
 TermsOfServiceCreateCommand.flags = {

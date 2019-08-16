@@ -24,9 +24,7 @@ class WebLinksUpdateCommand extends BoxCommand {
 }
 
 WebLinksUpdateCommand.description = 'Update a web link';
-WebLinksUpdateCommand.examples = [
-	'box web-links:update 12345 --name "Example Site"'
-];
+WebLinksUpdateCommand.examples = ['box web-links:update 12345 --name "Example Site"'];
 WebLinksUpdateCommand._endpoint = 'put_web_links_id';
 
 WebLinksUpdateCommand.flags = {

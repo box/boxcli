@@ -13,9 +13,7 @@ class FilesGetMetadataCommand extends BoxCommand {
 }
 
 FilesGetMetadataCommand.description = 'Get information about a metadata object';
-FilesGetMetadataCommand.examples = [
-	'box files:metadata:get 11111 --template-key employeeRecord'
-];
+FilesGetMetadataCommand.examples = ['box files:metadata:get 11111 --template-key employeeRecord'];
 FilesGetMetadataCommand._endpoint = 'get_files_id_metadata_id_id';
 
 FilesGetMetadataCommand.flags = {

@@ -17,9 +17,7 @@ class LegalHoldPoliciesGetVersionHoldCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesGetVersionHoldCommand.description = 'Get information about a file version legal hold';
-LegalHoldPoliciesGetVersionHoldCommand.examples = [
-	'box legal-hold-policies:file-version-holds:get 12345'
-];
+LegalHoldPoliciesGetVersionHoldCommand.examples = ['box legal-hold-policies:file-version-holds:get 12345'];
 LegalHoldPoliciesGetVersionHoldCommand._endpoint = 'get_file_version_legal_holds_id';
 
 LegalHoldPoliciesGetVersionHoldCommand.flags = {

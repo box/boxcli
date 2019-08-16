@@ -28,9 +28,7 @@ class UsersMoveRootContentCommand extends BoxCommand {
 UsersMoveRootContentCommand.aliases = [ 'users:move-root-content' ];
 
 UsersMoveRootContentCommand.description = 'Move a user\'s root content to another user';
-UsersMoveRootContentCommand.examples = [
-	'box users:transfer-content 33333 44444'
-];
+UsersMoveRootContentCommand.examples = ['box users:transfer-content 33333 44444'];
 UsersMoveRootContentCommand._endpoint = 'put_users_id_folders_id';
 
 UsersMoveRootContentCommand.flags = {

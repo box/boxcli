@@ -12,9 +12,7 @@ class WebLinksGetCommand extends BoxCommand {
 }
 
 WebLinksGetCommand.description = 'Get information about a web link';
-WebLinksGetCommand.examples = [
-	'box web-links:get 12345'
-];
+WebLinksGetCommand.examples = ['box web-links:get 12345'];
 WebLinksGetCommand._endpoint = 'get_web_links_id';
 
 WebLinksGetCommand.flags = {

@@ -19,9 +19,7 @@ class FilesCreateMetadataCommand extends BoxCommand {
 FilesCreateMetadataCommand.aliases = [ 'files:metadata:create' ];
 
 FilesCreateMetadataCommand.description = 'Add metadata to a file';
-FilesCreateMetadataCommand.examples = [
-	'box files:metadata:add 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales'
-];
+FilesCreateMetadataCommand.examples = ['box files:metadata:add 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales'];
 FilesCreateMetadataCommand._endpoint = 'post_files_id_metadata_id_id';
 
 FilesCreateMetadataCommand.flags = {

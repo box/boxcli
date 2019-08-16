@@ -17,9 +17,7 @@ class CollaborationWhitelistGetExemptionCommand extends BoxCommand {
 }
 
 CollaborationWhitelistGetExemptionCommand.description = 'Get a collaboration whitelist exemption';
-CollaborationWhitelistGetExemptionCommand.examples = [
-	'box collaboration-whitelist:exemptions:get 12345'
-];
+CollaborationWhitelistGetExemptionCommand.examples = ['box collaboration-whitelist:exemptions:get 12345'];
 CollaborationWhitelistGetExemptionCommand._endpoint = 'get_collaboration_whitelist_exempt_targets_id';
 
 CollaborationWhitelistGetExemptionCommand.flags = {
