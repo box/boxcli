@@ -24,6 +24,7 @@ FilesUnshareCommand.aliases = ['files:shared-links:delete'];
 
 FilesUnshareCommand.description = 'Delete a shared link for a file';
 FilesUnshareCommand.examples = ['box files:unshare 11111'];
+FilesUnshareCommand._endpoint = 'put_files_id delete_shared_link';
 
 FilesUnshareCommand.flags = {
 	...SharedLinksDeleteCommand.flags,

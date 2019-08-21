@@ -24,6 +24,7 @@ FoldersUnshareCommand.aliases = [ 'folders:shared-links:delete' ];
 
 FoldersUnshareCommand.description = 'Delete a shared link for a folder';
 FoldersUnshareCommand.examples = ['box folders:unshare 22222'];
+FoldersUnshareCommand._endpoint = 'put_folders_id delete_shared_link';
 
 FoldersUnshareCommand.flags = {
 	...SharedLinksDeleteCommand.flags,
