@@ -14,6 +14,8 @@ class MetadataTemplatesListCommand extends BoxCommand {
 MetadataTemplatesListCommand.aliases = [ 'metadata-templates:list' ];
 
 MetadataTemplatesListCommand.description = 'Get all metadata templates in your Enterprise';
+MetadataTemplatesListCommand.examples = ['box metadata-templates'];
+MetadataTemplatesListCommand._endpoint = 'get_metadata_templates_enterprise';
 
 MetadataTemplatesListCommand.flags = {
 	...BoxCommand.flags

@@ -16,6 +16,8 @@ class StoragePoliciesListAssignmentsCommand extends BoxCommand {
 }
 
 StoragePoliciesListAssignmentsCommand.description = 'Look up which storage policy an object is assigned to';
+StoragePoliciesListAssignmentsCommand.examples = ['box storage-policies:assignments:lookup 33333'];
+StoragePoliciesListAssignmentsCommand._endpoint = 'get_storage_policy_assignments';
 
 StoragePoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,

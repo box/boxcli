@@ -15,6 +15,8 @@ class FilesDeleteVersionsCommand extends BoxCommand {
 }
 
 FilesDeleteVersionsCommand.description = 'Delete a file version';
+FilesDeleteVersionsCommand.examples = ['box files:versions:delete 11111 55555'];
+FilesDeleteVersionsCommand._endpoint = 'delete_files_id_versions_id';
 
 FilesDeleteVersionsCommand.flags = {
 	...BoxCommand.flags,

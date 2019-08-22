@@ -37,6 +37,8 @@ class GroupsUpdateMembershipCommand extends BoxCommand {
 GroupsUpdateMembershipCommand.aliases = [ 'groups:membership:update' ];
 
 GroupsUpdateMembershipCommand.description = 'Update a user\'s membership to a group';
+GroupsUpdateMembershipCommand.examples = ['box groups:memberships:update'];
+GroupsUpdateMembershipCommand._endpoint = 'put_group_memberships_id';
 
 GroupsUpdateMembershipCommand.flags = {
 	...BoxCommand.flags,

@@ -19,6 +19,8 @@ class UsersListGroupsCommand extends BoxCommand {
 UsersListGroupsCommand.aliases = [ 'users:list-groups' ];
 
 UsersListGroupsCommand.description = 'List groups a user belongs to';
+UsersListGroupsCommand.examples = ['box users:groups 33333'];
+UsersListGroupsCommand._endpoint = 'get_users_id_memberships';
 
 UsersListGroupsCommand.flags = {
 	...BoxCommand.flags

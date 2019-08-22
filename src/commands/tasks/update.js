@@ -21,6 +21,8 @@ class TasksUpdateCommand extends BoxCommand {
 }
 
 TasksUpdateCommand.description = 'Update a task on a file';
+TasksUpdateCommand.examples = ['box tasks:update 88888 --due-at 1w'];
+TasksUpdateCommand._endpoint = 'put_tasks_id';
 
 TasksUpdateCommand.flags = {
 	...BoxCommand.flags,

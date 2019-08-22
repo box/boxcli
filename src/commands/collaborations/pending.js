@@ -25,6 +25,8 @@ class CollaborationsGetPendingCommand extends BoxCommand {
 CollaborationsGetPendingCommand.aliases = [ 'collaborations:get-pending' ];
 
 CollaborationsGetPendingCommand.description = 'List all pending collaborations for a user';
+CollaborationsGetPendingCommand.examples = ['box collaborations:pending'];
+CollaborationsGetPendingCommand._endpoint = 'get_collaborations pending';
 
 CollaborationsGetPendingCommand.flags = {
 	...BoxCommand.flags,

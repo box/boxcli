@@ -12,6 +12,8 @@ class CollaborationWhitelistCreateExemptionCommand extends BoxCommand {
 }
 
 CollaborationWhitelistCreateExemptionCommand.description = 'Exempt a user from the collaboration whitelist';
+CollaborationWhitelistCreateExemptionCommand.examples = ['box collaboration-whitelist:exemptions:create 11111'];
+CollaborationWhitelistCreateExemptionCommand._endpoint = 'post_collaboration_whitelist_exempt_targets';
 
 CollaborationWhitelistCreateExemptionCommand.flags = {
 	...BoxCommand.flags

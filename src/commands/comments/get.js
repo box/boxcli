@@ -17,6 +17,8 @@ class CommentsGetCommand extends BoxCommand {
 }
 
 CommentsGetCommand.description = 'Get information about a comment';
+CommentsGetCommand.examples = ['box comments:get 12345'];
+CommentsGetCommand._endpoint = 'get_comments_id';
 
 CommentsGetCommand.flags = {
 	...BoxCommand.flags

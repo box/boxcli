@@ -62,6 +62,11 @@ class EventsGetCommand extends BoxCommand {
 EventsGetCommand.aliases = [ 'events:get' ];
 
 EventsGetCommand.description = 'Get events';
+EventsGetCommand.examples = [
+	'box events',
+	'box events --enterprise --created-after 2019-01-01'
+];
+EventsGetCommand._endpoint = 'get_events';
 
 EventsGetCommand.flags = {
 	...BoxCommand.flags,

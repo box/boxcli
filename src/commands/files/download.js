@@ -54,6 +54,8 @@ class FilesDownloadCommand extends BoxCommand {
 }
 
 FilesDownloadCommand.description = 'Download a file';
+FilesDownloadCommand.examples = ['box files:download 11111 --destination /path/to/destinationFolder'];
+FilesDownloadCommand._endpoint = 'get_files_id_content';
 
 FilesDownloadCommand.flags = {
 	...BoxCommand.flags,

@@ -29,6 +29,8 @@ class FoldersListItemsCommand extends BoxCommand {
 FoldersListItemsCommand.aliases = [ 'folders:list-items' ];
 
 FoldersListItemsCommand.description = 'List items in a folder';
+FoldersListItemsCommand.examples = ['box folders:items 22222'];
+FoldersListItemsCommand._endpoint = 'get_folders_id_items';
 
 FoldersListItemsCommand.flags = {
 	...BoxCommand.flags,

@@ -52,6 +52,7 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 }
 
 FilesVersionsDownloadCommand.description = 'Download a specific version of a file';
+FilesVersionsDownloadCommand.examples = ['box files:versions:download 11111 55555'];
 
 FilesVersionsDownloadCommand.flags = {
 	..._.omit(FilesDownloadCommand.flags, 'version'),

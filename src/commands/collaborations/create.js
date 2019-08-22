@@ -20,6 +20,8 @@ CollaborationsAddCommand.hidden = true;
 CollaborationsAddCommand.aliases = [ 'collaborations:add' ];
 
 CollaborationsAddCommand.description = 'Create a collaboration for a Box item';
+CollaborationsAddCommand.examples = ['box collaborations:create 22222 folder --role editor --user-id 33333'];
+CollaborationsAddCommand._endpoint = 'post_collaborations';
 
 CollaborationsAddCommand.flags = {
 	...BoxCommand.flags,

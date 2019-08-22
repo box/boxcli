@@ -72,6 +72,8 @@ class UsersUpdateCommand extends BoxCommand {
 }
 
 UsersUpdateCommand.description = 'Update a Box User';
+UsersUpdateCommand.examples = ['box users:update 33333 --status inactive'];
+UsersUpdateCommand._endpoint = 'put_users_id';
 
 UsersUpdateCommand.flags = {
 	...BoxCommand.flags,

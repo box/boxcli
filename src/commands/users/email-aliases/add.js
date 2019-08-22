@@ -21,6 +21,8 @@ class UsersAddEmailAliasCommand extends BoxCommand {
 UsersAddEmailAliasCommand.aliases = [ 'users:add-email-alias' ];
 
 UsersAddEmailAliasCommand.description = 'Add a new email alias to a user';
+UsersAddEmailAliasCommand.examples = ['box users:email-aliases:add 33333 user+alias@example.com'];
+UsersAddEmailAliasCommand._endpoint = 'post_users_id_email_aliases';
 
 UsersAddEmailAliasCommand.flags = {
 	...BoxCommand.flags,

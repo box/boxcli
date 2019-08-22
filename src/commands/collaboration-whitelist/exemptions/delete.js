@@ -12,6 +12,8 @@ class CollaborationWhitelistDeleteExemptionCommand extends BoxCommand {
 }
 
 CollaborationWhitelistDeleteExemptionCommand.description = 'Delete a collaboration whitelist exemption';
+CollaborationWhitelistDeleteExemptionCommand.examples = ['box collaboration-whitelist:exemptions:delete 12345'];
+CollaborationWhitelistDeleteExemptionCommand._endpoint = 'delete_collaboration_whitelist_exempt_targets_id';
 
 CollaborationWhitelistDeleteExemptionCommand.flags = {
 	...BoxCommand.flags

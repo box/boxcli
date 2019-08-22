@@ -14,6 +14,8 @@ class UsersInviteUserCommand extends BoxCommand {
 UsersInviteUserCommand.aliases = [ 'users:invite-user' ];
 
 UsersInviteUserCommand.description = 'Invite an Existing Box User to Your Enterprise';
+UsersInviteUserCommand.examples = ['box users:invite user@example.com 12345'];
+UsersInviteUserCommand._endpoint = 'post_invites';
 
 UsersInviteUserCommand.flags = {
 	...BoxCommand.flags

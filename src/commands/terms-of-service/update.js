@@ -21,6 +21,8 @@ class TermsOfServiceUpdateCommand extends BoxCommand {
 }
 
 TermsOfServiceUpdateCommand.description = 'Update a terms of service';
+TermsOfServiceUpdateCommand.examples = ['box terms-of-service:update 55555 --status disabled'];
+TermsOfServiceUpdateCommand._endpoint = 'put_terms_of_services_id';
 
 TermsOfServiceUpdateCommand.flags = {
 	...BoxCommand.flags,

@@ -19,6 +19,8 @@ class GroupsListMembershipCommand extends BoxCommand {
 GroupsListMembershipCommand.aliases = [ 'groups:membership:list' ];
 
 GroupsListMembershipCommand.description = 'List members of a group';
+GroupsListMembershipCommand.examples = ['box groups:memberships 12345'];
+GroupsListMembershipCommand._endpoint = 'get_groups_id_memberships';
 
 GroupsListMembershipCommand.flags = {
 	...BoxCommand.flags
