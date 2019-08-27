@@ -1,0 +1,6 @@
+type,id,sequence_id,etag,name,file_version.type,file_version.id,file_version.sha1,sha1,url
+folder,1234567,10,10,Box,,,,,
+folder,22585432,9,9,Human Resources,,,,,
+folder,24432981,8,8,Engineering,,,,,
+file,124000,79,79,Draymond.boxnote,file_version,431000,b7e432rew9bc2850a5780a86a25a8574d1b473f,b7e9fsdfe329bc2850a5780a86a25a8574d1b473f,
+web_link,13413421543,77,77,77 Crunchy Dragon Rolls,,,,,https://cloud.app.box.com/s/432fesr32fsdfw

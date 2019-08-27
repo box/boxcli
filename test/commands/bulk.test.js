@@ -808,9 +808,11 @@ describe('Bulk', () => {
 		let inputFilePath = path.join(__dirname, '../fixtures/bulk/bulk_files_tasks_list_input.json'),
 			fixture = getFixture('files/get_files_id_tasks_page_1'),
 			fixture2 = getFixture('files/get_files_id_tasks_page_2'),
+			fixture3 = getFixture('folders/get_folders_id_items'),
 			jsonCollectionOutput = getFixture('output/bulk_collection_output_json.txt'),
 			tableCollectionOutput = getFixture('output/bulk_collection_output_table.txt'),
-			csvCollectionOutput = getFixture('output/bulk_collection_output_csv.txt');
+			csvCollectionOutput = getFixture('output/bulk_collection_output_csv.txt'),
+			csvItemsOutput = getFixture('output/bulk_items_output_csv.txt');
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -917,6 +919,24 @@ describe('Bulk', () => {
 			])
 			.it('should output flattened CSV when each command run returns an array (CSV Output)', ctx => {
 				assert.equal(ctx.stdout, csvCollectionOutput);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/folders/0/items')
+				.query({ usemarker: true })
+				.reply(200, fixture3)
+			)
+			.stdout()
+			.stderr({print: true})
+			.command([
+				'folders:items',
+				'0',
+				'--csv',
+				'--token=test'
+			])
+			.it('should output flattened CSV with union of all fields present in each item when each command run returns an array (CSV Output)', ctx => {
+				assert.equal(ctx.stdout, csvItemsOutput);
 			});
 
 	});
