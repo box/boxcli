@@ -860,7 +860,12 @@ class BoxCommand extends Command {
 			objectArray = [objectArray];
 			DEBUG.output('Creating tabular output from single object');
 		}
-		let keyPaths = this.getNestedKeys(objectArray[0]);
+
+		let keyPaths = [];
+		for (let object of objectArray) {
+			keyPaths = _.union(keyPaths, this.getNestedKeys(object));
+		}
+
 		DEBUG.output('Found %d keys for tabular output', keyPaths.length);
 		formattedData.push(keyPaths);
 		for (let object of objectArray) {

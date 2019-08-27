@@ -1,0 +1,58 @@
+{
+    "total_count": 5,
+    "entries": [
+        {
+            "type": "folder",
+            "id": "1234567",
+            "sequence_id": "10",
+            "etag": "10",
+            "name": "Box"
+        },
+        {
+            "type": "folder",
+            "id": "22585432",
+            "sequence_id": "9",
+            "etag": "9",
+            "name": "Human Resources"
+        },
+        {
+            "type": "folder",
+            "id": "24432981",
+            "sequence_id": "8",
+            "etag": "8",
+            "name": "Engineering"
+        },
+        {
+            "type": "file",
+            "id": "124000",
+            "file_version": {
+                "type": "file_version",
+                "id": "431000",
+                "sha1": "b7e432rew9bc2850a5780a86a25a8574d1b473f"
+            },
+            "sequence_id": "79",
+            "etag": "79",
+            "sha1": "b7e9fsdfe329bc2850a5780a86a25a8574d1b473f",
+            "name": "Draymond.boxnote"
+        },
+        {
+            "type": "web_link",
+            "id": "13413421543",
+            "sequence_id": "77",
+            "etag": "77",
+            "name": "77 Crunchy Dragon Rolls",
+            "url": "https://cloud.app.box.com/s/432fesr32fsdfw"
+        }
+    ],
+    "next_marker": null,
+    "order": [
+        {
+            "by": "type",
+            "direction": "ASC"
+        },
+        {
+            "by": "name",
+            "direction": "ASC"
+        }
+    ]
+}
