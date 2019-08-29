@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.0 [2019-08-29]
+
+- Fixed an issue where the CSV formatting of commands that return multiple different object types (e.g
+  `box files:metadata:list` and `box search`) would only include the columns from the first object in the result set.
+  These commands now output the full set of columns across all objects in the result set.
+- Added a success message to `box collaborations:update` when setting `--role=owner`; previously the command would
+  output `undefined`.
+
 ## 2.3.0 [2019-05-23]
 
 - Added `--confirm` flag to the `box users:email-aliases:add` command to automatically confirm the email alias
