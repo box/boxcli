@@ -7,6 +7,8 @@
   These commands now output the full set of columns across all objects in the result set.
 - Added a success message to `box collaborations:update` when setting `--role=owner`; previously the command would
   output `undefined`.
+- Added support for setting external App User IDs in the `box users:create` and `box users:update` commands with
+  the `--external-id` flag
 
 ## 2.3.0 [2019-05-23]
 
