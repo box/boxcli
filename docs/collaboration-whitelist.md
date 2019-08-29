@@ -33,9 +33,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist
 ```
 
-_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/index.js)_
+_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/index.js)_
 
 ## `box collaboration-whitelist:add DOMAIN`
 
@@ -62,9 +65,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/add.js)_
+_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/add.js)_
 
 ## `box collaboration-whitelist:delete ID`
 
@@ -90,9 +96,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/delete.js)_
+_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/delete.js)_
 
 ## `box collaboration-whitelist:exemptions`
 
@@ -115,9 +124,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:exemptions
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/exemptions/index.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/index.js)_
 
 ## `box collaboration-whitelist:exemptions:create USERID`
 
@@ -143,9 +155,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:exemptions:create 11111
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/exemptions/create.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/create.js)_
 
 ## `box collaboration-whitelist:exemptions:delete ID`
 
@@ -171,9 +186,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:exemptions:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
 
 ## `box collaboration-whitelist:exemptions:get ID`
 
@@ -199,9 +217,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:exemptions:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/exemptions/get.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/get.js)_
 
 ## `box collaboration-whitelist:get ID`
 
@@ -227,6 +248,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-whitelist:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collaboration-whitelist/get.js)_
+_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/get.js)_

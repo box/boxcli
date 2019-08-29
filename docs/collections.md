@@ -32,9 +32,12 @@ OPTIONS
 
 ALIASES
   $ box collections:list
+
+EXAMPLE
+  box collections
 ```
 
-_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collections/index.js)_
+_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/index.js)_
 
 ## `box collections:add ITEMTYPE ITEMID COLLECTIONID`
 
@@ -62,9 +65,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collections:add file 11111 12345
 ```
 
-_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collections/add.js)_
+_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/add.js)_
 
 ## `box collections:items ID`
 
@@ -90,9 +96,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collections:items 12345
 ```
 
-_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collections/items.js)_
+_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/items.js)_
 
 ## `box collections:remove ITEMTYPE ITEMID COLLECTIONID`
 
@@ -120,6 +129,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collections:remove file 11111 12345
 ```
 
-_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/collections/remove.js)_
+_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/remove.js)_

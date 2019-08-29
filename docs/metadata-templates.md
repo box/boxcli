@@ -34,9 +34,12 @@ OPTIONS
 
 ALIASES
   $ box metadata-templates:list
+
+EXAMPLE
+  box metadata-templates
 ```
 
-_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/index.js)_
+_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/index.js)_
 
 ## `box metadata-templates:cascade TEMPLATEKEY`
 
@@ -65,9 +68,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --scope=scope                          [default: enterprise] The scope of the metadata template to cascade
+
+EXAMPLE
+  box metadata-templates:cascade employeeRecord --folder 22222
 ```
 
-_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/cascade.js)_
+_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/cascade.js)_
 
 ## `box metadata-templates:create`
 
@@ -105,9 +111,12 @@ OPTIONS
 
   --template-key=template-key            A unique identifier for the template.  If not specified, will be derived from
                                          the display name
+
+EXAMPLE
+  box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales
 ```
 
-_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/create.js)_
+_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/create.js)_
 
 ## `box metadata-templates:delete TEMPLATEKEY`
 
@@ -134,9 +143,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --scope=scope                          [default: enterprise] The scope of the metadata template to delete
+
+EXAMPLE
+  box metadata-templates:delete employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/delete.js)_
+_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/delete.js)_
 
 ## `box metadata-templates:get TEMPLATEKEY`
 
@@ -163,9 +175,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --scope=scope                          [default: enterprise] The scope of the metadata template to get
+
+EXAMPLE
+  box metadata-templates:get employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/get.js)_
+_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/get.js)_
 
 ## `box metadata-templates:update TEMPLATEKEY`
 
@@ -237,6 +252,9 @@ OPTIONS
   --scope=scope                                [default: enterprise] The scope of the metadata template
 
   --string=string                              Add a string field with the provided name
+
+EXAMPLE
+  box metadata-templates:update employeeRecord --hidden
 ```
 
-_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/metadata-templates/update.js)_
+_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/metadata-templates/update.js)_

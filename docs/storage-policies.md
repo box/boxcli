@@ -34,9 +34,12 @@ OPTIONS
 
 ALIASES
   $ box storage-policies:list
+
+EXAMPLE
+  box storage-policies
 ```
 
-_See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/index.js)_
+_See code: [src/commands/storage-policies/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/index.js)_
 
 ## `box storage-policies:assign STORAGEPOLICYID USERID`
 
@@ -63,9 +66,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box storage-policies:assign 12345 33333
 ```
 
-_See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/assign.js)_
+_See code: [src/commands/storage-policies/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/assign.js)_
 
 ## `box storage-policies:assignments:get ID`
 
@@ -91,9 +97,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box storage-policies:assignments:get 12345
 ```
 
-_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/assignments/get.js)_
+_See code: [src/commands/storage-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/assignments/get.js)_
 
 ## `box storage-policies:assignments:lookup ID`
 
@@ -120,9 +129,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --type=user|enterprise                 (required) [default: user] Type of object to look up the storage policy for
+
+EXAMPLE
+  box storage-policies:assignments:lookup 33333
 ```
 
-_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/assignments/lookup.js)_
+_See code: [src/commands/storage-policies/assignments/lookup.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/assignments/lookup.js)_
 
 ## `box storage-policies:assignments:remove ID`
 
@@ -148,9 +160,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box storage-policies:assignments:remove 12345
 ```
 
-_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/assignments/remove.js)_
+_See code: [src/commands/storage-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/assignments/remove.js)_
 
 ## `box storage-policies:get ID`
 
@@ -176,6 +191,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box storage-policies:get 12345
 ```
 
-_See code: [src/commands/storage-policies/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/storage-policies/get.js)_
+_See code: [src/commands/storage-policies/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/storage-policies/get.js)_

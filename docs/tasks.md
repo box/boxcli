@@ -42,9 +42,12 @@ OPTIONS
 
 ALIASES
   $ box task-assignments:create
+
+EXAMPLE
+  box tasks:assign 88888 --assign-to-user-id 33333
 ```
 
-_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/assign.js)_
+_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assign.js)_
 
 ## `box tasks:assignments ID`
 
@@ -73,9 +76,12 @@ OPTIONS
 
 ALIASES
   $ box task-assignments:list
+
+EXAMPLE
+  box tasks:assignments 88888
 ```
 
-_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/assignments/index.js)_
+_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/index.js)_
 
 ## `box tasks:assignments:delete ID`
 
@@ -104,9 +110,12 @@ OPTIONS
 
 ALIASES
   $ box task-assignments:delete
+
+EXAMPLE
+  box tasks:assignments:delete 12345
 ```
 
-_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/assignments/delete.js)_
+_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/delete.js)_
 
 ## `box tasks:assignments:get ID`
 
@@ -135,9 +144,12 @@ OPTIONS
 
 ALIASES
   $ box task-assignments:get
+
+EXAMPLE
+  box tasks:assignments:get 12345
 ```
 
-_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/assignments/get.js)_
+_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/get.js)_
 
 ## `box tasks:assignments:update ID`
 
@@ -168,9 +180,12 @@ OPTIONS
 
 ALIASES
   $ box task-assignments:update
+
+EXAMPLE
+  box tasks:assignments:update 12345 --status approved
 ```
 
-_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/assignments/update.js)_
+_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/update.js)_
 
 ## `box tasks:create FILEID`
 
@@ -199,9 +214,12 @@ OPTIONS
   --message=message                      Message for task
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box tasks:create 11111 --message "Please proofread this document"
 ```
 
-_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/create.js)_
+_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/create.js)_
 
 ## `box tasks:delete ID`
 
@@ -227,9 +245,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box tasks:delete 88888
 ```
 
-_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/delete.js)_
+_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/delete.js)_
 
 ## `box tasks:get ID`
 
@@ -255,9 +276,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box tasks:get 88888
 ```
 
-_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/get.js)_
+_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/get.js)_
 
 ## `box tasks:update ID`
 
@@ -285,6 +309,9 @@ OPTIONS
   --message=message                      Message for task
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box tasks:update 88888 --due-at 1w
 ```
 
-_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/tasks/update.js)_
+_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/update.js)_

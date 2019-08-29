@@ -50,9 +50,13 @@ OPTIONS
 
 ALIASES
   $ box events:get
+
+EXAMPLES
+  box events
+  box events --enterprise --created-after 2019-01-01
 ```
 
-_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/events/index.js)_
+_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/events/index.js)_
 
 ## `box events:poll`
 
@@ -93,4 +97,4 @@ OPTIONS
                                          shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now
 ```
 
-_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/events/poll.js)_
+_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/events/poll.js)_

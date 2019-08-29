@@ -37,9 +37,12 @@ OPTIONS
 
   --tagged-message=tagged-message        The text of the comment, including @[userid:Username] somewhere in the message
                                          to mention the user
+
+EXAMPLE
+  box comments:create 11111 --message "Thanks for the update!"
 ```
 
-_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/create.js)_
+_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/comments/create.js)_
 
 ## `box comments:delete ID`
 
@@ -65,9 +68,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box comments:delete 12345
 ```
 
-_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/delete.js)_
+_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/comments/delete.js)_
 
 ## `box comments:get ID`
 
@@ -93,9 +99,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box comments:get 12345
 ```
 
-_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/get.js)_
+_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/comments/get.js)_
 
 ## `box comments:reply ID`
 
@@ -125,9 +134,12 @@ OPTIONS
 
   --tagged-message=tagged-message        The text of the comment, including @[userid:Username] somewhere in the message
                                          to mention the user
+
+EXAMPLE
+  box comments:reply 12345 --message "No problem!"
 ```
 
-_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/reply.js)_
+_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/comments/reply.js)_
 
 ## `box comments:update ID`
 
@@ -155,6 +167,9 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --tagged-message=tagged-message        The tagged text of the comment
+
+EXAMPLE
+  box comments:update 12345 --message "Thank you for the update!"
 ```
 
-_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/comments/update.js)_
+_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/comments/update.js)_

@@ -36,9 +36,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --parent-id=parent-id                  (required) ID of the folder to create the web link in
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box web-links:create http://example.com --parent-id 0
 ```
 
-_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/web-links/create.js)_
+_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/create.js)_
 
 ## `box web-links:delete ID`
 
@@ -64,9 +67,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box web-links:delete 12345
 ```
 
-_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/web-links/delete.js)_
+_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/delete.js)_
 
 ## `box web-links:get ID`
 
@@ -92,9 +98,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box web-links:get 12345
 ```
 
-_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/web-links/get.js)_
+_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/get.js)_
 
 ## `box web-links:move ID PARENTID`
 
@@ -121,9 +130,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box web-links:move 12345 22222
 ```
 
-_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/web-links/move.js)_
+_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/move.js)_
 
 ## `box web-links:update ID`
 
@@ -152,6 +164,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box web-links:update 12345 --name "Example Site"
 ```
 
-_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/web-links/update.js)_
+_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/update.js)_

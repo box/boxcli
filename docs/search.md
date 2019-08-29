@@ -76,6 +76,10 @@ OPTIONS
 
   --updated-at-to=updated-at-to                  End of updated date range. Use a RFC3339 timestamp or shorthand syntax
                                                  0t, like 5w for 5 weeks
+
+EXAMPLES
+  box search "Q3 OKR"
+  box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/search.js)_

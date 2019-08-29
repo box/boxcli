@@ -30,6 +30,9 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --password=password                    Shared item password
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3
 ```
 
-_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.3.0/src/commands/shared-links/get.js)_
+_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/shared-links/get.js)_
