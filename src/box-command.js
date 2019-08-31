@@ -779,7 +779,9 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	info(content) {
-		process.stderr.write(`${content}${os.EOL}`);
+		if (!this.flags.quiet) {
+			process.stderr.write(`${content}${os.EOL}`);
+		}
 	}
 
 	/**
@@ -1131,12 +1133,17 @@ BoxCommand.flags = {
 		char: 'y',
 		description: 'Automatically respond yes to all confirmation prompts',
 	}),
+	quiet: flags.boolean({
+		char: 'q',
+		description: 'Suppress any non-error output to stderr',
+	})
 };
 
 BoxCommand.minFlags = _.pick(BoxCommand.flags, [
 	'no-color',
 	'help',
-	'verbose'
+	'verbose',
+	'quiet'
 ]);
 
 module.exports = BoxCommand;
