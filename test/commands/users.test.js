@@ -679,10 +679,6 @@ describe('Users', () => {
 				'--timezone=America/Los_Angeles',
 				{timezone: 'America/Los_Angeles'}
 			],
-			'avatar URL flag': [
-				'--avatar-url=https://example.com/foo.png',
-				{avatar_url: 'https://example.com/foo.png'}
-			],
 		}, function(flag, body) {
 
 			test
@@ -848,10 +844,6 @@ describe('Users', () => {
 			'timezone flag': [
 				'--timezone=America/Los_Angeles',
 				{timezone: 'America/Los_Angeles'}
-			],
-			'avatar URL flag': [
-				'--avatar-url=https://example.com/foo.png',
-				{avatar_url: 'https://example.com/foo.png'}
 			],
 			'role flag': [
 				'--role=coadmin',
