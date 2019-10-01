@@ -52,9 +52,6 @@ class UsersCreateCommand extends BoxCommand {
 		if (flags.timezone) {
 			options.timezone = flags.timezone;
 		}
-		if (flags['avatar-url']) {
-			options.avatar_url = flags['avatar-url'];
-		}
 		if (flags['external-id']) {
 			options.external_app_user_id = flags['external-id'];
 		}
@@ -149,7 +146,6 @@ UsersCreateCommand.flags = {
 		]
 	}),
 	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
-	'avatar-url': flags.string({ description: 'URL of the user\'s avatar image' })
 };
 
 UsersCreateCommand.args = [
