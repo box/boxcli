@@ -14,6 +14,9 @@ class TasksUpdateCommand extends BoxCommand {
 		if (flags['due-at']) {
 			options.due_at = flags['due-at'];
 		}
+		if (flags['completion-rule']) {
+			options.completion_rule = flags['completion-rule'];
+		}
 
 		let task = await this.client.tasks.update(args.id, options);
 		await this.output(task);
@@ -30,6 +33,13 @@ TasksUpdateCommand.flags = {
 	'due-at': flags.string({
 		description: 'When this task is due, use format 05h for 5 hours for example',
 		parse: input => BoxCommand.normalizeDateString(input),
+	}),
+	'completion-rule': flags.string({
+		description: 'Rule for how many assignees must complete the task to consider it completed',
+		options: [
+			'all_assignees',
+			'any_assignee'
+		]
 	}),
 };
 
