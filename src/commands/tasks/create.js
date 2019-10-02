@@ -14,6 +14,9 @@ class TasksCreateCommand extends BoxCommand {
 		if (flags['due-at']) {
 			options.due_at = flags['due-at'];
 		}
+		if (flags['completion-rule']) {
+			options.completion_rule = flags['completion-rule'];
+		}
 
 		let task = await this.client.tasks.create(args.fileID, options);
 		await this.output(task);
@@ -33,7 +36,14 @@ TasksCreateCommand.flags = {
 	}),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command'
-	})
+	}),
+	'completion-rule': flags.string({
+		description: 'Rule for how many assignees must complete the task to consider it completed',
+		options: [
+			'all_assignees',
+			'any_assignee'
+		]
+	}),
 };
 
 TasksCreateCommand.args = [
