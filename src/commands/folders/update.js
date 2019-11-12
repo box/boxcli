@@ -20,7 +20,7 @@ class FoldersUpdateCommand extends BoxCommand {
 			};
 		}
 		if (flags.hasOwnProperty('restrict-collaboration')) {
-			updates.can_non_owners_invite = flags['restrict-collaboration'];
+			updates.can_non_owners_invite = !flags['restrict-collaboration'];
 		}
 		if (flags.hasOwnProperty('restrict-to-enterprise')) {
 			updates.is_collaboration_restricted_to_enterprise = flags['restrict-to-enterprise'];
@@ -67,7 +67,7 @@ FoldersUpdateCommand.flags = {
 	}),
 	'restrict-to-enterprise': flags.boolean({
 		description: 'Restrict collaboration so only users in the folder owner\'s enterprise can be added',
-		allowNo: true,
+		allowNo: true
 	}),
 	etag: flags.string({ description: 'Only apply updates if the etag value matches' }),
 };
