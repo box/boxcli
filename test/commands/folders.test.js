@@ -1286,11 +1286,11 @@ describe('Folders', () => {
 		leche.withData({
 			'restrict collaboration flag': [
 				'--restrict-collaboration',
-				{can_non_owners_invite: true}
+				{can_non_owners_invite: false}
 			],
 			'no restrict collaboration flag': [
 				'--no-restrict-collaboration',
-				{can_non_owners_invite: false}
+				{can_non_owners_invite: true}
 			],
 			'restrict to enterprise flag': [
 				'--restrict-to-enterprise',
