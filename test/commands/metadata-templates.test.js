@@ -353,7 +353,7 @@ describe('Metadata Templates', () => {
 		});
 	});
 
-	describe('metadata-templates:update', () => {
+	describe.only('metadata-templates:update', () => {
 
 		let scope = 'enterprise',
 			templateKey = 'employeeRecord',
@@ -494,6 +494,49 @@ describe('Metadata Templates', () => {
 				'--token=test'
 			])
 			.it('should update the metadata template (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+			test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/metadata_templates/${scope}/${templateKey}/schema`, expectedUpdates)
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'metadata-templates:update',
+				templateKey,
+				'--add-enum-option=key1',
+				'--option=optionKey1',
+				'--enum=Field Display Name',
+				'--description=My New Field',
+				'--field-key=key2',
+				'--option=opt1',
+				'--option=opt2',
+				'--reorder-enum-options=key2',
+				'--option=opt2',
+				'--option=opt1',
+				'--reorder-fields=key2,key3,key1',
+				'--edit-field=key2',
+				'--display-name=Different Display Name',
+				'--edit-enum-option=key2.opt2',
+				'--option=newOpt2',
+				'--remove-enum-option=key2.opt1',
+				'--remove-field=key2',
+				'--multi-select=foo',
+				'--option=bar',
+				'--option=baz',
+				'--no-hidden',
+				'--number=Count',
+				'--date=Date',
+				'--edit-template',
+				'--hidden',
+				'--display-name=New Display Name',
+				'--json',
+				'--token=test',
+				`--scope=${scope}`
+			])
+			.it('should update the metadata template with edit-template flag (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 

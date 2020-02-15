@@ -87,4 +87,25 @@ describe('Trash', () => {
 				.it('should send fields param to the API when --fiels flag is passed');
 		});
 	});
+
+	describe('trash:get', () => {
+		let fixture = getFixture('trash/get_web_links_id_trash');
+		let itemId = '1234';
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/${itemType}s/${itemId}/trash`)
+				.reply(200, fixture)
+			)
+			.stderr()
+			.command([
+				'trash:get',
+				'web_link',
+				itemId,
+				'--token=test'
+			])
+			.it('should get information on a web link in trash', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+	});
 });
