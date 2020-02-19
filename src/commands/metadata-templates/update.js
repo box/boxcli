@@ -43,14 +43,6 @@ const FLAG_HANDLERS = Object.freeze({
 			data: {},
 		};
 	},
-	'edit-template': (value, currentOp, ops) => {
-		ops.push(currentOp);
-
-		return {
-			op: 'editTemplate',
-			data: {},
-		};
-	},
 	'edit-enum-option': (value, currentOp, ops) => {
 		ops.push(currentOp);
 
@@ -334,10 +326,6 @@ MetadataTemplatesUpdateCommand.flags = {
 	}),
 	'edit-field': flags.string({
 		description: 'Edit the specified field; must be followed by flags to apply to the field',
-	}),
-	'edit-template': flags.boolean({
-		description: 'Edit the template; must be followed by flags to apply to the template',
-		allowNo: false
 	}),
 	'edit-enum-option': flags.string({
 		description: 'Edit the specified enum option; must be followed by an --option flag',

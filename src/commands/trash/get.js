@@ -4,13 +4,13 @@ const BoxCommand = require('../../box-command');
 
 class TrashGetCommand extends BoxCommand {
 	async run() {
-        const { flags, args } = this.parse(TrashGetCommand);
-        let options = {};
+		const { flags, args } = this.parse(TrashGetCommand);
+		let options = {};
 
 		if (flags.fields) {
 			options.fields = flags.fields;
 		}
-        let item;
+		let item;
 		if (args.type === 'file') {
 			item = await this.client.files.getTrashedFile(args.id, options);
 		} else if (args.type === 'folder') {
@@ -26,7 +26,7 @@ TrashGetCommand.description = 'Get information about an item in trash';
 TrashGetCommand.examples = ['box trash:get folder 22222'];
 
 TrashGetCommand.flags = {
-    ...BoxCommand.flags
+	...BoxCommand.flags
 };
 
 TrashGetCommand.args = [
