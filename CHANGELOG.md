@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+- Added `--quiet` flag to suppress any non-error output to stderr
+- Fixed the `--restrict-collaboration` flag for `box folders:update` where passing passing the flag would not restrict the collaboration and setting the flag to false would restrict the collaboration
+- Added `box trash:restore` to restore a trashed item and `box trash:get` to get information on a trashed item
+
 ## 2.4.0 [2019-08-29]
 
 - Fixed an issue where the CSV formatting of commands that return multiple different object types (e.g
