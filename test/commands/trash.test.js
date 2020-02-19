@@ -90,6 +90,7 @@ describe('Trash', () => {
 
 	describe('trash:get', () => {
 		let folderFixture = getFixture('trash/get_folders_id_trash'),
+			fileFixture = getFixture('trash/get_files_id_trash'),
 			webLinkFixture = getFixture('trash/get_folders_id_trash');
 		let itemId = '12345';
 
@@ -108,6 +109,25 @@ describe('Trash', () => {
 			])
 			.it('should get information on a folder in trash (JSON Output)', ctx => {
 				let fixtureJSON = JSON.parse(folderFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${itemId}/trash`)
+				.reply(200, fileFixture)
+			)
+			.stdout()
+			.command([
+				'trash:get',
+				'file',
+				itemId,
+				'--json',
+				'--token=test'
+			])
+			.it('should get information on a file in trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(fileFixture);
 				let outputJSON = JSON.parse(ctx.stdout);
 				assert.deepEqual(outputJSON, fixtureJSON);
 			});
@@ -134,6 +154,7 @@ describe('Trash', () => {
 
 	describe('trash:restore', () => {
 		let folderFixture = getFixture('trash/post_folders_id'),
+			fileFixture = getFixture('trash/post_files_id'),
 			webLinkFixture = getFixture('trash/post_web_links_id');
 
 		let itemId = '1234',
@@ -161,6 +182,27 @@ describe('Trash', () => {
 			])
 			.it('should restore a folder from trash (JSON Output)', ctx => {
 				let fixtureJSON = JSON.parse(folderFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/files/${itemId}`, expectedBody)
+				.reply(201, fileFixture)
+			)
+			.stdout()
+			.command([
+				'trash:restore',
+				'file',
+				itemId,
+				`--name=${name}`,
+				`--parent-id=${parentId}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should restore a file from trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(fileFixture);
 				let outputJSON = JSON.parse(ctx.stdout);
 				assert.deepEqual(outputJSON, fixtureJSON);
 			});

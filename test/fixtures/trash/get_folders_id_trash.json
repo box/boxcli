@@ -1,5 +1,5 @@
 {
-    "id": 12345,
+    "id": "12345",
     "etag": 1,
     "type": "folder",
     "sequence_id": 3,
@@ -12,22 +12,22 @@
         "total_count": 1,
         "entries": [
             {
-                "id": 12345,
+                "id": "0",
                 "etag": 1,
                 "type": "folder",
                 "sequence_id": 3,
-                "name": "Contracts"
+                "name": "All files"
             }
         ]
     },
     "created_by": {
-        "id": 11446498,
+        "id": "11446498",
         "type": "user",
         "name": "Aaron Levie",
         "login": "ceo@example.com"
     },
     "modified_by": {
-        "id": 11446498,
+        "id": "11446498",
         "type": "user",
         "name": "Aaron Levie",
         "login": "ceo@example.com"
@@ -38,7 +38,7 @@
     "content_modified_at": "2012-12-12T10:53:43-08:00",
     "expires_at": "2012-12-12T10:53:43-08:00",
     "owned_by": {
-        "id": 11446498,
+        "id": "11446498",
         "type": "user",
         "name": "Aaron Levie",
         "login": "ceo@example.com"
@@ -64,11 +64,11 @@
         "email": "upload.Contracts.asd7asd@u.box.com"
     },
     "parent": {
-        "id": 12345,
+        "id": "0",
         "etag": 1,
         "type": "folder",
         "sequence_id": 3,
-        "name": "Contracts"
+        "name": "All files"
     },
     "item_status": "active",
     "item_collection": {
@@ -83,7 +83,7 @@
         ],
         "entries": [
             {
-                "id": 12345,
+                "id": "123456",
                 "etag": 1,
                 "type": "file",
                 "sequence_id": 3,
@@ -118,4 +118,4 @@
         "is_watermarked": true
     },
     "can_non_owners_view_collaborators": true
-}
+  }
