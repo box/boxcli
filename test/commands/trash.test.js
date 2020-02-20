@@ -87,4 +87,145 @@ describe('Trash', () => {
 				.it('should send fields param to the API when --fiels flag is passed');
 		});
 	});
+
+	describe('trash:get', () => {
+		let folderFixture = getFixture('trash/get_folders_id_trash'),
+			fileFixture = getFixture('trash/get_files_id_trash'),
+			webLinkFixture = getFixture('trash/get_folders_id_trash');
+		let itemId = '12345';
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/folders/${itemId}/trash`)
+				.reply(200, folderFixture)
+			)
+			.stdout()
+			.command([
+				'trash:get',
+				'folder',
+				itemId,
+				'--json',
+				'--token=test'
+			])
+			.it('should get information on a folder in trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(folderFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${itemId}/trash`)
+				.reply(200, fileFixture)
+			)
+			.stdout()
+			.command([
+				'trash:get',
+				'file',
+				itemId,
+				'--json',
+				'--token=test'
+			])
+			.it('should get information on a file in trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(fileFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/web_links/${itemId}/trash`)
+				.reply(200, webLinkFixture)
+			)
+			.stdout()
+			.command([
+				'trash:get',
+				'web_link',
+				itemId,
+				'--json',
+				'--token=test'
+			])
+			.it('should get information on a web link in trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(webLinkFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+	});
+
+	describe('trash:restore', () => {
+		let folderFixture = getFixture('trash/post_folders_id'),
+			fileFixture = getFixture('trash/post_files_id'),
+			webLinkFixture = getFixture('trash/post_web_links_id');
+
+		let itemId = '1234',
+			name = 'Contracts',
+			parentId = '0';
+
+		let expectedBody = {
+			name,
+			parent: { id: parentId }
+		};
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/folders/${itemId}`, expectedBody)
+				.reply(201, folderFixture)
+			)
+			.stdout()
+			.command([
+				'trash:restore',
+				'folder',
+				itemId,
+				`--name=${name}`,
+				`--parent-id=${parentId}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should restore a folder from trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(folderFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/files/${itemId}`, expectedBody)
+				.reply(201, fileFixture)
+			)
+			.stdout()
+			.command([
+				'trash:restore',
+				'file',
+				itemId,
+				`--name=${name}`,
+				`--parent-id=${parentId}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should restore a file from trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(fileFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post(`/2.0/web_links/${itemId}`, expectedBody)
+				.reply(201, webLinkFixture)
+			)
+			.stdout()
+			.command([
+				'trash:restore',
+				'web_link',
+				itemId,
+				`--name=${name}`,
+				`--parent-id=${parentId}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should restore a web link from trash (JSON Output)', ctx => {
+				let fixtureJSON = JSON.parse(webLinkFixture);
+				let outputJSON = JSON.parse(ctx.stdout);
+				assert.deepEqual(outputJSON, fixtureJSON);
+			});
+	});
 });
