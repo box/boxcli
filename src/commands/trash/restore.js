@@ -34,7 +34,7 @@ TrashRestoreCommand.examples = ['box trash:restore folder 22222'];
 TrashRestoreCommand.flags = {
 	...BoxCommand.flags,
 	name: flags.string({
-		description: 'An new name for the item'
+		description: 'The new name for the item'
 	}),
 	'parent-id': flags.string({
 		description: 'ID of a folder to restore the item to only when the original folder no longer exists'
