@@ -859,7 +859,10 @@ describe('Folders', () => {
 					{
 						op: 'add',
 						path: '/arr',
-						value: [ 'foo', 'bar' ],
+						value: [
+							'foo',
+							'bar'
+						],
 					}
 				])
 				.reply(200, addMetadataFixture)
@@ -879,7 +882,7 @@ describe('Folders', () => {
 				assert.equal(ctx.stdout, addMetadataFixture);
 			});
 
-		
+
 	});
 
 	leche.withData([
@@ -1280,7 +1283,52 @@ describe('Folders', () => {
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
 
-		// @TODO(2018-08-21): Add tests for other flags
+		leche.withData({
+			'restrict collaboration flag': [
+				'--restrict-collaboration',
+				{can_non_owners_invite: false}
+			],
+			'no restrict collaboration flag': [
+				'--no-restrict-collaboration',
+				{can_non_owners_invite: true}
+			],
+			'restrict to enterprise flag': [
+				'--restrict-to-enterprise',
+				{is_collaboration_restricted_to_enterprise: true}
+			],
+			'no restrict to enterprise flag': [
+				'--no-restrict-to-enterprise',
+				{is_collaboration_restricted_to_enterprise: false}
+			],
+			'upload email access flag': [
+				'--upload-email-access=open',
+				{folder_upload_email: {access: 'open'}}
+			],
+			'sync flag': [
+				'--sync',
+				{sync_state: 'synced'}
+			],
+			'no sync flag': [
+				'--no-sync',
+				{sync_state: 'not_synced'}
+			],
+		}, function(flag, expectedData) {
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.put(`/2.0/folders/${folderId}`, expectedData)
+					.reply(200, fixture)
+				)
+				.stdout()
+				.stderr()
+				.command([
+					'folders:update',
+					folderId,
+					flag,
+					'--token=test',
+				])
+				.it('should send correct updates when flag is passed');
+		});
 	});
 
 	describe('folders:upload', () => {

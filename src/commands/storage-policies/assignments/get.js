@@ -12,6 +12,8 @@ class StoragePoliciesGetAssignmentCommand extends BoxCommand {
 }
 
 StoragePoliciesGetAssignmentCommand.description = 'Get information on a storage policy assignment';
+StoragePoliciesGetAssignmentCommand.examples = ['box storage-policies:assignments:get 12345'];
+StoragePoliciesGetAssignmentCommand._endpoint = 'get_storage_policy_assignments_id';
 
 StoragePoliciesGetAssignmentCommand.flags = {
 	...BoxCommand.flags

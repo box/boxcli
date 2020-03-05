@@ -13,6 +13,8 @@ class MetadataTemplatesDeleteCommand extends BoxCommand {
 }
 
 MetadataTemplatesDeleteCommand.description = 'Delete a metadata template';
+MetadataTemplatesDeleteCommand.examples = ['box metadata-templates:delete employeeRecord'];
+MetadataTemplatesDeleteCommand._endpoint = 'delete_metadata_templates_id_id_schema';
 
 MetadataTemplatesDeleteCommand.flags = {
 	...BoxCommand.flags,

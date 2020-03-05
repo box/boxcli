@@ -37,9 +37,12 @@ OPTIONS
   --no-color                                   Turn off colors for logging
   --policy-type=finite|indefinite              A policy type to filter the retention policies by
   --save-to-file-path=save-to-file-path        Override default file path to save report
+
+EXAMPLE
+  box retention-policies
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -75,9 +78,12 @@ OPTIONS
   --no-color                                            Turn off colors for logging
 
   --save-to-file-path=save-to-file-path                 Override default file path to save report
+
+EXAMPLE
+  box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -104,9 +110,12 @@ OPTIONS
   --no-color                                  Turn off colors for logging
   --save-to-file-path=save-to-file-path       Override default file path to save report
   --type=folder|enterprise|metadata_template  The type of the retention policy assignment to retrieve
+
+EXAMPLE
+  box retention-policies:assignments 12345
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -132,9 +141,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box retention-policies:assignments:get 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -182,9 +194,12 @@ OPTIONS
                                                             nearing expiration
 
   --save-to-file-path=save-to-file-path                     Override default file path to save report
+
+EXAMPLE
+  box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action permanently_delete
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/create.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -224,9 +239,12 @@ OPTIONS
   --policy-id=policy-id                                     A policy id to filter the file version retentions by
 
   --save-to-file-path=save-to-file-path                     Override default file path to save report
+
+EXAMPLE
+  box retention-policies:file-version-retentions
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -252,9 +270,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box retention-policies:file-version-retentions:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -280,9 +301,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box retention-policies:get 12345
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -333,6 +357,9 @@ OPTIONS
   --policy-type=finite|indefinite              Type of policy
 
   --save-to-file-path=save-to-file-path        Override default file path to save report
+
+EXAMPLE
+  box retention-policies:update 12345
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/update.js)_

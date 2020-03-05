@@ -30,9 +30,12 @@ OPTIONS
 
 ALIASES
   $ box trash:list
+
+EXAMPLE
+  box trash
 ```
 
-_See code: [src/commands/trash/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/trash/index.js)_
+_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/trash/index.js)_
 
 ## `box trash:delete TYPE ID`
 
@@ -59,6 +62,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box trash:delete folder 22222
 ```
 
-_See code: [src/commands/trash/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/trash/delete.js)_
+_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/trash/delete.js)_

@@ -114,6 +114,23 @@ describe('Collaborations', () => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
 
+			test
+				.nock(TEST_API_ROOT, api => api
+					.put(`/2.0/collaborations/${collaborationId}`, {role: 'owner'})
+					.reply(204)
+				)
+				.stdout()
+				.stderr()
+				.command([
+					command,
+					collaborationId,
+					'--role=owner',
+					'--token=test'
+				])
+				.it('should print a success message after updating collab role to owner', ctx => {
+					assert.equal(ctx.stderr, `Collaborator successfully upgraded to owner.${os.EOL}`);
+				});
+
 			leche.withData({
 				'editor flag': [
 					'--editor',

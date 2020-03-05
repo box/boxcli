@@ -18,6 +18,8 @@ class DevicePinsListCommand extends BoxCommand {
 }
 
 DevicePinsListCommand.description = 'List all the device pins for your enterprise';
+DevicePinsListCommand.examples = ['box device-pins'];
+DevicePinsListCommand._endpoint = 'get_enterprises_id_device_pinners';
 
 DevicePinsListCommand.flags = {
 	...BoxCommand.flags,

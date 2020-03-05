@@ -13,6 +13,8 @@ class WebLinksMoveCommand extends BoxCommand {
 }
 
 WebLinksMoveCommand.description = 'Move a web link';
+WebLinksMoveCommand.examples = ['box web-links:move 12345 22222'];
+WebLinksMoveCommand._endpoint = 'put_web_links_id move';
 
 WebLinksMoveCommand.flags = {
 	...BoxCommand.flags

@@ -26,6 +26,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box recent-items
 ```
 
-_See code: [src/commands/recent-items.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/recent-items.js)_
+_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/recent-items.js)_

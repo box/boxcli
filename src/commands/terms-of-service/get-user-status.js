@@ -18,6 +18,8 @@ class TermsOfServiceGetUserStatusCommand extends BoxCommand {
 }
 
 TermsOfServiceGetUserStatusCommand.description = 'Get a user\'s status on a terms of service';
+TermsOfServiceGetUserStatusCommand.examples = ['box terms-of-service:get-user-status 55555'];
+TermsOfServiceGetUserStatusCommand._endpoint = 'get_terms_of_service_user_statuses';
 
 TermsOfServiceGetUserStatusCommand.flags = {
 	...BoxCommand.flags,

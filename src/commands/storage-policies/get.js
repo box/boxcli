@@ -12,6 +12,9 @@ class StoragePoliciesGetCommand extends BoxCommand {
 }
 
 StoragePoliciesGetCommand.description = 'Get information on a storage policy';
+StoragePoliciesGetCommand.examples = ['box storage-policies:get 12345'];
+StoragePoliciesGetCommand._endpoint = 'get_storage_policies_id';
+
 
 StoragePoliciesGetCommand.flags = {
 	...BoxCommand.flags

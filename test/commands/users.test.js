@@ -56,6 +56,27 @@ describe('Users', () => {
 				.it('should add a new email alias to a user (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.post(`/2.0/users/${userId}/email_aliases`, {
+						...expectedBody,
+						is_confirmed: true,
+					})
+					.reply(201, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					userId,
+					email,
+					'--confirm',
+					'--json',
+					'--token=test'
+				])
+				.it('should auto-confirm email alias when --confirm flag is passed', ctx => {
+					assert.equal(ctx.stdout, fixture);
+				});
 		});
 	});
 
@@ -658,10 +679,6 @@ describe('Users', () => {
 				'--timezone=America/Los_Angeles',
 				{timezone: 'America/Los_Angeles'}
 			],
-			'avatar URL flag': [
-				'--avatar-url=https://example.com/foo.png',
-				{avatar_url: 'https://example.com/foo.png'}
-			],
 		}, function(flag, body) {
 
 			test
@@ -685,7 +702,11 @@ describe('Users', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/users', { name, is_platform_access_only: true })
+				.post('/2.0/users', {
+					name,
+					is_platform_access_only: true,
+					external_app_user_id: 'foo',
+				})
 				.reply(201, fixture)
 			)
 			.stdout()
@@ -693,10 +714,11 @@ describe('Users', () => {
 				'users:create',
 				name,
 				'--app-user',
+				'--external-id=foo',
 				'--id-only',
 				'--token=test'
 			])
-			.it('should create a new app user when --app-user flag is passed', ctx => {
+			.it('should create a new app user with external ID when App User flags are passed', ctx => {
 				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
 			});
 
@@ -823,10 +845,6 @@ describe('Users', () => {
 				'--timezone=America/Los_Angeles',
 				{timezone: 'America/Los_Angeles'}
 			],
-			'avatar URL flag': [
-				'--avatar-url=https://example.com/foo.png',
-				{avatar_url: 'https://example.com/foo.png'}
-			],
 			'role flag': [
 				'--role=coadmin',
 				{role: 'coadmin'}
@@ -842,6 +860,10 @@ describe('Users', () => {
 			'name flag': [
 				'--name=Bob Smith',
 				{name: 'Bob Smith'}
+			],
+			'external ID flag': [
+				'--external-id=foo',
+				{external_app_user_id: 'foo'}
 			]
 		}, function(flag, body) {
 

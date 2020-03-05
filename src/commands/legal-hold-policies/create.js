@@ -27,6 +27,8 @@ class LegalHoldPoliciesCreateCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesCreateCommand.description = 'Create a new legal hold policy';
+LegalHoldPoliciesCreateCommand.examples = ['box legal-hold-policies:create "Class Action Suit" --ongoing'];
+LegalHoldPoliciesCreateCommand._endpoint = 'post_legal_hold_policies';
 
 LegalHoldPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,

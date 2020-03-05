@@ -264,6 +264,8 @@ class MetadataTemplatesUpdateCommand extends BoxCommand {
 }
 
 MetadataTemplatesUpdateCommand.description = 'Update a metadata template';
+MetadataTemplatesUpdateCommand.examples = ['box metadata-templates:update employeeRecord --hidden'];
+MetadataTemplatesUpdateCommand._endpoints = 'put_metadata_templates_id_id_schema';
 
 MetadataTemplatesUpdateCommand.flags = {
 	...BoxCommand.flags,

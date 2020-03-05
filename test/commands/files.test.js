@@ -247,6 +247,22 @@ describe('Files', () => {
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
 				.reply(204)
+			)
+			.stderr()
+			.command([
+				'files:delete',
+				fileId,
+				'--quiet',
+				'--token=test',
+			])
+			.it('should delete a file, but output no information to stderr', ctx => {
+				assert.equal(ctx.stderr, '');
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.delete(`/2.0/files/${fileId}`)
+				.reply(204)
 				.delete(`/2.0/files/${fileId}/trash`)
 				.reply(204)
 			)
@@ -1056,7 +1072,10 @@ describe('Files', () => {
 					{
 						op: 'add',
 						path: '/arr',
-						value: [ 'foo', 'bar' ],
+						value: [
+							'foo',
+							'bar'
+						],
 					}
 				])
 				.reply(200, addMetadataFixture)

@@ -25,6 +25,8 @@ class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 }
 
 LegalHoldPoliciesListAssignmentsCommand.description = 'List policy assignments';
+LegalHoldPoliciesListAssignmentsCommand.examples = ['box legal-hold-policies:assignments 99999'];
+LegalHoldPoliciesListAssignmentsCommand._endpoint = 'get_legal_hold_policy_assignments';
 
 LegalHoldPoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,

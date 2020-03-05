@@ -12,7 +12,6 @@ const csv = require('csv');
 const csvParse = util.promisify(csv.parse);
 const csvStringify = util.promisify(csv.stringify);
 const dateTime = require('date-fns');
-const objectPath = require('object-path');
 const BoxSDK = require('box-node-sdk');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
@@ -780,7 +779,9 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	info(content) {
-		process.stderr.write(`${content}${os.EOL}`);
+		if (!this.flags.quiet) {
+			process.stderr.write(`${content}${os.EOL}`);
+		}
 	}
 
 	/**
@@ -861,14 +862,19 @@ class BoxCommand extends Command {
 			objectArray = [objectArray];
 			DEBUG.output('Creating tabular output from single object');
 		}
-		let keyPaths = this.getNestedKeys(objectArray[0]);
+
+		let keyPaths = [];
+		for (let object of objectArray) {
+			keyPaths = _.union(keyPaths, this.getNestedKeys(object));
+		}
+
 		DEBUG.output('Found %d keys for tabular output', keyPaths.length);
 		formattedData.push(keyPaths);
 		for (let object of objectArray) {
 			let row = [];
 			if (typeof (object) === 'object') {
 				for (let keyPath of keyPaths) {
-					let value = objectPath.get(object, keyPath);
+					let value = _.get(object, keyPath);
 					if (Array.isArray(value)) {
 						row.push('Array');
 					} else if (value === null || value === undefined) {
@@ -1127,12 +1133,17 @@ BoxCommand.flags = {
 		char: 'y',
 		description: 'Automatically respond yes to all confirmation prompts',
 	}),
+	quiet: flags.boolean({
+		char: 'q',
+		description: 'Suppress any non-error output to stderr',
+	})
 };
 
 BoxCommand.minFlags = _.pick(BoxCommand.flags, [
 	'no-color',
 	'help',
-	'verbose'
+	'verbose',
+	'quiet'
 ]);
 
 module.exports = BoxCommand;

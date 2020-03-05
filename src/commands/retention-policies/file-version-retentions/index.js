@@ -37,6 +37,8 @@ class RetentionPoliciesListVersionRetentionCommand extends BoxCommand {
 }
 
 RetentionPoliciesListVersionRetentionCommand.description = 'List all file version retentions for your enterprise';
+RetentionPoliciesListVersionRetentionCommand.examples = ['box retention-policies:file-version-retentions'];
+RetentionPoliciesListVersionRetentionCommand._endpoint = 'get_file_version_retentions';
 
 RetentionPoliciesListVersionRetentionCommand.flags = {
 	...BoxCommand.flags,

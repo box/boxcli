@@ -12,6 +12,8 @@ class FilesPromoteVersionsCommand extends BoxCommand {
 }
 
 FilesPromoteVersionsCommand.description = 'Promote a file version';
+FilesPromoteVersionsCommand.examples = ['box files:versions:promote 11111 55555'];
+FilesPromoteVersionsCommand._endpoint = 'post_files_id_versions_current';
 
 FilesPromoteVersionsCommand.flags = {
 	...BoxCommand.flags

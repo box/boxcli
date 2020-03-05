@@ -21,6 +21,8 @@ class WebLinksCreateCommand extends BoxCommand {
 }
 
 WebLinksCreateCommand.description = 'Create a new web link';
+WebLinksCreateCommand.examples = ['box web-links:create http://example.com --parent-id 0'];
+WebLinksCreateCommand._endpoint = 'post_web_links';
 
 WebLinksCreateCommand.flags = {
 	...BoxCommand.flags,

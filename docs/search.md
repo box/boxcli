@@ -41,6 +41,8 @@ OPTIONS
 
   --csv                                          Output formatted CSV
 
+  --direction=asc|desc                           The direction to sort results (ascending or descending)
+
   --fields=fields                                Comma separated list of fields to show
 
   --file-extensions=file-extensions              Limit searches to specific file extensions i.e. png,md,pdf
@@ -63,6 +65,8 @@ OPTIONS
 
   --size-to=size-to                              Upper bound for file size, in bytes
 
+  --sort=sort                                    The field to sort results by
+
   --trash-content=trashed_only|non_trashed_only  Controls whether to search in the trash. Defaults to non_trashed_only
 
   --type=file|folder|web_link                    The type of objects you want to include in the search results
@@ -72,6 +76,10 @@ OPTIONS
 
   --updated-at-to=updated-at-to                  End of updated date range. Use a RFC3339 timestamp or shorthand syntax
                                                  0t, like 5w for 5 weeks
+
+EXAMPLES
+  box search "Q3 OKR"
+  box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/search.js)_

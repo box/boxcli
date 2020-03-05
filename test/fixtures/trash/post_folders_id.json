@@ -1,0 +1,121 @@
+{
+  "id": "12345",
+  "etag": 1,
+  "type": "folder",
+  "sequence_id": 3,
+  "name": "Contracts",
+  "created_at": "2012-12-12T10:53:43-08:00",
+  "modified_at": "2012-12-12T10:53:43-08:00",
+  "description": "Legal contracts for the new ACME deal",
+  "size": 629644,
+  "path_collection": {
+      "total_count": 1,
+      "entries": [
+          {
+              "id": "0",
+              "etag": 1,
+              "type": "folder",
+              "sequence_id": 3,
+              "name": "All files"
+          }
+      ]
+  },
+  "created_by": {
+      "id": "11446498",
+      "type": "user",
+      "name": "Aaron Levie",
+      "login": "ceo@example.com"
+  },
+  "modified_by": {
+      "id": "11446498",
+      "type": "user",
+      "name": "Aaron Levie",
+      "login": "ceo@example.com"
+  },
+  "trashed_at": "2012-12-12T10:53:43-08:00",
+  "purged_at": "2012-12-12T10:53:43-08:00",
+  "content_created_at": "2012-12-12T10:53:43-08:00",
+  "content_modified_at": "2012-12-12T10:53:43-08:00",
+  "expires_at": "2012-12-12T10:53:43-08:00",
+  "owned_by": {
+      "id": "11446498",
+      "type": "user",
+      "name": "Aaron Levie",
+      "login": "ceo@example.com"
+  },
+  "shared_link": {
+      "url": "https://www.box.com/s/vspke7y05sb214wjokpk",
+      "download_url": "https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg",
+      "vanity_url": "https://acme.app.box.com/v/my_url/",
+      "access": "open",
+      "effective_access": "company",
+      "effective_permission": "can_download",
+      "unshared_at": "2018-04-13T13:53:23-07:00",
+      "is_password_enabled": true,
+      "permissions": {
+          "can_download": true,
+          "can_preview": true
+      },
+      "download_count": 3,
+      "preview_count": 3
+  },
+  "folder_upload_email": {
+      "access": "open",
+      "email": "upload.Contracts.asd7asd@u.box.com"
+  },
+  "parent": {
+      "id": "0",
+      "etag": 1,
+      "type": "folder",
+      "sequence_id": 3,
+      "name": "All files"
+  },
+  "item_status": "active",
+  "item_collection": {
+      "total_count": 5000,
+      "limit": 1000,
+      "offset": 2000,
+      "order": [
+          {
+              "by": "type",
+              "direction": "ASC"
+          }
+      ],
+      "entries": [
+          {
+              "id": "123456",
+              "etag": 1,
+              "type": "file",
+              "sequence_id": 3,
+              "name": "Contract.pdf"
+          }
+      ]
+  },
+  "sync_state": "synced",
+  "has_collaborations": true,
+  "permissions": {
+      "can_delete": true,
+      "can_download": true,
+      "can_invite_collaborator": true,
+      "can_rename": true,
+      "can_set_share_access": true,
+      "can_share": true,
+      "can_upload": true
+  },
+  "tags": [
+      "approved"
+  ],
+  "can_non_owners_invite": true,
+  "is_externally_owned": true,
+  "is_collaboration_restricted_to_enterprise": true,
+  "allowed_shared_link_access_levels": [
+      "open"
+  ],
+  "allowed_invitee_roles": [
+      "editor"
+  ],
+  "watermark_info": {
+      "is_watermarked": true
+  },
+  "can_non_owners_view_collaborators": true
+}

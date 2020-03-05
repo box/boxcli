@@ -1,5 +1,41 @@
 # Changelog
 
+## Next Release
+
+- Added `--quiet` flag to suppress any non-error output to stderr
+- Fixed a bug for the `--restrict-collaboration` flag for `box folders:update` where previously the flag would not restrict the collaborations when passed as true and would restrict collaborations when passed as false
+- Added `box trash:restore` to restore a trashed item and `box trash:get` to get information on a trashed item
+
+## 2.4.0 [2019-08-29]
+
+- Fixed an issue where the CSV formatting of commands that return multiple different object types (e.g
+  `box files:metadata:list` and `box search`) would only include the columns from the first object in the result set.
+  These commands now output the full set of columns across all objects in the result set.
+- Added a success message to `box collaborations:update` when setting `--role=owner`; previously the command would
+  output `undefined`.
+- Added support for setting external App User IDs in the `box users:create` and `box users:update` commands with
+  the `--external-id` flag
+
+## 2.3.0 [2019-05-23]
+
+- Added `--confirm` flag to the `box users:email-aliases:add` command to automatically confirm the email alias
+- Added `--restrict-to-enterprise` flag to the `box folders:update` command to restrict collaboration on the folder
+  to the owner's enterprise
+- Fixed a bug in the `box folders:update` command where the `--upload-email-access` flag would not correctly set
+  the folder upload email access level
+
+## 2.2.0 [2019-04-30]
+
+- Added `--sort` and `--direction` flags to `box search` to control the sort order of the search results
+- Fixed `box collections:add` to work correctly with `web_link` items
+- Fixed an issue where some commands including `box folders:collaborations:add` could incorrectly interpret bulk
+  input entries and produce unintended API requests
+- Added `box folders:metadata:set` and `box files:metadata:set` commands to apply metadata keys and values, overwriting
+  existing metadata under those keys
+- Errors encountered during bulk input are now caught within the CLI, skipping that entry and continuing bulk input.
+  The CLI should now run all bulk input entries to completion and report entries that produced errors after all entries
+  have been processed.
+
 ## 2.1.0 [2019-03-28]
 
 - Fixed an issue where the `--fields` flag was not always requesting additional fields from the API
@@ -11,7 +47,7 @@
       up to `limit` events will be returned along with the next stream position
     - `box events:poll` now correctly polls for new events
 
-## 2.0.0
+## 2.0.0 [2018-12-13]
 
 ### Features and Enhancements
 - __Full API parity:__ The new version of the CLI supports all available API endpoints and parameters
@@ -134,7 +170,7 @@
 - Added new feature on all commands for using an individual token. Add the `--token` option to perform an individual command with the Box CLI using a specific token you provide. The feature is most useful when paired with the Developer Token you can generate through the Box Developer Console. When working with an application you create in the Box Developer Console, you will not need to authorize the application into a Box Enterprise before working with the Developer Token. For example usage: `box users get me --token <token_string>`. Certain commands may fail based on the permissions of the user to which the token you use belongs.
 - Fixed a bug preventing `previewer` being used when adding or updating a collaboration.
 - Added the following commands: `box collaborations delete`, `box folders collaborations delete`, `box files collaborations delete`.
-- Improved error messaging for failure on registering a configuration file and private key file with the Box CLI when creating a new CLI `environment`. 
+- Improved error messaging for failure on registering a configuration file and private key file with the Box CLI when creating a new CLI `environment`.
 - Added `--disable-file-path-translation` to the following commands: `box configure environments add`, `box configure environments update-config-file-path`, `box configure environments update-private-key-path`. This option ignores any additional processing on trying to resolve the file paths you provide when creating and updating Box CLI `environments`.
 - Fixed visual bug with upload progress tracker.
 - Updated Box .Net SDK to v3.3.0.

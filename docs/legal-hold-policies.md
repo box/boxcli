@@ -37,9 +37,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --policy-name=policy-name              Filter by policy name
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies
 ```
 
-_See code: [src/commands/legal-hold-policies/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/index.js)_
+_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/index.js)_
 
 ## `box legal-hold-policies:assign POLICYID`
 
@@ -67,9 +70,12 @@ OPTIONS
   --json                                          Output formatted JSON
   --no-color                                      Turn off colors for logging
   --save-to-file-path=save-to-file-path           Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:assign 99999 --assign-to-type folder --assign-to-id 22222
 ```
 
-_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assign.js)_
+_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assign.js)_
 
 ## `box legal-hold-policies:assignments ID`
 
@@ -97,9 +103,12 @@ OPTIONS
   --json                                          Output formatted JSON
   --no-color                                      Turn off colors for logging
   --save-to-file-path=save-to-file-path           Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:assignments 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/index.js)_
+_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/index.js)_
 
 ## `box legal-hold-policies:assignments:delete ID`
 
@@ -125,9 +134,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:assignments:delete 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/delete.js)_
+_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/delete.js)_
 
 ## `box legal-hold-policies:assignments:get ID`
 
@@ -153,9 +165,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:assignments:get 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/assignments/get.js)_
+_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/get.js)_
 
 ## `box legal-hold-policies:create POLICYNAME`
 
@@ -196,9 +211,12 @@ OPTIONS
                                          indefinitely
 
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:create "Class Action Suit" --ongoing
 ```
 
-_See code: [src/commands/legal-hold-policies/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/create.js)_
+_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/create.js)_
 
 ## `box legal-hold-policies:delete ID`
 
@@ -224,9 +242,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:delete 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/delete.js)_
+_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/delete.js)_
 
 ## `box legal-hold-policies:file-version-holds ID`
 
@@ -252,9 +273,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:file-version-holds 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
 
 ## `box legal-hold-policies:file-version-holds:get ID`
 
@@ -280,9 +304,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:file-version-holds:get 12345
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
 
 ## `box legal-hold-policies:get ID`
 
@@ -308,9 +335,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:get 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/get.js)_
+_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/get.js)_
 
 ## `box legal-hold-policies:update ID`
 
@@ -339,6 +369,9 @@ OPTIONS
   --policy-name=policy-name              Name of legal hold policy. Max characters 254
   --release-notes=release-notes          Notes around why the policy was released. Max characters 500
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box legal-hold-policies:update 99999 --description "Files related to the ongoing class action suit"
 ```
 
-_See code: [src/commands/legal-hold-policies/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/legal-hold-policies/update.js)_
+_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/update.js)_

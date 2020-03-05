@@ -19,6 +19,8 @@ class TrashListCommand extends BoxCommand {
 TrashListCommand.aliases = [ 'trash:list' ];
 
 TrashListCommand.description = 'List all items in trash';
+TrashListCommand.examples = ['box trash'];
+TrashListCommand._endpoint = 'get_folders_trash_items';
 
 TrashListCommand.flags = {
 	...BoxCommand.flags

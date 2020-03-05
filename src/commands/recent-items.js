@@ -17,6 +17,8 @@ class RecentItems extends BoxCommand {
 }
 
 RecentItems.description = 'List information about files accessed in the past 90 days up to a 1000 items';
+RecentItems.examples = ['box recent-items'];
+RecentItems._endpoint = 'get_recent_items';
 
 RecentItems.flags = {
 	...BoxCommand.flags

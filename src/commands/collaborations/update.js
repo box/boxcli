@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const chalk = require('chalk');
 
 class CollaborationsUpdateCommand extends BoxCommand {
 	async run() {
@@ -42,7 +43,13 @@ class CollaborationsUpdateCommand extends BoxCommand {
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
 		let collaboration = await this.client.wrapWithDefaultHandler(this.client.put)(`/collaborations/${args.id}`, params);
-		await this.output(collaboration);
+		if (collaboration) {
+			await this.output(collaboration);
+		} else if (params.body.role === this.client.collaborationRoles.OWNER) {
+			// Upgrading a collaborator to owner produces a 204 response with empty body
+			// Output a success message instead of trying to print the updated collaboration
+			this.info(chalk`{green Collaborator successfully upgraded to owner.}`);
+		}
 	}
 }
 
@@ -52,6 +59,8 @@ CollaborationsUpdateCommand.aliases = [
 ];
 
 CollaborationsUpdateCommand.description = 'Update a collaboration';
+CollaborationsUpdateCommand.examples = ['box collaborations:update 12345 --role viewer'];
+CollaborationsUpdateCommand._endpoint = 'put_collaborations_id';
 
 CollaborationsUpdateCommand.flags = {
 	...BoxCommand.flags,

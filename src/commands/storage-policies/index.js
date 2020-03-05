@@ -14,6 +14,8 @@ class StoragePoliciesListCommand extends BoxCommand {
 StoragePoliciesListCommand.aliases = [ 'storage-policies:list' ];
 
 StoragePoliciesListCommand.description = 'List storage policies';
+StoragePoliciesListCommand.examples = ['box storage-policies'];
+StoragePoliciesListCommand._endpoint = 'get_storage_policies';
 
 StoragePoliciesListCommand.flags = {
 	...BoxCommand.flags

@@ -13,6 +13,7 @@ describe('Tasks', () => {
 			id = '22222',
 			message = 'Please review',
 			dueDate = '2019-01-01T09:00:00+00:00',
+			completionRule = 'any_assignee',
 			fixture = getFixture('tasks/post_tasks'),
 			yamlOutput = getFixture('output/tasks_create_yaml.txt');
 
@@ -92,12 +93,34 @@ describe('Tasks', () => {
 			.it('should create task with a due date when the --due-at flag is passed', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/tasks', {
+					item: { type, id },
+					action: 'review',
+					completion_rule: completionRule,
+				})
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'tasks:create',
+				id,
+				`--completion-rule=${completionRule}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should create task with a completion rule when --completion-rule flag is passed', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
 	});
 
 	describe('tasks:update', () => {
 		let taskId = '11111',
 			message = 'Could you please review this?',
 			dueDate = '2019-01-01T09:00:00+00:00',
+			completionRule = 'any_assignee',
 			fixture = getFixture('tasks/put_tasks_id'),
 			yamlOutput = getFixture('output/tasks_update_yaml.txt');
 
@@ -148,6 +171,23 @@ describe('Tasks', () => {
 				'--token=test'
 			])
 			.it('should update task due date when the --due-at flag is passed', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/tasks/${taskId}`, { completion_rule: completionRule })
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'tasks:update',
+				taskId,
+				`--completion-rule=${completionRule}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should update task with a completion rule when --completion-rule flag is passed', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});

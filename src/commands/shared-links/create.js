@@ -19,6 +19,7 @@ SharedLinksCreateCommand.aliases = ['shared-links:update'];
 SharedLinksCreateCommand.hidden = true;
 
 SharedLinksCreateCommand.description = 'Create a shared link for a Box item';
+SharedLinksCreateCommand.examples = ['box shared-links:create 22222 folder --access company'];
 
 SharedLinksCreateCommand.flags = {
 	...BoxCommand.flags,

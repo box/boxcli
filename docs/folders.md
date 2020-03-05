@@ -15,6 +15,7 @@ Manage folders
 * [`box folders:metadata:add ID`](#box-foldersmetadataadd-id)
 * [`box folders:metadata:get ID`](#box-foldersmetadataget-id)
 * [`box folders:metadata:remove ID`](#box-foldersmetadataremove-id)
+* [`box folders:metadata:set ID`](#box-foldersmetadataset-id)
 * [`box folders:metadata:update ID`](#box-foldersmetadataupdate-id)
 * [`box folders:move ID PARENTID`](#box-foldersmove-id-parentid)
 * [`box folders:rename ID NAME`](#box-foldersrename-id-name)
@@ -50,9 +51,12 @@ OPTIONS
 
 ALIASES
   $ box folders:collaborations:list
+
+EXAMPLE
+  box folders:collaborations 22222
 ```
 
-_See code: [src/commands/folders/collaborations/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/collaborations/index.js)_
+_See code: [src/commands/folders/collaborations/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/collaborations/index.js)_
 
 ## `box folders:collaborations:add ID`
 
@@ -116,9 +120,12 @@ OPTIONS
                                                                                            save report
 
   --user-id=user-id                                                                        Id for user to collaborate
+
+EXAMPLE
+  box folders:collaborations:add 22222 --role editor --user-id 33333
 ```
 
-_See code: [src/commands/folders/collaborations/add.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/collaborations/add.js)_
+_See code: [src/commands/folders/collaborations/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/collaborations/add.js)_
 
 ## `box folders:copy ID PARENTID`
 
@@ -147,9 +154,12 @@ OPTIONS
   --name=name                            An optional new name for the folder
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:copy 22222 44444
 ```
 
-_See code: [src/commands/folders/copy.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/copy.js)_
+_See code: [src/commands/folders/copy.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/copy.js)_
 
 ## `box folders:create PARENTID NAME`
 
@@ -178,9 +188,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:create 22222 "New Subfolder"
 ```
 
-_See code: [src/commands/folders/create.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/create.js)_
+_See code: [src/commands/folders/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/create.js)_
 
 ## `box folders:delete ID`
 
@@ -209,9 +222,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:delete 22222
 ```
 
-_See code: [src/commands/folders/delete.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/delete.js)_
+_See code: [src/commands/folders/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/delete.js)_
 
 ## `box folders:download ID`
 
@@ -240,9 +256,12 @@ OPTIONS
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --zip                                  Download the folder into a single .zip archive
+
+EXAMPLE
+  box folders:download 22222
 ```
 
-_See code: [src/commands/folders/download.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/download.js)_
+_See code: [src/commands/folders/download.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/download.js)_
 
 ## `box folders:get ID`
 
@@ -268,9 +287,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:get 22222
 ```
 
-_See code: [src/commands/folders/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/get.js)_
+_See code: [src/commands/folders/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/get.js)_
 
 ## `box folders:items ID`
 
@@ -301,9 +323,12 @@ OPTIONS
 
 ALIASES
   $ box folders:list-items
+
+EXAMPLE
+  box folders:items 22222
 ```
 
-_See code: [src/commands/folders/items.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/items.js)_
+_See code: [src/commands/folders/items.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/items.js)_
 
 ## `box folders:metadata ID`
 
@@ -332,9 +357,12 @@ OPTIONS
 
 ALIASES
   $ box folders:metadata:get-all
+
+EXAMPLE
+  box folders:metadata 22222
 ```
 
-_See code: [src/commands/folders/metadata/index.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/metadata/index.js)_
+_See code: [src/commands/folders/metadata/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/index.js)_
 
 ## `box folders:metadata:add ID`
 
@@ -374,9 +402,12 @@ OPTIONS
 
 ALIASES
   $ box folders:metadata:create
+
+EXAMPLE
+  box folders:metadata:add 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales
 ```
 
-_See code: [src/commands/folders/metadata/add.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/metadata/add.js)_
+_See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/add.js)_
 
 ## `box folders:metadata:get ID`
 
@@ -404,9 +435,12 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --scope=scope                          [default: enterprise] The scope of the metadata template to retrieve
   --template-key=template-key            (required) The key of the metadata template to retrieve
+
+EXAMPLE
+  box folders:metadata:get 22222 --template-key employeeRecord
 ```
 
-_See code: [src/commands/folders/metadata/get.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/metadata/get.js)_
+_See code: [src/commands/folders/metadata/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/get.js)_
 
 ## `box folders:metadata:remove ID`
 
@@ -437,9 +471,54 @@ OPTIONS
 
 ALIASES
   $ box folders:metadata:delete
+
+EXAMPLE
+  box folders:metadata:remove 22222 --scope global --template-key properties
 ```
 
-_See code: [src/commands/folders/metadata/remove.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/metadata/remove.js)_
+_See code: [src/commands/folders/metadata/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/remove.js)_
+
+## `box folders:metadata:set ID`
+
+Set metadata on a folder
+
+```
+USAGE
+  $ box folders:metadata:set ID
+
+ARGUMENTS
+  ID  ID of the folder to add metadata to
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+
+  --data=data                            (required) Metadata key and value, in the form "key=value".  Note: For float
+                                         type, use "f" on end of digits: key2=1234.50f
+
+  --fields=fields                        Comma separated list of fields to show
+
+  --json                                 Output formatted JSON
+
+  --no-color                             Turn off colors for logging
+
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+  --scope=scope                          [default: enterprise] The scope of the metadata template to use
+
+  --template-key=template-key            (required) The key of the metadata template to use
+
+EXAMPLE
+  box folders:metadata:set 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales
+```
+
+_See code: [src/commands/folders/metadata/set.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/set.js)_
 
 ## `box folders:metadata:update ID`
 
@@ -495,9 +574,12 @@ OPTIONS
   --scope=scope                          [default: enterprise] The scope of the metadata template to update against
 
   --template-key=template-key            (required) The key of the metadata template to update against
+
+EXAMPLE
+  box folders:metadata:update 22222 --template-key employeeRecord --replace department=Finance
 ```
 
-_See code: [src/commands/folders/metadata/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/metadata/update.js)_
+_See code: [src/commands/folders/metadata/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/metadata/update.js)_
 
 ## `box folders:move ID PARENTID`
 
@@ -525,9 +607,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:move 22222 44444
 ```
 
-_See code: [src/commands/folders/move.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/move.js)_
+_See code: [src/commands/folders/move.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/move.js)_
 
 ## `box folders:rename ID NAME`
 
@@ -556,9 +641,12 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:rename 22222 "New Folder Name"
 ```
 
-_See code: [src/commands/folders/rename.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/rename.js)_
+_See code: [src/commands/folders/rename.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/rename.js)_
 
 ## `box folders:share ID`
 
@@ -595,9 +683,12 @@ OPTIONS
 ALIASES
   $ box folders:shared-links:create
   $ box folders:shared-links:update
+
+EXAMPLE
+  box folders:share 22222 --access company
 ```
 
-_See code: [src/commands/folders/share.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/share.js)_
+_See code: [src/commands/folders/share.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/share.js)_
 
 ## `box folders:unshare ID`
 
@@ -626,9 +717,12 @@ OPTIONS
 
 ALIASES
   $ box folders:shared-links:delete
+
+EXAMPLE
+  box folders:unshare 22222
 ```
 
-_See code: [src/commands/folders/unshare.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/unshare.js)_
+_See code: [src/commands/folders/unshare.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/unshare.js)_
 
 ## `box folders:update ID`
 
@@ -657,13 +751,23 @@ OPTIONS
   --name=name                               New name for folder
   --no-color                                Turn off colors for logging
   --[no-]restrict-collaboration             Restrict collaboration so only owners can invite new collaborators
+
+  --[no-]restrict-to-enterprise             Restrict collaboration so only users in the folder owner's enterprise can be
+                                            added
+
   --save-to-file-path=save-to-file-path     Override default file path to save report
+
   --[no-]sync                               Whether the folder is synced to desktop
+
   --tags=tags                               Comma seperated tags
+
   --upload-email-access=open|collaborators  Upload email access level
+
+EXAMPLE
+  box folders:update 22222 --name "New Folder Name"
 ```
 
-_See code: [src/commands/folders/update.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/update.js)_
+_See code: [src/commands/folders/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/update.js)_
 
 ## `box folders:upload PATH`
 
@@ -692,6 +796,9 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box folders:upload /path/to/folder
 ```
 
-_See code: [src/commands/folders/upload.js](https://github.com/Documents/box-cli-v2/blob/v0.0.0/src/commands/folders/upload.js)_
+_See code: [src/commands/folders/upload.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/folders/upload.js)_

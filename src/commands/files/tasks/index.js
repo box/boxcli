@@ -19,6 +19,8 @@ class FilesListTasksCommand extends BoxCommand {
 FilesListTasksCommand.aliases = [ 'files:tasks:list' ];
 
 FilesListTasksCommand.description = 'List all tasks on this file';
+FilesListTasksCommand.examples = ['box files:tasks 11111'];
+FilesListTasksCommand._endpoint = 'get_files_id_tasks';
 
 FilesListTasksCommand.flags = {
 	...BoxCommand.flags

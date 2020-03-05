@@ -16,6 +16,7 @@ class WatermarkingRemoveCommand extends BoxCommand {
 }
 
 WatermarkingRemoveCommand.description = 'Remove a watermark from an item';
+WatermarkingRemoveCommand.examples = ['box watermarking:remove folder 22222'];
 
 WatermarkingRemoveCommand.flags = {
 	...BoxCommand.flags

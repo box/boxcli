@@ -18,6 +18,8 @@ class CommentsCreateCommand extends BoxCommand {
 }
 
 CommentsCreateCommand.description = 'Create a comment on a file';
+CommentsCreateCommand.examples = ['box comments:create 11111 --message "Thanks for the update!"'];
+CommentsCreateCommand._endpoint = 'post_comments';
 
 CommentsCreateCommand.flags = {
 	...BoxCommand.flags,

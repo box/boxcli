@@ -52,8 +52,8 @@ class UsersCreateCommand extends BoxCommand {
 		if (flags.timezone) {
 			options.timezone = flags.timezone;
 		}
-		if (flags['avatar-url']) {
-			options.avatar_url = flags['avatar-url'];
+		if (flags['external-id']) {
+			options.external_app_user_id = flags['external-id'];
 		}
 
 		if (flags['app-user']) {
@@ -68,18 +68,24 @@ class UsersCreateCommand extends BoxCommand {
 }
 
 UsersCreateCommand.description = 'Create a new Box User';
+UsersCreateCommand.examples = ['box users:create "John Doe" jdoe@example.com'];
+UsersCreateCommand._endpoint = 'post_users';
 
 UsersCreateCommand.flags = {
 	...BoxCommand.flags,
 	'app-user': flags.boolean({
 		description: 'Set this user as an app user'
 	}),
+	'external-id': flags.string({
+		description: 'External ID for app users',
+		dependsOn: ['app-user'],
+	}),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command'
 	}),
 	'sync-enable': flags.boolean({
 		description: 'Enable Box Sync for this user',
-		exclusion: ['sync-disable'],
+		exclusive: ['sync-disable'],
 		allowNo: true
 	}),
 	'exempt-from-device-limits': flags.boolean({
@@ -140,7 +146,6 @@ UsersCreateCommand.flags = {
 		]
 	}),
 	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
-	'avatar-url': flags.string({ description: 'URL of the user\'s avatar image' })
 };
 
 UsersCreateCommand.args = [

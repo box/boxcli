@@ -50,9 +50,6 @@ class UsersUpdateCommand extends BoxCommand {
 		if (flags.timezone) {
 			updates.timezone = flags.timezone;
 		}
-		if (flags['avatar-url']) {
-			updates.avatar_url = flags['avatar-url'];
-		}
 		if (flags.remove) {
 			updates.enterprise = null;
 		}
@@ -62,6 +59,9 @@ class UsersUpdateCommand extends BoxCommand {
 		if (flags.name) {
 			updates.name = flags.name;
 		}
+		if (flags['external-id']) {
+			updates.external_app_user_id = flags['external-id'];
+		}
 
 		let user = await this.client.users.update(args.id, updates);
 		await this.output(user);
@@ -69,6 +69,8 @@ class UsersUpdateCommand extends BoxCommand {
 }
 
 UsersUpdateCommand.description = 'Update a Box User';
+UsersUpdateCommand.examples = ['box users:update 33333 --status inactive'];
+UsersUpdateCommand._endpoint = 'put_users_id';
 
 UsersUpdateCommand.flags = {
 	...BoxCommand.flags,
@@ -141,8 +143,10 @@ UsersUpdateCommand.flags = {
 		]
 	}),
 	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
-	'avatar-url': flags.string({ description: 'URL of the user\'s avatar image' }),
 	login: flags.string({ description: 'Change the user\'s primary email address used for logging into Box '}),
+	'external-id': flags.string({
+		description: 'External ID for app users',
+	}),
 };
 
 UsersUpdateCommand.args = [
