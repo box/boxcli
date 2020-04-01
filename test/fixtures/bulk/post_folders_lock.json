@@ -1,0 +1,17 @@
+{
+    "folder": {
+      "type": "folder",
+      "id": "123",
+      "sequence_id": "1",
+      "etag": "1",
+      "name": "locked_folder"
+    },
+    "id": "2648",
+    "type": "folder_lock",
+    "created_by": {
+      "id": "1111",
+      "type": "user"
+    },
+    "created_at": "2019-10-17T18:06:36Z",
+    "lock_type": "freeze"
+  }
