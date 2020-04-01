@@ -1,0 +1,2 @@
+RESOURCE,method
+https://api.box.com/2.0/folder_locks,POST

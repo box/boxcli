@@ -200,6 +200,35 @@ describe('Bulk', () => {
 			])
 			.it('should permit keys that do not use flag punctuation');
 
+		let folderLockBody = {
+			folder: {
+				type: 'folder',
+				id: '1243215'
+			}
+		};
+		let folderLockBodyString = JSON.stringify(folderLockBody);
+		let folderLockInputFilePath = path.join(__dirname, '../fixtures/bulk/input_manual_request_folder_lock.csv');
+		let folderLockBodyFixture = getFixture('bulk/post_folders_lock.json');
+		test
+			.nock(TEST_API_ROOT, api => api
+				.matchHeader('Content-Type', 'application/json;version=1')
+				.matchHeader('Accept', 'application/json;version=1')
+				.post('/2.0/folder_locks', folderLockBody)
+				.reply(200, folderLockBodyFixture)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'request',
+				`--body=${folderLockBodyString}`,
+				'--header=Content-Type: application/json;version=1',
+				'--header=Accept: application/json;version=1',
+				`--bulk-file-path=${folderLockInputFilePath}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should allow flags that can be specified multiple times in a single command to be passed through the command line for bulk commands');
+
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/search')

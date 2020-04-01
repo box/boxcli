@@ -401,7 +401,17 @@ class BoxCommand extends Command {
 			// be overwritten/combined with later values by the oclif parser
 			Object.keys(this.flags)
 				.filter(flag => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
-				.forEach(flag => this._addFlagToArgv(flag, this.flags[flag]));
+				.forEach(flag => {
+					// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
+					// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
+					if (Array.isArray(this.flags[flag])) {
+						(this.flags[flag]).forEach(value => {
+							this._addFlagToArgv(flag, value);
+						});
+					} else {
+						this._addFlagToArgv(flag, this.flags[flag]);
+					}
+				});
 
 			// Include all flag values from bulk input, which will override earlier ones
 			// from the command line
