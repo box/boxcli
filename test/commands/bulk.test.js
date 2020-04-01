@@ -24,7 +24,7 @@ describe('Bulk', () => {
 		sandbox.verifyAndRestore();
 	});
 
-	describe.only('CSV Input', () => {
+	describe('CSV Input', () => {
 		let inputFilePath = path.join(__dirname, '..', 'fixtures/bulk/input.csv'),
 			saveFilePath = path.join(__dirname, '..', 'fixtures/bulk/saveTest.txt'),
 			csvOutput = getFixture('bulk/post_collaborations_csv.csv'),
