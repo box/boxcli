@@ -1,6 +1,6 @@
 # Changelog
 
-## Next Release
+## 2.5.0 [2020-04-08]
 
 - Added `--quiet` flag to suppress any non-error output to stderr
 - Fixed a bug for the `--restrict-collaboration` flag for `box folders:update` where previously the flag would not restrict the collaborations when passed as true and would restrict collaborations when passed as false
