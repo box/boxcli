@@ -32,7 +32,8 @@ describe('BoxCommand', () => {
 				let debugLines = ctx.stderr.split(os.EOL);
 				assert.include(debugLines[0], 'box:@box/cli:hooks:init');
 				assert.include(debugLines[1], 'box:help');
-			});
+			})
+			.timeout(30000);
 
 		test
 			.nock(TEST_API_ROOT, api => api
