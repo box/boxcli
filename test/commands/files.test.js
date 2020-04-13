@@ -1861,6 +1861,8 @@ describe('Files', () => {
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
+				assert.equal(downloadContent, expectedContent);
+				assert.equal(downloadContent, 'test');
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
