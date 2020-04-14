@@ -131,7 +131,7 @@
 		"lint": "eslint --fix ./src ./test",
 		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/master -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
-		"version": "oclif-dev readme --multi && git add README.md && git add docs",
+		"version": "oclif-dev readme --multi && git add README.md && git add docs && git remote -v && git status",
 		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/ && npm run binaries",
 		"binaries": "pkg --targets node10-macos-x64,node10-win-x64,node10-linux-x64 --out-path ./dist ."
 	}
