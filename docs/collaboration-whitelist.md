@@ -22,6 +22,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -38,7 +39,7 @@ EXAMPLE
   box collaboration-whitelist
 ```
 
-_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/index.js)_
+_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/index.js)_
 
 ## `box collaboration-whitelist:add DOMAIN`
 
@@ -53,6 +54,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -70,7 +72,7 @@ EXAMPLE
   box collaboration-whitelist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/add.js)_
+_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/add.js)_
 
 ## `box collaboration-whitelist:delete ID`
 
@@ -85,6 +87,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -101,7 +104,7 @@ EXAMPLE
   box collaboration-whitelist:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/delete.js)_
+_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/delete.js)_
 
 ## `box collaboration-whitelist:exemptions`
 
@@ -113,6 +116,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -129,7 +133,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/index.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/exemptions/index.js)_
 
 ## `box collaboration-whitelist:exemptions:create USERID`
 
@@ -144,6 +148,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -160,7 +165,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:create 11111
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/create.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/exemptions/create.js)_
 
 ## `box collaboration-whitelist:exemptions:delete ID`
 
@@ -175,6 +180,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -191,7 +197,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/exemptions/delete.js)_
 
 ## `box collaboration-whitelist:exemptions:get ID`
 
@@ -206,6 +212,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -222,7 +229,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/exemptions/get.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/exemptions/get.js)_
 
 ## `box collaboration-whitelist:get ID`
 
@@ -237,6 +244,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -253,4 +261,4 @@ EXAMPLE
   box collaboration-whitelist:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaboration-whitelist/get.js)_
+_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaboration-whitelist/get.js)_

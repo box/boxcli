@@ -21,6 +21,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -41,7 +42,7 @@ EXAMPLE
   box collaborations:delete 12345
 ```
 
-_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaborations/delete.js)_
+_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaborations/delete.js)_
 
 ## `box collaborations:get ID`
 
@@ -56,6 +57,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -72,7 +74,7 @@ EXAMPLE
   box collaborations:get 12345
 ```
 
-_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaborations/get.js)_
+_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaborations/get.js)_
 
 ## `box collaborations:pending`
 
@@ -84,6 +86,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -103,7 +106,7 @@ EXAMPLE
   box collaborations:pending
 ```
 
-_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaborations/pending.js)_
+_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaborations/pending.js)_
 
 ## `box collaborations:update ID`
 
@@ -118,6 +121,9 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                                                                     Show CLI help
+
+  -q, --quiet                                                                                    Suppress any non-error
+                                                                                                 output to stderr
 
   -r, --role=editor|viewer|previewer|uploader|previewer_uploader|viewer_uploader|co-owner|owner  An option to manually
                                                                                                  enter the role
@@ -173,4 +179,4 @@ EXAMPLE
   box collaborations:update 12345 --role viewer
 ```
 
-_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collaborations/update.js)_
+_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collaborations/update.js)_

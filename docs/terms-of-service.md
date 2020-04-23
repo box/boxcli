@@ -20,6 +20,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -37,7 +38,7 @@ EXAMPLE
   box terms-of-service
 ```
 
-_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/index.js)_
+_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/index.js)_
 
 ## `box terms-of-service:create`
 
@@ -49,6 +50,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -68,7 +70,7 @@ EXAMPLE
   box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."
 ```
 
-_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/create.js)_
+_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/create.js)_
 
 ## `box terms-of-service:get ID`
 
@@ -83,6 +85,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -99,7 +102,7 @@ EXAMPLE
   box terms-of-service:get 55555
 ```
 
-_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/get.js)_
+_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/get.js)_
 
 ## `box terms-of-service:get-user-status TOSID`
 
@@ -114,6 +117,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -131,7 +135,7 @@ EXAMPLE
   box terms-of-service:get-user-status 55555
 ```
 
-_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/get-user-status.js)_
+_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/get-user-status.js)_
 
 ## `box terms-of-service:set-user-status ID`
 
@@ -146,6 +150,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -165,7 +170,7 @@ EXAMPLE
   box terms-of-service:set-user-status 55555 --accept
 ```
 
-_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/set-user-status.js)_
+_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/set-user-status.js)_
 
 ## `box terms-of-service:update ID`
 
@@ -180,6 +185,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -198,4 +204,4 @@ EXAMPLE
   box terms-of-service:update 55555 --status disabled
 ```
 
-_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/terms-of-service/update.js)_
+_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/terms-of-service/update.js)_

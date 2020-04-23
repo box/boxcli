@@ -18,6 +18,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -37,7 +38,7 @@ EXAMPLE
   box collections
 ```
 
-_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/index.js)_
+_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collections/index.js)_
 
 ## `box collections:add ITEMTYPE ITEMID COLLECTIONID`
 
@@ -54,6 +55,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -70,7 +72,7 @@ EXAMPLE
   box collections:add file 11111 12345
 ```
 
-_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/add.js)_
+_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collections/add.js)_
 
 ## `box collections:items ID`
 
@@ -85,6 +87,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -101,7 +104,7 @@ EXAMPLE
   box collections:items 12345
 ```
 
-_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/items.js)_
+_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collections/items.js)_
 
 ## `box collections:remove ITEMTYPE ITEMID COLLECTIONID`
 
@@ -118,6 +121,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -134,4 +138,4 @@ EXAMPLE
   box collections:remove file 11111 12345
 ```
 
-_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/collections/remove.js)_
+_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/collections/remove.js)_

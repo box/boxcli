@@ -44,6 +44,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -63,7 +64,7 @@ EXAMPLE
   box files:collaborations 11111
 ```
 
-_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/collaborations/index.js)_
+_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/collaborations/index.js)_
 
 ## `box files:collaborations:add ID`
 
@@ -78,6 +79,9 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                                                               Show CLI help
+
+  -q, --quiet                                                                              Suppress any non-error output
+                                                                                           to stderr
 
   -r, --role=editor|viewer|previewer|uploader|previewer_uploader|viewer_uploader|co-owner  An option to manually enter
                                                                                            the role
@@ -132,7 +136,7 @@ EXAMPLE
   box files:collaborations:add 11111 --role editor --user-id 22222
 ```
 
-_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/collaborations/add.js)_
+_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/collaborations/add.js)_
 
 ## `box files:comments ID`
 
@@ -147,6 +151,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -166,7 +171,7 @@ EXAMPLE
   box files:comments 11111
 ```
 
-_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/comments.js)_
+_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/comments.js)_
 
 ## `box files:copy ID PARENTID`
 
@@ -182,6 +187,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -201,7 +207,7 @@ EXAMPLE
   box files:copy 11111 22222
 ```
 
-_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/copy.js)_
+_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/copy.js)_
 
 ## `box files:delete ID`
 
@@ -217,6 +223,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                            Permanently delete the item, bypassing the trash
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -234,7 +241,7 @@ EXAMPLE
   box files:delete 11111
 ```
 
-_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/delete.js)_
+_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/delete.js)_
 
 ## `box files:download ID`
 
@@ -249,6 +256,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -267,7 +275,7 @@ EXAMPLE
   box files:download 11111 --destination /path/to/destinationFolder
 ```
 
-_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/download.js)_
+_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/download.js)_
 
 ## `box files:get ID`
 
@@ -282,6 +290,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -298,7 +307,7 @@ EXAMPLE
   box files:get 11111
 ```
 
-_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/get.js)_
+_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/get.js)_
 
 ## `box files:lock ID`
 
@@ -313,6 +322,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -342,7 +352,7 @@ EXAMPLE
   box files:lock 11111
 ```
 
-_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/lock.js)_
+_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/lock.js)_
 
 ## `box files:metadata ID`
 
@@ -357,6 +367,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -376,7 +387,7 @@ EXAMPLE
   box files:metadata 11111
 ```
 
-_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/index.js)_
+_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/index.js)_
 
 ## `box files:metadata:add ID`
 
@@ -391,6 +402,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -421,7 +433,7 @@ EXAMPLE
   box files:metadata:add 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales
 ```
 
-_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/add.js)_
+_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/add.js)_
 
 ## `box files:metadata:get ID`
 
@@ -436,6 +448,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -454,7 +467,7 @@ EXAMPLE
   box files:metadata:get 11111 --template-key employeeRecord
 ```
 
-_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/get.js)_
+_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/get.js)_
 
 ## `box files:metadata:remove ID`
 
@@ -469,6 +482,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -490,7 +504,7 @@ EXAMPLE
   box files:metadata:remove 11111 --scope global --template-key properties
 ```
 
-_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/remove.js)_
+_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/remove.js)_
 
 ## `box files:metadata:set ID`
 
@@ -505,6 +519,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -532,7 +547,7 @@ EXAMPLE
   box files:metadata:set 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales
 ```
 
-_See code: [src/commands/files/metadata/set.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/set.js)_
+_See code: [src/commands/files/metadata/set.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/set.js)_
 
 ## `box files:metadata:update ID`
 
@@ -555,6 +570,8 @@ OPTIONS
 
   -m, --move=move                        Move a metadata value from one key to another; must be in the form
                                          sourceKey>destinationKey
+
+  -q, --quiet                            Suppress any non-error output to stderr
 
   -s, --save                             Save report to default reports folder on disk
 
@@ -593,7 +610,7 @@ EXAMPLE
   box files:metadata:update 11111 --template-key employeeRecord --replace department=Finance
 ```
 
-_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/metadata/update.js)_
+_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/metadata/update.js)_
 
 ## `box files:move ID PARENTID`
 
@@ -609,6 +626,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -626,7 +644,7 @@ EXAMPLE
   box files:move 11111 22222
 ```
 
-_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/move.js)_
+_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/move.js)_
 
 ## `box files:rename ID NAME`
 
@@ -642,6 +660,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -660,7 +679,7 @@ EXAMPLE
   box files:rename 11111 "New File Name.pdf"
 ```
 
-_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/rename.js)_
+_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/rename.js)_
 
 ## `box files:share ID`
 
@@ -675,6 +694,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -702,7 +722,7 @@ EXAMPLE
   box files:share 11111 --access company
 ```
 
-_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/share.js)_
+_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/share.js)_
 
 ## `box files:tasks ID`
 
@@ -717,6 +737,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -736,7 +757,7 @@ EXAMPLE
   box files:tasks 11111
 ```
 
-_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/tasks/index.js)_
+_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/tasks/index.js)_
 
 ## `box files:unlock ID`
 
@@ -751,6 +772,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -767,7 +789,7 @@ EXAMPLE
   box files:unlock 11111
 ```
 
-_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/unlock.js)_
+_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/unlock.js)_
 
 ## `box files:unshare ID`
 
@@ -782,6 +804,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -801,7 +824,7 @@ EXAMPLE
   box files:unshare 11111
 ```
 
-_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/unshare.js)_
+_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/unshare.js)_
 
 ## `box files:update ID`
 
@@ -816,6 +839,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -836,7 +860,7 @@ EXAMPLE
   box files:update 11111 --name "New File Name.pdf"
 ```
 
-_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/update.js)_
+_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/update.js)_
 
 ## `box files:upload PATH`
 
@@ -855,6 +879,8 @@ OPTIONS
 
   -p, --parent-id=parent-id                  [default: 0] ID of the parent folder to upload the file to; defaults to the
                                              root folder
+
+  -q, --quiet                                Suppress any non-error output to stderr
 
   -s, --save                                 Save report to default reports folder on disk
 
@@ -890,7 +916,7 @@ EXAMPLE
   box files:upload /path/to/file.pdf --parent-id 22222
 ```
 
-_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/upload.js)_
+_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/upload.js)_
 
 ## `box files:versions FILEID`
 
@@ -905,6 +931,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -924,7 +951,7 @@ EXAMPLE
   box files:versions 11111
 ```
 
-_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/versions/index.js)_
+_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/versions/index.js)_
 
 ## `box files:versions:delete FILEID FILEVERSIONID`
 
@@ -940,6 +967,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -957,7 +985,7 @@ EXAMPLE
   box files:versions:delete 11111 55555
 ```
 
-_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/versions/delete.js)_
+_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/versions/delete.js)_
 
 ## `box files:versions:download FILEID FILEVERSIONID`
 
@@ -973,6 +1001,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -990,7 +1019,7 @@ EXAMPLE
   box files:versions:download 11111 55555
 ```
 
-_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/versions/download.js)_
+_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/versions/download.js)_
 
 ## `box files:versions:promote FILEID FILEVERSIONID`
 
@@ -1006,6 +1035,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -1022,7 +1052,7 @@ EXAMPLE
   box files:versions:promote 11111 55555
 ```
 
-_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/versions/promote.js)_
+_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/versions/promote.js)_
 
 ## `box files:versions:upload FILEID PATH`
 
@@ -1039,6 +1069,7 @@ ARGUMENTS
 OPTIONS
   -h, --help                                 Show CLI help
   -n, --name=name                            Provide different name for uploaded file
+  -q, --quiet                                Suppress any non-error output to stderr
   -s, --save                                 Save report to default reports folder on disk
   -t, --token=token                          Provide a token to perform this call
   -v, --verbose                              Show verbose output, which can be helpful for debugging
@@ -1063,4 +1094,4 @@ EXAMPLE
   box files:versions:upload 11111 /path/to/file.pdf
 ```
 
-_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/files/versions/upload.js)_
+_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/files/versions/upload.js)_

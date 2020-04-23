@@ -21,6 +21,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -37,7 +38,7 @@ EXAMPLE
   box watermarking:apply folder 22222
 ```
 
-_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/watermarking/apply.js)_
+_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/watermarking/apply.js)_
 
 ## `box watermarking:get ITEMTYPE ITEMID`
 
@@ -53,6 +54,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -69,7 +71,7 @@ EXAMPLE
   box watermarking:get folder 22222
 ```
 
-_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/watermarking/get.js)_
+_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/watermarking/get.js)_
 
 ## `box watermarking:remove ITEMTYPE ITEMID`
 
@@ -85,6 +87,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -101,4 +104,4 @@ EXAMPLE
   box watermarking:remove folder 22222
 ```
 
-_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/watermarking/remove.js)_
+_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/watermarking/remove.js)_

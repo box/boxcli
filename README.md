@@ -105,6 +105,7 @@ Command Topics
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
 * [`box metadata-cascade-policies`](docs/metadata-cascade-policies.md) - List the metadata cascade policies on a folder
 * [`box metadata-templates`](docs/metadata-templates.md) - Get all metadata templates in your Enterprise
+* [`box oss`](docs/oss.md) - Print a list of open-source licensed packages used in the Box CLI
 * [`box recent-items`](docs/recent-items.md) - List information about files accessed in the past 90 days up to a 1000 items
 * [`box request`](docs/request.md) - Manually specify a Box API request
 * [`box retention-policies`](docs/retention-policies.md) - List all retention policies for your enterprise

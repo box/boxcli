@@ -25,6 +25,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -42,7 +43,7 @@ EXAMPLE
   box legal-hold-policies
 ```
 
-_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/index.js)_
+_See code: [src/commands/legal-hold-policies/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/index.js)_
 
 ## `box legal-hold-policies:assign POLICYID`
 
@@ -57,6 +58,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                      Show CLI help
+  -q, --quiet                                     Suppress any non-error output to stderr
   -s, --save                                      Save report to default reports folder on disk
   -t, --token=token                               Provide a token to perform this call
   -v, --verbose                                   Show verbose output, which can be helpful for debugging
@@ -75,7 +77,7 @@ EXAMPLE
   box legal-hold-policies:assign 99999 --assign-to-type folder --assign-to-id 22222
 ```
 
-_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assign.js)_
+_See code: [src/commands/legal-hold-policies/assign.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/assign.js)_
 
 ## `box legal-hold-policies:assignments ID`
 
@@ -90,6 +92,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                      Show CLI help
+  -q, --quiet                                     Suppress any non-error output to stderr
   -s, --save                                      Save report to default reports folder on disk
   -t, --token=token                               Provide a token to perform this call
   -v, --verbose                                   Show verbose output, which can be helpful for debugging
@@ -108,7 +111,7 @@ EXAMPLE
   box legal-hold-policies:assignments 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/index.js)_
+_See code: [src/commands/legal-hold-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/assignments/index.js)_
 
 ## `box legal-hold-policies:assignments:delete ID`
 
@@ -123,6 +126,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -139,7 +143,7 @@ EXAMPLE
   box legal-hold-policies:assignments:delete 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/delete.js)_
+_See code: [src/commands/legal-hold-policies/assignments/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/assignments/delete.js)_
 
 ## `box legal-hold-policies:assignments:get ID`
 
@@ -154,6 +158,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -170,7 +175,7 @@ EXAMPLE
   box legal-hold-policies:assignments:get 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/assignments/get.js)_
+_See code: [src/commands/legal-hold-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/assignments/get.js)_
 
 ## `box legal-hold-policies:create POLICYNAME`
 
@@ -185,6 +190,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -216,7 +222,7 @@ EXAMPLE
   box legal-hold-policies:create "Class Action Suit" --ongoing
 ```
 
-_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/create.js)_
+_See code: [src/commands/legal-hold-policies/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/create.js)_
 
 ## `box legal-hold-policies:delete ID`
 
@@ -231,6 +237,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -247,7 +254,7 @@ EXAMPLE
   box legal-hold-policies:delete 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/delete.js)_
+_See code: [src/commands/legal-hold-policies/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/delete.js)_
 
 ## `box legal-hold-policies:file-version-holds ID`
 
@@ -262,6 +269,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -278,7 +286,7 @@ EXAMPLE
   box legal-hold-policies:file-version-holds 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/file-version-holds/index.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/file-version-holds/index.js)_
 
 ## `box legal-hold-policies:file-version-holds:get ID`
 
@@ -293,6 +301,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -309,7 +318,7 @@ EXAMPLE
   box legal-hold-policies:file-version-holds:get 12345
 ```
 
-_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/file-version-holds/get.js)_
+_See code: [src/commands/legal-hold-policies/file-version-holds/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/file-version-holds/get.js)_
 
 ## `box legal-hold-policies:get ID`
 
@@ -324,6 +333,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -340,7 +350,7 @@ EXAMPLE
   box legal-hold-policies:get 99999
 ```
 
-_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/get.js)_
+_See code: [src/commands/legal-hold-policies/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/get.js)_
 
 ## `box legal-hold-policies:update ID`
 
@@ -355,6 +365,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -374,4 +385,4 @@ EXAMPLE
   box legal-hold-policies:update 99999 --description "Files related to the ongoing class action suit"
 ```
 
-_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/legal-hold-policies/update.js)_
+_See code: [src/commands/legal-hold-policies/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/legal-hold-policies/update.js)_

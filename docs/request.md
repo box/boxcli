@@ -20,6 +20,7 @@ OPTIONS
   -H, --header=header                       HTTP header to add to the request, e.g. "Header: value"
   -X, --method=GET|POST|PUT|DELETE|OPTIONS  [default: GET] The HTTP method for the request
   -h, --help                                Show CLI help
+  -q, --quiet                               Suppress any non-error output to stderr
   -s, --save                                Save report to default reports folder on disk
   -t, --token=token                         Provide a token to perform this call
   -v, --verbose                             Show verbose output, which can be helpful for debugging
@@ -35,4 +36,4 @@ OPTIONS
   --save-to-file-path=save-to-file-path     Override default file path to save report
 ```
 
-_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/request.js)_
+_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/request.js)_

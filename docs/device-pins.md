@@ -17,6 +17,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -34,7 +35,7 @@ EXAMPLE
   box device-pins
 ```
 
-_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/device-pins/index.js)_
+_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/device-pins/index.js)_
 
 ## `box device-pins:delete ID`
 
@@ -49,6 +50,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -65,7 +67,7 @@ EXAMPLE
   box device-pins:delete 12345
 ```
 
-_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/device-pins/delete.js)_
+_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/device-pins/delete.js)_
 
 ## `box device-pins:get ID`
 
@@ -80,6 +82,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -96,4 +99,4 @@ EXAMPLE
   box device-pins:get 12345
 ```
 
-_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/device-pins/get.js)_
+_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/device-pins/get.js)_

@@ -18,6 +18,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -35,4 +36,4 @@ EXAMPLE
   box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3
 ```
 
-_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/shared-links/get.js)_
+_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/shared-links/get.js)_
