@@ -26,6 +26,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                   Show CLI help
+  -q, --quiet                                  Suppress any non-error output to stderr
   -s, --save                                   Save report to default reports folder on disk
   -t, --token=token                            Provide a token to perform this call
   -v, --verbose                                Show verbose output, which can be helpful for debugging
@@ -47,7 +48,7 @@ EXAMPLE
   box tasks:assign 88888 --assign-to-user-id 33333
 ```
 
-_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assign.js)_
+_See code: [src/commands/tasks/assign.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/assign.js)_
 
 ## `box tasks:assignments ID`
 
@@ -62,6 +63,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -81,7 +83,7 @@ EXAMPLE
   box tasks:assignments 88888
 ```
 
-_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/index.js)_
+_See code: [src/commands/tasks/assignments/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/assignments/index.js)_
 
 ## `box tasks:assignments:delete ID`
 
@@ -96,6 +98,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -115,7 +118,7 @@ EXAMPLE
   box tasks:assignments:delete 12345
 ```
 
-_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/delete.js)_
+_See code: [src/commands/tasks/assignments/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/assignments/delete.js)_
 
 ## `box tasks:assignments:get ID`
 
@@ -130,6 +133,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -149,7 +153,7 @@ EXAMPLE
   box tasks:assignments:get 12345
 ```
 
-_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/get.js)_
+_See code: [src/commands/tasks/assignments/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/assignments/get.js)_
 
 ## `box tasks:assignments:update ID`
 
@@ -164,6 +168,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                       Show CLI help
+  -q, --quiet                                      Suppress any non-error output to stderr
   -s, --save                                       Save report to default reports folder on disk
   -t, --token=token                                Provide a token to perform this call
   -v, --verbose                                    Show verbose output, which can be helpful for debugging
@@ -185,7 +190,7 @@ EXAMPLE
   box tasks:assignments:update 12345 --status approved
 ```
 
-_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/assignments/update.js)_
+_See code: [src/commands/tasks/assignments/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/assignments/update.js)_
 
 ## `box tasks:create FILEID`
 
@@ -199,27 +204,39 @@ ARGUMENTS
   FILEID  ID of the file to create a task on
 
 OPTIONS
-  -h, --help                             Show CLI help
-  -s, --save                             Save report to default reports folder on disk
-  -t, --token=token                      Provide a token to perform this call
-  -v, --verbose                          Show verbose output, which can be helpful for debugging
-  -y, --yes                              Automatically respond yes to all confirmation prompts
-  --as-user=as-user                      Provide an ID for a user
-  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
-  --csv                                  Output formatted CSV
-  --due-at=due-at                        When this task is due, use format 05h for 5 hours for example
-  --fields=fields                        Comma separated list of fields to show
-  --id-only                              Return only an ID to output from this command
-  --json                                 Output formatted JSON
-  --message=message                      Message for task
-  --no-color                             Turn off colors for logging
-  --save-to-file-path=save-to-file-path  Override default file path to save report
+  -h, --help                                    Show CLI help
+  -q, --quiet                                   Suppress any non-error output to stderr
+  -s, --save                                    Save report to default reports folder on disk
+  -t, --token=token                             Provide a token to perform this call
+  -v, --verbose                                 Show verbose output, which can be helpful for debugging
+  -y, --yes                                     Automatically respond yes to all confirmation prompts
+  --as-user=as-user                             Provide an ID for a user
+  --bulk-file-path=bulk-file-path               File path to bulk .csv or .json objects
+
+  --completion-rule=all_assignees|any_assignee  Rule for how many assignees must complete the task to consider it
+                                                completed
+
+  --csv                                         Output formatted CSV
+
+  --due-at=due-at                               When this task is due, use format 05h for 5 hours for example
+
+  --fields=fields                               Comma separated list of fields to show
+
+  --id-only                                     Return only an ID to output from this command
+
+  --json                                        Output formatted JSON
+
+  --message=message                             Message for task
+
+  --no-color                                    Turn off colors for logging
+
+  --save-to-file-path=save-to-file-path         Override default file path to save report
 
 EXAMPLE
   box tasks:create 11111 --message "Please proofread this document"
 ```
 
-_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/create.js)_
+_See code: [src/commands/tasks/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/create.js)_
 
 ## `box tasks:delete ID`
 
@@ -234,6 +251,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -250,7 +268,7 @@ EXAMPLE
   box tasks:delete 88888
 ```
 
-_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/delete.js)_
+_See code: [src/commands/tasks/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/delete.js)_
 
 ## `box tasks:get ID`
 
@@ -265,6 +283,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -281,7 +300,7 @@ EXAMPLE
   box tasks:get 88888
 ```
 
-_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/get.js)_
+_See code: [src/commands/tasks/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/get.js)_
 
 ## `box tasks:update ID`
 
@@ -295,23 +314,34 @@ ARGUMENTS
   ID  ID of the task to update
 
 OPTIONS
-  -h, --help                             Show CLI help
-  -s, --save                             Save report to default reports folder on disk
-  -t, --token=token                      Provide a token to perform this call
-  -v, --verbose                          Show verbose output, which can be helpful for debugging
-  -y, --yes                              Automatically respond yes to all confirmation prompts
-  --as-user=as-user                      Provide an ID for a user
-  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
-  --csv                                  Output formatted CSV
-  --due-at=due-at                        When this task is due, use format 05h for 5 hours for example
-  --fields=fields                        Comma separated list of fields to show
-  --json                                 Output formatted JSON
-  --message=message                      Message for task
-  --no-color                             Turn off colors for logging
-  --save-to-file-path=save-to-file-path  Override default file path to save report
+  -h, --help                                    Show CLI help
+  -q, --quiet                                   Suppress any non-error output to stderr
+  -s, --save                                    Save report to default reports folder on disk
+  -t, --token=token                             Provide a token to perform this call
+  -v, --verbose                                 Show verbose output, which can be helpful for debugging
+  -y, --yes                                     Automatically respond yes to all confirmation prompts
+  --as-user=as-user                             Provide an ID for a user
+  --bulk-file-path=bulk-file-path               File path to bulk .csv or .json objects
+
+  --completion-rule=all_assignees|any_assignee  Rule for how many assignees must complete the task to consider it
+                                                completed
+
+  --csv                                         Output formatted CSV
+
+  --due-at=due-at                               When this task is due, use format 05h for 5 hours for example
+
+  --fields=fields                               Comma separated list of fields to show
+
+  --json                                        Output formatted JSON
+
+  --message=message                             Message for task
+
+  --no-color                                    Turn off colors for logging
+
+  --save-to-file-path=save-to-file-path         Override default file path to save report
 
 EXAMPLE
   box tasks:update 88888 --due-at 1w
 ```
 
-_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tasks/update.js)_
+_See code: [src/commands/tasks/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tasks/update.js)_

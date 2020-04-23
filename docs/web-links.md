@@ -24,6 +24,7 @@ OPTIONS
   -d, --description=description          Description of the web link
   -h, --help                             Show CLI help
   -n, --name=name                        Name of the web link. Defaults to the URL if not set
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -41,7 +42,7 @@ EXAMPLE
   box web-links:create http://example.com --parent-id 0
 ```
 
-_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/create.js)_
+_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/web-links/create.js)_
 
 ## `box web-links:delete ID`
 
@@ -56,6 +57,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -72,7 +74,7 @@ EXAMPLE
   box web-links:delete 12345
 ```
 
-_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/delete.js)_
+_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/web-links/delete.js)_
 
 ## `box web-links:get ID`
 
@@ -87,6 +89,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -103,7 +106,7 @@ EXAMPLE
   box web-links:get 12345
 ```
 
-_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/get.js)_
+_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/web-links/get.js)_
 
 ## `box web-links:move ID PARENTID`
 
@@ -119,6 +122,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -135,7 +139,7 @@ EXAMPLE
   box web-links:move 12345 22222
 ```
 
-_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/move.js)_
+_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/web-links/move.js)_
 
 ## `box web-links:update ID`
 
@@ -152,6 +156,7 @@ OPTIONS
   -d, --description=description          Description of the web link
   -h, --help                             Show CLI help
   -n, --name=name                        Name of the web link
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -u, --url=url                          The URL the web link points to. Must start with "http://" or "https://"
@@ -169,4 +174,4 @@ EXAMPLE
   box web-links:update 12345 --name "Example Site"
 ```
 
-_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/web-links/update.js)_
+_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/web-links/update.js)_

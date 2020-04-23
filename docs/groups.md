@@ -25,6 +25,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -44,7 +45,7 @@ EXAMPLE
   box groups
 ```
 
-_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/index.js)_
+_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/index.js)_
 
 ## `box groups:collaborations ID`
 
@@ -59,6 +60,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -79,7 +81,7 @@ EXAMPLE
   box groups:collaborations 12345
 ```
 
-_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/collaborations.js)_
+_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/collaborations.js)_
 
 ## `box groups:create NAME`
 
@@ -96,6 +98,7 @@ OPTIONS
   -h, --help                                                           Show CLI help
   -i, --invite=admins_only|admins_and_members|all_managed_users        Specifies who can invite the group to collaborate
   -m, --view-members=admins_only|admins_and_members|all_managed_users  Specifies who can view the members of the group
+  -q, --quiet                                                          Suppress any non-error output to stderr
   -s, --save                                                           Save report to default reports folder on disk
   -t, --token=token                                                    Provide a token to perform this call
 
@@ -133,7 +136,7 @@ EXAMPLE
   box groups:create "US Employees"
 ```
 
-_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/create.js)_
+_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/create.js)_
 
 ## `box groups:delete ID`
 
@@ -148,6 +151,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -164,7 +168,7 @@ EXAMPLE
   box groups:delete 12345
 ```
 
-_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/delete.js)_
+_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/delete.js)_
 
 ## `box groups:get ID`
 
@@ -179,6 +183,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -195,7 +200,7 @@ EXAMPLE
   box groups:get 12345
 ```
 
-_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/get.js)_
+_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/get.js)_
 
 ## `box groups:memberships ID`
 
@@ -210,6 +215,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -229,7 +235,7 @@ EXAMPLE
   box groups:memberships 12345
 ```
 
-_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/memberships/index.js)_
+_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/memberships/index.js)_
 
 ## `box groups:memberships:add USERID GROUPID`
 
@@ -245,6 +251,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -r, --role=member|admin                [default: member] Set the user's role in the group
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
@@ -269,7 +276,7 @@ EXAMPLE
   box groups:memberships:add 33333 12345
 ```
 
-_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/memberships/add.js)_
+_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/memberships/add.js)_
 
 ## `box groups:memberships:get ID`
 
@@ -284,6 +291,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -303,7 +311,7 @@ EXAMPLE
   box groups:memberships:get 12345
 ```
 
-_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/memberships/get.js)_
+_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/memberships/get.js)_
 
 ## `box groups:memberships:remove ID`
 
@@ -318,6 +326,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -337,7 +346,7 @@ EXAMPLE
   box groups:memberships:remove 12345
 ```
 
-_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/memberships/remove.js)_
+_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/memberships/remove.js)_
 
 ## `box groups:memberships:update ID`
 
@@ -352,6 +361,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -r, --role=member|admin                Set the user's role in the group
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
@@ -376,7 +386,7 @@ EXAMPLE
   box groups:memberships:update
 ```
 
-_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/memberships/update.js)_
+_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/memberships/update.js)_
 
 ## `box groups:update ID`
 
@@ -394,6 +404,7 @@ OPTIONS
   -i, --invite=admins_only|admins_and_members|all_managed_users        Specifies who can invite the group to collaborate
   -m, --view-members=admins_only|admins_and_members|all_managed_users  Specifies who can view the members of the group
   -n, --name=name                                                      The name of the group
+  -q, --quiet                                                          Suppress any non-error output to stderr
   -s, --save                                                           Save report to default reports folder on disk
   -t, --token=token                                                    Provide a token to perform this call
 
@@ -429,4 +440,4 @@ EXAMPLE
   box groups:update 12345 --name "U.S. Employees"
 ```
 
-_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/groups/update.js)_
+_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/groups/update.js)_

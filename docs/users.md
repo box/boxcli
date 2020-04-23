@@ -28,6 +28,7 @@ OPTIONS
   -e, --external-users                   Limit results to external users only
   -h, --help                             Show CLI help
   -m, --managed-users                    Limit results to managed users only
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -49,7 +50,7 @@ EXAMPLE
   box users
 ```
 
-_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/index.js)_
+_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/index.js)_
 
 ## `box users:create NAME [LOGIN]`
 
@@ -81,6 +82,8 @@ OPTIONS
 
   -p, --phone-number=phone-number                                            Phone number of the user
 
+  -q, --quiet                                                                Suppress any non-error output to stderr
+
   -r, --role=user|coadmin                                                    Role of user. Enter user or coadmin
 
   -s, --save                                                                 Save report to default reports folder on
@@ -97,8 +100,6 @@ OPTIONS
   --app-user                                                                 Set this user as an app user
 
   --as-user=as-user                                                          Provide an ID for a user
-
-  --avatar-url=avatar-url                                                    URL of the user's avatar image
 
   --bulk-file-path=bulk-file-path                                            File path to bulk .csv or .json objects
 
@@ -136,7 +137,7 @@ EXAMPLE
   box users:create "John Doe" jdoe@example.com
 ```
 
-_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/create.js)_
+_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/create.js)_
 
 ## `box users:delete ID`
 
@@ -152,6 +153,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                            Delete user even if they own files
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -169,7 +171,7 @@ EXAMPLE
   box users:delete 33333
 ```
 
-_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/delete.js)_
+_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/delete.js)_
 
 ## `box users:email-aliases USERID`
 
@@ -184,6 +186,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -203,7 +206,7 @@ EXAMPLE
   box users:email-aliases 33333
 ```
 
-_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/email-aliases/index.js)_
+_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/email-aliases/index.js)_
 
 ## `box users:email-aliases:add USERID EMAIL`
 
@@ -219,6 +222,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -246,7 +250,7 @@ EXAMPLE
   box users:email-aliases:add 33333 user+alias@example.com
 ```
 
-_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/email-aliases/add.js)_
+_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/email-aliases/add.js)_
 
 ## `box users:email-aliases:remove USERID ALIASID`
 
@@ -262,6 +266,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -281,7 +286,7 @@ EXAMPLE
   box users:email-aliases:remove 33333 12345
 ```
 
-_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/email-aliases/remove.js)_
+_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/email-aliases/remove.js)_
 
 ## `box users:get [ID]`
 
@@ -296,6 +301,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -312,7 +318,7 @@ EXAMPLE
   box users:get 33333
 ```
 
-_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/get.js)_
+_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/get.js)_
 
 ## `box users:groups ID`
 
@@ -327,6 +333,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -346,7 +353,7 @@ EXAMPLE
   box users:groups 33333
 ```
 
-_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/groups.js)_
+_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/groups.js)_
 
 ## `box users:invite EMAIL ENTERPRISEID`
 
@@ -362,6 +369,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -381,7 +389,7 @@ EXAMPLE
   box users:invite user@example.com 12345
 ```
 
-_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/invite.js)_
+_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/invite.js)_
 
 ## `box users:transfer-content USERID NEWUSERID`
 
@@ -397,6 +405,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -417,7 +426,7 @@ EXAMPLE
   box users:transfer-content 33333 44444
 ```
 
-_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/transfer-content.js)_
+_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/transfer-content.js)_
 
 ## `box users:update ID`
 
@@ -453,6 +462,8 @@ OPTIONS
 
   -p, --phone-number=phone-number                                            Phone number of the user
 
+  -q, --quiet                                                                Suppress any non-error output to stderr
+
   -r, --role=user|coadmin                                                    Role of user. Enter user or coadmin
 
   -s, --save                                                                 Save report to default reports folder on
@@ -467,8 +478,6 @@ OPTIONS
                                                                              confirmation prompts
 
   --as-user=as-user                                                          Provide an ID for a user
-
-  --avatar-url=avatar-url                                                    URL of the user's avatar image
 
   --bulk-file-path=bulk-file-path                                            File path to bulk .csv or .json objects
 
@@ -509,4 +518,4 @@ EXAMPLE
   box users:update 33333 --status inactive
 ```
 
-_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/users/update.js)_
+_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/users/update.js)_

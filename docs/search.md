@@ -18,6 +18,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                     Show CLI help
+  -q, --quiet                                    Suppress any non-error output to stderr
   -s, --save                                     Save report to default reports folder on disk
   -t, --token=token                              Provide a token to perform this call
   -v, --verbose                                  Show verbose output, which can be helpful for debugging
@@ -82,4 +83,4 @@ EXAMPLES
   box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/search.js)_

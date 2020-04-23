@@ -24,6 +24,7 @@ USAGE
 OPTIONS
   -h, --help                                   Show CLI help
   -n, --policy-name=policy-name                A name to filter the retention policies by
+  -q, --quiet                                  Suppress any non-error output to stderr
   -s, --save                                   Save report to default reports folder on disk
   -t, --token=token                            Provide a token to perform this call
   -u, --created-by-user-id=created-by-user-id  A user id to filter the retention policies by
@@ -42,7 +43,7 @@ EXAMPLE
   box retention-policies
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -57,6 +58,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                            Show CLI help
+  -q, --quiet                                           Suppress any non-error output to stderr
   -s, --save                                            Save report to default reports folder on disk
   -t, --token=token                                     Provide a token to perform this call
   -v, --verbose                                         Show verbose output, which can be helpful for debugging
@@ -83,7 +85,7 @@ EXAMPLE
   box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -98,6 +100,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                                  Show CLI help
+  -q, --quiet                                 Suppress any non-error output to stderr
   -s, --save                                  Save report to default reports folder on disk
   -t, --token=token                           Provide a token to perform this call
   -v, --verbose                               Show verbose output, which can be helpful for debugging
@@ -115,7 +118,7 @@ EXAMPLE
   box retention-policies:assignments 12345
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -130,6 +133,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -146,7 +150,7 @@ EXAMPLE
   box retention-policies:assignments:get 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -164,6 +168,8 @@ OPTIONS
 
   -l, --retention-length=retention-length                   The number of days to apply the retention policy. If not
                                                             set, policy will be indefinite
+
+  -q, --quiet                                               Suppress any non-error output to stderr
 
   -s, --save                                                Save report to default reports folder on disk
 
@@ -199,7 +205,7 @@ EXAMPLE
   box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action permanently_delete
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/create.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -211,6 +217,7 @@ USAGE
 
 OPTIONS
   -h, --help                                                Show CLI help
+  -q, --quiet                                               Suppress any non-error output to stderr
   -s, --save                                                Save report to default reports folder on disk
   -t, --token=token                                         Provide a token to perform this call
   -v, --verbose                                             Show verbose output, which can be helpful for debugging
@@ -244,7 +251,7 @@ EXAMPLE
   box retention-policies:file-version-retentions
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -259,6 +266,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -275,7 +283,7 @@ EXAMPLE
   box retention-policies:file-version-retentions:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -290,6 +298,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -306,7 +315,7 @@ EXAMPLE
   box retention-policies:get 12345
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -327,6 +336,8 @@ OPTIONS
                                                finite policies
 
   -n, --policy-name=policy-name                New name of retention policy
+
+  -q, --quiet                                  Suppress any non-error output to stderr
 
   -r, --retire                                 Retire a retention policy
 
@@ -362,4 +373,4 @@ EXAMPLE
   box retention-policies:update 12345
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/retention-policies/update.js)_

@@ -19,6 +19,7 @@ USAGE
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -38,7 +39,7 @@ EXAMPLE
   box webhooks
 ```
 
-_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/webhooks/index.js)_
+_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/webhooks/index.js)_
 
 ## `box webhooks:create TARGETTYPE TARGETID`
 
@@ -59,6 +60,8 @@ OPTIONS
   -a, --address=address                  (required) URL for your webhook handler
 
   -h, --help                             Show CLI help
+
+  -q, --quiet                            Suppress any non-error output to stderr
 
   -s, --save                             Save report to default reports folder on disk
 
@@ -88,7 +91,7 @@ EXAMPLE
   box webhooks:create folder 22222 --triggers FILE.DELETED --address https://example.com/webhook/deletion
 ```
 
-_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/webhooks/create.js)_
+_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/webhooks/create.js)_
 
 ## `box webhooks:delete ID`
 
@@ -103,6 +106,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -119,7 +123,7 @@ EXAMPLE
   box webhooks:delete 12345
 ```
 
-_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/webhooks/delete.js)_
+_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/webhooks/delete.js)_
 
 ## `box webhooks:get ID`
 
@@ -134,6 +138,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
   -s, --save                             Save report to default reports folder on disk
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
@@ -150,7 +155,7 @@ EXAMPLE
   box webhooks:get 12345
 ```
 
-_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/webhooks/get.js)_
+_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/webhooks/get.js)_
 
 ## `box webhooks:update ID`
 
@@ -170,6 +175,8 @@ OPTIONS
   -a, --address=address                  URL for your webhook handler
 
   -h, --help                             Show CLI help
+
+  -q, --quiet                            Suppress any non-error output to stderr
 
   -s, --save                             Save report to default reports folder on disk
 
@@ -197,4 +204,4 @@ EXAMPLE
   box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED
 ```
 
-_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/webhooks/update.js)_
+_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/webhooks/update.js)_

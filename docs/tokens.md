@@ -20,6 +20,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --help             Show CLI help
+  -q, --quiet            Suppress any non-error output to stderr
   -t, --token=token      Specify the token to exchange
   -u, --user-id=user-id  Get a user token from a user ID
   -v, --verbose          Show verbose output, which can be helpful for debugging
@@ -28,7 +29,7 @@ OPTIONS
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tokens/exchange.js)_
+_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tokens/exchange.js)_
 
 ## `box tokens:get`
 
@@ -40,12 +41,13 @@ USAGE
 
 OPTIONS
   -h, --help             Show CLI help
+  -q, --quiet            Suppress any non-error output to stderr
   -u, --user-id=user-id  Get a user token from a user ID
   -v, --verbose          Show verbose output, which can be helpful for debugging
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tokens/get.js)_
+_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tokens/get.js)_
 
 ## `box tokens:revoke TOKEN`
 
@@ -60,8 +62,9 @@ ARGUMENTS
 
 OPTIONS
   -h, --help     Show CLI help
+  -q, --quiet    Suppress any non-error output to stderr
   -v, --verbose  Show verbose output, which can be helpful for debugging
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v2.4.0/src/commands/tokens/revoke.js)_
+_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v2.5.1/src/commands/tokens/revoke.js)_
