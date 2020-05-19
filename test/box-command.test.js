@@ -62,7 +62,7 @@ describe('BoxCommand', () => {
 				'0',
 				'--save'
 			])
-			.it('should save output to file with correct naming conventions', ctx => {
+			.it('should save output to file named with valid characters', ctx => {
 				assert.include(ctx.stderr, 'folders-collaborations-add');
 				assert.notInclude(ctx.stderr, ':');
 			});
