@@ -1,5 +1,8 @@
 # Changelog
 
+## Next Release
+- Fix filename issue when saving reports on Windows 
+
 ## 2.5.1 [2020-04-14]
 
 - Added `--quiet` flag to suppress any non-error output to stderr
