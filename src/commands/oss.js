@@ -7,9 +7,9 @@ const path = require('path');
 class OSSLicensesCommand extends BoxCommand {
 	async run() {
 
-        let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
+		let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
 
-        let licenseText = await fs.readFile(licensesFilePath, 'utf8');
+		let licenseText = await fs.readFile(licensesFilePath, 'utf8');
 
 		await this.output(licenseText);
 	}

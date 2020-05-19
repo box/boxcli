@@ -50,6 +50,22 @@ describe('BoxCommand', () => {
 				'--token=test'
 			])
 			.it('should send correct analytics and identification headers with API requests');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/collaborations')
+				.reply(200, {})
+			)
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				'0',
+				'--save'
+			])
+			.it('should save output to file with correct naming conventions', ctx => {
+				assert.include(ctx.stderr, 'folders-collaborations-add');
+				assert.notInclude(ctx.stderr, ':');
+			});
 	});
 
 	describe('normalizeDateString()', () => {

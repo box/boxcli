@@ -700,7 +700,7 @@ class BoxCommand extends Command {
 	 */
 	_getOutputFileName() {
 		let extension = this._getOutputFormat();
-		return `${this.id.replace(':', '-')}-${dateTime.format(new Date(), 'YYYY-MM-DD_HH_mm_ss_SSS')}.${extension}`;
+		return `${this.id.replace(/:/gu, '-')}-${dateTime.format(new Date(), 'YYYY-MM-DD_HH_mm_ss_SSS')}.${extension}`;
 	}
 
 	/**
