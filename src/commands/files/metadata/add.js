@@ -25,7 +25,7 @@ FilesCreateMetadataCommand._endpoint = 'post_files_id_metadata_id_id';
 FilesCreateMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "f" on end of digits: key2=1234.50f',
+		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		multiple: true,
 		required: true,
 		parse: utils.parseMetadata,

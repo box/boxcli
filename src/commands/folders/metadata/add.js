@@ -26,7 +26,7 @@ FoldersCreateMetadataCommand._endpoint = 'post_folders_id_metadata_id_id';
 FoldersCreateMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "f" on end of digits: key2=1234.50f',
+		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		required: true,
 		multiple: true,
 		parse: utils.parseMetadata,
