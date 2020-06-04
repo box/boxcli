@@ -60,6 +60,7 @@ describe('BoxCommand', () => {
 			.command([
 				'folders:collaborations:add',
 				'0',
+				'--token=test',
 				'--save'
 			])
 			.it('should save output to file named with valid characters', ctx => {
