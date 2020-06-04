@@ -23,7 +23,7 @@ FilesSetMetadataCommand.examples = ['box files:metadata:set 11111 --template-key
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "f" on end of digits: key2=1234.50f',
+		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		required: true,
 		multiple: true,
 		parse: utils.parseMetadata,
