@@ -508,11 +508,10 @@ class BoxCommand extends Command {
 		let client;
 		if (this.flags.token) {
 			DEBUG.init('Using passed in token %s', this.flags.token);
-			
 			let sdk = new BoxSDK({
 				clientID: '',
 				clientSecret: '',
-				...SDK_CONFIG
+				...SDK_CONFIG,
 			});
 			if (this.settings.enableProxy) {
 				sdk.configure({ proxy: this.settings.proxy });
