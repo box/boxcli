@@ -508,11 +508,15 @@ class BoxCommand extends Command {
 		let client;
 		if (this.flags.token) {
 			DEBUG.init('Using passed in token %s', this.flags.token);
+			
 			let sdk = new BoxSDK({
 				clientID: '',
 				clientSecret: '',
-				...SDK_CONFIG,
+				...SDK_CONFIG
 			});
+			if (this.settings.enableProxy) {
+				sdk.configure({ proxy: this.settings.proxy });
+			}
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (environmentsObj.default) {
@@ -537,6 +541,9 @@ class BoxCommand extends Command {
 
 			this.sdk = BoxSDK.getPreconfiguredInstance(configObj);
 			this.sdk.configure({ ...SDK_CONFIG });
+			if (this.settings.enableProxy) {
+				this.sdk.configure({ proxy: this.settings.proxy });
+			}
 
 			client = this.sdk.getAppAuthClient('enterprise', environment.enterpriseId, tokenCache);
 			DEBUG.init('Initialized client from environment config');
@@ -1080,6 +1087,12 @@ class BoxCommand extends Command {
 			boxReportsFileFormat: 'txt',
 			boxDownloadsFolderPath: path.join(os.homedir(), 'Downloads/Box-Downloads'),
 			outputJson: false,
+			enableProxy: true,
+			proxy: {
+				url: null,
+				username: null,
+				password: null
+			}
 		};
 	}
 
