@@ -2,7 +2,7 @@
 
 ## Next Release
 - Fix filename issue when saving reports on Windows
-- Add proxy support for `http`, `https`, `socks` and `pac` protocols. Proxy settings can be found under `box configure:settings`.
+- Add proxy support for `http`, `https`, `socks` and `pac` protocols. Proxy settings can be found under `box configure:settings`
 
 ## 2.5.1 [2020-04-14]
 
