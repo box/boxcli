@@ -1,0 +1,35 @@
+{
+	"download_url": "https://dl.boxcloud.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/content",
+	"status_url": "https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/status",
+	"expires_at": "2018-04-25T11:00:18-07:00",
+	"name_conflicts": [
+		[
+			{
+				"id": "100",
+				"type": "file",
+				"original_name": "salary.pdf",
+				"download_name": "aqc823.pdf"
+			},
+			{
+				"id": "200",
+				"type": "file",
+				"original_name": "salary.pdf",
+				"download_name": "aci23s.pdf"
+			}
+		],
+		[
+			{
+				"id": "1000",
+				"type": "folder",
+				"original_name": "employees",
+				"download_name": "3d366a_employees"
+			},
+			{
+				"id": "2000",
+				"type": "folder",
+				"original_name": "employees",
+				"download_name": "3aa6a7_employees"
+			}
+		]
+	]
+}
