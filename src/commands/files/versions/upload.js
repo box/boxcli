@@ -49,7 +49,8 @@ class FilesUploadVersionsCommand extends BoxCommand {
 			});
 			file = await uploader.start();
 		}
-		await this.output(file.entries[0]);
+		file = await file.next();
+		await this.output(file.value);
 	}
 }
 
