@@ -35,7 +35,7 @@ class FilesZipCommand extends BoxCommand {
 }
 
 FilesZipCommand.description = 'Create a zip of multiple files and folders and download it';
-FilesZipCommand.examples = ['box files:zip sample_file.zip --item=file,12421 --item=folder,48291'];
+FilesZipCommand.examples = ['box files:zip sample_file.zip --item=file:12421 --item=folder:48291'];
 FilesZipCommand._endpoint = 'zip_downloads';
 
 FilesZipCommand.flags = {
@@ -49,7 +49,7 @@ FilesZipCommand.flags = {
 		multiple: true,
 		required: true,
 		parse(val) {
-            let splitVal = val.split(',');
+            let splitVal = val.split(':');
             return {type: splitVal[0], id: splitVal[1]};
 		}
 	}),
