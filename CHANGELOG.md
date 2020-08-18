@@ -1,6 +1,7 @@
 # Changelog
 
 ## Next Release
+- Add zip functionality
 - Fix filename issue when saving reports on Windows 
 
 ## 2.5.1 [2020-04-14]

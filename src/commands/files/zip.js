@@ -17,7 +17,7 @@ class FilesZipCommand extends BoxCommand {
 
 		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
         
-        /* eslint-disable no-sync */
+		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
 
