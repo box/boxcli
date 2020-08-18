@@ -1981,7 +1981,7 @@ describe('Files', () => {
 			});
 	});
 
-	describe.only('files:zip', () => {
+	describe('files:zip', () => {
 
 		var fileName = 'test.zip',
 			items = [
@@ -2022,8 +2022,8 @@ describe('Files', () => {
 			.command([
 				'files:zip',
 				fileName,
-				`--item=${items[0].type}:${items[0].id}`,
-				`--item=${items[1].type}:${items[1].id}`,
+				`--item=${items[0].type},${items[0].id}`,
+				`--item=${items[1].type},${items[1].id}`,
 				`--destination=${fileDownloadPath}`,
 				'--json',
 				'--token=test'
