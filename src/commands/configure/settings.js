@@ -58,6 +58,18 @@ class ConfigureSettingsCommand extends BoxCommand {
 		if (flags.hasOwnProperty('output-json')) {
 			settings.outputJson = flags['output-json'];
 		}
+		if (flags['enable-proxy']) {
+			settings.enableProxy = flags['enable-proxy'];
+		}
+		if (flags['proxy-url']) {
+			settings.proxy.url = flags['proxy-url'];
+		}
+		if (flags['proxy-username']) {
+			settings.proxy.username = flags['proxy-username'];
+		}
+		if (flags['proxy-password']) {
+			settings.proxy.password = flags['proxy-password'];
+		}
 
 		this.updateSettings(settings);
 		await this.output(settings);
@@ -71,6 +83,21 @@ ConfigureSettingsCommand.description = 'View and update CLI configuration settin
 
 ConfigureSettingsCommand.flags = {
 	...BoxCommand.minFlags,
+	'enable-proxy': flags.boolean({
+		description: 'Enable or disable proxy',
+		allowNo: true,
+	}),
+	'proxy-url': flags.string({
+		description: 'Set proxy url, which should contain the protocol, url, and port (i.e. http://sample.proxyurl.com:80)'
+	}),
+	'proxy-username': flags.string({
+		description: 'Set username for proxy',
+		dependsOn: ['proxy-password']
+	}),
+	'proxy-password': flags.string({
+		description: 'Set password for proxy',
+		dependsOn: ['proxy-username']
+	}),
 	'downloads-folder-path': flags.string({
 		description: 'Set folder path for the downloads folder',
 		parse: utils.parsePath,
