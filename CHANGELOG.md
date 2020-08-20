@@ -1,6 +1,7 @@
 # Changelog
 
-## Next Release
+## 2.6.0 [2020-08-20]
+
 - Fix filename issue when saving reports on Windows
 - Add proxy support for `http`, `https`, `socks` and `pac` protocols. Proxy settings can be found under `box configure:settings`
 - Add zip functionality
