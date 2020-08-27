@@ -531,7 +531,7 @@ class BoxCommand extends Command {
 
 			if (!environment.hasInLinePrivateKey) {
 				try {
-					configObj.appAuth.privateKey = fs.readFileSync(environment.privateKeyPath, 'utf8');
+					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(environment.privateKeyPath, 'utf8');
 					DEBUG.init('Loaded JWT private key from %s', environment.privateKeyPath);
 				} catch (ex) {
 					throw new BoxCLIError(`Could not read private key file ${environment.privateKeyPath}`, ex);
