@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const { flags } = require('@oclif/command');
 
 class GroupsListCommand extends BoxCommand {
 	async run() {
@@ -9,6 +10,10 @@ class GroupsListCommand extends BoxCommand {
 
 		if (flags.fields) {
 			options.fields = flags.fields;
+		}
+
+		if (flags.filter) {
+			options.filter_term = flags.filter;
 		}
 
 		let groups = await this.client.groups.getAll(options);
@@ -23,7 +28,10 @@ GroupsListCommand.examples = ['box groups'];
 GroupsListCommand._endpoint = 'get_groups';
 
 GroupsListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	filter: flags.string({
+		description: 'Search term to filter groups on; matches prefixes of group name',
+	})
 };
 
 module.exports = GroupsListCommand;
