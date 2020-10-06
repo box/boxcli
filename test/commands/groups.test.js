@@ -110,6 +110,27 @@ describe('Groups', () => {
 					'--token=test'
 				])
 				.it('should send fields param to the API when --fields flag is passed');
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/groups')
+					.query({filter_term: 'Employees'})
+					.reply(200, fixture)
+					.get('/2.0/groups')
+					.query({
+						filter_term: 'Employees',
+						offset: 2
+					})
+					.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					command,
+					'--filter=Employees',
+					'--json',
+					'--token=test'
+				])
+				.it('should send filter_term param to the API when --filter flag is passed');
 		});
 	});
 
