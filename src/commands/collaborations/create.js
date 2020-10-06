@@ -15,8 +15,6 @@ class CollaborationsAddCommand extends BoxCommand {
 	}
 }
 
-CollaborationsAddCommand.hidden = true;
-
 CollaborationsAddCommand.aliases = [ 'collaborations:add' ];
 
 CollaborationsAddCommand.description = 'Create a collaboration for a Box item';
