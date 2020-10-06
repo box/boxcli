@@ -1,5 +1,16 @@
 # Changelog
 
+## NEXT VERSION (DATE)
+
+**New Features and Enhancements:**
+
+- Add filter_term parameter to `groups:list`
+- Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available
+
+**Bug Fixes:**
+
+- 
+
 ## 2.6.0 [2020-08-20]
 
 - Fix filename issue when saving reports on Windows
