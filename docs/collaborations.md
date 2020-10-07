@@ -3,10 +3,54 @@
 
 Manage collaborations
 
+* [`box collaborations:create ITEMID ITEMTYPE`](#box-collaborationscreate-itemid-itemtype)
 * [`box collaborations:delete ID`](#box-collaborationsdelete-id)
 * [`box collaborations:get ID`](#box-collaborationsget-id)
 * [`box collaborations:pending`](#box-collaborationspending)
 * [`box collaborations:update ID`](#box-collaborationsupdate-id)
+
+## `box collaborations:create ITEMID ITEMTYPE`
+
+Create a collaboration for a Box item
+
+```
+USAGE
+  $ box collaborations:create ITEMID ITEMTYPE
+
+ARGUMENTS
+  ITEMID    The ID of the Box item to add the collaboration to
+  ITEMTYPE  (file|folder) The type of the Box item to add the collaboration to
+
+OPTIONS
+  -h, --help                                                                               Show CLI help
+  -q, --quiet                                                                              Suppress any non-error output to stderr
+  -r, --role=editor|viewer|previewer|uploader|previewer_uploader|viewer_uploader|co-owner  An option to manually enter the role
+  -s, --save                                                                               Save report to default reports folder on disk
+  -t, --token=token                                                                        Provide a token to perform this call
+  -v, --verbose                                                                            Show verbose output, which can be helpful for debugging
+  -y, --yes                                                                                Automatically respond yes to all confirmation prompts
+  --as-user=as-user                                                                        Provide an ID for a user
+  --bulk-file-path=bulk-file-path                                                          File path to bulk .csv or .json objects
+  --[no-]can-view-path                                                                     Whether view path collaboration feature is enabled or not
+  --csv                                                                                    Output formatted CSV
+  --fields=fields                                                                          Comma separated list of fields to show
+  --group-id=group-id                                                                      Id for group to collaborate
+  --id-only                                                                                Return only an ID to output from this command
+  --json                                                                                   Output formatted JSON
+  --login=login                                                                            Login for user to collaborate
+  --no-color                                                                               Turn off colors for logging
+  --[no-]notify                                                                            All users will receive email notification of the collaboration
+  --save-to-file-path=save-to-file-path                                                    Override default file path to save report
+  --user-id=user-id                                                                        Id for user to collaborate
+
+ALIASES
+  $ box collaborations:add
+
+EXAMPLE
+  box collaborations:create 22222 folder --role editor --user-id 33333
+```
+
+_See code: [src/commands/collaborations/create.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/collaborations/create.js)_
 
 ## `box collaborations:delete ID`
 
