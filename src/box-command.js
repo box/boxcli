@@ -982,8 +982,6 @@ class BoxCommand extends Command {
 	 */
 	updateSettings(updatedSettings) {
 		this.settings = Object.assign(this.settings, updatedSettings);
-		console.log(this.settings)
-		console.log(updatedSettings)
 		try {
 			fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(this.settings, null, 4), 'utf8');
 		} catch (ex) {
