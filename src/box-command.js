@@ -1051,6 +1051,7 @@ class BoxCommand extends Command {
 		let settings;
 		try {
 			settings = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH));
+			settings = Object.assign(this._getDefaultSettings(), settings);
 			DEBUG.init('Loaded settings %O', settings);
 		} catch (ex) {
 			throw new BoxCLIError(`Could not read CLI settings file at ${SETTINGS_FILE_PATH}`, ex);
@@ -1086,7 +1087,7 @@ class BoxCommand extends Command {
 			boxReportsFileFormat: 'txt',
 			boxDownloadsFolderPath: path.join(os.homedir(), 'Downloads/Box-Downloads'),
 			outputJson: false,
-			enableProxy: true,
+			enableProxy: false,
 			proxy: {
 				url: null,
 				username: null,
