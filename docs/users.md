@@ -51,7 +51,7 @@ EXAMPLE
   box users
 ```
 
-_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/index.js)_
+_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/index.js)_
 
 ## `box users:create NAME [LOGIN]`
 
@@ -138,7 +138,7 @@ EXAMPLE
   box users:create "John Doe" jdoe@example.com
 ```
 
-_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/create.js)_
+_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/create.js)_
 
 ## `box users:delete ID`
 
@@ -172,7 +172,7 @@ EXAMPLE
   box users:delete 33333
 ```
 
-_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/delete.js)_
+_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/delete.js)_
 
 ## `box users:email-aliases USERID`
 
@@ -207,7 +207,7 @@ EXAMPLE
   box users:email-aliases 33333
 ```
 
-_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/email-aliases/index.js)_
+_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/email-aliases/index.js)_
 
 ## `box users:email-aliases:add USERID EMAIL`
 
@@ -251,7 +251,7 @@ EXAMPLE
   box users:email-aliases:add 33333 user+alias@example.com
 ```
 
-_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/email-aliases/add.js)_
+_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/email-aliases/add.js)_
 
 ## `box users:email-aliases:remove USERID ALIASID`
 
@@ -287,7 +287,7 @@ EXAMPLE
   box users:email-aliases:remove 33333 12345
 ```
 
-_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/email-aliases/remove.js)_
+_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/email-aliases/remove.js)_
 
 ## `box users:get [ID]`
 
@@ -319,7 +319,7 @@ EXAMPLE
   box users:get 33333
 ```
 
-_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/get.js)_
+_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/get.js)_
 
 ## `box users:groups ID`
 
@@ -354,7 +354,7 @@ EXAMPLE
   box users:groups 33333
 ```
 
-_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/groups.js)_
+_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/groups.js)_
 
 ## `box users:invite EMAIL ENTERPRISEID`
 
@@ -390,7 +390,7 @@ EXAMPLE
   box users:invite user@example.com 12345
 ```
 
-_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/invite.js)_
+_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/invite.js)_
 
 ## `box users:search NAME`
 
@@ -425,7 +425,7 @@ EXAMPLE
   box users:search "John Doe"
 ```
 
-_See code: [src/commands/users/search.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/search.js)_
+_See code: [src/commands/users/search.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/search.js)_
 
 ## `box users:transfer-content USERID NEWUSERID`
 
@@ -462,7 +462,7 @@ EXAMPLE
   box users:transfer-content 33333 44444
 ```
 
-_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/transfer-content.js)_
+_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/transfer-content.js)_
 
 ## `box users:update ID`
 
@@ -554,4 +554,4 @@ EXAMPLE
   box users:update 33333 --status inactive
 ```
 
-_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.6.0/src/commands/users/update.js)_
+_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/users/update.js)_
