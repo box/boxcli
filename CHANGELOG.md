@@ -6,16 +6,20 @@
 
 - Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
 
+**Bug Fixes:**
+
+- Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
+
 ## 2.7.0 (2020-11-02)
 
 **New Features and Enhancements:**
 
-- Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available (#211)
-- Add `filter_term` parameter to `groups:list` (#210)
+- Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available ([#211](https://github.com/box/boxcli/pull/211))
+- Add `filter_term` parameter to `groups:list` ([#210](https://github.com/box/boxcli/pull/210))
 
 **Bug Fixes:**
 
-- Fix bug with setting proxy settings (#213)
+- Fix bug with setting proxy settings ([#213](https://github.com/box/boxcli/pull/213))
 
 ## 2.6.0 [2020-08-20]
 
