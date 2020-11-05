@@ -891,9 +891,7 @@ class BoxCommand extends Command {
 			if (typeof (object) === 'object') {
 				for (let keyPath of keyPaths) {
 					let value = _.get(object, keyPath);
-					if (Array.isArray(value)) {
-						row.push(value);
-					} else if (value === null || value === undefined) {
+					if (value === null || value === undefined) {
 						row.push('');
 					} else {
 						row.push(value);
