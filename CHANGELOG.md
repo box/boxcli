@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+**New Features and Enhancements:**
+
+- Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
+
 ## 2.7.0 (2020-11-02)
 
 **New Features and Enhancements:**
