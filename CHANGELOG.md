@@ -4,11 +4,11 @@
 
 **New Features and Enhancements:**
 
-- Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
+- Output contents of array for bulk commands (#217)
 
 **Bug Fixes:**
 
-- Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
+- Fix bug with setting proxy settings (#218)
 
 ## 2.7.0 (2020-11-02)
 
