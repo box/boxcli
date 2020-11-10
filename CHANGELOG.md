@@ -4,15 +4,15 @@
 
 **Warning:**
 
-- Due to the changes in #217, additional details about Box Items may now be returned for some commands.
+- Due to the changes in ([#217](https://github.com/box/boxcli/pull/217)), additional details about Box Items may now be returned for some commands.
 
 **New Features and Enhancements:**
 
-- Output contents of array for bulk commands (#217)
+- Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
 
 **Bug Fixes:**
 
-- Fix bug with setting proxy settings (#218)
+- Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
 
 ## 2.7.0 (2020-11-02)
 
