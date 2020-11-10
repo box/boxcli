@@ -2,7 +2,13 @@
 
 ## Next Release
 
+**Warning:**
+
+- Due to the changes in ([#217](https://github.com/box/boxcli/pull/217)), additional details about Box Items may now be returned for some commands.
+
 **New Features and Enhancements:**
+
+- Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
 
 **Bug Fixes:**
 
