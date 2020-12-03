@@ -1,6 +1,6 @@
 # Changelog
 
-## Next Release
+## 2.8.0 (2020-12-03)
 
 **Warning:**
 
