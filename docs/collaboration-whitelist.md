@@ -39,7 +39,7 @@ EXAMPLE
   box collaboration-whitelist
 ```
 
-_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/index.js)_
+_See code: [src/commands/collaboration-whitelist/index.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/index.js)_
 
 ## `box collaboration-whitelist:add DOMAIN`
 
@@ -72,7 +72,7 @@ EXAMPLE
   box collaboration-whitelist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/add.js)_
+_See code: [src/commands/collaboration-whitelist/add.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/add.js)_
 
 ## `box collaboration-whitelist:delete ID`
 
@@ -104,7 +104,7 @@ EXAMPLE
   box collaboration-whitelist:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/delete.js)_
+_See code: [src/commands/collaboration-whitelist/delete.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/delete.js)_
 
 ## `box collaboration-whitelist:exemptions`
 
@@ -133,7 +133,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/exemptions/index.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/exemptions/index.js)_
 
 ## `box collaboration-whitelist:exemptions:create USERID`
 
@@ -165,7 +165,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:create 11111
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/exemptions/create.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/exemptions/create.js)_
 
 ## `box collaboration-whitelist:exemptions:delete ID`
 
@@ -197,7 +197,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:delete 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/exemptions/delete.js)_
 
 ## `box collaboration-whitelist:exemptions:get ID`
 
@@ -229,7 +229,7 @@ EXAMPLE
   box collaboration-whitelist:exemptions:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/exemptions/get.js)_
+_See code: [src/commands/collaboration-whitelist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/exemptions/get.js)_
 
 ## `box collaboration-whitelist:get ID`
 
@@ -261,4 +261,4 @@ EXAMPLE
   box collaboration-whitelist:get 12345
 ```
 
-_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.7.0/src/commands/collaboration-whitelist/get.js)_
+_See code: [src/commands/collaboration-whitelist/get.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/collaboration-whitelist/get.js)_
