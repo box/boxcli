@@ -78,8 +78,7 @@
 			]
 		},
 		"macos": {
-			"identifier": "com.box.cli",
-			"sign": "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+			"identifier": "com.box.cli"
 		},
 		"plugins": [
 			"@oclif/plugin-help",
