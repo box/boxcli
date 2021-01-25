@@ -440,6 +440,13 @@ describe('Metadata Templates', () => {
 				}
 			},
 			{
+				op: 'addMultiSelectOption',
+				fieldKey: 'foo',
+				data: {
+					key: 'bas',
+				},
+			},
+			{
 				op: 'addField',
 				data: {
 					type: 'float',
@@ -488,6 +495,8 @@ describe('Metadata Templates', () => {
 				'--option=bar',
 				'--option=baz',
 				'--no-hidden',
+				'--add-multi-select-option=foo',
+				'--option=bas',
 				'--number=Count',
 				'--date=Date',
 				'--json',

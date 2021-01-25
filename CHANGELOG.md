@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+**New Features and Enhancements**
+
+- Add ability to add an option to a metadata template multi select field ([#230](https://github.com/box/boxcli/pull/230))
+
 ## 2.8.0 (2020-12-03)
 
 **Warning:**
