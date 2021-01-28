@@ -2,23 +2,24 @@
 
 const BoxCommand = require('../../../box-command');
 
-class FoldersLocksListCommand extends BoxCommand {
+class FoldersLocksCreateCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(FoldersLocksListCommand);
+		const { args } = this.parse(FoldersLocksCreateCommand);
 
 		let lock = await this.client.folders.lock(args.id);
 		await this.output(lock);
 	}
 }
 
-FoldersLocksListCommand.description = 'Create a lock on a folder';
-FoldersLocksListCommand.examples = ['box folders:locks:create 22222'];
+FoldersLocksCreateCommand.description = 'Create a lock on a folder';
+FoldersLocksCreateCommand.examples = ['box folders:locks:create 22222'];
+FoldersLocksCreateCommand._endpoint = 'post_folder_locks';
 
-FoldersLocksListCommand.flags = {
+FoldersLocksCreateCommand.flags = {
 	...BoxCommand.flags,
 };
 
-FoldersLocksListCommand.args = [
+FoldersLocksCreateCommand.args = [
 	{
 		name: 'id',
 		required: true,
@@ -27,4 +28,4 @@ FoldersLocksListCommand.args = [
 	}
 ];
 
-module.exports = FoldersLocksListCommand;
+module.exports = FoldersLocksCreateCommand;

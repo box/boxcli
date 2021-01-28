@@ -13,7 +13,7 @@ class FoldersLocksDeleteCommand extends BoxCommand {
 
 FoldersLocksDeleteCommand.description = 'Delete a lock on a folder';
 FoldersLocksDeleteCommand.examples = ['box folders:locks:delete 22222'];
-FoldersLocksDeleteCommand._endpoint = 'get_folders_id_collaborations';
+FoldersLocksDeleteCommand._endpoint = 'get_folder_locks_id';
 
 FoldersLocksDeleteCommand.flags = {
 	...BoxCommand.flags,

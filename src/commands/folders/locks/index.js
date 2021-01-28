@@ -15,7 +15,7 @@ FoldersLocksListCommand.aliases = [ 'folders:locks:list' ];
 
 FoldersLocksListCommand.description = 'List all locks on a folder';
 FoldersLocksListCommand.examples = ['box folders:locks 22222'];
-FoldersLocksListCommand._endpoint = 'get_folders_id_collaborations';
+FoldersLocksListCommand._endpoint = 'get_folder_locks';
 
 FoldersLocksListCommand.flags = {
 	...BoxCommand.flags,
