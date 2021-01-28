@@ -274,7 +274,11 @@ describe('Search', () => {
 						}
 					]),
 				}
-			]
+			],
+			'include recent shared links flag': [
+				['--include-recent-shared-links'],
+				{include_recent_shared_links: true}
+			],
 		}, function(flags, params) {
 
 			test

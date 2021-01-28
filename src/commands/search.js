@@ -138,6 +138,10 @@ class SearchCommand extends BoxCommand {
 			options.direction = flags.direction;
 		}
 
+		if (flags.hasOwnProperty('include-recent-shared-links')) {
+			options.include_recent_shared_links = flags['include-recent-shared-links'];
+		}
+
 		let results = await this.client.search.query(args.query || null, options);
 
 		// Hard limit the search results to avoid slamming the API
@@ -275,7 +279,10 @@ SearchCommand.flags = {
 			'asc',
 			'desc'
 		]
-	})
+	}),
+	'include-recent-shared-links': flags.boolean({
+		description: 'Returns shared links that the user recently accessed'
+	}),
 };
 
 SearchCommand.args = [
