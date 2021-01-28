@@ -1681,4 +1681,77 @@ describe('Folders', () => {
 			});
 	});
 
+	describe('folders:locks', () => {
+		let folderId = '0',
+			fixture = getFixture('folders/get_folder_locks'),
+			jsonOutput = getFixture('output/folders_locks_list_json.txt');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/folder_locks')
+				.query({ folder_id: folderId })
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'folders:locks',
+				folderId,
+				'--json',
+				'--token=test'
+			])
+			.it('should list all locks on a folder (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, jsonOutput);
+			});
+	});
+
+	describe('folders:locks:create', () => {
+		let folderId = '22222',
+			fixture = getFixture('folders/post_folder_locks');
+
+		let expectedBody = {
+			folder: {
+				type: 'folder',
+				id: folderId
+			},
+			locked_operations: {
+				move: true,
+				delete: true
+			}
+		};
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/folder_locks', expectedBody)
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'folders:locks:create',
+				folderId,
+				'--json',
+				'--token=test'
+			])
+			.it('should create a lock on a folder (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+	});
+
+	describe('folders:locks:delete', () => {
+		let folderLockId = '0';
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.delete(`/2.0/folder_locks/${folderLockId}`)
+				.reply(204)
+			)
+			.stderr()
+			.command([
+				'folders:locks:delete',
+				folderLockId,
+				'--token=test'
+			])
+			.it('should delete a lock on folder', ctx => {
+				assert.equal(ctx.stderr, `Delete folder lock with ID ${folderLockId}${os.EOL}`);
+			});
+	});
 });

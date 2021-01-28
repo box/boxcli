@@ -5,6 +5,7 @@
 **New Features and Enhancements**
 
 - Add ability to add an option to a metadata template multi select field ([#230](https://github.com/box/boxcli/pull/230))
+- Add folder lock functionality ([#232](https://github.com/box/boxcli/pull/232))
 - Add support for search param to get shared link items ([#233](https://github.com/box/boxcli/pull/233))
 
 ## 2.8.0 (2020-12-03)
