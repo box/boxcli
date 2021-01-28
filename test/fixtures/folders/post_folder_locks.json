@@ -3,19 +3,19 @@
     "type": "folder_lock",
     "created_at": "2020-09-14T23:12:53Z",
     "created_by": {
-      "id": "11446498",
-      "type": "user"
+        "id": "11446498",
+        "type": "user"
     },
     "folder": {
-      "id": "12345",
-      "type": "folder",
-      "etag": "1",
-      "name": "Contracts",
-      "sequence_id": "3"
+        "id": "12345",
+        "type": "folder",
+        "etag": "1",
+        "name": "Contracts",
+        "sequence_id": "3"
     },
     "lock_type": "freeze",
     "locked_operations": {
-      "delete": true,
-      "move": true
+        "delete": true,
+        "move": true
     }
-  }
+}

@@ -7,7 +7,7 @@ class FoldersLocksDeleteCommand extends BoxCommand {
 		const { args } = this.parse(FoldersLocksDeleteCommand);
 
 		await this.client.folders.deleteLock(args.id);
-        this.info(`Delete folder lock with ID ${args.id}`);
+		this.info(`Delete folder lock with ID ${args.id}`);
 	}
 }
 
