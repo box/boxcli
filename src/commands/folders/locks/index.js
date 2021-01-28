@@ -1,0 +1,33 @@
+'use strict';
+
+const BoxCommand = require('../../../box-command');
+
+class FoldersLocksListCommand extends BoxCommand {
+	async run() {
+		const { args } = this.parse(FoldersLocksListCommand);
+
+		let locks = await this.client.folders.getLocks(args.id);
+		await this.output(locks);
+	}
+}
+
+FoldersLocksListCommand.aliases = [ 'folders:locks:list' ];
+
+FoldersLocksListCommand.description = 'List all locks on a folder';
+FoldersLocksListCommand.examples = ['box folders:locks 22222'];
+FoldersLocksListCommand._endpoint = 'get_folders_id_collaborations';
+
+FoldersLocksListCommand.flags = {
+	...BoxCommand.flags,
+};
+
+FoldersLocksListCommand.args = [
+	{
+		name: 'id',
+		required: true,
+		hidden: false,
+		description: 'ID of the folder to get the locks on',
+	}
+];
+
+module.exports = FoldersLocksListCommand;
