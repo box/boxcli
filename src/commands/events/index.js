@@ -39,7 +39,7 @@ class EventsGetCommand extends BoxCommand {
 
 		let events = await this.client.events.get(options);
 
-		if (options.stream_position) {
+		if (options.stream_position || options.stream_type !== 'admin_logs') {
 			await this.output(events);
 		} else {
 			let allEvents = [].concat(events.entries); // Copy the first page of events
