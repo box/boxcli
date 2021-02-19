@@ -102,6 +102,25 @@ describe('Events', () => {
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/events')
 					.query({
+						limit: '10',
+					})
+					.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					'--limit=10',
+					'--json',
+					'--token=test'
+				])
+				.it('should get user events when neither --stream-position nor --enterprise flags are passed', ctx => {
+					assert.equal(ctx.stdout, fixture);
+				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/events')
+					.query({
 						created_before: '2018-07-13T19:00:00+00:00',
 						created_after: '2018-07-08T19:00:00+00:00',
 						stream_type: 'admin_logs'
