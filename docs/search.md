@@ -48,6 +48,8 @@ OPTIONS
 
   --file-extensions=file-extensions              Limit searches to specific file extensions i.e. png,md,pdf
 
+  --include-recent-shared-links                  Returns shared links that the user recently accessed
+
   --json                                         Output formatted JSON
 
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
@@ -83,4 +85,4 @@ EXAMPLES
   box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/search.js)_
