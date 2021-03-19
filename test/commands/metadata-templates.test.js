@@ -303,6 +303,7 @@ describe('Metadata Templates', () => {
 				'--option=Python',
 				'--option=Java',
 				'--number=Age',
+				'--copy-instance-on-item-copy',
 				'--token=test',
 			])
 			.it('should correctly parse field declarations');

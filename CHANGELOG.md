@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+**New Features and Enhancements**
+
+- Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
+
 ## 2.9.0 (2021-02-22)
 
 **New Features and Enhancements**
