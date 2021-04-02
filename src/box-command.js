@@ -499,8 +499,8 @@ class BoxCommand extends Command {
 	 *
 	 * @returns {BoxClient} The client for making API calls in the command
 	 */
-	getClient() {
-		// Allow some commands (e.g. configure:environments:add) to skip client setup so they can run
+	async getClient() {
+		// Allow some commands (e.g. configure:environments:add, login) to skip client setup so they can run
 		if (this.constructor.noClient) {
 			return null;
 		}
@@ -518,6 +518,33 @@ class BoxCommand extends Command {
 			}
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
+		} else if (environmentsObj.default && environmentsObj.default == 'oauth') {
+			console.log('hello')
+			let environment = environmentsObj.environments[environmentsObj.default];
+			DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
+			let tokenCache = new CLITokenCache(environmentsObj.default);
+
+			let sdk = new BoxSDK({
+				clientID: environment.clientId,
+				clientSecret: environment.clientSecret,
+				...SDK_CONFIG,
+			});
+			if (this.settings.enableProxy) {
+				sdk.configure({ proxy: this.settings.proxy });
+			}
+			this.sdk = sdk;
+			// tokenCache.read((error, tokenInfo) => {
+			// 	console.log(tokenInfo);
+			// 	client = sdk.getPersistentClient(tokenInfo, tokenCache);
+			// });
+			client = sdk.getPersistentClient({
+				"accessToken": "pHZvS3r4eBcNe7NjcnKCpizzm904TQNe",
+				"refreshToken": "7cyrlT1JIFmEGcdyve5KvBPnf7RD8CDUrMOIKGKY2BijIOGawH3EjZcDBhwcGsEb",
+				"accessTokenTTLMS": 4219000,
+				"acquiredAtMS": 1617342319054
+			}, tokenCache);
+			console.log(client.folders.client)
+			
 		} else if (environmentsObj.default) {
 			let environment = environmentsObj.environments[environmentsObj.default];
 			DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
@@ -563,6 +590,7 @@ class BoxCommand extends Command {
 				See this command for help adding an environment: box configure:environments:add --help
 				Or, supply a token with your command with --token.`.replace(/^\s+/umg, ''));
 		}
+		console.log(client.folders)
 		return client;
 	}
 
