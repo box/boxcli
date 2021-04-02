@@ -3,11 +3,11 @@
 const BoxCommand = require('../box-command');
 const { flags } = require('@oclif/command');
 const fs = require('fs');
-const BoxCLIError = require('../cli-error');
-const chalk = require('chalk');
-const CLITokenCache = require('../token-cache');
-const utils = require('../util');
 const BoxSDK = require('box-node-sdk');
+const BoxCLIError = require('../cli-error');
+const CLITokenCache = require('../token-cache');
+const chalk = require('chalk');
+const utils = require('../util');
 const open = require('open');
 const express = require('express');
 const inquirer = require('inquirer');
