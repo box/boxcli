@@ -10,25 +10,40 @@ const utils = require('../util');
 const BoxSDK = require('box-node-sdk');
 const open = require('open');
 const express = require('express');
+const inquirer = require('inquirer');
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(OAuthLoginCommand);
 		let environmentsObj = this.getEnvironments();
+
+    let answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'clientID',
+        message: 'What is your client ID?',
+      },
+      {
+        type: 'input',
+        name: 'clientSecret',
+        message: 'What is your client secret?',
+      }
+    ]);
+
     let environmentName = 'oauth';
     let newEnvironment = {
-			clientId: 'w8j8xjpheut2i5bn6mj7ois9qdlznk85',
-      clientSecret: 'NqBbzIK9akWndtgdnkUaLQgleK6208iZ',
+			clientId: answers.clientID,
+      clientSecret: answers.clientSecret,
 			name: environmentName,
 			cacheTokens: true,
 		};
 
     var sdk = new BoxSDK({
-        clientID: 'w8j8xjpheut2i5bn6mj7ois9qdlznk85',
-        clientSecret: 'NqBbzIK9akWndtgdnkUaLQgleK6208iZ'
+        clientID: answers.clientID,
+        clientSecret: answers.clientSecret
     });
 
-    const app = express();
+    let app = express();
     app.get('/callback', (req, res) => {
       // Will print the OAuth auth code
       sdk.getTokensAuthorizationCodeGrant(req.query.code, null, (err, tokenInfo) => {
@@ -50,8 +65,10 @@ class OAuthLoginCommand extends BoxCommand {
         });
       });
       res.end('You are now logged in!');
+      this.info(chalk`{green Successfully logged in and added a CLI environment!}`);
+      app.close();
     });
-    await app.listen(3000);
+    app = await app.listen(3000);
 
     // the URL to redirect the user to
     var authorize_url = sdk.getAuthorizeURL({
@@ -67,19 +84,9 @@ OAuthLoginCommand.noClient = true;
 
 OAuthLoginCommand.description = 'Sign in with OAuth and set as default environment';
 
-// OAuthLoginCommand.flags = {
-// 	...BoxCommand.minFlags,
-// 	'private-key-path': flags.string({
-// 		description: 'Provide a path to application private key',
-// 		parse: utils.parsePath,
-// 	}),
-// 	'set-as-current': flags.boolean({ description: 'Set this new environment as your current environment' }),
-// 	name: flags.string({
-// 		char: 'n',
-// 		description: 'Set a name for the environment',
-// 		default: 'default',
-// 	})
-// };
+OAuthLoginCommand.flags = {
+	...BoxCommand.minFlags,
+};
 
 // OAuthLoginCommand.args = [
 // 	{
