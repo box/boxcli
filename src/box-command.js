@@ -587,7 +587,6 @@ class BoxCommand extends Command {
 				See this command for help adding an environment: box configure:environments:add --help
 				Or, supply a token with your command with --token.`.replace(/^\s+/umg, ''));
 		}
-
 		return client;
 	}
 

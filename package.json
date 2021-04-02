@@ -41,8 +41,7 @@
 		"lodash": "^4.17.13",
 		"open": "^8.0.4",
 		"ora": "^3.0.0",
-		"p-event": "^2.3.1",
-		"simple-oauth2": "^4.2.0"
+		"p-event": "^2.3.1"
 	},
 	"devDependencies": {
 		"@oclif/dev-cli": "^1.19.5",
