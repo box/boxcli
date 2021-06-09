@@ -91,7 +91,7 @@ Command Topics
 # Command Topics
 
 * [`box autocomplete`](docs/autocomplete.md) - Display autocomplete installation instructions
-* [`box collaboration-whitelist`](docs/collaboration-whitelist.md) - List collaboration whitelist entries
+* [`box collaboration-allowlist`](docs/collaboration-allowlist.md) - List collaboration allowlist entries
 * [`box collaborations`](docs/collaborations.md) - Manage collaborations
 * [`box collections`](docs/collections.md) - List your collections
 * [`box comments`](docs/comments.md) - Manage comments on files
