@@ -94,6 +94,7 @@ OPTIONS
   -y, --yes                              Automatically respond yes to all confirmation prompts
   --as-user=as-user                      Provide an ID for a user
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --copy-instance-on-item-copy           Whether to include the metadata when a file or folder is copied
   --csv                                  Output formatted CSV
   --date=date                            Add a date field with the provided display name
   --description=description              Set the description of a field
