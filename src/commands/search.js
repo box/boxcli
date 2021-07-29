@@ -72,12 +72,11 @@ class SearchCommand extends BoxCommand {
 				// Build the filters object, e.g {"field1": value1, "field2": {"lt": value2}}
 				filters.forEach(({field, cmp, value}) => {
 					if (cmp === '=') {
-						// NOTE this is not supported for numeric fields
 						if (typeof value === 'number') {
-							throw new BoxCLIError('Equality comparator is not supported for numeric values');
+							filtersObj[field] = {lt: value, gt:value};
+						} else {
+							filtersObj[field] = value;
 						}
-
-						filtersObj[field] = value;
 					} else if (cmp === '<') {
 						filtersObj[field] = {lt: value};
 					} else if (cmp === '>') {

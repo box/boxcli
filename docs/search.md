@@ -54,9 +54,9 @@ OPTIONS
 
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
                                                  <scope>.<templateKey>.<field><op><value>
-                                                 <op> is either <, = or >
-                                                 Note: Equality check is not supported for numeric fields. You can
-                                                 use < and > for less than or equal/greater than or equal checks.
+                                                 <op> is either = for strings or <,=,> for numbers and dates
+                                                 When providing numeric value, follow it with "f"
+                                                 eg. enterprise.employeeRecord.joinedYear=2021f
 
   --no-color                                     Turn off colors for logging
 

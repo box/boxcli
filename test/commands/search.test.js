@@ -256,7 +256,10 @@ describe('Search', () => {
 							templateKey: 'properties',
 							filters: {
 								foo: 'barf',
-								money: 3.51,
+								money: {
+									lt: 3.51,
+									gt: 3.51,
+								},
 							},
 						},
 						{
