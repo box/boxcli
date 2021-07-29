@@ -53,7 +53,10 @@ OPTIONS
   --json                                         Output formatted JSON
 
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
-                                                 <scope>.<templateKey>.<field>=<value>
+                                                 <scope>.<templateKey>.<field><op><value>
+                                                 <op> is either <, = or >
+                                                 Note: Equality check is not supported for numeric fields. You can
+                                                 use < and > for less than or equal/greater than or equal checks.
 
   --no-color                                     Turn off colors for logging
 
