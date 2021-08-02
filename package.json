@@ -9,7 +9,7 @@
 		"upload",
 		"download"
 	],
-	"version": "2.7.0",
+	"version": "2.9.0",
 	"author": "Box <oss@box.com>",
 	"license": "Apache-2.0",
 	"main": "src/index.js",
@@ -28,7 +28,7 @@
 		"@oclif/plugin-help": "^2.2.1",
 		"@oclif/plugin-not-found": "^1.2.0",
 		"archiver": "^3.0.0",
-		"box-node-sdk": "^1.34.2",
+		"box-node-sdk": "^1.37.2",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^3.1.0",
@@ -78,8 +78,7 @@
 			]
 		},
 		"macos": {
-			"identifier": "com.box.cli",
-			"sign": "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+			"identifier": "com.box.cli"
 		},
 		"plugins": [
 			"@oclif/plugin-help",
@@ -129,7 +128,7 @@
 		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
-		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/master -- package-lock.json",
+		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif-dev readme --multi && git add README.md && git add docs",
 		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/ && npm run binaries",

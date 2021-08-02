@@ -303,6 +303,7 @@ describe('Metadata Templates', () => {
 				'--option=Python',
 				'--option=Java',
 				'--number=Age',
+				'--copy-instance-on-item-copy',
 				'--token=test',
 			])
 			.it('should correctly parse field declarations');
@@ -440,6 +441,13 @@ describe('Metadata Templates', () => {
 				}
 			},
 			{
+				op: 'addMultiSelectOption',
+				fieldKey: 'foo',
+				data: {
+					key: 'bas',
+				},
+			},
+			{
 				op: 'addField',
 				data: {
 					type: 'float',
@@ -488,6 +496,8 @@ describe('Metadata Templates', () => {
 				'--option=bar',
 				'--option=baz',
 				'--no-hidden',
+				'--add-multi-select-option=foo',
+				'--option=bas',
 				'--number=Count',
 				'--date=Date',
 				'--json',

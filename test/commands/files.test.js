@@ -1983,7 +1983,7 @@ describe('Files', () => {
 
 	describe('files:zip', () => {
 
-		var fileName = 'test.zip',
+		let fileName = 'test.zip',
 			items = [
 				{
 					type: 'file',
@@ -2003,7 +2003,7 @@ describe('Files', () => {
 			downloadUrl = '/2.0/zip_downloads/124hfiowk3fa8kmrwh/content',
 			statusUrl = '/2.0/zip_downloads/124hfiowk3fa8kmrwh/status',
 			createFileFixture = getFixture('files/post_zip_downloads'),
-			downloadStatusFixture = getFixture('files/get_zip_downloads_status')
+			downloadStatusFixture = getFixture('files/get_zip_downloads_status');
 
 		test
 			.nock(TEST_API_ROOT, api => api

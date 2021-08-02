@@ -5,22 +5,22 @@ const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 const os = require('os');
 
-describe('Collaboration-Whitelist', () => {
+describe('Collaboration-Allowlist', () => {
 
-	describe('collaboration-whitelist:get', () => {
-		let whitelistEntryId = '11111',
-			fixture = getFixture('collaboration-whitelist/get_collaboration_whitelist_entries_id'),
+	describe('collaboration-allowlist:get', () => {
+		let allowlistEntryId = '11111',
+			fixture = getFixture('collaboration-allowlist/get_collaboration_whitelist_entries_id'),
 			yamlOutput = getFixture('output/collaboration_whitelist_get_yaml.txt');
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryId}`)
+				.get(`/2.0/collaboration_whitelist_entries/${allowlistEntryId}`)
 				.reply(200, fixture)
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:get',
-				whitelistEntryId,
+				'collaboration-allowlist:get',
+				allowlistEntryId,
 				'--json',
 				'--token=test'
 			])
@@ -30,39 +30,39 @@ describe('Collaboration-Whitelist', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryId}`)
+				.get(`/2.0/collaboration_whitelist_entries/${allowlistEntryId}`)
 				.reply(200, fixture)
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:get',
-				whitelistEntryId,
+				'collaboration-allowlist:get',
+				allowlistEntryId,
 				'--token=test'
 			])
-			.it('should get a collaboration whitelist entry (YAML Output)', ctx => {
+			.it('should get a collaboration allowlist entry (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryId}`)
+				.get(`/2.0/collaboration_whitelist_entries/${allowlistEntryId}`)
 				.query({fields: 'direction'})
 				.reply(200, fixture)
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:get',
-				whitelistEntryId,
+				'collaboration-allowlist:get',
+				allowlistEntryId,
 				'--fields=direction',
 				'--token=test'
 			])
 			.it('should send fields param to the API when --fields flag is passed');
 	});
 
-	describe('collaboration-whitelist:add', () => {
+	describe('collaboration-allowlist:add', () => {
 		let domain = 'test.com',
 			direction = 'both',
-			fixture = getFixture('collaboration-whitelist/post_collaboration_whitelists'),
+			fixture = getFixture('collaboration-allowlist/post_collaboration_whitelists'),
 			yamlOutput = getFixture('output/collaboration_whitelist_add_yaml.txt');
 
 		let expectedBody = {
@@ -77,13 +77,13 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:add',
+				'collaboration-allowlist:add',
 				domain,
 				`--direction=${direction}`,
 				'--json',
 				'--token=test'
 			])
-			.it('should add a collaboration whitelist entry (JSON Output)', ctx => {
+			.it('should add a collaboration allowlist entry (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
@@ -94,38 +94,38 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:add',
+				'collaboration-allowlist:add',
 				domain,
 				`--direction=${direction}`,
 				'--token=test'
 			])
-			.it('should add a collaboration whitelist entry (YAML Output)', ctx => {
+			.it('should add a collaboration allowlist entry (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
 
-	describe('collaboration-whitelist:delete', () => {
-		let whitelistEntryId = '11111';
+	describe('collaboration-allowlist:delete', () => {
+		let allowlistEntryId = '11111';
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.delete(`/2.0/collaboration_whitelist_entries/${whitelistEntryId}`)
+				.delete(`/2.0/collaboration_whitelist_entries/${allowlistEntryId}`)
 				.reply(204)
 			)
 			.stderr()
 			.command([
-				'collaboration-whitelist:delete',
-				whitelistEntryId,
+				'collaboration-allowlist:delete',
+				allowlistEntryId,
 				'--token=test'
 			])
-			.it('should delete a collaboration whitelist entry', ctx => {
-				assert.equal(ctx.stderr, `Deleted collaboration whitelist entry ${whitelistEntryId}${os.EOL}`);
+			.it('should delete a collaboration allowlist entry', ctx => {
+				assert.equal(ctx.stderr, `Deleted collaboration allowlist entry ${allowlistEntryId}${os.EOL}`);
 			});
 	});
 
-	describe('collaboration-whitelist', () => {
-		let fixture = getFixture('collaboration-whitelist/get_collaboration_whitelist_entries_page_1'),
-			fixture2 = getFixture('collaboration-whitelist/get_collaboration_whitelist_entries_page_2'),
+	describe('collaboration-allowlist', () => {
+		let fixture = getFixture('collaboration-allowlist/get_collaboration_whitelist_entries_page_1'),
+			fixture2 = getFixture('collaboration-allowlist/get_collaboration_whitelist_entries_page_2'),
 			jsonOutput = getFixture('output/collaboration_whitelist_list_json.txt');
 
 		test
@@ -140,11 +140,11 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist',
+				'collaboration-allowlist',
 				'--json',
 				'--token=test'
 			])
-			.it('should list collaboration whitelist entries (JSON Output)', ctx => {
+			.it('should list collaboration allowlist entries (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 
@@ -162,7 +162,7 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist',
+				'collaboration-allowlist',
 				'--fields=direction',
 				'--json',
 				'--token=test'
@@ -170,9 +170,9 @@ describe('Collaboration-Whitelist', () => {
 			.it('should send fields param to the API when --fields flag is passed');
 	});
 
-	describe('collaboration-whitelist:exemptions:get', () => {
+	describe('collaboration-allowlist:exemptions:get', () => {
 		let exemptionId = '11111',
-			fixture = getFixture('collaboration-whitelist/get_collaboration_whitelist_exempt_targets_id'),
+			fixture = getFixture('collaboration-allowlist/get_collaboration_whitelist_exempt_targets_id'),
 			yamlOutput = getFixture('output/collaboration_whitelist_get_exemption_yaml.txt');
 
 		test
@@ -182,12 +182,12 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions:get',
+				'collaboration-allowlist:exemptions:get',
 				exemptionId,
 				'--json',
 				'--token=test'
 			])
-			.it('should get a collaboration whitelist exemption (JSON Output)', ctx => {
+			.it('should get a collaboration allowlist exemption (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
@@ -198,11 +198,11 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions:get',
+				'collaboration-allowlist:exemptions:get',
 				exemptionId,
 				'--token=test'
 			])
-			.it('should get a collaboration whitelist exemption (YAML Output)', ctx => {
+			.it('should get a collaboration allowlist exemption (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 
@@ -214,7 +214,7 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions:get',
+				'collaboration-allowlist:exemptions:get',
 				exemptionId,
 				'--fields=id',
 				'--token=test'
@@ -222,9 +222,9 @@ describe('Collaboration-Whitelist', () => {
 			.it('should send the fields param to the API when --fields flag is passed');
 	});
 
-	describe('collaboration-whitelist:exemptions:create', () => {
+	describe('collaboration-allowlist:exemptions:create', () => {
 		let userId = '5678',
-			fixture = getFixture('collaboration-whitelist/post_collaboration_exempt_targets'),
+			fixture = getFixture('collaboration-allowlist/post_collaboration_exempt_targets'),
 			yamlOutput = getFixture('output/collaboration_whitelist_create_exemption_yaml.txt');
 
 		let expectedBody = {
@@ -241,12 +241,12 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions:create',
+				'collaboration-allowlist:exemptions:create',
 				userId,
 				'--json',
 				'--token=test'
 			])
-			.it('should create a collaboration whitelist exemption (JSON Output)', ctx => {
+			.it('should create a collaboration allowlist exemption (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
@@ -257,18 +257,18 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions:create',
+				'collaboration-allowlist:exemptions:create',
 				userId,
 				'--token=test'
 			])
-			.it('should create a collaboration whitelist exemption (YAML Output)', ctx => {
+			.it('should create a collaboration allowlist exemption (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
 
-	describe('collaboration-whitelist:exemptions', () => {
-		let fixture = getFixture('collaboration-whitelist/get_collaboration_whitelist_exempt_targets_page_1'),
-			fixture2 = getFixture('collaboration-whitelist/get_collaboration_whitelist_exempt_targets_page_2'),
+	describe('collaboration-allowlist:exemptions', () => {
+		let fixture = getFixture('collaboration-allowlist/get_collaboration_whitelist_exempt_targets_page_1'),
+			fixture2 = getFixture('collaboration-allowlist/get_collaboration_whitelist_exempt_targets_page_2'),
 			jsonOutput = getFixture('output/collaboration_whitelist_list_exemptions_json.txt');
 
 		test
@@ -283,11 +283,11 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions',
+				'collaboration-allowlist:exemptions',
 				'--json',
 				'--token=test'
 			])
-			.it('should list collaboration whitelist exemptions (JSON Output)', ctx => {
+			.it('should list collaboration allowlist exemptions (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 
@@ -305,7 +305,7 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stdout()
 			.command([
-				'collaboration-whitelist:exemptions',
+				'collaboration-allowlist:exemptions',
 				'--fields=id',
 				'--json',
 				'--token=test'
@@ -313,7 +313,7 @@ describe('Collaboration-Whitelist', () => {
 			.it('should send fields param to the API when --fields flag is passed');
 	});
 
-	describe('collaboration-whitelist:exemptions:delete', () => {
+	describe('collaboration-allowlist:exemptions:delete', () => {
 		let exemptionId = '11111';
 
 		test
@@ -323,12 +323,12 @@ describe('Collaboration-Whitelist', () => {
 			)
 			.stderr()
 			.command([
-				'collaboration-whitelist:exemptions:delete',
+				'collaboration-allowlist:exemptions:delete',
 				exemptionId,
 				'--token=test'
 			])
-			.it('should delete collaboration whitelist exemption', ctx => {
-				assert.equal(ctx.stderr, `Deleted collaboration whitelist exemption ${exemptionId}${os.EOL}`);
+			.it('should delete collaboration allowlist exemption', ctx => {
+				assert.equal(ctx.stderr, `Deleted collaboration allowlist exemption ${exemptionId}${os.EOL}`);
 			});
 	});
 });

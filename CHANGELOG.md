@@ -1,15 +1,47 @@
 # Changelog
 
+## Next Release
+
+**New Features and Enhancements**
+
+- Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
+
+## 2.9.0 (2021-02-22)
+
+**New Features and Enhancements**
+
+- Add ability to add an option to a metadata template multi select field ([#230](https://github.com/box/boxcli/pull/230))
+- Add folder lock functionality ([#232](https://github.com/box/boxcli/pull/232))
+- Add support for search param to get shared link items ([#233](https://github.com/box/boxcli/pull/233))
+
+**Bug Fixes:**
+
+- Fix events command bug when there is no stream position flag ([#234](https://github.com/box/boxcli/pull/234))
+
+## 2.8.0 (2020-12-03)
+
+**Warning:**
+
+- Due to the changes in ([#217](https://github.com/box/boxcli/pull/217)), additional details about Box Items may now be returned for some commands.
+
+**New Features and Enhancements:**
+
+- Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
+
+**Bug Fixes:**
+
+- Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
+
 ## 2.7.0 (2020-11-02)
 
 **New Features and Enhancements:**
 
-- Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available (#211)
-- Add `filter_term` parameter to `groups:list` (#210)
+- Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available ([#211](https://github.com/box/boxcli/pull/211))
+- Add `filter_term` parameter to `groups:list` ([#210](https://github.com/box/boxcli/pull/210))
 
 **Bug Fixes:**
 
-- Fix bug with setting proxy settings (#213)
+- Fix bug with setting proxy settings ([#213](https://github.com/box/boxcli/pull/213))
 
 ## 2.6.0 [2020-08-20]
 

@@ -1,22 +1,24 @@
-`box terms-of-service`
-======================
+`box collaboration-allowlist`
+=============================
 
-List terms of services for your enterprise
+List collaboration allowlist entries
 
-* [`box terms-of-service`](#box-terms-of-service)
-* [`box terms-of-service:create`](#box-terms-of-servicecreate)
-* [`box terms-of-service:get ID`](#box-terms-of-serviceget-id)
-* [`box terms-of-service:get-user-status TOSID`](#box-terms-of-serviceget-user-status-tosid)
-* [`box terms-of-service:set-user-status ID`](#box-terms-of-serviceset-user-status-id)
-* [`box terms-of-service:update ID`](#box-terms-of-serviceupdate-id)
+* [`box collaboration-allowlist`](#box-collaboration-allowlist)
+* [`box collaboration-allowlist:add DOMAIN`](#box-collaboration-allowlistadd-domain)
+* [`box collaboration-allowlist:delete ID`](#box-collaboration-allowlistdelete-id)
+* [`box collaboration-allowlist:exemptions`](#box-collaboration-allowlistexemptions)
+* [`box collaboration-allowlist:exemptions:create USERID`](#box-collaboration-allowlistexemptionscreate-userid)
+* [`box collaboration-allowlist:exemptions:delete ID`](#box-collaboration-allowlistexemptionsdelete-id)
+* [`box collaboration-allowlist:exemptions:get ID`](#box-collaboration-allowlistexemptionsget-id)
+* [`box collaboration-allowlist:get ID`](#box-collaboration-allowlistget-id)
 
-## `box terms-of-service`
+## `box collaboration-allowlist`
 
-List terms of services for your enterprise
+List collaboration allowlist entries
 
 ```
 USAGE
-  $ box terms-of-service
+  $ box collaboration-allowlist
 
 OPTIONS
   -h, --help                             Show CLI help
@@ -32,56 +34,23 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
-  --type=managed|external                Filter by terms of service type
 
 EXAMPLE
-  box terms-of-service
+  box collaboration-allowlist
 ```
 
-_See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/index.js)_
+_See code: [src/commands/collaboration-allowlist/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/index.js)_
 
-## `box terms-of-service:create`
+## `box collaboration-allowlist:add DOMAIN`
 
-Create a terms of service
+Add a collaboration allowlist entry
 
 ```
 USAGE
-  $ box terms-of-service:create
-
-OPTIONS
-  -h, --help                             Show CLI help
-  -q, --quiet                            Suppress any non-error output to stderr
-  -s, --save                             Save report to default reports folder on disk
-  -t, --token=token                      Provide a token to perform this call
-  -v, --verbose                          Show verbose output, which can be helpful for debugging
-  -y, --yes                              Automatically respond yes to all confirmation prompts
-  --as-user=as-user                      Provide an ID for a user
-  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
-  --csv                                  Output formatted CSV
-  --fields=fields                        Comma separated list of fields to show
-  --json                                 Output formatted JSON
-  --no-color                             Turn off colors for logging
-  --save-to-file-path=save-to-file-path  Override default file path to save report
-  --status=enabled|disabled              (required) Status of the terms of service
-  --text=text                            (required) Text for the terms of service
-  --type=managed|external                (required) Type of terms of service
-
-EXAMPLE
-  box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."
-```
-
-_See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/create.js)_
-
-## `box terms-of-service:get ID`
-
-Get information on a terms of service
-
-```
-USAGE
-  $ box terms-of-service:get ID
+  $ box collaboration-allowlist:add DOMAIN
 
 ARGUMENTS
-  ID  ID for the terms of service to get
+  DOMAIN  Domain to add to allowlist (e.g. box.com)
 
 OPTIONS
   -h, --help                             Show CLI help
@@ -93,27 +62,28 @@ OPTIONS
   --as-user=as-user                      Provide an ID for a user
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
   --csv                                  Output formatted CSV
+  --direction=inbound|outbound|both      (required) Direction to allowlist collaboration in
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box terms-of-service:get 55555
+  box collaboration-allowlist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/get.js)_
+_See code: [src/commands/collaboration-allowlist/add.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/add.js)_
 
-## `box terms-of-service:get-user-status TOSID`
+## `box collaboration-allowlist:delete ID`
 
-Get a user's status on a terms of service
+Delete a collaboration allowlist entry
 
 ```
 USAGE
-  $ box terms-of-service:get-user-status TOSID
+  $ box collaboration-allowlist:delete ID
 
 ARGUMENTS
-  TOSID  ID of the terms of service to get user status for
+  ID  ID of the collaboration allowlist entry record to delete
 
 OPTIONS
   -h, --help                             Show CLI help
@@ -129,24 +99,20 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
-  --user-id=user-id                      ID for a user to get status for; defaults to the current user ID
 
 EXAMPLE
-  box terms-of-service:get-user-status 55555
+  box collaboration-allowlist:delete 12345
 ```
 
-_See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/get-user-status.js)_
+_See code: [src/commands/collaboration-allowlist/delete.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/delete.js)_
 
-## `box terms-of-service:set-user-status ID`
+## `box collaboration-allowlist:exemptions`
 
-Set a user's status on a terms of service with a terms of service Id
+List collaboration allowlist exemptions
 
 ```
 USAGE
-  $ box terms-of-service:set-user-status ID
-
-ARGUMENTS
-  ID  ID of the terms of service to set the user status on
+  $ box collaboration-allowlist:exemptions
 
 OPTIONS
   -h, --help                             Show CLI help
@@ -155,33 +121,30 @@ OPTIONS
   -t, --token=token                      Provide a token to perform this call
   -v, --verbose                          Show verbose output, which can be helpful for debugging
   -y, --yes                              Automatically respond yes to all confirmation prompts
-  --accept                               Set the user's status as accepted
   --as-user=as-user                      Provide an ID for a user
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
-  --reject                               Set the user's status as rejected
   --save-to-file-path=save-to-file-path  Override default file path to save report
-  --user-id=user-id                      ID of the user to set status for; defaults to the current user
 
 EXAMPLE
-  box terms-of-service:set-user-status 55555 --accept
+  box collaboration-allowlist:exemptions
 ```
 
-_See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/set-user-status.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/exemptions/index.js)_
 
-## `box terms-of-service:update ID`
+## `box collaboration-allowlist:exemptions:create USERID`
 
-Update a terms of service
+Exempt a user from the collaboration allowlist
 
 ```
 USAGE
-  $ box terms-of-service:update ID
+  $ box collaboration-allowlist:exemptions:create USERID
 
 ARGUMENTS
-  ID  ID of the terms of service to update
+  USERID  ID of the user to exempt from the collaboration allowlist
 
 OPTIONS
   -h, --help                             Show CLI help
@@ -197,11 +160,105 @@ OPTIONS
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
   --save-to-file-path=save-to-file-path  Override default file path to save report
-  --status=enabled|disabled              Status of the terms of service
-  --text=text                            Text for the terms of service
 
 EXAMPLE
-  box terms-of-service:update 55555 --status disabled
+  box collaboration-allowlist:exemptions:create 11111
 ```
 
-_See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/terms-of-service/update.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/create.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/exemptions/create.js)_
+
+## `box collaboration-allowlist:exemptions:delete ID`
+
+Delete a collaboration allowlist exemption
+
+```
+USAGE
+  $ box collaboration-allowlist:exemptions:delete ID
+
+ARGUMENTS
+  ID  ID of the allowlist exemption record to delete
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-allowlist:exemptions:delete 12345
+```
+
+_See code: [src/commands/collaboration-allowlist/exemptions/delete.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/exemptions/delete.js)_
+
+## `box collaboration-allowlist:exemptions:get ID`
+
+Get a collaboration allowlist exemption
+
+```
+USAGE
+  $ box collaboration-allowlist:exemptions:get ID
+
+ARGUMENTS
+  ID  ID of the allowlist exemption record to get
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-allowlist:exemptions:get 12345
+```
+
+_See code: [src/commands/collaboration-allowlist/exemptions/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/exemptions/get.js)_
+
+## `box collaboration-allowlist:get ID`
+
+Get a collaboration allowlist entry
+
+```
+USAGE
+  $ box collaboration-allowlist:get ID
+
+ARGUMENTS
+  ID  ID of the collaboration allowlist entry record to get
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box collaboration-allowlist:get 12345
+```
+
+_See code: [src/commands/collaboration-allowlist/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/collaboration-allowlist/get.js)_
