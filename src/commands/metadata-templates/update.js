@@ -90,6 +90,7 @@ const FLAG_HANDLERS = Object.freeze({
 		switch (currentOp.op) {
 		case 'addEnumOption':
 		case 'editEnumOption':
+		case 'addMultiSelectOption':
 			currentOp.data.key = value.input;
 			break;
 		case 'reorderEnumOptions':
@@ -228,6 +229,15 @@ const FLAG_HANDLERS = Object.freeze({
 			},
 		};
 	},
+	'add-multi-select-option': (value, currentOp, ops) => {
+		ops.push(currentOp);
+
+		return {
+			op: 'addMultiSelectOption',
+			fieldKey: value.input,
+			data: {},
+		};
+	},
 });
 
 /**
@@ -299,6 +309,10 @@ MetadataTemplatesUpdateCommand.flags = {
 	}),
 	'multi-select': flags.string({
 		description: 'Add a multi-select field with the provided display name',
+		multiple: true,
+	}),
+	'add-multi-select-option': flags.string({
+		description: 'Add an option to a specified multiselect field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
 	'field-key': flags.string({

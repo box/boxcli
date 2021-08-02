@@ -77,7 +77,7 @@ EnvironmentsUpdateCommand.flags = {
 	}),
 	'user-id': flags.string({ description: 'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment' }),
 	'cache-tokens': flags.boolean({
-		description: 'Enable token caching, which significantly improves performance',
+		description: 'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
 		allowNo: true,
 	}),
 };

@@ -40,7 +40,7 @@ EXAMPLE
   box metadata-templates
 ```
 
-_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/index.js)_
+_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/index.js)_
 
 ## `box metadata-templates:cascade TEMPLATEKEY`
 
@@ -75,7 +75,7 @@ EXAMPLE
   box metadata-templates:cascade employeeRecord --folder 22222
 ```
 
-_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/cascade.js)_
+_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/cascade.js)_
 
 ## `box metadata-templates:create`
 
@@ -119,7 +119,7 @@ EXAMPLE
   box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales
 ```
 
-_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/create.js)_
+_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/create.js)_
 
 ## `box metadata-templates:delete TEMPLATEKEY`
 
@@ -152,7 +152,7 @@ EXAMPLE
   box metadata-templates:delete employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/delete.js)_
+_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/delete.js)_
 
 ## `box metadata-templates:get TEMPLATEKEY`
 
@@ -185,7 +185,7 @@ EXAMPLE
   box metadata-templates:get employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/get.js)_
+_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/get.js)_
 
 ## `box metadata-templates:update TEMPLATEKEY`
 
@@ -199,68 +199,74 @@ ARGUMENTS
   TEMPLATEKEY  The key of the template to update
 
 OPTIONS
-  -h, --help                                   Show CLI help
-  -q, --quiet                                  Suppress any non-error output to stderr
-  -s, --save                                   Save report to default reports folder on disk
-  -t, --token=token                            Provide a token to perform this call
-  -v, --verbose                                Show verbose output, which can be helpful for debugging
-  -y, --yes                                    Automatically respond yes to all confirmation prompts
+  -h, --help                                         Show CLI help
+  -q, --quiet                                        Suppress any non-error output to stderr
+  -s, --save                                         Save report to default reports folder on disk
+  -t, --token=token                                  Provide a token to perform this call
+  -v, --verbose                                      Show verbose output, which can be helpful for debugging
+  -y, --yes                                          Automatically respond yes to all confirmation prompts
 
-  --add-enum-option=add-enum-option            Add an enum option to the specified field; must be followed by one or
-                                               more --option flags
+  --add-enum-option=add-enum-option                  Add an enum option to the specified field; must be followed by one
+                                                     or more --option flags
 
-  --as-user=as-user                            Provide an ID for a user
+  --add-multi-select-option=add-multi-select-option  Add an option to a specified multiselect field; must be followed by
+                                                     one or more --option flags
 
-  --bulk-file-path=bulk-file-path              File path to bulk .csv or .json objects
+  --as-user=as-user                                  Provide an ID for a user
 
-  --csv                                        Output formatted CSV
+  --bulk-file-path=bulk-file-path                    File path to bulk .csv or .json objects
 
-  --date=date                                  Add a date field with the provided display name
+  --csv                                              Output formatted CSV
 
-  --description=description                    Set the description of a field
+  --date=date                                        Add a date field with the provided display name
 
-  --display-name=display-name                  The display name of the metadata template or field
+  --description=description                          Set the description of a field
 
-  --edit-enum-option=edit-enum-option          Edit the specified enum option; must be followed by an --option flag
+  --display-name=display-name                        The display name of the metadata template or field
 
-  --edit-field=edit-field                      Edit the specified field; must be followed by flags to apply to the field
+  --edit-enum-option=edit-enum-option                Edit the specified enum option; must be followed by an --option
+                                                     flag
 
-  --enum=enum                                  Add an enum field with the provided display name
+  --edit-field=edit-field                            Edit the specified field; must be followed by flags to apply to the
+                                                     field
 
-  --field-key=field-key                        Set the key of a field
+  --enum=enum                                        Add an enum field with the provided display name
 
-  --fields=fields                              Comma separated list of fields to show
+  --field-key=field-key                              Set the key of a field
 
-  --[no-]hidden                                Whether this template or field is hidden in the UI
+  --fields=fields                                    Comma separated list of fields to show
 
-  --json                                       Output formatted JSON
+  --[no-]hidden                                      Whether this template or field is hidden in the UI
 
-  --multi-select=multi-select                  Add a multi-select field with the provided display name
+  --json                                             Output formatted JSON
 
-  --no-color                                   Turn off colors for logging
+  --multi-select=multi-select                        Add a multi-select field with the provided display name
 
-  --number=number                              Add a numeric field with the provided display name
+  --no-color                                         Turn off colors for logging
 
-  --option=option                              Specify a field option
+  --number=number                                    Add a numeric field with the provided display name
 
-  --remove-enum-option=remove-enum-option      Removes the specified enum field option; must be in the form
-                                               fieldKey.optionKey
+  --option=option                                    Specify a field option
 
-  --remove-field=remove-field                  Remove the specified field
+  --remove-enum-option=remove-enum-option            Removes the specified enum field option; must be in the form
+                                                     fieldKey.optionKey
 
-  --reorder-enum-options=reorder-enum-options  Reorder the options for a given field; must be followed by one or more
-                                               --option flags
+  --remove-field=remove-field                        Remove the specified field
 
-  --reorder-fields=reorder-fields              Reorder the template fields; must be in the form first_key,second_key,...
+  --reorder-enum-options=reorder-enum-options        Reorder the options for a given field; must be followed by one or
+                                                     more --option flags
 
-  --save-to-file-path=save-to-file-path        Override default file path to save report
+  --reorder-fields=reorder-fields                    Reorder the template fields; must be in the form
+                                                     first_key,second_key,...
 
-  --scope=scope                                [default: enterprise] The scope of the metadata template
+  --save-to-file-path=save-to-file-path              Override default file path to save report
 
-  --string=string                              Add a string field with the provided name
+  --scope=scope                                      [default: enterprise] The scope of the metadata template
+
+  --string=string                                    Add a string field with the provided name
 
 EXAMPLE
   box metadata-templates:update employeeRecord --hidden
 ```
 
-_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.8.0/src/commands/metadata-templates/update.js)_
+_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/metadata-templates/update.js)_

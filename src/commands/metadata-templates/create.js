@@ -189,6 +189,9 @@ MetadataTemplatesCreateCommand.flags = {
 	}),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command',
+	}),
+	'copy-instance-on-item-copy': flags.boolean({
+		description: 'Whether to include the metadata when a file or folder is copied',
 	})
 };
 

@@ -7,6 +7,11 @@ const date = require('date-fns');
 const DEFAULT_START_TIME = '-5d';
 const DEFAULT_END_TIME = 'now';
 
+const eventReplacements = {
+	ADMIN_INVITE_ACCEPT: 'MASTER_INVITE_ACCEPT',
+	ADMIN_INVITE_REJECT: 'MASTER_INVITE_REJECT',
+}
+
 class EventsGetCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(EventsGetCommand);
@@ -19,7 +24,13 @@ class EventsGetCommand extends BoxCommand {
 			options.limit = flags.limit;
 		}
 		if (flags['event-types']) {
-			options.event_type = flags['event-types'];
+			const joinedEvents = flags['event-types'];
+			const events = joinedEvents.split(',');
+			const mappedEvents = events.map((event) => {
+				const replacement = eventReplacements[event];
+				return replacement ? replacement : event;
+			});
+			options.event_type = mappedEvents.join(',');
 		}
 
 		if (flags['stream-position']) {
@@ -39,7 +50,7 @@ class EventsGetCommand extends BoxCommand {
 
 		let events = await this.client.events.get(options);
 
-		if (options.stream_position) {
+		if (options.stream_position || options.stream_type !== 'admin_logs') {
 			await this.output(events);
 		} else {
 			let allEvents = [].concat(events.entries); // Copy the first page of events

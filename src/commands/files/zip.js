@@ -8,15 +8,15 @@ const utils = require('../../util');
 
 class FilesZipCommand extends BoxCommand {
 	async run() {
-        const { flags, args } = this.parse(FilesZipCommand);
-        
-        let fileName = args.name;
-        if (!fileName.includes('.zip')) {
-            fileName += '.zip';
-        }
+		const { flags, args } = this.parse(FilesZipCommand);
+
+		let fileName = args.name;
+		if (!fileName.includes('.zip')) {
+			fileName += '.zip';
+		}
 
 		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
-        
+
 		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
@@ -26,10 +26,10 @@ class FilesZipCommand extends BoxCommand {
 			if (!shouldOverwrite) {
 				return;
 			}
-        }
- 
-        let output = fs.createWriteStream(filePath);
-        let downloadStatus = await this.client.files.downloadZip(fileName, flags.item, output);
+		}
+
+		let output = fs.createWriteStream(filePath);
+		let downloadStatus = await this.client.files.downloadZip(fileName, flags.item, output);
 		await this.output(downloadStatus);
 	}
 }
@@ -40,17 +40,17 @@ FilesZipCommand._endpoint = 'zip_downloads';
 
 FilesZipCommand.flags = {
 	...BoxCommand.flags,
-    destination: flags.string({
+	destination: flags.string({
 		description: 'The destination folder to write the zip file to',
 		parse: utils.parsePath,
-    }),
-    item: flags.string({
+	}),
+	item: flags.string({
 		description: 'Files or folders to be part of zip in the form type:ID (i.e. file:1374652)',
 		multiple: true,
 		required: true,
 		parse(val) {
-            let splitVal = val.split(':');
-            return {type: splitVal[0], id: splitVal[1]};
+			let splitVal = val.split(':');
+			return {type: splitVal[0], id: splitVal[1]};
 		}
 	}),
 };

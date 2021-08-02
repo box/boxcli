@@ -1,5 +1,23 @@
 # Changelog
 
+## Next Release
+
+**New Features and Enhancements**
+
+- Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
+
+## 2.9.0 (2021-02-22)
+
+**New Features and Enhancements**
+
+- Add ability to add an option to a metadata template multi select field ([#230](https://github.com/box/boxcli/pull/230))
+- Add folder lock functionality ([#232](https://github.com/box/boxcli/pull/232))
+- Add support for search param to get shared link items ([#233](https://github.com/box/boxcli/pull/233))
+
+**Bug Fixes:**
+
+- Fix events command bug when there is no stream position flag ([#234](https://github.com/box/boxcli/pull/234))
+
 ## 2.8.0 (2020-12-03)
 
 **Warning:**
