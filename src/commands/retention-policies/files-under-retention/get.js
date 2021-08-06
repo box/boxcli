@@ -17,7 +17,7 @@ class RetentionPoliciesGetFilesRetentionForAssignmentCommand extends BoxCommand 
 }
 
 RetentionPoliciesGetFilesRetentionForAssignmentCommand.description = 'Get information about files under retention for assignment';
-RetentionPoliciesGetFilesRetentionForAssignmentCommand.examples = ['box retention-policies:files-under-retention-for-assignment:get 77777'];
+RetentionPoliciesGetFilesRetentionForAssignmentCommand.examples = ['box retention-policies:files-under-retention:get 77777'];
 RetentionPoliciesGetFilesRetentionForAssignmentCommand._endpoint = 'get_retention_policy_assignments_id_files_under_retention';
 
 RetentionPoliciesGetFilesRetentionForAssignmentCommand.flags = {

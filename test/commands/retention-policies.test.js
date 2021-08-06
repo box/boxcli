@@ -635,9 +635,9 @@ describe('Retention Policies', () => {
 
 	});
 
-	describe('retention-policies:files-under-retention-for-assignment:get', () => {
+	describe('retention-policies:files-under-retention:get', () => {
 		let policyAssignmentId = '11111',
-		 	fixture = getFixture('retention-policies/get_files_under_retention_page_1'),
+			fixture = getFixture('retention-policies/get_files_under_retention_page_1'),
 			fixture2 = getFixture('retention-policies/get_files_under_retention_page_2'),
 			jsonOutput = getFixture('output/retention_policies_get_files_under_retention_json.txt');
 
@@ -653,7 +653,8 @@ describe('Retention Policies', () => {
 			)
 			.stdout()
 			.command([
-				'retention-policies:files-under-retention-for-assignment:get',
+				'retention-policies:files-under-retention:get',
+				policyAssignmentId,
 				'--json',
 				'--token=test'
 			])
@@ -663,9 +664,9 @@ describe('Retention Policies', () => {
 
 	});
 
-	describe('retention-policies:file-version-retentions-for-assignment:get', () => {
+	describe('retention-policies:file-versions-under-retention:get', () => {
 		let policyAssignmentId = '11111',
-		 	fixture = getFixture('retention-policies/get_file_versions_under_retention_page_1'),
+			fixture = getFixture('retention-policies/get_file_versions_under_retention_page_1'),
 			fixture2 = getFixture('retention-policies/get_file_versions_under_retention_page_2'),
 			jsonOutput = getFixture('output/retention_policies_get_file_versions_under_retention_json.txt');
 
@@ -681,7 +682,8 @@ describe('Retention Policies', () => {
 			)
 			.stdout()
 			.command([
-				'retention-policies:file-version-retentions-for-assignment:get',
+				'retention-policies:file-versions-under-retention:get',
+				policyAssignmentId,
 				'--json',
 				'--token=test'
 			])

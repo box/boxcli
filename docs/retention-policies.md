@@ -8,10 +8,10 @@ List all retention policies for your enterprise
 * [`box retention-policies:assignments ID`](#box-retention-policiesassignments-id)
 * [`box retention-policies:assignments:get ID`](#box-retention-policiesassignmentsget-id)
 * [`box retention-policies:create POLICYNAME`](#box-retention-policiescreate-policyname)
-* [`box retention-policies:file-retentions:get ID`](#box-retention-policiesfile-retentionsget-id)
+* [`box retention-policies:files-under-retention:get ID`](#box-retention-policiesfile-retentionsget-id)
 * [`box retention-policies:file-version-retentions`](#box-retention-policiesfile-version-retentions)
 * [`box retention-policies:file-version-retentions:get ID`](#box-retention-policiesfile-version-retentionsget-id)
-* [`box retention-policies:file-version-retentions:get-for-assignment ID`](#box-retention-policiesfile-version-retentionsget-for-assignment-id)
+* [`box retention-policies:file-versions-under-retention:get ID`](#box-retention-policiesfile-version-retentionsget-for-assignment-id)
 * [`box retention-policies:get ID`](#box-retention-policiesget-id)
 * [`box retention-policies:update ID`](#box-retention-policiesupdate-id)
 
@@ -209,13 +209,13 @@ EXAMPLE
 
 _See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/create.js)_
 
-## `box retention-policies:file-retentions:get ID`
+## `box retention-policies:files-under-retention:get ID`
 
 Get information about files under retention for assignment
 
 ```
 USAGE
-  $ box retention-policies:file-retentions:get ID
+  $ box retention-policies:files-under-retention:get ID
 
 ARGUMENTS
   ID  ID of the retention policy assignment
@@ -236,7 +236,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box retention-policies:files-under-retention-for-assignment:get 77777
+  box retention-policies:files-under-retention:get 77777
 ```
 
 _See code: [src/commands/retention-policies/file-retentions/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-retentions/get.js)_
@@ -319,13 +319,13 @@ EXAMPLE
 
 _See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
-## `box retention-policies:file-version-retentions:get-for-assignment ID`
+## `box retention-policies:file-versions-under-retention:get ID`
 
 Get information about file versions under retention for assignment
 
 ```
 USAGE
-  $ box retention-policies:file-version-retentions:get-for-assignment ID
+  $ box retention-policies:file-versions-under-retention:get ID
 
 ARGUMENTS
   ID  ID of the retention policy assignment
@@ -346,7 +346,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box retention-policies:file-version-retentions-for-assignment:get 77777
+  box retention-policies:file-versions-under-retention:get 77777
 ```
 
 _See code: [src/commands/retention-policies/file-version-retentions/get-for-assignment.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-version-retentions/get-for-assignment.js)_

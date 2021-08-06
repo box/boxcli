@@ -21,7 +21,7 @@
         "name": "Document.pdf",
         "sha1": "3C363836CF4E16666669A25DA280A1865C2D2874",
         "file_version": {
-            "id": 6789,
+            "id": 67890,
             "type": "file_version",
             "sha1": "2813c90c8178bf651a75ca1b96f015ce3def166b"
         },
