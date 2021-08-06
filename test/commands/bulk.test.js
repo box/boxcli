@@ -233,7 +233,7 @@ describe('Bulk', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/search')
 				.query({
-					mdfilters: '[{"scope":"enterprise","templateKey":"myTemplate","filters":{"name":"Matt","age":30}}]',
+					mdfilters: '[{"scope":"enterprise","templateKey":"myTemplate","filters":{"name":"Matt","age":{"lt":30,"gt":30}}}]',
 					limit: 100,
 					query: '',
 				})
@@ -740,7 +740,7 @@ describe('Bulk', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/search')
 				.query({
-					mdfilters: '[{"scope":"enterprise","templateKey":"myTemplate","filters":{"name":"Matt","age":30}}]',
+					mdfilters: '[{"scope":"enterprise","templateKey":"myTemplate","filters":{"name":"Matt","age":{"lt":30,"gt":30}}}]',
 					limit: 100,
 					query: '',
 				})

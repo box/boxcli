@@ -5,6 +5,7 @@
 **New Features and Enhancements**
 
 - Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
+- Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 
 ## 2.9.0 (2021-02-22)
 
