@@ -5,6 +5,8 @@ Box CLI
 
 A command line interface to the [Box Content API](https://developers.box.com/docs/).
 
+Getting Started Docs: https://developer.box.com/guides/tooling/cli/quick-start/
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
