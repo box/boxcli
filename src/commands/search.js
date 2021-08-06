@@ -72,7 +72,11 @@ class SearchCommand extends BoxCommand {
 				// Build the filters object, e.g {"field1": value1, "field2": {"lt": value2}}
 				filters.forEach(({field, cmp, value}) => {
 					if (cmp === '=') {
-						filtersObj[field] = value;
+						if (typeof value === 'number') {
+							filtersObj[field] = {lt: value, gt: value};
+						} else {
+							filtersObj[field] = value;
+						}
 					} else if (cmp === '<') {
 						filtersObj[field] = {lt: value};
 					} else if (cmp === '>') {
