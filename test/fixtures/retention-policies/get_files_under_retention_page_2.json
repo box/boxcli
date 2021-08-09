@@ -1,0 +1,19 @@
+{
+	"entries": [
+		{
+			"id": 6789,
+			"etag": 1,
+			"type": "file",
+			"sequence_id": 3,
+			"name": "Document.pdf",
+			"sha1": "3C363836CF4E16666669A25DA280A1865C2D2874",
+			"file_version": {
+				"id": 67890,
+				"type": "file_version",
+				"sha1": "2813c90c8178bf651a75ca1b96f015ce3def166b"
+			},
+			"applied_at": "2012-12-12T10:53:43-08:00"
+		}
+	],
+	"limit": 1000
+}

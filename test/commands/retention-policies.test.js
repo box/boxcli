@@ -634,4 +634,62 @@ describe('Retention Policies', () => {
 		});
 
 	});
+
+	describe('retention-policies:files-under-retention:get', () => {
+		let policyAssignmentId = '11111',
+			fixture = getFixture('retention-policies/get_files_under_retention_page_1'),
+			fixture2 = getFixture('retention-policies/get_files_under_retention_page_2'),
+			jsonOutput = getFixture('output/retention_policies_get_files_under_retention_json.txt');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/retention_policy_assignments/${policyAssignmentId}/files_under_retention`)
+				.reply(200, fixture)
+				.get(`/2.0/retention_policy_assignments/${policyAssignmentId}/files_under_retention`)
+				.query({
+					marker: 'ZAD345'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'retention-policies:files-under-retention:get',
+				policyAssignmentId,
+				'--json',
+				'--token=test'
+			])
+			.it('should list all files under retention for assignment  (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, jsonOutput);
+			});
+
+	});
+
+	describe('retention-policies:file-versions-under-retention:get', () => {
+		let policyAssignmentId = '11111',
+			fixture = getFixture('retention-policies/get_file_versions_under_retention_page_1'),
+			fixture2 = getFixture('retention-policies/get_file_versions_under_retention_page_2'),
+			jsonOutput = getFixture('output/retention_policies_get_file_versions_under_retention_json.txt');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/retention_policy_assignments/${policyAssignmentId}/file_versions_under_retention`)
+				.reply(200, fixture)
+				.get(`/2.0/retention_policy_assignments/${policyAssignmentId}/file_versions_under_retention`)
+				.query({
+					marker: 'ZAD345'
+				})
+				.reply(200, fixture2)
+			)
+			.stdout()
+			.command([
+				'retention-policies:file-versions-under-retention:get',
+				policyAssignmentId,
+				'--json',
+				'--token=test'
+			])
+			.it('should list all file versions under retention for assignment (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, jsonOutput);
+			});
+
+	});
 });

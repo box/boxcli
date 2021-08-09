@@ -1,0 +1,30 @@
+[
+    {
+        "id": 12345,
+        "etag": 1,
+        "type": "file_version",
+        "sequence_id": 3,
+        "name": "Contract.pdf",
+        "sha1": "85136C79CBF9FE36BB9D05D0639C70C265C18D37",
+        "file_version": {
+            "id": 12345,
+            "type": "file_version",
+            "sha1": "134b65991ed521fcfe4724b7d814ab8ded5185dc"
+        },
+        "applied_at": "2012-12-12T10:53:43-08:00"
+    },
+    {
+        "id": 67890,
+        "etag": 1,
+        "type": "file_version",
+        "sequence_id": 3,
+        "name": "Document.pdf",
+        "sha1": "018EE5D1D1E0D0727CED62CA5F1B71F6F07AB96B",
+        "file_version": {
+            "id": 67890,
+            "type": "file_version",
+            "sha1": "18CA54DC8372620C1E46ADE6D56FF220A19D01F8"
+        },
+        "applied_at": "2012-12-12T10:53:43-08:00"
+    }
+]

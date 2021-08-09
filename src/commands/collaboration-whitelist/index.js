@@ -4,7 +4,12 @@ const CollaborationAllowlistListCommand = require('../collaboration-allowlist');
 
 class CollaborationWhitelistListCommand extends CollaborationAllowlistListCommand {}
 
-['description', 'examples', '_endpoint', 'flags'].forEach((name) => {
+[
+	'description',
+	'examples',
+	'_endpoint',
+	'flags'
+].forEach(name => {
 	CollaborationWhitelistListCommand[name] =
 		CollaborationAllowlistListCommand[name];
 });
