@@ -141,12 +141,17 @@ OPTIONS
   -h, --help                           Show CLI help
   -q, --quiet                          Suppress any non-error output to stderr
   -v, --verbose                        Show verbose output, which can be helpful for debugging
-  --[no-]cache-tokens                  Enable token caching, which significantly improves performance.
-                                       Run with --no-cache-tokens and then --cache-tokens if your
-                                       application config updates are not reflected in your requests.
+
+  --[no-]cache-tokens                  Enable token caching, which significantly improves performance. Run with
+                                       --no-cache-tokens and then --cache-tokens if your application config updates are
+                                       not reflected in your requests.
+
   --config-file-path=config-file-path  Provide a file path to configuration file
+
   --name=name                          New name of the environment
+
   --no-color                           Turn off colors for logging
+
   --private-key-path=private-key-path  Provide a file path to application private key
 
   --user-id=user-id                    Store a default user ID to use with the session commands. A default user ID can

@@ -10,7 +10,7 @@ const DEFAULT_END_TIME = 'now';
 const eventReplacements = {
 	ADMIN_INVITE_ACCEPT: 'MASTER_INVITE_ACCEPT',
 	ADMIN_INVITE_REJECT: 'MASTER_INVITE_REJECT',
-}
+};
 
 class EventsGetCommand extends BoxCommand {
 	async run() {
@@ -26,7 +26,7 @@ class EventsGetCommand extends BoxCommand {
 		if (flags['event-types']) {
 			const joinedEvents = flags['event-types'];
 			const events = joinedEvents.split(',');
-			const mappedEvents = events.map((event) => {
+			const mappedEvents = events.map(event => {
 				const replacement = eventReplacements[event];
 				return replacement ? replacement : event;
 			});
