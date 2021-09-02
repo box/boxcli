@@ -7,10 +7,10 @@ class SignRequestsCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SignRequestsCreateCommand);
 
-		const signRequest = await client.signRequests.create({
+		const signRequest = await this.client.signRequests.create({
 			signers: flags.signers.split(',').map((email) => ({
 				role: 'signer',
-				email: 'mhagmajer@boxdemo.com',
+				email,
 			})),
 			source_files: flags['source-files'].split(',').map((id) => ({
 				type: 'file',
@@ -28,7 +28,7 @@ class SignRequestsCreateCommand extends BoxCommand {
 
 SignRequestsCreateCommand.description = 'Create sign request';
 SignRequestsCreateCommand.examples = [
-	'box sign-requests:create -S alice@example.com -12345 -p',
+	'box sign-requests:create -S alice@example.com -f 12345 -p 23456',
 ];
 SignRequestsCreateCommand._endpoint = 'post_sign_requests';
 
@@ -44,7 +44,7 @@ SignRequestsCreateCommand.flags = {
 		char: 'f',
 		required: true,
 		description:
-			'Comma separated list of files to create a signing document from. This is currently limited to one file, e.g. 12345,2345',
+			'Comma separated list of files to create a signing document from. This is currently limited to one file, e.g. 12345',
 	}),
 	'parent-folder': flags.string({
 		char: 'p',
@@ -53,14 +53,5 @@ SignRequestsCreateCommand.flags = {
 			'The destination folder to place final, signed document and signing log',
 	}),
 };
-
-SignRequestsCreateCommand.args = [
-	{
-		name: 'id',
-		required: true,
-		hidden: false,
-		description: 'The ID of the sign request',
-	},
-];
 
 module.exports = SignRequestsCreateCommand;

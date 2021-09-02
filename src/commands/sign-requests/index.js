@@ -17,7 +17,7 @@ SignRequestsListCommand.examples = ['box sign-requests'];
 SignRequestsListCommand._endpoint = 'get_sign_requests';
 
 SignRequestsListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 module.exports = SignRequestsListCommand;
