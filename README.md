@@ -113,6 +113,7 @@ Command Topics
 * [`box retention-policies`](docs/retention-policies.md) - List all retention policies for your enterprise
 * [`box search`](docs/search.md) - Search for files and folders in your Enterprise
 * [`box shared-links`](docs/shared-links.md) - Manage shared links
+* [`box sign-requests`](docs/sign-requests.md) - Manage sign requests
 * [`box storage-policies`](docs/storage-policies.md) - List storage policies
 * [`box tasks`](docs/tasks.md) - Manage tasks
 * [`box terms-of-service`](docs/terms-of-service.md) - List terms of services for your enterprise
