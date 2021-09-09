@@ -43,6 +43,10 @@ describe('Sign requests', () => {
 		let signerEmail = 'bob@example.com',
 			fileId = '1234',
 			parentFolderId = '2345',
+			documentTag1Id = '3456',
+			documentTag1Value = 'hello',
+			documentTag2Id = '4567',
+			documentTag2Value = false,
 			fixture = getFixture('sign-requests/post_sign_requests');
 
 		test
@@ -51,8 +55,9 @@ describe('Sign requests', () => {
 					.post(`/2.0/sign_requests`, {
 						signers: [
 							{
-								role: 'signer',
+								role: 'approver',
 								email: signerEmail,
+								is_in_person: true,
 							},
 						],
 						source_files: [
@@ -65,15 +70,27 @@ describe('Sign requests', () => {
 							type: 'folder',
 							id: parentFolderId,
 						},
+						prefill_tags: [
+							{
+								document_tag_id: documentTag1Id,
+								text_value: documentTag1Value,
+							},
+							{
+								document_tag_id: documentTag2Id,
+								checkbox_value: false,
+							},
+						],
 					})
 					.reply(200, fixture)
 			)
 			.stdout()
 			.command([
 				'sign-requests:create',
-				`--signers=${signerEmail}`,
+				`--signer=email=${signerEmail},role=approver,is_in_person=1`,
 				`--source-files=${fileId}`,
 				`--parent-folder=${parentFolderId}`,
+				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
+				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
 				'--json',
 				'--token=test',
 			])
@@ -107,8 +124,7 @@ describe('Sign requests', () => {
 	});
 
 	describe('sign-requests:resend', () => {
-		let signRequestId = '6742981',
-			fixture = getFixture('sign-requests/post_sign_requests_id_resend');
+		let signRequestId = '6742981';
 
 		test
 			.nock(TEST_API_ROOT, (api) =>
@@ -116,7 +132,7 @@ describe('Sign requests', () => {
 					.post(
 						`/2.0/sign_requests/${signRequestId}/resend?sign_request_id=${signRequestId}`
 					)
-					.reply(200, fixture)
+					.reply(200)
 			)
 			.stderr()
 			.command([

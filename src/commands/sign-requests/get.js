@@ -4,7 +4,7 @@ const BoxCommand = require('../../box-command');
 
 class SignRequestsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(SignRequestsGetCommand);
+		const { args } = this.parse(SignRequestsGetCommand);
 
 		const signRequest = await this.client.signRequests.getById({
 			sign_request_id: args.id,
