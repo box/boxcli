@@ -4,7 +4,7 @@
 
 **New Features and Enhancements**
 
-- Add support for copyInstanceOnItemCopy field for metadata templates ([#239](https://github.com/box/boxcli/pull/239))
+- Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
 - Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 - Add support for Box Sign API ([#258](https://github.com/box/boxcli/pull/258))
 
@@ -95,51 +95,50 @@
 - Fixed the `--event-types` flag for the `box events` and `box events:poll` commands
 - Updated to`lodash@4.17.11` to address a potential prototype pollution vulnerability
 - Fixed paging in both the `box events` and `box events:poll` commands:
-  - The `box events` command now requires either a closed date range (defaults to last five days), or a stream
-    position. If given a date range, all events in that range will be returned. If given a stream position,
-    up to `limit` events will be returned along with the next stream position
-  - `box events:poll` now correctly polls for new events
+    - The `box events` command now requires either a closed date range (defaults to last five days), or a stream
+      position.  If given a date range, all events in that range will be returned.  If given a stream position,
+      up to `limit` events will be returned along with the next stream position
+    - `box events:poll` now correctly polls for new events
 
 ## 2.0.0 [2018-12-13]
 
 ### Features and Enhancements
-
-- **Full API parity:** The new version of the CLI supports all available API endpoints and parameters
-- **Recursive folder upload and download:** Uploading or downloading a folder now preserves the entire deep folder
+- __Full API parity:__ The new version of the CLI supports all available API endpoints and parameters
+- __Recursive folder upload and download:__ Uploading or downloading a folder now preserves the entire deep folder
   structure
-- **Expanded human-readable output:** All object fields returned by the API are now displayed by default, and can be
+- __Expanded human-readable output:__ All object fields returned by the API are now displayed by default, and can be
   controlled with `--fields`.  All commands that output collections of objects no longer require interactive key presses
   to view all objects.
-- **More output options for bulk commands:** Bulk commands no longer require output to be written to disk, and can
+- __More output options for bulk commands:__ Bulk commands no longer require output to be written to disk, and can
   output JSON, CSV, or human-readable output directly to stdout or to any file.
-- **More flexible date/time input:** Date-times can now be specified in UNIX epoch format (e.g. `1535336043`), with a
+- __More flexible date/time input:__ Date-times can now be specified in UNIX epoch format (e.g. `1535336043`), with a
   year offset shorthand (e.g. `-1y` for "one year ago"), and as a combination of offset shorthands (e.g. `-5h30m` for
   "5 minutes and 30 seconds ago")
-- **All commands now accept bulk input:** Every command can now accept its arguments and flags from a file input in
+- __All commands now accept bulk input:__ Every command can now accept its arguments and flags from a file input in
   either CSV or JSON format!  There is also no more need for CSV templates, since the column names are the same as the
   CLI's own args and flags (case-insensitive).  Looking at the help for a command should tell you everything you need
   to know to run the command in bulk
-- **All commands can now save output to disk:** Every command now allows passing the `--save` and `--save-to-file-path`
+- __All commands can now save output to disk:__ Every command now allows passing the `--save` and `--save-to-file-path`
   flags to save the output to disk.  The output written will respect the `--json` and `--csv` flags for specifying
   output format, otherwise it will use the file format in the CLI settings.
-- **Custom API calls:** The new `box request` command allows making any API call against the Box API, and can be used
+- __Custom API calls:__ The new `box request` command allows making any API call against the Box API, and can be used
   to pass arbitrary URLs and parameters
-- **Per-environment token caching enabled by default:** To improve performance when running multiple commands, each
+- __Per-environment token caching enabled by default:__ To improve performance when running multiple commands, each
   environment now caches the primary Service Account tokens by default.  This can be disabled by running
   `box configure:environments:update --no-cache-tokens`
-- **Command correction and autocomplete:** If you mis-type a command, you will now be prompted if there is an available
+- __Command correction and autocomplete:__ If you mis-type a command, you will now be prompted if there is an available
   correction; selecting "yes" at the prompt will run the corrected command for you.  There is also now a
   `box autocomplete` command, which will help you set up autocompletion (currently available only in bash and zsh
   shells)
-- **User-friendly prompts:** Some commands (e.g. `box configure:environments:select`) can now be called without
+- __User-friendly prompts:__ Some commands (e.g. `box configure:environments:select`) can now be called without
   providing the necessary arguments; in this case, the command will display a helpful prompt to allow selecting the
   argument value.
-- **Re-organized command hierarchy:** We've renamed and reorganized many of the commands in the CLI to clarify the
+- __Re-organized command hierarchy:__ We've renamed and reorganized many of the commands in the CLI to clarify the
   inputs they take and reduce unnecessary subcommand nesting.  In some cases, this drastically reduces the length of
   the command.  For example, `box files:shared-links:create` is now `box files:share` — 14 characters shorter!  Most
   commands that were previously available as `xyzs:list` are now just `xyzs`; for example,
   `box folders collaborations list` is now `box folders:collaborations`
-- **Download commands can download to a specified location on disk:** Pass the `--destination` flag to have the files or
+- __Download commands can download to a specified location on disk:__ Pass the `--destination` flag to have the files or
   folders download to any location
 
 ### Breaking Changes
@@ -171,8 +170,8 @@
 - Multi-word collaboration roles specified via the `-r|--role` flag in `box collaborations:add` and similar commands
   are now separated by an underscore (e.g `viewer_uploader`) instead of a space.  This should make it easier to work
   with these commands without needing to quote the flag value.
-- The `-y|--yes` flag has been removed from some commands; deletions of users, folders, files, etc will no longer
-  prompt to confirm that the item should be deleted.
+ - The `-y|--yes` flag has been removed from some commands; deletions of users, folders, files, etc will no longer
+   prompt to confirm that the item should be deleted.
 - The `-m|--multi` flag has been removed from `box files:download` and `box folders:download` since these commands
   now accept bulk input via CSV.
 - The `--id-only` flag has been removed from `box folders:move`, since a folder move within a user's account should
@@ -206,7 +205,6 @@
 - The bulk input file format for `box collaborations:add` has changed; see `--help` for more details
 
 ### Bug Fixes
-
 - The `--json` flag in the search command works correctly now
 - Windows absolute paths without the drive letter (e.g. `\MyFolder\file.pdf`) now work correctly
 - Uploading files over 4 GB in size now works correctly
@@ -232,7 +230,6 @@
 - Changed Box CLI output to JSON by default with no existing `.box` directory.
 
 ## 1.0.2
-
 - Added shared link commands for Create, Get, Update, and Delete. Located as standalone commands under `box shared-links` as well as under `box folders shared-links` and `box files shared-links`.
 - Fixed UTF-8 issue obscuring characters when saving CSV reports.
 - Added autopaging for events and fixed faulty event Get command.
