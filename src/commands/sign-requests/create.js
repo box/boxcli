@@ -5,29 +5,32 @@ const { omit, mapKeys, snakeCase } = require('lodash');
 const { flags } = require('@oclif/command');
 const BoxCLIError = require('../../cli-error');
 
-const ALLOWED_SIGNER_ROLES = ['signer', 'approver', 'final_copy_reader'];
+const ALLOWED_SIGNER_ROLES = [
+	'signer',
+	'approver',
+	'final_copy_reader'
+];
 
 class SignRequestsCreateCommand extends BoxCommand {
 	async run() {
 		const { flags } = this.parse(SignRequestsCreateCommand);
 
 		const {
-			signer,
-			prefill_tag,
-			document_preparation_needed,
-			text_signatures_enabled,
-			reminders_enabled,
+			signer: signers,
+			prefill_tag: prefillTags,
+			document_preparation_needed: isDocumentPreparationNeeded,
+			text_signatures_enabled: areTextSignaturesEnabled,
+			reminders_enabled: areRemindersEnabled,
 			...rest
-		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) =>
-			snakeCase(key)
+		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) => snakeCase(key)
 		);
 
 		const signRequest = await this.client.signRequests.create({
-			signers: signer,
-			prefill_tags: prefill_tag,
-			is_document_preparation_needed: document_preparation_needed,
-			are_text_signatures_enabled: text_signatures_enabled,
-			are_reminders_enabled: reminders_enabled,
+			signers,
+			prefill_tags: prefillTags,
+			is_document_preparation_needed: isDocumentPreparationNeeded,
+			are_text_signatures_enabled: areTextSignaturesEnabled,
+			are_reminders_enabled: areRemindersEnabled,
 			...rest,
 		});
 
@@ -36,9 +39,7 @@ class SignRequestsCreateCommand extends BoxCommand {
 }
 
 SignRequestsCreateCommand.description = 'Create sign request';
-SignRequestsCreateCommand.examples = [
-	'box sign-requests:create --signer email=alice@example.com --source-files 12345 --parent-folder 23456  --prefil-tag id=1,value=Test',
-];
+SignRequestsCreateCommand.examples = ['box sign-requests:create --signer email=alice@example.com --source-files 12345 --parent-folder 23456  --prefil-tag id=1,value=Test'];
 SignRequestsCreateCommand._endpoint = 'post_sign_requests';
 
 SignRequestsCreateCommand.flags = {
@@ -54,43 +55,46 @@ SignRequestsCreateCommand.flags = {
 			};
 
 			for (const part of input.split(',')) {
-				const [key, value] = part.split('=');
+				const [
+					key,
+					value
+				] = part.split('=');
 
 				switch (key) {
-					case 'email':
-						signer.email = value;
-						break;
+				case 'email':
+					signer.email = value;
+					break;
 
-					case 'role':
-						if (!ALLOWED_SIGNER_ROLES.includes(value)) {
-							throw new BoxCLIError(
-								`Invalid value for role property of signer: ${value}. Expecting one of: ${ALLOWED_SIGNER_ROLES.join(
-									', '
-								)}.`
-							);
-						}
-						signer.role = value;
-						break;
+				case 'role':
+					if (!ALLOWED_SIGNER_ROLES.includes(value)) {
+						throw new BoxCLIError(
+							`Invalid value for role property of signer: ${value}. Expecting one of: ${ALLOWED_SIGNER_ROLES.join(
+								', '
+							)}.`
+						);
+					}
+					signer.role = value;
+					break;
 
-					case 'is_in_person':
-						if (value !== '0' && value !== '1') {
-							throw new BoxCLIError(
-								`Invalid value for is_in_person property of signer: ${value}. Expecting either 0 or 1.`
-							);
-						}
-						signer.is_in_person = value === '1';
-						break;
+				case 'is_in_person':
+					if (value !== '0' && value !== '1') {
+						throw new BoxCLIError(
+							`Invalid value for is_in_person property of signer: ${value}. Expecting either 0 or 1.`
+						);
+					}
+					signer.is_in_person = value === '1';
+					break;
 
-					case 'order':
-						signer.order = value;
-						break;
+				case 'order':
+					signer.order = value;
+					break;
 
-					case 'embed_url_external_user_id':
-						signer.embed_url_external_user_id = value;
-						break;
+				case 'embed_url_external_user_id':
+					signer.embed_url_external_user_id = value;
+					break;
 
-					default:
-						throw new BoxCLIError(`Unknown proprty for signer: ${key}`);
+				default:
+					throw new BoxCLIError(`Unknown proprty for signer: ${key}`);
 				}
 			}
 
@@ -101,17 +105,16 @@ SignRequestsCreateCommand.flags = {
 		required: true,
 		description:
 			'Comma separated list of files to create a signing document from. This is currently limited to one file, e.g. 12345',
-		parse: (input) =>
-			input.split(',').map((id) => ({
-				type: 'file',
-				id,
-			})),
+		parse: input => input.split(',').map(id => ({
+			type: 'file',
+			id,
+		})),
 	}),
 	'parent-folder': flags.string({
 		required: true,
 		description:
 			'The destination folder to place final, signed document and signing log',
-		parse: (input) => ({
+		parse: input => ({
 			type: 'folder',
 			id: input,
 		}),
@@ -146,32 +149,35 @@ SignRequestsCreateCommand.flags = {
 			const prefillTag = {};
 
 			for (const part of input.split(',')) {
-				const [key, value] = part.split('=');
+				const [
+					key,
+					value
+				] = part.split('=');
 
 				switch (key) {
-					case 'id':
-						prefillTag.document_tag_id = value;
-						break;
+				case 'id':
+					prefillTag.document_tag_id = value;
+					break;
 
-					case 'text':
-						prefillTag.text_value = value;
-						break;
+				case 'text':
+					prefillTag.text_value = value;
+					break;
 
-					case 'checkbox':
-						if (value !== '0' && value !== '1') {
-							throw new BoxCLIError(
-								`Invalid value for checkbox property of prefill-tag: ${value}. Expecting either 0 or 1.`
-							);
-						}
-						prefillTag.checkbox_value = value === '1';
-						break;
+				case 'checkbox':
+					if (value !== '0' && value !== '1') {
+						throw new BoxCLIError(
+							`Invalid value for checkbox property of prefill-tag: ${value}. Expecting either 0 or 1.`
+						);
+					}
+					prefillTag.checkbox_value = value === '1';
+					break;
 
-					case 'date':
-						prefillTag.date_value = value;
-						break;
+				case 'date':
+					prefillTag.date_value = value;
+					break;
 
-					default:
-						throw new BoxCLIError(`Unknown proprty for prefill-tag: ${key}`);
+				default:
+					throw new BoxCLIError(`Unknown proprty for prefill-tag: ${key}`);
 				}
 			}
 
