@@ -39,7 +39,7 @@ class SignRequestsCreateCommand extends BoxCommand {
 }
 
 SignRequestsCreateCommand.description = 'Create sign request';
-SignRequestsCreateCommand.examples = ['box sign-requests:create --signer email=alice@example.com --source-files 12345 --parent-folder 23456  --prefil-tag id=1,value=Test'];
+SignRequestsCreateCommand.examples = ['box sign-requests:create --signer email=alice@example.com --source-files 12345 --parent-folder 23456  --prefill-tag id=1,value=Test'];
 SignRequestsCreateCommand._endpoint = 'post_sign_requests';
 
 SignRequestsCreateCommand.flags = {
@@ -94,7 +94,7 @@ SignRequestsCreateCommand.flags = {
 					break;
 
 				default:
-					throw new BoxCLIError(`Unknown proprty for signer: ${key}`);
+					throw new BoxCLIError(`Unknown property for signer: ${key}`);
 				}
 			}
 
@@ -177,7 +177,7 @@ SignRequestsCreateCommand.flags = {
 					break;
 
 				default:
-					throw new BoxCLIError(`Unknown proprty for prefill-tag: ${key}`);
+					throw new BoxCLIError(`Unknown property for prefill-tag: ${key}`);
 				}
 			}
 
