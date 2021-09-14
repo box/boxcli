@@ -27,9 +27,7 @@ class MetadataQueryCommand extends BoxCommand {
 
 MetadataQueryCommand.description =
 	'Create a search using SQL-like syntax to return items that match specific metadata';
-MetadataQueryCommand.examples = [
-	'box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100,maxAmount=200 --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts',
-];
+MetadataQueryCommand.examples = ['box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100,maxAmount=200 --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts'];
 MetadataQueryCommand._endpoint = 'post_metadata_queries_execute_read';
 
 MetadataQueryCommand.flags = {
@@ -43,8 +41,11 @@ MetadataQueryCommand.flags = {
 		parse(input) {
 			return Object.assign(
 				{},
-				...input.split(',').map((param) => {
-					const [key, value] = param.split('=');
+				...input.split(',').map(param => {
+					const [
+						key,
+						value
+					] = param.split('=');
 					return {
 						[key]: value,
 					};
@@ -59,9 +60,12 @@ MetadataQueryCommand.flags = {
 		description:
 			'A list of template fields and directions to sort the metadata query results by.',
 		parse(input) {
-			return input.split(',').map((param) => {
-				const [field_key, direction] = param.split('=');
-				return { field_key, direction };
+			return input.split(',').map(param => {
+				const [
+					fieldKey,
+					direction
+				] = param.split('=');
+				return { field_key: fieldKey, direction };
 			});
 		},
 	}),

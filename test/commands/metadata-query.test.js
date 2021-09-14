@@ -29,10 +29,9 @@ describe('Metadata Query', () => {
 			fixture = getFixture('metadata-query/post_metadata_queries_execute_read');
 
 		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/metadata_queries/execute_read', request)
-					.reply(200, fixture)
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/metadata_queries/execute_read', request)
+				.reply(200, fixture)
 			)
 			.stdout()
 			.command([
@@ -47,7 +46,7 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata', (ctx) => {
+			.it('should query metadata', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});
