@@ -10,7 +10,7 @@ describe('Metadata Query', () => {
 				from: 'enterprise_123456.contractTemplate',
 				query: 'amount >= :value',
 				query_params: {
-					value: '105',
+					value: 100,
 				},
 				fields: [
 					'created_at',
@@ -39,7 +39,7 @@ describe('Metadata Query', () => {
 				request.from,
 				request.ancestor_folder_id,
 				`--query=${request.query}`,
-				`--query-params=value=${request.query_params.value}`,
+				`--query-params=value=${request.query_params.value}f`,
 				`--extra-fields=${request.fields.join(',')}`,
 				`--order-by=${request.order_by[0].field_key}=${request.order_by[0].direction}`,
 				`--limit=${request.limit}`,

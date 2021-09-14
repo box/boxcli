@@ -27,7 +27,7 @@ class MetadataQueryCommand extends BoxCommand {
 
 MetadataQueryCommand.description =
 	'Create a search using SQL-like syntax to return items that match specific metadata';
-MetadataQueryCommand.examples = ['box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100,maxAmount=200 --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts'];
+MetadataQueryCommand.examples = ['box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts'];
 MetadataQueryCommand._endpoint = 'post_metadata_queries_execute_read';
 
 MetadataQueryCommand.flags = {
@@ -46,9 +46,14 @@ MetadataQueryCommand.flags = {
 						key,
 						value
 					] = param.split('=');
+					/* eslint-disable multiline-ternary */
 					return {
-						[key]: value,
+						[key]:
+							value.endsWith('f') && !isNaN(parseFloat(value))
+								? parseFloat(value)
+								: value,
 					};
+					/* eslint-enable multiline-ternary */
 				})
 			);
 		},
