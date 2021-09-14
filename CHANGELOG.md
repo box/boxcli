@@ -7,6 +7,7 @@
 - Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
 - Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 - Add support for Box Sign API ([#258](https://github.com/box/boxcli/pull/258))
+- Add support Metadata Query API ([#259](https://github.com/box/boxcli/pull/259))
 
 ## 2.9.0 (2021-02-22)
 
