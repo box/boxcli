@@ -106,6 +106,7 @@ Command Topics
 * [`box help`](docs/help.md) - Display help for the Box CLI
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
 * [`box metadata-cascade-policies`](docs/metadata-cascade-policies.md) - List the metadata cascade policies on a folder
+* [`box metadata-query`](docs/metadata-query.md) - Create a search using SQL-like syntax to return items that match specific metadata
 * [`box metadata-templates`](docs/metadata-templates.md) - Get all metadata templates in your Enterprise
 * [`box oss`](docs/oss.md) - Print a list of open-source licensed packages used in the Box CLI
 * [`box recent-items`](docs/recent-items.md) - List information about files accessed in the past 90 days up to a 1000 items
