@@ -419,6 +419,7 @@ describe('Bulk', () => {
 			.stderr()
 			.command([
 				'folders:collaborations:add',
+				'--viewer',
 				`--bulk-file-path=${folderCollabInput}`,
 				'--json',
 				'--fields=id',
@@ -436,7 +437,6 @@ describe('Bulk', () => {
 				expectedErrorOutput += `Entry 2 (${os.EOL}`;
 				expectedErrorOutput += `    id=22222${os.EOL}`;
 				expectedErrorOutput += `    login=wario@example.com${os.EOL}`;
-				expectedErrorOutput += `    role=viewer${os.EOL}`;
 				expectedErrorOutput += `) failed with error:${os.EOL}`;
 				expectedErrorOutput += `Unexpected API Response [409 Conflict | 170397861659135cc65a65] collaboration_already_exists${os.EOL}`;
 				expectedErrorOutput += os.EOL;

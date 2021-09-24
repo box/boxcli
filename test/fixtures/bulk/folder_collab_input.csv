@@ -1,4 +1,4 @@
-id,login,role
-11111,mario@example.com,viewer
-22222,wario@example.com,viewer
-33333,peach@example.com,viewer
+id,login
+11111,mario@example.com
+22222,wario@example.com
+33333,peach@example.com
