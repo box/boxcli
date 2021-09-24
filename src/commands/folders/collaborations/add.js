@@ -24,6 +24,10 @@ FoldersCollaborationsAddCommand.examples = ['box folders:collaborations:add 2222
 
 FoldersCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,
+	role: {
+		...CollaborationsCreateCommand.flags.role,
+		required: true,
+	},
 };
 
 FoldersCollaborationsAddCommand.args = [
