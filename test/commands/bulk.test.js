@@ -445,61 +445,52 @@ describe('Bulk', () => {
 				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
 
-			test
-				.stdout()
-				.stderr()
-				.command([
-					'folders:collaborations:add',
-					'12345',
-					`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header.csv')}`,
-					'--json',
-					'--fields=id',
-					'--no-color',
-					'--token=test'
-				])
-				.it('should report errors on missing headers', ctx => {
-					let expectedErrorOutput = `1 entry failed!${os.EOL}`;
-					expectedErrorOutput += `----------${os.EOL}`;
-					expectedErrorOutput += `Entry 2 (${os.EOL}`;
-					expectedErrorOutput += `    id=22222${os.EOL}`;
-					expectedErrorOutput += `    login=wario@example.com${os.EOL}`;
-					expectedErrorOutput += `) failed with error:${os.EOL}`;
-					expectedErrorOutput += `Unexpected API Response [409 Conflict | 170397861659135cc65a65] collaboration_already_exists${os.EOL}`;
-					expectedErrorOutput += os.EOL;
+		test
+			.stdout()
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				'12345',
+				`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header.csv')}`,
+				'--json',
+				'--fields=id',
+				'--no-color',
+				'--token=test'
+			])
+			.it('should report errors on missing headers', ctx => {
+				assert.equal(ctx.stderr, `CSV input file should contain the headers row and at least on data row${os.EOL}`);
+			});
 
-					assert.equal(ctx.stderr, `CSV input file should contain the headers row and at least on data row${os.EOL}`);
-				});
+		test
+			.stdout()
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				'12345',
+				`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header_multiple.csv')}`,
+				'--json',
+				'--fields=id',
+				'--no-color',
+				'--token=test'
+			])
+			.it('should report errors on missing headers if specified multiple rows', ctx => {
+				let expectedErrorOutput = `2 entries failed!${os.EOL}`;
+				expectedErrorOutput += `----------${os.EOL}`;
+				expectedErrorOutput += `Entry 1 (${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `) failed with error:${os.EOL}`;
+				expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `----------${os.EOL}`;
+				expectedErrorOutput += `Entry 2 (${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `) failed with error:${os.EOL}`;
+				expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
+				expectedErrorOutput += os.EOL;
 
-			test
-				.stdout()
-				.stderr()
-				.command([
-					'folders:collaborations:add',
-					'12345',
-					`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header_multiple.csv')}`,
-					'--json',
-					'--fields=id',
-					'--no-color',
-					'--token=test'
-				])
-				.it('should report errors on missing headers if specified multiple rows', ctx => {
-					let expectedErrorOutput = `2 entries failed!${os.EOL}`;
-					expectedErrorOutput += `----------${os.EOL}`;
-					expectedErrorOutput += `Entry 1 (${os.EOL}`;
-					expectedErrorOutput += os.EOL;
-					expectedErrorOutput += `) failed with error:${os.EOL}`;
-					expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
-					expectedErrorOutput += os.EOL;
-					expectedErrorOutput += `----------${os.EOL}`;
-					expectedErrorOutput += `Entry 2 (${os.EOL}`;
-					expectedErrorOutput += os.EOL;
-					expectedErrorOutput += `) failed with error:${os.EOL}`;
-					expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
-					expectedErrorOutput += os.EOL;
-
-					assert.equal(ctx.stderr, expectedErrorOutput);
-				});
-		});
+				assert.equal(ctx.stderr, expectedErrorOutput);
+			});
+	});
 
 	describe('JSON Input', () => {
 		let entriesInputFilePath = path.join(__dirname, '../fixtures/bulk/input_entries.json'),
