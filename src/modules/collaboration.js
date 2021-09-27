@@ -59,6 +59,9 @@ class CollaborationModule {
 		} else if (flags['co-owner']) {
 			params.body.role = this.client.collaborationRoles.CO_OWNER;
 		}
+		if (!params.body.role) {
+			throw new Error('Missing required flag for collaboration role');
+		}
 
 		if (flags['user-id']) {
 			params.body.accessible_by.type = 'user';

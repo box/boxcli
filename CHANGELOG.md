@@ -8,6 +8,7 @@
 - Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 - Add support for Box Sign API ([#258](https://github.com/box/boxcli/pull/258))
 - Add support Metadata Query API ([#259](https://github.com/box/boxcli/pull/259))
+- fix: folder:collaborations:add make role a required flag (SDK-1070) ([#261](https://github.com/box/boxcli/pull/261))
 
 ## 2.9.0 (2021-02-22)
 

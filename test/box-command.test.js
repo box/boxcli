@@ -60,6 +60,7 @@ describe('BoxCommand', () => {
 			.command([
 				'folders:collaborations:add',
 				'0',
+				'--previewer',
 				'--token=test',
 				'--save'
 			])

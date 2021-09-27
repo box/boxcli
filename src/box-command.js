@@ -353,6 +353,10 @@ class BoxCommand extends Command {
 				},
 			});
 
+			if (parsedData.length < 2) {
+				throw new Error('CSV input file should contain the headers row and at least on data row');
+			}
+
 			// @NOTE: We don't parse the CSV into an aray of Objects
 			// and instead mainatain a separate array of headers, in
 			// order to ensure that ordering is maintained in the keys
