@@ -42,6 +42,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login
 			},
+			role: 'previewer',
 			can_view_path: true
 		};
 		let addCollaborationBody2 = {
@@ -53,6 +54,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login: 'roger.federer@example.com'
 			},
+			role: 'previewer',
 			can_view_path: true
 		};
 		let addCollaborationBody3 = {
@@ -64,6 +66,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login: 'dominic.toretto@example.com'
 			},
+			role: 'previewer',
 			can_view_path: false
 		};
 
@@ -83,6 +86,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${inputFilePath}`,
 				'--json',
 				'--no-color',
@@ -109,6 +113,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${inputFilePath}`,
 				'--csv',
 				'--no-color',
@@ -135,6 +140,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${inputFilePath}`,
 				'--no-color',
 				'--token=test'
@@ -160,6 +166,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${inputFilePath}`,
 				`--save-to-file-path=${saveFilePath}`,
 				'-y',
@@ -192,6 +199,7 @@ describe('Bulk', () => {
 			.command([
 				'collaborations:add',
 				boxItemId,
+				'--previewer',
 				'--can-view-path',
 				`--login=${login}`,
 				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_key_casing.csv')}`,
@@ -334,6 +342,7 @@ describe('Bulk', () => {
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_bogus_keys.csv')}`,
 				'--json',
 				'--token=test'
@@ -359,7 +368,8 @@ describe('Bulk', () => {
 					accessible_by: {
 						type: 'user',
 						login: 'mario@example.com',
-					}
+					},
+					role: 'viewer',
 				})
 				.query({ fields: 'id' })
 				.reply(200, fakeCollab1)
@@ -371,7 +381,8 @@ describe('Bulk', () => {
 					accessible_by: {
 						type: 'user',
 						login: 'wario@example.com'
-					}
+					},
+					role: 'viewer',
 				})
 				.query({ fields: 'id' })
 				.reply(409, {
@@ -398,7 +409,8 @@ describe('Bulk', () => {
 					accessible_by: {
 						type: 'user',
 						login: 'peach@example.com'
-					}
+					},
+					role: 'viewer',
 				})
 				.query({ fields: 'id' })
 				.reply(200, fakeCollab2)
@@ -407,6 +419,7 @@ describe('Bulk', () => {
 			.stderr()
 			.command([
 				'folders:collaborations:add',
+				'--viewer',
 				`--bulk-file-path=${folderCollabInput}`,
 				'--json',
 				'--fields=id',
@@ -431,6 +444,52 @@ describe('Bulk', () => {
 				assert.equal(ctx.stdout, expectedOutput + os.EOL);
 				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
+
+		test
+			.stdout()
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				'12345',
+				`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header.csv')}`,
+				'--json',
+				'--fields=id',
+				'--no-color',
+				'--token=test'
+			])
+			.it('should report errors on missing headers', ctx => {
+				assert.equal(ctx.stderr, `CSV input file should contain the headers row and at least on data row${os.EOL}`);
+			});
+
+		test
+			.stdout()
+			.stderr()
+			.command([
+				'folders:collaborations:add',
+				'12345',
+				`--bulk-file-path=${path.join(__dirname, '..', 'fixtures/bulk/folder_collab_input_no_header_multiple.csv')}`,
+				'--json',
+				'--fields=id',
+				'--no-color',
+				'--token=test'
+			])
+			.it('should report errors on missing headers if specified multiple rows', ctx => {
+				let expectedErrorOutput = `2 entries failed!${os.EOL}`;
+				expectedErrorOutput += `----------${os.EOL}`;
+				expectedErrorOutput += `Entry 1 (${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `) failed with error:${os.EOL}`;
+				expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `----------${os.EOL}`;
+				expectedErrorOutput += `Entry 2 (${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+				expectedErrorOutput += `) failed with error:${os.EOL}`;
+				expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
+				expectedErrorOutput += os.EOL;
+
+				assert.equal(ctx.stderr, expectedErrorOutput);
+			});
 	});
 
 	describe('JSON Input', () => {
@@ -452,6 +511,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login
 			},
+			role: 'previewer',
 			can_view_path: true
 		};
 		let addCollaborationBody2 = {
@@ -463,6 +523,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login: 'roger.federer@example.com'
 			},
+			role: 'previewer',
 			can_view_path: true
 		};
 		let addCollaborationBody3 = {
@@ -474,6 +535,7 @@ describe('Bulk', () => {
 				type: 'user',
 				login: 'dominic.toretto@example.com'
 			},
+			role: 'previewer',
 			can_view_path: false
 		};
 
@@ -493,6 +555,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${entriesInputFilePath}`,
 				'--json',
 				'--no-color',
@@ -519,6 +582,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${bareArrayInputFilePath}`,
 				'--json',
 				'--no-color',
@@ -616,6 +680,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${entriesInputFilePath}`,
 				`--save-to-file-path=${saveFilePath}`,
 				'-y',
@@ -655,6 +720,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${entriesInputFilePath}`,
 				`--save-to-file-path=${saveFilePath}`,
 				'--json',
@@ -694,6 +760,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${entriesInputFilePath}`,
 				`--save-to-file-path=${path.dirname(saveFilePath)}`,
 				'-y',
@@ -730,6 +797,7 @@ describe('Bulk', () => {
 				boxItemId,
 				'--can-view-path',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_key_casing.json')}`,
 				'--json',
 				'--token=test'
@@ -809,6 +877,7 @@ describe('Bulk', () => {
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_nested_keys.json')}`,
 				'--json',
 				'--token=test'
@@ -825,6 +894,7 @@ describe('Bulk', () => {
 			.command([
 				'collaborations:add',
 				`--login=${login}`,
+				'--previewer',
 				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_bogus_keys.json')}`,
 				'--json',
 				'--token=test'
