@@ -78,7 +78,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box shared-links:delete folder 22222
+  box shared-links:delete 22222 folder
 ```
 
 _See code: [src/commands/shared-links/delete.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/shared-links/delete.js)_
