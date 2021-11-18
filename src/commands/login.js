@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
-const BoxCommand = require("../box-command");
-const { flags } = require("@oclif/command");
-const fs = require("fs");
-const BoxSDK = require("box-node-sdk");
-const BoxCLIError = require("../cli-error");
-const CLITokenCache = require("../token-cache");
-const chalk = require("chalk");
-const utils = require("../util");
-const open = require("open");
-const express = require("express");
-const inquirer = require("inquirer");
+const BoxCommand = require('../box-command');
+const { flags } = require('@oclif/command');
+const fs = require('fs');
+const BoxSDK = require('box-node-sdk');
+const BoxCLIError = require('../cli-error');
+const CLITokenCache = require('../token-cache');
+const chalk = require('chalk');
+const utils = require('../util');
+const open = require('open');
+const express = require('express');
+const inquirer = require('inquirer');
 const path = require('path');
 
 class OAuthLoginCommand extends BoxCommand {
@@ -19,18 +19,18 @@ class OAuthLoginCommand extends BoxCommand {
 		let environmentsObj = this.getEnvironments();
 		let answers = await inquirer.prompt([
 			{
-				type: "input",
-				name: "clientID",
-				message: "What is your client ID?",
+				type: 'input',
+				name: 'clientID',
+				message: 'What is your client ID?',
 			},
 			{
-				type: "input",
-				name: "clientSecret",
-				message: "What is your client secret?",
+				type: 'input',
+				name: 'clientSecret',
+				message: 'What is your client secret?',
 			},
 		]);
 
-		let environmentName = "oauth";
+		let environmentName = 'oauth';
 		let newEnvironment = {
 			clientId: answers.clientID,
 			clientSecret: answers.clientSecret,
@@ -44,7 +44,7 @@ class OAuthLoginCommand extends BoxCommand {
 		});
 
 		let app = express();
-		app.get("/callback", async (req, res) => {
+		app.get('/callback', async (req, res) => {
 			// Will print the OAuth auth code
 			try {
 				let tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
@@ -64,12 +64,12 @@ class OAuthLoginCommand extends BoxCommand {
 				environmentsObj.environments[environmentName] = newEnvironment;
 				environmentsObj.default = environmentName;
 				this.updateEnvironments(environmentsObj);
-        let client = sdk.getPersistentClient(tokenInfo, tokenCache);
-				let user = await client.users.get("me");
-        let user_login = user.login;
+				let client = sdk.getPersistentClient(tokenInfo, tokenCache);
+				let user = await client.users.get('me');
+				let user_login = user.login;
 				let callbackHtmlPath = path.resolve(__dirname, '../logged-in.html');
-        let html = fs.readFileSync(callbackHtmlPath, 'utf8');
-        html = html.replace("example@box.com", user.login);
+				let html = fs.readFileSync(callbackHtmlPath, 'utf8');
+				html = html.replace('example@box.com', user.login);
 				res.send(html);
 				this.info(chalk`{green Successfully logged in as ${user_login}!}`);
 				app.close();
@@ -81,7 +81,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		// the URL to redirect the user to
 		var authorize_url = sdk.getAuthorizeURL({
-			response_type: "code",
+			response_type: 'code',
 		});
 
 		open(authorize_url);
@@ -92,7 +92,7 @@ class OAuthLoginCommand extends BoxCommand {
 OAuthLoginCommand.noClient = true;
 
 OAuthLoginCommand.description =
-	"Sign in with OAuth and set as default environment";
+	'Sign in with OAuth and set as default environment';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
