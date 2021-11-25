@@ -7,17 +7,26 @@ const BoxSDK = require('box-node-sdk');
 const BoxCLIError = require('../cli-error');
 const CLITokenCache = require('../token-cache');
 const chalk = require('chalk');
-const utils = require('../util');
 const open = require('open');
 const express = require('express');
 const inquirer = require('inquirer');
 const path = require('path');
+const ora = require('ora');
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(OAuthLoginCommand);
-		let environmentsObj = this.getEnvironments();
-		let answers = await inquirer.prompt([
+		const { flags } = this.parse(OAuthLoginCommand);
+		const environmentsObj = this.getEnvironments();
+		const port = flags.port;
+
+		this.info(chalk`{yellow {bold Prerequisites:}}`);
+		this.info(
+			chalk`{yellow 1. Go to Developer Console (https://app.box.com/developers/console)\n   and create a custom app with OAuth authentication method.}`
+		);
+		this.info(
+			chalk`{yellow 2. Click on Configuration tab and set the OAuth Redirect URI to:\n   http://localhost:${port}/callback}`
+		);
+		const answers = await inquirer.prompt([
 			{
 				type: 'input',
 				name: 'clientID',
@@ -30,28 +39,28 @@ class OAuthLoginCommand extends BoxCommand {
 			},
 		]);
 
-		let environmentName = 'oauth';
-		let newEnvironment = {
+		const environmentName = flags.name;
+		const newEnvironment = {
 			clientId: answers.clientID,
 			clientSecret: answers.clientSecret,
 			name: environmentName,
 			cacheTokens: true,
 		};
 
-		let sdk = new BoxSDK({
+		const sdk = new BoxSDK({
 			clientID: answers.clientID,
 			clientSecret: answers.clientSecret,
 		});
 
-		let app = express();
+		const app = express();
+		let server;
 		app.get('/callback', async (req, res) => {
-			// Will print the OAuth auth code
 			try {
-				let tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
+				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
 					req.query.code,
 					null
 				);
-				let tokenCache = new CLITokenCache(environmentName);
+				const tokenCache = new CLITokenCache(environmentName);
 				await new Promise((resolve, reject) => {
 					tokenCache.write(tokenInfo, (error) => {
 						if (error) {
@@ -64,23 +73,38 @@ class OAuthLoginCommand extends BoxCommand {
 				environmentsObj.environments[environmentName] = newEnvironment;
 				environmentsObj.default = environmentName;
 				this.updateEnvironments(environmentsObj);
-				let client = sdk.getPersistentClient(tokenInfo, tokenCache);
-				let user = await client.users.get('me');
-				let user_login = user.login;
-				let callbackHtmlPath = path.resolve(__dirname, '../logged-in.html');
+
+				const client = sdk.getPersistentClient(tokenInfo, tokenCache);
+				const user = await client.users.get('me');
+
+				const callbackHtmlPath = path.resolve(__dirname, '../logged-in.html');
+
 				let html = fs.readFileSync(callbackHtmlPath, 'utf8');
 				html = html.replace('example@box.com', user.login);
 				res.send(html);
-				this.info(chalk`{green Successfully logged in as ${user_login}!}`);
-				app.close();
+
+				this.info(chalk`{green Successfully logged in as ${user.login}!}`);
+				this.info(
+					chalk`{green New environment "${environmentName}" has been created and selected.}`
+				);
 			} catch (err) {
 				throw new BoxCLIError(err);
+			} finally {
+				server.close();
 			}
 		});
-		app = app.listen(3000);
+		server = app.listen(port);
+
+		let spinner = ora({
+			text: chalk`{bgCyan Opening browser for OAuth. Please click {bold Grant access to Box} to continue.}`,
+			spinner: 'bouncingBall',
+		}).start();
+
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		spinner.succeed();
 
 		// the URL to redirect the user to
-		var authorize_url = sdk.getAuthorizeURL({
+		const authorize_url = sdk.getAuthorizeURL({
 			response_type: 'code',
 		});
 
@@ -91,20 +115,20 @@ class OAuthLoginCommand extends BoxCommand {
 // @NOTE: This command MUST skip client setup, since it is used to add the first environment
 OAuthLoginCommand.noClient = true;
 
-OAuthLoginCommand.description =
-	'Sign in with OAuth and set as default environment';
+OAuthLoginCommand.description = 'Sign in with OAuth and set a new environment';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
+	name: flags.string({
+		char: 'n',
+		description: 'Set a name for the environment',
+		default: 'oauth',
+	}),
+	port: flags.integer({
+		char: 'p',
+		description: 'Set the port number for the local OAuth callback server',
+		default: 3000,
+	}),
 };
-
-// OAuthLoginCommand.args = [
-// 	{
-// 		name: 'path',
-// 		required: true,
-// 		hidden: false,
-// 		description: 'Provide a file path to configuration file'
-// 	}
-// ];
 
 module.exports = OAuthLoginCommand;
