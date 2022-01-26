@@ -490,6 +490,44 @@ describe('Bulk', () => {
 
 				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/collaborations', addCollaborationBody1)
+				.matchHeader('As-User', '12345')
+				.reply(200, addCollaborationFixture1)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'collaborations:add',
+				`--login=${login}`,
+				'--previewer',
+				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_asuser_flag_single.csv')}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should map As-User header from the bulk file');
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/collaborations', addCollaborationBody1)
+				.matchHeader('As-User', '12345')
+				.reply(200, addCollaborationFixture1)
+				.post('/2.0/collaborations', addCollaborationBody1)
+				.matchHeader('As-User', '')
+				.reply(200, addCollaborationFixture1)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'collaborations:add',
+				`--login=${login}`,
+				'--previewer',
+				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_asuser_flag_multiple.csv')}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should send empty As-User header when not present in the bulk file');
 	});
 
 	describe('JSON Input', () => {
