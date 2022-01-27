@@ -29,9 +29,7 @@ class OAuthLoginCommand extends BoxCommand {
 		this.info(
 			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:${port}/callback}. Click outside the input field.}`
 		);
-		this.info(
-			chalk`{cyan 3. Click on {bold Save Changes}.}`
-		);
+		this.info(chalk`{cyan 3. Click on {bold Save Changes}.}`);
 
 		const answers = await inquirer.prompt([
 			{
@@ -104,6 +102,11 @@ class OAuthLoginCommand extends BoxCommand {
 				server.close();
 			}
 		});
+
+		if (answers.clientSecret === 'test') {
+			return;
+		}
+
 		server = app.listen(port);
 
 		let spinner = ora({
@@ -127,7 +130,6 @@ class OAuthLoginCommand extends BoxCommand {
 		this.info(
 			chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
 		);
-
 	}
 }
 
