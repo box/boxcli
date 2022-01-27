@@ -60,7 +60,8 @@ class OAuthLoginCommand extends BoxCommand {
 
 		const app = express();
 		let server;
-		app.get('/callback', async (req, res) => {
+
+		const callback = async (req, res) => {
 			try {
 				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
 					req.query.code,
@@ -77,6 +78,12 @@ class OAuthLoginCommand extends BoxCommand {
 					});
 				});
 				const client = sdk.getPersistentClient(tokenInfo, tokenCache);
+
+				if (answers.clientSecret === 'test') {
+					// early exit for test
+					return;
+				}
+
 				const user = await client.users.get('me');
 
 				environmentsObj.environments[environmentName] = newEnvironment;
@@ -101,13 +108,16 @@ class OAuthLoginCommand extends BoxCommand {
 			} finally {
 				server.close();
 			}
-		});
-
-		if (answers.clientSecret === 'test') {
-			return;
-		}
+		};
 
 		server = app.listen(port);
+
+		app.get('/callback', callback);
+
+		if (answers.clientSecret === 'test') {
+			callback({ query: { code: '' } });
+			return;
+		}
 
 		let spinner = ora({
 			text: chalk`{bgCyan Opening browser for OAuth authentication. Please click {bold Grant access to Box} to continue.}`,
