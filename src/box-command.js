@@ -522,30 +522,34 @@ class BoxCommand extends Command {
 			}
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
-		} else if (environmentsObj.default && environmentsObj.default == 'oauth') {
-			let environment = environmentsObj.environments[environmentsObj.default];
-			DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
-			let tokenCache = new CLITokenCache(environmentsObj.default);
+		} else if (environmentsObj.default && environmentsObj.environments[environmentsObj.default].authMethod == 'oauth20') {
+			try {
+				let environment = environmentsObj.environments[environmentsObj.default];
+				DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
+				let tokenCache = new CLITokenCache(environmentsObj.default);
 
-			let sdk = new BoxSDK({
-				clientID: environment.clientId,
-				clientSecret: environment.clientSecret,
-				...SDK_CONFIG,
-			});
-			if (this.settings.enableProxy) {
-				sdk.configure({ proxy: this.settings.proxy });
-			}
-			this.sdk = sdk;
-			let tokenInfo = await new Promise((resolve, reject) => {
-				tokenCache.read((error, tokenInfo) => {
-					if (error) {
-						reject(error);
-					} else {
-						resolve(tokenInfo);
-					}
+				let sdk = new BoxSDK({
+					clientID: environment.clientId,
+					clientSecret: environment.clientSecret,
+					...SDK_CONFIG,
 				});
-			  });
-			client = sdk.getPersistentClient(tokenInfo, tokenCache);
+				if (this.settings.enableProxy) {
+					sdk.configure({ proxy: this.settings.proxy });
+				}
+				this.sdk = sdk;
+				let tokenInfo = await new Promise((resolve, reject) => {
+					tokenCache.read((error, tokenInfo) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve(tokenInfo);
+						}
+					});
+				});
+				client = sdk.getPersistentClient(tokenInfo, tokenCache);
+			} catch (err) {
+				throw new BoxCLIError(`Can't load the default OAuth environment "${environmentsObj.default}". Please login again or provide a token.`);
+			}
 		} else if (environmentsObj.default) {
 			let environment = environmentsObj.environments[environmentsObj.default];
 			DEBUG.init('Using environment %s %O', environmentsObj.default, environment);

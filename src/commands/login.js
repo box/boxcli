@@ -19,7 +19,6 @@ class OAuthLoginCommand extends BoxCommand {
 		const environmentsObj = this.getEnvironments();
 		const port = flags.port;
 
-		this.info(chalk`{cyan {bold Prerequisites:}}`);
 		this.info(
 			chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
 		);
@@ -28,7 +27,10 @@ class OAuthLoginCommand extends BoxCommand {
 			chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
 		);
 		this.info(
-			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:3000/callback}}`
+			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:${port}/callback}. Click outside the input field.}`
+		);
+		this.info(
+			chalk`{cyan 3. Click on {bold Save Changes}.}`
 		);
 
 		const answers = await inquirer.prompt([
@@ -50,6 +52,7 @@ class OAuthLoginCommand extends BoxCommand {
 			clientSecret: answers.clientSecret,
 			name: environmentName,
 			cacheTokens: true,
+			authMethod: 'oauth20',
 		};
 
 		const sdk = new BoxSDK({
@@ -75,12 +78,12 @@ class OAuthLoginCommand extends BoxCommand {
 						}
 					});
 				});
+				const client = sdk.getPersistentClient(tokenInfo, tokenCache);
+				const user = await client.users.get('me');
+
 				environmentsObj.environments[environmentName] = newEnvironment;
 				environmentsObj.default = environmentName;
 				this.updateEnvironments(environmentsObj);
-
-				const client = sdk.getPersistentClient(tokenInfo, tokenCache);
-				const user = await client.users.get('me');
 
 				const callbackHtmlPath = path.resolve(__dirname, '../logged-in.html');
 
@@ -88,7 +91,7 @@ class OAuthLoginCommand extends BoxCommand {
 				html = html.replace('example@box.com', user.login);
 				res.send(html);
 
-				this.info(chalk`{green  Successfully logged in as ${user.login}!}`);
+				this.info(chalk`{green Successfully logged in as ${user.login}!}`);
 				this.info(
 					chalk`{green New environment "${environmentName}" has been created and selected.}`
 				);
@@ -109,6 +112,7 @@ class OAuthLoginCommand extends BoxCommand {
 		}).start();
 
 		await new Promise((resolve) => setTimeout(resolve, 1000));
+
 		spinner.succeed();
 
 		// the URL to redirect the user to
@@ -117,6 +121,13 @@ class OAuthLoginCommand extends BoxCommand {
 		});
 
 		open(authorize_url);
+
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+
+		this.info(
+			chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
+		);
+
 	}
 }
 
