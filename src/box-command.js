@@ -424,6 +424,30 @@ class BoxCommand extends Command {
 				.filter(o => o.type === 'flag' && o.fieldKey !== 'bulk-file-path')
 				.forEach(o => this._addFlagToArgv(o.fieldKey, o.value));
 
+			// Set as-user header from the bulk file or use the default one.
+			let asUser = bulkData.find(o => o.fieldKey === 'as-user') || {};
+			if (!_.isEmpty(asUser)){
+				if (_.isNil(asUser.value)) {
+					let environmentsObj = this.getEnvironments();
+					if (environmentsObj.default) {
+						let environment = environmentsObj.environments[environmentsObj.default];
+						DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
+						if (environment.useDefaultAsUser) {
+							this.client.asUser(environment.defaultAsUserId);
+							DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
+						} else {
+							this.client.asSelf()
+						}
+					}
+					else {
+						this.client.asSelf()
+					}
+				} else {
+					this.client.asUser(asUser.value);
+					DEBUG.init('Impersonating user ID %s', asUser.value);
+				}
+			}
+			
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
 			/* eslint-disable no-await-in-loop */
@@ -555,11 +579,6 @@ class BoxCommand extends Command {
 				client.asUser(environment.defaultAsUserId);
 				DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
 			}
-
-			if (this.flags['as-user']) {
-				client.asUser(this.flags['as-user']);
-				DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
-			}
 		} else {
 			// No environments set up yet!
 			throw new BoxCLIError(`No default environment found.
@@ -567,6 +586,11 @@ class BoxCommand extends Command {
 				See this command for help adding an environment: box configure:environments:add --help
 				Or, supply a token with your command with --token.`.replace(/^\s+/umg, ''));
 		}
+		if (this.flags['as-user']) {
+			client.asUser(this.flags['as-user']);
+			DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
+		}
+
 		return client;
 	}
 
