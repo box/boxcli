@@ -429,11 +429,17 @@ class BoxCommand extends Command {
 			if (!_.isEmpty(asUser)){
 				if (_.isNil(asUser.value)) {
 					let environmentsObj = this.getEnvironments();
-					let environment = environmentsObj.environments[environmentsObj.default];
-					if (environment.useDefaultAsUser) {
-						this.client.asUser(environment.defaultAsUserId);
-						DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
-					} else {
+					if (environmentsObj.default) {
+						let environment = environmentsObj.environments[environmentsObj.default];
+						DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
+						if (environment.useDefaultAsUser) {
+							this.client.asUser(environment.defaultAsUserId);
+							DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
+						} else {
+							this.client.asSelf()
+						}
+					}
+					else {
 						this.client.asSelf()
 					}
 				} else {
