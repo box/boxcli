@@ -53,10 +53,7 @@ OPTIONS
   --json                                         Output formatted JSON
 
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
-                                                 <scope>.<templateKey>.<field><op><value>
-                                                 <op> is either = for strings or <,=,> for numbers and dates
-                                                 When providing numeric value, follow it with "f"
-                                                 eg. enterprise.employeeRecord.joinedYear=2021f
+                                                 <scope>.<templateKey>.<field>=<value>
 
   --no-color                                     Turn off colors for logging
 
@@ -88,4 +85,4 @@ EXAMPLES
   box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/search.js)_

@@ -20,4 +20,4 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/oss.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/oss.js)_
+_See code: [src/commands/oss.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/oss.js)_

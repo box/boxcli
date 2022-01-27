@@ -1,16 +1,21 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const BoxCLIError = require('../../../cli-error');
 const inquirer = require('inquirer');
 
 class EnvironmentsDeleteCommand extends BoxCommand {
-	run() {
+	async run() {
 		const { flags, args } = this.parse(EnvironmentsDeleteCommand);
 		let environmentsObj = this.getEnvironments();
 		let name = args.name;
 
 		if (!name) {
-			let answers = inquirer.prompt([
+			const choices = Object.keys(environmentsObj.environments);
+			if (choices.length === 0) {
+				throw new BoxCLIError('No environments to delete');
+			}
+			let answers = await inquirer.prompt([
 				{
 					type: 'list',
 					name: 'environment',

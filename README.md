@@ -105,6 +105,7 @@ Command Topics
 * [`box groups`](docs/groups.md) - List all groups
 * [`box help`](docs/help.md) - Display help for the Box CLI
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
+* [`box login`](docs/login.md) - Sign in with OAuth and set a new environment
 * [`box metadata-cascade-policies`](docs/metadata-cascade-policies.md) - List the metadata cascade policies on a folder
 * [`box metadata-query`](docs/metadata-query.md) - Create a search using SQL-like syntax to return items that match specific metadata
 * [`box metadata-templates`](docs/metadata-templates.md) - Get all metadata templates in your Enterprise
@@ -114,7 +115,7 @@ Command Topics
 * [`box retention-policies`](docs/retention-policies.md) - List all retention policies for your enterprise
 * [`box search`](docs/search.md) - Search for files and folders in your Enterprise
 * [`box shared-links`](docs/shared-links.md) - Manage shared links
-* [`box sign-requests`](docs/sign-requests.md) - Manage sign requests
+* [`box sign-requests`](docs/sign-requests.md) - List sign requests
 * [`box storage-policies`](docs/storage-policies.md) - List storage policies
 * [`box tasks`](docs/tasks.md) - Manage tasks
 * [`box terms-of-service`](docs/terms-of-service.md) - List terms of services for your enterprise

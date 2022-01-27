@@ -8,10 +8,10 @@ List all retention policies for your enterprise
 * [`box retention-policies:assignments ID`](#box-retention-policiesassignments-id)
 * [`box retention-policies:assignments:get ID`](#box-retention-policiesassignmentsget-id)
 * [`box retention-policies:create POLICYNAME`](#box-retention-policiescreate-policyname)
-* [`box retention-policies:files-under-retention:get ID`](#box-retention-policiesfile-retentionsget-id)
 * [`box retention-policies:file-version-retentions`](#box-retention-policiesfile-version-retentions)
 * [`box retention-policies:file-version-retentions:get ID`](#box-retention-policiesfile-version-retentionsget-id)
-* [`box retention-policies:file-versions-under-retention:get ID`](#box-retention-policiesfile-version-retentionsget-for-assignment-id)
+* [`box retention-policies:file-versions-under-retention:get ID`](#box-retention-policiesfile-versions-under-retentionget-id)
+* [`box retention-policies:files-under-retention:get ID`](#box-retention-policiesfiles-under-retentionget-id)
 * [`box retention-policies:get ID`](#box-retention-policiesget-id)
 * [`box retention-policies:update ID`](#box-retention-policiesupdate-id)
 
@@ -45,7 +45,7 @@ EXAMPLE
   box retention-policies
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -87,7 +87,7 @@ EXAMPLE
   box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -120,7 +120,7 @@ EXAMPLE
   box retention-policies:assignments 12345
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -152,7 +152,7 @@ EXAMPLE
   box retention-policies:assignments:get 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -207,39 +207,7 @@ EXAMPLE
   box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action permanently_delete
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/create.js)_
-
-## `box retention-policies:files-under-retention:get ID`
-
-Get information about files under retention for assignment
-
-```
-USAGE
-  $ box retention-policies:files-under-retention:get ID
-
-ARGUMENTS
-  ID  ID of the retention policy assignment
-
-OPTIONS
-  -h, --help                             Show CLI help
-  -q, --quiet                            Suppress any non-error output to stderr
-  -s, --save                             Save report to default reports folder on disk
-  -t, --token=token                      Provide a token to perform this call
-  -v, --verbose                          Show verbose output, which can be helpful for debugging
-  -y, --yes                              Automatically respond yes to all confirmation prompts
-  --as-user=as-user                      Provide an ID for a user
-  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
-  --csv                                  Output formatted CSV
-  --fields=fields                        Comma separated list of fields to show
-  --json                                 Output formatted JSON
-  --no-color                             Turn off colors for logging
-  --save-to-file-path=save-to-file-path  Override default file path to save report
-
-EXAMPLE
-  box retention-policies:files-under-retention:get 77777
-```
-
-_See code: [src/commands/retention-policies/file-retentions/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-retentions/get.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -285,7 +253,7 @@ EXAMPLE
   box retention-policies:file-version-retentions
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -317,7 +285,7 @@ EXAMPLE
   box retention-policies:file-version-retentions:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:file-versions-under-retention:get ID`
 
@@ -349,7 +317,39 @@ EXAMPLE
   box retention-policies:file-versions-under-retention:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get-for-assignment.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/file-version-retentions/get-for-assignment.js)_
+_See code: [src/commands/retention-policies/file-versions-under-retention/get.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/file-versions-under-retention/get.js)_
+
+## `box retention-policies:files-under-retention:get ID`
+
+Get information about files under retention for assignment
+
+```
+USAGE
+  $ box retention-policies:files-under-retention:get ID
+
+ARGUMENTS
+  ID  ID of the retention policy assignment
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+EXAMPLE
+  box retention-policies:files-under-retention:get 77777
+```
+
+_See code: [src/commands/retention-policies/files-under-retention/get.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/files-under-retention/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -381,7 +381,7 @@ EXAMPLE
   box retention-policies:get 12345
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -439,4 +439,4 @@ EXAMPLE
   box retention-policies:update 12345
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v2.9.0/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v3.0.0/src/commands/retention-policies/update.js)_
