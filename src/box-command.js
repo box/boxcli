@@ -427,18 +427,18 @@ class BoxCommand extends Command {
 			// Set as-user header from the bulk file or use the default one.
 			let asUser = bulkData.find(o => o.fieldKey === 'as-user') || {};
 			if (!_.isEmpty(asUser)){
-				if (!_.isNil(asUser.value)) {
-					this.client.asUser(asUser.value);
-					DEBUG.init('Impersonating user ID %s', asUser.value);
-				} else {
+				if (_.isNil(asUser.value)) {
 					let environmentsObj = this.getEnvironments();
 					let environment = environmentsObj.environments[environmentsObj.default];
 					if (environment.useDefaultAsUser) {
-						client.asUser(environment.defaultAsUserId);
+						this.client.asUser(environment.defaultAsUserId);
 						DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
 					} else {
 						this.client.asSelf()
 					}
+				} else {
+					this.client.asUser(asUser.value);
+					DEBUG.init('Impersonating user ID %s', asUser.value);
 				}
 			}
 			
