@@ -25,7 +25,7 @@ class OAuthLoginCommand extends BoxCommand {
 		);
 
 		this.info(
-			chalk`{cyan 1. Create a custom application with OAuth authentication method.}`
+			chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
 		);
 		this.info(
 			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:3000/callback}}`
@@ -35,12 +35,12 @@ class OAuthLoginCommand extends BoxCommand {
 			{
 				type: 'input',
 				name: 'clientID',
-				message: 'What is the client ID of your application?',
+				message: 'What is the OAuth Client ID of your application?',
 			},
 			{
 				type: 'input',
 				name: 'clientSecret',
-				message: 'What is the client secret of your application?',
+				message: 'What is the OAuth Client Secret of your application?',
 			},
 		]);
 
