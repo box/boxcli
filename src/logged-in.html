@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        html {
+            margin: 0;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            height: 100%;
+        }
+
+        .dot {
+            height: 7px;
+            width: 7px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin-left: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dot-close {
+            background-color: #FE554F;
+        }
+
+        .dot-minimize {
+            background-color: #FEB728;
+        }
+
+        .dot-expand {
+            background-color: #29BD36;
+        }
+
+        .title-bar {
+            display: flex;
+            height: 15px;
+            width: 50%;
+            min-width: 500px;
+            max-width: 600px;
+            /* background-color: #233659; */
+            position: relative;
+            justify-content: space-between;
+            background-color: #000000;
+            border-radius: 10px 10px 0 0;
+            align-items: center;
+        }
+
+        .terminal {
+            border-radius: 0 0 10px 10px;
+            height: 33%;
+            width: 50%;
+            min-width: 500px;
+            max-width: 600px;
+            background-color: black;
+            -webkit-box-shadow: 0px -17px 30px 2px #ADADAD, 0px 0px 30px 2px #ADADAD;
+            -moz-box-shadow: 0px -17px 30px 2px #ADADAD, 0px 0px 30px 2px #ADADAD;
+            box-shadow: 0px -17px 30px 2px #ADADAD, 0px 0px 30px 2px #ADADAD;
+        }
+
+        .message {
+            color: white;
+            z-index: 10;
+            padding: 10px;
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+            font-size: 15px;
+        }
+
+        .green {
+            color: #4AF626;
+        }
+
+        .css-typing p {
+            border-right: .15em solid #4AF626;
+            font-family: "Courier";
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: white;
+            margin: 10px;
+        }
+
+        .css-typing p:nth-child(1) {
+            width: 30em;
+            opacity: 0;
+            -webkit-animation: type 2s steps(60, end), blink .5s step-end alternate;
+            animation: type 2s steps(60, end), blink .5s step-end alternate;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+
+        .css-typing p:nth-child(2) {
+            width: 29.5em;
+            opacity: 0;
+            -webkit-animation: type2 2s steps(60, end), blink .5s step-end infinite alternate;
+            animation: type2 2s steps(60, end), blink .5s step-end infinite alternate;
+            -webkit-animation-delay: 2s;
+            animation-delay: 2s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+
+
+        @keyframes type {
+            0% {
+                width: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            99.9% {
+                border-right: .15em solid #4AF626;
+            }
+
+            100% {
+                opacity: 1;
+                border: none;
+            }
+        }
+
+        @-webkit-keyframes type {
+            0% {
+                width: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            99.9% {
+                border-right: .15em solid #4AF626;
+            }
+
+            100% {
+                opacity: 1;
+                border: none;
+            }
+        }
+
+        @keyframes type2 {
+            0% {
+                width: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes type2 {
+            0% {
+                width: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        @-webkit-keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title-bar">
+        <div style="display: flex;">
+            <div class="dot dot-close"></div>
+            <div class="dot dot-minimize"></div>
+            <div class="dot dot-expand"></div>
+        </div>
+    </div>
+    <div class="terminal">
+        <div class="css-typing">
+            <p id="username">
+                <span class="green">$</span> You are logged in as <span class="green">example@box.com</span>!
+            </p>
+            <p>
+                <span class="green">$</span> You can close this page and return to your CLI.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

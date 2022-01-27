@@ -1,3 +1,5 @@
+/* eslint-disable promise/avoid-new,class-methods-use-this */
+
 'use strict';
 
 const { Command, flags } = require('@oclif/command');
@@ -228,7 +230,7 @@ class BoxCommand extends Command {
 	 * Initialize before the command is run
 	 * @returns {void}
 	 */
-	init() {
+	async init() {
 		DEBUG.init('Initializing Box CLI');
 		let originalArgs, originalFlags;
 		if (this.argv.some(arg => arg.startsWith('--bulk-file-path'))
@@ -247,7 +249,7 @@ class BoxCommand extends Command {
 		this.flags = flags;
 		this.args = args;
 		this.settings = this._loadSettings();
-		this.client = this.getClient();
+		this.client = await this.getClient();
 
 		if (this.isBulk) {
 			this.constructor.args = originalArgs;
@@ -426,7 +428,7 @@ class BoxCommand extends Command {
 
 			// Set as-user header from the bulk file or use the default one.
 			let asUser = bulkData.find(o => o.fieldKey === 'as-user') || {};
-			if (!_.isEmpty(asUser)){
+			if (!_.isEmpty(asUser)) {
 				if (_.isNil(asUser.value)) {
 					let environmentsObj = this.getEnvironments();
 					if (environmentsObj.default) {
@@ -436,18 +438,17 @@ class BoxCommand extends Command {
 							this.client.asUser(environment.defaultAsUserId);
 							DEBUG.init('Impersonating default user ID %s', environment.defaultAsUserId);
 						} else {
-							this.client.asSelf()
+							this.client.asSelf();
 						}
-					}
-					else {
-						this.client.asSelf()
+					} else {
+						this.client.asSelf();
 					}
 				} else {
 					this.client.asUser(asUser.value);
 					DEBUG.init('Impersonating user ID %s', asUser.value);
 				}
 			}
-			
+
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
 			/* eslint-disable no-await-in-loop */
@@ -527,8 +528,8 @@ class BoxCommand extends Command {
 	 *
 	 * @returns {BoxClient} The client for making API calls in the command
 	 */
-	getClient() {
-		// Allow some commands (e.g. configure:environments:add) to skip client setup so they can run
+	async getClient() {
+		// Allow some commands (e.g. configure:environments:add, login) to skip client setup so they can run
 		if (this.constructor.noClient) {
 			return null;
 		}
@@ -546,6 +547,34 @@ class BoxCommand extends Command {
 			}
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
+		} else if (environmentsObj.default && environmentsObj.environments[environmentsObj.default].authMethod === 'oauth20') {
+			try {
+				let environment = environmentsObj.environments[environmentsObj.default];
+				DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
+				let tokenCache = new CLITokenCache(environmentsObj.default);
+
+				let sdk = new BoxSDK({
+					clientID: environment.clientId,
+					clientSecret: environment.clientSecret,
+					...SDK_CONFIG,
+				});
+				if (this.settings.enableProxy) {
+					sdk.configure({ proxy: this.settings.proxy });
+				}
+				this.sdk = sdk;
+				let tokenInfo = await new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
+					tokenCache.read((error, localTokenInfo) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve(localTokenInfo);
+						}
+					});
+				});
+				client = sdk.getPersistentClient(tokenInfo, tokenCache);
+			} catch (err) {
+				throw new BoxCLIError(`Can't load the default OAuth environment "${environmentsObj.default}". Please login again or provide a token.`);
+			}
 		} else if (environmentsObj.default) {
 			let environment = environmentsObj.environments[environmentsObj.default];
 			DEBUG.init('Using environment %s %O', environmentsObj.default, environment);
