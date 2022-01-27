@@ -1,14 +1,31 @@
 # Changelog
 
-## Next Release
+## 3.0.0 (2022-01-27)
+
+**Breaking Changes**
+
+- Drop support for Node 10
+- Insensitive language changes (#247, #252)
 
 **New Features and Enhancements**
 
+- Add support for login with OAuth ([#240](https://github.com/box/boxcli/pull/240))
+- feat: support as-user flag for bulk files and when token is present ([#270](https://github.com/box/boxcli/pull/270))
 - Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
 - Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 - Add support for Box Sign API ([#258](https://github.com/box/boxcli/pull/258))
 - Add support Metadata Query API ([#259](https://github.com/box/boxcli/pull/259))
 - fix: folder:collaborations:add make role a required flag (SDK-1070) ([#261](https://github.com/box/boxcli/pull/261))
+- Minor dependencies upgrade
+- Add new API for files and file versions under retention (#250)
+- Adding support for sign request (#258)
+- Support Metadata Query API (#259)
+- chore: enforce conventional commits (#268)
+- feat: support as-user flag for bulk files and when token is present (#270)
+
+**Bug Fixes:**
+- fix: folder:collaborations:add make role a required flag (#261)
+- fix: Fixed shared-links delete example. (#262)
 
 ## 2.9.0 (2021-02-22)
 
