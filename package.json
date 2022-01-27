@@ -40,7 +40,7 @@
 		"js-yaml": "^3.13.1",
 		"lodash": "^4.17.13",
 		"open": "^8.0.4",
-		"ora": "^3.0.0",
+		"ora": "^5.4.1",
 		"p-event": "^2.3.1"
 	},
 	"devDependencies": {

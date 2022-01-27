@@ -19,23 +19,28 @@ class OAuthLoginCommand extends BoxCommand {
 		const environmentsObj = this.getEnvironments();
 		const port = flags.port;
 
-		this.info(chalk`{yellow {bold Prerequisites:}}`);
+		this.info(chalk`{cyan {bold Prerequisites:}}`);
 		this.info(
-			chalk`{yellow 1. Go to Developer Console (https://app.box.com/developers/console)\n   and create a custom app with OAuth authentication method.}`
+			chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
+		);
+
+		this.info(
+			chalk`{cyan 1. Create a custom application with OAuth authentication method.}`
 		);
 		this.info(
-			chalk`{yellow 2. Click on Configuration tab and set the OAuth Redirect URI to:\n   http://localhost:${port}/callback}`
+			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:3000/callback}}`
 		);
+
 		const answers = await inquirer.prompt([
 			{
 				type: 'input',
 				name: 'clientID',
-				message: 'What is your client ID?',
+				message: 'What is the client ID of your application?',
 			},
 			{
 				type: 'input',
 				name: 'clientSecret',
-				message: 'What is your client secret?',
+				message: 'What is the client secret of your application?',
 			},
 		]);
 
@@ -83,9 +88,12 @@ class OAuthLoginCommand extends BoxCommand {
 				html = html.replace('example@box.com', user.login);
 				res.send(html);
 
-				this.info(chalk`{green Successfully logged in as ${user.login}!}`);
+				this.info(chalk`{green  Successfully logged in as ${user.login}!}`);
 				this.info(
 					chalk`{green New environment "${environmentName}" has been created and selected.}`
+				);
+				this.info(
+					chalk`{green You are set up to make your first API call. Refer to the CLI commands library (https://github.com/box/boxcli#command-topics) for examples.}`
 				);
 			} catch (err) {
 				throw new BoxCLIError(err);
@@ -96,7 +104,7 @@ class OAuthLoginCommand extends BoxCommand {
 		server = app.listen(port);
 
 		let spinner = ora({
-			text: chalk`{bgCyan Opening browser for OAuth. Please click {bold Grant access to Box} to continue.}`,
+			text: chalk`{bgCyan Opening browser for OAuth authentication. Please click {bold Grant access to Box} to continue.}`,
 			spinner: 'bouncingBall',
 		}).start();
 
