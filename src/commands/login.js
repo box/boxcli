@@ -1,3 +1,5 @@
+/* eslint-disable promise/avoid-new, no-sync */
+
 'use strict';
 
 const BoxCommand = require('../box-command');
@@ -63,7 +65,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		server = app.listen(port);
 
-		app.get('/callback', async (req, res) => {
+		app.get('/callback', async(req, res) => {
 			try {
 				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
 					req.query.code,
@@ -71,7 +73,7 @@ class OAuthLoginCommand extends BoxCommand {
 				);
 				const tokenCache = new CLITokenCache(environmentName);
 				await new Promise((resolve, reject) => {
-					tokenCache.write(tokenInfo, (error) => {
+					tokenCache.write(tokenInfo, error => {
 						if (error) {
 							reject(error);
 						} else {
@@ -112,18 +114,18 @@ class OAuthLoginCommand extends BoxCommand {
 			spinner: 'bouncingBall',
 		}).start();
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		await new Promise(resolve => setTimeout(resolve, 1000));
 
 		spinner.succeed();
 
 		// the URL to redirect the user to
-		const authorize_url = sdk.getAuthorizeURL({
+		const authorizeUrl = sdk.getAuthorizeURL({
 			response_type: 'code',
 		});
 
-		open(authorize_url);
+		open(authorizeUrl);
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		await new Promise(resolve => setTimeout(resolve, 1000));
 
 		this.info(
 			chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
