@@ -426,7 +426,7 @@ class BoxCommand extends Command {
 
 			// Set as-user header from the bulk file or use the default one.
 			let asUser = bulkData.find(o => o.fieldKey === 'as-user') || {};
-			if (!_.isNil(asUser)){
+			if (!_.isEmpty(asUser)){
 				if (!_.isNil(asUser.value)) {
 					this.client.asUser(asUser.value);
 					DEBUG.init('Impersonating user ID %s', asUser.value);
