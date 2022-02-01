@@ -1032,7 +1032,7 @@ USAGE
 
 ARGUMENTS
   FILEID         ID of the file to get versions for
-  FILEVERSIONID  ID of the file version to delete
+  FILEVERSIONID  ID of the file version to promote
 
 OPTIONS
   -h, --help                             Show CLI help
