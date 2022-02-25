@@ -239,6 +239,7 @@ describe('Metadata Templates', () => {
 					...expectedBody,
 					templateKey,
 					hidden: true,
+					copyInstanceOnItemCopy: true,
 					fields: [
 						{
 							type: 'string',
