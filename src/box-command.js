@@ -858,6 +858,13 @@ class BoxCommand extends Command {
 		}
 	}
 
+	/**
+	 * Writes output to stderr — this should be used for informational output.  For example, a message
+	 * stating that an item has been deleted.
+	 *
+	 * @param {string} content The message to output
+	 * @returns {void}
+	 */
 	log(content) {
 		if (!this.flags.quiet) {
 			super.log(content);
