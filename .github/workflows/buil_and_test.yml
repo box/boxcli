@@ -29,11 +29,13 @@ jobs:
         run: npm install
       - name: Build and test
         run: npm test
+      - name: Check coveralls
+          run: coverage/lcov.info
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-#          flag-name: run-${{ matrix.node }}
+          flag-name: run-node-${{ matrix.node }}
 #          parallel: true
 #  finish:
 #    needs: build-and-test
