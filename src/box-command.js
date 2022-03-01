@@ -815,7 +815,7 @@ class BoxCommand extends Command {
 			this.info(chalk`{green Output written to ${savePath}}`);
 		} else {
 			DEBUG.output('Writing output to terminal');
-			this.log(outputContent);
+			this.info(outputContent);
 		}
 
 		DEBUG.output('Finished writing output');
@@ -856,6 +856,17 @@ class BoxCommand extends Command {
 		if (!this.flags.quiet) {
 			process.stderr.write(`${content}${os.EOL}`);
 		}
+	}
+
+	/**
+	 * Writes output to stderr — this should be used for informational output.  For example, a message
+	 * stating that an item has been deleted.
+	 *
+	 * @param {string} content The message to output
+	 * @returns {void}
+	 */
+	log(content) {
+		this.info(content);
 	}
 
 	/**
