@@ -48,6 +48,7 @@ const KEY_MAPPINGS = {
 	cacheTokens: 'Cache Tokens',
 	ip: 'IP',
 	operationParams: 'Operation Params',
+	copyInstanceOnItemCopy: 'Copy Instance On Item Copy'
 };
 
 const REQUIRED_FIELDS = [

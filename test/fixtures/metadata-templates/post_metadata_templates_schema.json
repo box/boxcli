@@ -5,6 +5,7 @@
     "scope": "enterprise_12345",
     "displayName": "New Metadata Template",
     "hidden": true,
+    "copyInstanceOnItemCopy": true,
     "fields": [
         {
             "id": "3c7ba014-e136-49e3-a0aa-f48588ddd223",
