@@ -30,7 +30,7 @@ jobs:
       - name: Build and test
         run: npm test
       - name: Check coveralls
-          run: coverage/lcov.info
+        run: cat coverage/lcov.info
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
@@ -46,3 +46,4 @@ jobs:
 #        with:
 #          github-token: ${{ secrets.GITHUB_TOKEN }}
 #          parallel-finished: true
+# after_script: "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
