@@ -2,6 +2,8 @@ Box CLI
 =======
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
+[![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
+
 
 A command line interface to the [Box Content API](https://developers.box.com/docs/).
 
