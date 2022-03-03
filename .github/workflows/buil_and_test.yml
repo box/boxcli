@@ -1,7 +1,7 @@
 name: build-main
 on:
   pull_request_target:
-    types: [ opened, synchronize, edited ]
+    types: [ opened, synchronize ]
     branches:
       - main
   push:
@@ -26,8 +26,6 @@ jobs:
         run: npm install
       - name: Build and test
         run: npm test
-      - name: Check coveralls
-        run: cat coverage/lcov.info
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
