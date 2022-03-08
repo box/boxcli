@@ -540,6 +540,23 @@ describe('Users', () => {
 				.it('should move a user\'s root content to another user (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
+
+			test
+				.nock(TEST_API_ROOT, api => api
+					.put(`/2.0/users/${userId}/folders/0`)
+					.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					command,
+					userId,
+					newUserId,
+					'--token=test',
+					'-q'
+				])
+				.it('should move a user\'s root content to another user (No Output)', ctx => {
+					assert.isEmpty(ctx.stdout);
+				});
 		});
 	});
 
