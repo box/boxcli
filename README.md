@@ -156,7 +156,7 @@ A current release is on the leading edge of our SDK development, and is intended
 
 | Version | Current Patch/Minor | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|---------------------|------------------------|-----------|---------------|----------------|
-| 3       | 3.0.0               | Node.js 11+            | Supported | 01 Feb 2022   | TBD            |
+| 3       | 3.0.0               | Node.js 12+            | Supported | 01 Feb 2022   | TBD            |
 | 2       | 2.9.0               |                        | EOL       | 14 Dec 2018   | 01 Feb 2022    |
 | 1       | 1.4.0               |                        | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
