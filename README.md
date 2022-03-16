@@ -12,10 +12,15 @@ Getting Started Docs: https://developer.box.com/guides/tooling/cli/quick-start/
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Command Topics](#command-topics)
+- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+- [Versions](#versions)
+  - [Supported Version](#supported-version)
+  - [Version schedule](#version-schedule)
+- [Contributing to the Box CLI](#contributing-to-the-box-cli)
+- [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -92,7 +97,6 @@ Command Topics
 --------------
 
 <!-- commands -->
-# Command Topics
 
 * [`box autocomplete`](docs/autocomplete.md) - Display autocomplete installation instructions
 * [`box collaboration-allowlist`](docs/collaboration-allowlist.md) - List collaboration allowlist entries
@@ -136,6 +140,25 @@ Questions, Bugs, and Feature Requests?
 [Browse the issues tickets](https://github.com/box/boxcli/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/boxcli/issues/new) and someone will get back to you.   If you have general questions about the
 Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
+
+Versions
+---------------------------
+
+We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](VERSIONS.md) for details which is effective from 30 July 2022.
+
+### Supported Version
+
+Only the current MAJOR version of SDK is supported. New features, functionality, bug fixes, and security updates will only be added to the current MAJOR version.
+
+A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often). At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade. We always recommend that all users run the latest available minor release for whatever major version is in use. We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
+
+### Version schedule
+
+| Version | Current Patch/Minor | Supported Environments | State     | First Release | EOL/Terminated |
+|---------|---------------------|------------------------|-----------|---------------|----------------|
+| 3       | 3.0.0               | Node.js 12+            | Supported | 01 Feb 2022   | TBD            |
+| 2       | 2.9.0               |                        | EOL       | 14 Dec 2018   | 01 Feb 2022    |
+| 1       | 1.4.0               |                        | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
 Contributing to the Box CLI
 ---------------------------
