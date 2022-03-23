@@ -50,6 +50,7 @@ Usage
 -----
 
 ```sh-session
+asdh
 $ box --version
 box-cli/0.0.0 darwin-x64 node-v10.10.0
 $ box users:get --help
