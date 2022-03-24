@@ -6,7 +6,7 @@ const inquirer = require('inquirer');
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(EnvironmentsSetCurrentCommand);
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 
 		if (!name) {
@@ -23,7 +23,7 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 
 		if (environmentsObj.environments.hasOwnProperty(name)) {
 			environmentsObj.default = name;
-			this.updateEnvironments(environmentsObj);
+			await this.updateEnvironments(environmentsObj);
 			this.info(`The ${name} environment has been set as the default`);
 		} else {
 			this.error(`The ${name} environment does not exist`);
