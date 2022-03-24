@@ -145,12 +145,8 @@ rules:
     no-sync: error
 
 ### STYLISTIC ISSUES
-    array-bracket-newline: &arraySpacingOptions
-        - error
-        - 
-            multiline: true
-            minItems: 2
-    array-element-newline: *arraySpacingOptions
+    array-bracket-newline: off # prettier
+    array-element-newline: off # prettier
     block-spacing: error
     brace-style:
         - error
@@ -179,11 +175,9 @@ rules:
         - declaration
         - 
             allowArrowFunctions: true
-    implicit-arrow-linebreak: error
+    implicit-arrow-linebreak: off # prettier
     # This rule can be customized for switch/case etc.
-    indent:
-        - error
-        - tab
+    indent: off # prettier
     key-spacing: error
     keyword-spacing:
         - error
@@ -206,9 +200,7 @@ rules:
         - error
         - 
             max: 1
-    multiline-ternary:
-        - error
-        - never
+    multiline-ternary: off # prettier
     new-cap: error
     new-parens: error
     newline-per-chained-call:
@@ -278,17 +270,12 @@ rules:
     arrow-body-style:
         - error
         - as-needed
-    arrow-parens:
-        - error
-        - as-needed
+    arrow-parens: off # prettier
     arrow-spacing: error
     generator-star-spacing:
         - error
         - after
-    no-confusing-arrow:
-        - error
-        - 
-            allowParens: true
+    no-confusing-arrow: off # prettier
     no-duplicate-imports:
         - error
         - 

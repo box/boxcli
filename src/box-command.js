@@ -21,9 +21,15 @@ const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
 const darwinKeychain = require('keychain');
-const darwinKeychainSetPassword = util.promisify(darwinKeychain.setPassword.bind(darwinKeychain));
-const darwinKeychainGetPassword = util.promisify(darwinKeychain.getPassword.bind(darwinKeychain));
-const windowsCredentialStore = process.platform === 'win32' && new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
+const darwinKeychainSetPassword = util.promisify(
+	darwinKeychain.setPassword.bind(darwinKeychain)
+);
+const darwinKeychainGetPassword = util.promisify(
+	darwinKeychain.getPassword.bind(darwinKeychain)
+);
+const windowsCredentialStore =
+	process.platform === 'win32' &&
+	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
 
@@ -52,13 +58,10 @@ const KEY_MAPPINGS = {
 	cacheTokens: 'Cache Tokens',
 	ip: 'IP',
 	operationParams: 'Operation Params',
-	copyInstanceOnItemCopy: 'Copy Instance On Item Copy'
+	copyInstanceOnItemCopy: 'Copy Instance On Item Copy',
 };
 
-const REQUIRED_FIELDS = [
-	'type',
-	'id'
-];
+const REQUIRED_FIELDS = ['type', 'id'];
 
 const SDK_CONFIG = Object.freeze({
 	iterators: true,
@@ -75,7 +78,10 @@ const SDK_CONFIG = Object.freeze({
 
 const CONFIG_FOLDER_PATH = path.join(os.homedir(), '.box');
 const SETTINGS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'settings.json');
-const ENVIRONMENTS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'box_environments.json');
+const ENVIRONMENTS_FILE_PATH = path.join(
+	CONFIG_FOLDER_PATH,
+	'box_environments.json'
+);
 
 /**
  * Parse a string value from CSV into the correct boolean value
@@ -84,23 +90,9 @@ const ENVIRONMENTS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'box_environments.j
  * @private
  */
 function getBooleanFlagValue(value) {
-	let trueValues = [
-		'yes',
-		'y',
-		'true',
-		'1',
-		't',
-		'on'
-	];
-	let falseValues = [
-		'no',
-		'n',
-		'false',
-		'0',
-		'f',
-		'off'
-	];
-	if (typeof (value) === 'boolean') {
+	let trueValues = ['yes', 'y', 'true', '1', 't', 'on'];
+	let falseValues = ['no', 'n', 'false', '0', 'f', 'off'];
+	if (typeof value === 'boolean') {
 		return value;
 	} else if (trueValues.includes(value.toLowerCase())) {
 		return true;
@@ -108,7 +100,9 @@ function getBooleanFlagValue(value) {
 		return false;
 	}
 	let possibleValues = trueValues.concat(falseValues).join(', ');
-	throw new Error(`Incorrect boolean value "${value}" passed. Possible values are ${possibleValues}`);
+	throw new Error(
+		`Incorrect boolean value "${value}" passed. Possible values are ${possibleValues}`
+	);
 }
 
 /**
@@ -120,24 +114,23 @@ function getBooleanFlagValue(value) {
  * @returns {Date} The date with offset applied
  */
 function offsetDate(date, timeLength, timeUnit) {
-
 	switch (timeUnit) {
-	case 's':
-		return dateTime.addSeconds(date, timeLength);
-	case 'm':
-		return dateTime.addMinutes(date, timeLength);
-	case 'h':
-		return dateTime.addHours(date, timeLength);
-	case 'd':
-		return dateTime.addDays(date, timeLength);
-	case 'w':
-		return dateTime.addWeeks(date, timeLength);
-	case 'M':
-		return dateTime.addMonths(date, timeLength);
-	case 'y':
-		return dateTime.addYears(date, timeLength);
-	default:
-		throw new Error(`Invalid time unit: ${timeUnit}`);
+		case 's':
+			return dateTime.addSeconds(date, timeLength);
+		case 'm':
+			return dateTime.addMinutes(date, timeLength);
+		case 'h':
+			return dateTime.addHours(date, timeLength);
+		case 'd':
+			return dateTime.addDays(date, timeLength);
+		case 'w':
+			return dateTime.addWeeks(date, timeLength);
+		case 'M':
+			return dateTime.addMonths(date, timeLength);
+		case 'y':
+			return dateTime.addYears(date, timeLength);
+		default:
+			throw new Error(`Invalid time unit: ${timeUnit}`);
 	}
 }
 
@@ -149,8 +142,9 @@ function offsetDate(date, timeLength, timeUnit) {
  * @private
  */
 function formatKey(key) {
-	return key.split('_')
-		.map(s => KEY_MAPPINGS[s] || _.capitalize(s))
+	return key
+		.split('_')
+		.map((s) => KEY_MAPPINGS[s] || _.capitalize(s))
 		.join(' ');
 }
 
@@ -161,7 +155,6 @@ function formatKey(key) {
  * @private
  */
 function formatObjectKeys(obj) {
-
 	// No need to process primitive values
 	if (typeof obj !== 'object' || obj === null) {
 		return obj;
@@ -173,12 +166,11 @@ function formatObjectKeys(obj) {
 	}
 
 	if (Array.isArray(obj)) {
-		return obj.map(el => formatObjectKeys(el));
+		return obj.map((el) => formatObjectKeys(el));
 	}
 
-
 	let formattedObj = Object.create(null);
-	Object.keys(obj).forEach(key => {
+	Object.keys(obj).forEach((key) => {
 		let formattedKey = formatKey(key);
 		formattedObj[formattedKey] = formatObjectKeys(obj[key]);
 	});
@@ -205,8 +197,9 @@ function formatObject(obj) {
 
 	// The YAML library puts a trailing newline at the end of the string, which is
 	// redundant with the automatic newline added by oclif when writing to stdout
-	return yamlString.replace(/\r?\n$/u, '')
-		.replace(/^([^:]+:)/mug, (match, key) => chalk.cyan(key));
+	return yamlString
+		.replace(/\r?\n$/u, '')
+		.replace(/^([^:]+:)/gmu, (match, key) => chalk.cyan(key));
 }
 
 /**
@@ -1197,22 +1190,25 @@ class BoxCommand extends Command {
 	async getEnvironments() {
 		try {
 			switch (process.platform) {
-			case 'darwin': {
-				const password = await darwinKeychainGetPassword({ account: 'Box', service: 'boxcli' });
-				if (!_.isUndefined(password)) {
-					return JSON.parse(password);
+				case 'darwin': {
+					const password = await darwinKeychainGetPassword({
+						account: 'Box',
+						service: 'boxcli',
+					});
+					if (!_.isUndefined(password)) {
+						return JSON.parse(password);
+					}
+					break;
 				}
-				break;
-			}
 
-			case 'win32': {
-				if (await windowsCredentialStore.exists()) {
-					return JSON.parse((await windowsCredentialStore.read()).password);
+				case 'win32': {
+					if (await windowsCredentialStore.exists()) {
+						return JSON.parse((await windowsCredentialStore.read()).password);
+					}
+					break;
 				}
-				break;
-			}
 
-			default:
+				default:
 			}
 			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
 		} catch (ex) {
@@ -1230,10 +1226,7 @@ class BoxCommand extends Command {
 	 * @param {Object} environments use to override current environment
 	 * @returns {void}
 	 */
-	async updateEnvironments(
-		updatedEnvironments,
-		environments
-	) {
+	async updateEnvironments(updatedEnvironments, environments) {
 		if (typeof environments === 'undefined') {
 			environments = await this.getEnvironments();
 		}
@@ -1241,19 +1234,26 @@ class BoxCommand extends Command {
 		try {
 			let fileContents = JSON.stringify(environments, null, 4);
 			switch (process.platform) {
-			case 'darwin': {
-				await darwinKeychainSetPassword({ account: 'Box', service: 'boxcli', password: JSON.stringify(environments) });
-				fileContents = '';
-				break;
-			}
+				case 'darwin': {
+					await darwinKeychainSetPassword({
+						account: 'Box',
+						service: 'boxcli',
+						password: JSON.stringify(environments),
+					});
+					fileContents = '';
+					break;
+				}
 
-			case 'win32': {
-				await windowsCredentialStore.write('boxcli' /* user */, JSON.stringify(environments) /* password */);
-				fileContents = '';
-				break;
-			}
+				case 'win32': {
+					await windowsCredentialStore.write(
+						'boxcli' /* user */,
+						JSON.stringify(environments) /* password */
+					);
+					fileContents = '';
+					break;
+				}
 
-			default:
+				default:
 			}
 
 			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
@@ -1371,12 +1371,12 @@ class BoxCommand extends Command {
 BoxCommand.flags = {
 	token: flags.string({
 		char: 't',
-		description: 'Provide a token to perform this call'
+		description: 'Provide a token to perform this call',
 	}),
 	'as-user': flags.string({ description: 'Provide an ID for a user' }),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({
-		description: 'Turn off colors for logging'
+		description: 'Turn off colors for logging',
 	}),
 	json: flags.boolean({
 		description: 'Output formatted JSON',
@@ -1396,7 +1396,9 @@ BoxCommand.flags = {
 		exclusive: ['save'],
 		parse: utils.parsePath,
 	}),
-	fields: flags.string({ description: 'Comma separated list of fields to show' }),
+	fields: flags.string({
+		description: 'Comma separated list of fields to show',
+	}),
 	'bulk-file-path': flags.string({
 		description: 'File path to bulk .csv or .json objects',
 		parse: utils.parsePath,
@@ -1416,14 +1418,14 @@ BoxCommand.flags = {
 	quiet: flags.boolean({
 		char: 'q',
 		description: 'Suppress any non-error output to stderr',
-	})
+	}),
 };
 
 BoxCommand.minFlags = _.pick(BoxCommand.flags, [
 	'no-color',
 	'help',
 	'verbose',
-	'quiet'
+	'quiet',
 ]);
 
 module.exports = BoxCommand;
