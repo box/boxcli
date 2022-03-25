@@ -9,7 +9,7 @@ class WebhooksUpdateCommand extends BoxCommand {
 		let updates = {};
 
 		if (flags.triggers) {
-			updates.trigger = flags.triggers.split(',');
+			updates.triggers = flags.triggers.split(',');
 		}
 		if (flags.address) {
 			updates.address = flags.address;
