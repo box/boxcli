@@ -460,8 +460,7 @@ class BoxCommand extends Command {
 			let asUser = bulkData.find((o) => o.fieldKey === 'as-user') || {};
 			if (!_.isEmpty(asUser)) {
 				if (_.isNil(asUser.value)) {
-					// eslint-disable-next-line no-await-in-loop
-					let environmentsObj = await this.getEnvironments();
+					let environmentsObj = await this.getEnvironments(); // eslint-disable-line no-await-in-loop
 					if (environmentsObj.default) {
 						let environment =
 							environmentsObj.environments[environmentsObj.default];
