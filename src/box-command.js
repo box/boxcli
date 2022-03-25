@@ -20,6 +20,16 @@ const CLITokenCache = require('./token-cache');
 const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
+const darwinKeychain = require('keychain');
+const darwinKeychainSetPassword = util.promisify(
+	darwinKeychain.setPassword.bind(darwinKeychain)
+);
+const darwinKeychainGetPassword = util.promisify(
+	darwinKeychain.getPassword.bind(darwinKeychain)
+);
+const windowsCredentialStore =
+	process.platform === 'win32' &&
+	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
 
@@ -237,7 +247,7 @@ class BoxCommand extends Command {
 		/* eslint-enable no-shadow */
 		this.flags = flags;
 		this.args = args;
-		this.settings = this._loadSettings();
+		this.settings = await this._loadSettings();
 		this.client = await this.getClient();
 
 		if (this.isBulk) {
@@ -450,7 +460,7 @@ class BoxCommand extends Command {
 			let asUser = bulkData.find((o) => o.fieldKey === 'as-user') || {};
 			if (!_.isEmpty(asUser)) {
 				if (_.isNil(asUser.value)) {
-					let environmentsObj = this.getEnvironments();
+					let environmentsObj = await this.getEnvironments();
 					if (environmentsObj.default) {
 						let environment =
 							environmentsObj.environments[environmentsObj.default];
@@ -574,7 +584,7 @@ class BoxCommand extends Command {
 		if (this.constructor.noClient) {
 			return null;
 		}
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let client;
 		if (this.flags.token) {
 			DEBUG.init('Using passed in token %s', this.flags.token);
@@ -1177,8 +1187,29 @@ class BoxCommand extends Command {
 	 *
 	 * @returns {Object} The parsed environment information
 	 */
-	getEnvironments() {
+	async getEnvironments() {
 		try {
+			switch (process.platform) {
+				case 'darwin': {
+					const password = await darwinKeychainGetPassword({
+						account: 'Box',
+						service: 'boxcli',
+					});
+					if (!_.isUndefined(password)) {
+						return JSON.parse(password);
+					}
+					break;
+				}
+
+				case 'win32': {
+					if (await windowsCredentialStore.exists()) {
+						return JSON.parse((await windowsCredentialStore.read()).password);
+					}
+					break;
+				}
+
+				default:
+			}
 			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
 		} catch (ex) {
 			throw new BoxCLIError(
@@ -1192,17 +1223,40 @@ class BoxCommand extends Command {
 	 * Writes updated environment information to disk
 	 *
 	 * @param {Object} updatedEnvironments The environment information to write
+	 * @param {Object} environments use to override current environment
 	 * @returns {void}
 	 */
-	updateEnvironments(updatedEnvironments) {
-		let environments = this.getEnvironments();
+	async updateEnvironments(updatedEnvironments, environments) {
+		if (typeof environments === 'undefined') {
+			environments = await this.getEnvironments();
+		}
 		Object.assign(environments, updatedEnvironments);
 		try {
-			fs.writeFileSync(
-				ENVIRONMENTS_FILE_PATH,
-				JSON.stringify(environments, null, 4),
-				'utf8'
-			);
+			let fileContents = JSON.stringify(environments, null, 4);
+			switch (process.platform) {
+				case 'darwin': {
+					await darwinKeychainSetPassword({
+						account: 'Box',
+						service: 'boxcli',
+						password: JSON.stringify(environments),
+					});
+					fileContents = '';
+					break;
+				}
+
+				case 'win32': {
+					await windowsCredentialStore.write(
+						'boxcli' /* user */,
+						JSON.stringify(environments) /* password */
+					);
+					fileContents = '';
+					break;
+				}
+
+				default:
+			}
+
+			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
 		} catch (ex) {
 			throw new BoxCLIError(
 				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
@@ -1219,19 +1273,14 @@ class BoxCommand extends Command {
 	 * @returns {Object} The parsed settings
 	 * @private
 	 */
-	_loadSettings() {
+	async _loadSettings() {
 		try {
 			if (!fs.existsSync(CONFIG_FOLDER_PATH)) {
 				fs.mkdirpSync(CONFIG_FOLDER_PATH);
 				DEBUG.init('Created config folder at %s', CONFIG_FOLDER_PATH);
 			}
 			if (!fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
-				let environmentsJSON = JSON.stringify(
-					this._getDefaultEnvironments(),
-					null,
-					4
-				);
-				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, environmentsJSON, 'utf8');
+				await this.updateEnvironments({}, this._getDefaultEnvironments());
 				DEBUG.init('Created environments config at %s', ENVIRONMENTS_FILE_PATH);
 			}
 			if (!fs.existsSync(SETTINGS_FILE_PATH)) {

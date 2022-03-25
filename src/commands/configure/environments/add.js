@@ -8,9 +8,9 @@ const chalk = require('chalk');
 const utils = require('../../../util');
 
 class EnvironmentsAddCommand extends BoxCommand {
-	run() {
+	async run() {
 		const { flags, args } = this.parse(EnvironmentsAddCommand);
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let environmentName = flags.name;
 		let configFilePath = utils.parsePath(args.path);
 		let configObj;
@@ -82,7 +82,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 		}
 
 		environmentsObj.environments[environmentName] = newEnvironment;
-		this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObj);
 		this.info(chalk`{green Successfully added CLI environment "${flags.name}"}`);
 	}
 }
