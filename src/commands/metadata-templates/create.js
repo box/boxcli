@@ -129,6 +129,10 @@ class MetadataTemplatesCreateCommand extends BoxCommand {
 			options.templateKey = flags['template-key'];
 		}
 
+		if (flags['copy-instance-on-item-copy']) {
+			options.copyInstanceOnItemCopy = flags['copy-instance-on-item-copy'];
+		}
+
 		let template = await this.client.metadata.createTemplate(flags['display-name'], fields, options);
 		await this.output(template);
 	}

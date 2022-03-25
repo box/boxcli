@@ -4,6 +4,7 @@ Template Key: newMetadata
 Scope: enterprise_12345
 Display Name: New Metadata Template
 Hidden: true
+Copy Instance On Item Copy: true
 Fields:
     -
         ID: 3c7ba014-e136-49e3-a0aa-f48588ddd223

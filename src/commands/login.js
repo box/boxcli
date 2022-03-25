@@ -14,6 +14,7 @@ const express = require('express');
 const inquirer = require('inquirer');
 const path = require('path');
 const ora = require('ora');
+const { nanoid } = require('nanoid');
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
@@ -65,15 +66,22 @@ class OAuthLoginCommand extends BoxCommand {
 
 		server = app.listen(port);
 
-		app.get('/callback', async(req, res) => {
+		const state = nanoid(32);
+
+		app.get('/callback', async (req, res) => {
 			try {
+				if (req.query.state !== state) {
+					throw new BoxCLIError(
+						`Invalid OAuth state received in callback. Got "${req.query.state}" while expecting "${state}"`
+					);
+				}
 				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
 					req.query.code,
 					null
 				);
 				const tokenCache = new CLITokenCache(environmentName);
 				await new Promise((resolve, reject) => {
-					tokenCache.write(tokenInfo, error => {
+					tokenCache.write(tokenInfo, (error) => {
 						if (error) {
 							reject(error);
 						} else {
@@ -114,18 +122,19 @@ class OAuthLoginCommand extends BoxCommand {
 			spinner: 'bouncingBall',
 		}).start();
 
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
 		spinner.succeed();
 
 		// the URL to redirect the user to
 		const authorizeUrl = sdk.getAuthorizeURL({
 			response_type: 'code',
+			state,
 		});
 
 		open(authorizeUrl);
 
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
 		this.info(
 			chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
