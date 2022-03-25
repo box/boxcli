@@ -182,7 +182,7 @@ describe('Webhooks', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/webhooks/${webhookId}`, { trigger: triggers.split(',') })
+				.put(`/2.0/webhooks/${webhookId}`, { triggers: triggers.split(',') })
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -199,7 +199,7 @@ describe('Webhooks', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/webhooks/${webhookId}`, { trigger: triggers.split(',') })
+				.put(`/2.0/webhooks/${webhookId}`, { triggers: triggers.split(',') })
 				.reply(200, fixture)
 			)
 			.stdout()
