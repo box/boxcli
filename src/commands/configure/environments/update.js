@@ -9,7 +9,7 @@ const utils = require('../../../util');
 class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(EnvironmentsUpdateCommand);
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let environment = environmentsObj.environments[args.name || environmentsObj.default];
 
 		if (!environment) {
@@ -54,7 +54,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			environment.cacheTokens = flags['cache-tokens'];
 		}
 
-		this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObj);
 		await this.output(environment);
 	}
 }

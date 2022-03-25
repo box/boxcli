@@ -5,10 +5,10 @@ const { flags } = require('@oclif/command');
 const chalk = require('chalk');
 
 class EnvironmentsSwitchUserCommand extends BoxCommand {
-	run() {
+	async run() {
 		const { flags, args } = this.parse(EnvironmentsSwitchUserCommand);
 
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let environment = environmentsObj.environments[environmentsObj.default];
 
 		if (flags.default && !args.userID) {
@@ -20,7 +20,7 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 			throw new Error('Either a userID argument or --default flag must be passed, but not both');
 		}
 
-		this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObj);
 		this.info(chalk`{green User set to ${args.userID || 'default'}}`);
 	}
 }

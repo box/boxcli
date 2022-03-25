@@ -19,7 +19,7 @@ const { nanoid } = require('nanoid');
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
 		const { flags } = this.parse(OAuthLoginCommand);
-		const environmentsObj = this.getEnvironments();
+		const environmentsObj = await this.getEnvironments();
 		const port = flags.port;
 
 		this.info(
@@ -95,7 +95,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 				environmentsObj.environments[environmentName] = newEnvironment;
 				environmentsObj.default = environmentName;
-				this.updateEnvironments(environmentsObj);
+				await this.updateEnvironments(environmentsObj);
 
 				const callbackHtmlPath = path.resolve(__dirname, '../logged-in.html');
 

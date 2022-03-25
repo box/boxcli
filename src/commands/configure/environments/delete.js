@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(EnvironmentsDeleteCommand);
-		let environmentsObj = this.getEnvironments();
+		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 
 		if (!name) {
@@ -31,7 +31,7 @@ class EnvironmentsDeleteCommand extends BoxCommand {
 			if (environmentsObj.default === name) {
 				environmentsObj.default = '';
 			}
-			this.updateEnvironments(environmentsObj);
+			await this.updateEnvironments(environmentsObj);
 			this.info(`The ${name} environment was deleted`);
 		} else {
 			this.error(`The ${name} environment does not exist`);
