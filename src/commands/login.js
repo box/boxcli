@@ -14,6 +14,7 @@ const express = require('express');
 const inquirer = require('inquirer');
 const path = require('path');
 const ora = require('ora');
+const http = require('http');
 const { nanoid } = require('nanoid');
 
 class OAuthLoginCommand extends BoxCommand {
@@ -25,7 +26,6 @@ class OAuthLoginCommand extends BoxCommand {
 		this.info(
 			chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
 		);
-
 		this.info(
 			chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
 		);
@@ -131,14 +131,33 @@ class OAuthLoginCommand extends BoxCommand {
 			response_type: 'code',
 			state,
 		});
-
-		open(authorizeUrl);
-
+		if (flags.code) {
+			this.info(
+				chalk`{green Please open ${authorizeUrl} to authorize the application and read parameters from the URL accessed after authorization.}`
+			);
+			this.info(
+				chalk`{yellow If you are not seeing your code, please make sure you have set up the Redirect URI.}`
+			);
+			const authInfo = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'code',
+					message: 'What is your auth code? (code=)',
+				},
+				{
+					type: 'input',
+					name: 'state',
+					message: 'What is your state code? (state=)',
+				},
+			]);
+			http.get("http://localhost:" + port + "/callback?state=" + authInfo.state + "&code=" + authInfo.code)
+		} else {
+			open(authorizeUrl);
+			this.info(
+				chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
+			);
+		}
 		await new Promise((resolve) => setTimeout(resolve, 1000));
-
-		this.info(
-			chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
-		);
 	}
 }
 
@@ -149,6 +168,11 @@ OAuthLoginCommand.description = 'Sign in with OAuth and set a new environment';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
+	code: flags.boolean({
+		char: 'c',
+		description: 'Manually visit authorize URL and input code',
+		default: false,
+	}),
 	name: flags.string({
 		char: 'n',
 		description: 'Set a name for the environment',
