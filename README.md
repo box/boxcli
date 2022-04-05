@@ -7,7 +7,7 @@
 The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
 Among other features, Box CLI includes the following functionality:
-* Bulk actions - A csv file can be used to execute commands in bulk and each row of the spreadsheet is treated as an individual API call.
+* Bulk actions - A csv file can be used to execute commands in bulk, and each row of the spreadsheet is treated as an individual API call.
 * As-User header - Act on behalf of another user.
 * Search API - Search for files and folders in your Box Enterprise account.
 
@@ -58,15 +58,13 @@ Successfully added CLI environment "ManualKey"
 [oauth-guide]: https://developer.box.com/guides/tooling/cli/quick-start/
 
 ### CLI Installation
-
 Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
 
 #### Windows & macOS Installers
-
 To install the latest CLI on your machine, download the latest `.exe` for Windows or `.pkg` for macOS for the [latest release](https://github.com/box/boxcli/releases).
 
 #### Linux & Node install
-Additionally, the CLI can be installed as a Node package on any platform, including Linux. For this to work you will need to have [Node JS](https://nodejs.org/) installed on your machine.
+Additionally, the CLI can be installed as a Node package on any platform, including Linux. For this to work, you will need to have [Node JS](https://nodejs.org/) installed on your machine.
 
 ```bash
 npm install --global @box/cli
