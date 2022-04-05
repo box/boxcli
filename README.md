@@ -17,9 +17,9 @@ Among other features, Box CLI includes the following functionality:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Getting Started](#getting-started)
+  - [CLI Installation](#cli-installation)
   - [CLI and OAuth 2.0 set up](#cli-and-oauth-20-set-up)
   - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
-  - [CLI Installation](#cli-installation)
 - [Usage](#usage)
 - [Command Topics](#command-topics)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
@@ -32,6 +32,20 @@ Among other features, Box CLI includes the following functionality:
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Getting Started
+
+### CLI Installation
+Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
+
+#### Windows & macOS Installers
+To install the latest CLI on your machine, download the latest `.exe` for Windows or `.pkg` for macOS for the [latest release](https://github.com/box/boxcli/releases).
+
+#### Linux & Node install
+Additionally, the CLI can be installed as a Node package on any platform, including Linux. For this to work, you will need to have [Node JS](https://nodejs.org/) installed on your machine.
+
+```bash
+npm install --global @box/cli
+```
+
 
 ### CLI and OAuth 2.0 set up
 The most convenient way to get start with Box CLI is to follow [Box CLI with OAuth 2.0 guide][oauth-guide]. You will be guided how to configure Box application and install CLI on your machine.
@@ -57,19 +71,6 @@ Successfully added CLI environment "ManualKey"
 
 [dev-console]: https://app.box.com/developers/console
 [oauth-guide]: https://developer.box.com/guides/tooling/cli/quick-start/
-
-### CLI Installation
-Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
-
-#### Windows & macOS Installers
-To install the latest CLI on your machine, download the latest `.exe` for Windows or `.pkg` for macOS for the [latest release](https://github.com/box/boxcli/releases).
-
-#### Linux & Node install
-Additionally, the CLI can be installed as a Node package on any platform, including Linux. For this to work, you will need to have [Node JS](https://nodejs.org/) installed on your machine.
-
-```bash
-npm install --global @box/cli
-```
 
 ## Usage
 
