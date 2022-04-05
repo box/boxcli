@@ -9,8 +9,7 @@ The Box CLI is a user-friendly command line tool which allows both technical and
 Among other features, Box CLI includes the following functionality:
 * Bulk actions - A csv file can be used to execute commands in bulk and each row of the spreadsheet is treated as an individual API call.
 * As-User header - Act on behalf of another user.
-* verbose mode
-* string quoting across different platforms
+* Search API - Search for files and folders in your Box Enterprise account.
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
