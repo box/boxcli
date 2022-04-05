@@ -18,7 +18,6 @@ Among other features, Box CLI includes the following functionality:
 
 - [Getting Started](#getting-started)
   - [CLI Installation](#cli-installation)
-  - [CLI and OAuth 2.0 set up](#cli-and-oauth-20-set-up)
   - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
 - [Usage](#usage)
 - [Command Topics](#command-topics)
@@ -33,6 +32,8 @@ Among other features, Box CLI includes the following functionality:
 
 ## Getting Started
 
+The most convenient way to get start with Box CLI is to follow [Box CLI with OAuth 2.0 guide][oauth-guide]. You will be guided how to configure Box application and install CLI on your machine.
+
 ### CLI Installation
 Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
 
@@ -45,10 +46,6 @@ Additionally, the CLI can be installed as a Node package on any platform, includ
 ```bash
 npm install --global @box/cli
 ```
-
-
-### CLI and OAuth 2.0 set up
-The most convenient way to get start with Box CLI is to follow [Box CLI with OAuth 2.0 guide][oauth-guide]. You will be guided how to configure Box application and install CLI on your machine.
 
 ### CLI and Server Authentication with JWT
 
