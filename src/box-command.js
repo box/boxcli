@@ -389,8 +389,7 @@ class BoxCommand extends Command {
 				let keyParts = key.match(/(.*)_\d+$/u);
 				let someKey = keyParts ? keyParts[1] : key;
 
-				let matchKey = someKey.toLowerCase().replace(/[-_]/gu, '');
-				return matchKey;
+				return someKey.toLowerCase().replace(/[-_]/gu, '');
 			});
 
 			bulkCalls = parsedData.map((values) =>
@@ -593,9 +592,7 @@ class BoxCommand extends Command {
 				clientSecret: '',
 				...SDK_CONFIG,
 			});
-			if (this.settings.enableProxy) {
-				sdk.configure({ proxy: this.settings.proxy });
-			}
+			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (
@@ -617,9 +614,7 @@ class BoxCommand extends Command {
 					clientSecret: environment.clientSecret,
 					...SDK_CONFIG,
 				});
-				if (this.settings.enableProxy) {
-					sdk.configure({ proxy: this.settings.proxy });
-				}
+				this._configureSdk(sdk, { ...SDK_CONFIG });
 				this.sdk = sdk;
 				let tokenInfo = await new Promise((resolve, reject) => {
 					// eslint-disable-line promise/avoid-new
@@ -674,10 +669,7 @@ class BoxCommand extends Command {
 			}
 
 			this.sdk = BoxSDK.getPreconfiguredInstance(configObj);
-			this.sdk.configure({ ...SDK_CONFIG });
-			if (this.settings.enableProxy) {
-				this.sdk.configure({ proxy: this.settings.proxy });
-			}
+			this._configureSdk(this.sdk, { ...SDK_CONFIG });
 
 			client = this.sdk.getAppAuthClient(
 				'enterprise',
@@ -708,6 +700,26 @@ class BoxCommand extends Command {
 		}
 
 		return client;
+	}
+
+	_configureSdk(sdk, config = {}) {
+		const clientSettings = { ...config };
+		if (this.settings.enableProxy) {
+			clientSettings.proxy = this.settings.proxy;
+		}
+		if (this.settings.apiRootURL) {
+			clientSettings.apiRootURL = this.settings.apiRootURL;
+		}
+		if (this.settings.uploadAPIRootURL) {
+			clientSettings.uploadAPIRootURL = this.settings.uploadAPIRootURL;
+		}
+		if (this.settings.authorizeRootURL) {
+			clientSettings.authorizeRootURL = this.settings.authorizeRootURL;
+		}
+		if (Object.keys(clientSettings).length > 0) {
+			DEBUG.init('SDK client settings %s', clientSettings);
+			sdk.configure(clientSettings);
+		}
 	}
 
 	/**
@@ -1021,10 +1033,11 @@ class BoxCommand extends Command {
 	/**
 	 * Final hook that executes for all commands, regardless of if an error occurred
 	 * @param {Error} [err] An error, if one occurred
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 */
-	async finally(/* err */) {
+	async finally(err) {
 		// called after run and catch regardless of whether or not the command errored
+		return Promise.resolve();
 	}
 
 	/**
