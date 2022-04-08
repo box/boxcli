@@ -60,6 +60,7 @@ class OAuthLoginCommand extends BoxCommand {
 			clientID: answers.clientID,
 			clientSecret: answers.clientSecret,
 		});
+		this._configureSdk(sdk);
 
 		const app = express();
 		let server;

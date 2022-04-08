@@ -592,9 +592,7 @@ class BoxCommand extends Command {
 				clientSecret: '',
 				...SDK_CONFIG,
 			});
-			if (this.settings.enableProxy) {
-				sdk.configure({ proxy: this.settings.proxy });
-			}
+			this._configureSdk(sdk);
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (
@@ -704,13 +702,10 @@ class BoxCommand extends Command {
 		return client;
 	}
 
-	_configureSdk(sdk, config = {}) {
-		const clientSettings = { ...config };
+	_configureSdk(sdk) {
+		const clientSettings = {};
 		if (this.settings.enableProxy) {
 			clientSettings.proxy = this.settings.proxy;
-		}
-		if (this.settings.apiRootURL) {
-			clientSettings.apiRootURL = this.settings.apiRootURL;
 		}
 		if (this.settings.apiRootURL) {
 			clientSettings.apiRootURL = this.settings.apiRootURL;
