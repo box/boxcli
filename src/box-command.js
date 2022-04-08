@@ -592,7 +592,7 @@ class BoxCommand extends Command {
 				clientSecret: '',
 				...SDK_CONFIG,
 			});
-			this._configureSdk(sdk);
+			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (
@@ -614,7 +614,7 @@ class BoxCommand extends Command {
 					clientSecret: environment.clientSecret,
 					...SDK_CONFIG,
 				});
-				this._configureSdk(sdk);
+				this._configureSdk(sdk, { ...SDK_CONFIG });
 				this.sdk = sdk;
 				let tokenInfo = await new Promise((resolve, reject) => {
 					// eslint-disable-line promise/avoid-new
@@ -702,8 +702,8 @@ class BoxCommand extends Command {
 		return client;
 	}
 
-	_configureSdk(sdk) {
-		const clientSettings = {};
+	_configureSdk(sdk, config = {}) {
+		const clientSettings = { ...config };
 		if (this.settings.enableProxy) {
 			clientSettings.proxy = this.settings.proxy;
 		}
