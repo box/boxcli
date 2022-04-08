@@ -1,18 +1,24 @@
-Box CLI
-=======
+# Box CLI
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
 
-A command line interface to the [Box Content API](https://developers.box.com/docs/).
+The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
-Getting Started Docs: https://developer.box.com/guides/tooling/cli/quick-start/
+Among other features, Box CLI includes the following functionality:
+* Bulk actions - A csv file can be used to execute commands in bulk, and each row of the spreadsheet is treated as an individual API call.
+* As-User header - Act on behalf of another user.
+* Search API - Search for files and folders in your Box Enterprise account.
+
+## Table of contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Getting Started](#getting-started)
+  - [CLI Installation](#cli-installation)
+  - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
 - [Usage](#usage)
 - [Command Topics](#command-topics)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
@@ -24,10 +30,26 @@ Getting Started Docs: https://developer.box.com/guides/tooling/cli/quick-start/
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Getting Started
----------------
+## Getting Started
 
-To get started with the Box CLI, first set up a Box application using Server Authentication with JWT and
+The most convenient way to get start with Box CLI is to follow [Box CLI with OAuth 2.0 guide][oauth-guide]. You will be guided how to configure Box application and install CLI on your machine.
+
+### CLI Installation
+Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
+
+#### Windows & macOS Installers
+To install the latest CLI on your machine, download the latest `.exe` for Windows or `.pkg` for macOS for the [latest release](https://github.com/box/boxcli/releases).
+
+#### Linux & Node install
+Additionally, the CLI can be installed as a Node package on any platform, including Linux. For this to work, you will need to have [Node JS](https://nodejs.org/) installed on your machine.
+
+```bash
+npm install --global @box/cli
+```
+
+### CLI and Server Authentication with JWT
+
+Alternatively, to get started with the Box CLI, [download and install](#CLI-Installation) CLI, set up a Box application using Server Authentication with JWT and
 download the JSON configuration file from the Configuration page of your app in the
 [Box Developer Console][dev-console].  Then, set up the CLI by pointing it to your configuration file:
 
@@ -45,9 +67,9 @@ Successfully added CLI environment "ManualKey"
 ```
 
 [dev-console]: https://app.box.com/developers/console
+[oauth-guide]: https://developer.box.com/guides/tooling/cli/quick-start/
 
-Usage
------
+## Usage
 
 ```sh-session
 $ box --version
@@ -93,8 +115,7 @@ Address: ''
 Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 ```
 
-Command Topics
---------------
+## Command Topics
 
 <!-- commands -->
 
@@ -134,15 +155,13 @@ Command Topics
 
 <!-- commandsstop -->
 
-Questions, Bugs, and Feature Requests?
---------------------------------------
+## Questions, Bugs, and Feature Requests?
 
 [Browse the issues tickets](https://github.com/box/boxcli/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/boxcli/issues/new) and someone will get back to you.   If you have general questions about the
 Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
 
-Versions
----------------------------
+## Versions
 
 We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](VERSIONS.md) for details which is effective from 30 July 2022.
 
@@ -160,8 +179,7 @@ A current release is on the leading edge of our SDK development, and is intended
 | 2       |                        | EOL       | 14 Dec 2018   | 01 Feb 2022    |
 | 1       |                        | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
-Contributing to the Box CLI
----------------------------
+## Contributing to the Box CLI
 
 1. Clone this repo.
 1. Run `npm install`.
@@ -172,8 +190,7 @@ in the `test/` directory!
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
-Copyright and License
----------------------
+## Copyright and License
 
 Copyright 2018 Box, Inc. All rights reserved.
 
