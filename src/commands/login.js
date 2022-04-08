@@ -21,6 +21,7 @@ class OAuthLoginCommand extends BoxCommand {
 		const { flags } = this.parse(OAuthLoginCommand);
 		const environmentsObj = await this.getEnvironments();
 		const port = flags.port;
+		const redirectUri = `http://localhost:${port}/callback`;
 
 		this.info(
 			chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
@@ -30,7 +31,7 @@ class OAuthLoginCommand extends BoxCommand {
 			chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
 		);
 		this.info(
-			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic http://localhost:${port}/callback}. Click outside the input field.}`
+			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
 		);
 		this.info(chalk`{cyan 3. Click on {bold Save Changes}.}`);
 
@@ -130,6 +131,7 @@ class OAuthLoginCommand extends BoxCommand {
 		const authorizeUrl = sdk.getAuthorizeURL({
 			response_type: 'code',
 			state,
+			redirect_uri: redirectUri,
 		});
 
 		open(authorizeUrl);
