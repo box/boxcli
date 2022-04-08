@@ -716,6 +716,15 @@ class BoxCommand extends Command {
 		if (this.settings.authorizeRootURL) {
 			clientSettings.authorizeRootURL = this.settings.authorizeRootURL;
 		}
+		if (this.settings.numMaxRetries) {
+			clientSettings.numMaxRetries = this.settings.numMaxRetries;
+		}
+		if (this.settings.retryIntervalMS) {
+			clientSettings.retryIntervalMS = this.settings.retryIntervalMS;
+		}
+		if (this.settings.uploadRequestTimeoutMS) {
+			clientSettings.uploadRequestTimeoutMS = this.settings.uploadRequestTimeoutMS;
+		}
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
 			sdk.configure(clientSettings);
