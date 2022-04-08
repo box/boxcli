@@ -702,6 +702,12 @@ class BoxCommand extends Command {
 		return client;
 	}
 
+	/**
+	 * Configures SDK by using values from settings.json file
+	 * @param {*} sdk to configure
+	 * @param {*} config Additional options to use while building configuration
+	 * @returns {void}
+	 */
 	_configureSdk(sdk, config = {}) {
 		const clientSettings = { ...config };
 		if (this.settings.enableProxy) {
@@ -715,6 +721,15 @@ class BoxCommand extends Command {
 		}
 		if (this.settings.authorizeRootURL) {
 			clientSettings.authorizeRootURL = this.settings.authorizeRootURL;
+		}
+		if (this.settings.numMaxRetries) {
+			clientSettings.numMaxRetries = this.settings.numMaxRetries;
+		}
+		if (this.settings.retryIntervalMS) {
+			clientSettings.retryIntervalMS = this.settings.retryIntervalMS;
+		}
+		if (this.settings.uploadRequestTimeoutMS) {
+			clientSettings.uploadRequestTimeoutMS = this.settings.uploadRequestTimeoutMS;
 		}
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
@@ -1033,11 +1048,10 @@ class BoxCommand extends Command {
 	/**
 	 * Final hook that executes for all commands, regardless of if an error occurred
 	 * @param {Error} [err] An error, if one occurred
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
-	async finally(err) {
+	async finally(/* err */) {
 		// called after run and catch regardless of whether or not the command errored
-		return Promise.resolve();
 	}
 
 	/**
