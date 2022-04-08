@@ -702,6 +702,11 @@ class BoxCommand extends Command {
 		return client;
 	}
 
+	/**
+	 * Configures SDK by using values from settings.json file
+	 * @param {*} sdk to configure
+	 * @param  config Additional options to use while building configuration
+	 */
 	_configureSdk(sdk, config = {}) {
 		const clientSettings = { ...config };
 		if (this.settings.enableProxy) {
