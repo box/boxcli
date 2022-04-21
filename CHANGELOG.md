@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 (2022-01-27)
+## [3.0.0](https://github.com/box/boxcli/compare/v2.9.0...v3.0.0) (2022-01-27)
 
 **Breaking Changes**
 
@@ -27,7 +27,7 @@
 - fix: folder:collaborations:add make role a required flag (#261)
 - fix: Fixed shared-links delete example. (#262)
 
-## 2.9.0 (2021-02-22)
+## [2.9.0](https://github.com/box/boxcli/compare/v2.8.0...v2.9.0) (2021-02-22)
 
 **New Features and Enhancements**
 
@@ -39,7 +39,7 @@
 
 - Fix events command bug when there is no stream position flag ([#234](https://github.com/box/boxcli/pull/234))
 
-## 2.8.0 (2020-12-03)
+## [2.8.0](https://github.com/box/boxcli/compare/v2.7.0...v2.8.0) (2020-12-03)
 
 **Warning:**
 
@@ -53,7 +53,7 @@
 
 - Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
 
-## 2.7.0 (2020-11-02)
+## [2.7.0](https://github.com/box/boxcli/compare/v2.6.0...v2.7.0) (2020-11-02)
 
 **New Features and Enhancements:**
 
@@ -64,13 +64,13 @@
 
 - Fix bug with setting proxy settings ([#213](https://github.com/box/boxcli/pull/213))
 
-## 2.6.0 [2020-08-20]
+## [2.6.0](https://github.com/box/boxcli/compare/v2.5.1...v2.6.0) [2020-08-20]
 
 - Fix filename issue when saving reports on Windows
 - Add proxy support for `http`, `https`, `socks` and `pac` protocols. Proxy settings can be found under `box configure:settings`
 - Add zip functionality
 
-## 2.5.1 [2020-04-14]
+## [2.5.1](https://github.com/box/boxcli/compare/v2.4.0...v2.5.1) [2020-04-14]
 
 - Added `--quiet` flag to suppress any non-error output to stderr
 - Fixed a bug for the `--restrict-collaboration` flag for `box folders:update` where previously the flag would not restrict the collaborations when passed as true and would restrict collaborations when passed as false
@@ -78,7 +78,7 @@
 - Fixed a bug where flags that can be specified multiple times in a single command could not be passed through the command line for bulk commands
 - **Note**: Skipped version 2.5.0 due to development of new release process
 
-## 2.4.0 [2019-08-29]
+## [2.4.0](https://github.com/box/boxcli/compare/v2.3.0...v2.4.0) [2019-08-29]
 
 - Fixed an issue where the CSV formatting of commands that return multiple different object types (e.g
   `box files:metadata:list` and `box search`) would only include the columns from the first object in the result set.
@@ -88,7 +88,7 @@
 - Added support for setting external App User IDs in the `box users:create` and `box users:update` commands with
   the `--external-id` flag
 
-## 2.3.0 [2019-05-23]
+## [2.3.0](https://github.com/box/boxcli/compare/v2.2.0...v2.3.0) [2019-05-23]
 
 - Added `--confirm` flag to the `box users:email-aliases:add` command to automatically confirm the email alias
 - Added `--restrict-to-enterprise` flag to the `box folders:update` command to restrict collaboration on the folder
@@ -96,7 +96,7 @@
 - Fixed a bug in the `box folders:update` command where the `--upload-email-access` flag would not correctly set
   the folder upload email access level
 
-## 2.2.0 [2019-04-30]
+## [2.2.0](https://github.com/box/boxcli/compare/v2.1.0...v2.2.0) [2019-04-30]
 
 - Added `--sort` and `--direction` flags to `box search` to control the sort order of the search results
 - Fixed `box collections:add` to work correctly with `web_link` items
@@ -108,7 +108,7 @@
   The CLI should now run all bulk input entries to completion and report entries that produced errors after all entries
   have been processed.
 
-## 2.1.0 [2019-03-28]
+## [2.1.0](https://github.com/box/boxcli/compare/v2.0.0...v2.1.0) [2019-03-28]
 
 - Fixed an issue where the `--fields` flag was not always requesting additional fields from the API
 - Fixed the `--event-types` flag for the `box events` and `box events:poll` commands
@@ -119,7 +119,7 @@
       up to `limit` events will be returned along with the next stream position
     - `box events:poll` now correctly polls for new events
 
-## 2.0.0 [2018-12-13]
+## [2.0.0](https://github.com/box/boxcli/compare/v1.1.1...v2.0.0) [2018-12-13]
 
 ### Features and Enhancements
 - __Full API parity:__ The new version of the CLI supports all available API endpoints and parameters
@@ -229,7 +229,7 @@
 - Uploading files over 4 GB in size now works correctly
 - Listing the items in a folder with more than 300,000 items should no longer fail with an invalid offset error
 
-## 1.1.1
+## [1.1.1](https://github.com/box/boxcli/compare/v1.1.0...v1.1.1)
 
 - Fixed bug preventing removal of a user from an Enterprise and conversion to a free user account.
 - Fixed bug that returned incorrect total count when using `box list users -m` to only list managed users.
@@ -237,7 +237,7 @@
 - Removed SyncState from CSV for creating folders.
 - Enabled setting a description for a folder when creating the folder.
 
-## 1.1.0
+## [1.1.0](https://github.com/box/boxcli/compare/v1.0.2...v1.1.0)
 
 - Added new feature on all commands for using an individual token. Add the `--token` option to perform an individual command with the Box CLI using a specific token you provide. The feature is most useful when paired with the Developer Token you can generate through the Box Developer Console. When working with an application you create in the Box Developer Console, you will not need to authorize the application into a Box Enterprise before working with the Developer Token. For example usage: `box users get me --token <token_string>`. Certain commands may fail based on the permissions of the user to which the token you use belongs.
 - Fixed a bug preventing `previewer` being used when adding or updating a collaboration.
@@ -248,17 +248,17 @@
 - Updated Box .Net SDK to v3.3.0.
 - Changed Box CLI output to JSON by default with no existing `.box` directory.
 
-## 1.0.2
+## [1.0.2](https://github.com/box/boxcli/compare/v1.0.1...v1.0.2)
 - Added shared link commands for Create, Get, Update, and Delete. Located as standalone commands under `box shared-links` as well as under `box folders shared-links` and `box files shared-links`.
 - Fixed UTF-8 issue obscuring characters when saving CSV reports.
 - Added autopaging for events and fixed faulty event Get command.
 - Added date options `w` for weeks and `now` when using date options with commands.
 
-## 1.0.1
+## [1.0.1](https://github.com/box/boxcli/compare/v1.0.0...v1.0.1)
 
 - Fixed minor bug preventing --name, --description, and --etag options from working on the `box folders update` command
 - Added a `box folders rename` command.
 
-## 1.0.0
+## [1.0.0](https://github.com/box/boxcli/compare/v1.0.0...v1.0.0)
 
 - Welcome to the Box CLI!
