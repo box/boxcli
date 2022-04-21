@@ -2,12 +2,12 @@
 
 ## [3.0.0](https://github.com/box/boxcli/compare/v2.9.0...v3.0.0) (2022-01-27)
 
-**Breaking Changes**
+### ⚠ BREAKING CHANGES
 
 - Drop support for Node 10
 - Insensitive language changes (#247, #252)
 
-**New Features and Enhancements**
+### New Features and Enhancements
 
 - Add support for login with OAuth ([#240](https://github.com/box/boxcli/pull/240))
 - feat: support as-user flag for bulk files and when token is present ([#270](https://github.com/box/boxcli/pull/270))
@@ -23,44 +23,44 @@
 - chore: enforce conventional commits (#268)
 - feat: support as-user flag for bulk files and when token is present (#270)
 
-**Bug Fixes:**
+### Bug Fixes
 - fix: folder:collaborations:add make role a required flag (#261)
 - fix: Fixed shared-links delete example. (#262)
 
 ## [2.9.0](https://github.com/box/boxcli/compare/v2.8.0...v2.9.0) (2021-02-22)
 
-**New Features and Enhancements**
+### New Features and Enhancements
 
 - Add ability to add an option to a metadata template multi select field ([#230](https://github.com/box/boxcli/pull/230))
 - Add folder lock functionality ([#232](https://github.com/box/boxcli/pull/232))
 - Add support for search param to get shared link items ([#233](https://github.com/box/boxcli/pull/233))
 
-**Bug Fixes:**
+### Bug Fixes
 
 - Fix events command bug when there is no stream position flag ([#234](https://github.com/box/boxcli/pull/234))
 
 ## [2.8.0](https://github.com/box/boxcli/compare/v2.7.0...v2.8.0) (2020-12-03)
 
-**Warning:**
+### Warning:
 
 - Due to the changes in ([#217](https://github.com/box/boxcli/pull/217)), additional details about Box Items may now be returned for some commands.
 
-**New Features and Enhancements:**
+### New Features and Enhancements
 
 - Output contents of array for bulk commands ([#217](https://github.com/box/boxcli/pull/217))
 
-**Bug Fixes:**
+### Bug Fixes
 
 - Fix bug with setting proxy settings ([#218](https://github.com/box/boxcli/pull/218))
 
 ## [2.7.0](https://github.com/box/boxcli/compare/v2.6.0...v2.7.0) (2020-11-02)
 
-**New Features and Enhancements:**
+### New Features and Enhancements
 
 - Make commands `collaborations:add`, `shared-links:update`, `shared-links:delete`, `users:search` that were previously hidden, now available ([#211](https://github.com/box/boxcli/pull/211))
 - Add `filter_term` parameter to `groups:list` ([#210](https://github.com/box/boxcli/pull/210))
 
-**Bug Fixes:**
+### Bug Fixes
 
 - Fix bug with setting proxy settings ([#213](https://github.com/box/boxcli/pull/213))
 
@@ -160,7 +160,7 @@
 - __Download commands can download to a specified location on disk:__ Pass the `--destination` flag to have the files or
   folders download to any location
 
-### Breaking Changes
+### ⚠ BREAKING CHANGES
 
 - The `box files:metadata:*`, `box folders:metadata:*`, and `box metadata-templates:*` command interfaces have changed;
   please run the commands with `--help` for more details
