@@ -1,5 +1,10 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [3.0.1](https://github.com/box/boxcli/compare/v3.1.0...v3.0.1) (2022-04-22)
+
+
 ## [3.0.0](https://github.com/box/boxcli/compare/v2.9.0...v3.0.0) (2022-01-27)
 
 ### ⚠ BREAKING CHANGES
@@ -225,7 +230,7 @@
 
 ### Bug Fixes
 - The `--json` flag in the search command works correctly now
-- Windows absolute paths without the drive letter (e.g. `\MyFolder\file.pdf`) now work correctly
+- Windows absolute paths without the drive letter (e.g. `\MyFolderile.pdf`) now work correctly
 - Uploading files over 4 GB in size now works correctly
 - Listing the items in a folder with more than 300,000 items should no longer fail with an invalid offset error
 
