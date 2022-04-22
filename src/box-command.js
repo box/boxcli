@@ -702,6 +702,13 @@ class BoxCommand extends Command {
 		return client;
 	}
 
+	/**
+	 * Configures SDK
+	 * @param {Object} sdk SDK to configure
+	 * @param {Object} config Configuration to apply
+	 * @private
+	 * @returns {void}
+	 */
 	_configureSdk(sdk, config = {}) {
 		const clientSettings = { ...config };
 		if (this.settings.enableProxy) {
@@ -1033,11 +1040,10 @@ class BoxCommand extends Command {
 	/**
 	 * Final hook that executes for all commands, regardless of if an error occurred
 	 * @param {Error} [err] An error, if one occurred
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
-	async finally(err) {
+	async finally(/* err */) {
 		// called after run and catch regardless of whether or not the command errored
-		return Promise.resolve();
 	}
 
 	/**

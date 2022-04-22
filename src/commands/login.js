@@ -70,7 +70,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		const state = nanoid(32);
 
-		app.get('/callback', async (req, res) => {
+		app.get('/callback', async(req, res) => {
 			try {
 				if (req.query.state !== state) {
 					throw new BoxCLIError(
