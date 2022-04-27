@@ -703,10 +703,9 @@ class BoxCommand extends Command {
 	}
 
 	/**
-	 * Configures SDK
-	 * @param {Object} sdk SDK to configure
-	 * @param {Object} config Configuration to apply
-	 * @private
+	 * Configures SDK by using values from settings.json file
+	 * @param {*} sdk to configure
+	 * @param {*} config Additional options to use while building configuration
 	 * @returns {void}
 	 */
 	_configureSdk(sdk, config = {}) {
@@ -722,6 +721,15 @@ class BoxCommand extends Command {
 		}
 		if (this.settings.authorizeRootURL) {
 			clientSettings.authorizeRootURL = this.settings.authorizeRootURL;
+		}
+		if (this.settings.numMaxRetries) {
+			clientSettings.numMaxRetries = this.settings.numMaxRetries;
+		}
+		if (this.settings.retryIntervalMS) {
+			clientSettings.retryIntervalMS = this.settings.retryIntervalMS;
+		}
+		if (this.settings.uploadRequestTimeoutMS) {
+			clientSettings.uploadRequestTimeoutMS = this.settings.uploadRequestTimeoutMS;
 		}
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
