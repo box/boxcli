@@ -148,7 +148,7 @@ class SearchCommand extends BoxCommand {
 
 		let results = await this.client.search.query(args.query || null, options);
 
-		// Hard limit the search results to avoid slamming the API
+		// Limit the search results according to the --limit flag value
 		let limitedResults = [];
 		const itemsLimit = flags.limit || RESULTS_LIMIT;
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
