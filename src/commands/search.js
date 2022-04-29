@@ -286,7 +286,7 @@ SearchCommand.flags = {
 		]
 	}),
 	limit: flags.integer({
-		description: 'Defines the maximum number of items to return.',
+		description: 'Defines the maximum number of items to return. Default value is 100.',
 	}),
 	'include-recent-shared-links': flags.boolean({
 		description: 'Returns shared links that the user recently accessed'
