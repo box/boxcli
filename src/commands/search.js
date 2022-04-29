@@ -27,7 +27,7 @@ class SearchCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SearchCommand);
 		let options = {
-			limit: flags.limit || RESULTS_LIMIT,
+			limit: RESULTS_LIMIT,
 		};
 		if (flags.scope) {
 			options.scope = flags.scope;
@@ -150,9 +150,10 @@ class SearchCommand extends BoxCommand {
 
 		// Hard limit the search results to avoid slamming the API
 		let limitedResults = [];
+		const itemsLimit = flags.limit || RESULTS_LIMIT;
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
 			let numResults = limitedResults.push(result);
-			if (numResults >= options.limit) {
+			if (numResults >= itemsLimit) {
 				break;
 			}
 		}
@@ -285,7 +286,7 @@ SearchCommand.flags = {
 		]
 	}),
 	limit: flags.integer({
-		description: 'Defines the maximum number of items to return as part of a page of results.',
+		description: 'Defines the maximum number of items to return.',
 	}),
 	'include-recent-shared-links': flags.boolean({
 		description: 'Returns shared links that the user recently accessed'

@@ -52,7 +52,7 @@ OPTIONS
 
   --json                                         Output formatted JSON
   
-  --limit=limit                                  Defines the maximum number of items to return as part of a page of results.
+  --limit=limit                                  Defines the maximum number of items to return
 
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
                                                  <scope>.<templateKey>.<field>=<value>
