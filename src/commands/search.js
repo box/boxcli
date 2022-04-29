@@ -6,7 +6,6 @@ const _ = require('lodash');
 const BoxCLIError = require('../cli-error');
 
 const RESULTS_LIMIT = 100;
-const MAX_LIMIT = 200;
 
 /**
  * Parses a metadata value from the command line into the correct type
@@ -153,7 +152,7 @@ class SearchCommand extends BoxCommand {
 		let limitedResults = [];
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
 			let numResults = limitedResults.push(result);
-			if (numResults >= MAX_LIMIT) {
+			if (numResults >= options.limit) {
 				break;
 			}
 		}
