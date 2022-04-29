@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Market Research",
+    "parent": {
+      "id": "44884797174"
+    },
+    "children": [
+      {
+        "name": "Statistics",
+        "children": [
+          {
+            "name": "Computed",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sales Plays",
+    "parent": {
+      "id": "44884797174"
+    },
+    "children": [
+      {
+        "name": "Big Pharma",
+        "children": []
+      }
+    ]
+  }
+]
