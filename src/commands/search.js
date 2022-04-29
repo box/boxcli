@@ -6,6 +6,7 @@ const _ = require('lodash');
 const BoxCLIError = require('../cli-error');
 
 const RESULTS_LIMIT = 100;
+const MAX_LIMIT = 200;
 
 /**
  * Parses a metadata value from the command line into the correct type
@@ -27,7 +28,7 @@ class SearchCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SearchCommand);
 		let options = {
-			limit: RESULTS_LIMIT,
+			limit: flags.limit || RESULTS_LIMIT,
 		};
 		if (flags.scope) {
 			options.scope = flags.scope;
@@ -152,7 +153,7 @@ class SearchCommand extends BoxCommand {
 		let limitedResults = [];
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
 			let numResults = limitedResults.push(result);
-			if (numResults >= RESULTS_LIMIT) {
+			if (numResults >= MAX_LIMIT) {
 				break;
 			}
 		}
@@ -283,6 +284,9 @@ SearchCommand.flags = {
 			'asc',
 			'desc'
 		]
+	}),
+	limit: flags.integer({
+		description: 'Defines the maximum number of items to return as part of a page of results.',
 	}),
 	'include-recent-shared-links': flags.boolean({
 		description: 'Returns shared links that the user recently accessed'

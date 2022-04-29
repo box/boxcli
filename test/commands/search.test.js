@@ -185,6 +185,14 @@ describe('Search', () => {
 					direction: 'asc',
 				}
 			],
+			'limit flags': [
+				[
+					'--limit=101',
+				],
+				{
+					limit: 101,
+				}
+			],
 			'multitple metadata filters': [
 				[
 					'--md-filter-scope=global',
@@ -289,7 +297,7 @@ describe('Search', () => {
 					.get('/2.0/search')
 					.query({
 						query,
-						limit: 100,
+						limit: params.limit ? params.limit : 100,
 						...params,
 					})
 					.reply(200, fixture)
@@ -297,7 +305,7 @@ describe('Search', () => {
 					.query({
 						query,
 						...params,
-						limit: 100,
+						limit: params.limit ? params.limit : 100,
 						offset: 5
 					})
 					.reply(200, fixture2)
