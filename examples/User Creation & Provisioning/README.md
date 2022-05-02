@@ -23,9 +23,9 @@ PS /Users/mikechen>
 3. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
 
 ## Mock Employee Data
-* Generate 1 Employees: [employees_1.csv](/examples/User%20Creation%20%26%20Provisioning/employees_1.csv)
-* Generate 5 Employees: [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/employees_5.csv)
-* Generate 10 Employees: [employees_10.csv](/examples/User%20Creation%20%26%20Provisioning/employees_10.csv)
+* Generate 1 Employees: [employees_1.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_1.csv)
+* Generate 5 Employees: [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv)
+* Generate 10 Employees: [employees_10.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_10.csv)
 
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
