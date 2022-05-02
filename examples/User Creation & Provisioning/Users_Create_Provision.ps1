@@ -19,7 +19,7 @@ $script:OnboardingFolderId = $null
 $script:UserId = $null 
 
 # Main function
-Function Start{
+Function Start-Script {
     Write-Output "Starting User Creation & Provisioning script..."
 
     Try {
@@ -34,17 +34,17 @@ Function Start{
     }
 
     #Create Folder Structure from JSON
-    Create-Folder-Structure
+    New-Folder-Structure
 
     #OR directly upload Folder structure to current user's root folder from local directory
     #$script:OnboardingFolderId = box folders:upload $LocalUploadPath --id-only
     #Write-Output "Uploaded local folder structre to current user's root folder with $($script:OnboardingFolderId)"
 
     #Create Managed User & Provision Onboarding Folder
-    Create-Provision-Managed-User
+    New-Provision-Managed-User
 }
 
-Function Create-Folder-Structure{
+Function New-Folder-Structure {
 
     #Extract folder structure from json
     Write-Output "Extracting folder structure"
@@ -60,12 +60,12 @@ Function Create-Folder-Structure{
     Write-Output "Created a user owned Onboarding folder with id: $($OnboardingFolderId)"
 
     #Create folder structure owned by current user
-    ForEach($subfolder in $FolderStructure){
+    ForEach ($subfolder in $FolderStructure) {
         $SubFolderId = box folders:create $OnboardingFolderId $subfolder.name --id-only 
         Write-Output "Created subfolder $($subfolder.name) under Onboarding folder with id: $($SubFolderId)"
 
         #Continue creating subfolders if object has children
-        While ($subfolder.children){
+        While ($subfolder.children) {
             $child = $subfolder.children
             #Write-Output "Child folder: $($child)"
             $SubFolderID = box folders:create $SubFolderId $child.name --id-only 
@@ -75,11 +75,11 @@ Function Create-Folder-Structure{
     }
 }
 
-Function Create-Provision-Managed-User{
-    ForEach($Employee in $Employees){
+Function New-Provision-Managed-User {
+    ForEach ($Employee in $Employees) {
         Write-Output "Creating employee Managed User account with first name: $($Employee.firstName), last name: $($Employee.lastName), email: $($Employee.email), and $($Employee.employeeNumber)"
         
-        Try{
+        Try {
             #Create Managed User
             $ManagedUserID = box users:create "$($Employee.firstName) $($Employee.lastName)" $Employee.email --id-only
             Write-Output $ManagedUserID.StatusCode
@@ -96,4 +96,4 @@ Function Create-Provision-Managed-User{
     }
 }
 
-Start
+Start-Script
