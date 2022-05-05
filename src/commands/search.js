@@ -148,11 +148,12 @@ class SearchCommand extends BoxCommand {
 
 		let results = await this.client.search.query(args.query || null, options);
 
-		// Hard limit the search results to avoid slamming the API
+		// Limit the search results according to the --limit flag value (if specified) or RESULTS_LIMIT value
+		const itemsLimit = flags.limit || RESULTS_LIMIT;
 		let limitedResults = [];
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
 			let numResults = limitedResults.push(result);
-			if (numResults >= RESULTS_LIMIT) {
+			if (numResults >= itemsLimit) {
 				break;
 			}
 		}
@@ -283,6 +284,9 @@ SearchCommand.flags = {
 			'asc',
 			'desc'
 		]
+	}),
+	limit: flags.integer({
+		description: 'Defines the maximum number of items to return. Default value is 100.',
 	}),
 	'include-recent-shared-links': flags.boolean({
 		description: 'Returns shared links that the user recently accessed'
