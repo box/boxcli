@@ -18,14 +18,14 @@ PS /Users/mikechen>
 4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
 
 ## Script Parameters
-1. Update the [EmployeeList](/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
-2. Update the [FolderStructureJSONPath](/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
-3. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure]((/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/Users_Create_Provision.ps1#L40). 
+1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
+2. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
+3. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
 
 ## Mock Employee Data
-* Generate 1 Employees: [employees_1.csv](/employees_1.csv)
-* Generate 5 Employees: [employees_5.csv](/employees_5.csv)
-* Generate 10 Employees: [employees_10.csv](/employees_10.csv)
+* Generate 1 Employees: [employees_1.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_1.csv)
+* Generate 5 Employees: [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv)
+* Generate 10 Employees: [employees_10.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_10.csv)
 
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
