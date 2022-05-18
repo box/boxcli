@@ -174,11 +174,11 @@ A current release is on the leading edge of our SDK development, and is intended
 
 ### Version schedule
 
-| Version | Supported Environments | State     | First Release | EOL/Terminated |
-|---------|------------------------|-----------|---------------|----------------|
-| 3       | Node.js 12+            | Supported | 01 Feb 2022   | TBD            |
-| 2       |                        | EOL       | 14 Dec 2018   | 01 Feb 2022    |
-| 1       |                        | EOL       | 01 Nov 2017   | 14 Dec 2018    |
+| Version | Supported Environments  | State     | First Release | EOL/Terminated |
+|---------|-------------------------|-----------|---------------|----------------|
+| 3       | Node.js >= 12 and <= 14 | Supported | 01 Feb 2022   | TBD            |
+| 2       |                         | EOL       | 14 Dec 2018   | 01 Feb 2022    |
+| 1       |                         | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
 ## Contributing to the Box CLI
 
