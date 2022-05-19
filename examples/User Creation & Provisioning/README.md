@@ -3,8 +3,11 @@ This User Creation and Provisioning powershell script will use the Box CLI to bu
 
 ## Setup Pre-Requisites
 1. Clone this github repo.
-2. Install the latest version of [PowerShell]([https://dotnet.microsoft.com/download](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2))
+2. Install PowerShell or .Net core.
+    1. For macOS, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
+    2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
 3. Test PowerShell by running the `pwsh` command in your terminal.
+
 ```
 mikechen@mbp create-users-automation % pwsh
 PowerShell 7.2.1
