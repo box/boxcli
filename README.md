@@ -1,7 +1,7 @@
 # Box CLI
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
-![Platform](https://img.shields.io/badge/node-6--14-blue)
+![Platform](https://img.shields.io/badge/node-12--14-blue)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
 
