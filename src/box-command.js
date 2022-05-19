@@ -1,4 +1,3 @@
-/* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
 
 const { Command, flags } = require('@oclif/command');
