@@ -20,6 +20,7 @@ const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
 const darwinKeychain = require('keychain');
+const { stringifyStream } = require('@discoveryjs/json-ext');
 const darwinKeychainSetPassword = util.promisify(
 	darwinKeychain.setPassword.bind(darwinKeychain)
 );
@@ -31,6 +32,10 @@ const windowsCredentialStore =
 	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
+const stream = require('stream');
+const pipeline = util.promisify(stream.pipeline);
+
+const { Transform } = require('stream');
 
 const KEY_MAPPINGS = {
 	url: 'URL',
@@ -282,7 +287,10 @@ class BoxCommand extends Command {
 				[flag.replace(/-/gu, '')]: { type: 'flag', fieldKey: flag },
 			}))
 		);
-		let bulkCalls = await this._parseBulkFile(this.flags['bulk-file-path'], fieldMapping);
+		let bulkCalls = await this._parseBulkFile(
+			this.flags['bulk-file-path'],
+			fieldMapping
+		);
 		let bulkEntryIndex = 0;
 		for (let bulkData of bulkCalls) {
 			/* eslint-disable no-await-in-loop */
@@ -326,9 +334,7 @@ class BoxCommand extends Command {
 			return;
 		}
 		this.info(
-			chalk`{redBright ${numErrors} entr${
-				numErrors > 1 ? 'ies' : 'y'
-			} failed!}`
+			chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`
 		);
 		this.bulkErrors.forEach((errorInfo) => {
 			this.info(chalk`{dim ----------}`);
@@ -500,7 +506,7 @@ class BoxCommand extends Command {
 			values.map((value, index) => {
 				let key = headers[index];
 				let field = fieldMapping[key];
-				return field ? {...field, value} : undefined;
+				return field ? { ...field, value } : undefined;
 			})
 		);
 	}
@@ -544,7 +550,7 @@ class BoxCommand extends Command {
 							matchKey + nestedKey.toLowerCase().replace(/[-_]/gu, '');
 						let nestedField = fieldMapping[nestedMatchKey];
 						return nestedField
-							? {...nestedField, value: value[nestedKey]}
+							? { ...nestedField, value: value[nestedKey] }
 							: undefined;
 					});
 				} else if (Array.isArray(value)) {
@@ -566,9 +572,9 @@ class BoxCommand extends Command {
 						return value.map((o) => flattenObjectToArgs(o));
 					}
 					// If the array is of values for this field, just return those
-					return field ? value.map((v) => ({...field, value: v})) : [];
+					return field ? value.map((v) => ({ ...field, value: v })) : [];
 				}
-				return field ? {...field, value} : undefined;
+				return field ? { ...field, value } : undefined;
 			});
 		});
 	}
@@ -585,10 +591,7 @@ class BoxCommand extends Command {
 			DEBUG.execute('Read bulk input file at %s', filePath);
 			return fileContents;
 		} catch (ex) {
-			throw new BoxCLIError(
-				`Could not open input file ${filePath}`,
-				ex
-			);
+			throw new BoxCLIError(`Could not open input file ${filePath}`, ex);
 		}
 	}
 
@@ -654,7 +657,8 @@ class BoxCommand extends Command {
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (
 			environmentsObj.default &&
-			environmentsObj.environments[environmentsObj.default].authMethod === 'oauth20'
+			environmentsObj.environments[environmentsObj.default].authMethod ===
+				'oauth20'
 		) {
 			try {
 				let environment = environmentsObj.environments[environmentsObj.default];
@@ -785,7 +789,8 @@ class BoxCommand extends Command {
 			clientSettings.retryIntervalMS = this.settings.retryIntervalMS;
 		}
 		if (this.settings.uploadRequestTimeoutMS) {
-			clientSettings.uploadRequestTimeoutMS = this.settings.uploadRequestTimeoutMS;
+			clientSettings.uploadRequestTimeoutMS =
+				this.settings.uploadRequestTimeoutMS;
 		}
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
@@ -820,8 +825,46 @@ class BoxCommand extends Command {
 			formattedOutputData = await this._formatOutputObject(content);
 			DEBUG.output('Formatted output content for display');
 		}
-		const outputString = await this._stringifyOutput(formattedOutputData);
-		return this._writeOutput(outputString);
+		let outputFormat = this._getOutputFormat();
+		DEBUG.output('Using %s output format', outputFormat);
+		DEBUG.output(formattedOutputData);
+
+		let writeFunc;
+		let logFunc;
+		let stringifiedOutput;
+
+		if (outputFormat === 'json') {
+			stringifiedOutput = stringifyStream(formattedOutputData, null, 4);
+
+			let appendNewLineTransform = new Transform({
+				transform(chunk, encoding, callback) {
+					callback(null, chunk);
+				},
+				flush(callback) {
+					this.push(os.EOL);
+					callback();
+				},
+			});
+
+			writeFunc = async (savePath) =>
+				await pipeline(
+					stringifiedOutput,
+					appendNewLineTransform,
+					fs.createWriteStream(savePath, { encoding: 'utf8' })
+				);
+
+			logFunc = async () => await this.logStream(stringifiedOutput);
+		} else {
+			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
+
+			writeFunc = async (savePath) =>
+				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
+					encoding: 'utf8',
+				});
+
+			logFunc = () => this.log(stringifiedOutput);
+		}
+		return this._writeOutput(writeFunc, logFunc);
 	}
 
 	/**
@@ -901,7 +944,6 @@ class BoxCommand extends Command {
 	 */
 	async _stringifyOutput(outputData) {
 		let outputFormat = this._getOutputFormat();
-		DEBUG.output('Using %s output format', outputFormat);
 
 		if (typeof outputData !== 'object') {
 			DEBUG.output('Primitive output cast to string');
@@ -914,10 +956,6 @@ class BoxCommand extends Command {
 			// redundant with the automatic newline added by oclif when writing to stdout
 			DEBUG.output('Processed output as CSV');
 			return csvString.replace(/\r?\n$/u, '');
-		} else if (outputFormat === 'json') {
-			let jsonString = JSON.stringify(outputData, null, 4);
-			DEBUG.output('Processed output as JSON');
-			return jsonString;
 		} else if (Array.isArray(outputData)) {
 			let str = outputData
 				.map((o) => `${formatObjectHeader(o)}${os.EOL}${formatObject(o)}`)
@@ -948,21 +986,20 @@ class BoxCommand extends Command {
 
 	/**
 	 * Write output to its final destination, either a file or stdout
-	 * @param {string} outputContent The stringified content to output
+	 * @param {Function} writeFunc Function used to save output to a file
+	 * @param {Function} logFunc Function used to print output to stdout
 	 * @returns {Promise<void>} A promise resolving when output is written
 	 * @private
 	 */
-	async _writeOutput(outputContent) {
+	async _writeOutput(writeFunc, logFunc) {
 		if (this.flags.save) {
 			DEBUG.output('Writing output to default location on disk');
-			// append a newline character to the end of the file to match console.log() behavior
-			outputContent += os.EOL;
 			let filePath = path.join(
 				this.settings.boxReportsFolderPath,
 				this._getOutputFileName()
 			);
 			try {
-				fs.writeFileSync(filePath, outputContent, 'utf8');
+				await writeFunc(filePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${filePath}`,
@@ -971,9 +1008,6 @@ class BoxCommand extends Command {
 			}
 			this.info(chalk`{green Output written to ${filePath}}`);
 		} else if (this.flags['save-to-file-path']) {
-			// append a newline character to the end of the file to match console.log() behavior
-			outputContent += os.EOL;
-
 			let savePath = this.flags['save-to-file-path'];
 			if (fs.existsSync(savePath)) {
 				if (fs.statSync(savePath).isDirectory()) {
@@ -1000,7 +1034,7 @@ class BoxCommand extends Command {
 					'Writing output to specified location on disk: %s',
 					savePath
 				);
-				fs.writeFileSync(savePath, outputContent, 'utf8');
+				await writeFunc(savePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${savePath}`,
@@ -1010,7 +1044,7 @@ class BoxCommand extends Command {
 			this.info(chalk`{green Output written to ${savePath}}`);
 		} else {
 			DEBUG.output('Writing output to terminal');
-			this.log(outputContent);
+			await logFunc();
 		}
 
 		DEBUG.output('Finished writing output');
@@ -1063,6 +1097,33 @@ class BoxCommand extends Command {
 	log(content) {
 		if (!this.flags.quiet) {
 			super.log(content);
+		}
+	}
+
+	/**
+	 * Writes stream output to stderr — this should be used for informational output.  For example, a message
+	 * stating that an item has been deleted.
+	 *
+	 * @param {ReadableStream} content The message to output
+	 * @returns {void}
+	 */
+	async logStream(content) {
+		if (!this.flags.quiet) {
+			// For Node 12 when process.stdout is in pipeline it's not emitting end event correctly and it freezes.
+			// See - https://github.com/nodejs/node/issues/34059
+			// Using promise for now.
+			content.pipe(process.stdout);
+
+			await new Promise((resolve, reject) => {
+				content
+					.on('end', () => {
+						process.stdout.write(os.EOL);
+						resolve();
+					})
+					.on('error', (err) => {
+						reject(err);
+					});
+			});
 		}
 	}
 
