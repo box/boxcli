@@ -22,6 +22,7 @@
 	},
 	"bugs": "https://github.com/box/boxcli/issues",
 	"dependencies": {
+		"@discoveryjs/json-ext": "^0.5.7",
 		"@oclif/command": "^1.5.5",
 		"@oclif/config": "^1.7.6",
 		"@oclif/plugin-autocomplete": "^0.1.0",
