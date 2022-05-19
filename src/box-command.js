@@ -1,4 +1,4 @@
-/* eslint-disable promise/avoid-new,class-methods-use-this */
+/* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
 
 const { Command, flags } = require('@oclif/command');
@@ -846,21 +846,25 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) =>
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
 					fs.createWriteStream(savePath, { encoding: 'utf8' })
 				);
+			};
 
-			logFunc = async () => await this.logStream(stringifiedOutput);
+			logFunc = async () => {
+				await this.logStream(stringifiedOutput);
+			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) =>
+			writeFunc = async (savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
+			};
 
 			logFunc = () => this.log(stringifiedOutput);
 		}
