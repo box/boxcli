@@ -655,6 +655,15 @@ class BoxCommand extends Command {
 			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
+		} else if (this.flags['ccg-auth']) {
+			let sdk = new BoxSDK({
+				clientID: '',
+				clientSecret: '',
+				...SDK_CONFIG,
+			});
+			this._configureSdk(sdk, { ...SDK_CONFIG });
+			this.sdk = sdk;
+			client = sdk.getCCGClientForUser(this.flags['as-user']);
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -846,7 +855,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -854,13 +863,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1522,6 +1531,10 @@ BoxCommand.flags = {
 		description: 'Provide a token to perform this call',
 	}),
 	'as-user': flags.string({ description: 'Provide an ID for a user' }),
+	'ccg-auth': flags.boolean({
+		description: 'Uses Client Credentials Grant (requires as-user)',
+		dependsOn: ['as-user'],
+	}),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({
 		description: 'Turn off colors for logging',
