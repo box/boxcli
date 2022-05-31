@@ -153,7 +153,7 @@ class OAuthLoginCommand extends BoxCommand {
 					message: 'What is your state code? (state=)',
 				},
 			]);
-			http.get("http://localhost:" + port + "/callback?state=" + authInfo.state + "&code=" + authInfo.code)
+			http.get(`http://localhost:${port}/callback?state=${authInfo.state}&code=${authInfo.code}`);
 		} else {
 			open(authorizeUrl);
 			this.info(

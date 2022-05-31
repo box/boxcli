@@ -1,5 +1,4 @@
-/* eslint-disable promise/avoid-new,class-methods-use-this */
-
+/* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
 
 const { Command, flags } = require('@oclif/command');
@@ -21,6 +20,7 @@ const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
 const darwinKeychain = require('keychain');
+const { stringifyStream } = require('@discoveryjs/json-ext');
 const darwinKeychainSetPassword = util.promisify(
 	darwinKeychain.setPassword.bind(darwinKeychain)
 );
@@ -32,6 +32,10 @@ const windowsCredentialStore =
 	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
+const stream = require('stream');
+const pipeline = util.promisify(stream.pipeline);
+
+const { Transform } = require('stream');
 
 const KEY_MAPPINGS = {
 	url: 'URL',
@@ -271,9 +275,8 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async bulkOutputRun() {
-		let allPossibleArgs = this.constructor.args.map((arg) => arg.name);
-		let allPossibleFlags = Object.keys(this.constructor.flags);
-
+		const allPossibleArgs = this.constructor.args.map((arg) => arg.name);
+		const allPossibleFlags = Object.keys(this.constructor.flags);
 		// Map from matchKey (arg/flag name in all lower-case characters) => {type, fieldKey}
 		let fieldMapping = Object.assign(
 			{},
@@ -284,208 +287,18 @@ class BoxCommand extends Command {
 				[flag.replace(/-/gu, '')]: { type: 'flag', fieldKey: flag },
 			}))
 		);
-		let fileExtension = path.extname(this.flags['bulk-file-path']);
-		let fileContents;
-		let bulkCalls;
-		try {
-			fileContents = fs.readFileSync(this.flags['bulk-file-path']);
-			DEBUG.execute('Read bulk input file at %s', this.flags['bulk-file-path']);
-		} catch (ex) {
-			throw new BoxCLIError(
-				`Could not open input file ${this.flags['bulk-file-path']}`,
-				ex
-			);
-		}
-
-		if (fileExtension === '.json') {
-			let parsedData;
-			try {
-				let jsonFile = JSON.parse(fileContents);
-				parsedData = jsonFile.hasOwnProperty('entries')
-					? jsonFile.entries
-					: jsonFile;
-			} catch (e) {
-				throw new BoxCLIError(
-					`Could not parse JSON input file ${this.flags['bulk-file-path']}`,
-					e
-				);
-			}
-
-			if (!Array.isArray(parsedData)) {
-				throw new TypeError(
-					'Expected input file to contain an array of input objects, but none found'
-				);
-			}
-
-			// Translate each row object to an array of {type, fieldKey, value}, to be handled below
-			bulkCalls = parsedData.map(function flattenObjectToArgs(obj) {
-				// One top-level object key can map to multiple args/flags, so we need to deeply flatten after mapping
-				return _.flatMapDeep(obj, (value, key) => {
-					let matchKey = key.toLowerCase().replace(/[-_]/gu, '');
-					let field = fieldMapping[matchKey];
-
-					if (_.isPlainObject(value)) {
-						// Map e.g. { item: { id: 12345, type: folder } } => { item: 12345, itemtype: folder }
-						// @NOTE: For now, we only support nesting keys this way one level deep
-						return Object.keys(value).map((nestedKey) => {
-							let nestedMatchKey =
-								matchKey + nestedKey.toLowerCase().replace(/[-_]/gu, '');
-							let nestedField = fieldMapping[nestedMatchKey];
-
-							return nestedField
-								? { ...nestedField, value: value[nestedKey] }
-								: undefined;
-						});
-					} else if (Array.isArray(value)) {
-						// Arrays can be one of two things: an array of values for a single key,
-						// or an array of grouped flags/args as objects
-						// First, check if everything in the array is either all object or all non-object
-						let types = value.reduce((acc, t) => acc.concat(typeof t), []);
-						if (
-							types.some((t) => t !== 'object') &&
-							types.some((t) => t === 'object')
-						) {
-							throw new BoxCLIError(
-								'Mixed types in bulk input JSON array; use strings or Objects'
-							);
-						}
-
-						// If everything in the array is objects, handle each one as a group of flags and args
-						// by recursively parsing that object into args
-						if (types[0] === 'object') {
-							return value.map((o) => flattenObjectToArgs(o));
-						}
-
-						// If the array is of values for this field, just return those
-						return field ? value.map((v) => ({ ...field, value: v })) : [];
-					}
-
-					return field ? { ...field, value } : undefined;
-				});
-			});
-		} else if (fileExtension === '.csv') {
-			let parsedData = await csvParse(fileContents, {
-				delimiter: ',',
-				cast(value, context) {
-					if (value.length === 0) {
-						// Regard unquoted empty values as null
-						return context.quoting ? '' : null;
-					}
-
-					return value;
-				},
-			});
-
-			if (parsedData.length < 2) {
-				throw new Error(
-					'CSV input file should contain the headers row and at least on data row'
-				);
-			}
-
-			// @NOTE: We don't parse the CSV into an aray of Objects
-			// and instead mainatain a separate array of headers, in
-			// order to ensure that ordering is maintained in the keys
-			let headers = parsedData.shift().map((key) => {
-				let keyParts = key.match(/(.*)_\d+$/u);
-				let someKey = keyParts ? keyParts[1] : key;
-
-				return someKey.toLowerCase().replace(/[-_]/gu, '');
-			});
-
-			bulkCalls = parsedData.map((values) =>
-				values.map((value, index) => {
-					let key = headers[index];
-					let field = fieldMapping[key];
-
-					return field ? { ...field, value } : undefined;
-				})
-			);
-		} else {
-			throw new Error(
-				`Input file had extension "${fileExtension}", but only .json and .csv are supported`
-			);
-		}
-
-		// Filter out any undefined values, which can arise when the input file contains extraneous keys
-		bulkCalls = bulkCalls.map((args) => args.filter((o) => o !== undefined));
-		DEBUG.execute(
-			'Read %d entries from bulk file %s',
-			bulkCalls.length,
-			this.flags['bulk-file-path']
+		let bulkCalls = await this._parseBulkFile(
+			this.flags['bulk-file-path'],
+			fieldMapping
 		);
-
 		let bulkEntryIndex = 0;
 		for (let bulkData of bulkCalls) {
+			/* eslint-disable no-await-in-loop */
 			this.argv = [];
 			bulkEntryIndex += 1;
-
-			// For each possible arg, find the correct value between bulk input
-			// and values given on the command line
-			for (let arg of allPossibleArgs) {
-				let bulkArg = bulkData.find((o) => o.fieldKey === arg) || {};
-				if (!_.isNil(bulkArg.value)) {
-					// Use value from bulk input file when available
-					this.argv.push(bulkArg.value);
-				} else if (this.args[arg]) {
-					// Fall back to value from command line
-					this.argv.push(this.args[arg]);
-				}
-			}
-
-			// Include flag values from command line first; they'll automatically
-			// be overwritten/combined with later values by the oclif parser
-			Object.keys(this.flags)
-				.filter((flag) => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
-				.forEach((flag) => {
-					// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
-					// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
-					if (Array.isArray(this.flags[flag])) {
-						this.flags[flag].forEach((value) => {
-							this._addFlagToArgv(flag, value);
-						});
-					} else {
-						this._addFlagToArgv(flag, this.flags[flag]);
-					}
-				});
-
-			// Include all flag values from bulk input, which will override earlier ones
-			// from the command line
-			bulkData
-				// Remove the bulk file path flag so we don't recurse!
-				.filter((o) => o.type === 'flag' && o.fieldKey !== 'bulk-file-path')
-				.forEach((o) => this._addFlagToArgv(o.fieldKey, o.value));
-
-			// Set as-user header from the bulk file or use the default one.
-			let asUser = bulkData.find((o) => o.fieldKey === 'as-user') || {};
-			if (!_.isEmpty(asUser)) {
-				if (_.isNil(asUser.value)) {
-					let environmentsObj = await this.getEnvironments(); // eslint-disable-line no-await-in-loop
-					if (environmentsObj.default) {
-						let environment =
-							environmentsObj.environments[environmentsObj.default];
-						DEBUG.init(
-							'Using environment %s %O',
-							environmentsObj.default,
-							environment
-						);
-						if (environment.useDefaultAsUser) {
-							this.client.asUser(environment.defaultAsUserId);
-							DEBUG.init(
-								'Impersonating default user ID %s',
-								environment.defaultAsUserId
-							);
-						} else {
-							this.client.asSelf();
-						}
-					} else {
-						this.client.asSelf();
-					}
-				} else {
-					this.client.asUser(asUser.value);
-					DEBUG.init('Impersonating user ID %s', asUser.value);
-				}
-			}
-
+			this._getArgsForBulkInput(allPossibleArgs, bulkData);
+			this._setFlagsForBulkInput(bulkData);
+			await this._handleAsUserSettings(bulkData);
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
 			/* eslint-disable no-await-in-loop */
@@ -503,35 +316,282 @@ class BoxCommand extends Command {
 			}
 			/* eslint-enable no-await-in-loop */
 		}
-
 		this.isBulk = false;
 		DEBUG.execute('Leaving bulk mode and writing final output');
 		await this.output(this.bulkOutputList);
-		let numErrors = this.bulkErrors.length;
-		if (numErrors > 0) {
-			this.info(
-				chalk`{redBright ${numErrors} entr${
-					numErrors > 1 ? 'ies' : 'y'
-				} failed!}`
-			);
-			this.bulkErrors.forEach((errorInfo) => {
-				this.info(chalk`{dim ----------}`);
-				let entryData = errorInfo.data
-					.map((o) => `    ${o.fieldKey}=${o.value}`)
-					.join(os.EOL);
-				this.info(
-					chalk`{redBright Entry ${errorInfo.index} (${
-						os.EOL + entryData + os.EOL
-					}) failed with error:}`
-				);
-				let err = errorInfo.error;
-				let errMsg = chalk`{redBright ${
-					this.flags && this.flags.verbose ? err.stack : err.message
-				}${os.EOL}}`;
-				this.info(errMsg);
-			});
-		} else {
+		this._handleBulkErrors();
+	}
+
+	/**
+	 * Logs bulk processing errors if any occured.
+	 * @returns {void}
+	 * @private
+	 */
+	_handleBulkErrors() {
+		const numErrors = this.bulkErrors.length;
+		if (numErrors === 0) {
 			this.info(chalk`{green All bulk input entries processed successfully.}`);
+			return;
+		}
+		this.info(
+			chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`
+		);
+		this.bulkErrors.forEach((errorInfo) => {
+			this.info(chalk`{dim ----------}`);
+			let entryData = errorInfo.data
+				.map((o) => `    ${o.fieldKey}=${o.value}`)
+				.join(os.EOL);
+			this.info(
+				chalk`{redBright Entry ${errorInfo.index} (${
+					os.EOL + entryData + os.EOL
+				}) failed with error:}`
+			);
+			let err = errorInfo.error;
+			let errMsg = chalk`{redBright ${
+				this.flags && this.flags.verbose ? err.stack : err.message
+			}${os.EOL}}`;
+			this.info(errMsg);
+		});
+	}
+
+	/**
+	 * Set as-user header from the bulk file or use the default one.
+	 * @param {Array} bulkData Bulk data
+	 * @returns {Promise<void>} Returns nothing
+	 * @private
+	 */
+	async _handleAsUserSettings(bulkData) {
+		let asUser = bulkData.find((o) => o.fieldKey === 'as-user') || {};
+		if (!_.isEmpty(asUser)) {
+			if (_.isNil(asUser.value)) {
+				let environmentsObj = await this.getEnvironments(); // eslint-disable-line no-await-in-loop
+				if (environmentsObj.default) {
+					let environment =
+						environmentsObj.environments[environmentsObj.default];
+					DEBUG.init(
+						'Using environment %s %O',
+						environmentsObj.default,
+						environment
+					);
+					if (environment.useDefaultAsUser) {
+						this.client.asUser(environment.defaultAsUserId);
+						DEBUG.init(
+							'Impersonating default user ID %s',
+							environment.defaultAsUserId
+						);
+					} else {
+						this.client.asSelf();
+					}
+				} else {
+					this.client.asSelf();
+				}
+			} else {
+				this.client.asUser(asUser.value);
+				DEBUG.init('Impersonating user ID %s', asUser.value);
+			}
+		}
+	}
+
+	/**
+	 * Include flag values from command line first,
+	 * they'll automatically be overwritten/combined with later values by the oclif parser.
+	 * @param {Array} bulkData Bulk data
+	 * @returns {void}
+	 * @private
+	 */
+	_setFlagsForBulkInput(bulkData) {
+		Object.keys(this.flags)
+			.filter((flag) => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
+			.forEach((flag) => {
+				// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
+				// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
+				if (Array.isArray(this.flags[flag])) {
+					this.flags[flag].forEach((value) => {
+						this._addFlagToArgv(flag, value);
+					});
+				} else {
+					this._addFlagToArgv(flag, this.flags[flag]);
+				}
+			});
+		// Include all flag values from bulk input, which will override earlier ones
+		// from the command line
+		bulkData
+			// Remove the bulk file path flag so we don't recurse!
+			.filter((o) => o.type === 'flag' && o.fieldKey !== 'bulk-file-path')
+			.forEach((o) => this._addFlagToArgv(o.fieldKey, o.value));
+	}
+
+	/**
+	 * For each possible arg, find the correct value between bulk input and values given on the command line.
+	 * @param {Array} allPossibleArgs All possible args
+	 * @param {Array} bulkData Bulk data
+	 * @returns {void}
+	 * @private
+	 */
+	_getArgsForBulkInput(allPossibleArgs, bulkData) {
+		for (let arg of allPossibleArgs) {
+			let bulkArg = bulkData.find((o) => o.fieldKey === arg) || {};
+			if (!_.isNil(bulkArg.value)) {
+				// Use value from bulk input file when available
+				this.argv.push(bulkArg.value);
+			} else if (this.args[arg]) {
+				// Fall back to value from command line
+				this.argv.push(this.args[arg]);
+			}
+		}
+	}
+
+	/**
+	 * Parses file wilk bulk commands
+	 * @param {String} filePath Path to file with bulk commands
+	 * @param {Array} fieldMapping Data to parse
+	 * @returns {Promise<*>} Returns parsed data
+	 * @private
+	 */
+	async _parseBulkFile(filePath, fieldMapping) {
+		const fileExtension = path.extname(filePath);
+		const fileContents = this._readBulkFile(filePath);
+		let bulkCalls;
+		if (fileExtension === '.json') {
+			bulkCalls = this._handleJsonFile(fileContents, fieldMapping);
+		} else if (fileExtension === '.csv') {
+			bulkCalls = await this._handleCsvFile(fileContents, fieldMapping);
+		} else {
+			throw new Error(
+				`Input file had extension "${fileExtension}", but only .json and .csv are supported`
+			);
+		}
+		// Filter out any undefined values, which can arise when the input file contains extraneous keys
+		bulkCalls = bulkCalls.map((args) => args.filter((o) => o !== undefined));
+		DEBUG.execute(
+			'Read %d entries from bulk file %s',
+			bulkCalls.length,
+			this.flags['bulk-file-path']
+		);
+		return bulkCalls;
+	}
+
+	/**
+	 * Parses CSV file
+	 * @param {Object} fileContents File content to parse
+	 * @param {Array} fieldMapping Field mapings
+	 * @returns {Promise<string|null|*>} Returns parsed data
+	 * @private
+	 */
+	async _handleCsvFile(fileContents, fieldMapping) {
+		let parsedData = await csvParse(fileContents, {
+			delimiter: ',',
+			cast(value, context) {
+				if (value.length === 0) {
+					// Regard unquoted empty values as null
+					return context.quoting ? '' : null;
+				}
+				return value;
+			},
+		});
+		if (parsedData.length < 2) {
+			throw new Error(
+				'CSV input file should contain the headers row and at least on data row'
+			);
+		}
+		// @NOTE: We don't parse the CSV into an aray of Objects
+		// and instead mainatain a separate array of headers, in
+		// order to ensure that ordering is maintained in the keys
+		let headers = parsedData.shift().map((key) => {
+			let keyParts = key.match(/(.*)_\d+$/u);
+			let someKey = keyParts ? keyParts[1] : key;
+			return someKey.toLowerCase().replace(/[-_]/gu, '');
+		});
+		return parsedData.map((values) =>
+			values.map((value, index) => {
+				let key = headers[index];
+				let field = fieldMapping[key];
+				return field ? { ...field, value } : undefined;
+			})
+		);
+	}
+
+	/**
+	 * Parses JSON file
+	 * @param {Object} fileContents File content to parse
+	 * @param {Array} fieldMapping Field mapings
+	 * @returns {*} Returns parsed data
+	 * @private
+	 */
+	_handleJsonFile(fileContents, fieldMapping) {
+		let parsedData;
+		try {
+			let jsonFile = JSON.parse(fileContents);
+			parsedData = jsonFile.hasOwnProperty('entries')
+				? jsonFile.entries
+				: jsonFile;
+		} catch (e) {
+			throw new BoxCLIError(
+				`Could not parse JSON input file ${this.flags['bulk-file-path']}`,
+				e
+			);
+		}
+		if (!Array.isArray(parsedData)) {
+			throw new TypeError(
+				'Expected input file to contain an array of input objects, but none found'
+			);
+		}
+		// Translate each row object to an array of {type, fieldKey, value}, to be handled below
+		return parsedData.map(function flattenObjectToArgs(obj) {
+			// One top-level object key can map to multiple args/flags, so we need to deeply flatten after mapping
+			return _.flatMapDeep(obj, (value, key) => {
+				let matchKey = key.toLowerCase().replace(/[-_]/gu, '');
+				let field = fieldMapping[matchKey];
+				if (_.isPlainObject(value)) {
+					// Map e.g. { item: { id: 12345, type: folder } } => { item: 12345, itemtype: folder }
+					// @NOTE: For now, we only support nesting keys this way one level deep
+					return Object.keys(value).map((nestedKey) => {
+						let nestedMatchKey =
+							matchKey + nestedKey.toLowerCase().replace(/[-_]/gu, '');
+						let nestedField = fieldMapping[nestedMatchKey];
+						return nestedField
+							? { ...nestedField, value: value[nestedKey] }
+							: undefined;
+					});
+				} else if (Array.isArray(value)) {
+					// Arrays can be one of two things: an array of values for a single key,
+					// or an array of grouped flags/args as objects
+					// First, check if everything in the array is either all object or all non-object
+					let types = value.reduce((acc, t) => acc.concat(typeof t), []);
+					if (
+						types.some((t) => t !== 'object') &&
+						types.some((t) => t === 'object')
+					) {
+						throw new BoxCLIError(
+							'Mixed types in bulk input JSON array; use strings or Objects'
+						);
+					}
+					// If everything in the array is objects, handle each one as a group of flags and args
+					// by recursively parsing that object into args
+					if (types[0] === 'object') {
+						return value.map((o) => flattenObjectToArgs(o));
+					}
+					// If the array is of values for this field, just return those
+					return field ? value.map((v) => ({ ...field, value: v })) : [];
+				}
+				return field ? { ...field, value } : undefined;
+			});
+		});
+	}
+
+	/**
+	 * Returns bulk file contents
+	 * @param {String} filePath Path to bulk file
+	 * @returns {Buffer} Bulk file contents
+	 * @private
+	 */
+	_readBulkFile(filePath) {
+		try {
+			const fileContents = fs.readFileSync(filePath);
+			DEBUG.execute('Read bulk input file at %s', filePath);
+			return fileContents;
+		} catch (ex) {
+			throw new BoxCLIError(`Could not open input file ${filePath}`, ex);
 		}
 	}
 
@@ -729,7 +789,8 @@ class BoxCommand extends Command {
 			clientSettings.retryIntervalMS = this.settings.retryIntervalMS;
 		}
 		if (this.settings.uploadRequestTimeoutMS) {
-			clientSettings.uploadRequestTimeoutMS = this.settings.uploadRequestTimeoutMS;
+			clientSettings.uploadRequestTimeoutMS =
+				this.settings.uploadRequestTimeoutMS;
 		}
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
@@ -764,8 +825,50 @@ class BoxCommand extends Command {
 			formattedOutputData = await this._formatOutputObject(content);
 			DEBUG.output('Formatted output content for display');
 		}
-		let outputString = await this._stringifyOutput(formattedOutputData);
-		return this._writeOutput(outputString);
+		let outputFormat = this._getOutputFormat();
+		DEBUG.output('Using %s output format', outputFormat);
+		DEBUG.output(formattedOutputData);
+
+		let writeFunc;
+		let logFunc;
+		let stringifiedOutput;
+
+		if (outputFormat === 'json') {
+			stringifiedOutput = stringifyStream(formattedOutputData, null, 4);
+
+			let appendNewLineTransform = new Transform({
+				transform(chunk, encoding, callback) {
+					callback(null, chunk);
+				},
+				flush(callback) {
+					this.push(os.EOL);
+					callback();
+				},
+			});
+
+			writeFunc = async(savePath) => {
+				await pipeline(
+					stringifiedOutput,
+					appendNewLineTransform,
+					fs.createWriteStream(savePath, { encoding: 'utf8' })
+				);
+			};
+
+			logFunc = async() => {
+				await this.logStream(stringifiedOutput);
+			};
+		} else {
+			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
+
+			writeFunc = async(savePath) => {
+				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
+					encoding: 'utf8',
+				});
+			};
+
+			logFunc = () => this.log(stringifiedOutput);
+		}
+		return this._writeOutput(writeFunc, logFunc);
 	}
 
 	/**
@@ -845,7 +948,6 @@ class BoxCommand extends Command {
 	 */
 	async _stringifyOutput(outputData) {
 		let outputFormat = this._getOutputFormat();
-		DEBUG.output('Using %s output format', outputFormat);
 
 		if (typeof outputData !== 'object') {
 			DEBUG.output('Primitive output cast to string');
@@ -858,10 +960,6 @@ class BoxCommand extends Command {
 			// redundant with the automatic newline added by oclif when writing to stdout
 			DEBUG.output('Processed output as CSV');
 			return csvString.replace(/\r?\n$/u, '');
-		} else if (outputFormat === 'json') {
-			let jsonString = JSON.stringify(outputData, null, 4);
-			DEBUG.output('Processed output as JSON');
-			return jsonString;
 		} else if (Array.isArray(outputData)) {
 			let str = outputData
 				.map((o) => `${formatObjectHeader(o)}${os.EOL}${formatObject(o)}`)
@@ -892,21 +990,20 @@ class BoxCommand extends Command {
 
 	/**
 	 * Write output to its final destination, either a file or stdout
-	 * @param {string} outputContent The stringified content to output
+	 * @param {Function} writeFunc Function used to save output to a file
+	 * @param {Function} logFunc Function used to print output to stdout
 	 * @returns {Promise<void>} A promise resolving when output is written
 	 * @private
 	 */
-	async _writeOutput(outputContent) {
+	async _writeOutput(writeFunc, logFunc) {
 		if (this.flags.save) {
 			DEBUG.output('Writing output to default location on disk');
-			// append a newline character to the end of the file to match console.log() behavior
-			outputContent += os.EOL;
 			let filePath = path.join(
 				this.settings.boxReportsFolderPath,
 				this._getOutputFileName()
 			);
 			try {
-				fs.writeFileSync(filePath, outputContent, 'utf8');
+				await writeFunc(filePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${filePath}`,
@@ -915,9 +1012,6 @@ class BoxCommand extends Command {
 			}
 			this.info(chalk`{green Output written to ${filePath}}`);
 		} else if (this.flags['save-to-file-path']) {
-			// append a newline character to the end of the file to match console.log() behavior
-			outputContent += os.EOL;
-
 			let savePath = this.flags['save-to-file-path'];
 			if (fs.existsSync(savePath)) {
 				if (fs.statSync(savePath).isDirectory()) {
@@ -944,7 +1038,7 @@ class BoxCommand extends Command {
 					'Writing output to specified location on disk: %s',
 					savePath
 				);
-				fs.writeFileSync(savePath, outputContent, 'utf8');
+				await writeFunc(savePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${savePath}`,
@@ -954,7 +1048,7 @@ class BoxCommand extends Command {
 			this.info(chalk`{green Output written to ${savePath}}`);
 		} else {
 			DEBUG.output('Writing output to terminal');
-			this.log(outputContent);
+			await logFunc();
 		}
 
 		DEBUG.output('Finished writing output');
@@ -1007,6 +1101,33 @@ class BoxCommand extends Command {
 	log(content) {
 		if (!this.flags.quiet) {
 			super.log(content);
+		}
+	}
+
+	/**
+	 * Writes stream output to stderr — this should be used for informational output.  For example, a message
+	 * stating that an item has been deleted.
+	 *
+	 * @param {ReadableStream} content The message to output
+	 * @returns {void}
+	 */
+	async logStream(content) {
+		if (!this.flags.quiet) {
+			// For Node 12 when process.stdout is in pipeline it's not emitting end event correctly and it freezes.
+			// See - https://github.com/nodejs/node/issues/34059
+			// Using promise for now.
+			content.pipe(process.stdout);
+
+			await new Promise((resolve, reject) => {
+				content
+					.on('end', () => {
+						process.stdout.write(os.EOL);
+						resolve();
+					})
+					.on('error', (err) => {
+						reject(err);
+					});
+			});
 		}
 	}
 

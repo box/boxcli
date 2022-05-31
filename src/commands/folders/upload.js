@@ -14,7 +14,7 @@ class FoldersUploadCommand extends BoxCommand {
 
 		let folderId = await this.uploadFolder(args.path, flags['parent-folder'], flags['folder-name']);
 		let folder = await this.client.folders.get(folderId);
-		this.output(folder);
+		await this.output(folder);
 	}
 
 	async uploadFolder(folderPath, parentFolderId, folderName) {

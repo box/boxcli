@@ -3,7 +3,7 @@ name: Bug
 about: Report a bug found in the SDK
 title: ''
 labels: bug
-assignees: PJSimon, sujaygarlanka
+assignees: mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2
 
 ---
 
@@ -45,4 +45,4 @@ Operating System: <!-- Replace with the operating system you run the CLI on. -->
 [sdk-docs]: ./doc
 [api-docs]: https://developer.box.com/docs
 [dev-forums]: https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum
-[github-repo]: https://github.com/box/box-java-sdk/search?type=Issues
+[github-repo]: https://github.com/box/boxcli/search?type=Issues
