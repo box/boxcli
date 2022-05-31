@@ -1,6 +1,6 @@
 # Configuration
 To configure Box CLI the method [configure].
-You can have many environents that define how you authinticate to box but there is only one configuration shared across them.
+You can have many environments that define how you authenticate to box but there is only one configuration shared across them.
 To see current configuration run:
 ```commandline
  box configure:settings
@@ -45,7 +45,7 @@ box configure:settings --no-enable-proxy
 ```
 
 Proxy settings are not removed from your configuration, this command disables proxy setting by CLI.
-You can enable proxy once again (will be using prevous settings) with:
+You can enable proxy once again (will be using previous settings) with:
 ```commandline
 box configure:settings --enable-proxy
 ```
@@ -80,7 +80,7 @@ and changing any setting.
 
 ## Configure how client retries calls and handles timeouts
 
-You can confugure how many retries, how long to wait between retries or upload timeout. The default values are already
+You can configure how many retries, how long to wait between retries or upload timeout. The default values are already
 defined for the CLI but if you want to change default behaviour add those options to `settings.json`
 
 ```json
