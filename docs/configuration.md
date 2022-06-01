@@ -23,7 +23,7 @@ To configure proxy you will need:
 * Proxy URL, which should contain the protocol, url, and port (i.e. http://sample.proxyurl.com:80)
 * Username and Password if required
 
-Use [configure] command to setup proxy:
+Use [configure] command to set up proxy:
 ```commandline
 box configure:settings --enable-proxy\
  --proxy-url=proxy-url\
