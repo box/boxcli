@@ -26,9 +26,15 @@ function parseMetadataValue(value) {
 class SearchCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SearchCommand);
+
+		if (flags.all && flags.limit) {
+			throw new BoxCLIError('--all and --limit flags cannot be used together.');
+		}
+
 		let options = {
 			limit: RESULTS_LIMIT,
 		};
+
 		if (flags.scope) {
 			options.scope = flags.scope;
 		}
@@ -153,7 +159,7 @@ class SearchCommand extends BoxCommand {
 		let limitedResults = [];
 		for await (let result of { [Symbol.asyncIterator]: () => results }) {
 			let numResults = limitedResults.push(result);
-			if (numResults >= itemsLimit) {
+			if (!flags.all && numResults >= itemsLimit) {
 				break;
 			}
 		}
@@ -287,6 +293,9 @@ SearchCommand.flags = {
 	}),
 	limit: flags.integer({
 		description: 'Defines the maximum number of items to return. Default value is 100.',
+	}),
+	all: flags.boolean({
+		description: 'Returns all search results.',
 	}),
 	'include-recent-shared-links': flags.boolean({
 		description: 'Returns shared links that the user recently accessed'

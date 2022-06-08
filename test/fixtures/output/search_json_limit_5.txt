@@ -1,0 +1,293 @@
+[
+    {
+        "type": "file",
+        "id": "11111",
+        "file_version": {
+            "type": "file_version",
+            "id": "111110",
+            "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+        },
+        "sequence_id": "9",
+        "etag": "9",
+        "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+        "name": "test file.txt",
+        "description": "",
+        "size": 16,
+        "path_collection": {
+            "total_count": 1,
+            "entries": [
+                {
+                    "type": "folder",
+                    "id": "0",
+                    "sequence_id": null,
+                    "etag": null,
+                    "name": "All Files"
+                }
+            ]
+        },
+        "created_at": "2016-12-07T15:53:59-08:00",
+        "modified_at": "2018-04-24T15:08:58-07:00",
+        "trashed_at": null,
+        "purged_at": null,
+        "content_created_at": "2016-12-07T15:53:59-08:00",
+        "content_modified_at": "2016-12-07T15:59:32-08:00",
+        "created_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "modified_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "owned_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "shared_link": null,
+        "parent": {
+            "type": "folder",
+            "id": "0",
+            "sequence_id": null,
+            "etag": null,
+            "name": "All Files"
+        },
+        "item_status": "active"
+    },
+    {
+        "type": "folder",
+        "id": "22222",
+        "sequence_id": "1",
+        "etag": "1",
+        "name": "Test Folder",
+        "created_at": "2016-12-07T16:34:50-08:00",
+        "modified_at": "2016-12-07T16:34:50-08:00",
+        "description": "",
+        "size": 0,
+        "path_collection": {
+            "total_count": 1,
+            "entries": [
+                {
+                    "type": "folder",
+                    "id": "0",
+                    "sequence_id": null,
+                    "etag": null,
+                    "name": "All Files"
+                }
+            ]
+        },
+        "created_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "modified_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "trashed_at": null,
+        "purged_at": null,
+        "content_created_at": "2016-12-07T16:34:50-08:00",
+        "content_modified_at": "2016-12-07T16:34:50-08:00",
+        "owned_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "shared_link": null,
+        "folder_upload_email": null,
+        "parent": null,
+        "item_status": "active"
+    },
+    {
+        "type": "folder",
+        "id": "33333",
+        "sequence_id": "0",
+        "etag": "0",
+        "name": "SDK Test Folder",
+        "created_at": "2016-12-07T15:23:44-08:00",
+        "modified_at": "2016-12-07T15:23:44-08:00",
+        "description": "",
+        "size": 0,
+        "path_collection": {
+            "total_count": 1,
+            "entries": [
+                {
+                    "type": "folder",
+                    "id": "0",
+                    "sequence_id": null,
+                    "etag": null,
+                    "name": "All Files"
+                }
+            ]
+        },
+        "created_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "modified_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "trashed_at": null,
+        "purged_at": null,
+        "content_created_at": "2016-12-07T15:23:44-08:00",
+        "content_modified_at": "2016-12-07T15:23:44-08:00",
+        "owned_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "shared_link": null,
+        "folder_upload_email": null,
+        "parent": {
+            "type": "folder",
+            "id": "0",
+            "sequence_id": null,
+            "etag": null,
+            "name": "All Files"
+        },
+        "item_status": "active"
+    },
+    {
+        "type": "file",
+        "id": "44444",
+        "file_version": {
+            "type": "file_version",
+            "id": "444440",
+            "sha1": "12717919be7d81be2a30824d9cf1d0f9aa4465ab"
+        },
+        "sequence_id": "1",
+        "etag": "1",
+        "sha1": "12717919be7d81be2a30824d9cf1d0f9aa4465ab",
+        "name": "test.js",
+        "description": "",
+        "size": 362,
+        "path_collection": {
+            "total_count": 2,
+            "entries": [
+                {
+                    "type": "folder",
+                    "id": "0",
+                    "sequence_id": null,
+                    "etag": null,
+                    "name": "All Files"
+                },
+                {
+                    "type": "folder",
+                    "id": "12345",
+                    "sequence_id": "0",
+                    "etag": "0",
+                    "name": "Copied Folder"
+                }
+            ]
+        },
+        "created_at": "2016-12-08T11:50:43-08:00",
+        "modified_at": "2016-12-08T14:48:18-08:00",
+        "trashed_at": null,
+        "purged_at": null,
+        "content_created_at": "2015-12-17T23:10:11-08:00",
+        "content_modified_at": "2015-12-17T23:10:11-08:00",
+        "created_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "modified_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "owned_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "shared_link": null,
+        "parent": {
+            "type": "folder",
+            "id": "12345",
+            "sequence_id": "0",
+            "etag": "0",
+            "name": "Copied Folder"
+        },
+        "item_status": "active"
+    },
+    {
+        "type": "file",
+        "id": "55555",
+        "file_version": {
+            "type": "file_version",
+            "id": "555550",
+            "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223"
+        },
+        "sequence_id": "0",
+        "etag": "0",
+        "sha1": "6afc05eae22e994f1c7dd48e58f8895dd9028223",
+        "name": "Copied file.txt",
+        "description": "",
+        "size": 9,
+        "path_collection": {
+            "total_count": 1,
+            "entries": [
+                {
+                    "type": "folder",
+                    "id": "0",
+                    "sequence_id": null,
+                    "etag": null,
+                    "name": "All Files"
+                }
+            ]
+        },
+        "created_at": "2016-12-07T15:56:54-08:00",
+        "modified_at": "2016-12-07T15:56:54-08:00",
+        "trashed_at": null,
+        "purged_at": null,
+        "content_created_at": "2016-12-07T15:53:59-08:00",
+        "content_modified_at": "2016-12-07T15:53:59-08:00",
+        "created_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "modified_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "owned_by": {
+            "type": "user",
+            "id": "33333",
+            "name": "Test User",
+            "login": "testuser@example.com"
+        },
+        "shared_link": null,
+        "parent": {
+            "type": "folder",
+            "id": "0",
+            "sequence_id": null,
+            "etag": null,
+            "name": "All Files"
+        },
+        "item_status": "active"
+    }
+]
