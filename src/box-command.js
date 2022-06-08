@@ -656,14 +656,38 @@ class BoxCommand extends Command {
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
 		} else if (this.flags['ccg-auth']) {
-			let sdk = new BoxSDK({
-				clientID: '',
-				clientSecret: '',
+			DEBUG.init('Using Client Credentials Grant Authentication');
+
+			const environment =
+				environmentsObj.environments[environmentsObj.default] || {};
+			const { clientId, clientSecret } = environment;
+
+			if (!clientId || !clientSecret) {
+				throw new BoxCLIError(
+					'You need to have a default environment with clientId and clientSecret in order to use CCG'
+				);
+			}
+
+			const enterpriseId = this.flags['enterprise-id'];
+			const asUser = this.flags['as-user'];
+
+			if (!enterpriseId && !asUser) {
+				throw new BoxCLIError(
+					'You need to provide enterprise-id or as-user to use CCG'
+				);
+			}
+
+			const sdk = new BoxSDK({
+				clientID: clientId,
+				clientSecret: clientSecret,
+				enterpriseID: enterpriseId,
 				...SDK_CONFIG,
 			});
 			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
-			client = sdk.getCCGClientForUser(this.flags['as-user']);
+			client = asUser
+				? sdk.getCCGClientForUser(asUser)
+				: sdk.getAnonymousClient();
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -1531,9 +1555,12 @@ BoxCommand.flags = {
 		description: 'Provide a token to perform this call',
 	}),
 	'as-user': flags.string({ description: 'Provide an ID for a user' }),
+	'enterprise-id': flags.string({
+		description: 'Provide an ID for an enterprise (used for CCG auth)',
+	}),
 	'ccg-auth': flags.boolean({
-		description: 'Uses Client Credentials Grant (requires as-user)',
-		dependsOn: ['as-user'],
+		description:
+			'Uses Client Credentials Grant Authentication (requires enterprise-id or as-user)',
 	}),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({
