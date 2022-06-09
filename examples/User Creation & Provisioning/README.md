@@ -1,7 +1,7 @@
 # Create Users & Provisioning Automation
 This User Creation and Provisioning powershell script will use the Box CLI to build and create a user (admin or service account) owned "Onboarding" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into the newly created folder structure.
 
-For detailed script overview, please follow [CLI script overview](https://developer.box.com/guides/tooling/cli/quick-start/powershell-script-templates/)
+For detailed script overview, please follow [this guide](https://developer.box.com/guides/tooling/cli/quick-start/powershell-script-templates/)
 
 ## Setup Pre-Requisites
 1. Clone this github repo.
