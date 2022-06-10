@@ -6,8 +6,10 @@ For detailed script overview, please follow [this guide](https://developer.box.c
 ## Setup Pre-Requisites
 1. Clone this github repo.
 2. Install PowerShell or .Net core.
-    1. For macOS, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
+	> If you encounter issues make sure you install both dotnet core and PowerShell
+    1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
+	
 3. Test PowerShell by running the `pwsh` command in your terminal.
 
 ```
