@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.1.0](https://github.com/box/boxcli/compare/v3.0.0...v3.1.0) (2022-06-15)
+
+### Bug Fixes
+
+- `users:transfer-content` to respect quiet flag ([#288](https://github.com/box/boxcli/issues/288)) ([1d0bbab](https://github.com/box/boxcli/commit/1d0bbab652bf74a59c8486fc4d5eac415161254c))
+- correctly pass `copy-instance-on-item-copy` flag ([#285](https://github.com/box/boxcli/issues/285)) ([cd4fbf4](https://github.com/box/boxcli/commit/cd4fbf4f746b83c2b066efb31b2e2952dba1312d))
+- Fix updating webhook triggers ([#297](https://github.com/box/boxcli/issues/297)) ([09e94c3](https://github.com/box/boxcli/commit/09e94c32ed8e4243e76dd19e67b6d1c17c2cdc04))
+- support large output when using `json` flag by replacing `json.stringify` ([#328](https://github.com/box/boxcli/issues/328)) ([1204f2c](https://github.com/box/boxcli/commit/1204f2c146c713124060730e0554ab2f2dde27fa))
+- Support limit flag for Box Search ([#323](https://github.com/box/boxcli/issues/323)) ([0009a77](https://github.com/box/boxcli/commit/0009a77ee3fc4b72ef01bbbeff0ea588c10a6f89)), closes [#322](https://github.com/box/boxcli/issues/322)
+- Support OAuth with multiple redirect URIs ([#302](https://github.com/box/boxcli/issues/302)) ([9fe216e](https://github.com/box/boxcli/commit/9fe216e8d2f59e4375a4b7c766844366f7166a0a))
+
+### New Features and Enhancements
+
+- Add --all flag for search to return all results ([#336](https://github.com/box/boxcli/issues/336)) ([23ea0a5](https://github.com/box/boxcli/commit/23ea0a5c5b065ea3b91b73b64bb7b267a6ff0a18))
+- add unique state parameter to OAuth2 login ([#292](https://github.com/box/boxcli/issues/292)) ([5ce6a40](https://github.com/box/boxcli/commit/5ce6a40b4c6e2fc78b2b598a8b1529200c63902e))
+- allow changing base URLs ([#303](https://github.com/box/boxcli/issues/303)) ([e284059](https://github.com/box/boxcli/commit/e28405971ebcf2c2284bb875b40ceb7eaebb41c4))
+- obtain `oauth` authorization from commandline ([#299](https://github.com/box/boxcli/issues/299)) ([18c88bb](https://github.com/box/boxcli/commit/18c88bb6835509394b92eb0685e3a9306ede8984))
+- use native credential storage for MacOS and Windows ([#295](https://github.com/box/boxcli/issues/295)) ([74c4922](https://github.com/box/boxcli/commit/74c492271ebc54e15500abbaaa2c7aac32be5070))
+
 ## [3.0.0](https://github.com/box/boxcli/compare/v2.9.0...v3.0.0) (2022-01-27)
 
 ### ⚠ BREAKING CHANGES
@@ -11,7 +30,7 @@
 
 - Add support for login with OAuth ([#240](https://github.com/box/boxcli/pull/240))
 - feat: support as-user flag for bulk files and when token is present ([#270](https://github.com/box/boxcli/pull/270))
-- Add support for copyInstanceOnItemCopy field for metadata templates  ([#239](https://github.com/box/boxcli/pull/239))
+- Add support for copyInstanceOnItemCopy field for metadata templates ([#239](https://github.com/box/boxcli/pull/239))
 - Add support note to the mdfilter equality check in search ([#253](https://github.com/box/boxcli/pull/253))
 - Add support for Box Sign API ([#258](https://github.com/box/boxcli/pull/258))
 - Add support Metadata Query API ([#259](https://github.com/box/boxcli/pull/259))
@@ -24,6 +43,7 @@
 - feat: support as-user flag for bulk files and when token is present (#270)
 
 ### Bug Fixes
+
 - fix: folder:collaborations:add make role a required flag (#261)
 - fix: Fixed shared-links delete example. (#262)
 
@@ -114,50 +134,51 @@
 - Fixed the `--event-types` flag for the `box events` and `box events:poll` commands
 - Updated to`lodash@4.17.11` to address a potential prototype pollution vulnerability
 - Fixed paging in both the `box events` and `box events:poll` commands:
-	- The `box events` command now requires either a closed date range (defaults to last five days), or a stream
-	  position.  If given a date range, all events in that range will be returned.  If given a stream position,
-	  up to `limit` events will be returned along with the next stream position
-	- `box events:poll` now correctly polls for new events
+  - The `box events` command now requires either a closed date range (defaults to last five days), or a stream
+    position. If given a date range, all events in that range will be returned. If given a stream position,
+    up to `limit` events will be returned along with the next stream position
+  - `box events:poll` now correctly polls for new events
 
 ## [2.0.0](https://github.com/box/boxcli/compare/v1.1.1...v2.0.0) [2018-12-13]
 
 ### Features and Enhancements
-- __Full API parity:__ The new version of the CLI supports all available API endpoints and parameters
-- __Recursive folder upload and download:__ Uploading or downloading a folder now preserves the entire deep folder
+
+- **Full API parity:** The new version of the CLI supports all available API endpoints and parameters
+- **Recursive folder upload and download:** Uploading or downloading a folder now preserves the entire deep folder
   structure
-- __Expanded human-readable output:__ All object fields returned by the API are now displayed by default, and can be
+- **Expanded human-readable output:** All object fields returned by the API are now displayed by default, and can be
   controlled with `--fields`.  All commands that output collections of objects no longer require interactive key presses
   to view all objects.
-- __More output options for bulk commands:__ Bulk commands no longer require output to be written to disk, and can
+- **More output options for bulk commands:** Bulk commands no longer require output to be written to disk, and can
   output JSON, CSV, or human-readable output directly to stdout or to any file.
-- __More flexible date/time input:__ Date-times can now be specified in UNIX epoch format (e.g. `1535336043`), with a
+- **More flexible date/time input:** Date-times can now be specified in UNIX epoch format (e.g. `1535336043`), with a
   year offset shorthand (e.g. `-1y` for "one year ago"), and as a combination of offset shorthands (e.g. `-5h30m` for
   "5 minutes and 30 seconds ago")
-- __All commands now accept bulk input:__ Every command can now accept its arguments and flags from a file input in
+- **All commands now accept bulk input:** Every command can now accept its arguments and flags from a file input in
   either CSV or JSON format!  There is also no more need for CSV templates, since the column names are the same as the
   CLI's own args and flags (case-insensitive).  Looking at the help for a command should tell you everything you need
   to know to run the command in bulk
-- __All commands can now save output to disk:__ Every command now allows passing the `--save` and `--save-to-file-path`
+- **All commands can now save output to disk:** Every command now allows passing the `--save` and `--save-to-file-path`
   flags to save the output to disk.  The output written will respect the `--json` and `--csv` flags for specifying
   output format, otherwise it will use the file format in the CLI settings.
-- __Custom API calls:__ The new `box request` command allows making any API call against the Box API, and can be used
+- **Custom API calls:** The new `box request` command allows making any API call against the Box API, and can be used
   to pass arbitrary URLs and parameters
-- __Per-environment token caching enabled by default:__ To improve performance when running multiple commands, each
+- **Per-environment token caching enabled by default:** To improve performance when running multiple commands, each
   environment now caches the primary Service Account tokens by default.  This can be disabled by running
   `box configure:environments:update --no-cache-tokens`
-- __Command correction and autocomplete:__ If you mis-type a command, you will now be prompted if there is an available
+- **Command correction and autocomplete:** If you mis-type a command, you will now be prompted if there is an available
   correction; selecting "yes" at the prompt will run the corrected command for you.  There is also now a
   `box autocomplete` command, which will help you set up autocompletion (currently available only in bash and zsh
   shells)
-- __User-friendly prompts:__ Some commands (e.g. `box configure:environments:select`) can now be called without
+- **User-friendly prompts:** Some commands (e.g. `box configure:environments:select`) can now be called without
   providing the necessary arguments; in this case, the command will display a helpful prompt to allow selecting the
   argument value.
-- __Re-organized command hierarchy:__ We've renamed and reorganized many of the commands in the CLI to clarify the
+- **Re-organized command hierarchy:** We've renamed and reorganized many of the commands in the CLI to clarify the
   inputs they take and reduce unnecessary subcommand nesting.  In some cases, this drastically reduces the length of
   the command.  For example, `box files:shared-links:create` is now `box files:share` — 14 characters shorter!  Most
   commands that were previously available as `xyzs:list` are now just `xyzs`; for example,
   `box folders collaborations list` is now `box folders:collaborations`
-- __Download commands can download to a specified location on disk:__ Pass the `--destination` flag to have the files or
+- **Download commands can download to a specified location on disk:** Pass the `--destination` flag to have the files or
   folders download to any location
 
 ### ⚠ BREAKING CHANGES
@@ -224,6 +245,7 @@
 - The bulk input file format for `box collaborations:add` has changed; see `--help` for more details
 
 ### Bug Fixes
+
 - The `--json` flag in the search command works correctly now
 - Windows absolute paths without the drive letter (e.g. `\MyFolder\file.pdf`) now work correctly
 - Uploading files over 4 GB in size now works correctly
@@ -249,6 +271,7 @@
 - Changed Box CLI output to JSON by default with no existing `.box` directory.
 
 ## [1.0.2](https://github.com/box/boxcli/compare/v1.0.1...v1.0.2)
+
 - Added shared link commands for Create, Get, Update, and Delete. Located as standalone commands under `box shared-links` as well as under `box folders shared-links` and `box files shared-links`.
 - Fixed UTF-8 issue obscuring characters when saving CSV reports.
 - Added autopaging for events and fixed faulty event Get command.
