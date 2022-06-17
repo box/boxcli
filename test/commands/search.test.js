@@ -7,11 +7,13 @@ const leche = require('leche');
 
 describe('Search', () => {
 
-	describe('search', () => {
-		let query = 'Test',
+	let query = 'Test',
 			fixture = getFixture('search/get_search_query_page_1'),
 			fixture2 = getFixture('search/get_search_query_page_2'),
-			jsonOutput = getFixture('output/search_json.txt');
+			jsonOutput = getFixture('output/search_json.txt'),
+			jsonOutputLimitedTo5 = getFixture('output/search_json_limit_5.txt');
+
+	describe('search', () => {
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -314,5 +316,68 @@ describe('Search', () => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
 		});
+
+		test
+				.nock(TEST_API_ROOT, api => api
+						.get('/2.0/search')
+						.query({
+							query,
+							limit: 100,
+						})
+						.reply(200, fixture)
+						.get('/2.0/search')
+						.query({
+							query,
+							limit: 100,
+							offset: 5
+						})
+						.reply(200, fixture2)
+				)
+				.stdout()
+				.command([
+					'search',
+					query,
+					'--json',
+					'--all',
+					'--token=test'
+				])
+				.it('should return all results when --all flag provided', ctx => {
+					assert.equal(ctx.stdout, jsonOutput);
+				});
+
+		test
+				.nock(TEST_API_ROOT, api => api
+						.get('/2.0/search')
+						.query({
+							query,
+							limit: 100,
+						})
+						.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					'search',
+					query,
+					'--json',
+					'--limit=5',
+					'--token=test'
+				])
+				.it('should return limited results when --limit flag provided', ctx => {
+					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
+				});
+	});
+	describe('fails', () => {
+		test
+				.stderr()
+				.command([
+					'search',
+					query,
+					'--limit=80',
+					'--all',
+					'--token=test'
+				])
+				.it('when both --all and --limit flag provided', ctx => {
+					assert.include(ctx.stderr, '--all and --limit flags cannot be used together.');
+				});
 	});
 });

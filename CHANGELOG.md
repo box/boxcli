@@ -1,5 +1,27 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.1.0](https://github.com/box/boxcli/compare/v3.0.0...v3.1.0) (2022-06-17)
+
+
+### New Features and Enhancements
+
+* Add --all flag for search to return all results ([#336](https://github.com/box/boxcli/issues/336)) ([23ea0a5](https://github.com/box/boxcli/commit/23ea0a5c5b065ea3b91b73b64bb7b267a6ff0a18))
+* add unique state parameter to OAuth2 login ([#292](https://github.com/box/boxcli/issues/292)) ([5ce6a40](https://github.com/box/boxcli/commit/5ce6a40b4c6e2fc78b2b598a8b1529200c63902e))
+* allow changing base URLs ([#303](https://github.com/box/boxcli/issues/303)) ([e284059](https://github.com/box/boxcli/commit/e28405971ebcf2c2284bb875b40ceb7eaebb41c4))
+* obtain `oauth` authorization from commandline ([#299](https://github.com/box/boxcli/issues/299)) ([18c88bb](https://github.com/box/boxcli/commit/18c88bb6835509394b92eb0685e3a9306ede8984))
+* use native credential storage for MacOS and Windows ([#295](https://github.com/box/boxcli/issues/295)) ([74c4922](https://github.com/box/boxcli/commit/74c492271ebc54e15500abbaaa2c7aac32be5070))
+
+### Bug Fixes
+
+* `users:transfer-content` to respect quiet flag ([#288](https://github.com/box/boxcli/issues/288)) ([1d0bbab](https://github.com/box/boxcli/commit/1d0bbab652bf74a59c8486fc4d5eac415161254c))
+* correctly pass `copy-instance-on-item-copy` flag ([#285](https://github.com/box/boxcli/issues/285)) ([cd4fbf4](https://github.com/box/boxcli/commit/cd4fbf4f746b83c2b066efb31b2e2952dba1312d))
+* Fix updating webhook triggers ([#297](https://github.com/box/boxcli/issues/297)) ([09e94c3](https://github.com/box/boxcli/commit/09e94c32ed8e4243e76dd19e67b6d1c17c2cdc04))
+* support large output when using `json` flag by replacing `json.stringify` ([#328](https://github.com/box/boxcli/issues/328)) ([1204f2c](https://github.com/box/boxcli/commit/1204f2c146c713124060730e0554ab2f2dde27fa))
+* Support limit flag for Box Search ([#323](https://github.com/box/boxcli/issues/323)) ([0009a77](https://github.com/box/boxcli/commit/0009a77ee3fc4b72ef01bbbeff0ea588c10a6f89)), closes [#322](https://github.com/box/boxcli/issues/322)
+* Support OAuth with multiple redirect URIs ([#302](https://github.com/box/boxcli/issues/302)) ([9fe216e](https://github.com/box/boxcli/commit/9fe216e8d2f59e4375a4b7c766844366f7166a0a))
+
 ## [3.0.0](https://github.com/box/boxcli/compare/v2.9.0...v3.0.0) (2022-01-27)
 
 ### ⚠ BREAKING CHANGES
