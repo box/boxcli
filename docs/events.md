@@ -48,6 +48,22 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
   --stream-position=stream-position      The location in the event stream from which you want to start receiving events
+  
+  --stream-type                          Stream type admin_logs or admin_logs_streaming. 
+                                         Unless specified `admin_logs` stream type is used.
+                                         
+                                         The emphasis for `admin_logs` stream is on completeness over latency, 
+                                         which means that Box will deliver admin events in chronological order 
+                                         and without duplicates,but with higher latency. You can specify 
+                                         start and end time/dates.
+    
+                                         The emphasis for `admin_logs_streaming` feed is on low latency rather than 
+                                         chronological accuracy, which means that Box may returnevents more than once 
+                                         and out of chronological order. Events are returned via the API around 
+                                         12 seconds after theyare processed by Box (the 12 seconds buffer ensures 
+                                         that new events are not written after your cursor position). Only two weeks 
+                                         of events are available via this feed, and you cannot set start and end time/dates.
+
 
 ALIASES
   $ box events:get
