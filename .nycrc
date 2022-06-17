@@ -7,8 +7,8 @@
 		"html"
 	],
 	"check-coverage": true,
-	"lines": 89,
-	"statements": 89,
+	"lines": 85,
+	"statements": 85,
 	"functions": 85,
 	"branches": 77,
 	"report-dir": "./coverage"
