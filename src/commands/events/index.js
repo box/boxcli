@@ -18,7 +18,7 @@ class EventsGetCommand extends BoxCommand {
 		let options = {};
 
 		if (flags.enterprise) {
-			options.stream_type = 'admin_logs';
+			options.stream_type = flags['stream-type'] || 'admin_logs';
 		}
 		if (flags.limit) {
 			options.limit = flags.limit;
@@ -49,8 +49,8 @@ class EventsGetCommand extends BoxCommand {
 		}
 
 		let events = await this.client.events.get(options);
-
-		if (options.stream_position || options.stream_type !== 'admin_logs') {
+		const isNotAdminTypeStream = options.stream_type !== 'admin_logs' && options.stream_type !== 'admin_logs_streaming';
+		if (options.stream_position || isNotAdminTypeStream) {
 			await this.output(events);
 		} else {
 			let allEvents = [].concat(events.entries); // Copy the first page of events
@@ -110,6 +110,22 @@ EventsGetCommand.flags = {
 	limit: flags.integer({
 		description: 'The maximum number of items to return',
 	}),
+	'stream-type': flags.string(
+		{
+			description: 'Stream type admin_logs or admin_logs_streaming.\n' +
+				'Unless specified `admin_logs` stream type is used.\n\n' +
+				'The emphasis for `admin_logs` stream is on completeness over latency, which means that Box will ' +
+				'deliver admin events in chronological order and without duplicates, but with higher latency. ' +
+				'You can specify start and end time/dates.\n\n' +
+				'The emphasis for `admin_logs_streaming` feed is on low latency rather than chronological accuracy, ' +
+				'which means that Box may return events more than once and out of chronological order. Events are ' +
+				'returned via the API around 12 seconds after they are processed by Box (the 12 seconds buffer ' +
+				'ensures that new events are not written after your cursor position). Only two weeks of events are ' +
+				'available via this feed, and you cannot set start and end time/dates.',
+			dependsOn: ['enterprise'],
+			options: ['admin_logs', 'admin_logs_streaming']
+		}
+	)
 };
 
 
