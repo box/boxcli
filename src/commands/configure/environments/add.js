@@ -81,6 +81,10 @@ class EnvironmentsAddCommand extends BoxCommand {
 			environmentsObj.default = environmentName;
 		}
 
+		if (flags['ccg-auth']) {
+			newEnvironment.clientSecret = configObj.boxAppSettings.clientSecret;
+		}
+
 		environmentsObj.environments[environmentName] = newEnvironment;
 		await this.updateEnvironments(environmentsObj);
 		this.info(chalk`{green Successfully added CLI environment "${flags.name}"}`);
@@ -103,7 +107,10 @@ EnvironmentsAddCommand.flags = {
 		char: 'n',
 		description: 'Set a name for the environment',
 		default: 'default',
-	})
+	}),
+	'ccg-auth': flags.boolean({
+		description: 'Add a CCG environment',
+	}),	
 };
 
 EnvironmentsAddCommand.args = [
