@@ -1342,7 +1342,7 @@ class BoxCommand extends Command {
 							service: 'boxcli',
 						});
 						return JSON.parse(password);
-					} catch {
+					} catch (e) {
 						// fallback to env file if not found
 					}
 					break;
