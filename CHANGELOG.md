@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/box/boxcli/compare/v3.1.0...v3.2.0) (2022-06-30)
+
+
+### New Features and Enhancements
+
+* Added support for stream type `admin_logs_streaming` ([#337](https://github.com/box/boxcli/issues/337)) ([7596157](https://github.com/box/boxcli/commit/7596157e3a72ef152be44a04198e38d6c57de250))
+
 ## [3.1.0](https://github.com/box/boxcli/compare/v3.0.0...v3.1.0) (2022-06-17)
 
 
