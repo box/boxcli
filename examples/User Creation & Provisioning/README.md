@@ -1,10 +1,17 @@
 # Create Users & Provisioning Automation
 This User Creation and Provisioning powershell script will use the Box CLI to build and create a user (admin or service account) owned "Onboarding" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into the newly created folder structure.
 
+For detailed script overview, please follow [this guide](https://developer.box.com/guides/tooling/cli/quick-start/powershell-script-templates/)
+
 ## Setup Pre-Requisites
 1. Clone this github repo.
-2. Install the latest version of [dotnet core.](https://dotnet.microsoft.com/download)
+2. Install PowerShell or .Net core.
+	> If you encounter issues make sure you install both dotnet core and PowerShell
+    1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
+    2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
+	
 3. Test PowerShell by running the `pwsh` command in your terminal.
+
 ```
 mikechen@mbp create-users-automation % pwsh
 PowerShell 7.2.1
@@ -15,7 +22,8 @@ Type 'help' to get help.
 
 PS /Users/mikechen>
 ```
-4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
+
+4. Create an OAuth Application following the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/).
 
 ## Script Parameters
 1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
