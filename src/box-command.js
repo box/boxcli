@@ -27,9 +27,6 @@ const darwinKeychainSetPassword = util.promisify(
 const darwinKeychainGetPassword = util.promisify(
 	darwinKeychain.getPassword.bind(darwinKeychain)
 );
-const windowsCredentialStore =
-	process.platform === 'win32' &&
-	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
 const stream = require('stream');
@@ -1346,19 +1343,14 @@ class BoxCommand extends Command {
 		try {
 			switch (process.platform) {
 				case 'darwin': {
-					const password = await darwinKeychainGetPassword({
-						account: 'Box',
-						service: 'boxcli',
-					});
-					if (!_.isUndefined(password)) {
+					try {
+						const password = await darwinKeychainGetPassword({
+							account: 'Box',
+							service: 'boxcli',
+						});
 						return JSON.parse(password);
-					}
-					break;
-				}
-
-				case 'win32': {
-					if (await windowsCredentialStore.exists()) {
-						return JSON.parse((await windowsCredentialStore.read()).password);
+					} catch (e) {
+						// fallback to env file if not found
 					}
 					break;
 				}
@@ -1395,15 +1387,6 @@ class BoxCommand extends Command {
 						service: 'boxcli',
 						password: JSON.stringify(environments),
 					});
-					fileContents = '';
-					break;
-				}
-
-				case 'win32': {
-					await windowsCredentialStore.write(
-						'boxcli' /* user */,
-						JSON.stringify(environments) /* password */
-					);
 					fileContents = '';
 					break;
 				}
