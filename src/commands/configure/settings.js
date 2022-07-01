@@ -70,6 +70,12 @@ class ConfigureSettingsCommand extends BoxCommand {
 		if (flags['proxy-password']) {
 			settings.proxy.password = flags['proxy-password'];
 		}
+		if (flags.hasOwnProperty(['enable-analytics-client'])) {
+			settings.enableAnalyticsClient = flags['enable-analytics-client'];
+		}
+    if (flags['analytics-client-name']) {
+      settings.analyticsClient.name = flags['analytics-client-name'];
+    }
 
 		this.updateSettings(settings);
 		await this.output(settings);
@@ -117,7 +123,14 @@ ConfigureSettingsCommand.flags = {
 	'reports-folder-path': flags.string({
 		description: 'Set folder path for the reports folder',
 		parse: utils.parsePath,
-	})
+	}),
+	'enable-analytics-client': flags.boolean({
+    description: 'Enable or disable custom analytics client',
+		allowNo: true,
+  }),
+	'analytics-client-name': flags.string({
+    description: 'Set custom analytics client header value',
+  }),
 };
 
 module.exports = ConfigureSettingsCommand;
