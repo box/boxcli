@@ -666,19 +666,19 @@ class BoxCommand extends Command {
 				);
 			}
 
-			const enterpriseId = this.flags['enterprise-id'];
-			const asUser = this.flags['as-user'];
-
-			if (!enterpriseId && !asUser) {
-				throw new BoxCLIError(
-					'You need to provide enterprise-id or as-user to use CCG'
-				);
+			let configObj;
+			try {
+				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+			} catch (ex) {
+				throw new BoxCLIError('Could not read environments config file', ex);
 			}
 
+			const { enterpriseID } = configObj;
+			const asUser = this.flags['as-user'];
 			const sdk = new BoxSDK({
 				clientID: clientId,
 				clientSecret: clientSecret,
-				enterpriseID: enterpriseId,
+				enterpriseID,
 				...SDK_CONFIG,
 			});
 			this._configureSdk(sdk, { ...SDK_CONFIG });
@@ -823,7 +823,10 @@ class BoxCommand extends Command {
 			clientSettings.uploadRequestTimeoutMS =
 				this.settings.uploadRequestTimeoutMS;
 		}
-		if (this.settings.enableAnalyticsClient && this.settings.analyticsClient.name) {
+		if (
+			this.settings.enableAnalyticsClient &&
+			this.settings.analyticsClient.name
+		) {
 			clientSettings.analyticsClient.name = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
 		} else {
 			clientSettings.analyticsClient.name = DEFAULT_ANALYTICS_CLIENT_NAME;
@@ -1524,8 +1527,8 @@ class BoxCommand extends Command {
 			},
 			enableAnalyticsClient: false,
 			analyticsClient: {
-				name: null
-			}
+				name: null,
+			},
 		};
 	}
 
@@ -1549,12 +1552,10 @@ BoxCommand.flags = {
 		description: 'Provide a token to perform this call',
 	}),
 	'as-user': flags.string({ description: 'Provide an ID for a user' }),
-	'enterprise-id': flags.string({
-		description: 'Provide an ID for an enterprise (used for CCG auth)',
-	}),
 	'ccg-auth': flags.boolean({
 		description:
-			'Uses Client Credentials Grant Authentication (requires enterprise-id or as-user)',
+			'Uses Client Credentials Grant Authentication (requires as-user)',
+		// dependsOn: ['as-user'],
 	}),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({
