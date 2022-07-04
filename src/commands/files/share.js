@@ -22,7 +22,7 @@ class FilesShareCommand extends BoxCommand {
 
 FilesShareCommand.aliases = [
 	'files:shared-links:create',
-	'files:shared-links:update'
+	'files:shared-links:update',
 ];
 
 FilesShareCommand.description = 'Create a shared link for a file';
@@ -31,6 +31,10 @@ FilesShareCommand._endpoint = 'put_files_id create_shared_link';
 
 FilesShareCommand.flags = {
 	...SharedLinksCreateCommand.flags,
+	'can-edit': flags.boolean({
+		description: 'Whether the shared link allows edits',
+		allowNo: true,
+	}),
 };
 
 FilesShareCommand.args = [
@@ -38,8 +42,8 @@ FilesShareCommand.args = [
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to share'
-	}
+		description: 'ID of the file to share',
+	},
 ];
 
 module.exports = FilesShareCommand;

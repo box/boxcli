@@ -6,24 +6,22 @@ const BoxCLIError = require('../cli-error');
  * Module for shared code around shared links functionality
  */
 class SharedLinksModule {
-
 	/**
-     * @param {BoxClient} client The client to use for API requests
-     * @constructor
-     */
+	 * @param {BoxClient} client The client to use for API requests
+	 * @constructor
+	 */
 	constructor(client) {
 		this.client = client;
 	}
 
 	/**
-     * Create a shared link for an item
-     *
-     * @param {Object} args The parsed oclif command-line arguments
-     * @param {Object} flags The parsed oclif command-line flags
-     * @returns {Promise<Object>} A promise resolving to the updated item object
-     */
+	 * Create a shared link for an item
+	 *
+	 * @param {Object} args The parsed oclif command-line arguments
+	 * @param {Object} flags The parsed oclif command-line flags
+	 * @returns {Promise<Object>} A promise resolving to the updated item object
+	 */
 	createSharedLink(args, flags) {
-
 		let updates = { shared_link: { permissions: {} } };
 
 		if (flags.access) {
@@ -40,21 +38,25 @@ class SharedLinksModule {
 		}
 
 		if (args.itemType === 'file') {
+			if (flags.hasOwnProperty('can-edit')) {
+				updates.shared_link.permissions.can_edit = flags['can-edit'];
+			}
 			return this.client.files.update(args.itemID, updates);
 		} else if (args.itemType === 'folder') {
 			return this.client.folders.update(args.itemID, updates);
 		}
-		throw new BoxCLIError(`Unsupported item type for shared link creation: ${args.itemType}`);
+		throw new BoxCLIError(
+			`Unsupported item type for shared link creation: ${args.itemType}`
+		);
 	}
 
 	/**
-     * Remove a shared link from an item
-     *
-     * @param {Object} args The parsed oclif command-line arguments
-     * @returns {Promise<Object>} A promise resolving to the updated item object
-     */
+	 * Remove a shared link from an item
+	 *
+	 * @param {Object} args The parsed oclif command-line arguments
+	 * @returns {Promise<Object>} A promise resolving to the updated item object
+	 */
 	removeSharedLink(args) {
-
 		let updates = { shared_link: null };
 
 		if (args.itemType === 'file') {
@@ -62,7 +64,9 @@ class SharedLinksModule {
 		} else if (args.itemType === 'folder') {
 			return this.client.folders.update(args.itemID, updates);
 		}
-		throw new BoxCLIError(`Unsupported item type for shared link removal: ${args.itemType}`);
+		throw new BoxCLIError(
+			`Unsupported item type for shared link removal: ${args.itemType}`
+		);
 	}
 }
 

@@ -30,7 +30,7 @@ describe('Sign requests', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(
-					`/2.0/sign_requests/${signRequestId}?sign_request_id=${signRequestId}`
+					`/2.0/sign_requests/${signRequestId}`
 				)
 				.reply(200, fixture)
 			)
@@ -111,7 +111,7 @@ describe('Sign requests', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(
-					`/2.0/sign_requests/${signRequestId}/cancel?sign_request_id=${signRequestId}`
+					`/2.0/sign_requests/${signRequestId}/cancel`
 				)
 				.reply(200, fixture)
 			)
@@ -133,7 +133,7 @@ describe('Sign requests', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(
-					`/2.0/sign_requests/${signRequestId}/resend?sign_request_id=${signRequestId}`
+					`/2.0/sign_requests/${signRequestId}/resend`
 				)
 				.reply(200)
 			)
