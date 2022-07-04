@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
-const SharedLinksCreateCommand = require('../shared-links/create');
+const { sharedLinkFlags } = require('../shared-links/create');
 const SharedLinksModule = require('../../modules/shared-links');
 
 class FoldersShareCommand extends BoxCommand {
@@ -30,7 +30,7 @@ FoldersShareCommand.examples = ['box folders:share 22222 --access company'];
 FoldersShareCommand._endpoint = 'put_folders_id create_shared_link';
 
 FoldersShareCommand.flags = {
-	...SharedLinksCreateCommand.flags,
+	...sharedLinkFlags,
 };
 
 FoldersShareCommand.args = [

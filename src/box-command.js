@@ -27,9 +27,6 @@ const darwinKeychainSetPassword = util.promisify(
 const darwinKeychainGetPassword = util.promisify(
 	darwinKeychain.getPassword.bind(darwinKeychain)
 );
-const windowsCredentialStore =
-	process.platform === 'win32' &&
-	new (require('node-ms-passport'))('box/boxcli'); // eslint-disable-line global-require
 
 const DEBUG = require('./debug');
 const stream = require('stream');
@@ -70,7 +67,6 @@ const REQUIRED_FIELDS = ['type', 'id'];
 const SDK_CONFIG = Object.freeze({
 	iterators: true,
 	analyticsClient: {
-		name: 'box-cli',
 		version: pkg.version,
 	},
 	request: {
@@ -86,6 +82,8 @@ const ENVIRONMENTS_FILE_PATH = path.join(
 	CONFIG_FOLDER_PATH,
 	'box_environments.json'
 );
+
+const DEFAULT_ANALYTICS_CLIENT_NAME = 'box-cli';
 
 /**
  * Parse a string value from CSV into the correct boolean value
@@ -825,6 +823,12 @@ class BoxCommand extends Command {
 			clientSettings.uploadRequestTimeoutMS =
 				this.settings.uploadRequestTimeoutMS;
 		}
+		if (this.settings.enableAnalyticsClient && this.settings.analyticsClient.name) {
+			clientSettings.analyticsClient.name = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
+		} else {
+			clientSettings.analyticsClient.name = DEFAULT_ANALYTICS_CLIENT_NAME;
+		}
+
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
 			sdk.configure(clientSettings);
@@ -1372,19 +1376,14 @@ class BoxCommand extends Command {
 		try {
 			switch (process.platform) {
 				case 'darwin': {
-					const password = await darwinKeychainGetPassword({
-						account: 'Box',
-						service: 'boxcli',
-					});
-					if (!_.isUndefined(password)) {
+					try {
+						const password = await darwinKeychainGetPassword({
+							account: 'Box',
+							service: 'boxcli',
+						});
 						return JSON.parse(password);
-					}
-					break;
-				}
-
-				case 'win32': {
-					if (await windowsCredentialStore.exists()) {
-						return JSON.parse((await windowsCredentialStore.read()).password);
+					} catch (e) {
+						// fallback to env file if not found
 					}
 					break;
 				}
@@ -1421,15 +1420,6 @@ class BoxCommand extends Command {
 						service: 'boxcli',
 						password: JSON.stringify(environments),
 					});
-					fileContents = '';
-					break;
-				}
-
-				case 'win32': {
-					await windowsCredentialStore.write(
-						'boxcli' /* user */,
-						JSON.stringify(environments) /* password */
-					);
 					fileContents = '';
 					break;
 				}
@@ -1532,6 +1522,10 @@ class BoxCommand extends Command {
 				username: null,
 				password: null,
 			},
+			enableAnalyticsClient: false,
+			analyticsClient: {
+				name: null
+			}
 		};
 	}
 

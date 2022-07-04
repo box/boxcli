@@ -1111,7 +1111,7 @@ describe('Files', () => {
 
 			let sharedLinkBody = {
 				shared_link: {
-					permissions: { can_download: true },
+					permissions: { can_download: true, can_edit: true },
 					access: 'test',
 					password: 'test'
 				}
@@ -1129,6 +1129,7 @@ describe('Files', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					'--can-edit',
 					'--json',
 					'--token=test'
 				])
@@ -1148,6 +1149,7 @@ describe('Files', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					'--can-edit',
 					'--token=test'
 				])
 				.it('should create a shared link for a Box item (YAML Output)', ctx => {
