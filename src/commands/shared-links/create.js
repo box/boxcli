@@ -19,7 +19,7 @@ SharedLinksCreateCommand.aliases = ['shared-links:update'];
 SharedLinksCreateCommand.description = 'Create a shared link for a Box item';
 SharedLinksCreateCommand.examples = ['box shared-links:create 22222 folder --access company'];
 
-SharedLinksCreateCommand.flags = {
+const sharedLinkFlags = {
 	...BoxCommand.flags,
 	access: flags.string({ description: 'Shared link access level' }),
 	password: flags.string({ description: 'Shared link password' }),
@@ -31,6 +31,18 @@ SharedLinksCreateCommand.flags = {
 		description: 'Whether the shared link allows downloads',
 		allowNo: true
 	})
+}
+
+const sharedLinkFileFlags = {
+	'can-edit': flags.boolean({
+		description: 'Whether the shared link allows edits. Only Applicable for files.',
+		allowNo: true,
+	}),
+}
+
+SharedLinksCreateCommand.flags = {
+	...sharedLinkFlags,
+	...sharedLinkFileFlags
 };
 
 SharedLinksCreateCommand.args = [
@@ -52,4 +64,4 @@ SharedLinksCreateCommand.args = [
 	}
 ];
 
-module.exports = SharedLinksCreateCommand;
+module.exports = { SharedLinksCreateCommand, sharedLinkFlags, sharedLinkFileFlags } ;

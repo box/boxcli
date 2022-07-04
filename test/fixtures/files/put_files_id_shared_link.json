@@ -67,7 +67,8 @@
         "access": "test",
         "permissions": {
             "can_download": true,
-            "can_preview": true
+            "can_preview": true,
+            "can_edit": true
         }
     },
     "parent": {

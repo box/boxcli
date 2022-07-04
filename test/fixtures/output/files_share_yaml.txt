@@ -11,3 +11,4 @@ Access: test
 Permissions:
     Can Download: true
     Can Preview: true
+    Can Edit: true
