@@ -658,7 +658,7 @@ class BoxCommand extends Command {
 
 			const environment =
 				environmentsObj.environments[environmentsObj.default] || {};
-			const { clientId, clientSecret } = environment;
+			const { clientId, clientSecret, ccgUser } = environment;
 
 			if (!clientId || !clientSecret) {
 				throw new BoxCLIError(
@@ -674,7 +674,6 @@ class BoxCommand extends Command {
 			}
 
 			const { enterpriseID } = configObj;
-			const asUser = this.flags['as-user'];
 			const sdk = new BoxSDK({
 				clientID: clientId,
 				clientSecret: clientSecret,
@@ -683,8 +682,8 @@ class BoxCommand extends Command {
 			});
 			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
-			client = asUser
-				? sdk.getCCGClientForUser(asUser)
+			client = ccgUser
+				? sdk.getCCGClientForUser(ccgUser)
 				: sdk.getAnonymousClient();
 		} else if (
 			environmentsObj.default &&
@@ -1555,7 +1554,6 @@ BoxCommand.flags = {
 	'ccg-auth': flags.boolean({
 		description:
 			'Uses Client Credentials Grant Authentication (requires as-user)',
-		// dependsOn: ['as-user'],
 	}),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({

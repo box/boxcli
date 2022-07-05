@@ -102,6 +102,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 
 		if (isCCG) {
 			newEnvironment.clientSecret = configObj.boxAppSettings.clientSecret;
+			newEnvironment.ccgUser = flags['ccg-user'];
 		}
 
 		environmentsObj.environments[environmentName] = newEnvironment;
@@ -133,6 +134,10 @@ EnvironmentsAddCommand.flags = {
 	}),
 	'ccg-auth': flags.boolean({
 		description: 'Add a CCG environment',
+	}),
+	'ccg-user': flags.string({
+		description: 'Provide an ID for a user for CCG',
+		dependsOn: ['ccg-auth'],
 	}),
 };
 
