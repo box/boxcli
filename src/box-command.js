@@ -642,6 +642,10 @@ class BoxCommand extends Command {
 			return null;
 		}
 		let environmentsObj = await this.getEnvironments();
+		const environment =
+			environmentsObj.environments[environmentsObj.default] || {};
+		const { authMethod } = environment;
+
 		let client;
 		if (this.flags.token) {
 			DEBUG.init('Using passed in token %s', this.flags.token);
@@ -653,13 +657,42 @@ class BoxCommand extends Command {
 			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
+		} else if (authMethod === 'ccg') {
+			DEBUG.init('Using Client Credentials Grant Authentication');
+
+			const { clientId, clientSecret, ccgUser } = environment;
+
+			if (!clientId || !clientSecret) {
+				throw new BoxCLIError(
+					'You need to have a default environment with clientId and clientSecret in order to use CCG'
+				);
+			}
+
+			let configObj;
+			try {
+				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+			} catch (ex) {
+				throw new BoxCLIError('Could not read environments config file', ex);
+			}
+
+			const { enterpriseID } = configObj;
+			const sdk = new BoxSDK({
+				clientID: clientId,
+				clientSecret,
+				enterpriseID,
+				...SDK_CONFIG,
+			});
+			this._configureSdk(sdk, { ...SDK_CONFIG });
+			this.sdk = sdk;
+			client = ccgUser
+				? sdk.getCCGClientForUser(ccgUser)
+				: sdk.getAnonymousClient();
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
 				'oauth20'
 		) {
 			try {
-				let environment = environmentsObj.environments[environmentsObj.default];
 				DEBUG.init(
 					'Using environment %s %O',
 					environmentsObj.default,
@@ -691,7 +724,6 @@ class BoxCommand extends Command {
 				);
 			}
 		} else if (environmentsObj.default) {
-			let environment = environmentsObj.environments[environmentsObj.default];
 			DEBUG.init(
 				'Using environment %s %O',
 				environmentsObj.default,
@@ -790,7 +822,10 @@ class BoxCommand extends Command {
 			clientSettings.uploadRequestTimeoutMS =
 				this.settings.uploadRequestTimeoutMS;
 		}
-		if (this.settings.enableAnalyticsClient && this.settings.analyticsClient.name) {
+		if (
+			this.settings.enableAnalyticsClient &&
+			this.settings.analyticsClient.name
+		) {
 			clientSettings.analyticsClient.name = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
 		} else {
 			clientSettings.analyticsClient.name = DEFAULT_ANALYTICS_CLIENT_NAME;
@@ -850,7 +885,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -858,13 +893,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async () => {
+			logFunc = async() => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1491,8 +1526,8 @@ class BoxCommand extends Command {
 			},
 			enableAnalyticsClient: false,
 			analyticsClient: {
-				name: null
-			}
+				name: null,
+			},
 		};
 	}
 

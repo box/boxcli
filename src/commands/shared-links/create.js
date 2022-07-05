@@ -31,14 +31,14 @@ const sharedLinkFlags = {
 		description: 'Whether the shared link allows downloads',
 		allowNo: true
 	})
-}
+};
 
 const sharedLinkFileFlags = {
 	'can-edit': flags.boolean({
 		description: 'Whether the shared link allows edits. Only Applicable for files.',
 		allowNo: true,
 	}),
-}
+};
 
 SharedLinksCreateCommand.flags = {
 	...sharedLinkFlags,
@@ -64,4 +64,4 @@ SharedLinksCreateCommand.args = [
 	}
 ];
 
-module.exports = { SharedLinksCreateCommand, sharedLinkFlags, sharedLinkFileFlags } ;
+module.exports = { SharedLinksCreateCommand, sharedLinkFlags, sharedLinkFileFlags };
