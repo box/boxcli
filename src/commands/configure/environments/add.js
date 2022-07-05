@@ -103,6 +103,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 		if (isCCG) {
 			newEnvironment.clientSecret = configObj.boxAppSettings.clientSecret;
 			newEnvironment.ccgUser = flags['ccg-user'];
+			newEnvironment.authMethod = 'ccg';
 		}
 
 		environmentsObj.environments[environmentName] = newEnvironment;

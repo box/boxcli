@@ -642,6 +642,10 @@ class BoxCommand extends Command {
 			return null;
 		}
 		let environmentsObj = await this.getEnvironments();
+		const environment =
+			environmentsObj.environments[environmentsObj.default] || {};
+		const { authMethod } = environment;
+
 		let client;
 		if (this.flags.token) {
 			DEBUG.init('Using passed in token %s', this.flags.token);
@@ -653,11 +657,9 @@ class BoxCommand extends Command {
 			this._configureSdk(sdk, { ...SDK_CONFIG });
 			this.sdk = sdk;
 			client = sdk.getBasicClient(this.flags.token);
-		} else if (this.flags['ccg-auth']) {
+		} else if (authMethod === 'ccg') {
 			DEBUG.init('Using Client Credentials Grant Authentication');
 
-			const environment =
-				environmentsObj.environments[environmentsObj.default] || {};
 			const { clientId, clientSecret, ccgUser } = environment;
 
 			if (!clientId || !clientSecret) {
@@ -1551,10 +1553,6 @@ BoxCommand.flags = {
 		description: 'Provide a token to perform this call',
 	}),
 	'as-user': flags.string({ description: 'Provide an ID for a user' }),
-	'ccg-auth': flags.boolean({
-		description:
-			'Uses Client Credentials Grant Authentication (requires as-user)',
-	}),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
 	'no-color': flags.boolean({
 		description: 'Turn off colors for logging',
