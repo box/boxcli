@@ -678,7 +678,7 @@ class BoxCommand extends Command {
 			const { enterpriseID } = configObj;
 			const sdk = new BoxSDK({
 				clientID: clientId,
-				clientSecret: clientSecret,
+				clientSecret,
 				enterpriseID,
 				...SDK_CONFIG,
 			});
@@ -693,7 +693,6 @@ class BoxCommand extends Command {
 				'oauth20'
 		) {
 			try {
-				let environment = environmentsObj.environments[environmentsObj.default];
 				DEBUG.init(
 					'Using environment %s %O',
 					environmentsObj.default,
@@ -725,7 +724,6 @@ class BoxCommand extends Command {
 				);
 			}
 		} else if (environmentsObj.default) {
-			let environment = environmentsObj.environments[environmentsObj.default];
 			DEBUG.init(
 				'Using environment %s %O',
 				environmentsObj.default,
@@ -887,7 +885,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -895,13 +893,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async () => {
+			logFunc = async() => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
