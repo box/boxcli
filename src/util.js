@@ -186,6 +186,7 @@ module.exports = {
 	/**
 	 * Validates the a configuration object has all required properties
 	 * @param {Object} configObj The config object to validate
+	 * @param {boolean} isCCG Whether the config object is used for CCG auth
 	 * @returns {void}
 	 * @throws BoxCLIError
 	 */
