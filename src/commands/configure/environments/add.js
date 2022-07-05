@@ -134,10 +134,14 @@ EnvironmentsAddCommand.flags = {
 		default: 'default',
 	}),
 	'ccg-auth': flags.boolean({
-		description: 'Add a CCG environment',
+		description: 'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
 	}),
 	'ccg-user': flags.string({
-		description: 'Provide an ID for a user for CCG',
+		description: 'Provide an ID for a user for CCG. Use it to obtain user token. ' +
+			'In order to enable generating user token you have to go to your application ' +
+			'configuration that can be found here https://app.box.com/developers/console.\n' +
+			'In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. \n' +
+			'Do not forget to re-authorize application if it was already authorized.',
 		dependsOn: ['ccg-auth'],
 	}),
 };
