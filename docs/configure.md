@@ -27,8 +27,20 @@ OPTIONS
   -n, --name=name                      [default: default] Set a name for the environment
   -q, --quiet                          Suppress any non-error output to stderr
   -v, --verbose                        Show verbose output, which can be helpful for debugging
+  --ccg-auth                           Add a CCG environment that will use service account. 
+                                       You will have to provide enterprise ID with client id and secret.
+                                       
+  --ccg-user=ccg-user                  Provide an ID for a user for CCG. Use it to obtain user token. 
+                                       In order to enable generating user token you have to go to your application 
+                                       configuration that can be found here https://app.box.com/developers/console.
+                                       In`Configuration` tab, in section `Advanced Features` select `Generate 
+                                       user access tokens`. 
+                                       Do not forget to re-authorize application if it was already authorized.
+                                       
   --no-color                           Turn off colors for logging
+  
   --private-key-path=private-key-path  Provide a path to application private key
+  
   --set-as-current                     Set this new environment as your current environment
 ```
 
