@@ -26,7 +26,8 @@ PS /Users/mikechen>
 
 ## 1. Script Parameters
 1. Update the [EmployeeList](/Users_Deprovision.ps1#L10) to set your own Employee List CSV Path.
-2. Optional: To skip transfer of user content before deletion, set [EmployeeList](/Users_Deprovision.ps1#L13) to "N".
+2. Optional: To skip transfer of user content before deletion, set [TransferContent](/Users_Deprovision.ps1#L13) to "N".
+3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](/Users_Deprovision.ps1#L16) to any name of your choice.
 
 ### Mock Employee Data
 * Delete multiple accounts Employees: [Employees_to_delete.csv](/Employees_to_delete.csv)
@@ -81,4 +82,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
