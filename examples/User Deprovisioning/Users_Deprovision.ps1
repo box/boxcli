@@ -1,5 +1,5 @@
 #APP SETUP
-#README: This powershell script will use the Box CLI to deprovision a list of users by first checking if the user has content, transfering user content to another user (default: no), then deleting that user. 
+#README: This powershell script will use the Box CLI to deprovision a list of users by first transfering user content to the current admin user's root folder (Transfer content default: "Y") before deleting that user. 
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
@@ -7,7 +7,7 @@
 #############################################################################
 
 #Set Employee List CSV Path
-$EmployeeList = "./Employees_5.csv"
+$EmployeeList = "./Employees_to_delete.csv"
 
 #Transfer user content before deletion - "Y" or "N"
 $TransferContent = "Y"
@@ -16,7 +16,7 @@ $TransferContent = "Y"
 
 $EmployeeArchiveFolderID =$null
 
-#TODO: Dynamic EMployee Archive folder
+#TODO: Dynamic Employee Archive folder
 
 
 # Main function
