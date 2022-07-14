@@ -25,12 +25,12 @@ PS /Users/mikechen>
 4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
 
 ## 1. Script Parameters
-1. Update the [EmployeeList](/Users_Deprovision.ps1#L10) to set your own Employee List CSV Path.
-2. Optional: To skip transfer of user content before deletion, set [TransferContent](/Users_Deprovision.ps1#L13) to "N".
-3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](/Users_Deprovision.ps1#L16) to any name of your choice.
+1. Update the [EmployeeList](Users_Deprovision.ps1#L10) to set your own Employee List CSV Path.
+2. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L13) to "N".
+3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L16) to any name of your choice.
 
 ### Mock Employee Data
-* Delete multiple accounts Employees: [Employees_to_delete.csv](/Employees_to_delete.csv)
+* Delete multiple accounts Employees: [Employees_to_delete.csv](Employees_to_delete.csv)
 
 Customize the input file for a test run. For example, update the Employees_to_delete.csv with the following data:
 ```
