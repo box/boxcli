@@ -1,0 +1,33 @@
+{
+    "id": 42037322,
+    "type": "file_request",
+    "created_at": "2020-09-28T10:53:43-08:00",
+    "created_by": {
+        "id": 11446498,
+        "type": "user",
+        "login": "ceo@example.com",
+        "name": "Aaron Levie"
+    },
+    "description": "Following documents are requested for your process",
+    "etag": 1,
+    "expires_at": "2020-09-28T10:53:43-08:00",
+    "folder": {
+        "id": 12345,
+        "type": "folder",
+        "etag": 1,
+        "name": "Contracts",
+        "sequence_id": 3
+    },
+    "is_description_required": true,
+    "is_email_required": true,
+    "status": "active",
+    "title": "Please upload documents",
+    "updated_at": "2020-09-28T10:53:43-08:00",
+    "updated_by": {
+        "id": 11446498,
+        "type": "user",
+        "login": "ceo@example.com",
+        "name": "Aaron Levie"
+    },
+    "url": "/f/19e57f40ace247278a8e3d336678c64a"
+}
