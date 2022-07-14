@@ -12,11 +12,12 @@ $EmployeeList = "./Employees_to_delete.csv"
 #Transfer user content before deletion - "Y" or "N"
 $TransferContent = "Y"
 
+#Employee Archive folder name
+$EmployeeArchiveFolderName = "Employee Archive"
 #############################################################################
 
 $EmployeeArchiveFolderID =$null
 
-#TODO: Dynamic Employee Archive folder
 
 
 # Main function
@@ -44,15 +45,15 @@ Function Start{
     $RootFolder = box folders:items 0 --sort=name --direction=ASC --json | ConvertFrom-Json
     ForEach($Result in $RootFolder){
         #Check if "Employee Archive" folder already exists
-        if( $Result.name -eq "Employee Archive"){
+        if( $Result.name -eq $EmployeeArchiveFolderName){
             $EmployeeArchiveFolderID = $Result.id
             Write-Output "Employee Archive folder already exists with folder ID: $($EmployeeArchiveFolderID)"
         }
     }
     if($EmployeeArchiveFolderID -eq $null){
         #Create new "Employee Archive" folder if it doens't exist
-        $EmployeeArchiveFolderID = box folders:create 0 "Employee Archive" --id-only
-        Write-Output "Created new Employee Archive root folder with ID: $($EmployeeArchiveFolderID)"
+        $EmployeeArchiveFolderID = box folders:create 0 $EmployeeArchiveFolderName --id-only
+        Write-Output "Created new Employee Archive root folder with ID: $($EmployeeArchiveFolderID); name: $($EmployeeArchiveFolderName)"
     }
 
     ForEach($Employee in $Employees){
