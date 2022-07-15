@@ -1,0 +1,28 @@
+ID: 42037322
+Type: file_request
+Created At: '2020-09-28T10:53:43-08:00'
+Created By:
+    ID: 11446498
+    Type: user
+    Login: ceo@example.com
+    Name: Aaron Levie
+Description: Following documents are requested for your process
+ETag: 1
+Expires At: '2020-09-28T10:53:43-08:00'
+Folder:
+    ID: 12345
+    Type: folder
+    ETag: 1
+    Name: Contracts
+    Sequence ID: 3
+Is Description Required: true
+Is Email Required: true
+Status: active
+Title: Please upload documents
+Updated At: '2020-09-28T10:53:43-08:00'
+Updated By:
+    ID: 11446498
+    Type: user
+    Login: ceo@example.com
+    Name: Aaron Levie
+URL: /f/19e57f40ace247278a8e3d336678c64a
