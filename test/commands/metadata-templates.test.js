@@ -367,6 +367,7 @@ describe('Metadata Templates', () => {
 				data: {
 					hidden: true,
 					displayName: 'New Display Name',
+					copyInstanceOnItemCopy: false,
 				},
 			},
 			{
@@ -476,6 +477,7 @@ describe('Metadata Templates', () => {
 				`--scope=${scope}`,
 				'--hidden',
 				'--display-name=New Display Name',
+				'--no-copy-instance-on-item-copy',
 				'--add-enum-option=key1',
 				'--option=optionKey1',
 				'--enum=Field Display Name',
@@ -502,7 +504,7 @@ describe('Metadata Templates', () => {
 				'--number=Count',
 				'--date=Date',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
 			.it('should update the metadata template (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
@@ -563,6 +565,13 @@ describe('Metadata Templates', () => {
 					'--display-name=Wrong!'
 				],
 				'Unexpected --display-name flag outside of template or field edit operation'
+			],
+			'--copy-instance-on-item-copy flag in incorrect operation group': [
+				[
+					'--edit-field=bar',
+					'--copy-instance-on-item-copy'
+				],
+				'Unexpected --copy-instance-on-item-copy flag outside of template edit operation'
 			]
 		}, function(flags, expectedErrorMessage) {
 

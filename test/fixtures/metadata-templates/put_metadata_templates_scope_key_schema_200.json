@@ -3,6 +3,7 @@
     "scope": "enterprise_11111",
     "displayName": "New Display Name",
     "hidden": true,
+    "copyInstanceOnItemCopy": true,
     "fields": [
         {
             "type": "string",
