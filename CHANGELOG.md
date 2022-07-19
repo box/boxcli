@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/box/boxcli/compare/v3.2.0...v3.3.0) (2022-07-19)
+
+
+### New Features and Enhancements
+
+* add editable shared link support ([#350](https://github.com/box/boxcli/issues/350)) ([ab639e7](https://github.com/box/boxcli/commit/ab639e7e9336e8745ef84dd6dfc646c987638ec3))
+* add file requests api support ([#355](https://github.com/box/boxcli/issues/355)) ([73f0490](https://github.com/box/boxcli/commit/73f0490ff3c3dfefb89e14dde933d3a3ffc4113f))
+* add possibility to set custom analytics header ([#348](https://github.com/box/boxcli/issues/348)) ([5a3387f](https://github.com/box/boxcli/commit/5a3387fb687bcbd5d8441117c497312ac1d20f27))
+* Support --copy-instance-on-item-copy flag for update metadata template ([#357](https://github.com/box/boxcli/issues/357)) ([5d8272a](https://github.com/box/boxcli/commit/5d8272a0559ec97a345a2032456998383e7a6716))
+* support Client Credentials Grant as authentication method ([#335](https://github.com/box/boxcli/issues/335)) ([4649d8a](https://github.com/box/boxcli/commit/4649d8adf39f64c8292b70c35b7bffa96e462edc))
+
 ## [3.2.0](https://github.com/box/boxcli/compare/v3.1.0...v3.2.0) (2022-06-30)
 
 
