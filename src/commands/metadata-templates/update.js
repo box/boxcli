@@ -153,6 +153,20 @@ const FLAG_HANDLERS = Object.freeze({
 
 		return currentOp;
 	},
+	'copy-instance-on-item-copy': (value, currentOp/* , ops*/) => {
+		if (!currentOp) {
+			currentOp = {
+				op: 'editTemplate',
+				data: {},
+			};
+		}
+
+		if (currentOp.op !== 'editTemplate') {
+			throw new BoxCLIError('Unexpected --copy-instance-on-item-copy flag outside of template edit operation');
+		}
+		currentOp.data.copyInstanceOnItemCopy = (!value.input.startsWith('--no-'));
+		return currentOp;
+	},
 	'display-name': (value, currentOp/* , ops*/) => {
 		if (!currentOp) {
 			currentOp = {
@@ -349,6 +363,10 @@ MetadataTemplatesUpdateCommand.flags = {
 	}),
 	'remove-field': flags.string({
 		description: 'Remove the specified field',
+	}),
+	'copy-instance-on-item-copy': flags.boolean({
+		description: 'Whether to include the metadata when a file or folder is copied',
+		allowNo: true,
 	})
 };
 

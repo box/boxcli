@@ -40,7 +40,7 @@ EXAMPLE
   box metadata-templates
 ```
 
-_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/index.js)_
+_See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/index.js)_
 
 ## `box metadata-templates:cascade TEMPLATEKEY`
 
@@ -75,7 +75,7 @@ EXAMPLE
   box metadata-templates:cascade employeeRecord --folder 22222
 ```
 
-_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/cascade.js)_
+_See code: [src/commands/metadata-templates/cascade.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/cascade.js)_
 
 ## `box metadata-templates:create`
 
@@ -120,7 +120,7 @@ EXAMPLE
   box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales
 ```
 
-_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/create.js)_
+_See code: [src/commands/metadata-templates/create.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/create.js)_
 
 ## `box metadata-templates:delete TEMPLATEKEY`
 
@@ -153,7 +153,7 @@ EXAMPLE
   box metadata-templates:delete employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/delete.js)_
+_See code: [src/commands/metadata-templates/delete.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/delete.js)_
 
 ## `box metadata-templates:get TEMPLATEKEY`
 
@@ -186,7 +186,7 @@ EXAMPLE
   box metadata-templates:get employeeRecord
 ```
 
-_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/get.js)_
+_See code: [src/commands/metadata-templates/get.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/get.js)_
 
 ## `box metadata-templates:update TEMPLATEKEY`
 
@@ -216,6 +216,8 @@ OPTIONS
   --as-user=as-user                                  Provide an ID for a user
 
   --bulk-file-path=bulk-file-path                    File path to bulk .csv or .json objects
+
+  --[no-]copy-instance-on-item-copy                  Whether to include the metadata when a file or folder is copied
 
   --csv                                              Output formatted CSV
 
@@ -270,4 +272,4 @@ EXAMPLE
   box metadata-templates:update employeeRecord --hidden
 ```
 
-_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/metadata-templates/update.js)_
+_See code: [src/commands/metadata-templates/update.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/metadata-templates/update.js)_

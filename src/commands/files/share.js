@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
-const SharedLinksCreateCommand = require('../shared-links/create');
+const { sharedLinkFlags, sharedLinkFileFlags } = require('../shared-links/create');
 const SharedLinksModule = require('../../modules/shared-links');
 
 class FilesShareCommand extends BoxCommand {
@@ -22,7 +22,7 @@ class FilesShareCommand extends BoxCommand {
 
 FilesShareCommand.aliases = [
 	'files:shared-links:create',
-	'files:shared-links:update'
+	'files:shared-links:update',
 ];
 
 FilesShareCommand.description = 'Create a shared link for a file';
@@ -30,7 +30,8 @@ FilesShareCommand.examples = ['box files:share 11111 --access company'];
 FilesShareCommand._endpoint = 'put_files_id create_shared_link';
 
 FilesShareCommand.flags = {
-	...SharedLinksCreateCommand.flags,
+	...sharedLinkFlags,
+	...sharedLinkFileFlags
 };
 
 FilesShareCommand.args = [
@@ -38,8 +39,8 @@ FilesShareCommand.args = [
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to share'
-	}
+		description: 'ID of the file to share',
+	},
 ];
 
 module.exports = FilesShareCommand;

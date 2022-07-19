@@ -23,14 +23,10 @@ OPTIONS
   -t, --token=token                              Provide a token to perform this call
   -v, --verbose                                  Show verbose output, which can be helpful for debugging
   -y, --yes                                      Automatically respond yes to all confirmation prompts
+  --all                                          Returns all search results.
 
   --ancestor-folder-ids=ancestor-folder-ids      Search for the contents of specific folders (and folders within them).
                                                  Requires a folder ID or a set of comma-delimited folder IDs
-
-  -all                                           Return all search results. If not specified, the number of results
-                                                 returned will be determined by the --limit flag. 
-                                                 Note: using the --all flag may execute many API requests under the hood
-                                                 and quickly exhaust API calls limit.
 
   --as-user=as-user                              Provide an ID for a user
 
@@ -56,11 +52,9 @@ OPTIONS
   --include-recent-shared-links                  Returns shared links that the user recently accessed
 
   --json                                         Output formatted JSON
-  
-  --limit=limit                                  Defines the maximum number of items to return. Default value is 100.
-                                                 To return all results use --all flag instead.
 
-  
+  --limit=limit                                  Defines the maximum number of items to return. Default value is 100.
+
   --mdfilter=mdfilter                            Metadata value to filter on, in the format
                                                  <scope>.<templateKey>.<field>=<value>
 
@@ -94,4 +88,4 @@ EXAMPLES
   box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/search.js)_

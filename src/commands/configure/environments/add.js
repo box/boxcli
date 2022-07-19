@@ -19,10 +19,15 @@ class EnvironmentsAddCommand extends BoxCommand {
 			configObj = JSON.parse(fs.readFileSync(configFilePath));
 			/* eslint-enable no-sync */
 		} catch (ex) {
-			throw new BoxCLIError(`Could not read environment config file ${args.path}`, ex);
+			throw new BoxCLIError(
+				`Could not read environment config file ${args.path}`,
+				ex
+			);
 		}
 
-		utils.validateConfigObject(configObj);
+		const isCCG = flags['ccg-auth'];
+
+		utils.validateConfigObject(configObj, isCCG);
 
 		let newEnvironment = {
 			clientId: configObj.boxAppSettings.clientID,
@@ -49,16 +54,25 @@ class EnvironmentsAddCommand extends BoxCommand {
 			throw new BoxCLIError('Your configuration file is missing the client ID');
 		}
 		if (!configObj.boxAppSettings.clientSecret) {
-			throw new BoxCLIError('Your configuration file is missing the client secret');
+			throw new BoxCLIError(
+				'Your configuration file is missing the client secret'
+			);
 		}
-		if (!configObj.boxAppSettings.appAuth.publicKeyID) {
-			throw new BoxCLIError('Your configuration file is missing the public key ID');
-		}
-		if (!configObj.boxAppSettings.appAuth.privateKey && !flags['private-key-path']) {
-			throw new BoxCLIError('Your environment does not have a private key');
-		}
-		if (!configObj.boxAppSettings.appAuth.passphrase) {
-			throw new BoxCLIError('Your environment does not have a passphrase');
+		if (!isCCG) {
+			if (!configObj.boxAppSettings.appAuth.publicKeyID) {
+				throw new BoxCLIError(
+					'Your configuration file is missing the public key ID'
+				);
+			}
+			if (
+				!configObj.boxAppSettings.appAuth.privateKey &&
+				!flags['private-key-path']
+			) {
+				throw new BoxCLIError('Your environment does not have a private key');
+			}
+			if (!configObj.boxAppSettings.appAuth.passphrase) {
+				throw new BoxCLIError('Your environment does not have a passphrase');
+			}
 		}
 		if (!configObj.enterpriseID) {
 			throw new BoxCLIError('Your environment does not have an enterprise ID');
@@ -66,8 +80,13 @@ class EnvironmentsAddCommand extends BoxCommand {
 
 		if (flags['private-key-path']) {
 			/* eslint-disable no-sync */
-			if (!fs.existsSync(flags['private-key-path']) || fs.statSync(flags['private-key-path']).isDirectory()) {
-				throw new BoxCLIError(`The private key path ${flags['private-key-path']} does not point to a file`);
+			if (
+				!fs.existsSync(flags['private-key-path']) ||
+				fs.statSync(flags['private-key-path']).isDirectory()
+			) {
+				throw new BoxCLIError(
+					`The private key path ${flags['private-key-path']} does not point to a file`
+				);
 			}
 			/* eslint-enable no-sync */
 			newEnvironment.privateKeyPath = flags['private-key-path'];
@@ -81,9 +100,17 @@ class EnvironmentsAddCommand extends BoxCommand {
 			environmentsObj.default = environmentName;
 		}
 
+		if (isCCG) {
+			newEnvironment.clientSecret = configObj.boxAppSettings.clientSecret;
+			newEnvironment.ccgUser = flags['ccg-user'];
+			newEnvironment.authMethod = 'ccg';
+		}
+
 		environmentsObj.environments[environmentName] = newEnvironment;
 		await this.updateEnvironments(environmentsObj);
-		this.info(chalk`{green Successfully added CLI environment "${flags.name}"}`);
+		this.info(
+			chalk`{green Successfully added CLI environment "${flags.name}"}`
+		);
 	}
 }
 
@@ -98,12 +125,25 @@ EnvironmentsAddCommand.flags = {
 		description: 'Provide a path to application private key',
 		parse: utils.parsePath,
 	}),
-	'set-as-current': flags.boolean({ description: 'Set this new environment as your current environment' }),
+	'set-as-current': flags.boolean({
+		description: 'Set this new environment as your current environment',
+	}),
 	name: flags.string({
 		char: 'n',
 		description: 'Set a name for the environment',
 		default: 'default',
-	})
+	}),
+	'ccg-auth': flags.boolean({
+		description: 'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
+	}),
+	'ccg-user': flags.string({
+		description: 'Provide an ID for a user for CCG. Use it to obtain user token. ' +
+			'In order to enable generating user token you have to go to your application ' +
+			'configuration that can be found here https://app.box.com/developers/console.\n' +
+			'In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. \n' +
+			'Do not forget to re-authorize application if it was already authorized.',
+		dependsOn: ['ccg-auth'],
+	}),
 };
 
 EnvironmentsAddCommand.args = [
@@ -111,8 +151,8 @@ EnvironmentsAddCommand.args = [
 		name: 'path',
 		required: true,
 		hidden: false,
-		description: 'Provide a file path to configuration file'
-	}
+		description: 'Provide a file path to configuration file',
+	},
 ];
 
 module.exports = EnvironmentsAddCommand;

@@ -23,16 +23,39 @@ ARGUMENTS
   PATH  Provide a file path to configuration file
 
 OPTIONS
-  -h, --help                           Show CLI help
-  -n, --name=name                      [default: default] Set a name for the environment
-  -q, --quiet                          Suppress any non-error output to stderr
-  -v, --verbose                        Show verbose output, which can be helpful for debugging
-  --no-color                           Turn off colors for logging
-  --private-key-path=private-key-path  Provide a path to application private key
-  --set-as-current                     Set this new environment as your current environment
+  -h, --help
+      Show CLI help
+
+  -n, --name=name
+      [default: default] Set a name for the environment
+
+  -q, --quiet
+      Suppress any non-error output to stderr
+
+  -v, --verbose
+      Show verbose output, which can be helpful for debugging
+
+  --ccg-auth
+      Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and 
+      secret.
+
+  --ccg-user=ccg-user
+      Provide an ID for a user for CCG. Use it to obtain user token. In order to enable generating user token you have to 
+      go to your application configuration that can be found here https://app.box.com/developers/console.
+      In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. 
+      Do not forget to re-authorize application if it was already authorized.
+
+  --no-color
+      Turn off colors for logging
+
+  --private-key-path=private-key-path
+      Provide a path to application private key
+
+  --set-as-current
+      Set this new environment as your current environment
 ```
 
-_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/add.js)_
+_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/add.js)_
 
 ## `box configure:environments:delete [NAME]`
 
@@ -52,7 +75,7 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/delete.js)_
+_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/delete.js)_
 
 ## `box configure:environments:get`
 
@@ -71,7 +94,7 @@ OPTIONS
   --no-color       Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/get.js)_
+_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/get.js)_
 
 ## `box configure:environments:set-current [NAME]`
 
@@ -94,7 +117,7 @@ ALIASES
   $ box configure:environments:select
 ```
 
-_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/set-current.js)_
+_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/set-current.js)_
 
 ## `box configure:environments:switch-user [USERID]`
 
@@ -124,7 +147,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/switch-user.js)_
+_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/switch-user.js)_
 
 ## `box configure:environments:update [NAME]`
 
@@ -158,7 +181,7 @@ OPTIONS
                                        be stored for each Box environment
 ```
 
-_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/environments/update.js)_
+_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/environments/update.js)_
 
 ## `box configure:settings`
 
@@ -172,7 +195,9 @@ OPTIONS
   -h, --help                                     Show CLI help
   -q, --quiet                                    Suppress any non-error output to stderr
   -v, --verbose                                  Show verbose output, which can be helpful for debugging
+  --analytics-client-name=analytics-client-name  Set custom analytics client header value
   --downloads-folder-path=downloads-folder-path  Set folder path for the downloads folder
+  --[no-]enable-analytics-client                 Enable or disable custom analytics client
   --[no-]enable-proxy                            Enable or disable proxy
   --file-format=csv|json|txt                     Set the file format for generated reports
   --no-color                                     Turn off colors for logging
@@ -187,4 +212,4 @@ OPTIONS
   --reports-folder-path=reports-folder-path      Set folder path for the reports folder
 ```
 
-_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/configure/settings.js)_
+_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/configure/settings.js)_

@@ -10,12 +10,19 @@ const REQUIRED_CONFIG_VALUES = Object.freeze([
 	'boxAppSettings.clientSecret',
 	'boxAppSettings.appAuth.publicKeyID',
 	'boxAppSettings.appAuth.passphrase',
-	'enterpriseID'
+	'enterpriseID',
+]);
+
+const REQUIRED_CONFIG_VALUES_CCG = Object.freeze([
+	'boxAppSettings.clientID',
+	'boxAppSettings.clientSecret',
+	'enterpriseID',
 ]);
 
 const NUMBER_REGEX = /^[-+]?\d*\.?\d+$/u;
 const UNESCAPED_COMMA_REGEX = /(?<![^\\](?:\\\\)*\\),/gu;
-const UNESCAPED_SUBSCRIPT_REGEX = /(?<![^\\](?:\\\\)*\\)\[(.*?)(?<![^\\](?:\\\\)*\\)\]/gu;
+const UNESCAPED_SUBSCRIPT_REGEX =
+	/(?<![^\\](?:\\\\)*\\)\[(.*?)(?<![^\\](?:\\\\)*\\)\]/gu;
 
 const PATH_ESCAPES = Object.freeze({
 	'/': '~1',
@@ -33,7 +40,6 @@ const PATH_ESCAPES = Object.freeze({
  * @private
  */
 function unescapeString(str, replacements = {}) {
-
 	let ret = '',
 		chars = [...str];
 
@@ -51,7 +57,6 @@ function unescapeString(str, replacements = {}) {
 	}
 
 	return ret;
-
 }
 
 /**
@@ -67,7 +72,6 @@ function unescapeString(str, replacements = {}) {
  * @private
  */
 function parseKey(value) {
-
 	if (value.startsWith('/')) {
 		// Treat as path
 		return unescapeString(value, PATH_ESCAPES);
@@ -77,8 +81,9 @@ function parseKey(value) {
 	if (parts[parts.length - 1] === '') {
 		parts = parts.slice(0, -1);
 	}
-	return `/${parts.map(s => (s ? unescapeString(s, PATH_ESCAPES) : '-')).join('/')}`;
-
+	return `/${parts
+		.map((s) => (s ? unescapeString(s, PATH_ESCAPES) : '-'))
+		.join('/')}`;
 }
 
 /**
@@ -95,7 +100,6 @@ function parseKey(value) {
  * @private
  */
 function parseValue(value) {
-
 	if (value.startsWith('#')) {
 		// Try parsing as number
 		let valueStr = unescapeString(value.substr(1));
@@ -115,8 +119,9 @@ function parseValue(value) {
 			return [];
 		}
 
-		return interiorStr.split(UNESCAPED_COMMA_REGEX)
-			.map(el => unescapeString(el));
+		return interiorStr
+			.split(UNESCAPED_COMMA_REGEX)
+			.map((el) => unescapeString(el));
 	}
 
 	// No other parsing applied; treat as string
@@ -136,13 +141,11 @@ function parseValue(value) {
  * @private
  */
 function parseMetadataString(input) {
-
 	let chars = [...input];
 	let op = {};
 
 	// Find the splitting point, if one exists
 	let splitIndex = chars.findIndex((char, index, arr) => {
-
 		if (char === '>' || char === '=') {
 			let escaped = false;
 			for (let i = index - 1; i >= 0; i--) {
@@ -183,12 +186,16 @@ module.exports = {
 	/**
 	 * Validates the a configuration object has all required properties
 	 * @param {Object} configObj The config object to validate
+	 * @param {boolean} isCCG Whether the config object is used for CCG auth
 	 * @returns {void}
 	 * @throws BoxCLIError
 	 */
-	validateConfigObject(configObj) {
+	validateConfigObject(configObj, isCCG) {
 		let checkProp = _.propertyOf(configObj);
-		let missingProp = REQUIRED_CONFIG_VALUES.find(key => !checkProp(key));
+		let requiredConfigValues = isCCG
+			? REQUIRED_CONFIG_VALUES_CCG
+			: REQUIRED_CONFIG_VALUES;
+		let missingProp = requiredConfigValues.find((key) => !checkProp(key));
 
 		if (missingProp) {
 			throw new BoxCLIError(`Config object missing key ${missingProp}`);
@@ -205,7 +212,10 @@ module.exports = {
 		// Check for homedir and expand if necessary
 		// @NOTE: This can occur when the user passes a path via --flag="~/my-stuff" syntax, since the shell
 		// doesn't get a chance to expand the tilde
-		value = value.replace(/^~(\/|\\|$)/u, (match, ending) => os.homedir() + ending);
+		value = value.replace(
+			/^~(\/|\\|$)/u,
+			(match, ending) => os.homedir() + ending
+		);
 
 		return path.resolve(value);
 	},
@@ -217,7 +227,6 @@ module.exports = {
 	 * @returns {Object} The parsed metadata key and value
 	 */
 	parseMetadata(value) {
-
 		let op = parseMetadataString(value);
 		if (!op.hasOwnProperty('path') || !op.hasOwnProperty('value')) {
 			throw new BoxCLIError('Metadata must be in the form key=value');
@@ -225,7 +234,9 @@ module.exports = {
 
 		let pathSegments = op.path.slice(1).split('/');
 		if (pathSegments.length !== 1) {
-			throw new BoxCLIError(`Metadata value must be assigned to a top-level key, instead got ${op.path}`);
+			throw new BoxCLIError(
+				`Metadata value must be assigned to a top-level key, instead got ${op.path}`
+			);
 		}
 
 		let key = pathSegments[0];
@@ -245,7 +256,6 @@ module.exports = {
 	 * @returns {Object} The parsed operation object
 	 */
 	parseMetadataOp(value) {
-
 		return parseMetadataString(value);
-	}
+	},
 };

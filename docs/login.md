@@ -14,6 +14,7 @@ USAGE
   $ box login
 
 OPTIONS
+  -c, --code       Manually visit authorize URL and input code
   -h, --help       Show CLI help
   -n, --name=name  [default: oauth] Set a name for the environment
   -p, --port=port  [default: 3000] Set the port number for the local OAuth callback server
@@ -22,4 +23,4 @@ OPTIONS
   --no-color       Turn off colors for logging
 ```
 
-_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v3.1.0/src/commands/login.js)_
+_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/login.js)_
