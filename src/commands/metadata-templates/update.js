@@ -365,7 +365,7 @@ MetadataTemplatesUpdateCommand.flags = {
 		description: 'Remove the specified field',
 	}),
 	'copy-instance-on-item-copy': flags.boolean({
-		description: 'Edit weather to include the metadata when a file or folder is copied',
+		description: 'Whether to include the metadata when a file or folder is copied',
 		allowNo: true,
 	})
 };
