@@ -119,6 +119,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 ## Command Topics
 
 <!-- commands -->
+# Command Topics
 
 * [`box autocomplete`](docs/autocomplete.md) - Display autocomplete installation instructions
 * [`box collaboration-allowlist`](docs/collaboration-allowlist.md) - List collaboration allowlist entries
@@ -128,6 +129,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box configure`](docs/configure.md) - Configure the Box CLI
 * [`box device-pins`](docs/device-pins.md) - List all the device pins for your enterprise
 * [`box events`](docs/events.md) - Get events
+* [`box file-requests`](docs/file-requests.md) - Copies existing file request to new folder
 * [`box files`](docs/files.md) - Manage files
 * [`box folders`](docs/folders.md) - Manage folders
 * [`box groups`](docs/groups.md) - List all groups
