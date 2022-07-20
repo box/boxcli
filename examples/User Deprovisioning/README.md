@@ -27,9 +27,9 @@ PS /Users/mikechen>
 4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
 
 ## 1. Script Parameters
-1. Update the [EmployeeList](Users_Deprovision.ps1#L10) to set your own Employee List CSV Path.
-2. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L13) to "N".
-3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L16) to any name of your choice.
+1. Update the [EmployeeList](Users_Deprovision.ps1#L12) to set your own Employee List CSV Path.
+2. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
+3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
 
 ### Mock Employee Data
 * Delete multiple accounts Employees: [Employees_to_delete.csv](Employees_to_delete.csv)
@@ -70,6 +70,9 @@ Deleted user 19927131476
 Deleted employee Managed User 1
 ```
 
+## 3. Logging
+Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Users_Deprovision_all.txt` and `Users_Deprovision_errors.txt`. The former contains all log entries and the latter contains only errors.
+
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
 
@@ -77,7 +80,7 @@ This project is a collection of open source examples and should not be treated a
 
 The MIT License (MIT)
 
-Copyright (c) 2022 Mike Chen
+Copyright (c) 2022 Box
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
