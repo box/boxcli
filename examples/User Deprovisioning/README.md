@@ -28,17 +28,14 @@ PS /Users/mikechen>
 
 ## 1. Script Parameters
 1. Update the [EmployeeList](Users_Deprovision.ps1#L12) to set your own Employee List CSV Path.
-2. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
-3. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
-
-### Mock Employee Data
-* Delete multiple accounts Employees: [Employees_to_delete.csv](Employees_to_delete.csv)
-
-Customize the input file for a test run. For example, update the Employees_to_delete.csv with the following data:
-```
-name,email
-Managed User 1,ManagedUser1@test.com
-```
+2. Customize the [input file of employee accounts for deletion](Employees_to_delete.csv) by providing their **email** addresses
+	* For example, update the [Employees_to_delete.csv](Employees_to_delete.csv) with the following data:
+	```
+	name,email
+	Managed User 1,ManagedUser1@test.com
+	```
+3. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
+4. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
 
 ## 2. Run the script
 Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
