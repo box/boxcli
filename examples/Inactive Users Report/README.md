@@ -34,11 +34,6 @@ List of [event type](https://developer.box.com/reference/resources/event/#param-
     PS /Users/mikechen>
     ```
 
-4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
-    * The Box application must have the following application **access level** enabled in the configuration page: `App + Enterprise Access`
-	* The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
-
-
 ## 1. Script Parameters
 1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L15) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
 

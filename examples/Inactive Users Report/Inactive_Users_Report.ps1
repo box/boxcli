@@ -2,7 +2,6 @@
 #README: This powershell script will create list of users which inactive for more than a specified number of days.
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
-#APPLICATION SCOPES: Manage Enterprise Properties, Manage Users, Generate User Access Tokens
 
 ########################################################################################
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
