@@ -121,8 +121,6 @@ catch {
 	break
 }
 
-Write-Host $usersObjResp
-
 # Get the current list of events
 try {
 	$userEventObjResp = "$(box events --enterprise --limit=500 --created-after=-$($daysInactive)d --event-types=$eventType --fields=source,created_by,event_type --json 2>&1)"
@@ -168,7 +166,7 @@ Write-Log "Need to check $($totalUserToCheck) user$(If($totalUserToCheck -gt 1) 
 
 # Perform the check
 ForEach($Event in $userEventObj) {
-	Check if user have just created
+	# Check if user have just created
 	if ($Event.event_type -eq "NEW_USER") {
 		if ($activeUsers.ContainsKey($Event.source.id)) {
 			$activeUsers[$Event.source.id] = $true
@@ -181,16 +179,18 @@ ForEach($Event in $userEventObj) {
 	}
 }
 
-Write-Log ($activeUsers | Out-String)	-output true
-
+$totalInactiveUser = 0
 # Write the output to a file
-
 New-Item $ReportOutputFile -Value "`"name`",`"email`",`"id`",`"role`",`"status`",`"space_used`"`r`n" -ItemType File -Force > $null
 ForEach($User in $usersObj) {
 	if ($activeUsers.ContainsKey($User.id) -and $activeUsers[$User.id] -eq $false) {
+		$totalInactiveUser += 1
 		Add-Content -Path $ReportOutputFile -Value "`"$($User.name)`",`"$($User.login)`",`"$($User.id)`",`"$($User.role)`",`"$($User.status)`",`"$($User.space_used)`""
 	}
 }
+Write-Log "Found $($totalInactiveUser) user$(If($totalInactiveUser -gt 1) {"s"}) inactive for more than $($daysInactive) day$(If($daysInactive -gt 1) {"s"})." -output true
+Write-Log "Report is available at $ReportOutputFile" -output true
+
 
 
 ########################################################################################

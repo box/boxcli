@@ -6,3 +6,4 @@ There are the following scripts available:
 1. [Users and Folder Provisioning Automation](/examples/User%20Creation%20%26%20Provisioning)
 2. [Mass Update User Zones](/examples/Mass%20Update%20User%20Zones)
 3. [Users Deprovisioning Automation](/examples/User%20Deprovisioning)
+4. [Report of Inactive Users](/examples/Inactive%20Users%20Report)
