@@ -10,7 +10,7 @@ Zone assignments are interpreted using the `ZonesTable`.  This script is designe
 If you are wondering how to assign Zones through the Admin Console, see [here](https://support.box.com/hc/en-us/articles/360044193533-Assigning-Zones-through-the-Admin-Console) for more details. For more information about Box Zones, please visit our [page here](https://www.box.com/zones).
 
 ## Setup Pre-Requisites
-1. Clone this github repo or downdload files from the `/examples` directory
+1. Clone this github repo or download files from the `/examples` directory
    ```bash
    git clone https://github.com/box/boxcli.git
    ```
@@ -74,7 +74,7 @@ If you are wondering how to assign Zones through the Admin Console, see [here](h
 	}
 	```
 ## 2. Run the script
-Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the User Provisioning folder.
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `Mass Update User Zones` folder.
 ```
 rvb@lab:~/box-cli/examples/Mass Update User Zones$ pwsh
 PowerShell 7.2.4
@@ -83,7 +83,7 @@ Copyright (c) Microsoft Corporation.
 https://aka.ms/powershell
 Type 'help' to get help.
 
-PS /home/rvb/box-cli/examples/Mass Update User Zonesg>
+PS /home/rvb/box-cli/examples/Mass Update User Zones>
 ```
 
 Run the script:

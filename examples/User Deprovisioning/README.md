@@ -5,7 +5,7 @@ This Box CLI script deprovision a list of users by first transfering user conten
 
 
 ## Setup Pre-Requisites
-1. Clone this github repo or downdload files from the `/examples` directory
+1. Clone this github repo or download files from the `/examples` directory
    ```bash
    git clone https://github.com/box/boxcli.git
    ```

@@ -4,7 +4,7 @@ This User Creation and Provisioning powershell script will use the Box CLI to bu
 For detailed script overview, please follow [this guide](https://developer.box.com/guides/tooling/cli/quick-start/powershell-script-templates/)
 
 ## Setup Pre-Requisites
-1. Clone this github repo or downdload files from the `/examples` directory
+1. Clone this github repo or download files from the `/examples` directory
 	```bash
 	git clone https://github.com/box/boxcli.git
 	```
@@ -46,7 +46,7 @@ For detailed script overview, please follow [this guide](https://developer.box.c
 4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
 
 ## 2. Run the script
-Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the User Provisioning folder.
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
 ```
 rvb@lab:~/box-cli/examples/User Creation & Provisioning$ pwsh
 PowerShell 7.2.4
@@ -63,7 +63,7 @@ Run the script:
 ./Users_Create_Provision.ps1
 ```
 
-You will see following output to configm the script started:
+You will see following output to confirm the script started:
 ```
 PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Create_Provision.ps1
 Starting User Creation & Provisioning script...
