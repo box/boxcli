@@ -35,14 +35,14 @@ For detailed script overview, please follow [this guide](https://developer.box.c
 ## 1. Script Parameters
 1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
 2. Customize the input file of employee accounts for creation.
-	For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
-	```
-	firstName,lastName,email
-	Managed,User 1,ManagedUser1@test.com
-	Managed,User 2,ManagedUser2@test.com
-	Managed,User 3,ManagedUser3@test.com
-	```
-3.  Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
+    For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
+    ```
+    firstName,lastName,email
+    Managed,User 1,ManagedUser1@test.com
+    Managed,User 2,ManagedUser2@test.com
+    Managed,User 3,ManagedUser3@test.com
+    ```
+3. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
 4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
 
 ## 2. Run the script

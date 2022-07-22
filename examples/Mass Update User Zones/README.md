@@ -20,7 +20,7 @@ If you are wondering how to assign Zones through the Admin Console, see [here](h
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
     
 3. Test PowerShell by running the `pwsh` command in your terminal.
-	```bash
+    ```bash
     pwsh
     ```
 
@@ -35,12 +35,12 @@ If you are wondering how to assign Zones through the Admin Console, see [here](h
     PS /Users/mikechen>
     ```
 
-5. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
+4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
     * The Box application must have the following application **access level** enabled in the configuration page: `App + Enterprise Access`
     * The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
     * The Box application must have the following **advanced features** enabled in the configuration page: `Generate User Access Tokens`
 
-6. The  **Box Admin** or **Co-Admin Account** user must have `Manage Users` privileges at a minimum.
+5. The  **Box Admin** or **Co-Admin Account** user must have `Manage Users` privileges at a minimum.
 
 
 ## 1. Script Parameters
