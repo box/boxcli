@@ -9,36 +9,62 @@ The script will get list of all users in the enterprise, mapping with Box [Event
 List of [event type](https://developer.box.com/reference/resources/event/#param-event_type) can be mark as an active user (can be change by modify the script): `LOGIN`,`UPLOAD`,`COPY`,`MOVE`,`PREVIEW`,`DOWNLOAD`,`EDIT`,`DELETE`,`UNDELETE`,`LOCK`,`UNLOCK`, `NEW_USER`
 
 ## Setup Pre-Requisites
-1. Clone this github repo.
+1. Clone this github repo or download files from the `/examples` directory
+   ```bash
+   git clone https://github.com/box/boxcli.git
+   ```
 2. Install PowerShell or .Net core.
    > If you encounter issues make sure you install both dotnet core and PowerShell
     1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
     
 3. Test PowerShell by running the `pwsh` command in your terminal.
+    ```bash
+    pwsh
+    ```
 
-```
-mikechen@mbp report-inactive-users % pwsh
-PowerShell 7.2.1
-Copyright (c) Microsoft Corporation.
-
-https://aka.ms/powershell
-Type 'help' to get help.
-
-PS /Users/mikechen>
-```
+    ```
+    mikechen@mbp create-users-automation % pwsh
+    PowerShell 7.2.1
+    Copyright (c) Microsoft Corporation.
+	
+    https://aka.ms/powershell
+    Type 'help' to get help.
+	
+    PS /Users/mikechen>
+    ```
 
 4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
     * The Box application must have the following application **access level** enabled in the configuration page: `App + Enterprise Access`
 	* The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
 
 
-## Script Parameters
-1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L20) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
+## 1. Script Parameters
+1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L15) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
 
-2. Optional: To change the report output file name, set the value for [ReportName](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L16) variable.
+2. Optional: To change the report output file name, set the value for [ReportName](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11) variable.
 
-## Logging ##
+## 2. Run the script
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `Inactive Users Report` folder.
+
+```
+rvb@lab:~/box-cli/examples/Inactive Users Report$ pwsh
+PowerShell 7.2.4
+Copyright (c) Microsoft Corporation.
+
+https://aka.ms/powershell
+Type 'help' to get help.
+
+PS /home/rvb/box-cli/examples/Inactive Users Report>
+```
+
+Run the script:
+
+```bash
+./Inactive_Users_Report.ps1
+```
+
+## Logging
 Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Inactive_Users_Report_all.txt` and `Inactive_Users_Report_errors.txt`. The former contains all log entries and the latter contains only errors.
 
 ## Disclaimer
