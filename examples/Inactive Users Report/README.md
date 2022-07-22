@@ -2,9 +2,9 @@
 # Report Inactive Users #
 
 ## Overview ##
-The Report Inactive Users script utilizes the Box CLI to generate a `.csv` file with list of users which inactive for last specific days.
+The Report Inactive Users script utilizes the Box CLI to generate a `.csv` file with a list of users which are inactive for last specific days.
 
-The script will get list of all users in the enterprise, mapping with Box Events in last specific days, for users which have [role](https://developer.box.com/reference/resources/user--full/#param-role) `user` and not an App user will be checked. All user which don't have any event in last days, will be consider as inactive and write into a `.csv` file. Result file from this script can be compatible for other scripts like [Users Deprovisioning Automation](/examples/User%20Deprovisioning).
+The script will get list of all users in the enterprise, mapping with Box Events in last specific days, for users who have [role](https://developer.box.com/reference/resources/user--full/#param-role) `user` and not an App user will be checked. All users which don't have any event in last days, will be considered as inactive and written into a `.csv` file. Result file from this script can be compatible with other scripts like [Users Deprovisioning Automation](/examples/User%20Deprovisioning).
 
 List of [event type](https://developer.box.com/reference/resources/event/#param-event_type) can be mark as an active user (can be change by modify the script): `LOGIN`,`UPLOAD`,`COPY`,`MOVE`,`PREVIEW`,`DOWNLOAD`,`EDIT`,`DELETE`,`UNDELETE`,`LOCK`,`UNLOCK`, `NEW_USER`
 
@@ -34,9 +34,9 @@ PS /Users/mikechen>
 
 
 ## Script Parameters
-1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L20) to set the number of days which event will be scanned, for all users have no specific event in these days will be consider as inactive. If value not changed, or equal to -1, you will be prompted when run the script.
+1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L20) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
 
-2. Optional: Change the report output file name, set the value for [ReportName]((/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L16)
+2. Optional: To change the report output file name, set the value for [ReportName](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L16) variable.
 
 ## Logging ##
 Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Inactive_Users_Report_all.txt` and `Inactive_Users_Report_errors.txt`. The former contains all log entries and the latter contains only errors.
