@@ -4,7 +4,7 @@
 ## Overview ##
 The Report Inactive Users script utilizes the Box CLI to generate a `.csv` file with a list of users which are inactive for last specific days.
 
-The script will get list of all users in the enterprise, mapping with Box Events in last specific days, for users who have [role](https://developer.box.com/reference/resources/user--full/#param-role) `user` and not an App user will be checked. All users which don't have any event in last days, will be considered as inactive and written into a `.csv` file. Result file from this script can be compatible with other scripts like [Users Deprovisioning Automation](/examples/User%20Deprovisioning).
+The script will get list of all users in the enterprise, mapping with Box [Events](https://developer.box.com/reference/resources/event/) in last specific days, for users who have [role](https://developer.box.com/reference/resources/user--full/#param-role) `user` and not an App user will be checked. All users which don't have any event in last days, will be considered as inactive and written into a `.csv` file. Result file from this script can be compatible with other scripts like [Users Deprovisioning Automation](/examples/User%20Deprovisioning).
 
 List of [event type](https://developer.box.com/reference/resources/event/#param-event_type) can be mark as an active user (can be change by modify the script): `LOGIN`,`UPLOAD`,`COPY`,`MOVE`,`PREVIEW`,`DOWNLOAD`,`EDIT`,`DELETE`,`UNDELETE`,`LOCK`,`UNLOCK`, `NEW_USER`
 

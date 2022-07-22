@@ -111,9 +111,9 @@ try {
 	$usersObjResp = "$(box users --fields='id,login,name,role,space_used,is_platform_access_only,status' --json 2>&1)"
 	$usersObj = $usersObjResp | ConvertFrom-Json
 	if (($usersObj.Length -eq 0) -or ($usersObj.total_count -eq 0)) {
-		Write-Log "No users found" -output true -color Red
+		Write-Log "No users found!" -output true -color Red
 	} else {
-		Write-Log "Found $($usersObj.Length) user$(If($usersObj.Length -gt 1) {"s"})" -output true
+		Write-Log "Found $($usersObj.Length) user$(If($usersObj.Length -gt 1) {"s"})." -output true
 	}
 }
 catch {
@@ -126,7 +126,7 @@ try {
 	$userEventObjResp = "$(box events --enterprise --limit=500 --created-after=-$($daysInactive)d --event-types=$eventType --fields=source,created_by,event_type --json 2>&1)"
 	$userEventObj = $userEventObjResp | ConvertFrom-Json
 	if (($userEventObj.Length -eq 0) -or ($userEventObj -eq 0)) {
-		Write-Log "No event was found for last $daysInactive days" -output Yellow
+		Write-Log "No event was found for last $daysInactive days!" -output Yellow
 	} else {
 		Write-Log "Found $($userEventObj.Length) event$(If($userEventObj.Length -gt 1) {"s"}) in last $daysInactive day$(If($daysInactive -gt 1) {"s"})" -output true
 	}
