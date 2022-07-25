@@ -5,24 +5,30 @@ This Box CLI script deprovision a list of users by first transfering user conten
 
 
 ## Setup Pre-Requisites
-1. Clone this github repo.
+1. Clone this github repo or download files from the `/examples` directory
+   ```bash
+   git clone https://github.com/box/boxcli.git
+   ```
 2. Install PowerShell or .Net core.
    > If you encounter issues make sure you install both dotnet core and PowerShell
     1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
     
 3. Test PowerShell by running the `pwsh` command in your terminal.
-
-```
-mikechen@mbp create-users-automation % pwsh
-PowerShell 7.2.1
-Copyright (c) Microsoft Corporation.
-
-https://aka.ms/powershell
-Type 'help' to get help.
-
-PS /Users/mikechen>
-```
+   ```bash
+   pwsh
+   ```
+   
+	```
+	mikechen@mbp create-users-automation % pwsh
+	PowerShell 7.2.1
+	Copyright (c) Microsoft Corporation.
+	
+	https://aka.ms/powershell
+	Type 'help' to get help.
+	
+	PS /Users/mikechen>
+	```
 
 4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
 
@@ -52,6 +58,10 @@ PS /home/rvb/box-cli/examples/User Deprovisioning>
 ```
 
 Run the script:
+```bash
+./Users_Deprovision.ps1
+```
+
 
 ```
 PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Deprovision.ps1
@@ -67,7 +77,7 @@ Deleted user 19927131476
 Deleted employee Managed User 1
 ```
 
-## 3. Logging
+## Logging
 Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Users_Deprovision_all.txt` and `Users_Deprovision_errors.txt`. The former contains all log entries and the latter contains only errors.
 
 ## Disclaimer

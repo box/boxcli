@@ -4,36 +4,71 @@ This User Creation and Provisioning powershell script will use the Box CLI to bu
 For detailed script overview, please follow [this guide](https://developer.box.com/guides/tooling/cli/quick-start/powershell-script-templates/)
 
 ## Setup Pre-Requisites
-1. Clone this github repo.
+1. Clone this github repo or download files from the `/examples` directory
+	```bash
+	git clone https://github.com/box/boxcli.git
+	```
 2. Install PowerShell or .Net core.
 	> If you encounter issues make sure you install both dotnet core and PowerShell
     1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
 	
 3. Test PowerShell by running the `pwsh` command in your terminal.
+	```bash
+	pwsh
+	```
+	
+	You will see similar output:
+	```
+	mikechen@mbp create-users-automation % pwsh
+	PowerShell 7.2.1
+	Copyright (c) Microsoft Corporation.
 
+	https://aka.ms/powershell
+	Type 'help' to get help.
+
+	PS /Users/mikechen>
+	```
+
+4. Create an OAuth Application following the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/).
+
+## 1. Script Parameters
+1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
+2. Customize the input file of employee accounts for creation.
+    For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
+    ```
+    firstName,lastName,email
+    Managed,User 1,ManagedUser1@test.com
+    Managed,User 2,ManagedUser2@test.com
+    Managed,User 3,ManagedUser3@test.com
+    ```
+3. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
+4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
+
+## 2. Run the script
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
 ```
-mikechen@mbp create-users-automation % pwsh
-PowerShell 7.2.1
+rvb@lab:~/box-cli/examples/User Creation & Provisioning$ pwsh
+PowerShell 7.2.4
 Copyright (c) Microsoft Corporation.
 
 https://aka.ms/powershell
 Type 'help' to get help.
 
-PS /Users/mikechen>
+PS /home/rvb/box-cli/examples/User Creation & Provisioning>
 ```
 
-4. Create an OAuth Application following the [CLI Setup Quick Start](https://developer.box.com/guides/tooling/cli/quick-start/).
+Run the script: 
+```bash
+./Users_Create_Provision.ps1
+```
 
-## Script Parameters
-1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
-2. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
-3. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
+You will see following output to confirm the script started:
+```
+PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Create_Provision.ps1
+Starting User Creation & Provisioning script...
+```
 
-## Mock Employee Data
-* Generate 1 Employees: [employees_1.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_1.csv)
-* Generate 5 Employees: [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv)
-* Generate 10 Employees: [employees_10.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_10.csv)
 
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.

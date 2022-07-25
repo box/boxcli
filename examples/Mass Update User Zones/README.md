@@ -10,34 +10,40 @@ Zone assignments are interpreted using the `ZonesTable`.  This script is designe
 If you are wondering how to assign Zones through the Admin Console, see [here](https://support.box.com/hc/en-us/articles/360044193533-Assigning-Zones-through-the-Admin-Console) for more details. For more information about Box Zones, please visit our [page here](https://www.box.com/zones).
 
 ## Setup Pre-Requisites
-1. Clone this github repo.
+1. Clone this github repo or download files from the `/examples` directory
+   ```bash
+   git clone https://github.com/box/boxcli.git
+   ```
 2. Install PowerShell or .Net core.
    > If you encounter issues make sure you install both dotnet core and PowerShell
     1. For MacOS & Linux, Install the latest version of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.2).
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
     
 3. Test PowerShell by running the `pwsh` command in your terminal.
+    ```bash
+    pwsh
+    ```
 
-```
-mikechen@mbp create-users-automation % pwsh
-PowerShell 7.2.1
-Copyright (c) Microsoft Corporation.
-
-https://aka.ms/powershell
-Type 'help' to get help.
-
-PS /Users/mikechen>
-```
+    ```
+    mikechen@mbp create-users-automation % pwsh
+    PowerShell 7.2.1
+    Copyright (c) Microsoft Corporation.
+	
+    https://aka.ms/powershell
+    Type 'help' to get help.
+	
+    PS /Users/mikechen>
+    ```
 
 4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
     * The Box application must have the following application **access level** enabled in the configuration page: `App + Enterprise Access`
-	* The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
-	* The Box application must have the following **advanced features** enabled in the configuration page: `Generate User Access Tokens`
+    * The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
+    * The Box application must have the following **advanced features** enabled in the configuration page: `Generate User Access Tokens`
 
 5. The  **Box Admin** or **Co-Admin Account** user must have `Manage Users` privileges at a minimum.
 
 
-## Script Parameters
+## 1. Script Parameters
 1. Update the [UserZonesUpdatePath](/examples/Mass%20Update%20User%20Zones/Mass_Update_User_Zones.ps1#L18) to set your own User Zones Update .csv file path. This .csv file should have two columns with the following headers: Email, Region. The Email column should contain the primary email address for the user in Box. The Region column should contain the friendly name (as defined in the `ZonesTable`) for the zone to which the corresponding user should be assigned. 
 
 	This is an example input .csv and a `ZonesTable` that might interpret it:
@@ -51,7 +57,7 @@ PS /Users/mikechen>
 3. Optional: To run the script in simulate mode, set the `simulate` boolean flag when running the script:
 `./Mass_Update_User_Zones.ps1 -simulate`
 
-## Variables ##
+###  Variables
 * `ZonesTable`: This is the logic that defines the zones. In this hashtable, the keys are the "friendly name" for the zone (this is the value used in the input .csv) and the corresponding value is the global ID for that zone. The customer should consult their BC or CSM contact to get the IDs corresponding to the zones enabled in their enterprise.
 
 	```powershell
@@ -67,8 +73,25 @@ PS /Users/mikechen>
 		France = "100012"         #France
 	}
 	```
+## 2. Run the script
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `Mass Update User Zones` folder.
+```
+rvb@lab:~/box-cli/examples/Mass Update User Zones$ pwsh
+PowerShell 7.2.4
+Copyright (c) Microsoft Corporation.
 
-## Logging ##
+https://aka.ms/powershell
+Type 'help' to get help.
+
+PS /home/rvb/box-cli/examples/Mass Update User Zones>
+```
+
+Run the script:
+```bash
+./Mass_Update_User_Zones.ps1
+```
+
+## Logging
 Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Mass_Update_User_Zones_all.txt` and `Mass_Update_User_Zones_errors.txt`. The former contains all log entries and the latter contains only errors.
 
 ## Disclaimer
