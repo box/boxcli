@@ -8,6 +8,7 @@ const fs = require('fs');
 const BoxSDK = require('box-node-sdk');
 const BoxCLIError = require('../cli-error');
 const CLITokenCache = require('../token-cache');
+const pkg = require('../../package.json');
 const chalk = require('chalk');
 const open = require('open');
 const express = require('express');
@@ -57,11 +58,16 @@ class OAuthLoginCommand extends BoxCommand {
 			authMethod: 'oauth20',
 		};
 
+		const sdkConfig = Object.freeze({
+			analyticsClient: {
+				version: pkg.version,
+			}
+		});
 		const sdk = new BoxSDK({
 			clientID: answers.clientID,
 			clientSecret: answers.clientSecret,
 		});
-		this._configureSdk(sdk);
+		this._configureSdk(sdk, sdkConfig);
 
 		const app = express();
 		let server;
