@@ -83,7 +83,7 @@ EXAMPLE
   box collaborations:create 22222 folder --role editor --user-id 33333
 ```
 
-_See code: [src/commands/collaborations/create.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/collaborations/create.js)_
+_See code: [src/commands/collaborations/create.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/collaborations/create.js)_
 
 ## `box collaborations:delete ID`
 
@@ -119,7 +119,7 @@ EXAMPLE
   box collaborations:delete 12345
 ```
 
-_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/collaborations/delete.js)_
+_See code: [src/commands/collaborations/delete.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/collaborations/delete.js)_
 
 ## `box collaborations:get ID`
 
@@ -151,7 +151,7 @@ EXAMPLE
   box collaborations:get 12345
 ```
 
-_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/collaborations/get.js)_
+_See code: [src/commands/collaborations/get.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/collaborations/get.js)_
 
 ## `box collaborations:pending`
 
@@ -183,7 +183,7 @@ EXAMPLE
   box collaborations:pending
 ```
 
-_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/collaborations/pending.js)_
+_See code: [src/commands/collaborations/pending.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/collaborations/pending.js)_
 
 ## `box collaborations:update ID`
 
@@ -256,4 +256,4 @@ EXAMPLE
   box collaborations:update 12345 --role viewer
 ```
 
-_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v3.3.0/src/commands/collaborations/update.js)_
+_See code: [src/commands/collaborations/update.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/collaborations/update.js)_
