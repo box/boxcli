@@ -83,7 +83,8 @@ EventsGetCommand.flags = {
 	...BoxCommand.flags,
 	enterprise: flags.boolean({
 		char: 'e',
-		description: 'Get enterprise events'
+		description: 'Get all enterprise events form a given criteria.\n' +
+		'CLI will use the `next_stream_position` automatically to fetch all records.'
 	}),
 	'created-after': flags.string({
 		description: 'Return enterprise events that occurred after a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days before the end date',
@@ -108,7 +109,9 @@ EventsGetCommand.flags = {
 		]
 	}),
 	limit: flags.integer({
-		description: 'The maximum number of items to return',
+		description: 'The maximum number of items to return.\n' +
+		'When using it with `enterprise` events, it determines the number of items to return per API call. ' +
+		'The CLI will automatically use the `next_stream_position` to fetch all records.'
 	}),
 	'stream-type': flags.string(
 		{
