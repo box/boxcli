@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.3.2](https://github.com/box/boxcli/compare/v3.3.1...v3.3.2) (2022-07-29)
+
+
+### Bug Fixes
+
+* Fix request command when calling without body ([#369](https://github.com/box/boxcli/issues/369)) ([9317888](https://github.com/box/boxcli/commit/9317888c3f1bff56ef784d7319f1b8ccf12239ef))
+
 ### [3.3.1](https://github.com/box/boxcli/compare/v3.3.0...v3.3.1) (2022-07-25)
 
 
