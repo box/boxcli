@@ -16,7 +16,8 @@ USAGE
 
 OPTIONS
   -e, --enterprise
-      Get enterprise events
+      Get all enterprise events form a given criteria.
+      CLI will use the `next_stream_position` automatically to fetch all records.
 
   -h, --help
       Show CLI help
@@ -64,7 +65,9 @@ OPTIONS
       Output formatted JSON
 
   --limit=limit
-      The maximum number of items to return
+      The maximum number of items to return.
+      When using it with `enterprise` events, it determines the number of items to return per API call. The CLI will 
+      automatically use the `next_stream_position` to fetch all records.
 
   --no-color
       Turn off colors for logging
@@ -95,7 +98,7 @@ EXAMPLES
   box events --enterprise --created-after 2019-01-01
 ```
 
-_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/events/index.js)_
+_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/events/index.js)_
 
 ## `box events:poll`
 
@@ -137,4 +140,4 @@ OPTIONS
                                          shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now
 ```
 
-_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v3.3.1/src/commands/events/poll.js)_
+_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/events/poll.js)_
