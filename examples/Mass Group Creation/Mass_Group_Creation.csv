@@ -1,0 +1,3 @@
+﻿GroupName,UserEmails,FolderIds,Role
+GROUP_110,ajankowski+t6@boxdemo.com ManagedUser1@test.com ManagedUser2@test.com ManagedUser3@test.com, 168762712627 168763277577 168761214424
+GROUP_3,ManagedUser1@test.com ManagedUser2@test.com ManagedUser3@test.com, 168762712627 168763113798 168762772610,viewer

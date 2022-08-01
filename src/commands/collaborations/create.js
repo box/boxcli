@@ -7,7 +7,9 @@ const CollaborationModule = require('../../modules/collaboration');
 class CollaborationsAddCommand extends BoxCommand {
 
 	async run() {
+		console.log("HEJHEJ\n\n\n");
 		const { flags, args } = this.parse(CollaborationsAddCommand);
+
 
 		let collabModule = new CollaborationModule(this.client);
 		let collaboration = await collabModule.createCollaboration(args, flags);
