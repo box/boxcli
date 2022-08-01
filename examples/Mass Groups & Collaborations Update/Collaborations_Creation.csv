@@ -1,0 +1,7 @@
+GroupName,FolderId,CollaborationRole
+Group 1,1111111,editor
+Group 2,1111111,viewer_uploader
+Group 2,2222222,viewer
+Group 3,1111111,viewer_uploader
+Group 3,3333333,editor
+Group 3,4444444,editor
