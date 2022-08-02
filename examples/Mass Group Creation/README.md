@@ -1,4 +1,4 @@
-# Mass Update User Zones #
+# Mass Group Creation #
 
 ## Overview ##
 The Mass Update User Zones script utilizes the Box CLI to provision users to the specified data residency Zone within a Multizone Box tenant.

@@ -1,7 +1,0 @@
-﻿GroupName,UserEmails,FolderIds,Role
-GROUP_MGC_1,ajankowski+t6@boxdemo.com 168842633667, viewer
-GROUP_MGC_1,ajankowski+t5@boxdemo.com 1688426336637, viewer
-
-GROUP_MGC_1,ajankowski+t6@boxdemo.com ManagedUser1@test.com ManagedUser2@test.com ManagedUser3@test.com, 168842633667
-GROUP_MGC_2,ajankowski+t5@boxdemo.com ManagedUser1@test.com ManagedUser2@test.com ManagedUser3@test.com, 168842633667, viewer
-GROUP_MGC_2_3,ajankowski+t5@boxdemo.com ajankowski+t6@boxdemo.com, 168842636376 168842065511,editor

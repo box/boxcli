@@ -1,7 +1,5 @@
-GroupName, UserEmail
-"Group 1",ajankowski+t6@boxdemo.com
-"Group 1",ajankowski+t6@boxdemo.com
-"Group 2"
-"Group B"
-"Group 3"
-"Group C"
+GroupName,UserEmail
+Group A1,ajankowski+t5@boxdemo.com
+Group A1,ajankowski+t6@boxdemo.com
+Group A2,ajankowski+t5@boxdemo.com
+Group A2,ajankowski+t6@boxdemo.com
