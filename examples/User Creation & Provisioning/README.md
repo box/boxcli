@@ -43,7 +43,7 @@ For detailed script overview, please follow [this guide](https://developer.box.c
     Managed,User 3,ManagedUser3@test.com
     ```
 3. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
-4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L37), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L40). 
+4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L107), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L110-112). 
 
 ## 2. Run the script
 Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
@@ -69,6 +69,8 @@ PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Create_Provi
 Starting User Creation & Provisioning script...
 ```
 
+## Logging
+Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Users_Create_Provision_all.txt` and `Users_Create_Provision_errors.txt`. The former contains all log entries and the latter contains only errors.
 
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
