@@ -6,12 +6,19 @@
 
 #############################################################################
 
-#Set Employee List CSV Path
+# Set Employee List CSV Path
 $EmployeeList = "./Employees_5.csv"
 
-#Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
+# Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
 $FolderStructureJSONPath = "./Folder_Structure.json"
 $LocalUploadPath = "./OnboardingLocalUpload"
+
+# Name of folder that will be created as parent root folder for folders defined in json file
+$RootFolderName = "Onboarding"
+
+# ID of folder, wherein root folder will be created if using JSON structure,
+# otherwise it's a destination folder for local uploaded folder structure.
+$RootFolderParentID = "0"
 
 #############################################################################
 
@@ -85,102 +92,124 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 }
 
-$script:OnboardingFolderId = $null
-$script:UserId = $null 
+$script:RootFolderID = $null
 
 # Main function
 Function Start-Script {
     Write-Log "Starting User Creation & Provisioning script..." -output true
 
-    Try {
+    try {
         # Get employees json file and convert from CSV to an array of objects
         $Employees = Import-Csv $EmployeeList
         Write-Log $Employees -output true
     }
-    Catch {
-        Write-Log "Failed to load mock employee data" -output true -color Red
+    catch {
+        Write-Log "Failed to load mock employee data. Exits script." -errorMessage "Invalid input data." -output true -color Red
         break
     }
 
     try {
-        #Create Folder Structure from JSON
+        # Create Folder Structure from JSON
         New-Folder-Structure
 
-        #OR directly upload Folder structure to current user's root folder from local directory
-        #$script:OnboardingFolderId = box folders:upload $LocalUploadPath --id-only 2>&1
-        #[int64]$script:OnboardingFolderId = $script:OnboardingFolderId
-        #Write-Log "Uploaded local folder structre to current user's root folder with $($script:OnboardingFolderId)" -output true
+        # OR directly upload Folder structure to current user's root folder from local directory
+        # $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$RootFolderParentID --json 2>&1
+        # $script:RootFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
+        Write-Log "Uploaded local folder structre to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
     }
-    Catch {
-        Write-Log "Failed to setup onboarding folder" -errorMessage $script:OnboardingFolderId -output true -color Red
+    catch {
+        Write-Log "Failed to upload local folder structure to parent folder with ID $RootFolderParentID. Exits script." -errorMessage $UploadedFoldersResp -output true -color Red
         break
     }
 
-    #Create Managed User & Provision Onboarding Folder
-    New-Provision-Managed-User
+    # Create Managed User & Provision Onboarding Folder.
+    # Only if folders were created successfully.
+    if ($script:RootFolderID) {
+        New-Provision-Managed-User
+    }
 }
 
+# Create folder sturcture form JSON file
 Function New-Folder-Structure {
-
-    #Extract folder structure from json
+    # Extract folder structure from json
     Write-Log "Extracting folder structure" -output True
-    $FolderStructure = Get-Content -Raw -Path $FolderStructureJSONPath | ConvertFrom-Json
-
     try {
-        #Get current user id
-        $User = box users:get --json | ConvertFrom-Json
-        [int64]$script:UserId = $User.id
-        Write-Log "Found current User ID: $($UserId)" -output True
+        $FolderStructure = Get-Content -Raw -Path $FolderStructureJSONPath | ConvertFrom-Json
     }
-    Catch {
-        Write-Log "Failed to get current user id" -errorMessage $User -output True -color Red
+    catch {
+        Write-Log "Error reading '$FolderStructureJSONPath'. Exits script.". -errorMessage "Invalid input data."  -output True -color Red
         break
     }
-    
+
+    # Create root folder
     try {
-        #First create Onboarding folder owned by current user
-        $script:OnboardingFolderId = box folders:create 0 "Onboarding" --id-only 2>&1
-        [int64]$script:OnboardingFolderId = $script:OnboardingFolderId
-        Write-Log "Created a user owned Onboarding folder with id: $($OnboardingFolderId)" -output True
+        $CreatedRootFolderResp = box folders:create "$RootFolderParentID" "$RootFolderName" --json 2>&1
+        $script:RootFolderID = $CreatedRootFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
+        Write-Log "Created a user owned '$RootFolderName' folder with id: $($script:RootFolderID)." -output True
+    }
+    catch {
+        Write-Log "Failed to create '$RootFolderName' folder. See log for details. Exits script.". -errorMessage $CreatedRootFolderResp -output True -color Red
+        break
+    }
 
-        #Create folder structure owned by current user
-        ForEach ($subfolder in $FolderStructure) {
-            $SubFolderId = box folders:create $OnboardingFolderId $subfolder.name --id-only 2>&1
-            [int64]$SubFolderId = $SubFolderID
-            Write-Log "Created subfolder $($subfolder.name) under Onboarding folder with id: $($SubFolderId)" -output True
+    # Create all folders structure from json file, where $RootFolderName is the parent
+    New-Subfolders-Recursively "$script:RootFolderID" "$RootFolderName" $FolderStructure
+}
 
-            #Continue creating subfolders if object has children
-            While ($subfolder.children) {
-                $child = $subfolder.children
-                #Write-Output "Child folder: $($child)"
-                $SubFolderID = box folders:create $SubFolderId $child.name --id-only 2>&1
-                [int64]$SubFolderId = $SubFolderID
-                Write-Log "Created subfolder under $($child.name) folder with id: $($SubFolderId)" -output True
-                $subfolder = $child.children
+# Creates folders structure
+Function New-Subfolders-Recursively {
+    Param
+    (
+         [Parameter(Mandatory=$true, Position=0)]
+         [string] $ParentFolderId,
+         [Parameter(Mandatory=$true, Position=1)]
+         [string] $ParentFolderName,
+         [Parameter(Mandatory=$true, Position=2)]
+         [System.Object[]] $Children
+    )
+
+    ForEach ($child in $Children) {
+        try {
+            $CreatedChildFolderResp = box folders:create "$($ParentFolderId)" "$($child.name)" --fields="id,name" --json 2>&1
+            $CreatedChildFolder = $CreatedChildFolderResp | ConvertFrom-Json
+            Write-Log "Created subfolder '$($child.name)' with id: $($CreatedChildFolder.id) under '$ParentFolderName' (ID: $ParentFolderId) folder." -output True
+
+            if ($child.children && $child.children.Length -gt 0) {
+                New-Subfolders-Recursively "$($CreatedChildFolder.id)" "$($child.name)" $($child.children)
             }
         }
-    } catch {
-        Write-Log "Failed to create folder structure" -errorMessage $ -output true -color Red
-        break
+        catch {
+            Write-Log "Failed to create subfolder '$($child.name)' under '$ParentFolderName' (ID: $ParentFolderId) folder. See log for details.". -errorMessage $CreatedChildFolderResp -output True -color Red
+            continue
+        }
     }
 }
 
+# Create new managed users and add them as collaborators to created folders
 Function New-Provision-Managed-User {
     ForEach ($Employee in $Employees) {
         Write-Log "Creating employee Managed User account with first name: $($Employee.firstName), last name: $($Employee.lastName), email: $($Employee.email)" -output True
-        
-        Try {
-            #Create Managed User
-            [int64]$ManagedUserID = (box users:create "$($Employee.firstName) $($Employee.lastName)" $Employee.email --id-only 2>&1)
-            Write-Log "Created Managed user with id: $($ManagedUserID)" -output True
 
-            #Collaborate New Managed User to Folder Structure owned by current user
-            $CollaboratedResp = box folders:collaborations:add $script:OnboardingFolderId --role=viewer_uploader --user-id=$ManagedUserID
-            Write-Log "Collaborated Managed User $($Employee.firstName) $($Employee.lastName) to current user's Onboarding folder for provisioning" -output True
+        # # Create Managed User
+        try {
+            $CreatedManagedUserResp = (box users:create "$($Employee.firstName) $($Employee.lastName)" $Employee.email --json 2>&1)
+            $ManagedUserID = $CreatedManagedUserResp | ConvertFrom-Json | ForEach-Object { $_.id }
+            Write-Log "Created Managed user for email: $($Employee.email) where ID: $($ManagedUserID)." -output True
         }
-        Catch {
-            Write-Log "Failed to create Managed User" -errorMessage $ManagedUserId -output true -color Red
-            break
+        catch {
+            Write-Log "Failed to create Managed User for email: $($Employee.email). Skipping this user. See log for details." -errorMessage $CreatedManagedUserResp -output true -color Red
+            continue
+        }
+
+        # Collaborate New Managed User to Folder Structure owned by current user
+        try {
+            $CollaboratedResp = box folders:collaborations:add $script:RootFolderID --role=viewer_uploader --user-id=$ManagedUserID --json 2>&1
+            $CollaboratedResp | ConvertFrom-Json | Out-Null
+            Write-Log "Collaborated Managed User $($Employee.firstName) $($Employee.lastName) to current user's indicated folder for provisioning with ID: $script:RootFolderID." -output True
+        }
+        catch {
+            Write-Log "Failed to create collaboration for user $($Employee.firstName) $($Employee.lastName) with ID: $ManagedUserID, to folder ID: $script:RootFolderID. See log for details." -errorMessage $CollaboratedResp -output true -color Red
+            continue
         }
     }
 }

@@ -42,8 +42,9 @@ For detailed script overview, please follow [this guide](https://developer.box.c
     Managed,User 2,ManagedUser2@test.com
     Managed,User 3,ManagedUser3@test.com
     ```
-3. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path.
-4. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [Create-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L107), and uncomment [OnboardingFolderId](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L110-L112). 
+3. Update the [RootFolderParentID](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L21) to set destination folder ID for your changes, either when using JSON file as input to create folder structure, or uploading local structure. It is set to `0` by default, but feel free to set it to your needs.
+4. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path. You can also change the [RootFolderName](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L17). It's a name of the folder, that will be created as parent for folders from JSON structure. It's set to `Onboarding` by default, but feel free to set it to your needs.
+5. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [New-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L113), and uncomment [RootFolderID](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L116-L117). 
 
 ## 2. Run the script
 Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
