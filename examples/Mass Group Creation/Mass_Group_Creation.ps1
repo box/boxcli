@@ -8,18 +8,23 @@
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
 ########################################################################################
 
-# Set User Zones Update CSV Path
-$MassGroupCreationPath = "./Mass_Group_Creation.csv"
+# Set groups update CSV path
+$GroupsUpdatePath = "./Groups_Update.csv"
+
+# Set collaborations creation CSV path
+$CollaborationsCreationPath = "./Collaborations_Creation.csv"
+
+# Default collaboration role, used when it's not set in CSV file
 $DefaultCollaborationRole = "editor"
 
 ########################################################################################
 ###   SCRIPT BUSINESS LOGIC - MODIFY ANYTHING BELOW THIS POINT   #######################
 ########################################################################################
 
-$GroupNameColumnName = "GroupName"   # gropu name column name of csv input
-$UserEmailsColumnName = "UserEmails" # user emails column name of csv input
-$FolderIdsColumnName = "FolderIds" # folder ids column name of csv input
-$CollaborationRoleColumnName = "Role" # role column name of csv input
+$GroupNameColumnName = "GroupName"   # group name column name of csv input
+$UserEmailColumnName = "UserEmail" # user email column name of csv input
+$FolderIdColumnName = "FolderId" # folder id column name of csv input
+$CollaborationRoleColumnName = "CollaborationRole" # role column name of csv input
 
 $AvailableCollaborationRoles = @("editor", "viewer", "previewer", "uploader", "previewer_uploader", "viewer_uploader", "co-owner")
 
@@ -220,7 +225,7 @@ foreach($GroupToUpdate in $AllGroupsToUpdate) {
             Write-Log $AddedGroupMembershipResp
         } catch {
             Write-Log "Could not add user '$CurrentUser' (ID: $CurrentUserID) to group '$CurrentGroup' (ID:$CurrentGroupID). See log for details." -errorMessage $AddedGroupMembershipResp -output true -color Red
-			continue
+            continue
         }
     }
 
@@ -240,7 +245,7 @@ foreach($GroupToUpdate in $AllGroupsToUpdate) {
             Write-Log $CreatedCollaborationsResp
         } catch {
             Write-Log "Could not create collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroup' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole'. See log for details." -errorMessage $CreatedCollaborationsResp -output true -color Red
-			continue
+            continue
         }
     }
 }
