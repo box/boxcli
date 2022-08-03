@@ -30,7 +30,9 @@ This Box CLI script deprovision a list of users by first transfering user conten
 	PS /Users/mikechen>
 	```
 
-4. Create an OAuth Application using either the [CLI Setup Quick Start](https://developer.box.com/guides/cli/quick-start/) or in the [Box Developer Console](https://account.box.com/developers/services) using the [OAuth Setup Guide](https://developer.box.com/guides/authentication/oauth2/oauth2-setup/)
+4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
+
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 
 ## 1. Script Parameters
 1. Update the [EmployeeList](Users_Deprovision.ps1#L12) to set your own Employee List CSV Path.
