@@ -36,7 +36,7 @@ List of [event type](https://developer.box.com/reference/resources/event/#param-
 4. Create an OAuth Application following the [CLI Setup Quick Start](https://developer.box.com/guides/cli/quick-start/).
 
 ## 1. Script Parameters
-1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L15) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
+1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L14) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
 
 2. Optional: To change the report output file name, set the value for [ReportName](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11) variable.
 
