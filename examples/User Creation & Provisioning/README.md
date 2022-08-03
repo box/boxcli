@@ -30,7 +30,9 @@ For detailed script overview, please follow [PowerShell Scripts with the Box CLI
 	PS /Users/mikechen>
 	```
 
-4. Create an OAuth Application following the [CLI Setup Quick Start](https://developer.box.com/guides/cli/quick-start/).
+4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
+
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 
 ## 1. Script Parameters
 1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
