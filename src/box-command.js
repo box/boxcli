@@ -21,6 +21,7 @@ const pkg = require('../package.json');
 const inquirer = require('inquirer');
 const darwinKeychain = require('keychain');
 const { stringifyStream } = require('@discoveryjs/json-ext');
+const progress = require('cli-progress');
 const darwinKeychainSetPassword = util.promisify(
 	darwinKeychain.setPassword.bind(darwinKeychain)
 );
@@ -290,6 +291,12 @@ class BoxCommand extends Command {
 			fieldMapping
 		);
 		let bulkEntryIndex = 0;
+		let progressBar = new progress.Bar({
+			format: '[{bar}] {percentage}% | {value}/{total}',
+			stopOnComplete: true,
+		});
+		progressBar.start(bulkCalls.length, 0);
+
 		for (let bulkData of bulkCalls) {
 			/* eslint-disable no-await-in-loop */
 			this.argv = [];
@@ -313,6 +320,7 @@ class BoxCommand extends Command {
 				});
 			}
 			/* eslint-enable no-await-in-loop */
+			progressBar.update(bulkEntryIndex);
 		}
 		this.isBulk = false;
 		DEBUG.execute('Leaving bulk mode and writing final output');
