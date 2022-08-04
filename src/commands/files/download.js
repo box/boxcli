@@ -48,11 +48,14 @@ class FilesDownloadCommand extends BoxCommand {
 		});
 		let startTime = Date.now();
 		progressBar.start(file.size, 0, { speed: 'N/A' });
-		/* eslint-disable no-sync */
+
+		let downloadedByte = 0;
+		stream.on('data', (chunk) => {
+			downloadedByte += chunk.length;
+		});
 		let intervalUpdate = setInterval(() => {
-			let { size } = fs.statSync(filePath);
-			progressBar.update(size, {
-				speed: Math.floor(size / (Date.now() - startTime) / 1000),
+			progressBar.update(downloadedByte, {
+				speed: Math.floor(downloadedByte / (Date.now() - startTime) / 1000),
 			});
 		}, 1000);
 
@@ -63,6 +66,7 @@ class FilesDownloadCommand extends BoxCommand {
 			stream.on('error', reject);
 		});
 		clearInterval(intervalUpdate);
+		progressBar.update(downloadedByte);
 		this.info(`Downloaded file ${fileName}`);
 	}
 }
