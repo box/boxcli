@@ -52,7 +52,7 @@ npm install --global @box/cli
 
 Alternatively, to get started with the Box CLI, [download and install](#CLI-Installation) CLI, set up a Box application using Server Authentication with JWT and
 download the JSON configuration file from the Configuration page of your app in the
-[Box Developer Console][dev-console].  Then, set up the CLI by pointing it to your configuration file:
+[Box Developer Console][dev-console] following [JWT CLI Guide][jwt-guide].  Then, set up the CLI by pointing it to your configuration file:
 
 ```sh-session
 $ box configure:environments:add PATH_TO_CONFIG_FILE
@@ -68,7 +68,8 @@ Successfully added CLI environment "ManualKey"
 ```
 
 [dev-console]: https://app.box.com/developers/console
-[oauth-guide]: https://developer.box.com/guides/tooling/cli/quick-start/
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
+[jwt-guide]: https://developer.box.com/guides/cli/cli-docs/jwt-cli/
 
 ## Usage
 

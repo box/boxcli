@@ -35,7 +35,7 @@ If you are wondering how to assign Zones through the Admin Console, see [here](h
     PS /Users/mikechen>
     ```
 
-4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/tooling/cli/jwt-cli/) page for instructions. 
+4. Setting up the CLI requires creating a Box application that uses server authentication with JWT. See the [Box CLI Using JWT Authentication](https://developer.box.com/guides/cli/cli-docs/jwt-cli/) page for instructions. 
     * The Box application must have the following application **access level** enabled in the configuration page: `App + Enterprise Access`
     * The Box application must have the following **application scopes** enabled in the configuration page: `Manage Enterprise Properties`, `Manage Users`
     * The Box application must have the following **advanced features** enabled in the configuration page: `Generate User Access Tokens`
