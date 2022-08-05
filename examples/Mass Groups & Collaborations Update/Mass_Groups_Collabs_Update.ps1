@@ -8,15 +8,16 @@
 
 param (
     [switch]$SkipGroupsUpdate = $false, # if enabled, then will skip groups update
-    [switch]$SkipCollabsCreation = $false # if enabled, then will skip collaborations creation
+    [switch]$SkipCollabsCreation = $false, # if enabled, then will skip collaborations creation
+    [switch]$UpdateExistingCollabs = $false # if enabled, then existing collaborations will be updated with new the role
 )
 
 ########################################################################################
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
 ########################################################################################
 
-# Set groups update CSV path
-$GroupsUpdatePath = "./Groups_Update.csv"
+# Set user group addition CSV path
+$UserGroupAdditionPath = "./User_Group_Addition.csv"
 
 # Set collaborations creation CSV path
 $CollaborationsCreationPath = "./Collaborations_Creation.csv"
@@ -110,21 +111,25 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 }
 
+########################################################################################
+###   Part 1) Update groups   ##########################################################
+########################################################################################
+
 # Function to create/update groups based on CSV file
 function Update-Groups {
     Write-Log "Start update groups..." -output true
 
     # Ensure that file exist
-    if (-not(Test-Path -Path $GroupsUpdatePath -PathType Leaf)) {
-        Write-Log "File '$GroupsUpdatePath' doesn't exist. Skipping groups update." -errorMessage "File not found."-output true -color Red
+    if (-not(Test-Path -Path $UserGroupAdditionPath -PathType Leaf)) {
+        Write-Log "File '$UserGroupAdditionPath' doesn't exist. Skipping groups update." -errorMessage "File not found."-output true -color Red
         return
     }
 
     # Read the input CSV
     try {
-        $AllGroupsInput = Import-Csv $GroupsUpdatePath
+        $AllGroupsInput = Import-Csv $UserGroupAdditionPath
     } catch {
-        Write-Log "Error reading '$GroupsUpdatePath' CSV file. Skipping groups update." -exception $_.Exception -output true -color Red
+        Write-Log "Error reading '$UserGroupAdditionPath' CSV file. Skipping groups update." -exception $_.Exception -output true -color Red
         return
     }
 
@@ -137,7 +142,7 @@ function Update-Groups {
     # Check if the input file has the correct format
     $csvColumns = $AllGroupsInput | Get-Member -memberType 'NoteProperty' | Select-Object -ExpandProperty 'Name'
     if (-not (($csvColumns -contains $GroupNameColumnName) -and ($csvColumns -contains $UserEmailColumnName))) {
-        Write-Log "Input file '$GroupsUpdatePath' requires '$GroupNameColumnName' and '$UserEmailColumnName' columns. Skipping groups update." -errorMessage "Invalid input data." -output true -color Red
+        Write-Log "Input file '$UserGroupAdditionPath' requires '$GroupNameColumnName' and '$UserEmailColumnName' columns. Skipping groups update." -errorMessage "Invalid input data." -output true -color Red
         return;
     }
 
@@ -250,6 +255,57 @@ function Update-Groups {
     Write-Log "Finish update groups." -output true
 }
 
+########################################################################################
+###   Part 2) Update collaborations   ##################################################
+########################################################################################
+
+# Collaboration group class used to tracking collaborations locally
+class CollaborationGroup {
+    [string]$CollaborationId
+    [string]$GroupId
+    [string]$Role
+
+    CollaborationGroup([System.Object]$collaborationItem) {
+        $this.CollaborationId = $collaborationItem.id
+        $this.GroupId = $collaborationItem.accessible_by.id
+        $this.Role = $collaborationItem.role.Replace(" ","_")
+    }
+
+    CollaborationGroup([string]$cId, [string]$gId, [string]$r) {
+        $this.CollaborationId = $cId
+        $this.GroupId = $gId
+        $this.Role = $r.Replace(" ","_")
+    }
+}
+
+# This class is used for convenient accessing/tracking collaborations assigned to folders
+class FolderCollaborationStorage {
+    # Hashtable where folder's id is the key and array of CollaborationGroup is a value
+    $hashtable = @{}
+
+    [void] AddCollaborationGroupForFolder([CollaborationGroup]$entry, [string]$folderId) {
+        $this.hashtable.$folderId += $entry
+    }
+
+    [bool] ContainsFolderId([string]$folderId) {
+        return $this.hashtable.ContainsKey($folderId)
+    }
+
+    [void] AddFolderId([string]$folderId) {
+        if(!$this.hashtable.ContainsKey($folderId)) {
+            $this.hashtable.$folderId = @()
+        }
+    }
+
+    [CollaborationGroup] GetCollaborationGroup([string]$groupId, [string]$folderId) {
+         return $this.hashtable[$folderId] | Where-Object { $_.GroupId -eq $groupId } | Select-Object -First 1
+    }
+
+    [bool] ContainsCollaborationGroup([string]$groupId, [string]$folderId) {
+        return $null -ne $this.GetCollaborationGroup($groupId, $folderId)
+   }
+}
+
 # Function to create collaborations based on CSV file
 function Update-Collaborations {
     Write-Log "Start create collaborations..." -output true
@@ -287,11 +343,8 @@ function Update-Collaborations {
         return;
     }
 
-    # Hashtable where folder's id is the key and array of group's ids is a value
-    # e.g.:
-    # $FolderGroupsCollaborationHashtable['folder_id_1'] = @('group_id_1', 'group_id_2', 'group_id_3')
-    # $FolderGroupsCollaborationHashtable['folder_id_2'] = @('group_id_2', 'group_id_4')
-    $FolderGroupsCollaborationHashtable = @{}
+    # Create a storage for collaborations for easier accessing necessary data
+    $FolderCollaborationStorage = [FolderCollaborationStorage]::new()
 
     $currentRowIndex = 0
     # Iterate through all entries from CSV input file
@@ -340,16 +393,16 @@ function Update-Collaborations {
             continue
         }
 
-        # If current processing folderId is not in FolderGroupsCollaborationHashtable, then fetch collaborations of this folder
-        if (!$FolderGroupsCollaborationHashtable.ContainsKey($CurrentFolderID)) {
+        # If current processing folderId is not in FolderCollaborationStorage, then fetch collaborations of this folder
+        if(!$FolderCollaborationStorage.ContainsFolderId($CurrentFolderID)) {
             try {
                 # Get members of the group
-                $FolderCollaborationsResp = "$(box folders:collaborations $CurrentFolderID --fields='accessible_by' --json 2>&1)"
+                $FolderCollaborationsResp = "$(box folders:collaborations $CurrentFolderID --fields='accessible_by,role,id' --json 2>&1)"
                 $FolderCollaborations = $FolderCollaborationsResp | ConvertFrom-Json
 
-                # Update hashtable FolderGroupsCollaborationHashtable by adding list of group ids to particular group id
-                $FolderGroupsCollaborationHashtable.$CurrentFolderID = @()
-                $FolderCollaborations | Where-Object { $_.accessible_by.type -eq 'group' } | ForEach-Object { $FolderGroupsCollaborationHashtable.$CurrentFolderID += $_.accessible_by.id }
+                # Update FolderCollaborationStorage by adding list CollaborationGroup to particular folder id
+                $FolderCollaborationStorage.AddFolderId($CurrentFolderID)
+                $FolderCollaborations | Where-Object { $_.accessible_by.type -eq 'group' } | ForEach-Object { $FolderCollaborationStorage.AddCollaborationGroupForFolder([CollaborationGroup]::new($_), $CurrentFolderID)}
 
                 Write-Log "Successfully fetched the collaborations of the folder with ID: $CurrentFolderID." -output true
                 Write-Log $FolderCollaborations
@@ -359,25 +412,61 @@ function Update-Collaborations {
             }
         }
 
-        # Create new group collaboration to folder only if it's not there already
-        if($FolderGroupsCollaborationHashtable[$CurrentFolderID].Contains($CurrentGroupID)) {
-            Write-Log "Group '$CurrentGroupName' (ID:$CurrentGroupID) is already a collaborator of folder ID: $CurrentFolderID. Skipping processing current row." -output true
-            continue
+
+        # Check if the group is already a collaborator to the folder
+        if($FolderCollaborationStorage.ContainsCollaborationGroup($CurrentGroupID, $CurrentFolderID))
+        {
+            $CollaborationGroup = $FolderCollaborationStorage.GetCollaborationGroup($CurrentGroupID, $CurrentFolderID)
+
+            # If the group is already a collaborator to the folder, check if it has the same role as in the CSV entry.
+            # If they are the same, skip processing the current line.
+            if($CollaborationGroup.Role -eq $CurrentCollaborationRole) {
+                Write-Log "Group '$CurrentGroupName' (ID:$CurrentGroupID) is already a collaborator of folder ID: $CurrentFolderID with the same role '$CurrentCollaborationRole'. Skipping processing current row." -output true
+                continue
+            }
+            else {
+                # If the collaborator role is different from the CSV entry, check if -UpdateExistingCollabs switch is enabled to update existing collaboration. If it is, then update the collaboration with the role from CSV entry.
+                if ($UpdateExistingCollabs) {
+                    try {
+                        # Update collaboration with the new role defined in CSV
+                        $UpdatedCollaborationResp = "$(box collaborations:update $CollaborationGroup.CollaborationId --role=$CurrentCollaborationRole --json 2>&1)"
+                        $UpdatedCollaborationResp | ConvertFrom-Json | Out-Null
+
+                        # Update the role for this entry locally in FolderCollaborationStorage, to be up to date.
+                        # It is possible with this simple assignment, because $CollaborationGroup is a reference type.
+                        $CollaborationGroup.Role = $CurrentCollaborationRole
+
+                        Write-Log "Successfully updated collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroupName' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole'." -output true
+                        Write-Log $UpdatedCollaborationResp
+                    } catch {
+                        Write-Log "Could not update collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroupName' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole'. See log for details." -errorMessage $UpdatedCollaborationResp -output true -color Red
+                        continue
+                    }
+                }
+                else {
+                    # If the collaborator role is different from the CSV entry, but the -UpdateExistingCollabs switch is disabled,
+                    # skip processing current CSV row.
+                    Write-Log ("Group '$CurrentGroupName' (ID:$CurrentGroupID) is already a collaborator of folder ID: $CurrentFolderID but with role '$($CollaborationGroup.Role)' instead of '$CurrentCollaborationRole'." +`
+                    " If you want to update existing collaborations, run the script with the '-UpdateExistingCollabs' swith enabled. Skipping processing current row.")` -output true
+                    continue
+                }
+            }
         }
         else {
+            # If the group is not a collaborator to the folder yet, then create this collaboration
             try {
                 # Create collaboration
-                $CreatedCollaborationsResp = "$(box collaborations:create $CurrentFolderID folder --group-id=$CurrentGroupID --role=$CurrentCollaborationRole --json 2>&1)"
-                # Parse response to json; it will throw an exception if request fails
-                $CreatedCollaborationsResp | ConvertFrom-Json | Out-Null
+                $CreatedCollaborationResp = "$(box collaborations:create $CurrentFolderID folder --group-id=$CurrentGroupID --role=$CurrentCollaborationRole --json 2>&1)"
+                $CreatedCollaboration = $CreatedCollaborationResp | ConvertFrom-Json
 
-                # Update folder's groups collaboration hashtable by adding group id to the list of ids assigned to particular folder
-                $FolderGroupsCollaborationHashtable.$CurrentFolderID += $CurrentGroupID
+                # Update collaboration storage by adding new CollaborationGroup item for particular folder
+                $CollaborationGroupItem = [CollaborationGroup]::new($CreatedCollaboration.id, $CreatedCollaboration.accessible_by.id, $CreatedCollaboration.role)
+                $FolderCollaborationStorage.AddCollaborationGroupForFolder($CollaborationGroupItem,$CurrentFolderID)
 
                 Write-Log "Successfully created collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroupName' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole' ." -output true
-                Write-Log $CreatedCollaborationsResp
+                Write-Log $CreatedCollaborationResp
             } catch {
-                Write-Log "Could not create collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroupName' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole'. See log for details." -errorMessage $CreatedCollaborationsResp -output true -color Red
+                Write-Log "Could not create collaboration to folder with ID: $CurrentFolderID, with group: '$CurrentGroupName' (ID:$CurrentGroupID) and role: '$CurrentCollaborationRole'. See log for details." -errorMessage $CreatedCollaborationResp -output true -color Red
                 continue
             }
         }
@@ -393,9 +482,10 @@ function Start-Script {
     # Get existing groups
     try {
         $GroupsResp = "$(box groups --json 2>&1)"
+        $Groups = $GroupsResp | ConvertFrom-Json
 
         # Add groups to hashtable GroupsHashtable for later convenient access, where "name" is the key and "id" is a value.
-        $GroupsResp | ConvertFrom-Json | ForEach-Object { $GroupsHashtable[$_.name] = $_.id }
+        $Groups | ForEach-Object { $GroupsHashtable[$_.name] = $_.id }
     } catch {
         Write-Log "Could not get groups. See log for details." -errorMessage $GroupsResp -output true -color Red
         break
@@ -421,7 +511,7 @@ function Start-Script {
     if ($SkipGroupsUpdate) {
         Write-Log "Switch '-SkipGroupsUpdate' is enabled. Skipping groups update." -output true
     } else {
-        # Update groups based on $GroupsUpdatePath csv file
+        # Update groups based on $UserGroupAdditionPath csv file
         Update-Groups
     }
 
