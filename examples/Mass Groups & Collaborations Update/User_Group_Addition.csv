@@ -1,0 +1,6 @@
+GroupName,UserEmail
+Group 1,ManagedUser1@test.com
+Group 1,ManagedUser2@test.com
+Group 2,ManagedUser3@test.com
+Group 3,ManagedUser1@test.com
+Group 3,ManagedUser3@test.com
