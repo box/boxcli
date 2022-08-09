@@ -38,5 +38,5 @@ EXAMPLE
   box shared-links:delete --bulk-file-path path/to/csv/shared-links-delete.csv
 ```
 
-_See documentation [shared-links.md](https://github.com/box/boxcli/blob/main/docs/shared-links.md#box-shared-linksdelete-itemid-itemtype)_
-_See example: [shared-links/shared-links-delete.csv](shared-links-delete.csv)_
+- _See documentation [shared-links.md](https://github.com/box/boxcli/blob/main/docs/shared-links.md#box-shared-linksdelete-itemid-itemtype)_
+- _See example: [shared-links/shared-links-delete.csv](shared-links-delete.csv)_

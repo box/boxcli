@@ -27,8 +27,8 @@ EXAMPLE
   box collaborations:create --bulk-file-path path/to/csv/collaborations-add.csv
 ```
 
-_See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationscreate-itemid-itemtype)_
-_See example: [collaborations-add.csv](collaborations-add.csv)_
+- _See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationscreate-itemid-itemtype)_
+- _See example: [collaborations-add.csv](collaborations-add.csv)_
 
 ## `box collaborations:delete ID`
 
@@ -45,8 +45,8 @@ EXAMPLE
   box collaborations:delete --bulk-file-path path/to/csv/collaborations-delete.csv
 ```
 
-_See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationsdelete-id)_
-_See example: [collaborations-delete.csv](collaborations-delete.csv)_
+- _See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationsdelete-id)_
+- _See example: [collaborations-delete.csv](collaborations-delete.csv)_
 
 ## `box collaborations:update ID`
 
@@ -65,5 +65,5 @@ EXAMPLE
   box collaborations:update --bulk-file-path path/to/csv/collaborations-update.csv
 ```
 
-_See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationsupdate-id)_
-_See example: [collaborations-update.csv](collaborations-update.csv)_
+- _See documentation [collaborations.md](https://github.com/box/boxcli/blob/main/docs/collaborations.md#box-collaborationsupdate-id)_
+- _See example: [collaborations-update.csv](collaborations-update.csv)_

@@ -19,8 +19,8 @@ EXAMPLE
   box metadata-templates:create --bulk-file-path path/to/csv/metadata-templates-create.csv
 ```
 
-_See documentation [metadata-templates.md](https://github.com/box/boxcli/blob/main/docs/metadata-templates.md#box-metadata-templatescreate)_
-_See example: [metadata-templates-create.csv](metadata-templates-create.csv)_
+- _See documentation [metadata-templates.md](https://github.com/box/boxcli/blob/main/docs/metadata-templates.md#box-metadata-templatescreate)_
+- _See example: [metadata-templates-create.csv](metadata-templates-create.csv)_
 
 ## `box metadata-templates:cascade TEMPLATEKEY`
 
@@ -37,5 +37,5 @@ EXAMPLE
   box metadata-templates:cascade --bulk-file-path path/to/csv/metadata-templates-create.csv
 ```
 
-_See documentation [metadata-templates.md](https://github.com/box/boxcli/blob/main/docs/metadata-templates.md#box-metadata-templatescascade-templatekey)_
-_See example: [metadata-templates-cascade.csv](metadata-templates-cascade.csv)_
+- _See documentation [metadata-templates.md](https://github.com/box/boxcli/blob/main/docs/metadata-templates.md#box-metadata-templatescascade-templatekey)_
+- _See example: [metadata-templates-cascade.csv](metadata-templates-cascade.csv)_

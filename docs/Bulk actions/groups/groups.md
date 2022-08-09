@@ -22,8 +22,8 @@ EXAMPLE
   box groups:create --bulk-file-path path/to/csv/groups-create.csv
 ```
 
-_See documentation [groups.md](https://github.com/box/boxcli/blob/main/docs/groups.md#box-groupscreate-name)_
-_See example: [groups-create.csv](groups-create.csv)_
+- _See documentation [groups.md](https://github.com/box/boxcli/blob/main/docs/groups.md#box-groupscreate-name)_
+- _See example: [groups-create.csv](groups-create.csv)_
 
 
 
@@ -44,5 +44,5 @@ EXAMPLE
   box groups:memberships:add --bulk-file-path path/to/csv/groups-memberships-add.csv
 ```
 
-_See documentation [groups.md](https://github.com/box/boxcli/blob/main/docs/groups.md#box-groupsmembershipsadd-userid-groupid)_
-_See example: [groups-memberships-add.csv](groups-memberships-add.csv)_
+- _See documentation [groups.md](https://github.com/box/boxcli/blob/main/docs/groups.md#box-groupsmembershipsadd-userid-groupid)_
+- _See example: [groups-memberships-add.csv](groups-memberships-add.csv)_

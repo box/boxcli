@@ -67,5 +67,5 @@ EXAMPLE
   box users:update --bulk-file-path path/to/csv/update-users.csv
 ```
 
-_See documentation [users.md](https://github.com/box/boxcli/blob/main/docs/users.md#box-usersupdate-id)_
-_See example: [update-users.csv](update-users.csv)_
+- _See documentation [users.md](https://github.com/box/boxcli/blob/main/docs/users.md#box-usersupdate-id)_
+- _See example: [update-users.csv](update-users.csv)_

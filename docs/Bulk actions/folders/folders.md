@@ -25,8 +25,8 @@ EXAMPLE
   box folders:create --bulk-file-path path/to/csv/folders-create.csv
 ```
 
-_See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-folderscreate-parentid-name)_
-_See example: [folders-create.csv](folders-create.csv)_
+- _See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-folderscreate-parentid-name)_
+- _See example: [folders-create.csv](folders-create.csv)_
 
 
 ## `box folders:metadata:add ID`
@@ -47,8 +47,8 @@ EXAMPLE
   box folders:metadata:add --bulk-file-path path/to/csv/folders-metadata-add.csv
 ```
 
-_See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-foldersmetadataadd-id)_
-_See example: [folders-metadata-add.csv](folders-metadata-add.csv)_
+- _See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-foldersmetadataadd-id)_
+- _See example: [folders-metadata-add.csv](folders-metadata-add.csv)_
 
 
 
@@ -68,5 +68,5 @@ EXAMPLE
   box folders:update --bulk-file-path path/to/csv/folders-update.csv
 ```
 
-_See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-foldersupdate-id)_
-_See example: [folders-update.csv](folders-update.csv)_
+- _See documentation [folders.md](https://github.com/box/boxcli/blob/main/docs/folders.md#box-foldersupdate-id)_
+- _See example: [folders-update.csv](folders-update.csv)_

@@ -18,8 +18,8 @@ ARGUMENTS PER SEPARATED VALUE
 EXAMPLE
   box files:download --bulk-file-path path/to/csv/file.csv --destination path/to/destination/folder
 ```
-_See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesdownload-id)_
-_See example: [files-download.csv](files-download.csv)_
+- _See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesdownload-id)_
+- _See example: [files-download.csv](files-download.csv)_
 
 
 ## `box files:update ID`
@@ -41,8 +41,8 @@ EXAMPLE
 ```
 
 
-_See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesupdate-id)_
-_See example: [files-update.csv](files-update.csv)_
+- _See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesupdate-id)_
+- _See example: [files-update.csv](files-update.csv)_
 
 ## `box files:upload PATH`
 
@@ -55,5 +55,5 @@ ARGUMENTS PER SEPARATED VALUE
 EXAMPLE
   box files:upload --bulk-file-path path/to/csv/file.csv
 ```
-_See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesupload-path)_
-_See example: [files-upload.csv](files-upload.csv)_
+- _See documentation [files.md](https://github.com/box/boxcli/blob/main/docs/files.md#box-filesupload-path)_
+- _See example: [files-upload.csv](files-upload.csv)_

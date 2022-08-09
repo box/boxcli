@@ -36,5 +36,5 @@ EXAMPLE
   box webhooks:delete --bulk-file-path path/to/csv/file.csv --save-to-file-path path/to/destination/folder
 ```
 
-_See documentation [webhooks.md](https://github.com/box/boxcli/blob/main/docs/webhooks.md#box-webhooksdelete-id)_
-_See example: [webhooks-delete.csv](webhooks-delete.csv)_
+- _See documentation [webhooks.md](https://github.com/box/boxcli/blob/main/docs/webhooks.md#box-webhooksdelete-id)_
+- _See example: [webhooks-delete.csv](webhooks-delete.csv)_
