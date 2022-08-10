@@ -14,6 +14,9 @@ $EmployeeList = "./Employees_to_delete.csv"
 # Transfer user content before deletion - "Y" or "N"
 $TransferContent = "Y"
 
+# Run in test mode - don't transfer files or delete users - only an uppercase 'N' will delete users
+$TestMode = "Y"
+
 # Employee Archive folder name
 $EmployeeArchiveFolderName = "Employee Archive"
 
@@ -170,36 +173,40 @@ Function Start-Script {
             continue
         }
 
-        if($TransferContent -eq "Y") {
-            # Transfer users content to current user's root folder before deleting user
-            Write-Log "Transfering $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""" -output true
+        if($TestMode -eq "N") {
+            if($TransferContent -eq "Y") {
+                # Transfer users content to current user's root folder before deleting user
+                Write-Log "Transfering $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""" -output true
 
-            try {
-                $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $UserId --json 2>&1)"
-                $NewFolder = $NewFolderResp | ConvertFrom-Json
-            } catch {
-                Write-Log "Skipping this employee. Could not transfer $($FoundEmployee.name) content over to current user's Root folder. See log for details." -errorMessage $NewFolderResp -output true -color Red
-                continue
+                try {
+                    $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $UserId --json 2>&1)"
+                    $NewFolder = $NewFolderResp | ConvertFrom-Json
+                } catch {
+                    Write-Log "Skipping this employee. Could not transfer $($FoundEmployee.name) content over to current user's Root folder. See log for details." -errorMessage $NewFolderResp -output true -color Red
+                    continue
+                }
+
+                # Move transferred folder to "Employee Archive" folder
+                $TransferredFolder = $NewFolder.id
+                try {
+                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
+                    Write-Log "Transfered employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to Employee Archive Folder" -output true
+                } catch {
+                    Write-Log "Skipping this employee. Could not move transfered folder with ID: $TransferredFolder to $EmployeeArchiveFolderName folder with ID: $EmployeeArchiveFolderID. See log for details." -errorMessage $MoveFolderResp -output true -color Red
+                    continue
+               }
             }
-
-            # Move transferred folder to "Employee Archive" folder
-            $TransferredFolder = $NewFolder.id
-            try {
-                $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
-                Write-Log "Transfered employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to Employee Archive Folder" -output true
-            } catch {
-                Write-Log "Skipping this employee. Could not move transfered folder with ID: $TransferredFolder to $EmployeeArchiveFolderName folder with ID: $EmployeeArchiveFolderID. See log for details." -errorMessage $MoveFolderResp -output true -color Red
-                continue
-           }
         }
 
         # Delete user
-        try {
-            $DeleteUserResp = "$(box users:delete $FoundEmployeeID --json 2>&1)"
-            Write-Log "Deleted employee $($FoundEmployee.name) with ID: $($FoundEmployeeID)" -output true
-        } catch {
-            Write-Log "Could not delete employee $($FoundEmployee.name) with ID: $($FoundEmployeeID). See log for details." -errorMessage $DeleteUserResp -output true -color Red
-            continue
+        if($TestMode -eq "N") {
+            try {
+                $DeleteUserResp = "$(box users:delete $FoundEmployeeID --json 2>&1)"
+                Write-Log "Deleted employee $($FoundEmployee.name) with ID: $($FoundEmployeeID)" -output true
+            } catch {
+                Write-Log "Could not delete employee $($FoundEmployee.name) with ID: $($FoundEmployeeID). See log for details." -errorMessage $DeleteUserResp -output true -color Red
+                continue
+            }
         }
     }
 
