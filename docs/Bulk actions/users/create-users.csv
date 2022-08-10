@@ -1,0 +1,3 @@
+Id,Login,Name,Role,Status,Address,Phone,JobTitle,Language,MaxUploadSize,SpaceUsed,SpaceAmount,IsPlatformAccessOnly,IsSyncEnabled,IsExemptFromDeviceLimits,IsExemptFromLoginVerification,CanSeeManagedUsers,IsPasswordResetRequired
+,,AMCLI,,,123 Fake St.,8675309,Programmer,,,,,TRUE,,,,,,
+,am@donttrustthewizard.com,AM WIZARD,,,,,,,,,,,,,,,,

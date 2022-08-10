@@ -1,0 +1,10 @@
+ITEMID,ITEMTYPE,role,login,user-id,group-id
+1357902468,folder,editor,externaluserA@email.com,,
+1357902468,folder,editor,externaluserB@email.com,,
+1357902468,folder,editor,externaluserC@email.com,,
+2468135790,file,previewer_uploader,,0987654321,
+2468135790,file,previewer_uploader,,7486359338,
+2468135790,file,previewer_uploader,,9871324987,
+1234567890,file,viewer,,,1234509876
+1234567890,file,viewer,,,8927349829
+1234567890,file,viewer,,,4345989273

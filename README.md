@@ -8,7 +8,7 @@
 The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
 Among other features, Box CLI includes the following functionality:
-* Bulk actions - A csv file can be used to execute commands in bulk, and each row of the spreadsheet is treated as an individual API call.
+* [Bulk actions](docs/Bulk%20actions/README.md) - A csv file can be used to execute commands in bulk, and each row of the spreadsheet is treated as an individual API call.
 * As-User header - Act on behalf of another user.
 * Search API - Search for files and folders in your Box Enterprise account.
 
@@ -117,7 +117,6 @@ Address: ''
 Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 ```
 
-## Command Topics
 
 <!-- commands -->
 # Command Topics
