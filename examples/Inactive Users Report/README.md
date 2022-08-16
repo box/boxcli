@@ -94,3 +94,4 @@ This project is a collection of open source examples and should not be treated a
 [daysInactive-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L14
 [ReportName-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11
 [events-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L17
+[deprovisionscript]: https://developer.box.com/guides/cli/scripts/deprovision-users/
