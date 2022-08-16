@@ -1,18 +1,15 @@
-# Mass Groups & Collaborations Update #
+# Mass Groups & Collaborations Update
+Creates and updates collaboration groups,  adds role-based group access to folders.
+The script consists of two parts described in detail in the sections below. You can run them both or use the optional flags to decide which part to run.
 
-## Overview ##
-The Mass Groups and Collaborations Update PowerShell script will use the Box CLI to create or update groups, add users to them and finally to create collaborations for groups to the folders.
-
-The entire script consists of two parts, each of which can be run separately or both.
-
-1. The first part is responsible for creating groups if they don't already exist, and adding users to them if they are not already there. It takes a .csv file from [UserGroupAdditionPath](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Mass_Groups_Collabs_Update.ps1#L20) as input. As you can see in an example CSV file [User_Group_Addition.csv](/examples/Mass%20Groups%20%26%20Collaborations%20Update/User_Group_Addition.csv), each row defines a pair between a group and a user. So each group name can be used multiple times with different users, as well as user can be used multiple times with different groups.
+1. The first part creates groups if they don't already exist, and adding users to them if they are not already there. It takes a .csv file from [UserGroupAdditionPath](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Mass_Groups_Collabs_Update.ps1#L20) as input. As you can see in an example CSV file [User_Group_Addition.csv](/examples/Mass%20Groups%20%26%20Collaborations%20Update/User_Group_Addition.csv), each row defines a pair between a group and a user. So each group name can be used multiple times with different users, as well as user can be used multiple times with different groups.
 If you want however to skip this part of creating groups, you just need to set a `-SkipGroupsUpdate` flag when running the script.
 
    ```bash
    Mass_Groups_Collabs_Update.ps1 -SkipGroupsUpdate
    ```
 
-2. The second part is responsible for creating collaborations for groups to the folders only if they don't already exist. It takes a .csv file from [CollaborationsCreationPath](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Mass_Groups_Collabs_Update.ps1#L23) as input. As you can see in an example CSV file [Collaborations_Creation.csv](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Collaborations_Creation.csv), each row defines a relation between a group `GroupName` and a folder `FolderId`. Then for each row, the script checks if this group exists and if it's not already added as a collaborator to the pointed folder.
+2. The second part creates collaborations for groups to the folders only if they don't already exist. It takes a .csv file from [CollaborationsCreationPath](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Mass_Groups_Collabs_Update.ps1#L23) as input. As you can see in an example CSV file [Collaborations_Creation.csv](/examples/Mass%20Groups%20%26%20Collaborations%20Update/Collaborations_Creation.csv), each row defines a relation between a group `GroupName` and a folder `FolderId`. Then for each row, the script checks if this group exists and if it's not already added as a collaborator to the pointed folder.
 If both of these conditions are met, then a new collaboration is created using the role defined in `CollaborationRole` column.
 In case when you want to skip this part of creating collaborations, you just need to set a `-SkipCollabsCreation` flag when running the script.
 
@@ -120,19 +117,10 @@ Run the script:
 ```
 
 ## Logging
-Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Mass_Groups_Collabs_Update_all.txt` and `Mass_Groups_Collabs_Update_errors.txt`. The former contains all log entries, and the latter contains only errors.
+Logs are stored in a `logs` folder located in the main folder. You have access to these log files:
+
+* `Mass_Groups_Collabs_Update_all.txt` that contains all log entries.
+* `Mass_Groups_Collabs_Update_errors.txt` that contains only errors.
 
 ## Disclaimer
-This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2022 Box
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.

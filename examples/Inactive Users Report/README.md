@@ -1,12 +1,18 @@
+# Report inactive Users 
 
-# Report Inactive Users #
+Identifies inactive enterprise users by looking at user activity within a defined period of time. This script helps manage the number of seats within an enterprise and works in synergy with the deprovisioning script.
 
-## Overview ##
-The Report Inactive Users script utilizes the Box CLI to generate a `.csv` file with a list of users which are inactive for last specific days.
+This script generates a `.csv` file with a list of users who has been inactive for a number of days. It performs the following steps:
 
-The script will get list of all users in the enterprise, mapping with Box [Events](https://developer.box.com/reference/resources/event/) in last specific days, for users who have [role](https://developer.box.com/reference/resources/user--full/#param-role) `user` and not an App user will be checked. All users which don't have any event in last days, will be considered as inactive and written into a `.csv` file. Result file from this script can be compatible with other scripts like [Users Deprovisioning Automation](/examples/User%20Deprovisioning).
+1. Looks for the users who have the role `user`.
+   > The script does not consider other roles, such as `AppUser`.
 
-List of [event type](https://developer.box.com/reference/resources/event/#param-event_type) can be mark as an active user (can be change by modify the script): `LOGIN`,`UPLOAD`,`COPY`,`MOVE`,`PREVIEW`,`DOWNLOAD`,`EDIT`,`DELETE`,`UNDELETE`,`LOCK`,`UNLOCK`, `NEW_USER`
+2. Uses [Box Events][boxevents] to check if the user performed any actions   
+   for a specified number of days.
+   The default list of [event types][event-types] includes: `LOGIN`,`UPLOAD`,`COPY`,`MOVE`,`PREVIEW`,`DOWNLOAD`,`EDIT`,`DELETE`,`UNDELETE`,`LOCK`,`UNLOCK`, `NEW_USER`. You can modify this list in the script settings.
+3. Adds users who didn't perform any actions to a `.csv` file with
+   inactive users. You can use this file as input for other scripts, for example to [deprovision users][deprovisionscript].
+
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory
@@ -35,16 +41,14 @@ List of [event type](https://developer.box.com/reference/resources/event/#param-
     ```
 4. Create an OAuth Application following the [CLI Setup Quick Start][oauth-guide].
 
-[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
-
 ## 1. Script Parameters
-1. Update the [daysInactive](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L14) to set the number of days which event will be scanned, for all users that have no specific event in these days will be considered as inactive. If value not changed, or equal to -1, you will be prompted when running the script.
-
-2. Optional: To change the report output file name, set the value for [ReportName](/examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11) variable.
+1. Set the [number of days][daysInactive-param] you want the script to scan for user events. If you   don't specify this value or leave the default, the script will prompt you to enter it.
+3. Optional: To change the report output file name, define the [ReportOutputFile][ReportName-param] parameter
+4. Optional: To change event types, define the list for [eventType][events-param] parameter.
 
 ## 2. Run the script
-Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `Inactive Users Report` folder.
 
+Change the directory to the folder containing the script. In this example, it is the `Inactive Users Report` folder.
 ```
 rvb@lab:~/box-cli/examples/Inactive Users Report$ pwsh
 PowerShell 7.2.4
@@ -62,20 +66,31 @@ Run the script:
 ./Inactive_Users_Report.ps1
 ```
 
+When the script run is completed, you will see the following
+output or a similar one.
+
+   ```bash
+    Looking for users inactive for more than 3 days.
+    Found 6 users.
+    Found 7 events in last 3 days
+    Enterprise has: 0 App user, 6 regular users. With 1 admin role, 5 user roles.
+    Need to check 5 users (regular user, with user role) for inactive.
+    Found 5 users inactive for more than 3 days.
+    Report is available at InactiveUsers.csv
+   ```
+
 ## Logging
-Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Inactive_Users_Report_all.txt` and `Inactive_Users_Report_errors.txt`. The former contains all log entries and the latter contains only errors.
+Logs are stored in a `logs` folder located in the main folder. You have access to these log files:
+
+* `Inactive_Users_Report_all.txt` that contains all log entries.
+* `Inactive_Users_Report_errors.txt` that contains only errors.
 
 ## Disclaimer
-This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
+This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
 
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2022 Box
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[boxevents]:https://developer.box.com/reference/resources/event/
+[event-types]: https://developer.box.com/reference/resources/event/#param-event_type
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
+[daysInactive-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L14
+[ReportName-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11
+[events-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L17

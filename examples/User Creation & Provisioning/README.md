@@ -1,7 +1,8 @@
-# Create Users & Provisioning Automation
-This User Creation and Provisioning powershell script will use the Box CLI to build and create a user (admin or service account) owned "Onboarding" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into the newly created folder structure.
+# Provision users and folders
 
-For detailed script overview, please follow [PowerShell Scripts with the Box CLI guide](https://developer.box.com/guides/cli/quick-start/powershell-script-templates/)
+This PowerShell script uses the Box CLI to build and create an onboarding folder structure, create managed users in bulk, and provision such new users by adding them to the newly created folder structure as collaborators with viewer or uploader roles.
+
+**For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/quick-start/powershell-script-templates/).**
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory
@@ -31,8 +32,6 @@ For detailed script overview, please follow [PowerShell Scripts with the Box CLI
 	```
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
-
-[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 
 ## 1. Script Parameters
 1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
@@ -73,19 +72,12 @@ Starting User Creation & Provisioning script...
 ```
 
 ## Logging
-Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Users_Create_Provision_all.txt` and `Users_Create_Provision_errors.txt`. The former contains all log entries and the latter contains only errors.
+Logs are stored in a `logs` folder located in the main folder. You have access to these log files:
+
+* `Users_Create_Provision_all.txt` that contains all log entries.
+* `Users_Create_Provision_errors.txt` that contains only errors.
 
 ## Disclaimer
-This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
+This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
 
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2022 Box
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
