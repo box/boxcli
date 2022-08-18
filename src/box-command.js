@@ -894,7 +894,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -902,13 +902,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1399,15 +1399,15 @@ class BoxCommand extends Command {
 					break;
 				}
 
-        case 'win32': {
+				case 'win32': {
 					try {
 						const password = await keytar.getPassword(
-              'boxcli' /* service */,
-              'Box' /* account */
-            );
-            if (password) {
-              return JSON.parse(password);
-            }
+							'boxcli' /* service */,
+							'Box' /* account */
+						);
+						if (password) {
+							return JSON.parse(password);
+						}
 					} catch (e) {
 						// fallback to env file if not found
 					}
@@ -1450,12 +1450,12 @@ class BoxCommand extends Command {
 					break;
 				}
 
-        case 'win32': {
+				case 'win32': {
 					await keytar.setPassword(
-            'boxcli' /* service */,
-            'Box' /* account */,
-            JSON.stringify(environments) /* password */
-          );
+						'boxcli' /* service */,
+						'Box' /* account */,
+						JSON.stringify(environments) /* password */
+					);
 					fileContents = '';
 					break;
 				}
