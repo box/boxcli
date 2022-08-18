@@ -56,16 +56,16 @@
 		"eslint-plugin-unicorn": "^5.0.0",
 		"jsonwebtoken": "^8.3.0",
 		"leche": "^2.2.3",
-		"mocha": "^5.2.0",
+		"mocha": "^10.0.0",
 		"mockery": "^2.1.0",
 		"nock": "^10.0.0",
-		"nyc": "^12.0.2",
+		"nyc": "^15.1.0",
 		"pkg": "^5.5.2",
 		"sinon": "^6.1.5",
-		"standard-version": "^9.3.2"
+		"standard-version": "^9.5.0"
 	},
 	"engines": {
-		"node": ">=12.0.0"
+		"node": ">=12.0.0 <15.0.0"
 	},
 	"files": [
 		"/bin",
