@@ -28,6 +28,7 @@ const darwinKeychainSetPassword = util.promisify(
 const darwinKeychainGetPassword = util.promisify(
 	darwinKeychain.getPassword.bind(darwinKeychain)
 );
+const keytar = require('keytar');
 
 const DEBUG = require('./debug');
 const stream = require('stream');
@@ -893,7 +894,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -901,13 +902,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1398,6 +1399,21 @@ class BoxCommand extends Command {
 					break;
 				}
 
+				case 'win32': {
+					try {
+						const password = await keytar.getPassword(
+							'boxcli' /* service */,
+							'Box' /* account */
+						);
+						if (password) {
+							return JSON.parse(password);
+						}
+					} catch (e) {
+						// fallback to env file if not found
+					}
+					break;
+				}
+
 				default:
 			}
 			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
@@ -1430,6 +1446,16 @@ class BoxCommand extends Command {
 						service: 'boxcli',
 						password: JSON.stringify(environments),
 					});
+					fileContents = '';
+					break;
+				}
+
+				case 'win32': {
+					await keytar.setPassword(
+						'boxcli' /* service */,
+						'Box' /* account */,
+						JSON.stringify(environments) /* password */
+					);
 					fileContents = '';
 					break;
 				}
