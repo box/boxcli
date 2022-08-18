@@ -28,6 +28,7 @@ const darwinKeychainSetPassword = util.promisify(
 const darwinKeychainGetPassword = util.promisify(
 	darwinKeychain.getPassword.bind(darwinKeychain)
 );
+const keytar = require('keytar');
 
 const DEBUG = require('./debug');
 const stream = require('stream');
@@ -1398,6 +1399,21 @@ class BoxCommand extends Command {
 					break;
 				}
 
+        case 'win32': {
+					try {
+						const password = await keytar.getPassword(
+              'boxcli' /* service */,
+              'Box' /* account */
+            );
+            if (password) {
+              return JSON.parse(password);
+            }
+					} catch (e) {
+						// fallback to env file if not found
+					}
+					break;
+				}
+
 				default:
 			}
 			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
@@ -1430,6 +1446,16 @@ class BoxCommand extends Command {
 						service: 'boxcli',
 						password: JSON.stringify(environments),
 					});
+					fileContents = '';
+					break;
+				}
+
+        case 'win32': {
+					await keytar.setPassword(
+            'boxcli' /* service */,
+            'Box' /* account */,
+            JSON.stringify(environments) /* password */
+          );
 					fileContents = '';
 					break;
 				}
