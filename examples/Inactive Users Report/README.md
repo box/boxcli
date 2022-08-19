@@ -1,5 +1,7 @@
 # Report inactive Users 
 
+> Due to scale issue, CLI can't handle more than 1M events per run and as a run the Inactive Users Report will fail.
+
 Identifies inactive enterprise users by looking at user activity within a defined period of time. This script helps manage the number of seats within an enterprise and works in synergy with the deprovisioning script.
 
 This script generates a `.csv` file with a list of users who has been inactive for a number of days. It performs the following steps:
