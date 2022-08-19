@@ -3,6 +3,7 @@ This Box CLI script deprovision a list of users by first transfering user conten
 
 > For every user, script makes 7 API calls to archive their content and delete the account.
 
+**For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/scripts/deprovision-users/).**
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory
@@ -32,8 +33,6 @@ This Box CLI script deprovision a list of users by first transfering user conten
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
 
-[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
-
 ## 1. Script Parameters
 1. Update the [EmployeeList](Users_Deprovision.ps1#L12) to set your own Employee List CSV Path.
 2. Customize the [input file of employee accounts for deletion](Employees_to_delete.csv) by providing their **email** addresses
@@ -46,7 +45,7 @@ This Box CLI script deprovision a list of users by first transfering user conten
 4. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
 
 ## 2. Run the script
-Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
+Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
 
 ```
 rvb@lab:~/box-cli/examples/User Deprovisioning$ pwsh
@@ -80,19 +79,12 @@ Deleted employee Managed User 1
 ```
 
 ## Logging
-Logs are written to a `logs` folder within the folder that contains this script. The logs are named `Users_Deprovision_all.txt` and `Users_Deprovision_errors.txt`. The former contains all log entries and the latter contains only errors.
+Logs are stored in a `logs` folder located in the main folder. You have access to these log files:
+
+* `Users_Deprovision_all.txt` that contains all log entries.
+* `Users_Deprovision_errors.txt` that contains only errors.
 
 ## Disclaimer
-This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk.
+This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
 
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2022 Box
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
