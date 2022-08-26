@@ -9,7 +9,7 @@ ETag: '1'
 SHA1: 97b3dbba6eab7ad0f058240744c8636b7c7bea93
 Name: test_file_download.txt
 Description: ''
-Size: 106833
+Size: 295191
 Path Collection:
     Total Count: 2
     Entries:

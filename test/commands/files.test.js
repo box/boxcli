@@ -4,7 +4,7 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT } = require('../helpers/test-helper');
+const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, getDownloadProgressBar } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 
@@ -1864,7 +1864,9 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
+				let expectedMessage = getDownloadProgressBar(295191);
+				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -1899,7 +1901,9 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
+				let expectedMessage = getDownloadProgressBar(295191);
+				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 	});
 
