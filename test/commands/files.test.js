@@ -1864,7 +1864,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				let expectedMessage = getDownloadProgressBar();
+				let expectedMessage = getDownloadProgressBar(295191);
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
@@ -1901,7 +1901,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				let expectedMessage = getDownloadProgressBar();
+				let expectedMessage = getDownloadProgressBar(295191);
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});

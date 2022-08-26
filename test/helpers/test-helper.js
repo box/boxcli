@@ -21,18 +21,18 @@ function getFixture(fixture) {
 }
 
 function getProgressBar(message) {
-	return process.stderr.isTTY ? message : ``;
+	return process.stderr.isTTY ? message : '';
 }
 
-function getBulkProgressBar(itemsNum) {
+function getBulkProgressBar(size) {
 	return getProgressBar(
-		`[----------------------------------------] 0% | 0/${itemsNum}[========================================] 100% | ${itemsNum}/${itemsNum}${os.EOL}`
+		`[----------------------------------------] 0% | 0/${size}[========================================] 100% | ${size}/${size}${os.EOL}`
 	);
 }
 
-function getDownloadProgressBar() {
+function getDownloadProgressBar(size) {
 	return getProgressBar(
-		`[----------------------------------------] 0% | ETA: 0s | 0/106833 | Speed: N/A MB/s[========================================] 100% | ETA: 0s | 295191/106833 | Speed: N/A MB/s${os.EOL}`
+		`[----------------------------------------] 0% | ETA: 0s | 0/${size} | Speed: N/A MB/s[========================================] 100% | ETA: 0s | ${size}/${size} | Speed: N/A MB/s${os.EOL}`
 	);
 }
 
