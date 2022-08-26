@@ -4,7 +4,11 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const fs = require('fs-extra');
 const path = require('path');
-const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
+const {
+	getFixture,
+	TEST_API_ROOT,
+	getBulkProgressBar,
+} = require('../helpers/test-helper');
 const os = require('os');
 const debug = require('debug');
 const sinon = require('sinon');
@@ -94,7 +98,9 @@ describe('Bulk', () => {
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
-				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -121,7 +127,9 @@ describe('Bulk', () => {
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (CSV Output)', ctx => {
 				assert.equal(ctx.stdout, csvOutput);
-				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -147,7 +155,9 @@ describe('Bulk', () => {
 			])
 			.it('should create multiple collaborations for multiple Box items with can-view-path and login flags passed (Table Output)', ctx => {
 				assert.equal(ctx.stdout, tableOutput);
-				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedMessage);
 			});
 
 		test
@@ -180,7 +190,8 @@ describe('Bulk', () => {
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
 
-				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
@@ -432,7 +443,8 @@ describe('Bulk', () => {
 					fakeCollab2
 				], null, 4);
 
-				let expectedErrorOutput = `1 entry failed!${os.EOL}`;
+				let expectedErrorOutput = getBulkProgressBar(3);
+				expectedErrorOutput += `1 entry failed!${os.EOL}`;
 				expectedErrorOutput += `----------${os.EOL}`;
 				expectedErrorOutput += `Entry 2 (${os.EOL}`;
 				expectedErrorOutput += `    id=22222${os.EOL}`;
@@ -474,7 +486,8 @@ describe('Bulk', () => {
 				'--token=test'
 			])
 			.it('should report errors on missing headers if specified multiple rows', ctx => {
-				let expectedErrorOutput = `2 entries failed!${os.EOL}`;
+				let expectedErrorOutput = getBulkProgressBar(2);
+				expectedErrorOutput += `2 entries failed!${os.EOL}`;
 				expectedErrorOutput += `----------${os.EOL}`;
 				expectedErrorOutput += `Entry 1 (${os.EOL}`;
 				expectedErrorOutput += os.EOL;
@@ -601,7 +614,9 @@ describe('Bulk', () => {
 			])
 			.it('should process multiple inputs from JSON file with entries property (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
-				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
+				let expectedErrorOutput = getBulkProgressBar(3);
+				expectedErrorOutput += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
 
 		test
@@ -628,7 +643,9 @@ describe('Bulk', () => {
 			])
 			.it('should process multiple inputs from JSON file with top-level array', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
-				assert.equal(ctx.stderr, `All bulk input entries processed successfully.${os.EOL}`);
+				let expectedErrorOutput = getBulkProgressBar(3);
+				expectedErrorOutput += `All bulk input entries processed successfully.${os.EOL}`;
+				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
 
 		test
@@ -731,7 +748,8 @@ describe('Bulk', () => {
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
 
-				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
@@ -772,7 +790,8 @@ describe('Bulk', () => {
 				assert.equal(savedFileContents, jsonOutput);
 				assert.include(ctx.stdout, '(y/N) y');
 
-				let expectedMessage = `Output written to ${saveFilePath}${os.EOL}`;
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
@@ -814,7 +833,8 @@ describe('Bulk', () => {
 				/* eslint-enable no-sync */
 				assert.equal(savedFileContents, jsonOutput);
 
-				let expectedMessage = `Output written to ${filePath}${os.EOL}`;
+				let expectedMessage = getBulkProgressBar(3);
+				expectedMessage += `Output written to ${filePath}${os.EOL}`;
 				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
