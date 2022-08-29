@@ -74,8 +74,9 @@ If you would like to use Admin Console for zone assignment, see [here](https://s
 
 
 2. Update the [adminEmail][adminEmail-param] to the admin or co-admin login email address of the account that will be used to make zone assignments.  If you don't specify this value, the script will prompt you for it.
-3. Optional: To run the script in simulate mode, set the `simulate` boolean flag when running the script:
-`./Mass_Update_User_Zones.ps1 -simulate`
+3. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
+`./Mass_Update_User_Zones.ps1 -DryRun`.
+ Dry run doesn't mean that API calls won't be made, instead any create/update/delete calls will be skipped only.
 
 ## 2. Run the script
 Change the directory to the folder containing the script.

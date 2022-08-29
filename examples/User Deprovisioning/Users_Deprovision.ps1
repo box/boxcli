@@ -3,6 +3,11 @@
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
+########################################################################################
+
+param (
+    [switch]$DryRun = $false # if enabled, then no delete/create/update calls will be made, only read ones
+)
 
 ########################################################################################
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
@@ -95,7 +100,11 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
 
 # Main function
 Function Start-Script {
-    Write-Log "Starting User Deprovisioning script..." -output false
+    if ($DryRun) {
+        Write-Log "Starting User Deprovisioning script in DryRun mode" -output false
+    } else {
+        Write-Log "Starting User Deprovisioning script" -output false
+    }
 
     # Get employees json file and convert from CSV to an array of objects
     Try {
@@ -140,14 +149,18 @@ Function Start-Script {
 
     # Create new "Employee Archive" folder if it doens't exist
     if($null -eq $EmployeeArchiveFolderID) {
-        try {
-            $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" --fields="id" --json 2>&1)"
-            $EmployeeArchiveFolderID = $EmployeeArchiveFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
-            Write-Log "Successfully created new '$EmployeeArchiveFolderName' root folder with ID: $($EmployeeArchiveFolderID)." -output true
-            Write-Log $EmployeeArchiveFolderResp
-        } catch {
-            Write-Log "Could not create new '$EmployeeArchiveFolderName' root folder. See log for details." -errorMessage $EmployeeArchiveFolderResp -output true -color Red
-            break
+        if(!$DryRun) {
+            try {
+                $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" --fields="id" --json 2>&1)"
+                $EmployeeArchiveFolderID = $EmployeeArchiveFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
+                Write-Log "Successfully created new '$EmployeeArchiveFolderName' root folder with ID: $($EmployeeArchiveFolderID)." -output true
+                Write-Log $EmployeeArchiveFolderResp
+            } catch {
+                Write-Log "Could not create new '$EmployeeArchiveFolderName' root folder. See log for details." -errorMessage $EmployeeArchiveFolderResp -output true -color Red
+                break
+            }
+        } else {
+            Write-Log "`"DryRun`" mode is enabled. Script would have created new '$EmployeeArchiveFolderName' root folder." -output true
         }
     }
 
@@ -177,45 +190,55 @@ Function Start-Script {
         }
 
         if($TransferContent -eq "Y") {
-            # Transfer users content to current user's root folder before deleting user
-            Write-Log "Transferring $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""..." -output true
+            if(!$DryRun) {
+                # Transfer users content to current user's root folder before deleting user
+                Write-Log "Transferring $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""..." -output true
 
-            try {
-                $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $UserId --json 2>&1)"
-                $NewFolder = $NewFolderResp | ConvertFrom-Json
-                Write-Log "Successfully transferred content to ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""." -output true
-                Write-Log $NewFolderResp
-            } catch {
-                Write-Log "Skipping this employee. Could not transfer $($FoundEmployee.name) content over to current user's Root folder. See log for details." -errorMessage $NewFolderResp -output true -color Red
-                continue
+                try {
+                    $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $UserId --json 2>&1)"
+                    $NewFolder = $NewFolderResp | ConvertFrom-Json
+                    Write-Log "Successfully transferred content to ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""." -output true
+                    Write-Log $NewFolderResp
+                } catch {
+                    Write-Log "Skipping this employee. Could not transfer $($FoundEmployee.name) content over to current user's Root folder. See log for details." -errorMessage $NewFolderResp -output true -color Red
+                    continue
+                }
+
+                # Move transferred folder to "Employee Archive" folder
+                $TransferredFolder = $NewFolder.id
+                try {
+                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
+                    $MoveFolderResp | ConvertFrom-Json | Out-Null
+                    Write-Log "Successfully moved transferred employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to '$EmployeeArchiveFolderName' folder with ID: $EmployeeArchiveFolderID." -output true
+                    Write-Log $MoveFolderResp
+                } catch {
+                    Write-Log "Skipping this employee. Could not move transferred folder with ID: $TransferredFolder to $EmployeeArchiveFolderName folder with ID: $EmployeeArchiveFolderID. See log for details." -errorMessage $MoveFolderResp -output true -color Red
+                    continue
+                }
+            } else {
+                Write-Log ("`"DryRun`" mode is enabled. Script would have transferred employee's content" +`
+                " to `"$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders`"" +`
+                " and then moved it to `"$EmployeeArchiveFolderName`" folder.") `
+                -output true
             }
-
-            # Move transferred folder to "Employee Archive" folder
-            $TransferredFolder = $NewFolder.id
-            try {
-                $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
-                $MoveFolderResp | ConvertFrom-Json | Out-Null
-                Write-Log "Successfully moved transferred employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to '$EmployeeArchiveFolderName' folder with ID: $EmployeeArchiveFolderID." -output true
-                Write-Log $MoveFolderResp
-            } catch {
-                Write-Log "Skipping this employee. Could not move transferred folder with ID: $TransferredFolder to $EmployeeArchiveFolderName folder with ID: $EmployeeArchiveFolderID. See log for details." -errorMessage $MoveFolderResp -output true -color Red
-                continue
-           }
         }
 
         # Delete user
-        try {
-            # Because of the "-q" flag, the users:delete command returns an error if it occurs or null otherwise
-            $DeleteUserResp = "$(box users:delete $FoundEmployeeID -q 2>&1)"
-            if(!$DeleteUserResp) {
-                Write-Log "Successfully deleted employee $($FoundEmployee.name) with ID: $($FoundEmployeeID)." -output true
-            } else {
+        if(!$DryRun) {
+            try {
+                $DeleteUserResp = "$(box users:delete $FoundEmployeeID 2>&1)"
+                if($LASTEXITCODE -eq 0) {
+                    Write-Log "Successfully deleted employee $($FoundEmployee.name) with ID: $($FoundEmployeeID)." -output true
+                } else {
+                    Write-Log "Could not delete employee $($FoundEmployee.name) with ID: $($FoundEmployeeID). See log for details." -errorMessage $DeleteUserResp -output true -color Red
+                    continue
+                }
+            } catch {
                 Write-Log "Could not delete employee $($FoundEmployee.name) with ID: $($FoundEmployeeID). See log for details." -errorMessage $DeleteUserResp -output true -color Red
                 continue
             }
-        } catch {
-            Write-Log "Could not delete employee $($FoundEmployee.name) with ID: $($FoundEmployeeID). See log for details." -errorMessage $DeleteUserResp -output true -color Red
-            continue
+        } else {
+            Write-Log "`"DryRun`" mode is enabled. Script would have deleted employee $($FoundEmployee.name) with ID: $($FoundEmployeeID)." -output true
         }
     }
 
