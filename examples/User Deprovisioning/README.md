@@ -43,6 +43,9 @@ This Box CLI script deprovision a list of users by first transfering user conten
 	```
 3. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
 4. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
+5. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
+`./Users_Deprovision.ps1 -DryRun`.
+ Dry run doesn't mean that API calls won't be made, instead any create/update/delete calls will be skipped only.
 
 ## 2. Run the script
 Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
