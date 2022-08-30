@@ -114,4 +114,4 @@ This project is a collection of open source examples and should not be treated a
 [example-csv]: User_Zones_Update.csv
 [zonestable]:/examples/Mass%20Update%20User%20Zones/Mass_Update_User_Zones.ps1#L23
 [adminEmail-param]: /examples/Mass%20Update%20User%20Zones/Mass_Update_User_Zones.ps1#L21
-user-guide]: https://developer.box.com/guides/cli/scripts/user-zones-mass-update/
+[user-guide]: https://developer.box.com/guides/cli/scripts/user-zones-mass-update/
