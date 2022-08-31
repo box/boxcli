@@ -98,6 +98,9 @@ ConfigureSettingsCommand.description =
 
 ConfigureSettingsCommand.flags = {
 	...BoxCommand.minFlags,
+	json: flags.boolean({
+		description: 'Output CLI configuration settings in JSON format'
+	}),
 	'enable-proxy': flags.boolean({
 		description: 'Enable or disable proxy',
 		allowNo: true,
