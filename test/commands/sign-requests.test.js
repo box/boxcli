@@ -67,6 +67,8 @@ describe('Sign requests', () => {
 							role: 'approver',
 							email: signerEmail,
 							is_in_person: true,
+							redirect_url: signerRedirectUrl,
+							declined_redirect_url: signerDeclinedRedirectUrl
 						},
 					],
 					source_files: [
@@ -89,6 +91,8 @@ describe('Sign requests', () => {
 							checkbox_value: false,
 						},
 					],
+					redirect_url: redirectUrl,
+					declined_redirect_url: declinedRedirectUrl
 				})
 				.reply(200, fixture)
 			)
