@@ -621,7 +621,7 @@ describe('Utilities', () => {
 		});
 
 		it('should throw expection if directory does not exist and create flag is false', () => {
-			const destination = `${process.cwd()}/temp`;
+			const destination = `${process.cwd()}/nonExistingPath`;
 			const retrieveException = async() => {
 				await cliUtils.checkDir(destination, false);
 			};
