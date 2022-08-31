@@ -78,7 +78,7 @@ FileRequestsUpdateCommand.flags = {
 		description: 'New title of file request',
 	}),
 	etag: flags.string({
-		description: `Pass in the item's last observed etag value into this header and the endpoint will fail with a 412 Precondition Failed if it has changed since.`,
+		description: 'Pass in the item\'s last observed etag value into this header and the endpoint will fail with a 412 Precondition Failed if it has changed since.',
 	}),
 };
 

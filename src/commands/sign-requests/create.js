@@ -47,7 +47,7 @@ SignRequestsCreateCommand.flags = {
 	signer: flags.string({
 		required: true,
 		description:
-			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. Allowed properties: email,role,is_in_person,order,embed_url_external_user_id',
+			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. Allowed properties: email,role,is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url',
 		multiple: true,
 		parse(input) {
 			const signer = {
@@ -91,6 +91,14 @@ SignRequestsCreateCommand.flags = {
 
 				case 'embed_url_external_user_id':
 					signer.embed_url_external_user_id = value;
+					break;
+
+				case 'redirect_url':
+					signer.redirect_url = value;
+					break;
+
+				case 'declined_redirect_url':
+					signer.declined_redirect_url = value;
 					break;
 
 				default:
@@ -191,6 +199,14 @@ SignRequestsCreateCommand.flags = {
 	'external-id': flags.string({
 		description:
 			'This can be used to reference an ID in an external system that the sign request is related to.',
+	}),
+	'redirect-url': flags.string({
+		description:
+		'The URL that a signer will be redirected to after signing a document. Defining this URL overrides the default redirect URL for all signers. If no declined redirect URL is specified, this URL will be used for decline actions as well.',
+	}),
+	'declined-redirect-url': flags.string({
+		description:
+			'The URL that a signer will be redirected to after declining to sign a document. Defining this URL overrides the default redirect URL for all signers.',
 	}),
 };
 

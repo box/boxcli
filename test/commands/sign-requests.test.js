@@ -48,12 +48,16 @@ describe('Sign requests', () => {
 
 	describe('sign-requests:create', () => {
 		let signerEmail = 'bob@example.com',
+			signerRedirectUrl = 'https://box.com/redirect_url_signer_1',
+			signerDeclinedRedirectUrl = 'https://box.com/declined_redirect_url_signer_1',
 			fileId = '1234',
 			parentFolderId = '2345',
 			documentTag1Id = '3456',
 			documentTag1Value = 'hello',
 			documentTag2Id = '4567',
-			fixture = getFixture('sign-requests/post_sign_requests');
+			fixture = getFixture('sign-requests/post_sign_requests'),
+			redirectUrl = 'https://box.com/redirect_url',
+			declinedRedirectUrl = 'https://box.com/declined_redirect_url';
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -91,11 +95,13 @@ describe('Sign requests', () => {
 			.stdout()
 			.command([
 				'sign-requests:create',
-				`--signer=email=${signerEmail},role=approver,is_in_person=1`,
+				`--signer=email=${signerEmail},role=approver,is_in_person=1,redirect_url=${signerRedirectUrl},declined_redirect_url=${signerDeclinedRedirectUrl}`,
 				`--source-files=${fileId}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
+				`--redirect-url=${redirectUrl}`,
+				`--declined-redirect-url=${declinedRedirectUrl}`,
 				'--json',
 				'--token=test',
 			])
