@@ -1,4 +1,7 @@
 # Mass Groups & Collaborations Update
+
+**For detailed script overview, please follow [this guide][user-guide].**
+
 Creates and updates collaboration groups,  adds role-based group access to folders.
 The script consists of two parts described in detail in the sections below. You can run them both or use the optional flags to decide which part to run.
 
@@ -45,8 +48,6 @@ In case when you want to skip this part of creating collaborations, you just nee
 
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
-
-[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 
 
 ## 1. Script Parameters
@@ -124,3 +125,6 @@ Logs are stored in a `logs` folder located in the main folder. You have access t
 
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
+
+[oauth-guide]: https://developer.box.com/guides/cli/quick-start/
+[user-guide]: https://developer.box.com/guides/cli/scripts/manage-groups-collaborations/
