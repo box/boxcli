@@ -2,6 +2,8 @@
 
 > Due to scale issue, CLI can't handle more than 1M events per run and as a run the Inactive Users Report will fail.
 
+**For detailed script overview, please follow [this guide][user-guide].**
+
 Identifies inactive enterprise users by looking at user activity within a defined period of time. This script helps manage the number of seats within an enterprise and works in synergy with the deprovisioning script.
 
 This script generates a `.csv` file with a list of users who has been inactive for a number of days. It performs the following steps:
@@ -97,3 +99,4 @@ This project is a collection of open source examples and should not be treated a
 [ReportName-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L11
 [events-param]: /examples/Inactive%20Users%20Report/Inactive_Users_Report.ps1#L17
 [deprovisionscript]: https://developer.box.com/guides/cli/scripts/deprovision-users/
+[user-guide]: https://developer.box.com/guides/cli/scripts/report-inactive-users/

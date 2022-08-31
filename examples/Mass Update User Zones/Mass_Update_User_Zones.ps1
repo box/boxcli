@@ -7,7 +7,7 @@
 ########################################################################################
 
 param (
-    [switch]$simulate = $false
+    [switch]$DryRun = $false # if enabled, then no delete/create/update calls will be made, only read ones
 )
 
 ########################################################################################
@@ -110,8 +110,8 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 }
 
-if ($simulate) {
-    Write-Log "started in simulate mode" -output false
+if ($DryRun) {
+    Write-Log "started in DryRun mode" -output false
 } else {
     Write-Log "started" -output false
 }
@@ -244,7 +244,7 @@ ForEach($UserToUpdate in $UsersToUpdate) {
         # If the user's current storage policy is inherited from the enterprise, create a new assignment
         if ($($userStoragePolicy.assigned_to.type -eq "enterprise")) {
             try {
-                if (!$simulate) {
+                if (!$DryRun) {
                     $assignmentObjResp = "$(box storage-policies:assign $ZonesTable[$UserZone] $userObj.id --token=$adminToken --json 2>&1)"
                     $assignmentObj = $assignmentObjResp | ConvertFrom-Json
 
@@ -253,7 +253,7 @@ ForEach($UserToUpdate in $UsersToUpdate) {
                     " Assignment id: $($assignmentObj.id)") `
                     -output true
                 } else {
-                    Write-Log ("Would have assigned $($userObj.login) ($($userObj.id))" +`
+                    Write-Log ("`"DryRun`" mode is enabled. Script would have assigned $($userObj.login) ($($userObj.id))" +`
                     " to the specified zone: $UserZone ($($ZonesTable[$UserZone])).") `
                     -output true
                 }
@@ -267,14 +267,14 @@ ForEach($UserToUpdate in $UsersToUpdate) {
             # If the target zone is the same as the enterprise default zone, delete the current policy assignment
             if ($($ZonesTable[$UserZone] -eq $EnterprisePolicy)){
                 try {
-                    if (!$simulate) {
+                    if (!$DryRun) {
                         "$(box storage-policies:assignments:remove $userStoragePolicy.id --token=$adminToken)"
 
                         Write-Log ("Successfully reassigned $($userObj.login) ($($userObj.id))" +`
                         " to the specified zone: $UserZone ($($ZonesTable[$UserZone])).") `
                         -output true
                     } else {
-                        Write-Log ("Would have reassigned $($userObj.login) ($($userObj.id))" +`
+                        Write-Log ("`"DryRun`" mode is enabled. Script would have reassigned $($userObj.login) ($($userObj.id))" +`
                         " to the specified zone: $UserZone ($($ZonesTable[$UserZone])).") `
                         -output true
                     }
@@ -287,7 +287,7 @@ ForEach($UserToUpdate in $UsersToUpdate) {
             # Else reassign the user to the specified zone
             } else {
                 try {
-                    if (!$simulate) {
+                    if (!$DryRun) {
                         $assignmentObjResp = "$(box storage-policies:assign $ZonesTable[$UserZone] $userObj.id --token=$adminToken --json 2>&1)"
                         $assignmentObj = $assignmentObjResp | ConvertFrom-Json
 
@@ -296,7 +296,7 @@ ForEach($UserToUpdate in $UsersToUpdate) {
                         " Assignment id: $($assignmentObj.id)") `
                         -output true
                     } else {
-                        Write-Log ("Would have reassigned $($userObj.login) ($($userObj.id))" +`
+                        Write-Log ("`"DryRun`" mode is enabled. Script would have reassigned $($userObj.login) ($($userObj.id))" +`
                         " to the specified zone: $UserZone ($($ZonesTable[$UserZone])).") `
                         -output true
                     }

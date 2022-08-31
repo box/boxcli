@@ -1,5 +1,7 @@
 # Mass Update User Zones #
 
+**For detailed script overview, please follow [this guide][user-guide].**
+
 Provisions users to specified data residency Zones within a Multizone Box tenant. It performs the following steps:
 
 1. It uses admin or co-admin login email address to find the associated enterprise and the zone policy assigned to this enterprise. An assigned zone policy is inherited by all users unless specified otherwise. It is sometimes called the **default zone**.
@@ -74,8 +76,9 @@ If you would like to use Admin Console for zone assignment, see [here](https://s
 
 
 2. Update the [adminEmail][adminEmail-param] to the admin or co-admin login email address of the account that will be used to make zone assignments.  If you don't specify this value, the script will prompt you for it.
-3. Optional: To run the script in simulate mode, set the `simulate` boolean flag when running the script:
-`./Mass_Update_User_Zones.ps1 -simulate`
+3. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
+`./Mass_Update_User_Zones.ps1 -DryRun`.
+ Dry run doesn't mean that API calls won't be made, instead any create/update/delete calls will be skipped only.
 
 ## 2. Run the script
 Change the directory to the folder containing the script.
@@ -112,3 +115,4 @@ This project is a collection of open source examples and should not be treated a
 [example-csv]: User_Zones_Update.csv
 [zonestable]:/examples/Mass%20Update%20User%20Zones/Mass_Update_User_Zones.ps1#L23
 [adminEmail-param]: /examples/Mass%20Update%20User%20Zones/Mass_Update_User_Zones.ps1#L21
+[user-guide]: https://developer.box.com/guides/cli/scripts/user-zones-mass-update/
