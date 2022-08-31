@@ -1869,6 +1869,41 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, expectedMessage);
 			});
 
+		const destination = `${fileDownloadPath}/temp`;
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'files:download',
+				fileId,
+				`--destination=${destination}`,
+				'-y',
+				'--token=test'
+			])
+			.it('should download a file to a non-existing destination', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(destination, fileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				fs.rmdirSync(destination);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
+
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1985,6 +2020,43 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
 			});
+
+		const destination = `${fileDownloadPath}/temp`;
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.query({ version: fileVersionID })
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'files:versions:download',
+				fileId,
+				`--destination=${destination}`,
+				'-y',
+				fileVersionID,
+				'--token=test'
+			])
+			.it('should download a file version to a non-existing destination', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(destination, fileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				fs.rmdirSync(destination);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
 	});
 
 	describe('files:zip', () => {
@@ -2040,6 +2112,43 @@ describe('Files', () => {
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+				assert.equal(ctx.stdout, downloadStatusFixture);
+			});
+
+		const destination = `${fileDownloadPath}/temp`;
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/zip_downloads', expectedBody)
+				.reply(202, createFileFixture)
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(downloadUrl)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.nock(TEST_API_ROOT, api => api
+				.get(statusUrl)
+				.reply(200, downloadStatusFixture)
+			)
+			.stdout()
+			.command([
+				'files:zip',
+				fileName,
+				`--item=${items[0].type}:${items[0].id}`,
+				`--item=${items[1].type}:${items[1].id}`,
+				`--destination=${destination}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should create a zip in a non-existent path', ctx => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(destination, fileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				fs.rmdirSync(destination);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stdout, downloadStatusFixture);

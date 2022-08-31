@@ -1510,9 +1510,6 @@ describe('Folders', () => {
 			)
 			.stdout()
 			.stderr()
-			.do(async() => {
-				await fs.mkdirp(downloadPath);
-			})
 			.command([
 				'folders:download',
 				folderID,
@@ -1563,9 +1560,6 @@ describe('Folders', () => {
 			})
 			.stdout()
 			.stderr()
-			.do(async() => {
-				await fs.mkdirp(downloadPath);
-			})
 			.command([
 				'folders:download',
 				folderID,
@@ -1602,9 +1596,6 @@ describe('Folders', () => {
 			)
 			.stdout()
 			.stderr()
-			.do(async() => {
-				await fs.mkdirp(downloadPath);
-			})
 			.command([
 				'folders:download',
 				folderID,
@@ -1644,9 +1635,6 @@ describe('Folders', () => {
 			)
 			.stdout()
 			.stderr()
-			.do(async() => {
-				await fs.mkdirp(downloadPath);
-			})
 			.command([
 				'folders:download',
 				folderID,
@@ -1674,10 +1662,54 @@ describe('Folders', () => {
 				folderID,
 				'--destination=/path/really/should/not/exist',
 				'--no-color',
-				'--token=test'
+				'--token=test',
+				'--no-create-path'
 			])
 			.it('should output error when destination directory does not exist', ctx => {
-				assert.equal(ctx.stderr, `Destination path must be a directory${os.EOL}`);
+				assert.equal(
+					ctx.stderr,
+					`The /path/really/should/not/exist path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
+				);
+			});
+
+		const destination = `${downloadPath}/temp`;
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/folders/${folderID}`)
+				.reply(200, getFolderFixture)
+				.get('/2.0/folders/22222')
+				.reply(200, getSubfolderFixture)
+				.get('/2.0/files/77777/content')
+				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/77777` })
+				.get('/2.0/files/44444/content')
+				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
+				.get('/2.0/files/55555/content')
+				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get('/44444')
+				.reply(200, expectedContents['file 1.txt'])
+				.get('/55555')
+				.reply(200, expectedContents['file 2.txt'])
+				.get('/77777')
+				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'folders:download',
+				folderID,
+				`--destination=${destination}`,
+				'--token=test',
+			])
+			.it('should download a folder a non-existent path', async(ctx) => {
+				let folderPath = path.join(destination, folderName);
+				let actualContents = await getDirectoryContents(folderPath);
+				await fs.remove(destination);
+
+				assert.deepEqual(actualContents, expectedContents);
+				assert.equal(ctx.stdout, '');
 			});
 	});
 

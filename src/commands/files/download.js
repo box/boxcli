@@ -17,6 +17,8 @@ class FilesDownloadCommand extends BoxCommand {
 
 		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
 
+		utils.checkDir(flags.destination, flags['create-path']);
+
 		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
@@ -83,6 +85,11 @@ FilesDownloadCommand.flags = {
 	destination: flags.string({
 		description: 'The destination folder to write the file to',
 		parse: utils.parsePath,
+	}),
+	'create-path': flags.boolean({
+		description: 'Recursively creates a path to a directory if it does not exist',
+		allowNo: true,
+		default: true
 	}),
 };
 

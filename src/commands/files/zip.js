@@ -17,6 +17,8 @@ class FilesZipCommand extends BoxCommand {
 
 		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
 
+		utils.checkDir(flags.destination, flags['create-path']);
+
 		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
@@ -45,13 +47,19 @@ FilesZipCommand.flags = {
 		parse: utils.parsePath,
 	}),
 	item: flags.string({
-		description: 'Files or folders to be part of zip in the form type:ID (i.e. file:1374652)',
+		description:
+			'Files or folders to be part of zip in the form type:ID (i.e. file:1374652)',
 		multiple: true,
 		required: true,
 		parse(val) {
 			let splitVal = val.split(':');
-			return {type: splitVal[0], id: splitVal[1]};
-		}
+			return { type: splitVal[0], id: splitVal[1] };
+		},
+	}),
+	'create-path': flags.boolean({
+		description: 'Recursively creates a path to a directory if it does not exist',
+		allowNo: true,
+		default: true,
 	}),
 };
 

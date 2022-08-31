@@ -4,6 +4,7 @@ const _ = require('lodash');
 const BoxCLIError = require('./cli-error');
 const os = require('os');
 const path = require('path');
+const fs = require('fs');
 
 const REQUIRED_CONFIG_VALUES = Object.freeze([
 	'boxAppSettings.clientID',
@@ -182,6 +183,27 @@ function parseMetadataString(input) {
 	return op;
 }
 
+/**
+ * Check if directory exists and creates it if shouldCreate flag was passed.
+ *
+ * @param {string} dirPath Directory path to check and create
+ * @param {boolean} shouldCreate Flag indicating if the directory should be created
+ * @returns {void}
+ * @private
+ */
+function checkDir(dirPath, shouldCreate) {
+	/* eslint-disable no-sync */
+	if (!fs.existsSync(dirPath)) {
+		if (shouldCreate) {
+			fs.mkdirSync(dirPath, { recursive: true });
+		} else {
+			throw new BoxCLIError(
+				`The ${dirPath} path does not exist. Either create it, or pass the --create-path flag set to true`
+			);
+		}
+	}
+}
+
 module.exports = {
 	/**
 	 * Validates the a configuration object has all required properties
@@ -258,4 +280,5 @@ module.exports = {
 	parseMetadataOp(value) {
 		return parseMetadataString(value);
 	},
+	checkDir,
 };

@@ -5,6 +5,7 @@ const mockery = require('mockery');
 const leche = require('leche');
 const sinon = require('sinon');
 const process = require('process');
+const fs = require('fs');
 
 describe('Utilities', () => {
 
@@ -594,6 +595,21 @@ describe('Utilities', () => {
 				let parsedOp = cliUtils.parseMetadataOp(value);
 				assert.deepEqual(parsedOp, expectedOutput);
 			});
+		});
+	});
+
+	const destination = `${process.cwd()}/temp`;
+
+	/* eslint-disable no-sync */
+	describe('checkDir()', () => {
+		it('should create directory if create flag is true', () => {
+			cliUtils.checkDir(destination, true);
+			assert.isTrue(fs.existsSync(destination));
+			fs.rmdirSync(destination);
+		});
+
+		it('should throw expection if directory does not exist and create flag is false', () => {
+			assert.throw(() => cliUtils.checkDir(destination, false));
 		});
 	});
 });
