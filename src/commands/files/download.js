@@ -17,7 +17,7 @@ class FilesDownloadCommand extends BoxCommand {
 
 		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
 
-		utils.checkDir(flags.destination, flags['create-path']);
+		await utils.checkDir(flags.destination, flags['create-path']);
 
 		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {

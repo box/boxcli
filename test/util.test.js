@@ -1,11 +1,15 @@
 'use strict';
 
+const chai = require('chai');
 const assert = require('chai').assert;
 const mockery = require('mockery');
 const leche = require('leche');
 const sinon = require('sinon');
 const process = require('process');
 const fs = require('fs');
+const chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiAsPromised);
 
 describe('Utilities', () => {
 
@@ -598,18 +602,30 @@ describe('Utilities', () => {
 		});
 	});
 
-	const destination = `${process.cwd()}/temp`;
-
 	/* eslint-disable no-sync */
 	describe('checkDir()', () => {
-		it('should create directory if create flag is true', () => {
-			cliUtils.checkDir(destination, true);
+		it('should create directory if create flag is true', async() => {
+			const destination = `${process.cwd()}/temp`;
+			await cliUtils.checkDir(destination, true);
 			assert.isTrue(fs.existsSync(destination));
 			fs.rmdirSync(destination);
 		});
 
+		it('should create nested directory if create flag is true', async() => {
+			const destination = `${process.cwd()}/nestedTemp`;
+			const nestedDestination = `${destination}/temp`;
+			await cliUtils.checkDir(nestedDestination, true);
+			assert.isTrue(fs.existsSync(nestedDestination));
+			fs.rmdirSync(nestedDestination);
+			fs.rmdirSync(destination);
+		});
+
 		it('should throw expection if directory does not exist and create flag is false', () => {
-			assert.throw(() => cliUtils.checkDir(destination, false));
+			const destination = `${process.cwd()}/temp`;
+			const retrieveException = async() => {
+				await cliUtils.checkDir(destination, false);
+			};
+			return assert.isRejected(retrieveException(), Error);
 		});
 	});
 });

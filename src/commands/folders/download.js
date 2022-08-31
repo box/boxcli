@@ -49,7 +49,7 @@ class FoldersDownloadCommand extends BoxCommand {
 		let id = args.id;
 		let outputFinalized = Promise.resolve();
 
-		utils.checkDir(flags.destination, flags['create-path']);
+		await utils.checkDir(flags.destination, flags['create-path']);
 
 		/* eslint-disable no-sync */
 		if (!fs.existsSync(destinationPath) || !fs.statSync(destinationPath).isDirectory()) {
