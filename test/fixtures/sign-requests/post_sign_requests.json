@@ -25,6 +25,8 @@
         }
     ],
     "prepare_url": "https://prepareurl.com",
+    "redirect_url": "https://box.com/redirect_url",
+    "declined_redirect_url": "https://box.com/declined_redirect_url",
     "sign_files": {
         "files": [
             {
@@ -65,7 +67,9 @@
                     "page_index": 4
                 }
             ],
-            "embed_url": "https://example.com"
+            "embed_url": "https://example.com",
+            "redirect_url": "https://box.com/redirect_url_signer_1",
+            "declined_redirect_url": "https://box.com/declined_redirect_url_signer_1"
         }
     ],
     "signing_log": {
