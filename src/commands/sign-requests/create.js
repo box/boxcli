@@ -47,7 +47,9 @@ SignRequestsCreateCommand.flags = {
 	signer: flags.string({
 		required: true,
 		description:
-			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. Allowed properties: email,role,is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url',
+			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. ' +
+			'Allowed (recommended) properties: email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url ' +
+			'but snake case is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url',
 		multiple: true,
 		parse(input) {
 			const signer = {
@@ -76,6 +78,7 @@ SignRequestsCreateCommand.flags = {
 					signer.role = value;
 					break;
 
+				case 'is-in-person':
 				case 'is_in_person':
 					if (value !== '0' && value !== '1') {
 						throw new BoxCLIError(
@@ -89,14 +92,17 @@ SignRequestsCreateCommand.flags = {
 					signer.order = value;
 					break;
 
+				case 'embed-url-external-user-id':
 				case 'embed_url_external_user_id':
 					signer.embed_url_external_user_id = value;
 					break;
 
 				case 'redirect_url':
+				case 'redirect-url':
 					signer.redirect_url = value;
 					break;
 
+				case 'declined-redirect-url':
 				case 'declined_redirect_url':
 					signer.declined_redirect_url = value;
 					break;
