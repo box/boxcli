@@ -33,7 +33,7 @@ try {
 	/* eslint-disable-next-line global-require */
 	keytar = require('keytar');
 } catch (ex) {
-	// keytar cannot be imported because the library not compatible with this machine
+	// keytar cannot be imported because the library is not provided for this operating system / architecture
 }
 
 const DEBUG = require('./debug');
