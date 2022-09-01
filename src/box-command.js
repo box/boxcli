@@ -28,7 +28,13 @@ const darwinKeychainSetPassword = util.promisify(
 const darwinKeychainGetPassword = util.promisify(
 	darwinKeychain.getPassword.bind(darwinKeychain)
 );
-const keytar = require('keytar');
+let keytar = null;
+try {
+	/* eslint-disable-next-line global-require */
+	keytar = require('keytar');
+} catch (ex) {
+	// keytar cannot be imported because the library is not provided for this operating system / architecture
+}
 
 const DEBUG = require('./debug');
 const stream = require('stream');
@@ -894,7 +900,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -902,13 +908,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async () => {
+			logFunc = async() => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1401,6 +1407,9 @@ class BoxCommand extends Command {
 
 				case 'win32': {
 					try {
+						if (!keytar) {
+							break;
+						}
 						const password = await keytar.getPassword(
 							'boxcli' /* service */,
 							'Box' /* account */
@@ -1451,6 +1460,9 @@ class BoxCommand extends Command {
 				}
 
 				case 'win32': {
+					if (!keytar) {
+						break;
+					}
 					await keytar.setPassword(
 						'boxcli' /* service */,
 						'Box' /* account */,
