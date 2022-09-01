@@ -71,20 +71,20 @@ describe('File Requests', () => {
 	let status = 'active';
 
 	let addParams = {
-		title: title,
-		description: description,
+		title,
+		description,
 		expires_at: expiresAt,
 		is_description_required: true,
 		is_email_required: true,
-		status: status,
+		status,
 	};
 
 	let addFlags = [
 		`--title=${title}`,
 		`--description=${description}`,
 		`--expires-at=${expiresAt}`,
-		`--description-required`,
-		`--email-required`,
+		'--description-required',
+		'--email-required',
 		`--status=${status}`,
 	];
 
