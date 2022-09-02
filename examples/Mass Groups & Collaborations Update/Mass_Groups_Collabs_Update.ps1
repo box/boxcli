@@ -41,8 +41,18 @@ $AvailableCollaborationRoles = @("editor", "viewer", "previewer", "uploader", "p
 $script:GroupsHashtable = @{}
 $script:UsersHashtable = @{}
 
+# Get current script file name
+Function Get-Script-Name() {
+    $filename = $MyInvocation.ScriptName | Split-Path -Leaf
+    if ($filename -match ".") {
+        $filename = $filename.Substring(0, $filename.LastIndexOf("."))
+    }
+
+    return $filename
+}
+
 # Function to write to logs
-function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Exception]$exception = $null, [string]$output = $false, [string]$color = "Green")
+Function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Exception]$exception = $null, [string]$output = $false, [string]$color = "Green")
 
     # Define log level - Can be "errors" or "all"
     $logLevel = "all"
@@ -55,12 +65,7 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     $dateTime = Get-Date
 
     # Set log filename to the name of the script
-    $logFilename = $MyInvocation.ScriptName
-    $logFilename = $logFilename.substring($logFilename.lastIndexOf([IO.Path]::DirectorySeparatorChar))
-    if ($logFilename -match ".") {
-        $logFilename = $logFilename.Substring(0, $logFilename.LastIndexOf("."))
-    }
-
+    $logFilename = Get-Script-Name
     $debugErrorFile = ".\logs\" + $logFilename + "_errors.txt"
     $debugAllFile = ".\logs\" + $logFilename + "_all.txt"
 
@@ -111,12 +116,70 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 }
 
+# This class is used for setting/restoring analytics client header when running this script
+class AnalyticsClientManager {
+    [string]$TemporaryAnalyticsClientName
+    [string]$OriginalAnalyticsClientName
+    [bool]$IsOriginalAnalyticsClientEnabled
+
+    AnalyticsClientManager([string]$temporaryAnalyticsClientName) {
+        $this.TemporaryAnalyticsClientName = "box_sample_scripts $($temporaryAnalyticsClientName)"
+    }
+
+    [bool] IsAnalyticsClientSupported() {
+        return "$(box configure:settings --help)" -like "*--analytics-client-name*--json*"
+    }
+
+    [void] StoreOriginalSettings() {
+        $SettingsContent = "$(box configure:settings --json)" | ConvertFrom-Json
+
+        $this.OriginalAnalyticsClientName = $SettingsContent.AnalyticsClient.Name
+        if (!$this.OriginalAnalyticsClientName) {
+            $this.OriginalAnalyticsClientName = "cli"
+        }
+
+        if($SettingsContent.EnableanalyticsClient) {
+            $this.IsOriginalAnalyticsClientEnabled = $true
+        } else {
+            $this.IsOriginalAnalyticsClientEnabled = $false
+        }
+
+        Write-Log "Stored original analytics client settings, name: $($this.OriginalAnalyticsClientName), enabled: $($this.IsOriginalAnalyticsClientEnabled)." -output false
+    }
+
+    [void] RestoreOriginalSettings() {
+        if ($this.IsOriginalAnalyticsClientEnabled) {
+            $RestoreAnalyticsClientEnablementState = "--enable-analytics-client"
+        } else {
+            $RestoreAnalyticsClientEnablementState = "--no-enable-analytics-client"
+        }
+
+        "$(box configure:settings $RestoreAnalyticsClientEnablementState --analytics-client-name=$($this.OriginalAnalyticsClientName))"
+        Write-Log "Restored original analytics client settings, name: $($this.OriginalAnalyticsClientName), enabled: $($this.IsOriginalAnalyticsClientEnabled)." -output false
+    }
+
+    [void] SetScriptAnalyticsClient() {
+        if ($this.IsAnalyticsClientSupported()) {
+            $this.StoreOriginalSettings()
+
+            "$(box configure:settings --enable-analytics-client --analytics-client-name=$($this.TemporaryAnalyticsClientName))"
+            Write-Log "Set temporarily analytics client settings, name: $($this.TemporaryAnalyticsClientName), enabled: true." -output false
+        }
+    }
+
+    [void] UnsetScriptAnalyticsClients() {
+        if ($this.IsAnalyticsClientSupported()) {
+            $this.RestoreOriginalSettings()
+        }
+    }
+}
+
 ########################################################################################
 ###   Part 1) Update groups   ##########################################################
 ########################################################################################
 
 # Function to create/update groups based on CSV file
-function Update-Groups {
+Function Update-Groups {
     Write-Log "Start update groups..." -output true
 
     # Ensure that file exist
@@ -307,7 +370,7 @@ class FolderCollaborationStorage {
 }
 
 # Function to create collaborations based on CSV file
-function Update-Collaborations {
+Function Update-Collaborations {
     Write-Log "Start create collaborations..." -output true
 
     # Ensure that file exist
@@ -475,8 +538,8 @@ function Update-Collaborations {
     Write-Log "Finish create collaborations." -output true
 }
 
-# Main function
-function Start-Script {
+# Create groups and collaborations
+Function Start-Group-Collabs-Creation-Script {
     Write-Log "Start Mass_Group_Creation script." -output true
 
     # Get existing groups
@@ -494,7 +557,7 @@ function Start-Script {
     # Get list of users
     try {
         $UsersResp = "$(box users --fields='id,login,name,role' --json 2>&1)"
-        $Users = $usersResp | ConvertFrom-Json
+        $Users = $UsersResp | ConvertFrom-Json
 
         if (($users.Length -eq 0) -or ($users.total_count -eq 0)) {
             Write-Log "No users found!" -output true -color Red
@@ -504,7 +567,7 @@ function Start-Script {
         # Add users to hashtable UsersHashtable for later convenient access, where "login" is the key and "id" is a value.
         $Users | ForEach-Object { $UsersHashtable[$_.login] = $_.id }
     } catch {
-        Write-Log "Could not get user list. See log for details." -errorMessage $usersResp -output true -color Red
+        Write-Log "Could not get user list. See log for details." -errorMessage $UsersResp -output true -color Red
         break
     }
 
@@ -523,6 +586,18 @@ function Start-Script {
     }
 
     Write-Log "Finish Mass_Group_Creation script." -output true
+}
+
+# Start function
+Function Start-Script {
+    try {
+        $AnalyticsClientManager = [AnalyticsClientManager]::new($(Get-Script-Name).ToLower())
+        $AnalyticsClientManager.SetScriptAnalyticsClient()
+
+        Start-Group-Collabs-Creation-Script
+    } finally {
+        $AnalyticsClientManager.UnsetScriptAnalyticsClients()
+    }
 }
 
 Start-Script

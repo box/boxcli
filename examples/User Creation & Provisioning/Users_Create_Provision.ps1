@@ -22,8 +22,18 @@ $RootFolderParentID = "0"
 
 #############################################################################
 
+# Get current script file name
+Function Get-Script-Name() {
+    $filename = $MyInvocation.ScriptName | Split-Path -Leaf
+    if ($filename -match ".") {
+        $filename = $filename.Substring(0, $filename.LastIndexOf("."))
+    }
+
+    return $filename
+}
+
 # Function to write to logs
-function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Exception]$exception = $null, [string]$output = $false, [string]$color = "Green")
+Function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Exception]$exception = $null, [string]$output = $false, [string]$color = "Green")
 
     # Define log level - Can be "errors" or "all"
     $logLevel = "all"
@@ -36,12 +46,7 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     $dateTime = Get-Date
 
     # Set log filename to the name of the script
-    $logFilename = $MyInvocation.ScriptName
-    $logFilename = $logFilename.substring($logFilename.lastIndexOf([IO.Path]::DirectorySeparatorChar))
-    if ($logFilename -match ".") {
-        $logFilename = $logFilename.Substring(0, $logFilename.LastIndexOf("."))
-    }
-
+    $logFilename = Get-Script-Name
     $debugErrorFile = ".\logs\" + $logFilename + "_errors.txt"
     $debugAllFile = ".\logs\" + $logFilename + "_all.txt"
 
@@ -92,10 +97,68 @@ function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 }
 
+# This class is used for setting/restoring analytics client header when running this script
+class AnalyticsClientManager {
+    [string]$TemporaryAnalyticsClientName
+    [string]$OriginalAnalyticsClientName
+    [bool]$IsOriginalAnalyticsClientEnabled
+
+    AnalyticsClientManager([string]$temporaryAnalyticsClientName) {
+        $this.TemporaryAnalyticsClientName = "box_sample_scripts $($temporaryAnalyticsClientName)"
+    }
+
+    [bool] IsAnalyticsClientSupported() {
+        return "$(box configure:settings --help)" -like "*--analytics-client-name*--json*"
+    }
+
+    [void] StoreOriginalSettings() {
+        $SettingsContent = "$(box configure:settings --json)" | ConvertFrom-Json
+
+        $this.OriginalAnalyticsClientName = $SettingsContent.AnalyticsClient.Name
+        if (!$this.OriginalAnalyticsClientName) {
+            $this.OriginalAnalyticsClientName = "cli"
+        }
+
+        if($SettingsContent.EnableanalyticsClient) {
+            $this.IsOriginalAnalyticsClientEnabled = $true
+        } else {
+            $this.IsOriginalAnalyticsClientEnabled = $false
+        }
+
+        Write-Log "Stored original analytics client settings, name: $($this.OriginalAnalyticsClientName), enabled: $($this.IsOriginalAnalyticsClientEnabled)." -output false
+    }
+
+    [void] RestoreOriginalSettings() {
+        if ($this.IsOriginalAnalyticsClientEnabled) {
+            $RestoreAnalyticsClientEnablementState = "--enable-analytics-client"
+        } else {
+            $RestoreAnalyticsClientEnablementState = "--no-enable-analytics-client"
+        }
+
+        "$(box configure:settings $RestoreAnalyticsClientEnablementState --analytics-client-name=$($this.OriginalAnalyticsClientName))"
+        Write-Log "Restored original analytics client settings, name: $($this.OriginalAnalyticsClientName), enabled: $($this.IsOriginalAnalyticsClientEnabled)." -output false
+    }
+
+    [void] SetScriptAnalyticsClient() {
+        if ($this.IsAnalyticsClientSupported()) {
+            $this.StoreOriginalSettings()
+
+            "$(box configure:settings --enable-analytics-client --analytics-client-name=$($this.TemporaryAnalyticsClientName))"
+            Write-Log "Set temporarily analytics client settings, name: $($this.TemporaryAnalyticsClientName), enabled: true." -output false
+        }
+    }
+
+    [void] UnsetScriptAnalyticsClients() {
+        if ($this.IsAnalyticsClientSupported()) {
+            $this.RestoreOriginalSettings()
+        }
+    }
+}
+
 $script:RootFolderID = $null
 
-# Main function
-Function Start-Script {
+#  User Creation & Provisioning
+Function Start-Users-Provisoning-Creation-Script {
     Write-Log "Starting User Creation & Provisioning script..." -output true
 
     try {
@@ -211,6 +274,18 @@ Function New-Provision-Managed-User {
             Write-Log "Failed to create collaboration for user $($Employee.firstName) $($Employee.lastName) with ID: $ManagedUserID, to folder ID: $script:RootFolderID. See log for details." -errorMessage $CollaboratedResp -output true -color Red
             continue
         }
+    }
+}
+
+# Start function
+Function Start-Script {
+    try {
+        $AnalyticsClientManager = [AnalyticsClientManager]::new($(Get-Script-Name).ToLower())
+        $AnalyticsClientManager.SetScriptAnalyticsClient()
+
+        Start-Users-Provisoning-Creation-Script
+    } finally {
+        $AnalyticsClientManager.UnsetScriptAnalyticsClients()
     }
 }
 
