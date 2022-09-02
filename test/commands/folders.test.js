@@ -1740,7 +1740,7 @@ describe('Folders', () => {
 				folderID,
 				'--token=test',
 			])
-			.it('should download a folder a non-existent path', async(ctx) => {
+			.it('should download a folder to a default destination', async(ctx) => {
 				let folderPath = path.join(DEFAULT_DOWNLOAD_PATH, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
 				await fs.remove(folderPath);
