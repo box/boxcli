@@ -6,6 +6,7 @@ const BoxCLIError = require('../../../cli-error');
 const _ = require('lodash');
 const path = require('path');
 const fs = require('fs');
+const utils = require('../../../util');
 
 class FilesVersionsDownloadCommand extends BoxCommand {
 	async run() {
@@ -15,7 +16,14 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 		let file = await this.client.files.get(args.fileID);
 		let fileName = file.name;
 
-		let filePath = path.join(flags.destination || this.settings.boxDownloadsFolderPath, fileName);
+		let filePath;
+
+		if (flags.destination) {
+			await utils.checkDir(flags.destination, flags['create-path']);
+			filePath = path.join(flags.destination, fileName);
+		} else {
+			filePath = path.join(this.settings.boxDownloadsFolderPath, fileName);
+		}
 
 		/* eslint-disable no-sync */
 		if (fs.existsSync(filePath)) {
