@@ -7,6 +7,10 @@ const os = require('os');
 const TEST_API_ROOT = 'https://api.box.com';
 const TEST_UPLOAD_ROOT = 'https://upload.box.com/api';
 const TEST_DOWNLOAD_ROOT = 'https://dl.boxcloud.com';
+const DEFAULT_DOWNLOAD_PATH = path.join(
+				os.homedir(),
+				'Downloads/Box-Downloads'
+)
 
 function getFixture(fixture) {
 	if (!path.extname(fixture)) {
@@ -40,6 +44,7 @@ module.exports = {
 	TEST_API_ROOT,
 	TEST_UPLOAD_ROOT,
 	TEST_DOWNLOAD_ROOT,
+	DEFAULT_DOWNLOAD_PATH,
 	getFixture,
 	getBulkProgressBar,
 	getDownloadProgressBar,
