@@ -8,6 +8,7 @@ const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
 const archiver = require('archiver');
 const dateTime = require('date-fns');
+const utils = require('../../util');
 
 /**
  * Saves a file to disk
@@ -43,10 +44,17 @@ class FoldersDownloadCommand extends BoxCommand {
 
 		this.maxDepth = flags.hasOwnProperty('depth') && flags.depth >= 0 ? flags.depth : Number.POSITIVE_INFINITY;
 
-		let destinationPath = flags.destination || this.settings.boxDownloadsFolderPath;
 		let outputPath;
 		let id = args.id;
 		let outputFinalized = Promise.resolve();
+
+		let destinationPath;
+		if (flags.destination) {
+			await utils.checkDir(flags.destination, flags['create-path']);
+			destinationPath = flags.destination;
+		} else {
+			destinationPath = this.settings.boxDownloadsFolderPath;
+		}
 
 		/* eslint-disable no-sync */
 		if (!fs.existsSync(destinationPath) || !fs.statSync(destinationPath).isDirectory()) {
@@ -190,8 +198,14 @@ FoldersDownloadCommand.flags = {
 		description: 'Download the folder into a single .zip archive',
 	}),
 	depth: flags.integer({
-		description: 'Number of levels deep to recurse when downloading the folder tree',
-	})
+		description:
+			'Number of levels deep to recurse when downloading the folder tree',
+	}),
+	'create-path': flags.boolean({
+		description: 'Recursively creates a path to a directory if it does not exist',
+		allowNo: true,
+		default: true,
+	}),
 };
 
 FoldersDownloadCommand.args = [
