@@ -48,12 +48,16 @@ describe('Sign requests', () => {
 
 	describe('sign-requests:create', () => {
 		let signerEmail = 'bob@example.com',
+			signerRedirectUrl = 'https://box.com/redirect_url_signer_1',
+			signerDeclinedRedirectUrl = 'https://box.com/declined_redirect_url_signer_1',
 			fileId = '1234',
 			parentFolderId = '2345',
 			documentTag1Id = '3456',
 			documentTag1Value = 'hello',
 			documentTag2Id = '4567',
-			fixture = getFixture('sign-requests/post_sign_requests');
+			fixture = getFixture('sign-requests/post_sign_requests'),
+			redirectUrl = 'https://box.com/redirect_url',
+			declinedRedirectUrl = 'https://box.com/declined_redirect_url';
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -63,6 +67,8 @@ describe('Sign requests', () => {
 							role: 'approver',
 							email: signerEmail,
 							is_in_person: true,
+							redirect_url: signerRedirectUrl,
+							declined_redirect_url: signerDeclinedRedirectUrl
 						},
 					],
 					source_files: [
@@ -85,21 +91,79 @@ describe('Sign requests', () => {
 							checkbox_value: false,
 						},
 					],
+					redirect_url: redirectUrl,
+					declined_redirect_url: declinedRedirectUrl
 				})
 				.reply(200, fixture)
 			)
 			.stdout()
 			.command([
 				'sign-requests:create',
-				`--signer=email=${signerEmail},role=approver,is_in_person=1`,
+				`--signer=email=${signerEmail},role=approver,is_in_person=1,redirect_url=${signerRedirectUrl},declined_redirect_url=${signerDeclinedRedirectUrl}`,
 				`--source-files=${fileId}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
+				`--redirect-url=${redirectUrl}`,
+				`--declined-redirect-url=${declinedRedirectUrl}`,
 				'--json',
 				'--token=test',
 			])
-			.it('should create a sign request', ctx => {
+			.it('should create a sign request with snake case', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/sign_requests', {
+					signers: [
+						{
+							role: 'approver',
+							email: signerEmail,
+							is_in_person: true,
+							redirect_url: signerRedirectUrl,
+							declined_redirect_url: signerDeclinedRedirectUrl
+						},
+					],
+					source_files: [
+						{
+							type: 'file',
+							id: fileId,
+						},
+					],
+					parent_folder: {
+						type: 'folder',
+						id: parentFolderId,
+					},
+					prefill_tags: [
+						{
+							document_tag_id: documentTag1Id,
+							text_value: documentTag1Value,
+						},
+						{
+							document_tag_id: documentTag2Id,
+							checkbox_value: false,
+						},
+					],
+					redirect_url: redirectUrl,
+					declined_redirect_url: declinedRedirectUrl
+				})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'sign-requests:create',
+				`--signer=email=${signerEmail},role=approver,is-in-person=1,redirect-url=${signerRedirectUrl},declined-redirect-url=${signerDeclinedRedirectUrl}`,
+				`--source-files=${fileId}`,
+				`--parent-folder=${parentFolderId}`,
+				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
+				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
+				`--redirect-url=${redirectUrl}`,
+				`--declined-redirect-url=${declinedRedirectUrl}`,
+				'--json',
+				'--token=test',
+			])
+			.it('should create a sign request with kebab case', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});
