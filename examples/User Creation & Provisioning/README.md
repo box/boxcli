@@ -33,7 +33,7 @@ This PowerShell script uses the Box CLI to build and create an onboarding folder
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
 
-## 1. Update the parameters
+## Configure the script
 ### Update the list of employee accounts for creation
 For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
 ```
@@ -51,9 +51,9 @@ Managed,User 3,ManagedUser3@test.com
 
 **Note**: Please specify either a local upload path or a folder structure JSON path, not both.
 
-### Updating parameters
+### Define script parameters
 
-There are 3 ways to pass parameters from users:
+There are 3 ways to pass parameters:
 * Use hardcoded value in script:
 
 Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L26-L38) before running.
@@ -70,9 +70,8 @@ PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
 Starting User Creation & Provisioning script...
 ```
 
-* Input the parameters while prompt
+* If you don't specify parameters, the script will prompt you to enter it.
 
-If some parameters are still missing at runtime, the script will prompt you to fill them:
 ```
 PS > ./Users_Create_Provision.ps1
 Please enter the path to the employee list CSV file:
@@ -103,7 +102,7 @@ Run the script:
 ./Users_Create_Provision.ps1
 ```
 
-If there is no parameters still missing, you will see following output to confirm the script started:
+When all parameters are defined, you will see following output to confirm the script started:
 ```
 PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Create_Provision.ps1
 Starting User Creation & Provisioning script...
