@@ -33,19 +33,52 @@ This PowerShell script uses the Box CLI to build and create an onboarding folder
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
 
-## 1. Script Parameters
-1. Update the [EmployeeList](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L10) to set your own Employee List CSV Path.
-2. Customize the input file of employee accounts for creation.
-    For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
-    ```
-    firstName,lastName,email
-    Managed,User 1,ManagedUser1@test.com
-    Managed,User 2,ManagedUser2@test.com
-    Managed,User 3,ManagedUser3@test.com
-    ```
-3. Update the [RootFolderParentID](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L21) to set destination folder ID for your changes, either when using JSON file as input to create folder structure, or uploading local structure. It is set to `0` by default, but feel free to set it to your needs.
-4. Update the [FolderStructureJSONPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L13) to set your own Folder Structure JSON path. You can also change the [RootFolderName](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L17). It's a name of the folder, that will be created as parent for folders from JSON structure. It's set to `Onboarding` by default, but feel free to set it to your needs.
-5. Optional: To directly upload folder structure from local directory, update [LocalUploadPath](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L14), comment out [New-Folder-Structure](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L113), and uncomment [RootFolderID](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L116-L117). 
+## 1. Update the parameters
+### Update the list of employee accounts for creation
+For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
+```
+firstName,lastName,email
+Managed,User 1,ManagedUser1@test.com
+Managed,User 2,ManagedUser2@test.com
+Managed,User 3,ManagedUser3@test.com
+```
+### List of parameters
+
+- `EmployeeList`: Path to Employee List CSV.
+- `RootFolderParentID`: Destination folder ID for your changes, either when using JSON file as input to create folder structure, or uploading local structure. It is set to `0` by default, but feel free to set it to your needs.
+- `FolderStructureJSONPath`: Your own Folder Structure JSON Path. You can also change the `RootFolderName`. It's a name of the folder, that will be created as parent for folders from JSON structure. It's set to `Onboarding` by default, but feel free to set it to your needs.
+- `LocalUploadPath`: Local directory to directly upload folder structure.
+
+**Note**: Please specify either a local upload path or a folder structure JSON path, not both.
+
+### Updating parameters
+
+There are 3 ways to pass parameters from users:
+* Use hardcoded value in script:
+Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L26-L38) before running.
+* Run script with parameters:
+You can also specify parameters while run the command, for example:
+```
+PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
+	-LocalUploadPath ./OnboardingLocalUpload `
+	-RootFolderName Onboarding `
+	-RootFolderParentID 0
+
+Starting User Creation & Provisioning script...
+```
+* Input the parameters while prompt
+If there some parameters still missing on runtime, the script will prompt to ask for the missing value:
+```
+PS > ./Users_Create_Provision.ps1
+Please enter the path to the employee list CSV file:
+./Employees_1.csv
+Please enter the path to the folder structure JSON file or the local upload path:
+Folder_Structure.json
+Folder structure JSON path set to: Folder_Structure.json
+Please enter the ID of the parent folder for the root folder:
+0
+Starting User Creation & Provisioning script...
+```
 
 ## 2. Run the script
 Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
@@ -65,7 +98,7 @@ Run the script:
 ./Users_Create_Provision.ps1
 ```
 
-You will see following output to confirm the script started:
+If there is no parameters still missing, you will see following output to confirm the script started:
 ```
 PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Create_Provision.ps1
 Starting User Creation & Provisioning script...
