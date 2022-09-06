@@ -63,7 +63,7 @@ Please update all needed parameters in the script [here](/examples/User%20Creati
 You can also specify parameters while run the command, for example:
 ```
 PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
-	-LocalUploadPath ./OnboardingLocalUpload `
+	-FolderStructureJSONPath ./Folder_Structure.json `
 	-RootFolderName Onboarding `
 	-RootFolderParentID 0
 
