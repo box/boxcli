@@ -4,7 +4,7 @@ param ([string]$EmployeeList, [string]$FolderStructureJSONPath, [string]$LocalUp
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
-Set-Alias box /Users/mcong/boxcli/bin/run
+
 ### Save scripot parameters to variables
 $EmployeeListParam = $EmployeeList
 $FolderStructureJSONPathParam = $FolderStructureJSONPath
