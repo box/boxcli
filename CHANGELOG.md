@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.5.0](https://github.com/box/boxcli/compare/v3.4.0...v3.5.0) (2022-09-06)
+
+
+### New Features and Enhancements
+
+* Add `DryRun` mode in `User Deprovision` example script ([#392](https://github.com/box/boxcli/issues/392)) ([584a30e](https://github.com/box/boxcli/commit/584a30ef33446a6687ce558c810804202650299f))
+* Add `redirect_url` and `declined_redirect_url` to Sign Request ([#395](https://github.com/box/boxcli/issues/395)) ([261b7d2](https://github.com/box/boxcli/commit/261b7d22a5e5adf3647276cbf59454cca9bf607f))
+* create destination path during download ([#393](https://github.com/box/boxcli/issues/393)) ([40881dd](https://github.com/box/boxcli/commit/40881ddbd2c86e80f19689f012736fb19f18d945))
+
+### Bug Fixes
+
+* Fix problem with `keytar` library ([#394](https://github.com/box/boxcli/issues/394)) ([1979f01](https://github.com/box/boxcli/commit/1979f01758a30cd1dbf9d32c19ce2f3a00c0d5ec))
+
 ## [3.4.0](https://github.com/box/boxcli/compare/v3.3.2...v3.4.0) (2022-08-26)
 
 
