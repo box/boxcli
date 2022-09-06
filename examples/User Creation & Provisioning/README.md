@@ -55,8 +55,11 @@ Managed,User 3,ManagedUser3@test.com
 
 There are 3 ways to pass parameters from users:
 * Use hardcoded value in script:
+
 Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L26-L38) before running.
+
 * Run script with parameters:
+
 You can also specify parameters while run the command, for example:
 ```
 PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
@@ -66,8 +69,10 @@ PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
 
 Starting User Creation & Provisioning script...
 ```
+
 * Input the parameters while prompt
-If there some parameters still missing on runtime, the script will prompt to ask for the missing value:
+
+If some parameters are still missing at runtime, the script will prompt you to fill them:
 ```
 PS > ./Users_Create_Provision.ps1
 Please enter the path to the employee list CSV file:
