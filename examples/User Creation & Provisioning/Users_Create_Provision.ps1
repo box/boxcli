@@ -5,7 +5,7 @@ param ([string]$EmployeeList, [string]$FolderStructureJSONPath, [string]$LocalUp
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
 
-### Save scripot parameters to variables
+### Backup script parameters to variables
 $EmployeeListParam = $EmployeeList
 $FolderStructureJSONPathParam = $FolderStructureJSONPath
 $LocalUploadPathParam = $LocalUploadPath
@@ -35,7 +35,7 @@ $RootFolderName = "Onboarding"
 
 # ID of folder, wherein root folder will be created if using JSON structure,
 # otherwise it's a destination folder for local uploaded folder structure.
-$RootFolderParentID = ""
+$RootFolderParentID = "0"
 
 #############################################################################
 
@@ -225,7 +225,7 @@ if (-not $RootFolderParentID) {
     $RootFolderParentID = Read-Host
 }
 
-if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $RootFolderName -and $RootFolderParentID) -or ($FolderStructureJSONPath -and -not $RootFolderName)) {
+if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $RootFolderParentID) -or ($FolderStructureJSONPath -and -not $RootFolderName)) {
     Write-Log "Missing required parameters." -errorMessage "Missing required parameters" -output true -color Red
     exit
 }
