@@ -249,16 +249,16 @@ Function Start-Users-Provisoning-Creation-Script {
     }
 
     try {
-        if ($FolderStructureJSONPath -ne "") {
+        if ($FolderStructureJSONPath) {
             # Create Folder Structure from JSON
             New-Folder-Structure
         }
-        elseif ($LocalUploadPath -ne "") {
+        elseif ($LocalUploadPath) {
             # OR directly upload Folder structure to current user's root folder from local directory
             $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$RootFolderParentID --json 2>&1
             $script:RootFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
         }
-        Write-Log "Uploaded local folder structre to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
+        Write-Log "Uploaded local folder structure to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
     }
     catch {
         Write-Log "Failed to upload local folder structure to parent folder with ID $RootFolderParentID. Exits script." -errorMessage $UploadedFoldersResp -output true -color Red
