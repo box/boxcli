@@ -84,7 +84,7 @@ Please enter the ID of the parent folder for the root folder:
 Starting User Creation & Provisioning script...
 ```
 
-## 2. Run the script
+## Run the script
 Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Creation & Provisioning` folder.
 ```
 rvb@lab:~/box-cli/examples/User Creation & Provisioning$ pwsh
