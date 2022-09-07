@@ -1,9 +1,18 @@
-param ([string]$EmployeeList, [string]$FolderStructureJSONPath, [string]$LocalUploadPath, [string]$RootFolderName, [string]$RootFolderParentID)
 #APP SETUP
 #README: This powershell script will use the Box CLI to build and create a user (admin or service account) owned "Onboarding" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into the newly created folder structure.
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
+
+########################################################################################
+
+param (
+    [string]$EmployeeList, # Path to Employee List CSV
+    [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
+    [string]$LocalUploadPath, # Path to the local directory you want to upload
+    [string]$RootFolderName, # Name of the folder, that will be created as parent for folders from JSON structure
+    [string]$RootFolderParentID # Destination folder ID for your changes
+)
 
 ### Backup script parameters to variables
 $EmployeeListParam = $EmployeeList
@@ -317,7 +326,7 @@ Function New-Subfolders-Recursively {
             $CreatedChildFolder = $CreatedChildFolderResp | ConvertFrom-Json
             Write-Log "Created subfolder '$($child.name)' with id: $($CreatedChildFolder.id) under '$ParentFolderName' (ID: $ParentFolderId) folder." -output True
 
-            if ($child.children && $child.children.Length -gt 0) {
+            if ($child.children -and $child.children.Length -gt 0) {
                 New-Subfolders-Recursively "$($CreatedChildFolder.id)" "$($child.name)" $($child.children)
             }
         }
