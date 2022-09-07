@@ -66,7 +66,7 @@ class FoldersDownloadCommand extends BoxCommand {
 
 		if (flags.zip) {
 			let fileName = `folders-download-${id}-${dateTime.format(new Date(), 'YYYY-MM-DDTHH_mm_ss_SSS')}.zip`;
-			outputPath = path.resolve(destinationPath, fileName);
+			outputPath = path.join(destinationPath, fileName);
 			outputFinalized = this._setupZip(outputPath);
 		}
 
@@ -75,7 +75,7 @@ class FoldersDownloadCommand extends BoxCommand {
 				if (item.type === 'folder' && !this.zip) {
 
 					// Set output path to the top-level folder, which is the first item in the generator
-					outputPath = outputPath || path.resolve(destinationPath, item.path);
+					outputPath = outputPath || path.join(destinationPath, item.path);
 
 					spinner.text = `Creating folder ${item.id} at ${item.path}`;
 					try {
@@ -193,6 +193,7 @@ FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,
 	destination: flags.string({
 		description: 'The destination folder to download the Box folder into',
+		parse: utils.parsePath
 	}),
 	zip: flags.boolean({
 		description: 'Download the folder into a single .zip archive',
