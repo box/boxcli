@@ -4,14 +4,40 @@
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
 
+########################################################################################
+
+param (
+    [string]$EmployeeList, # Path to Employee List CSV
+    [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
+    [string]$LocalUploadPath, # Path to the local directory you want to upload
+    [string]$RootFolderName, # Name of the folder, that will be created as parent for folders from JSON structure
+    [string]$RootFolderParentID # Destination folder ID for your changes
+)
+
+### Backup script parameters to variables
+$EmployeeListParam = $EmployeeList
+$FolderStructureJSONPathParam = $FolderStructureJSONPath
+$LocalUploadPathParam = $LocalUploadPath
+$RootFolderNameParam = $RootFolderName
+$RootFolderParentIDParam = $RootFolderParentID
+
 #############################################################################
 
+### Example of configuration
+
+# $EmployeeList = "./Employees_5.csv"
+# $FolderStructureJSONPath = "./Folder_Structure.json"
+# $LocalUploadPath = "./OnboardingLocalUpload"
+# $RootFolderName = "Onboarding"
+# $RootFolderParentID = "0"
+
+
 # Set Employee List CSV Path
-$EmployeeList = "./Employees_5.csv"
+$EmployeeList = ""
 
 # Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
-$FolderStructureJSONPath = "./Folder_Structure.json"
-$LocalUploadPath = "./OnboardingLocalUpload"
+$FolderStructureJSONPath = ""
+$LocalUploadPath = ""
 
 # Name of folder that will be created as parent root folder for folders defined in json file
 $RootFolderName = "Onboarding"
@@ -155,6 +181,66 @@ class AnalyticsClientManager {
     }
 }
 
+#############################################################################
+
+# Prioritize script parameters over hard coded values
+if ($EmployeeListParam) {
+    $EmployeeList = $EmployeeListParam
+}
+if ($FolderStructureJSONPathParam) {
+    $FolderStructureJSONPath = $FolderStructureJSONPathParam
+}
+if ($LocalUploadPathParam) {
+    $LocalUploadPath = $LocalUploadPathParam
+}
+if ($RootFolderNameParam) {
+    $RootFolderName = $RootFolderNameParam
+}
+if ($RootFolderParentIDParam) {
+    $RootFolderParentID = $RootFolderParentIDParam
+}
+if ($LocalUploadPath -and $FolderStructureJSONPath) {
+    Write-Log "Please specify either a local upload path or a folder structure JSON path, not both." -output true -color Red
+    exit
+}
+
+# Prompt for params if some are missing
+if (-not $EmployeeList) {
+    Write-Log "Please enter the path to the employee list CSV file:" -output true -color Yellow
+    $EmployeeList = Read-Host
+}
+if (-not $FolderStructureJSONPath -and -not $LocalUploadPath) {
+    Write-Log "Please enter the path to the folder structure JSON file or the local upload path:"  -output true -color Yellow
+    $UserInput = Read-Host
+    if (Test-Path $UserInput) {
+        if ((Get-Item $UserInput) -is [System.IO.DirectoryInfo]) {
+            $LocalUploadPath = $UserInput
+            Write-Log "Local upload path set to: $LocalUploadPath" -output true -color Green
+        } else {
+            $FolderStructureJSONPath = $UserInput
+            Write-Log "Folder structure JSON path set to: $FolderStructureJSONPath" -output true -color Green
+        }
+    } else {
+        Write-Log "Path does not exist." -errorMessage "Path $UserInput does not exist" -output true -color Red
+        exit
+    }
+}
+if (-not $RootFolderName -and $FolderStructureJSONPath) {
+    Write-Log "Please enter the name of the root folder:" -output true -color Yellow
+    $RootFolderName = Read-Host
+}
+if (-not $RootFolderParentID) {
+    Write-Log "Please enter the ID of the parent folder for the root folder:" -output true -color Yellow
+    $RootFolderParentID = Read-Host
+}
+
+if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $RootFolderParentID) -or ($FolderStructureJSONPath -and -not $RootFolderName)) {
+    Write-Log "Missing required parameters." -errorMessage "Missing required parameters" -output true -color Red
+    exit
+}
+
+#############################################################################
+
 $script:RootFolderID = $null
 
 #  User Creation & Provisioning
@@ -172,13 +258,16 @@ Function Start-Users-Provisoning-Creation-Script {
     }
 
     try {
-        # Create Folder Structure from JSON
-        New-Folder-Structure
-
-        # OR directly upload Folder structure to current user's root folder from local directory
-        # $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$RootFolderParentID --json 2>&1
-        # $script:RootFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
-        Write-Log "Uploaded local folder structre to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
+        if ($FolderStructureJSONPath) {
+            # Create Folder Structure from JSON
+            New-Folder-Structure
+        }
+        elseif ($LocalUploadPath) {
+            # OR directly upload Folder structure to current user's root folder from local directory
+            $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$RootFolderParentID --json 2>&1
+            $script:RootFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
+        }
+        Write-Log "Uploaded local folder structure to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
     }
     catch {
         Write-Log "Failed to upload local folder structure to parent folder with ID $RootFolderParentID. Exits script." -errorMessage $UploadedFoldersResp -output true -color Red
@@ -237,7 +326,7 @@ Function New-Subfolders-Recursively {
             $CreatedChildFolder = $CreatedChildFolderResp | ConvertFrom-Json
             Write-Log "Created subfolder '$($child.name)' with id: $($CreatedChildFolder.id) under '$ParentFolderName' (ID: $ParentFolderId) folder." -output True
 
-            if ($child.children && $child.children.Length -gt 0) {
+            if ($child.children -and $child.children.Length -gt 0) {
                 New-Subfolders-Recursively "$($CreatedChildFolder.id)" "$($child.name)" $($child.children)
             }
         }
