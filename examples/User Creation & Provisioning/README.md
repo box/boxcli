@@ -1,6 +1,6 @@
 # Provision users and folders
 
-This PowerShell script uses the Box CLI to build and create an onboarding folder structure, create managed users in bulk, and provision such new users by adding them to the newly created folder structure as collaborators with viewer or uploader roles.
+This PowerShell script uses the Box CLI to build and create a personal folder structure, create managed users in bulk, and provision such new users by adding them to the newly created folder structure as collaborators with viewer or uploader roles.
 
 **For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/quick-start/powershell-script-templates/).**
 
@@ -37,10 +37,10 @@ This PowerShell script uses the Box CLI to build and create an onboarding folder
 ### Update the list of employee accounts for creation
 For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
 ```
-firstName,lastName,email
-Managed,User 1,ManagedUser1@test.com
-Managed,User 2,ManagedUser2@test.com
-Managed,User 3,ManagedUser3@test.com
+firstName,lastName,email,username
+Managed,User 1,ManagedUser1@test.com,manageduser1
+Managed,User 2,ManagedUser2@test.com,manageduser2
+Managed,User 3,ManagedUser3@test.com,manageduser3
 ```
 ### List of parameters
 

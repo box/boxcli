@@ -1,6 +1,6 @@
-﻿firstName,lastName,email
-Managed,User 1,ManagedUser1@test.com
-Managed,User 2,ManagedUser2@test.com
-Managed,User 3,ManagedUser3@test.com
-Managed,User 4,ManagedUser4@test.com
-Managed,User 5,ManagedUser5@test.com
+﻿firstName,lastName,email,username
+Managed,User 1,ManagedUser1@demo.com,manageduser1
+Managed,User 2,ManagedUser2@demo.com,manageduser2
+Managed,User 3,ManagedUser3@demo.com,manageduser3
+Managed,User 4,ManagedUser4@demo.com,manageduser4
+Managed,User 5,ManagedUser5@demo.com,manageduser5
