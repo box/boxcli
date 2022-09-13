@@ -6,9 +6,10 @@
 ########################################################################################
 
 param (
-    [switch]$DryRun = $false # if enabled, then no delete/create/update calls will be made, only read ones
+    [bool]$DryRun = $false, # if enabled, then no delete/create/update calls will be made, only read ones
+    [string]$NewFilesOwnerID = "" # if set to 0, then the current admin user will be used as the new owner of the transferred files
 )
-
+Set-Alias box /Users/mcong/boxcli/bin/run;
 ########################################################################################
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
 ########################################################################################
@@ -161,8 +162,56 @@ class AnalyticsClientManager {
     }
 }
 
+# Function to check if current script is running under non-interactive mode
+function Assert-IsNonInteractiveShell {
+    # Test each Arg for match of abbreviated '-NonInteractive' command.
+    $NonInteractive = [Environment]::GetCommandLineArgs() | Where-Object{ $_ -like '-NonI*' }
+
+    if ([Environment]::UserInteractive -and -not $NonInteractive) {
+        # We are in an interactive shell.
+        return $false
+    }
+
+    return $true
+}
+
 # Deprovision users
 Function Start-Deprovisioning-Script {
+    # Check new file owner ID already specified
+    if ($NewFilesOwnerID) {
+        $UserId = $NewFilesOwnerID
+    } elseif (!(Assert-IsNonInteractiveShell)) {
+        Write-Log "Please specify the user ID of the user who will own the files of the users being deprovisioned." -output true -color Yellow
+        Write-Log "Press Enter if you want to use the current user as the new owner." -output true -color Yellow
+        $UserId = Read-Host "User ID"
+    }
+    if (!$UserId) {
+        try {
+            $UserResp = "$(box users:get --json 2>&1)"
+            $User = $UserResp | ConvertFrom-Json
+            $UserId = $User.id 
+            Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
+            Write-Log $UserResp
+        } catch {
+            Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
+            break
+        }
+    }
+    
+    # Check if user ID is valid
+    if ($UserId) {
+        try {
+            $UserResp = "$(box users:get $UserId --json 2>&1)"
+            $User = $UserResp | ConvertFrom-Json
+        } catch {
+            Write-Log "Could not get the user with ID $UserId. See log for details." -errorMessage $UserResp -output true -color Red
+            break
+        }
+    } else {
+        Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
+        break
+    }
+
     if ($DryRun) {
         Write-Log "Starting User Deprovisioning script in DryRun mode" -output false
     } else {
@@ -179,22 +228,10 @@ Function Start-Deprovisioning-Script {
         break
     }
 
-    # Get current user id
-    try {
-        $UserResp = "$(box users:get --json 2>&1)"
-        $User = $UserResp | ConvertFrom-Json
-        $UserId = $User.id
-        Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
-        Write-Log $UserResp
-    } catch {
-        Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
-        break
-    }
-
     # Create a "Employee Archive" folder in User's Root directory if one does not already exist
     # List root folder contents
     try {
-        $RootFolderResp = "$(box folders:items 0 --sort=name --direction=ASC --json 2>&1)"
+        $RootFolderResp = "$(box folders:items 0 --sort=name --direction=ASC --as-user=$UserId --json 2>&1)"
         $RootFolder = $RootFolderResp | ConvertFrom-Json
     } catch {
         Write-Log "Could not get root directory for current user (ID: $UserId). See log for details. " -errorMessage $RootFolderResp -output true -color Red
@@ -210,11 +247,11 @@ Function Start-Deprovisioning-Script {
         }
     }
 
-    # Create new "Employee Archive" folder if it doens't exist
+    # Create new "Employee Archive" folder if it doesn't exist
     if($null -eq $EmployeeArchiveFolderID) {
         if(!$DryRun) {
             try {
-                $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" --fields="id" --json 2>&1)"
+                $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" --as-user=$UserId --fields="id" --json 2>&1)"
                 $EmployeeArchiveFolderID = $EmployeeArchiveFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
                 Write-Log "Successfully created new '$EmployeeArchiveFolderName' root folder with ID: $($EmployeeArchiveFolderID)." -output true
                 Write-Log $EmployeeArchiveFolderResp
@@ -270,7 +307,7 @@ Function Start-Deprovisioning-Script {
                 # Move transferred folder to "Employee Archive" folder
                 $TransferredFolder = $NewFolder.id
                 try {
-                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
+                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --as-user=$UserId --json 2>&1)"
                     $MoveFolderResp | ConvertFrom-Json | Out-Null
                     Write-Log "Successfully moved transferred employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to '$EmployeeArchiveFolderName' folder with ID: $EmployeeArchiveFolderID." -output true
                     Write-Log $MoveFolderResp
