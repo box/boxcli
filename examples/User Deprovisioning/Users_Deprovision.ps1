@@ -7,7 +7,7 @@
 
 param (
     [bool]$DryRun = $false, # if enabled, then no delete/create/update calls will be made, only read ones
-    [string]$NewFilesOwnerID = "" # if set to 0, then the current admin user will be used as the new owner of the transferred files
+    [string]$NewFilesOwnerID = "" # The ID of the user to transfer files to before deleting the user
 )
 Set-Alias box /Users/mcong/boxcli/bin/run;
 ########################################################################################
@@ -177,7 +177,7 @@ function Assert-IsNonInteractiveShell {
 
 # Deprovision users
 Function Start-Deprovisioning-Script {
-    # Check new file owner ID already specified
+    # Check if new file owner ID already specified
     if ($NewFilesOwnerID) {
         $UserId = $NewFilesOwnerID
     } elseif (!(Assert-IsNonInteractiveShell)) {
@@ -186,6 +186,7 @@ Function Start-Deprovisioning-Script {
         $UserId = Read-Host "User ID"
     }
     if (!$UserId) {
+        Write-Log "No user ID specified. Using current user as the new files owner." -output true -color Yellow
         try {
             $UserResp = "$(box users:get --json 2>&1)"
             $User = $UserResp | ConvertFrom-Json
