@@ -1,5 +1,5 @@
 # Deprovision & Delete Users Automation
-This Box CLI script deprovision a list of users by first transfering user content to the current admin user's root folder under "Employee Archive" (Transfer content default: "Y") before deleting that user.
+This Box CLI script deprovision a list of users by first transfering user content to another user's root folder under "Employee Archive" (Transfer content default: "Y") before deleting that user.
 
 > For every user, script makes 7 API calls to archive their content and delete the account.
 
