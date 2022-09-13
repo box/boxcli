@@ -56,7 +56,7 @@ Managed,User 3,ManagedUser3@test.com
 There are 3 ways to pass parameters:
 * Use hardcoded value in script:
 
-Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L35-L47) before running.
+Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L17-L31) before running.
 
 * Run script with parameters:
 

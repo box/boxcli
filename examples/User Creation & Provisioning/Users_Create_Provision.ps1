@@ -5,46 +5,30 @@
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
 
 ########################################################################################
+### Example of configuration
+# param (
+#     [string]$EmployeeList = "./Employees_5.csv",
+#     [string]$FolderStructureJSONPath = "./Folder_Structure.json",
+#     [string]$LocalUploadPath = "./OnboardingLocalUpload",
+#     [string]$RootFolderName = "Onboarding",
+#     [string]$RootFolderParentID = "0"
+# )
 
 param (
-    [string]$EmployeeList, # Path to Employee List CSV
-    [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
-    [string]$LocalUploadPath, # Path to the local directory you want to upload
-    [string]$RootFolderName, # Name of the folder, that will be created as parent for folders from JSON structure
-    [string]$RootFolderParentID # Destination folder ID for your changes
+    # Set Employee List CSV Path
+    [string]$EmployeeList = "",
+
+    # Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
+    [string]$FolderStructureJSONPath = "",
+    [string]$LocalUploadPath = "",
+
+    # Name of folder that will be created as parent root folder for folders defined in json file
+    [string]$RootFolderName = "Onboarding",
+
+    # ID of folder, wherein root folder will be created if using JSON structure,
+    # otherwise it's a destination folder for local uploaded folder structure.
+    [string]$RootFolderParentID = "0" # Destination folder ID for your changes
 )
-
-### Backup script parameters to variables
-$EmployeeListParam = $EmployeeList
-$FolderStructureJSONPathParam = $FolderStructureJSONPath
-$LocalUploadPathParam = $LocalUploadPath
-$RootFolderNameParam = $RootFolderName
-$RootFolderParentIDParam = $RootFolderParentID
-
-#############################################################################
-
-### Example of configuration
-
-# $EmployeeList = "./Employees_5.csv"
-# $FolderStructureJSONPath = "./Folder_Structure.json"
-# $LocalUploadPath = "./OnboardingLocalUpload"
-# $RootFolderName = "Onboarding"
-# $RootFolderParentID = "0"
-
-
-# Set Employee List CSV Path
-$EmployeeList = ""
-
-# Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
-$FolderStructureJSONPath = ""
-$LocalUploadPath = ""
-
-# Name of folder that will be created as parent root folder for folders defined in json file
-$RootFolderName = "Onboarding"
-
-# ID of folder, wherein root folder will be created if using JSON structure,
-# otherwise it's a destination folder for local uploaded folder structure.
-$RootFolderParentID = "0"
 
 #############################################################################
 
@@ -183,22 +167,6 @@ class AnalyticsClientManager {
 
 #############################################################################
 
-# Prioritize script parameters over hard coded values
-if ($EmployeeListParam) {
-    $EmployeeList = $EmployeeListParam
-}
-if ($FolderStructureJSONPathParam) {
-    $FolderStructureJSONPath = $FolderStructureJSONPathParam
-}
-if ($LocalUploadPathParam) {
-    $LocalUploadPath = $LocalUploadPathParam
-}
-if ($RootFolderNameParam) {
-    $RootFolderName = $RootFolderNameParam
-}
-if ($RootFolderParentIDParam) {
-    $RootFolderParentID = $RootFolderParentIDParam
-}
 if ($LocalUploadPath -and $FolderStructureJSONPath) {
     Write-Log "Please specify either a local upload path or a folder structure JSON path, not both." -output true -color Red
     exit
