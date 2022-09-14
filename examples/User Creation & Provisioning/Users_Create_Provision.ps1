@@ -11,8 +11,8 @@ param (
     [string]$EmployeeList, # Path to Employee List CSV
     [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
     [string]$LocalUploadPath, # Path to the local directory you want to upload
-    [string]$PersonalFolderSlug, # Name of the folder, that will be created as parent for folders from JSON structure
-    [string]$PersonalFolderParentID # Destination folder ID for your changes
+    [string]$PersonalFolderSlug, # Ending slug of the folder that is created for each new user
+    [string]$PersonalFolderParentID # Parent folder ID for personal folders to be created in
 )
 
 ### Backup script parameters to variables
@@ -43,12 +43,11 @@ $EmployeeList = ""
 $FolderStructureJSONPath = ""
 $LocalUploadPath = ""
 
-# Ending slug of folder that will be created as parent Personal folder for folders defined in json file. Value will get concatenated with username
+# Ending slug of folder that will be used in creating personal folders for new users. Value will get concatenated with username
 # If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
 $PersonalFolderSlug = ""
 
-# ID of folder, where the above Personal folder will be created if using JSON structure,
-# otherwise it's a destination folder for local uploaded folder structure.
+# ID of parent folder for created personal folders to be created in
 # This folder should be created before running the script the first time.
 # It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with
 $PersonalFolderParentID = ""
