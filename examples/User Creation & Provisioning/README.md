@@ -37,8 +37,11 @@ This PowerShell script uses the Box CLI to build and create a personal folder st
 ### Update the list of employee accounts for creation
 
 The header row should look like the below:
+
 firstName,lastName,email,username
+
 NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
+
 NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME
 
 For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
@@ -71,7 +74,7 @@ You can also specify parameters while run the command, for example:
 PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
 	-FolderStructureJSONPath ./Folder_Structure.json `
 	-PersonalFolderSlug "Personal Folder" `
-	-PersonalFolderParentID 0
+	-PersonalFolderParentID 123456789
 
 Starting User Creation & Provisioning script...
 ```

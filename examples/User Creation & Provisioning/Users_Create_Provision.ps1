@@ -30,28 +30,28 @@ $PersonalFolderParentIDParam = $PersonalFolderParentID
 # $FolderStructureJSONPath = "./Folder_Structure.json"
 # $LocalUploadPath = "./PersonalLocalUpload"
 # $PersonalFolderSlug = "Personal Folder"
-# $PersonalFolderParentID = "0"
+# $PersonalFolderParentID = "123456789"
 
 
 # Set Employee List CSV Path
 # firstname, lastname, email, username
 # NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
 # NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME 
-$EmployeeList = "./Employees_5.csv"
+$EmployeeList = ""
 
 # Personal Folder Structure: Set either path build off JSON or directly upload a local folder
-$FolderStructureJSONPath = "./Folder_Structure.json"
+$FolderStructureJSONPath = ""
 $LocalUploadPath = ""
 
 # Ending slug of folder that will be created as parent Personal folder for folders defined in json file. Value will get concatenated with username
 # If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
-$PersonalFolderSlug = "Personal Folder"
+$PersonalFolderSlug = ""
 
 # ID of folder, where the above Personal folder will be created if using JSON structure,
 # otherwise it's a destination folder for local uploaded folder structure.
 # This folder should be created before running the script the first time.
 # It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with
-$PersonalFolderParentID = "125829599929"
+$PersonalFolderParentID = ""
 
 #############################################################################
 
@@ -233,11 +233,11 @@ if (-not $FolderStructureJSONPath -and -not $LocalUploadPath) {
     }
 }
 if (-not $PersonalFolderSlug -and $FolderStructureJSONPath) {
-    Write-Log "Please enter the name of the root folder:" -output true -color Yellow
+    Write-Log "Please enter the ending slug for each personal folder:" -output true -color Yellow
     $PersonalFolderSlug = Read-Host
 }
 if (-not $PersonalFolderParentID) {
-    Write-Log "Please enter the ID of the parent folder for the root folder:" -output true -color Yellow
+    Write-Log "Please enter the ID of the folder where you would like to create the personal folders:" -output true -color Yellow
     $PersonalFolderParentID = Read-Host
 }
 
