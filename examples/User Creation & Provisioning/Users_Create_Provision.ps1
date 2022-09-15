@@ -1,7 +1,8 @@
 #APP SETUP
-#README: This powershell script will use the Box CLI to build and create a user (admin or service account) owned "Onboarding" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into the newly created folder structure.
+#README: This powershell script will use the Box CLI to build and create a user (admin or service account) owned "Personal" folder structure, create managed users in bulk, and provision the new users by collaborating them as viewer and uploaders into their newly created personal folder structure.
 
-#APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
+#APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access Selected
+#FOR Oauth 2.0 APPS: User configured with CLI must be admin or co-admin
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
 
 ########################################################################################
@@ -10,16 +11,16 @@ param (
     [string]$EmployeeList, # Path to Employee List CSV
     [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
     [string]$LocalUploadPath, # Path to the local directory you want to upload
-    [string]$RootFolderName, # Name of the folder, that will be created as parent for folders from JSON structure
-    [string]$RootFolderParentID # Destination folder ID for your changes
+    [string]$PersonalFolderSlug, # Ending slug of the folder that is created for each new user
+    [string]$PersonalFolderParentID # Parent folder ID for personal folders to be created in
 )
 
 ### Backup script parameters to variables
 $EmployeeListParam = $EmployeeList
 $FolderStructureJSONPathParam = $FolderStructureJSONPath
 $LocalUploadPathParam = $LocalUploadPath
-$RootFolderNameParam = $RootFolderName
-$RootFolderParentIDParam = $RootFolderParentID
+$PersonalFolderSlugParam = $PersonalFolderSlug
+$PersonalFolderParentIDParam = $PersonalFolderParentID
 
 #############################################################################
 
@@ -27,24 +28,29 @@ $RootFolderParentIDParam = $RootFolderParentID
 
 # $EmployeeList = "./Employees_5.csv"
 # $FolderStructureJSONPath = "./Folder_Structure.json"
-# $LocalUploadPath = "./OnboardingLocalUpload"
-# $RootFolderName = "Onboarding"
-# $RootFolderParentID = "0"
+# $LocalUploadPath = "./PersonalLocalUpload"
+# $PersonalFolderSlug = "Personal Folder"
+# $PersonalFolderParentID = "123456789"
 
 
 # Set Employee List CSV Path
+# firstname, lastname, email, username
+# NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
+# NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME 
 $EmployeeList = ""
 
-# Onboarding Folder Structure: Set either path build off JSON or directly upload a local folder
+# Personal Folder Structure: Set either path build off JSON or directly upload a local folder
 $FolderStructureJSONPath = ""
 $LocalUploadPath = ""
 
-# Name of folder that will be created as parent root folder for folders defined in json file
-$RootFolderName = "Onboarding"
+# Ending slug of folder that will be used in creating personal folders for new users. Value will get concatenated with username
+# If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
+$PersonalFolderSlug = "Personal Folder"
 
-# ID of folder, wherein root folder will be created if using JSON structure,
-# otherwise it's a destination folder for local uploaded folder structure.
-$RootFolderParentID = "0"
+# ID of parent folder for created personal folders to be created in
+# This folder should be created before running the script the first time.
+# It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with
+$PersonalFolderParentID = ""
 
 #############################################################################
 
@@ -193,11 +199,11 @@ if ($FolderStructureJSONPathParam) {
 if ($LocalUploadPathParam) {
     $LocalUploadPath = $LocalUploadPathParam
 }
-if ($RootFolderNameParam) {
-    $RootFolderName = $RootFolderNameParam
+if ($PersonalFolderSlugParam) {
+    $PersonalFolderSlug = $PersonalFolderSlugParam
 }
-if ($RootFolderParentIDParam) {
-    $RootFolderParentID = $RootFolderParentIDParam
+if ($PersonalFolderParentIDParam) {
+    $PersonalFolderParentID = $PersonalFolderParentIDParam
 }
 if ($LocalUploadPath -and $FolderStructureJSONPath) {
     Write-Log "Please specify either a local upload path or a folder structure JSON path, not both." -output true -color Red
@@ -225,27 +231,27 @@ if (-not $FolderStructureJSONPath -and -not $LocalUploadPath) {
         exit
     }
 }
-if (-not $RootFolderName -and $FolderStructureJSONPath) {
-    Write-Log "Please enter the name of the root folder:" -output true -color Yellow
-    $RootFolderName = Read-Host
+if (-not $PersonalFolderSlug) {
+    Write-Log "Please enter the ending slug for each personal folder:" -output true -color Yellow
+    $PersonalFolderSlug = Read-Host
 }
-if (-not $RootFolderParentID) {
-    Write-Log "Please enter the ID of the parent folder for the root folder:" -output true -color Yellow
-    $RootFolderParentID = Read-Host
+if (-not $PersonalFolderParentID) {
+    Write-Log "Please enter the ID of the folder where you would like to create the personal folders:" -output true -color Yellow
+    $PersonalFolderParentID = Read-Host
 }
 
-if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $RootFolderParentID) -or ($FolderStructureJSONPath -and -not $RootFolderName)) {
+if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $PersonalFolderParentID) -or (-not $PersonalFolderSlug)) {
     Write-Log "Missing required parameters." -errorMessage "Missing required parameters" -output true -color Red
     exit
 }
 
 #############################################################################
 
-$script:RootFolderID = $null
+$script:PersonalFolderID = $null
 
-#  User Creation & Provisioning
+#  User Creation & Perfonal Folder Provisioning
 Function Start-Users-Provisoning-Creation-Script {
-    Write-Log "Starting User Creation & Provisioning script..." -output true
+    Write-Log "Starting User Creation & Personal Folder Provisioning script..." -output true
 
     try {
         # Get employees json file and convert from CSV to an array of objects
@@ -258,26 +264,67 @@ Function Start-Users-Provisoning-Creation-Script {
     }
 
     try {
-        if ($FolderStructureJSONPath) {
-            # Create Folder Structure from JSON
-            New-Folder-Structure
-        }
-        elseif ($LocalUploadPath) {
-            # OR directly upload Folder structure to current user's root folder from local directory
-            $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$RootFolderParentID --json 2>&1
-            $script:RootFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
-        }
-        Write-Log "Uploaded local folder structure to current user's folder with ID $($script:RootFolderID) where parent ID: $RootFolderParentID." -output true
+        #Create Managed Users and Provision Personal Folder
+        New-Provision-Managed-User
+        Write-Log "Users and Folders Created Successfully" -output true
     }
     catch {
-        Write-Log "Failed to upload local folder structure to parent folder with ID $RootFolderParentID. Exits script." -errorMessage $UploadedFoldersResp -output true -color Red
-        break
+        Write-Log "Failed to create managed users. Exists Script." -errorMessage "Something went wrong" -output true -color Red
     }
 
-    # Create Managed User & Provision Onboarding Folder.
-    # Only if folders were created successfully.
-    if ($script:RootFolderID) {
-        New-Provision-Managed-User
+}
+
+# Create new managed users and add them as collaborators to created folders
+Function New-Provision-Managed-User {
+    ForEach ($Employee in $Employees) {
+        Write-Log "Creating employee Managed User account with first name: $($Employee.firstName), last name: $($Employee.lastName), email: $($Employee.email)" -output True
+
+        # Create Managed User
+        try {
+            $CreatedManagedUserResp = (box users:create "$($Employee.firstName) $($Employee.lastName)" $Employee.email --json 2>&1)
+            $ManagedUserID = $CreatedManagedUserResp | ConvertFrom-Json | ForEach-Object { $_.id }
+            Write-Log "Created Managed user for email: $($Employee.email) where ID: $($ManagedUserID)." -output True
+        }
+        catch {
+            Write-Log "Failed to create Managed User for email: $($Employee.email). Skipping this user. See log for details." -errorMessage $CreatedManagedUserResp -output true -color Red
+            continue
+        }
+        
+        #Create Folders
+        try {
+            # If a username is not supplied in the csv, the email address is used instead
+            if (-not $($Employee.username)){
+                $script:PersonalFolderName = $($Employee.email) + "'s " + $PersonalFolderSlug
+            } else {
+                $script:PersonalFolderName = $($Employee.username) + "'s " + $PersonalFolderSlug
+            }
+            Write-Log "Personal Folder Name: $PersonalFolderName " -output True
+            if ($FolderStructureJSONPath) {
+                # Create Folder Structure from JSON
+                New-Folder-Structure
+            }
+            elseif ($LocalUploadPath) {
+                # OR directly upload Folder structure to current user's root folder from local directory
+                $UploadedFoldersResp = box folders:upload $LocalUploadPath --parent-folder=$PersonalFolderParentID --folder-name=$script:PersonalFolderName --json 2>&1
+                $script:PersonalFolderID = $UploadedFoldersResp | ConvertFrom-Json | ForEach-Object { $_.id }
+            }
+            Write-Log "Uploaded local folder structure to current user's folder with ID $($script:PersonalFolderID) where parent ID: $PersonalFolderParentID." -output true
+        }
+        catch {
+            Write-Log "Failed to upload local folder structure to parent folder with ID $PersonalFolderParentID. Exits script." -errorMessage $UploadedFoldersResp -output true -color Red
+            break
+        }
+
+        # Collaborate New Managed User to Folder Structure owned by current user
+        try {
+            $CollaboratedResp = box folders:collaborations:add $script:PersonalFolderID --role=viewer_uploader --user-id=$ManagedUserID --json 2>&1
+            $CollaboratedResp | ConvertFrom-Json | Out-Null
+            Write-Log "Collaborated Managed User $($Employee.firstName) $($Employee.lastName) to current user's indicated folder for provisioning with ID: $script:PersonalFolderID." -output True
+        }
+        catch {
+            Write-Log "Failed to create collaboration for user $($Employee.firstName) $($Employee.lastName) with ID: $ManagedUserID, to folder ID: $script:PersonalFolderID. See log for details." -errorMessage $CollaboratedResp -output true -color Red
+            continue
+        }
     }
 }
 
@@ -293,19 +340,19 @@ Function New-Folder-Structure {
         break
     }
 
-    # Create root folder
+    # Create Personal Root folder
     try {
-        $CreatedRootFolderResp = box folders:create "$RootFolderParentID" "$RootFolderName" --json 2>&1
-        $script:RootFolderID = $CreatedRootFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
-        Write-Log "Created a user owned '$RootFolderName' folder with id: $($script:RootFolderID)." -output True
+        $CreatedPersonalFolderResp = box folders:create "$PersonalFolderParentID" "$script:PersonalFolderName" --json 2>&1
+        $script:PersonalFolderID = $CreatedPersonalFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
+        Write-Log "Created a user owned '$PersonalFolderSlug' folder with id: $($script:PersonalFolderID)." -output True
     }
     catch {
-        Write-Log "Failed to create '$RootFolderName' folder. See log for details. Exits script.". -errorMessage $CreatedRootFolderResp -output True -color Red
+        Write-Log "Failed to create '$script:PersonalFolderName' folder. See log for details. Exits script.". -errorMessage $CreatedPersonalFolderResp -output True -color Red
         break
     }
 
-    # Create all folders structure from json file, where $RootFolderName is the parent
-    New-Subfolders-Recursively "$script:RootFolderID" "$RootFolderName" $FolderStructure
+    # Create all folders structure from json file, where $PersonalFolderSlug is the parent
+    New-Subfolders-Recursively "$script:PersonalFolderID" "$script:PersonalFolderName" $FolderStructure
 }
 
 # Creates folders structure
@@ -332,35 +379,6 @@ Function New-Subfolders-Recursively {
         }
         catch {
             Write-Log "Failed to create subfolder '$($child.name)' under '$ParentFolderName' (ID: $ParentFolderId) folder. See log for details.". -errorMessage $CreatedChildFolderResp -output True -color Red
-            continue
-        }
-    }
-}
-
-# Create new managed users and add them as collaborators to created folders
-Function New-Provision-Managed-User {
-    ForEach ($Employee in $Employees) {
-        Write-Log "Creating employee Managed User account with first name: $($Employee.firstName), last name: $($Employee.lastName), email: $($Employee.email)" -output True
-
-        # # Create Managed User
-        try {
-            $CreatedManagedUserResp = (box users:create "$($Employee.firstName) $($Employee.lastName)" $Employee.email --json 2>&1)
-            $ManagedUserID = $CreatedManagedUserResp | ConvertFrom-Json | ForEach-Object { $_.id }
-            Write-Log "Created Managed user for email: $($Employee.email) where ID: $($ManagedUserID)." -output True
-        }
-        catch {
-            Write-Log "Failed to create Managed User for email: $($Employee.email). Skipping this user. See log for details." -errorMessage $CreatedManagedUserResp -output true -color Red
-            continue
-        }
-
-        # Collaborate New Managed User to Folder Structure owned by current user
-        try {
-            $CollaboratedResp = box folders:collaborations:add $script:RootFolderID --role=viewer_uploader --user-id=$ManagedUserID --json 2>&1
-            $CollaboratedResp | ConvertFrom-Json | Out-Null
-            Write-Log "Collaborated Managed User $($Employee.firstName) $($Employee.lastName) to current user's indicated folder for provisioning with ID: $script:RootFolderID." -output True
-        }
-        catch {
-            Write-Log "Failed to create collaboration for user $($Employee.firstName) $($Employee.lastName) with ID: $ManagedUserID, to folder ID: $script:RootFolderID. See log for details." -errorMessage $CollaboratedResp -output true -color Red
             continue
         }
     }
