@@ -45,7 +45,7 @@ $LocalUploadPath = ""
 
 # Ending slug of folder that will be used in creating personal folders for new users. Value will get concatenated with username
 # If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
-$PersonalFolderSlug = ""
+$PersonalFolderSlug = "Personal Folder"
 
 # ID of parent folder for created personal folders to be created in
 # This folder should be created before running the script the first time.
@@ -231,7 +231,7 @@ if (-not $FolderStructureJSONPath -and -not $LocalUploadPath) {
         exit
     }
 }
-if (-not $PersonalFolderSlug -and $FolderStructureJSONPath) {
+if (-not $PersonalFolderSlug) {
     Write-Log "Please enter the ending slug for each personal folder:" -output true -color Yellow
     $PersonalFolderSlug = Read-Host
 }
@@ -240,7 +240,7 @@ if (-not $PersonalFolderParentID) {
     $PersonalFolderParentID = Read-Host
 }
 
-if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $PersonalFolderParentID) -or ($FolderStructureJSONPath -and -not $PersonalFolderSlug)) {
+if (-not ($EmployeeList -and ($FolderStructureJSONPath -or $LocalUploadPath) -and $PersonalFolderParentID) -or (-not $PersonalFolderSlug)) {
     Write-Log "Missing required parameters." -errorMessage "Missing required parameters" -output true -color Red
     exit
 }
@@ -292,7 +292,12 @@ Function New-Provision-Managed-User {
         
         #Create Folders
         try {
-            $script:PersonalFolderName = $($Employee.username) + "'s " + $PersonalFolderSlug
+            # If a username is not supplied in the csv, the email address is used instead
+            if (-not $($Employee.username)){
+                $script:PersonalFolderName = $($Employee.email) + "'s " + $PersonalFolderSlug
+            } else {
+                $script:PersonalFolderName = $($Employee.username) + "'s " + $PersonalFolderSlug
+            }
             Write-Log "Personal Folder Name: $PersonalFolderName " -output True
             if ($FolderStructureJSONPath) {
                 # Create Folder Structure from JSON
