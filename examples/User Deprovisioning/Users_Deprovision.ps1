@@ -238,7 +238,6 @@ Function Start-Deprovisioning-Script {
             Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
             break
         }
-        Write-Log "As-user header: $AsUserHeader" -output true
 
         # Create a "Employee Archive" folder in User's Root directory if one does not already exist
         # List root folder contents
