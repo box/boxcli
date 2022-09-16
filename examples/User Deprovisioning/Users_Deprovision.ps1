@@ -9,7 +9,7 @@ param (
     [switch]$DryRun = $false, # if enabled, then no delete/create/update calls will be made, only read ones
     [string]$NewFilesOwnerID = "" # The ID of the user to transfer files to before deleting the user
 )
-Set-Alias box /Users/mcong/boxcli/bin/run;
+
 ########################################################################################
 ###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
 ########################################################################################
