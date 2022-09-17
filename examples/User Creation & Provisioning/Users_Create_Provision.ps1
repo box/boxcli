@@ -7,50 +7,35 @@
 
 ########################################################################################
 
+# Example of configuration
+# param (
+#     [string]$EmployeeList = "./Employees_5.csv",
+#     [string]$FolderStructureJSONPath = "./Folder_Structure.json",
+#     [string]$LocalUploadPath = "./PersonalLocalUpload",
+#     [string]$PersonalFolderSlug = "Personal Folder",
+#     [string]$PersonalFolderParentID = "123456789"
+# )
+
 param (
-    [string]$EmployeeList, # Path to Employee List CSV
-    [string]$FolderStructureJSONPath, # Path to JSON file with folder structure to be created
-    [string]$LocalUploadPath, # Path to the local directory you want to upload
-    [string]$PersonalFolderSlug, # Ending slug of the folder that is created for each new user
-    [string]$PersonalFolderParentID # Parent folder ID for personal folders to be created in
+    # Set Employee List CSV Path
+    # firstname, lastname, email, username
+    # NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
+    # NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME 
+    [string]$EmployeeList = "",
+
+    # Personal Folder Structure: Set either path build off JSON or directly upload a local folder
+    [string]$FolderStructureJSONPath = "",
+    [string]$LocalUploadPath = "",
+    
+    # Ending slug of folder that will be used in creating personal folders for new users. Value will get concatenated with username
+    # If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
+    [string]$PersonalFolderSlug = "Personal Folder",
+
+    # ID of parent folder for created personal folders to be created in
+    # This folder should be created before running the script the first time.
+    # It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with
+    [string]$PersonalFolderParentID = ""
 )
-
-### Backup script parameters to variables
-$EmployeeListParam = $EmployeeList
-$FolderStructureJSONPathParam = $FolderStructureJSONPath
-$LocalUploadPathParam = $LocalUploadPath
-$PersonalFolderSlugParam = $PersonalFolderSlug
-$PersonalFolderParentIDParam = $PersonalFolderParentID
-
-#############################################################################
-
-### Example of configuration
-
-# $EmployeeList = "./Employees_5.csv"
-# $FolderStructureJSONPath = "./Folder_Structure.json"
-# $LocalUploadPath = "./PersonalLocalUpload"
-# $PersonalFolderSlug = "Personal Folder"
-# $PersonalFolderParentID = "123456789"
-
-
-# Set Employee List CSV Path
-# firstname, lastname, email, username
-# NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
-# NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME 
-$EmployeeList = ""
-
-# Personal Folder Structure: Set either path build off JSON or directly upload a local folder
-$FolderStructureJSONPath = ""
-$LocalUploadPath = ""
-
-# Ending slug of folder that will be used in creating personal folders for new users. Value will get concatenated with username
-# If username is RSMITH, the boarding folder name would be RSMITH Personal Folder
-$PersonalFolderSlug = "Personal Folder"
-
-# ID of parent folder for created personal folders to be created in
-# This folder should be created before running the script the first time.
-# It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with
-$PersonalFolderParentID = ""
 
 #############################################################################
 
@@ -189,22 +174,6 @@ class AnalyticsClientManager {
 
 #############################################################################
 
-# Prioritize script parameters over hard coded values
-if ($EmployeeListParam) {
-    $EmployeeList = $EmployeeListParam
-}
-if ($FolderStructureJSONPathParam) {
-    $FolderStructureJSONPath = $FolderStructureJSONPathParam
-}
-if ($LocalUploadPathParam) {
-    $LocalUploadPath = $LocalUploadPathParam
-}
-if ($PersonalFolderSlugParam) {
-    $PersonalFolderSlug = $PersonalFolderSlugParam
-}
-if ($PersonalFolderParentIDParam) {
-    $PersonalFolderParentID = $PersonalFolderParentIDParam
-}
 if ($LocalUploadPath -and $FolderStructureJSONPath) {
     Write-Log "Please specify either a local upload path or a folder structure JSON path, not both." -output true -color Red
     exit
