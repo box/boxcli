@@ -206,12 +206,14 @@ Function Start-Deprovisioning-Script {
         
         # No user ID specified or in non-interactive mode
         $AsUserHeader = ""
+        $CurrentUserId = ""
         if (!$UserId) {
             Write-Log "No user ID specified. Using current user as the new files owner." -output true -color Yellow
             try {
                 $UserResp = "$(box users:get --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
                 $UserId = $User.id 
+                $CurrentUserId = $User.id
                 Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
                 Write-Log $UserResp
             } catch {
@@ -221,11 +223,12 @@ Function Start-Deprovisioning-Script {
         }
         
         # Check if user ID is valid
-        if ($UserId) {
+        if ($UserId -and ($UserId -ne $CurrentUserId)) {
             try {
                 $UserResp = "$(box users:get --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
-                if (!($User.id -eq $UserId)) {
+                $CurrentUserId = $User.id
+                if (!($CurrentUserId -eq $UserId)) {
                     $AsUserHeader = "--as-user=$UserId"
                 }
                 $UserResp = "$(box users:get $AsUserHeader --json 2>&1)"
