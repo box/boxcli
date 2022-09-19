@@ -1,11 +1,11 @@
-﻿firstName,lastName,email
-Managed,User 1,ManagedUser1@test.com
-Managed,User 2,ManagedUser2@test.com
-Managed,User 3,ManagedUser3@test.com
-Managed,User 4,ManagedUser4@test.com
-Managed,User 5,ManagedUser5@test.com
-Managed,User 6,ManagedUser6@test.com
-Managed,User 7,ManagedUser7@test.com
-Managed,User 8,ManagedUser8@test.com
-Managed,User 9,ManagedUser9@test.com
-Managed,User 10,ManagedUser10@test.com
+﻿firstName,lastName,email,username
+Managed,User 1,ManagedUser1@test.com,manageduser1
+Managed,User 2,ManagedUser2@test.com,manageduser2
+Managed,User 3,ManagedUser3@test.com,manageduser3
+Managed,User 4,ManagedUser4@test.com,manageduser4
+Managed,User 5,ManagedUser5@test.com,manageduser5
+Managed,User 6,ManagedUser6@test.com,manageduser6
+Managed,User 7,ManagedUser7@test.com,manageduser7
+Managed,User 8,ManagedUser8@test.com,manageduser8
+Managed,User 9,ManagedUser9@test.com,manageduser9
+Managed,User 10,ManagedUser10@test.com,manageduser10

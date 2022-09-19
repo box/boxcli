@@ -1,6 +1,6 @@
 # Provision users and folders
 
-This PowerShell script uses the Box CLI to build and create an onboarding folder structure, create managed users in bulk, and provision such new users by adding them to the newly created folder structure as collaborators with viewer or uploader roles.
+This PowerShell script uses the Box CLI to build and create a personal folder structure, create managed users in bulk, and provision such new users by adding them to the newly created folder structure as collaborators with viewer or uploader roles.
 
 **For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/quick-start/powershell-script-templates/).**
 
@@ -35,18 +35,27 @@ This PowerShell script uses the Box CLI to build and create an onboarding folder
 
 ## Configure the script
 ### Update the list of employee accounts for creation
+
+The header row should look like the below:
+
+firstName,lastName,email,username
+
+NOTE 1 - EMAILS MUST BE UNIQUE ACROSS ALL OF BOX - CANNOT CREATE EMAILS USED PREVIOUSLY
+
+NOTE 2 - USERNAME MUST BE UNIQUE ACROSS YOUR BOX INSTANCE. - THIS IS USED FOR THE PERSONAL FOLDER NAME
+
 For example, update the [employees_5.csv](/examples/User%20Creation%20%26%20Provisioning/Employees_5.csv) with the following data:
 ```
-firstName,lastName,email
-Managed,User 1,ManagedUser1@test.com
-Managed,User 2,ManagedUser2@test.com
-Managed,User 3,ManagedUser3@test.com
+Managed,User 1,ManagedUser1@test.com,manageduser1
+Managed,User 2,ManagedUser2@test.com,manageduser2
+Managed,User 3,ManagedUser3@test.com,manageduser3
 ```
 ### List of parameters
 
 - `EmployeeList`: Path to Employee List CSV.
-- `RootFolderParentID`: Destination folder ID for your changes, either when using JSON file as input to create folder structure, or uploading local structure. It is set to `0` by default, but feel free to set it to your needs.
-- `FolderStructureJSONPath`: Your own Folder Structure JSON Path. You can also change the `RootFolderName`. It's a name of the folder, that will be created as parent for folders from JSON structure. It's set to `Onboarding` by default, but feel free to set it to your needs.
+- `PersonalFolderParentID`: Destination folder ID for all personal folders to be created in, either when using JSON file as input to create folder structure, or uploading local structure. This folder should be made prior to running the script the first time. It is not advised to make this value 0, as this will create individual Personal folders in root of the account you set up the cli with.
+- `FolderStructureJSONPath`: Your own Folder Structure JSON Path. 
+- `PersonalFolderSlug`. Ending name of the folder that will be created as parent for folders from JSON structure. It's set to `Personal Folder` by default, but feel free to set it to your needs. The username is concatenated with this value to create each user's personal folder name. ex - `rsmith2's Personal Folder`.
 - `LocalUploadPath`: Local directory to directly upload folder structure.
 
 **Note**: Please specify either a local upload path or a folder structure JSON path, not both.
@@ -56,7 +65,7 @@ Managed,User 3,ManagedUser3@test.com
 There are 3 ways to pass parameters:
 * Use hardcoded value in script:
 
-Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L35-L47) before running.
+Please update all needed parameters in the script [here](/examples/User%20Creation%20%26%20Provisioning/Users_Create_Provision.ps1#L19-L38) before running.
 
 * Run script with parameters:
 
@@ -64,8 +73,8 @@ You can also specify parameters while run the command, for example:
 ```
 PS > ./Users_Create_Provision.ps1 -EmployeeList ./Employees_1.csv `
 	-FolderStructureJSONPath ./Folder_Structure.json `
-	-RootFolderName Onboarding `
-	-RootFolderParentID 0
+	-PersonalFolderSlug "Personal Folder" `
+	-PersonalFolderParentID 123456789
 
 Starting User Creation & Provisioning script...
 ```
@@ -79,8 +88,8 @@ Please enter the path to the employee list CSV file:
 Please enter the path to the folder structure JSON file or the local upload path:
 Folder_Structure.json
 Folder structure JSON path set to: Folder_Structure.json
-Please enter the ID of the parent folder for the root folder:
-0
+Please enter the ID of the parent folder for the personal folders to be created in:
+1234567689
 Starting User Creation & Provisioning script...
 ```
 

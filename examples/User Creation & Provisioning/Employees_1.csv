@@ -1,2 +1,2 @@
-﻿firstName,lastName,email
-Managed,User 1,ManagedUser1@test.com
+﻿firstName,lastName,email,username
+Test,User 1,ManagedUser1@demo.com,manageduser1
