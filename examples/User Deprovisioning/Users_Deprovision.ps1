@@ -6,7 +6,8 @@
 ########################################################################################
 
 param (
-    [switch]$DryRun = $false # if enabled, then no delete/create/update calls will be made, only read ones
+    [switch]$DryRun = $false, # if enabled, then no delete/create/update calls will be made, only read ones
+    [string]$NewFilesOwnerID = "" # The ID of the user to transfer files to before deleting the user
 )
 
 ########################################################################################
@@ -161,6 +162,19 @@ class AnalyticsClientManager {
     }
 }
 
+# Function to check if current script is running under non-interactive mode
+function Assert-IsNonInteractiveShell {
+    # Test each Arg for match of abbreviated '-NonInteractive' command.
+    $NonInteractive = [Environment]::GetCommandLineArgs() | Where-Object{ $_ -like '-NonI*' }
+
+    if ([Environment]::UserInteractive -and -not $NonInteractive) {
+        # We are in an interactive shell.
+        return $false
+    }
+
+    return $true
+}
+
 # Deprovision users
 Function Start-Deprovisioning-Script {
     if ($DryRun) {
@@ -179,51 +193,89 @@ Function Start-Deprovisioning-Script {
         break
     }
 
-    # Get current user id
-    try {
-        $UserResp = "$(box users:get --json 2>&1)"
-        $User = $UserResp | ConvertFrom-Json
-        $UserId = $User.id
-        Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
-        Write-Log $UserResp
-    } catch {
-        Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
-        break
-    }
-
-    # Create a "Employee Archive" folder in User's Root directory if one does not already exist
-    # List root folder contents
-    try {
-        $RootFolderResp = "$(box folders:items 0 --sort=name --direction=ASC --json 2>&1)"
-        $RootFolder = $RootFolderResp | ConvertFrom-Json
-    } catch {
-        Write-Log "Could not get root directory for current user (ID: $UserId). See log for details. " -errorMessage $RootFolderResp -output true -color Red
-        break
-    }
-
-    # Check if "Employee Archive" folder already exists
-    ForEach($FolderItem in $RootFolder) {
-        if($FolderItem.name -eq $EmployeeArchiveFolderName) {
-            $EmployeeArchiveFolderID = $FolderItem.id
-            Write-Log "'$EmployeeArchiveFolderName' folder already exists with folder ID: $($EmployeeArchiveFolderID)." -output true
-            break
+    # Create folder if need to transfer content
+    if ($TransferContent -eq "Y") {
+        # Check if new file owner ID already specified
+        if ($NewFilesOwnerID) {
+            $UserId = $NewFilesOwnerID
+        } elseif (!(Assert-IsNonInteractiveShell)) {
+            Write-Log "Please specify the user ID of the user who will own the files of the users being deprovisioned." -output true -color Yellow
+            Write-Log "Press Enter if you want to use the current user as the new owner." -output true -color Yellow
+            $UserId = Read-Host "User ID"
         }
-    }
-
-    # Create new "Employee Archive" folder if it doens't exist
-    if($null -eq $EmployeeArchiveFolderID) {
-        if(!$DryRun) {
+        
+        # No user ID specified or in non-interactive mode
+        $AsUserHeader = ""
+        $CurrentUserId = ""
+        if (!$UserId) {
+            Write-Log "No user ID specified. Using current user as the new files owner." -output true -color Yellow
             try {
-                $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" --fields="id" --json 2>&1)"
-                $EmployeeArchiveFolderID = $EmployeeArchiveFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
-                Write-Log "Successfully created new '$EmployeeArchiveFolderName' root folder with ID: $($EmployeeArchiveFolderID)." -output true
-                Write-Log $EmployeeArchiveFolderResp
+                $UserResp = "$(box users:get --json 2>&1)"
+                $User = $UserResp | ConvertFrom-Json
+                $UserId = $User.id 
+                $CurrentUserId = $User.id
+                Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
+                Write-Log $UserResp
             } catch {
-                Write-Log "Could not create new '$EmployeeArchiveFolderName' root folder. See log for details." -errorMessage $EmployeeArchiveFolderResp -output true -color Red
+                Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
+                break
+            }
+        }
+        
+        # Check if user ID is valid
+        if ($UserId -and ($UserId -ne $CurrentUserId)) {
+            try {
+                $UserResp = "$(box users:get --json 2>&1)"
+                $User = $UserResp | ConvertFrom-Json
+                $CurrentUserId = $User.id
+                if (!($CurrentUserId -eq $UserId)) {
+                    $AsUserHeader = "--as-user=$UserId"
+                }
+                $UserResp = "$(box users:get $AsUserHeader --json 2>&1)"
+                $User = $UserResp | ConvertFrom-Json
+            } catch {
+                Write-Log "Could not get the user with ID $UserId. See log for details." -errorMessage $UserResp -output true -color Red
                 break
             }
         } else {
-            Write-Log "`"DryRun`" mode is enabled. Script would have created new '$EmployeeArchiveFolderName' root folder." -output true
+            Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
+            break
+        }
+
+        # Create a "Employee Archive" folder in User's Root directory if one does not already exist
+        # List root folder contents
+        try {
+            $RootFolderResp = "$(box folders:items 0 --sort=name --direction=ASC $AsUserHeader --json 2>&1)"
+            $RootFolder = $RootFolderResp | ConvertFrom-Json
+        } catch {
+            Write-Log "Could not get root directory for current user (ID: $UserId). See log for details. " -errorMessage $RootFolderResp -output true -color Red
+            break
+        }
+
+        # Check if "Employee Archive" folder already exists
+        ForEach($FolderItem in $RootFolder) {
+            if($FolderItem.name -eq $EmployeeArchiveFolderName) {
+                $EmployeeArchiveFolderID = $FolderItem.id
+                Write-Log "'$EmployeeArchiveFolderName' folder already exists with folder ID: $($EmployeeArchiveFolderID)." -output true
+                break
+            }
+        }
+
+        # Create new "Employee Archive" folder if it doesn't exist
+        if($null -eq $EmployeeArchiveFolderID) {
+            if(!$DryRun) {
+                try {
+                    $EmployeeArchiveFolderResp = "$(box folders:create 0 "$EmployeeArchiveFolderName" $AsUserHeader --fields="id" --json 2>&1)"
+                    $EmployeeArchiveFolderID = $EmployeeArchiveFolderResp | ConvertFrom-Json | ForEach-Object { $_.id }
+                    Write-Log "Successfully created new '$EmployeeArchiveFolderName' root folder with ID: $($EmployeeArchiveFolderID)." -output true
+                    Write-Log $EmployeeArchiveFolderResp
+                } catch {
+                    Write-Log "Could not create new '$EmployeeArchiveFolderName' root folder. See log for details." -errorMessage $EmployeeArchiveFolderResp -output true -color Red
+                    break
+                }
+            } else {
+                Write-Log "`"DryRun`" mode is enabled. Script would have created new '$EmployeeArchiveFolderName' root folder." -output true
+            }
         }
     }
 
@@ -270,7 +322,7 @@ Function Start-Deprovisioning-Script {
                 # Move transferred folder to "Employee Archive" folder
                 $TransferredFolder = $NewFolder.id
                 try {
-                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID --json 2>&1)"
+                    $MoveFolderResp = "$(box folders:move $TransferredFolder $EmployeeArchiveFolderID $AsUserHeader --json 2>&1)"
                     $MoveFolderResp | ConvertFrom-Json | Out-Null
                     Write-Log "Successfully moved transferred employee content $($FoundEmployee.name) with User ID: $($FoundEmployeeID) to '$EmployeeArchiveFolderName' folder with ID: $EmployeeArchiveFolderID." -output true
                     Write-Log $MoveFolderResp

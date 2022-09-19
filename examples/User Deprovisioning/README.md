@@ -1,5 +1,5 @@
 # Deprovision & Delete Users Automation
-This Box CLI script deprovision a list of users by first transfering user content to the current admin user's root folder under "Employee Archive" (Transfer content default: "Y") before deleting that user.
+This Box CLI script deprovision a list of users by first transfering user content to another user's root folder under "Employee Archive" (Transfer content default: "Y") before deleting that user.
 
 > For every user, script makes 7 API calls to archive their content and delete the account.
 
@@ -43,7 +43,10 @@ This Box CLI script deprovision a list of users by first transfering user conten
 	```
 3. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
 4. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
-5. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
+5. Optional: Update the User ID which will be the new owner of the files, by changing [NewFilesOwnerID](Users_Deprovision.ps1#L10) or
+set the flag `NewFilesOwnerID` when running the script:
+`./Users_Deprovision.ps1 -NewFilesOwnerID 123456`. If no ID was provided, script will prompt to input in the interactive mode, or use the current authenticated user ID to receive the content.
+6. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
 `./Users_Deprovision.ps1 -DryRun`.
  Dry run doesn't mean that API calls won't be made, instead any create/update/delete calls will be skipped only.
 
