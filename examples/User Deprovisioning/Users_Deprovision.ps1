@@ -204,44 +204,42 @@ Function Start-Deprovisioning-Script {
             $NewFilesOwnerID = Read-Host "User ID"
         }
         
-        # No user ID specified or in non-interactive mode
-        $AsUserHeader = ""
+
+        # Getting current user
         $CurrentUserId = ""
-        if (!$NewFilesOwnerID) {
-            Write-Log "No user ID specified. Using current user as the new files owner." -output true -color Yellow
+        try {
+            $UserResp = "$(box users:get --json 2>&1)"
+            $User = $UserResp | ConvertFrom-Json
+            $CurrentUserId = $User.id
+            Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
+            Write-Log $UserResp
+        } catch {
+            Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
+            break
+        }
+
+        # Validate new files owner if is not current user
+        $AsUserHeader = ""
+        if ($NewFilesOwnerID -and ($NewFilesOwnerID -ne $CurrentUserId)) {
+            Write-Log "Validating new files owner exists" -output true -color Yellow
             try {
-                $UserResp = "$(box users:get --json 2>&1)"
+                $UserResp = "$(box users:get --as-user=$NewFilesOwnerID --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
-                $NewFilesOwnerID = $User.id 
-                $CurrentUserId = $User.id
-                Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
+                $AsUserHeader = "--as-user=$NewFilesOwnerID"
+                Write-Log "Successfully validated new files owner: $($User.login), ID: $($User.id)." -output true
                 Write-Log $UserResp
             } catch {
-                Write-Log "Could not get the current user. See log for details." -errorMessage $UserResp -output true -color Red
+                Write-Log "New files owner does not exists. See log for details." -errorMessage $UserResp -output true -color Red
                 break
             }
         }
         
-        # Check if user ID is valid
+        # Use current user and new files owner if not specified
         if (!$NewFilesOwnerID) {
-            Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
-            break
+            Write-Log "Using current user as new files owner" -output true -color Yellow
+            $NewFilesOwnerID = $CurrentUserId
         }
-        elseif ($NewFilesOwnerID -ne $CurrentUserId) {
-            try {
-                $UserResp = "$(box users:get --json 2>&1)"
-                $User = $UserResp | ConvertFrom-Json
-                $CurrentUserId = $User.id
-                if ($CurrentUserId -ne $NewFilesOwnerID) {
-                    $AsUserHeader = "--as-user=$NewFilesOwnerID"
-                }
-                $UserResp = "$(box users:get $AsUserHeader --json 2>&1)"
-                $User = $UserResp | ConvertFrom-Json
-            } catch {
-                Write-Log "Could not get the user with ID $NewFilesOwnerID. See log for details." -errorMessage $UserResp -output true -color Red
-                break
-            }
-        }
+        
 
         # Create a "Employee Archive" folder in User's Root directory if one does not already exist
         # List root folder contents
