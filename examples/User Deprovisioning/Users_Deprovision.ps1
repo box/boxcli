@@ -223,7 +223,11 @@ Function Start-Deprovisioning-Script {
         }
         
         # Check if user ID is valid
-        if ($NewFilesOwnerID -and ($NewFilesOwnerID -ne $CurrentUserId)) {
+        if (!$NewFilesOwnerID) {
+            Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
+            break
+        }
+        elseif ($NewFilesOwnerID -ne $CurrentUserId) {
             try {
                 $UserResp = "$(box users:get --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
@@ -237,9 +241,6 @@ Function Start-Deprovisioning-Script {
                 Write-Log "Could not get the user with ID $NewFilesOwnerID. See log for details." -errorMessage $UserResp -output true -color Red
                 break
             }
-        } elseif (!$NewFilesOwnerID) {
-            Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
-            break
         }
 
         # Create a "Employee Archive" folder in User's Root directory if one does not already exist
