@@ -163,16 +163,16 @@ class AnalyticsClientManager {
 }
 
 # Function to check if current script is running under non-interactive mode
-function Assert-IsNonInteractiveShell {
+function IsInteractiveShell {
     # Test each Arg for match of abbreviated '-NonInteractive' command.
     $NonInteractive = [Environment]::GetCommandLineArgs() | Where-Object{ $_ -like '-NonI*' }
 
     if ([Environment]::UserInteractive -and -not $NonInteractive) {
         # We are in an interactive shell.
-        return $false
+        return $true
     }
 
-    return $true
+    return $false
 }
 
 # Deprovision users
@@ -197,22 +197,22 @@ Function Start-Deprovisioning-Script {
     if ($TransferContent -eq "Y") {
         # Check if new file owner ID already specified
         if ($NewFilesOwnerID) {
-            $UserId = $NewFilesOwnerID
-        } elseif (!(Assert-IsNonInteractiveShell)) {
+            Write-Log "New files owner ID is set to: $NewFilesOwnerID" -output true -color Green
+        } elseif (IsInteractiveShell) {
             Write-Log "Please specify the user ID of the user who will own the files of the users being deprovisioned." -output true -color Yellow
             Write-Log "Press Enter if you want to use the current user as the new owner." -output true -color Yellow
-            $UserId = Read-Host "User ID"
+            $NewFilesOwnerID = Read-Host "User ID"
         }
         
         # No user ID specified or in non-interactive mode
         $AsUserHeader = ""
         $CurrentUserId = ""
-        if (!$UserId) {
+        if (!$NewFilesOwnerID) {
             Write-Log "No user ID specified. Using current user as the new files owner." -output true -color Yellow
             try {
                 $UserResp = "$(box users:get --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
-                $UserId = $User.id 
+                $NewFilesOwnerID = $User.id 
                 $CurrentUserId = $User.id
                 Write-Log "Successfully get current user: $($User.login), ID: $($User.id)." -output true
                 Write-Log $UserResp
@@ -223,21 +223,21 @@ Function Start-Deprovisioning-Script {
         }
         
         # Check if user ID is valid
-        if ($UserId -and ($UserId -ne $CurrentUserId)) {
+        if ($NewFilesOwnerID -and ($NewFilesOwnerID -ne $CurrentUserId)) {
             try {
                 $UserResp = "$(box users:get --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
                 $CurrentUserId = $User.id
-                if (!($CurrentUserId -eq $UserId)) {
-                    $AsUserHeader = "--as-user=$UserId"
+                if ($CurrentUserId -ne $NewFilesOwnerID) {
+                    $AsUserHeader = "--as-user=$NewFilesOwnerID"
                 }
                 $UserResp = "$(box users:get $AsUserHeader --json 2>&1)"
                 $User = $UserResp | ConvertFrom-Json
             } catch {
-                Write-Log "Could not get the user with ID $UserId. See log for details." -errorMessage $UserResp -output true -color Red
+                Write-Log "Could not get the user with ID $NewFilesOwnerID. See log for details." -errorMessage $UserResp -output true -color Red
                 break
             }
-        } else {
+        } elseif (!$NewFilesOwnerID) {
             Write-Log "Missing required user ID." -errorMessage "Missing required user ID." -output true -color Red
             break
         }
@@ -248,7 +248,7 @@ Function Start-Deprovisioning-Script {
             $RootFolderResp = "$(box folders:items 0 --sort=name --direction=ASC $AsUserHeader --json 2>&1)"
             $RootFolder = $RootFolderResp | ConvertFrom-Json
         } catch {
-            Write-Log "Could not get root directory for current user (ID: $UserId). See log for details. " -errorMessage $RootFolderResp -output true -color Red
+            Write-Log "Could not get root directory for current user (ID: $NewFilesOwnerID). See log for details. " -errorMessage $RootFolderResp -output true -color Red
             break
         }
 
@@ -310,7 +310,7 @@ Function Start-Deprovisioning-Script {
                 Write-Log "Transferring $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""..." -output true
 
                 try {
-                    $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $UserId --json 2>&1)"
+                    $NewFolderResp = "$(box users:transfer-content $FoundEmployeeID $NewFilesOwnerID --json 2>&1)"
                     $NewFolder = $NewFolderResp | ConvertFrom-Json
                     Write-Log "Successfully transferred content to ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""." -output true
                     Write-Log $NewFolderResp
