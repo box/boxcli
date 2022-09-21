@@ -8,7 +8,7 @@
 
 param (
 # Set specific folder ID in which to get metadata values from
-    [string]$folderID = "",
+    [string]$FolderID = "",
 
 # Set to a specific Box user id if you would like to pull metadata as a specific user instead of the current user
     [string]$UserId = ""
@@ -190,10 +190,10 @@ class AnalyticsClientManager
 
 #############################################################################
 # Prompt for params if some are missing
-if (-not$folderID)
+if (-not$FolderID)
 {
     Write-Log "Please enter the ID of the folder to extract metadata from:" -output true -color Yellow
-    $folderID = Read-Host
+    $FolderID = Read-Host
 }
 
 if (-not$UserId)
@@ -205,19 +205,19 @@ if (-not$UserId)
 
 Function Start-Metadata-Extraction {
 
-    Write-Log "Pulling data from Folder ID: $folderID" -output true -color Green
+    Write-Log "Pulling data from Folder ID: $FolderID" -output true -color Green
 
     try {
         #Pull all File ID values from Folder ID
         If (!$UserId) {
             #Run as default user
             Write-Log "No user ID specified. Using current user." -output true -color Yellow
-            $EntriesResp = (box folders:items $folderID --json 2>&1)
+            $EntriesResp = (box folders:items $FolderID --json 2>&1)
         }
         Else {
             Write-Log "Extracting metadata as user ID: $UserId" -output true -color Yellow
             #Run with as-user header with inputted User ID
-            $EntriesResp = (box folders:items $folderID --as-user=$UserId --json 2>&1)
+            $EntriesResp = (box folders:items $FolderID --as-user=$UserId --json 2>&1)
 
         }
 

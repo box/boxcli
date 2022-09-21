@@ -8,6 +8,7 @@ There are the following scripts available:
 3. [Deprovision users and archive folders](/examples/User%20Deprovisioning)
 4. [Report Inactive Users](/examples/Inactive%20Users%20Report)
 5. [Manage Groups and Collaborations](/examples/Mass%20Groups%20%26%20Collaborations%20Update)
+6. [Extract metadata](/examples/Metadata%20Extraction)
 
 ## Disclaimer
 This folder is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
