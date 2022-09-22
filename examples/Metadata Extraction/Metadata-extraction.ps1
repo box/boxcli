@@ -234,16 +234,28 @@ Function Start-Metadata-Extraction {
     ForEach ($Item in $Entries) {
         $ItemID = $Item.id
         Write-Log "Reading Item ID: $ItemID" -output true -color Green
+        Write-Output $Item
 
         #Pull Metadata values from Folder ID's
         try {
             If (!$UserId) {
                 #Run as default user (service account)
+                If ($Item.type -eq 'file') {
                 $MetadataResp = (box files:metadata $ItemID --json 2>&1)
+                }
+                elseif ($Item.type -eq 'folder') {
+                    $MetadataResp = (box folders:metadata $ItemID --json 2>&1)
+                }
             }
             Else {
                 #Run with as-user header with inputted User ID
-                $MetadataResp = (box files:metadata $ItemID --as-user=$UserId --json  2>&1)
+                If ($Item.type -eq 'file') {
+                    $MetadataResp = (box files:metadata $ItemID --as-user=$UserId --json 2>&1)
+                }
+                elseif ($Item.type -eq 'folder') {
+                    $MetadataResp = (box folders:metadata $ItemID --as-user=$UserId --json 2>&1)
+                }
+
             }
 
             $Metadata = $MetadataResp | ConvertFrom-Json
