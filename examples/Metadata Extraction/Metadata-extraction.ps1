@@ -229,12 +229,11 @@ Function Start-Metadata-Extraction {
         break
     }
 
-    Write-Log "Output $Entries"
+    Write-Log "Output $($Entries | Out-String)"
 
     ForEach ($Item in $Entries) {
         $ItemID = $Item.id
         Write-Log "Reading Item ID: $ItemID" -output true -color Green
-        Write-Output $Item
 
         #Pull Metadata values from Folder ID's
         try {
