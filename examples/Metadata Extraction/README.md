@@ -1,6 +1,6 @@
 # Extract metadata
 
-Extracts metadata details for all the files in any Box folder and save that report as a CSV spreadsheet for each metadata template.
+Extracts metadata details for all the files and folder in any Box folder and save that report as a CSV spreadsheet for each metadata template.
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory
@@ -73,9 +73,6 @@ Logs are stored in a `logs` folder located in the main folder. You have access t
 ## Disclaimer
 This project is a collection of open source examples and should not be treated as an officially supported product. Use at your own risk and as a source of example how to use Box CLI.
 
-[boxevents]:https://developer.box.com/reference/resources/event/
-[event-types]: https://developer.box.com/reference/resources/event/#param-event_type
 [oauth-guide]: https://developer.box.com/guides/cli/quick-start/
-[user-guide]: https://developer.box.com/guides/cli/scripts/report-inactive-users/
 [FolderID-param]: /examples/Metadata%20Extraction/Metadata-extraction.ps1#L11
 [UserID-param]: /examples/Metadata%20Extraction/Metadata-extraction.ps1#L14
