@@ -1,6 +1,6 @@
 # Extract metadata
 
-Extracts metadata details for all the files and folder in any Box folder and save that report as a CSV spreadsheet for each metadata template.
+Extracts metadata details for all the files and folders in any Box folder and save that report as a CSV spreadsheet for each metadata template.
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory

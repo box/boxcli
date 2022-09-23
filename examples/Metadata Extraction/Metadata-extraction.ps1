@@ -208,7 +208,7 @@ Function Start-Metadata-Extraction {
     Write-Log "Pulling data from Folder ID: $FolderID" -output true -color Green
 
     try {
-        #Pull all File ID values from Folder ID
+        #Pull all Items ID values from Folder ID
         If (!$UserId) {
             #Run as default user
             Write-Log "No user ID specified. Using current user." -output true -color Yellow
@@ -218,11 +218,9 @@ Function Start-Metadata-Extraction {
             Write-Log "Extracting metadata as user ID: $UserId" -output true -color Yellow
             #Run with as-user header with inputted User ID
             $EntriesResp = (box folders:items $FolderID --as-user=$UserId --json 2>&1)
-
         }
 
         $Entries = $EntriesResp | ConvertFrom-Json
-
     }
     catch {
         Write-Log "Could not get the folder items. See error log for details." -errorMessage $EntriesResp -output True -color Red
@@ -240,7 +238,7 @@ Function Start-Metadata-Extraction {
             If (!$UserId) {
                 #Run as default user (service account)
                 If ($Item.type -eq 'file') {
-                $MetadataResp = (box files:metadata $ItemID --json 2>&1)
+                    $MetadataResp = (box files:metadata $ItemID --json 2>&1)
                 }
                 elseif ($Item.type -eq 'folder') {
                     $MetadataResp = (box folders:metadata $ItemID --json 2>&1)
@@ -254,11 +252,8 @@ Function Start-Metadata-Extraction {
                 elseif ($Item.type -eq 'folder') {
                     $MetadataResp = (box folders:metadata $ItemID --as-user=$UserId --json 2>&1)
                 }
-
             }
-
             $Metadata = $MetadataResp | ConvertFrom-Json
-
         }
         catch {
             Write-Log "Could not get the metadata for item. See error log for details." -errorMessage $MetadataResp -output True -color Red
@@ -268,15 +263,15 @@ Function Start-Metadata-Extraction {
 
         #Loop through each metadata entry to add additional folder info & separate according to metadata template
         ForEach ($MetadataValue in $Metadata) {
-            #Append File Info values: Name, File Id, & Type
+            #Append Object Info values: Name, Object Id, Type
             $MetadataValue | Add-Member -NotePropertyName "Name" -NotePropertyValue $Item.name;
             $MetadataValue | Add-Member -NotePropertyName "Object Id" -NotePropertyValue $Item.id;
             $MetadataValue | Add-Member -NotePropertyName "Type" -NotePropertyValue $Item.type;
 
             $Templatekey = $MetadataValue."`$template"
 
-                    #Export metadata values to separate csv's according to metadata template keys
-                    ($MetadataValue) | Export-Csv -Path ./MetadataTemplate_$Templatekey`.csv -Append -Force -NoTypeInformation
+            #Export metadata values to separate csv's according to metadata template keys
+            ($MetadataValue) | Export-Csv -Path ./MetadataTemplate_$Templatekey`.csv -Append -Force -NoTypeInformation
             Write-Log "Metadata saved to: MetadataTemplate_$Templatekey.csv" -output true -color Green
         }
     }
