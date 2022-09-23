@@ -271,7 +271,7 @@ Function Start-Metadata-Extraction {
             $Templatekey = $MetadataValue."`$template"
 
             #Export metadata values to separate csv's according to metadata template keys
-            ($MetadataValue) | Export-Csv -Path ./MetadataTemplate_$Templatekey`.csv -Append -Force -NoTypeInformation
+            $MetadataValue | Export-Csv -Path ./MetadataTemplate_$Templatekey`.csv -Append -Force -NoTypeInformation
             Write-Log "Metadata saved to: MetadataTemplate_$Templatekey.csv" -output true -color Green
         }
     }
