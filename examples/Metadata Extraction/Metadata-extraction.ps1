@@ -270,7 +270,7 @@ Function Start-Metadata-Extraction {
         ForEach ($MetadataValue in $Metadata) {
             #Append File Info values: Name, File Id, & Type
             $MetadataValue | Add-Member -NotePropertyName "Name" -NotePropertyValue $Item.name;
-            $MetadataValue | Add-Member -NotePropertyName "File Id" -NotePropertyValue $Item.id;
+            $MetadataValue | Add-Member -NotePropertyName "Object Id" -NotePropertyValue $Item.id;
             $MetadataValue | Add-Member -NotePropertyName "Type" -NotePropertyValue $Item.type;
 
             $Templatekey = $MetadataValue."`$template"
