@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/box/boxcli/compare/v3.3.2...v3.4.0) (2022-09-26)
+
+
+### New Features and Enhancements
+
+* Add `DryRun` mode in `User Deprovision` example script ([#392](https://github.com/box/boxcli/issues/392)) ([584a30e](https://github.com/box/boxcli/commit/584a30ef33446a6687ce558c810804202650299f))
+* Add `redirect_url` and `declined_redirect_url` to Sign Request ([#395](https://github.com/box/boxcli/issues/395)) ([261b7d2](https://github.com/box/boxcli/commit/261b7d22a5e5adf3647276cbf59454cca9bf607f))
+* Add progress bar for file download and bulk command ([#376](https://github.com/box/boxcli/issues/376)) ([68359c7](https://github.com/box/boxcli/commit/68359c7e97ce2b606184426cbbaac73914ceb81a))
+* create destination path during download ([#393](https://github.com/box/boxcli/issues/393)) ([40881dd](https://github.com/box/boxcli/commit/40881ddbd2c86e80f19689f012736fb19f18d945))
+* native credentials storage for Windows with a new library ([#385](https://github.com/box/boxcli/issues/385)) ([a6918aa](https://github.com/box/boxcli/commit/a6918aaa6e28bd29619bea31c97b845d8d429fec))
+
+### Bug Fixes
+
+* correctly resolve home dir in folders download ([#398](https://github.com/box/boxcli/issues/398)) ([86d3230](https://github.com/box/boxcli/commit/86d3230456827a042be04f5ef372b15d83fd6a10))
+* Fix logs in `Users Deprovisioning` script ([#381](https://github.com/box/boxcli/issues/381)) ([c85f77b](https://github.com/box/boxcli/commit/c85f77b3042dfc3ddfe54b2acd94b220f6ee0e9b))
+* Fix problem with `keytar` library ([#394](https://github.com/box/boxcli/issues/394)) ([1979f01](https://github.com/box/boxcli/commit/1979f01758a30cd1dbf9d32c19ce2f3a00c0d5ec))
+
 ### [3.3.2](https://github.com/box/boxcli/compare/v3.3.1...v3.3.2) (2022-07-29)
 
 
