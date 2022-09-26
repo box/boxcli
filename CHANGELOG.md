@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Note
 
-* To migrate storing Box CLI login credentials to the system keychain, execute the following command in the terminal (https://github.com/box/boxcli/issues/295):
+* To migrate storing Box CLI environments to the system credential storage, execute the following command in the terminal (https://github.com/box/boxcli/issues/295):
   ```
   box configure:environments:update
   ```
