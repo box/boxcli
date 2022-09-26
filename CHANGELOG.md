@@ -2,18 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [3.4.0](https://github.com/box/boxcli/compare/v3.3.2...v3.4.0) (2022-08-26)
-
-
-### New Features and Enhancements
-
-* Add progress bar for file download and bulk command ([#376](https://github.com/box/boxcli/issues/376)) ([68359c7](https://github.com/box/boxcli/commit/68359c7e97ce2b606184426cbbaac73914ceb81a))
-* native credentials storage for Windows with a new library ([#385](https://github.com/box/boxcli/issues/385)) ([a6918aa](https://github.com/box/boxcli/commit/a6918aaa6e28bd29619bea31c97b845d8d429fec))
-
-### Bug Fixes
-
-* Fix logs in `Users Deprovisioning` script ([#381](https://github.com/box/boxcli/issues/381)) ([c85f77b](https://github.com/box/boxcli/commit/c85f77b3042dfc3ddfe54b2acd94b220f6ee0e9b))
-
 ### [3.3.2](https://github.com/box/boxcli/compare/v3.3.1...v3.3.2) (2022-07-29)
 
 
