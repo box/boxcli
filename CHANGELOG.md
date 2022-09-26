@@ -19,6 +19,13 @@ All notable changes to this project will be documented in this file. See [standa
 * Fix logs in `Users Deprovisioning` script ([#381](https://github.com/box/boxcli/issues/381)) ([c85f77b](https://github.com/box/boxcli/commit/c85f77b3042dfc3ddfe54b2acd94b220f6ee0e9b))
 * Fix problem with `keytar` library ([#394](https://github.com/box/boxcli/issues/394)) ([1979f01](https://github.com/box/boxcli/commit/1979f01758a30cd1dbf9d32c19ce2f3a00c0d5ec))
 
+### Note
+
+* To migrate storing Box CLI login credentials to the system keychain, execute the following command in the terminal (https://github.com/box/boxcli/issues/295):
+  ```
+  box configure:environments:update
+  ```
+
 ### [3.3.2](https://github.com/box/boxcli/compare/v3.3.1...v3.3.2) (2022-07-29)
 
 
