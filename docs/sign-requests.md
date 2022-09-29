@@ -43,7 +43,7 @@ EXAMPLE
   box sign-requests
 ```
 
-_See code: [src/commands/sign-requests/index.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/sign-requests/index.js)_
+_See code: [src/commands/sign-requests/index.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/sign-requests/index.js)_
 
 ## `box sign-requests:cancel ID`
 
@@ -75,7 +75,7 @@ EXAMPLE
   box sign-requests:cancel 12345
 ```
 
-_See code: [src/commands/sign-requests/cancel.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/sign-requests/cancel.js)_
+_See code: [src/commands/sign-requests/cancel.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/sign-requests/cancel.js)_
 
 ## `box sign-requests:create`
 
@@ -116,6 +116,10 @@ OPTIONS
   --days-valid=days-valid
       Number of days after which this request will automatically expire if not completed
 
+  --declined-redirect-url=declined-redirect-url
+      The URL that a signer will be redirected to after declining to sign a document. Defining this URL overrides the 
+      default redirect URL for all signers.
+
   --[no-]document-preparation-needed
       Indicates if the sender should receive a `prepare_url` in the response to complete document preparation via UI.
 
@@ -149,6 +153,11 @@ OPTIONS
       Prefills a sign related tag in the content. Pass in a comma-separated dictionary of fields: id,text,checkbox,date. 
       Can be added multiple times.
 
+  --redirect-url=redirect-url
+      The URL that a signer will be redirected to after signing a document. Defining this URL overrides the default 
+      redirect URL for all signers. If no declined redirect URL is specified, this URL will be used for decline actions as 
+      well.
+
   --[no-]reminders-enabled
       Reminds signers to sign a document on day 3, 8, 13 and 18. Reminders are only sent to outstanding signers.
 
@@ -157,7 +166,9 @@ OPTIONS
 
   --signer=signer
       (required) A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. 
-      Allowed properties: email,role,is_in_person,order,embed_url_external_user_id
+      Allowed (recommended) properties: 
+      email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url but snake case is also 
+      supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url
 
   --source-files=source-files
       (required) Comma separated list of files to create a signing document from. This is currently limited to one file, 
@@ -171,7 +182,7 @@ EXAMPLE
   id=1,value=Test
 ```
 
-_See code: [src/commands/sign-requests/create.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/sign-requests/create.js)_
+_See code: [src/commands/sign-requests/create.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/sign-requests/create.js)_
 
 ## `box sign-requests:get ID`
 
@@ -203,7 +214,7 @@ EXAMPLE
   box sign-requests:get 12345
 ```
 
-_See code: [src/commands/sign-requests/get.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/sign-requests/get.js)_
+_See code: [src/commands/sign-requests/get.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/sign-requests/get.js)_
 
 ## `box sign-requests:resend ID`
 
@@ -235,4 +246,4 @@ EXAMPLE
   box sign-requests:resend 12345
 ```
 
-_See code: [src/commands/sign-requests/resend.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/sign-requests/resend.js)_
+_See code: [src/commands/sign-requests/resend.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/sign-requests/resend.js)_
