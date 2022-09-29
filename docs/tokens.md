@@ -29,7 +29,7 @@ OPTIONS
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/tokens/exchange.js)_
+_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/tokens/exchange.js)_
 
 ## `box tokens:get`
 
@@ -47,7 +47,7 @@ OPTIONS
   --no-color             Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/tokens/get.js)_
+_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/tokens/get.js)_
 
 ## `box tokens:revoke TOKEN`
 
@@ -67,4 +67,4 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v3.3.2/src/commands/tokens/revoke.js)_
+_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v3.4.0/src/commands/tokens/revoke.js)_
