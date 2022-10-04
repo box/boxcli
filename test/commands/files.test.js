@@ -1829,9 +1829,11 @@ describe('Files', () => {
 	describe('files:download', () => {
 		let fileId = '12345',
 			fileName = 'test_file_download.txt',
+			saveAsFileName = 'new_file_name.txt',
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+			destinationPath = `${fileDownloadPath}/temp`,
 			getFileFixture = getFixture('files/get_files_id');
 
 		test
@@ -1869,8 +1871,6 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, expectedMessage);
 			});
 
-		const destination = `${fileDownloadPath}/temp`;
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1889,17 +1889,17 @@ describe('Files', () => {
 			.command([
 				'files:download',
 				fileId,
-				`--destination=${destination}`,
+				`--destination=${destinationPath}`,
 				'-y',
 				'--token=test'
 			])
 			.it('should download a file to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destination, fileName);
+				let downloadedFilePath = path.join(destinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destination);
+				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -1928,6 +1928,77 @@ describe('Files', () => {
 			.it('should download a file to a default destination', () => {
 				/* eslint-disable no-sync */
 				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, fileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'files:download',
+				fileId,
+				`--save-as=${saveAsFileName}`,
+				`--destination=${destinationPath}`,
+				'-y',
+				'--token=test'
+			])
+			.it('should save downloaded file using provided filename in save-as parameter', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				fs.rmdirSync(destinationPath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.do(() => {
+				/* eslint-disable no-sync */
+				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName), 'foo', 'utf8');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.stderr()
+			.command([
+				'files:download',
+				fileId,
+				`--save-as=${saveAsFileName}`,
+				'--overwrite',
+				'--token=test'
+			])
+			.it('should overwrite downloaded file when --overwrite flag is used', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
@@ -1977,9 +2048,11 @@ describe('Files', () => {
 
 		let fileId = '12345',
 			fileName = 'test_file_download.txt',
+			saveAsFileName = 'new_file_name.txt',
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+			destinationPath = `${fileDownloadPath}/temp`,
 			getFileFixture = getFixture('files/get_files_id');
 
 		test
@@ -2052,8 +2125,6 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
 			});
 
-		const destination = `${fileDownloadPath}/temp`;
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -2106,18 +2177,93 @@ describe('Files', () => {
 			.command([
 				'files:versions:download',
 				fileId,
-				`--destination=${destination}`,
+				`--destination=${destinationPath}`,
 				'-y',
 				fileVersionID,
 				'--token=test'
 			])
 			.it('should download a file version to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destination, fileName);
+				let downloadedFilePath = path.join(destinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destination);
+				fs.rmdirSync(destinationPath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.query({ version: fileVersionID })
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'files:versions:download',
+				fileId,
+				`--save-as=${saveAsFileName}`,
+				`--destination=${destinationPath}`,
+				'-y',
+				fileVersionID,
+				'--token=test'
+			])
+			.it('should save downloaded file version using provided filename in save-as parameter', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				fs.rmdirSync(destinationPath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+				.get(`/2.0/files/${fileId}/content`)
+				.query({ version: fileVersionID })
+				.reply(302, '', {
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+				})
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(fileDownloadPath)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.do(() => {
+				/* eslint-disable no-sync */
+				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName), 'foo', 'utf8');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.stderr()
+			.command([
+				'files:versions:download',
+				fileId,
+				`--save-as=${saveAsFileName}`,
+				'--overwrite',
+				fileVersionID,
+				'--token=test'
+			])
+			.it('should overwrite downloaded file version when --overwrite flag is used', () => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -2241,6 +2387,45 @@ describe('Files', () => {
 				'--token=test'
 			])
 			.it('should create a zip in a default destination', ctx => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, fileName);
+				let downloadContent = fs.readFileSync(downloadedFilePath);
+				let expectedContent = fs.readFileSync(testFilePath);
+				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.ok(downloadContent.equals(expectedContent));
+				assert.equal(ctx.stdout, downloadStatusFixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/zip_downloads', expectedBody)
+				.reply(202, createFileFixture)
+			)
+			.nock(TEST_DOWNLOAD_ROOT, api => api
+				.get(downloadUrl)
+				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+			)
+			.nock(TEST_API_ROOT, api => api
+				.get(statusUrl)
+				.reply(200, downloadStatusFixture)
+			)
+			.do(() => {
+				/* eslint-disable no-sync */
+				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, fileName), 'foo', 'utf8');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.command([
+				'files:zip',
+				fileName,
+				`--item=${items[0].type}:${items[0].id}`,
+				`--item=${items[1].type}:${items[1].id}`,
+				'--overwrite',
+				'--json',
+				'--token=test'
+			])
+			.it('should overwrite downloaded zip file when --overwrite flag is used', ctx => {
 				/* eslint-disable no-sync */
 				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);

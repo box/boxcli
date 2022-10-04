@@ -14,7 +14,7 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 		const { flags, args } = this.parse(FilesVersionsDownloadCommand);
 
 		let file = await this.client.files.get(args.fileID);
-		let fileName = file.name;
+		let fileName = flags['save-as'] ? flags['save-as'] : file.name;
 
 		let filePath;
 
@@ -26,7 +26,7 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 		}
 
 		/* eslint-disable no-sync */
-		if (fs.existsSync(filePath)) {
+		if (!flags.overwrite && fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
 
 			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
