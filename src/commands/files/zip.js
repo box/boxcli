@@ -25,7 +25,7 @@ class FilesZipCommand extends BoxCommand {
 		}
 
 		/* eslint-disable no-sync */
-		if (fs.existsSync(filePath)) {
+		if (!flags.overwrite && fs.existsSync(filePath)) {
 		/* eslint-enable no-sync */
 
 			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
@@ -65,6 +65,11 @@ FilesZipCommand.flags = {
 		description: 'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
 		default: true,
+	}),
+	overwrite: flags.boolean({
+		description: 'Overwrite a zip file if it already exists',
+		allowNo: true,
+		default: false
 	}),
 };
 
