@@ -1827,16 +1827,18 @@ describe('Files', () => {
 	});
 
 	describe('files:download', () => {
-		let fileId = '12345',
-			fileName = 'test_file_download.txt',
-			saveAsFileName = 'new_file_name.txt',
-			fileVersionID = '8764569',
-			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
-			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
-			destinationPath = `${fileDownloadPath}/temp`,
-			getFileFixture = getFixture('files/get_files_id');
+		// download tests are hanging indefinitely on windows
+		if(process.platform !== "win32") {
+			let fileId = '12345',
+				fileName = 'test_file_download.txt',
+				saveAsFileName = 'new_file_name.txt',
+				fileVersionID = '8764569',
+				testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+				fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+				destinationPath = `${fileDownloadPath}/temp`,
+				getFileFixture = getFixture('files/get_files_id');
 
-		test
+			test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
@@ -2042,6 +2044,7 @@ describe('Files', () => {
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
+		}
 	});
 
 	describe('files:versions:download', () => {
