@@ -58,8 +58,8 @@ describe('Collaborations', () => {
 				'--token=test'
 			])
 			.it('should send fields param and filter output when --fields flag is passed', ctx => {
-				let lb = os.EOL;
-				assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: editor${lb}`);
+				let lb = "\n";
+				assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: editor${os.EOL}`);
 			});
 	});
 
@@ -211,8 +211,8 @@ describe('Collaborations', () => {
 					'--token=test'
 				])
 				.it('should send fields param and filter output when --fields flag is passed', ctx => {
-					let lb = os.EOL;
-					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: viewer${lb}`);
+					let lb = "\n";
+					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: viewer${os.EOL}`);
 				});
 
 			leche.withData({
@@ -491,8 +491,8 @@ describe('Collaborations', () => {
 					'--token=test'
 				])
 				.it('should send fields param and filter output when --fields flag is passed', ctx => {
-					let lb = os.EOL;
-					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: previewer${lb}`);
+					let lb = "\n";
+					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: previewer${os.EOL}`);
 				});
 
 			leche.withData({

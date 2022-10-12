@@ -9,9 +9,10 @@ on:
       - main
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node: ['12']
     name: Node ${{ matrix.node }}
     steps:
