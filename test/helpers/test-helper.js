@@ -60,6 +60,12 @@ function getDriveLetter() {
 	return process.cwd().split('\\')[0];
 }
 
+function toUrlPath(filePath) {
+	return isWin()
+		? `/${filePath.replace(':', '').replace(/\\/g, '/')}`
+		: filePath;
+}
+
 module.exports = {
 	TEST_API_ROOT,
 	TEST_UPLOAD_ROOT,
@@ -69,5 +75,6 @@ module.exports = {
 	getBulkProgressBar,
 	getDownloadProgressBar,
 	getDriveLetter,
-	isWin
+	isWin,
+	toUrlPath
 };

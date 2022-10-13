@@ -4,7 +4,8 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, isWin } = require('../helpers/test-helper');
+const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT,
+	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, isWin, toUrlPath } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 
@@ -2055,6 +2056,7 @@ describe('Files', () => {
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+			fileDownloadUrl = toUrlPath(fileDownloadPath),
 			destinationPath = `${fileDownloadPath}/temp`,
 			getFileFixture = getFixture('files/get_files_id');
 
@@ -2065,11 +2067,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(toUrlPath(fileDownloadUrl))
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2090,7 +2092,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
+				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
 
 		test
@@ -2100,11 +2102,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2125,7 +2127,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
+				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
 
 		test
@@ -2135,11 +2137,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2168,11 +2170,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2203,11 +2205,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2239,11 +2241,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.do(() => {
