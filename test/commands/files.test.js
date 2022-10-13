@@ -2071,7 +2071,7 @@ describe('Files', () => {
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(toUrlPath(fileDownloadUrl))
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
