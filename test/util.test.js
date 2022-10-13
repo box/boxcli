@@ -8,7 +8,6 @@ const sinon = require('sinon');
 const process = require('process');
 const fs = require('fs');
 const chaiAsPromised = require('chai-as-promised');
-const os = require('os');
 const { getDriveLetter, isWin } = require('./helpers/test-helper');
 
 chai.use(chaiAsPromised);
@@ -22,9 +21,9 @@ describe('Utilities', () => {
 	let mockOS,
 		cliUtils;
 
-	const isWindows = isWin()
-	
-	const driveLetter = isWindows ? getDriveLetter() : ''
+	const isWindows = isWin();
+
+	const driveLetter = isWindows ? getDriveLetter() : '';
 
 	beforeEach(() => {
 		mockery.enable({
@@ -51,11 +50,11 @@ describe('Utilities', () => {
 	describe('parsePath()', () => {
 
 		leche.withData({
- 			'bare tilde': [
+			'bare tilde':	[
 				'~',
 				...isWindows ? [`${driveLetter}\\home\\user`] : ['/home/user']
 			],
- 			'subdirectory of tilde': [
+			'subdirectory of tilde': [
 				'~/foo/bar',
 				...isWindows ? [`${driveLetter}\\home\\user\\foo\\bar`] : ['/home/user/foo/bar']
 			],

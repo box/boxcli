@@ -12,6 +12,10 @@ const DEFAULT_DOWNLOAD_PATH = path.join(
 				'Downloads/Box-Downloads'
 );
 
+function isWin() {
+	return process.platform === 'win32';
+}
+
 function getFixture(fixture) {
 	if (!path.extname(fixture)) {
 		fixture += '.json';
@@ -24,8 +28,8 @@ function getFixture(fixture) {
 
 	if (isWin()) {
 		/* eslint-disable require-unicode-regexp */
-		let transformedContent = fixture.endsWith('table.txt') 
-			? content.replace(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '') 
+		let transformedContent = fixture.endsWith('table.txt')
+			? content.replace(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '')
 			: content.replace(/\r/g, '');
 		/* eslint-disable require-unicode-regexp */
 
@@ -53,11 +57,7 @@ function getDownloadProgressBar(size) {
 }
 
 function getDriveLetter() {
-	return os.homedir().split("\\")[0];
-}
-
-function isWin() {
-	return process.platform === 'win32';
+	return os.homedir().split('\\')[0];
 }
 
 module.exports = {

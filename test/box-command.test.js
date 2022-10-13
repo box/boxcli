@@ -6,7 +6,6 @@ const BoxCommand = require('../src/box-command');
 const sinon = require('sinon');
 const leche = require('leche');
 const { test } = require('@oclif/test');
-const os = require('os');
 const debug = require('debug');
 const { TEST_API_ROOT, isWin } = require('./helpers/test-helper');
 
@@ -66,7 +65,7 @@ describe('BoxCommand', () => {
 			])
 			.it('should save output to file named with valid characters', ctx => {
 				assert.include(ctx.stderr, 'folders-collaborations-add');
-				const stderr = isWin() ? ctx.stderr.replace(':', '') : ctx.stderr
+				const stderr = isWin() ? ctx.stderr.replace(':', '') : ctx.stderr;
 				assert.notInclude(stderr, ':');
 			});
 	});

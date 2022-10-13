@@ -1828,7 +1828,7 @@ describe('Files', () => {
 
 	describe('files:download', () => {
 		// download tests are hanging indefinitely on windows
-		if(!isWin()) {
+		if (!isWin()) {
 			let fileId = '12345',
 				fileName = 'test_file_download.txt',
 				saveAsFileName = 'new_file_name.txt',

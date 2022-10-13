@@ -1666,13 +1666,13 @@ describe('Folders', () => {
 				'--no-create-path'
 			])
 			.it('should output error when destination directory does not exist', ctx => {
-				const path = isWin() 
+				const filePath = isWin()
 					? `${getDriveLetter()}\\path\\really\\should\\not\\exist`
-					: '/path/really/should/not/exist'
+					: '/path/really/should/not/exist';
 
 				assert.equal(
 					ctx.stderr,
-					`The ${path} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
+					`The ${filePath} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
 				);
 			});
 
