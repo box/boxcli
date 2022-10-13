@@ -5,7 +5,7 @@ const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
 const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT,
-	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, isWin, toUrlPath } = require('../helpers/test-helper');
+	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, toUrlPath } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 
