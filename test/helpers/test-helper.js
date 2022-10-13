@@ -57,7 +57,7 @@ function getDownloadProgressBar(size) {
 }
 
 function getDriveLetter() {
-	return os.homedir().split('\\')[0];
+	return process.cwd().split('\\')[0];
 }
 
 module.exports = {
