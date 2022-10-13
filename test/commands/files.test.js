@@ -1828,28 +1828,27 @@ describe('Files', () => {
 	});
 
 	describe('files:download', () => {
-		// download tests are hanging indefinitely on windows
-		if (!isWin()) {
-			let fileId = '12345',
-				fileName = 'test_file_download.txt',
-				saveAsFileName = 'new_file_name.txt',
-				fileVersionID = '8764569',
-				testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
-				fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
-				destinationPath = `${fileDownloadPath}/temp`,
-				getFileFixture = getFixture('files/get_files_id');
+		let fileId = '12345',
+		fileName = 'test_file_download.txt',
+		saveAsFileName = 'new_file_name.txt',
+		fileVersionID = '8764569',
+		testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+		fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+		fileDownloadUrl = toUrlPath(fileDownloadPath),
+		destinationPath = path.join(fileDownloadPath, 'temp'),
+		getFileFixture = getFixture('files/get_files_id');
 
-			test
+		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1880,11 +1879,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1913,11 +1912,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1944,11 +1943,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1978,11 +1977,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.do(() => {
@@ -2016,11 +2015,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2045,7 +2044,6 @@ describe('Files', () => {
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
-		}
 	});
 
 	describe('files:versions:download', () => {
@@ -2057,7 +2055,7 @@ describe('Files', () => {
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
 			fileDownloadUrl = toUrlPath(fileDownloadPath),
-			destinationPath = `${fileDownloadPath}/temp`,
+			destinationPath = path.join(fileDownloadPath, 'temp'),
 			getFileFixture = getFixture('files/get_files_id');
 
 		test
@@ -2332,7 +2330,7 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, downloadStatusFixture);
 			});
 
-		const destination = `${fileDownloadPath}/temp`;
+		const destination = path.join(fileDownloadPath, 'temp');
 
 		test
 			.nock(TEST_API_ROOT, api => api
