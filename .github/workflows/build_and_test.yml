@@ -11,6 +11,7 @@ jobs:
   build-and-test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node: ['12']
@@ -30,7 +31,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-node-${{ matrix.node }}
+          flag-name: run-node-${{ matrix.node }}-${{ matrix.os }}
           parallel: true
   finish:
     needs: build-and-test

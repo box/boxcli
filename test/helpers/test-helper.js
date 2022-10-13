@@ -8,8 +8,8 @@ const TEST_API_ROOT = 'https://api.box.com';
 const TEST_UPLOAD_ROOT = 'https://upload.box.com/api';
 const TEST_DOWNLOAD_ROOT = 'https://dl.boxcloud.com';
 const DEFAULT_DOWNLOAD_PATH = path.join(
-	os.homedir(),
-	'Downloads/Box-Downloads'
+				os.homedir(),
+				'Downloads/Box-Downloads'
 );
 
 function getFixture(fixture) {
@@ -22,10 +22,10 @@ function getFixture(fixture) {
 		'utf8'
 	);
 
-	if (process.platform === 'win32') {
+	if (isWin()) {
 		/* eslint-disable require-unicode-regexp */
-		let transformedContent = fixture.endsWith('table.txt')
-			? content.replace(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '')
+		let transformedContent = fixture.endsWith('table.txt') 
+			? content.replace(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '') 
 			: content.replace(/\r/g, '');
 		/* eslint-disable require-unicode-regexp */
 
@@ -52,6 +52,14 @@ function getDownloadProgressBar(size) {
 	);
 }
 
+function getDriveLetter() {
+	return os.homedir().split("\\")[0];
+}
+
+function isWin() {
+	return process.platform === 'win32';
+}
+
 module.exports = {
 	TEST_API_ROOT,
 	TEST_UPLOAD_ROOT,
@@ -60,4 +68,6 @@ module.exports = {
 	getFixture,
 	getBulkProgressBar,
 	getDownloadProgressBar,
+	getDriveLetter,
+	isWin
 };

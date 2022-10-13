@@ -4,7 +4,7 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar } = require('../helpers/test-helper');
+const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, isWin } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 
@@ -1828,7 +1828,7 @@ describe('Files', () => {
 
 	describe('files:download', () => {
 		// download tests are hanging indefinitely on windows
-		if(process.platform !== "win32") {
+		if(!isWin()) {
 			let fileId = '12345',
 				fileName = 'test_file_download.txt',
 				saveAsFileName = 'new_file_name.txt',

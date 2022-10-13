@@ -8,6 +8,8 @@ const sinon = require('sinon');
 const process = require('process');
 const fs = require('fs');
 const chaiAsPromised = require('chai-as-promised');
+const os = require('os');
+const { getDriveLetter, isWin } = require('./helpers/test-helper');
 
 chai.use(chaiAsPromised);
 
@@ -19,6 +21,10 @@ describe('Utilities', () => {
 
 	let mockOS,
 		cliUtils;
+
+	const isWindows = isWin()
+	
+	const driveLetter = isWindows ? getDriveLetter() : ''
 
 	beforeEach(() => {
 		mockery.enable({
@@ -45,65 +51,65 @@ describe('Utilities', () => {
 	describe('parsePath()', () => {
 
 		leche.withData({
-			'bare tilde': [
+ 			'bare tilde': [
 				'~',
-				'/home/user'
+				...isWindows ? [`${driveLetter}\\home\\user`] : ['/home/user']
 			],
-			'subdirectory of tilde': [
+ 			'subdirectory of tilde': [
 				'~/foo/bar',
-				'/home/user/foo/bar'
+				...isWindows ? [`${driveLetter}\\home\\user\\foo\\bar`] : ['/home/user/foo/bar']
 			],
 			'absolute path with interior tilde': [
 				'/var/~/bar',
-				'/var/~/bar'
+				...isWindows ? [`${driveLetter}\\var\\~\\bar`] : ['/var/~/bar']
 			],
 			'relative path with interior tilde': [
 				'./~/bar',
-				`${process.cwd()}/~/bar`
+				...isWindows ? [`${process.cwd()}\\~\\bar`] : [`${process.cwd()}/~/bar`]
 			],
 			'absolute path': [
 				'/var/box/files',
-				'/var/box/files'
+				...isWindows ? [`${driveLetter}\\var\\box\\files`] : ['/var/box/files']
 			],
 			'relative path': [
 				'./foo',
-				`${process.cwd()}/foo`
+				...isWindows ? [`${process.cwd()}\\foo`] : [`${process.cwd()}/foo`]
 			],
 			'root directory': [
 				'/',
-				'/'
+				...isWindows ? [`${driveLetter}\\`] : ['/']
 			],
 			'relative path that REALLY should be the root': [
 				'../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..',
-				'/'
+				...isWindows ? [`${driveLetter}\\`] : ['/']
 			],
 			'absolute file path': [
 				'/foo/bar/doc.pdf',
-				'/foo/bar/doc.pdf'
+				...isWindows ? [`${driveLetter}\\foo\\bar\\doc.pdf`] : ['/foo/bar/doc.pdf']
 			],
 			'relative file path': [
 				'./pic.jpg',
-				`${process.cwd()}/pic.jpg`
+				...isWindows ? [`${process.cwd()}\\pic.jpg`] : [`${process.cwd()}/pic.jpg`]
 			],
 			'file in current directory': [
 				'essay.docx',
-				`${process.cwd()}/essay.docx`
+				...isWindows ? [`${process.cwd()}\\essay.docx`] : [`${process.cwd()}/essay.docx`]
 			],
 			'relative file path that REALLY should be in the root directory': [
 				'../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../a.txt',
-				'/a.txt'
+				...isWindows ? [`${driveLetter}\\a.txt`] : ['/a.txt']
 			],
 			'folder name with spaces in it': [
 				'/A/Folder/With/Spaces In It',
-				'/A/Folder/With/Spaces In It'
+				...isWindows ? [`${driveLetter}\\A\\Folder\\With\\Spaces In It`] : ['/A/Folder/With/Spaces In It']
 			],
 			'file name with spaces in it': [
 				'/home/otheruser/Secret Stuff.pdf',
-				'/home/otheruser/Secret Stuff.pdf'
+				...isWindows ? [`${driveLetter}\\home\\otheruser\\Secret Stuff.pdf`] : ['/home/otheruser/Secret Stuff.pdf']
 			],
 			'absolute path to folder with trailing slash': [
 				'/foo/bar/baz/',
-				'/foo/bar/baz'
+				...isWindows ? [`${driveLetter}\\foo\\bar\\baz`] : ['/foo/bar/baz']
 			],
 			'dot for current directory': [
 				'.',

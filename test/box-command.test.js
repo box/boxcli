@@ -8,7 +8,7 @@ const leche = require('leche');
 const { test } = require('@oclif/test');
 const os = require('os');
 const debug = require('debug');
-const { TEST_API_ROOT } = require('./helpers/test-helper');
+const { TEST_API_ROOT, isWin } = require('./helpers/test-helper');
 
 describe('BoxCommand', () => {
 
@@ -29,7 +29,7 @@ describe('BoxCommand', () => {
 			])
 			.it('should enable framework debugging when verbose flag is passed', ctx => {
 				debug.disable();
-				let debugLines = ctx.stderr.split(os.EOL);
+				let debugLines = ctx.stderr.split('\n');
 				assert.include(debugLines[0], 'box:@box/cli:hooks:init');
 				assert.include(debugLines[1], 'box:help');
 			})
@@ -66,7 +66,8 @@ describe('BoxCommand', () => {
 			])
 			.it('should save output to file named with valid characters', ctx => {
 				assert.include(ctx.stderr, 'folders-collaborations-add');
-				assert.notInclude(ctx.stderr, ':');
+				const stderr = isWin() ? ctx.stderr.replace(':', '') : ctx.stderr
+				assert.notInclude(stderr, ':');
 			});
 	});
 
