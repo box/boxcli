@@ -1835,8 +1835,16 @@ describe('Files', () => {
 		testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 		fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
 		fileDownloadUrl = toUrlPath(fileDownloadPath),
-		destinationPath = path.join(fileDownloadPath, 'temp'),
+		tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
+		tempDestinationPath2 = path.join(fileDownloadPath, 'filesTemp2'),
 		getFileFixture = getFixture('files/get_files_id');
+
+		after(() => {
+			/* eslint-disable no-sync */
+			fs.rmdirSync(tempDestinationPath);
+			fs.rmdirSync(tempDestinationPath2);
+			/* eslint-enable no-sync */
+		});
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -1891,17 +1899,16 @@ describe('Files', () => {
 			.command([
 				'files:download',
 				fileId,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath}`,
 				'-y',
 				'--token=test'
 			])
 			.it('should download a file to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, fileName);
+				let downloadedFilePath = path.join(tempDestinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -1956,17 +1963,16 @@ describe('Files', () => {
 				'files:download',
 				fileId,
 				`--save-as=${saveAsFileName}`,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath2}`,
 				'-y',
 				'--token=test'
 			])
 			.it('should save downloaded file using provided filename in save-as parameter', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadedFilePath = path.join(tempDestinationPath2, saveAsFileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -2047,7 +2053,6 @@ describe('Files', () => {
 	});
 
 	describe('files:versions:download', () => {
-
 		let fileId = '12345',
 			fileName = 'test_file_download.txt',
 			saveAsFileName = 'new_file_name.txt',
@@ -2055,8 +2060,16 @@ describe('Files', () => {
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
 			fileDownloadUrl = toUrlPath(fileDownloadPath),
-			destinationPath = path.join(fileDownloadPath, 'temp'),
+			tempDestinationPath = path.join(fileDownloadPath, 'versionsTemp'),
+			tempDestinationPath2 = path.join(fileDownloadPath, 'versionsTemp2'),
 			getFileFixture = getFixture('files/get_files_id');
+
+		after(() => {
+			/* eslint-disable no-sync */
+			fs.rmdirSync(tempDestinationPath);
+			fs.rmdirSync(tempDestinationPath2);
+			/* eslint-enable no-sync */
+		});
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -2180,18 +2193,17 @@ describe('Files', () => {
 			.command([
 				'files:versions:download',
 				fileId,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath}`,
 				'-y',
 				fileVersionID,
 				'--token=test'
 			])
 			.it('should download a file version to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, fileName);
+				let downloadedFilePath = path.join(tempDestinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -2216,18 +2228,17 @@ describe('Files', () => {
 				'files:versions:download',
 				fileId,
 				`--save-as=${saveAsFileName}`,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath2}`,
 				'-y',
 				fileVersionID,
 				'--token=test'
 			])
 			.it('should save downloaded file version using provided filename in save-as parameter', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadedFilePath = path.join(tempDestinationPath2, saveAsFileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
