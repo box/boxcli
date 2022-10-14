@@ -9,11 +9,13 @@ on:
       - main
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node: ['12']
-    name: Node ${{ matrix.node }}
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,7 +31,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-node-${{ matrix.node }}
+          flag-name: run-node-${{ matrix.node }}-${{ matrix.os }}
           parallel: true
   finish:
     needs: build-and-test

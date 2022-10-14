@@ -54,8 +54,8 @@ describe('Manual Request', () => {
 				'--token=test'
 			])
 			.it('should make simple GET request when resource given as path (YAML Output)', ctx => {
-
-				let expectedOutput = `Status Code: 200${os.EOL}Headers: {}${os.EOL}Body: {}${os.EOL}`;
+				let lb = "\n"
+				let expectedOutput = `Status Code: 200${lb}Headers: {}${lb}Body: {}${os.EOL}`;
 
 				assert.equal(ctx.stdout, expectedOutput);
 			});

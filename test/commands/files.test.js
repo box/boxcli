@@ -4,7 +4,8 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar } = require('../helpers/test-helper');
+const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT,
+	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, toUrlPath } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 
@@ -1828,13 +1829,22 @@ describe('Files', () => {
 
 	describe('files:download', () => {
 		let fileId = '12345',
-			fileName = 'test_file_download.txt',
-			saveAsFileName = 'new_file_name.txt',
-			fileVersionID = '8764569',
-			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
-			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
-			destinationPath = `${fileDownloadPath}/temp`,
-			getFileFixture = getFixture('files/get_files_id');
+		fileName = 'test_file_download.txt',
+		saveAsFileName = 'new_file_name.txt',
+		fileVersionID = '8764569',
+		testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+		fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+		fileDownloadUrl = toUrlPath(fileDownloadPath),
+		tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
+		tempDestinationPath2 = path.join(fileDownloadPath, 'filesTemp2'),
+		getFileFixture = getFixture('files/get_files_id');
+
+		after(() => {
+			/* eslint-disable no-sync */
+			fs.rmdirSync(tempDestinationPath);
+			fs.rmdirSync(tempDestinationPath2);
+			/* eslint-enable no-sync */
+		});
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -1842,11 +1852,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1877,11 +1887,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1889,17 +1899,16 @@ describe('Files', () => {
 			.command([
 				'files:download',
 				fileId,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath}`,
 				'-y',
 				'--token=test'
 			])
 			.it('should download a file to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, fileName);
+				let downloadedFilePath = path.join(tempDestinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -1910,11 +1919,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1941,11 +1950,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -1954,17 +1963,16 @@ describe('Files', () => {
 				'files:download',
 				fileId,
 				`--save-as=${saveAsFileName}`,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath2}`,
 				'-y',
 				'--token=test'
 			])
 			.it('should save downloaded file using provided filename in save-as parameter', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadedFilePath = path.join(tempDestinationPath2, saveAsFileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -1975,11 +1983,11 @@ describe('Files', () => {
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.do(() => {
@@ -2013,11 +2021,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2045,15 +2053,23 @@ describe('Files', () => {
 	});
 
 	describe('files:versions:download', () => {
-
 		let fileId = '12345',
 			fileName = 'test_file_download.txt',
 			saveAsFileName = 'new_file_name.txt',
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
-			destinationPath = `${fileDownloadPath}/temp`,
+			fileDownloadUrl = toUrlPath(fileDownloadPath),
+			tempDestinationPath = path.join(fileDownloadPath, 'versionsTemp'),
+			tempDestinationPath2 = path.join(fileDownloadPath, 'versionsTemp2'),
 			getFileFixture = getFixture('files/get_files_id');
+
+		after(() => {
+			/* eslint-disable no-sync */
+			fs.rmdirSync(tempDestinationPath);
+			fs.rmdirSync(tempDestinationPath2);
+			/* eslint-enable no-sync */
+		});
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -2062,11 +2078,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2087,7 +2103,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
+				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
 
 		test
@@ -2097,11 +2113,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2122,7 +2138,7 @@ describe('Files', () => {
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				assert.equal(ctx.stderr, 'Downloaded file test_file_download.txt\n');
+				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
 
 		test
@@ -2132,11 +2148,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2165,11 +2181,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2177,18 +2193,17 @@ describe('Files', () => {
 			.command([
 				'files:versions:download',
 				fileId,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath}`,
 				'-y',
 				fileVersionID,
 				'--token=test'
 			])
 			.it('should download a file version to a non-existing destination', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, fileName);
+				let downloadedFilePath = path.join(tempDestinationPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -2200,11 +2215,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.stdout()
@@ -2213,18 +2228,17 @@ describe('Files', () => {
 				'files:versions:download',
 				fileId,
 				`--save-as=${saveAsFileName}`,
-				`--destination=${destinationPath}`,
+				`--destination=${tempDestinationPath2}`,
 				'-y',
 				fileVersionID,
 				'--token=test'
 			])
 			.it('should save downloaded file version using provided filename in save-as parameter', () => {
 				/* eslint-disable no-sync */
-				let downloadedFilePath = path.join(destinationPath, saveAsFileName);
+				let downloadedFilePath = path.join(tempDestinationPath2, saveAsFileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destinationPath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
@@ -2236,11 +2250,11 @@ describe('Files', () => {
 				.get(`/2.0/files/${fileId}/content`)
 				.query({ version: fileVersionID })
 				.reply(302, '', {
-					Location: TEST_DOWNLOAD_ROOT + fileDownloadPath
+					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get(fileDownloadPath)
+				.get(fileDownloadUrl)
 				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
 			)
 			.do(() => {
@@ -2327,7 +2341,7 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, downloadStatusFixture);
 			});
 
-		const destination = `${fileDownloadPath}/temp`;
+		const destination = path.join(fileDownloadPath, 'temp');
 
 		test
 			.nock(TEST_API_ROOT, api => api

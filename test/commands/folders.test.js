@@ -4,7 +4,7 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs-extra');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH } = require('../helpers/test-helper');
+const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDriveLetter, isWin } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 const _ = require('lodash');
@@ -1666,9 +1666,13 @@ describe('Folders', () => {
 				'--no-create-path'
 			])
 			.it('should output error when destination directory does not exist', ctx => {
+				const filePath = isWin()
+					? `${getDriveLetter()}\\path\\really\\should\\not\\exist`
+					: '/path/really/should/not/exist';
+
 				assert.equal(
 					ctx.stderr,
-					`The /path/really/should/not/exist path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
+					`The ${filePath} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
 				);
 			});
 
