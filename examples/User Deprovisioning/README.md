@@ -1,5 +1,5 @@
 # Deprovision & Delete Users Automation
-This Box CLI script deprovision a list of users by first transfering user content to another user's root folder under "Employee Archive" (Transfer content default: "Y") before deleting that user.
+This Box CLI script deprovision a list of users by first transfering user content to another user's root folder under "Employee Archive" before deleting that user.
 
 > For every user, script makes 7 API calls to archive their content and delete the account.
 
@@ -16,44 +16,98 @@ This Box CLI script deprovision a list of users by first transfering user conten
     2. For Windows, Install the latest version of [dotnet core](https://dotnet.microsoft.com/download).
     
 3. Test PowerShell by running the `pwsh` command in your terminal.
+   
    ```bash
    pwsh
    ```
    
-	```
-	mikechen@mbp create-users-automation % pwsh
-	PowerShell 7.2.1
-	Copyright (c) Microsoft Corporation.
-	
-	https://aka.ms/powershell
-	Type 'help' to get help.
-	
-	PS /Users/mikechen>
-	```
+   ```bash
+   mikechen@mbp create-users-automation % pwsh
+   PowerShell 7.2.1
+   Copyright (c) Microsoft Corporation.
+   
+   https://aka.ms/powershell
+   Type 'help' to get help.
+   
+   PS /Users/mikechen>
+   ```
 
 4. Create an OAuth Application using the [CLI Setup Quick Start][oauth-guide].
 
-## 1. Script Parameters
-1. Update the [EmployeeList](Users_Deprovision.ps1#L12) to set your own Employee List CSV Path.
-2. Customize the [input file of employee accounts for deletion](Employees_to_delete.csv) by providing their **email** addresses
-	* For example, update the [Employees_to_delete.csv](Employees_to_delete.csv) with the following data:
-	```
-	name,email
-	Managed User 1,ManagedUser1@test.com
-	```
-3. Optional: To skip transfer of user content before deletion, set [TransferContent](Users_Deprovision.ps1#L15) to "N".
-4. Optional: Update Archive folder name by changing  [EmployeeArchiveFolderName](Users_Deprovision.ps1#L18) to any name of your choice.
-5. Optional: Update the User ID which will be the new owner of the files, by changing [NewFilesOwnerID](Users_Deprovision.ps1#L10) or
-set the flag `NewFilesOwnerID` when running the script:
-`./Users_Deprovision.ps1 -NewFilesOwnerID 123456`. If no ID was provided, script will prompt to input in the interactive mode, or use the current authenticated user ID to receive the content.
-6. Optional: To run the script in dry run mode, set the `DryRun` boolean flag when running the script:
-`./Users_Deprovision.ps1 -DryRun`.
- Dry run doesn't mean that API calls won't be made, instead any create/update/delete calls will be skipped only.
+## Configure the script
+### Update the list of employees for deletion
 
-## 2. Run the script
-Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
+The header row should look like the below:
 
-```
+   ```bash
+   name, email
+   ```
+
+   where:
+   
+   * `name` is the name of the user in Box. 
+   * `email` is the primary email address of the user in Box.
+
+For example, update the [Employees_to_delete.csv](/examples/User%20Deprovisioning/Employees_to_delete.csv) with the following data:
+
+   ```bash
+   Managed,User 1,ManagedUser1@test.com,manageduser1
+   Managed,User 2,ManagedUser2@test.com,manageduser2
+   Managed,User 3,ManagedUser3@test.com,manageduser3
+   ```
+
+### List of parameters
+
+   |`Parameter`| `Description`| `Required` | `Default Value` |
+   |-----------|--------------|------------|-----------------|
+   |`EmployeeList`|  Path to Employee List CSV with employees to be deleted. | Yes | - |
+   |`SkipTransferContent`| Set this flag to skip transfer of user content before deletion when running the script. Otherwise user's content will be transferred. | No | `False` |
+   |`NewFilesOwnerID`|  The ID of the user to transfer files to before deleting the user. If not specified, the script will prompt to input in the interactive mode, or use the current authenticated user ID to receive the content.| No | If not specified, the script will prompt to input in the interactive mode, or use the current authenticated user ID. |
+   |`EmployeeArchiveFolderName`|The name of a folder, where users' content will be moved to if `SkipTransferContent` is set to `False`. If a folder with this name already exists in the user's `NewFilesOwnerID` root folder, it will be used. Otherwise, a new one will be created.|Yes|`Employee Archive`|
+   |`DryRun`|A flag that determines the script should be run in a mode, where no delete/create/update calls will be made, only read ones. |No|`False`|
+
+
+### Define script parameters
+
+You can the following options to pass parameters.
+
+* Use hardcoded value in script.
+
+    To use this option, update all required parameters listed in the [script parameters section][parameters] before running.
+
+* Run script with parameters.
+
+  You can specify parameters while providing the command. For example:
+
+     ```bash
+      PS > ./Users_Deprovision.ps1 -EmployeeList ./Employees_to_delete.csv `
+      -NewFilesOwnerID  123456789
+      -EmployeeArchiveFolderName "Employee Archive"
+     ```
+
+  or
+
+     ```bash
+      PS > ./Users_Deprovision.ps1 -EmployeeList ./Employees_to_delete.csv `
+      -SkipTransferContent
+     ```
+
+  If you don't specify parameters, the script will prompt you to enter it.
+
+     ```bash
+      PS > ./Users_Deprovision.ps1
+      Please enter the path to the employee list CSV file:
+      ./Employees_to_delete.csv
+      Please specify the user ID of the user who will own the files of the users being deprovisioned.
+      Press Enter if you want to use the current user as the new owner.
+      User ID: 1234567689
+      Starting User Deprovisioning script...
+     ```
+
+## Run the script
+Now all you need to do is run the script. Change the directory to the folder containing the script. In this example, it is the `User Deprovisioning` folder.
+
+```bash
 rvb@lab:~/box-cli/examples/User Deprovisioning$ pwsh
 PowerShell 7.2.4
 Copyright (c) Microsoft Corporation.
@@ -65,23 +119,16 @@ PS /home/rvb/box-cli/examples/User Deprovisioning>
 ```
 
 Run the script:
+
 ```bash
 ./Users_Deprovision.ps1
 ```
 
+When all parameters are defined, you will see following output to confirm the script started:
 
-```
-PS /home/rvb/box-cli/examples/User Creation & Provisioning> ./Users_Deprovision.ps1
+```bash
+PS /home/rvb/box-cli/examples/User Deprovisioning> ./Users_Deprovision.ps1
 Starting User Deprovisioning script...
-```
-
-Once script completes, you will see the following confirmation:
-
-```
-....
-Transfered employee content Managed User 1 with User ID: 19927131476 to Employee Archive Folder
-Deleted user 19927131476
-Deleted employee Managed User 1
 ```
 
 ## Logging

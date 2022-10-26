@@ -1,33 +1,41 @@
 #APP SETUP
-#README: This powershell script will use the Box CLI to deprovision a list of users by first transferring user content to the current admin user's root folder (Transfer content default: "Y") before deleting that user.
+#README: This powershell script will use the Box CLI to deprovision a list of users by first transferring user content to the current admin user's root folder before deleting that user.
 
 #APPLICATION ACCESS LEVEL (FOR JWT APPS): App + Enterprise Access
 #APPLICATION SCOPES: Read & Write all folders stored in Box, Manage users, & Make API calls using the as-user header
 ########################################################################################
 
+# Example of configuration
+# param (
+#     [string]$EmployeeList = "./Employees_to_delete.csv",
+#     [switch]$SkipTransferContent = $false,
+#     [string]$NewFilesOwnerID = "123456789",
+#     [string]$EmployeeArchiveFolderName = "Employee Archive",
+#     [switch]$DryRun = $false
+# )
+
 param (
-    [switch]$DryRun = $false, # if enabled, then no delete/create/update calls will be made, only read ones
-    [string]$NewFilesOwnerID = "" # The ID of the user to transfer files to before deleting the user
+    # Set Employee List CSV Path with employees to be deleted.
+    # The file should have two columns: name,email.
+    [string]$EmployeeList = "",
+
+    # Skip transfering user content before deleting to the user with ID -> $NewFilesOwnerID.
+    [switch]$SkipTransferContent = $false,
+
+    # The ID of the user to transfer files to before deleting the user.
+     # If not specified, current user will be used.
+    [string]$NewFilesOwnerID = "",
+
+    # The name of a folder, where users' content will be moved to if $SkipTransferContent is set to $false(default value).
+    # If a folder with this name already exists in the user's $NewFilesOwnerID root folder, it will be used. Otherwise, a new one will be created.
+    # NOTE - If you want to be promt to enter archive folder name, set this value to an empty string.
+    [string]$EmployeeArchiveFolderName = "Employee Archive",
+
+     # If enabled, then no delete/create/update calls will be made, only read ones
+    [switch]$DryRun = $false
 )
 
 ########################################################################################
-###   SCRIPT CONFIG - MODIFY THESE FOR YOUR ENVIRONMENT   ##############################
-########################################################################################
-
-# Set Employee List CSV Path
-$EmployeeList = "./Employees_to_delete.csv"
-
-# Transfer user content before deletion - "Y" or "N"
-$TransferContent = "Y"
-
-# Employee Archive folder name
-$EmployeeArchiveFolderName = "Employee Archive"
-
-########################################################################################
-###   SCRIPT BUSINESS LOGIC  ###########################################################
-########################################################################################
-
-$EmployeeArchiveFolderID = $null
 
 # Get current script file name
 Function Get-Script-Name() {
@@ -175,35 +183,62 @@ function IsInteractiveShell {
     return $false
 }
 
+#############################################################################
+
+# Prompt for params if they are missing
+if (IsInteractiveShell) {
+    if (-not $EmployeeList) {
+        Write-Log "Please enter the path to the employee list CSV file:" -output true -color Yellow
+        $EmployeeList = Read-Host
+    }
+
+    if (-not $SkipTransferContent) {
+        if (-not $NewFilesOwnerID) {
+            Write-Log "Please specify the user ID of the user who will own the files of the users being deprovisioned." -output true -color Yellow
+            Write-Log "Press Enter if you want to use the current user as the new owner." -output true -color Yellow
+            $NewFilesOwnerID = Read-Host "User ID"
+        }
+
+        if (-not $EmployeeArchiveFolderName) {
+            Write-Log "Please enter the archive folder name where users' content will be moved to:" -output true -color Yellow
+            $EmployeeArchiveFolderName = Read-Host
+        }
+    }
+}
+
+if (-not $EmployeeList -or (-not $SkipTransferContent -and (-not $EmployeeArchiveFolderName))) {
+    Write-Log "Missing required parameters." -errorMessage "Missing required parameters" -output true -color Red
+    exit
+}
+
+#############################################################################
+
+$EmployeeArchiveFolderID = $null
+
 # Deprovision users
 Function Start-Deprovisioning-Script {
     if ($DryRun) {
-        Write-Log "Starting User Deprovisioning script in DryRun mode" -output false
+        Write-Log "Starting User Deprovisioning script in DryRun mode..." -output true
     } else {
-        Write-Log "Starting User Deprovisioning script" -output false
+        Write-Log "Starting User Deprovisioning script..." -output true
     }
 
     # Get employees json file and convert from CSV to an array of objects
-    Try {
+    try {
         $Employees = Import-Csv $EmployeeList
         Write-Log "Importing csv of users to deprovision." -output true
     }
-    Catch {
+    catch {
         Write-Log "Error reading employee data from CSV file $EmployeeList" -exception $_.Exception -output true -color Red
         break
     }
 
     # Create folder if need to transfer content
-    if ($TransferContent -eq "Y") {
+    if (-not $SkipTransferContent) {
         # Check if new file owner ID already specified
         if ($NewFilesOwnerID) {
             Write-Log "New files owner ID is set to: $NewFilesOwnerID" -output true -color Green
-        } elseif (IsInteractiveShell) {
-            Write-Log "Please specify the user ID of the user who will own the files of the users being deprovisioned." -output true -color Yellow
-            Write-Log "Press Enter if you want to use the current user as the new owner." -output true -color Yellow
-            $NewFilesOwnerID = Read-Host "User ID"
         }
-        
 
         # Getting current user
         $CurrentUserId = ""
@@ -233,13 +268,12 @@ Function Start-Deprovisioning-Script {
                 break
             }
         }
-        
+
         # Use current user and new files owner if not specified
         if (!$NewFilesOwnerID) {
             Write-Log "Using current user as new files owner" -output true -color Yellow
             $NewFilesOwnerID = $CurrentUserId
         }
-        
 
         # Create a "Employee Archive" folder in User's Root directory if one does not already exist
         # List root folder contents
@@ -303,7 +337,7 @@ Function Start-Deprovisioning-Script {
             continue
         }
 
-        if($TransferContent -eq "Y") {
+        if(!$SkipTransferContent) {
             if(!$DryRun) {
                 # Transfer users content to current user's root folder before deleting user
                 Write-Log "Transferring $($FoundEmployee.name) content over to current user's Root folder with name ""$($FoundEmployee.login) - $($FoundEmployee.name)'s Files and Folders""..." -output true
