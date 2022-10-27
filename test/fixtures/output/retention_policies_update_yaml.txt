@@ -3,6 +3,7 @@ ID: '11111'
 Policy Name: Retained Financial Records
 Policy Type: finite
 Retention Length: '365'
+Retention Type: non_modifiable
 Disposition Action: remove_retention
 Can Owner Extend Retention: false
 Status: active
