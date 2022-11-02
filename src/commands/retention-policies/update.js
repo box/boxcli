@@ -20,6 +20,9 @@ class RetentionPoliciesUpdateCommand extends BoxCommand {
 		if (flags['retention-length']) {
 			updates.retention_length = parseInt(flags['retention-length'], 10);
 		}
+		if (flags['non-modifiable']) {
+			updates.retention_type = this.client.retentionPolicies.retentionTypes.NON_MODIFIABLE;
+		}
 		if (flags.retire) {
 			updates.status = 'retired';
 		}
@@ -60,6 +63,9 @@ RetentionPoliciesUpdateCommand.flags = {
 	'retention-length': flags.string({
 		char: 'l',
 		description: 'The amount of time, in days, to apply the retention policy. Required for finite policies'
+	}),
+	'non-modifiable': flags.boolean({
+		description: 'Set retention type to non_modifiable. '
 	}),
 	retire: flags.boolean({
 		char: 'r',

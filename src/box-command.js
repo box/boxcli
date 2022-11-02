@@ -900,7 +900,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -908,13 +908,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async () => {
+			logFunc = async() => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});

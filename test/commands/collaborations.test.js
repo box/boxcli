@@ -58,7 +58,7 @@ describe('Collaborations', () => {
 				'--token=test'
 			])
 			.it('should send fields param and filter output when --fields flag is passed', ctx => {
-				let lb = "\n";
+				let lb = '\n';
 				assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: editor${os.EOL}`);
 			});
 	});
@@ -211,7 +211,7 @@ describe('Collaborations', () => {
 					'--token=test'
 				])
 				.it('should send fields param and filter output when --fields flag is passed', ctx => {
-					let lb = "\n";
+					let lb = '\n';
 					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: viewer${os.EOL}`);
 				});
 
@@ -491,7 +491,7 @@ describe('Collaborations', () => {
 					'--token=test'
 				])
 				.it('should send fields param and filter output when --fields flag is passed', ctx => {
-					let lb = "\n";
+					let lb = '\n';
 					assert.equal(ctx.stdout, `Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: previewer${os.EOL}`);
 				});
 

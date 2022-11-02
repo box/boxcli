@@ -4,6 +4,7 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
+const os = require('os');
 
 describe('Retention Policies', () => {
 
@@ -11,6 +12,7 @@ describe('Retention Policies', () => {
 		let policyName = 'Financial Records',
 			retentionLength = 365,
 			dispositionAction = 'remove_retention',
+			retentionType = 'modifiable',
 			fixture = getFixture('retention-policies/post_retention_policies'),
 			yamlOutput = getFixture('output/retention_policies_create_yaml.txt');
 
@@ -88,6 +90,7 @@ describe('Retention Policies', () => {
 					...expectedBody,
 					policy_type: 'finite',
 					retention_length: retentionLength,
+					retention_type: retentionType,
 					are_owners_notified: true,
 					can_owner_extend_retention: true,
 				})
@@ -99,6 +102,7 @@ describe('Retention Policies', () => {
 				policyName,
 				`--disposition-action=${dispositionAction}`,
 				`--retention-length=${retentionLength}`,
+				`--retention-type=${retentionType}`,
 				'--notify-owners',
 				'--allow-extension',
 				'--json',
@@ -115,6 +119,7 @@ describe('Retention Policies', () => {
 			dispositionAction = 'permanently_delete',
 			policyType = 'finite',
 			retentionLength = 500,
+			retentionType = 'non_modifiable',
 			fixture = getFixture('retention-policies/put_retention_policies_id'),
 			yamlOutput = getFixture('output/retention_policies_update_yaml.txt');
 
@@ -179,6 +184,25 @@ describe('Retention Policies', () => {
 				'--token=test'
 			])
 			.it('should update policy type, disposition, and length when appropriate flags are passed', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/retention_policies/${policyId}`, {
+					retention_type: retentionType,
+				})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:update',
+				policyId,
+				'--non-modifiable',
+				'--json',
+				'--token=test'
+			])
+			.it('should update retention type when appropriate flag is passed', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});
@@ -349,6 +373,25 @@ describe('Retention Policies', () => {
 				'--token=test'
 			])
 			.it('should send fields param to the API when --fields flag is passed');
+	});
+
+	describe('retention-policies:assignments:remove', () => {
+		let assignmentId = '123456';
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.delete(`/2.0/retention_policy_assignments/${assignmentId}`)
+				.reply(204)
+			)
+			.stderr()
+			.command([
+				'retention-policies:assignments:remove',
+				assignmentId,
+				'--token=test'
+			])
+			.it('should remove a retention policy assignment', ctx => {
+				assert.equal(ctx.stderr, `Removed retention policy assignment ${assignmentId}${os.EOL}`);
+			});
 	});
 
 	describe('retention-policies:assign', () => {

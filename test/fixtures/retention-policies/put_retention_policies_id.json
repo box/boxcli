@@ -4,6 +4,7 @@
     "policy_name": "Retained Financial Records",
     "policy_type": "finite",
     "retention_length": "365",
+    "retention_type": "non_modifiable",
     "disposition_action": "remove_retention",
     "can_owner_extend_retention": false,
     "status": "active",
