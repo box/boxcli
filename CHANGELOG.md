@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.5.0](https://github.com/box/boxcli/compare/v3.4.0...v3.5.0) (2022-11-02)
+
+
+### New Features and Enhancements
+
+* Add option to change name of downloaded file in `save-as`parameter ([#415](https://github.com/box/boxcli/issues/415)) ([81fe64e](https://github.com/box/boxcli/commit/81fe64eb2891e7ab55564e2428f64f1129b468e8))
+* Add support for modifiable retention policies & enable deleting retention policy assignment ([#420](https://github.com/box/boxcli/issues/420)) ([26ab5b4](https://github.com/box/boxcli/commit/26ab5b4d7ec49576fdac48abc025903622f8efe0))
+
 ## [3.4.0](https://github.com/box/boxcli/compare/v3.3.2...v3.4.0) (2022-09-26)
 
 
