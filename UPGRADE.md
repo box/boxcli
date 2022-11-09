@@ -13,7 +13,9 @@ In version 3.6.0, we introduced a change in response in theese following command
 - `box folders:shared-links:update`
 - `box shared-links:create`
 
-Before:
+The response will now return a `file` or `folder` object with `shared_link` property instead of a `shared_link` object.
+
+**Before:**
 ```json
 {
     "url": "https://blosserdemoaccount.box.com/s/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p",
@@ -33,7 +35,7 @@ Before:
 }
 ```
 
-After:
+**After:**
 ```json 
 {
     "type": "file",
