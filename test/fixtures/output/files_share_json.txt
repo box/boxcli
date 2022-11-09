@@ -1,16 +1,20 @@
 {
-    "url": "https://blosserdemoaccount.box.com/s/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p",
-    "download_url": "https://blosserdemoaccount.box.com/shared/static/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p.png",
-    "vanity_url": null,
-    "effective_access": "open",
-    "is_password_enabled": true,
-    "unshared_at": null,
-    "download_count": 0,
-    "preview_count": 0,
-    "access": "test",
-    "permissions": {
-        "can_download": true,
-        "can_preview": true,
-        "can_edit": true
+    "type": "file",
+    "id": "1234567890",
+    "shared_link": {
+        "url": "https://blosserdemoaccount.box.com/s/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p",
+        "download_url": "https://blosserdemoaccount.box.com/shared/static/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p.png",
+        "vanity_url": null,
+        "effective_access": "open",
+        "is_password_enabled": true,
+        "unshared_at": null,
+        "download_count": 0,
+        "preview_count": 0,
+        "access": "test",
+        "permissions": {
+            "can_download": true,
+            "can_preview": true,
+            "can_edit": true
+        }
     }
 }

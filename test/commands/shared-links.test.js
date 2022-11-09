@@ -65,7 +65,7 @@ describe('Shared-Links', () => {
 		test
 			.nock(TEST_API_ROOT, (api) =>
 				api
-					.put(`/2.0/files/${fileId}`, fileSharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, fileSharedLinkBody)
 					.reply(200, createFileSharedLinkFixture)
 			)
 			.stdout()
@@ -84,7 +84,7 @@ describe('Shared-Links', () => {
 		test
 			.nock(TEST_API_ROOT, (api) =>
 				api
-					.put(`/2.0/files/${fileId}`, fileSharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, fileSharedLinkBody)
 					.reply(200, createFileSharedLinkFixture)
 			)
 			.stdout()
@@ -117,7 +117,7 @@ describe('Shared-Links', () => {
 		test
 			.nock(TEST_API_ROOT, (api) =>
 				api
-					.put(`/2.0/folders/${folderId}`, folderSharedLinkBody)
+					.put(`/2.0/folders/${folderId}?fields=shared_link`, folderSharedLinkBody)
 					.reply(200, createFolderSharedLinkFixture)
 			)
 			.stdout()
@@ -138,7 +138,7 @@ describe('Shared-Links', () => {
 		test
 			.nock(TEST_API_ROOT, (api) =>
 				api
-					.put(`/2.0/folders/${folderId}`, folderSharedLinkBody)
+					.put(`/2.0/folders/${folderId}?fields=shared_link`, folderSharedLinkBody)
 					.reply(200, createFolderSharedLinkFixture)
 			)
 			.stdout()

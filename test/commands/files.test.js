@@ -1120,7 +1120,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, sharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -1140,7 +1140,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, sharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -1159,7 +1159,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, {
+					.put(`/2.0/files/${fileId}?fields=shared_link`, {
 						shared_link: {
 							permissions: {},
 							unshared_at: unsharedDate,
@@ -1181,7 +1181,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, {
+					.put(`/2.0/files/${fileId}?fields=shared_link`, {
 						shared_link: {
 							permissions: {},
 							unshared_at: unsharedDate,
