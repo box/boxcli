@@ -22,7 +22,7 @@ class SharedLinksModule {
 	 * @returns {Promise<Object>} A promise resolving to the updated item object
 	 */
 	createSharedLink(args, flags) {
-		let updates = { shared_link: { permissions: {} } };
+		let updates = { shared_link: { permissions: {} }, fields: 'shared_link' };
 
 		if (flags.access) {
 			updates.shared_link.access = flags.access;
