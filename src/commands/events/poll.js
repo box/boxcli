@@ -21,7 +21,7 @@ class EventsPollCommand extends BoxCommand {
 		}
 		if (flags['polling-interval']) {
 			if (flags.enterprise) {
-				options.pollingInterval = flags['polling-interval'] * 1000;
+				options.pollingInterval = flags['polling-interval'];
 			} else {
 				options.fetchInterval = flags['polling-interval'] * 1000;
 			}
