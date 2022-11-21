@@ -20,7 +20,11 @@ class EventsPollCommand extends BoxCommand {
 			options.endDate = flags['end-date'];
 		}
 		if (flags['polling-interval']) {
-			options.fetchInterval = flags['polling-interval'] * 1000;
+			if (flags.enterprise) {
+				options.pollingInterval = flags['polling-interval'] * 1000;
+			} else {
+				options.fetchInterval = flags['polling-interval'] * 1000;
+			}
 		}
 
 		await this.output('Polling started...');
