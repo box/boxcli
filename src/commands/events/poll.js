@@ -20,7 +20,11 @@ class EventsPollCommand extends BoxCommand {
 			options.endDate = flags['end-date'];
 		}
 		if (flags['polling-interval']) {
-			options.pollingInterval = flags['polling-interval'];
+			if (flags.enterprise) {
+				options.pollingInterval = flags['polling-interval'];
+			} else {
+				options.fetchInterval = flags['polling-interval'] * 1000;
+			}
 		}
 
 		await this.output('Polling started...');
@@ -56,7 +60,10 @@ EventsPollCommand.flags = {
 		description: 'Return enterprise events that occured before this time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks.',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'polling-interval': flags.string({ description: 'Number of seconds to wait before polling for new events. Default is 60 seconds.' })
+	'polling-interval': flags.string({
+		description: 'Number of seconds to wait before polling for new events. Default is 60 seconds.',
+		parse: input => parseInt(input, 10),
+	})
 };
 
 

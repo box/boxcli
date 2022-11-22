@@ -908,7 +908,7 @@ describe('Folders', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}`, sharedLinkBody)
+					.put(`/2.0/folders/${folderId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -927,7 +927,7 @@ describe('Folders', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}`, sharedLinkBody)
+					.put(`/2.0/folders/${folderId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -945,7 +945,7 @@ describe('Folders', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}`, {
+					.put(`/2.0/folders/${folderId}?fields=shared_link`, {
 						shared_link: {
 							permissions: {},
 							unshared_at: unshareDate,

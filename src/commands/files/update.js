@@ -22,6 +22,10 @@ class FileUpdateCommand extends BoxCommand {
 			updates.etag = flags.etag;
 		}
 
+		if (flags['disposition-at']) {
+			updates.disposition_at = flags['disposition-at'];
+		}
+
 		let updatedFile = await this.client.files.update(args.id, updates);
 		await this.output(updatedFile);
 	}
@@ -37,6 +41,7 @@ FileUpdateCommand.flags = {
 	description: flags.string({ description: 'New description for the file' }),
 	tags: flags.string({ description: 'Set tags on the file, specified as comma-separated tags' }),
 	etag: flags.string({ description: 'Only apply updates if the ETag value matches' }),
+	'disposition-at': flags.string({ description: 'The retention expiration timestamp for the given file. This date cannot be shortened once set on a file'})
 };
 
 FileUpdateCommand.args = [

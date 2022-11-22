@@ -1120,7 +1120,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, sharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -1140,7 +1140,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, sharedLinkBody)
+					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
 					.reply(200, createSharedLinkFixture)
 				)
 				.stdout()
@@ -1159,7 +1159,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, {
+					.put(`/2.0/files/${fileId}?fields=shared_link`, {
 						shared_link: {
 							permissions: {},
 							unshared_at: unsharedDate,
@@ -1181,7 +1181,7 @@ describe('Files', () => {
 
 			test
 				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/files/${fileId}`, {
+					.put(`/2.0/files/${fileId}?fields=shared_link`, {
 						shared_link: {
 							permissions: {},
 							unshared_at: unsharedDate,
@@ -1469,7 +1469,8 @@ describe('Files', () => {
 			description = 'New description',
 			tags = 'foo,bar',
 			fixture = getFixture('files/put_files_id'),
-			yamlOutput = getFixture('output/files_rename_yaml.txt');
+			yamlOutput = getFixture('output/files_rename_yaml.txt'),
+			dispositionAt = '2025-12-09T04:07:18-08:00';
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -1553,6 +1554,25 @@ describe('Files', () => {
 			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
 				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/files/${fileID}`, {
+					disposition_at: dispositionAt
+				})
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'files:update',
+				fileID,
+				`--disposition-at=${dispositionAt}`,
+				'--json',
+				'--token=test',
+			])
+			.it('shoud update disposition_at property of a file', ctx => {
+				assert.equal(ctx.stdout, fixture);
 			});
 	});
 

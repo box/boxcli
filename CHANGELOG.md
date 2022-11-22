@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.0](https://github.com/box/boxcli/compare/v3.5.0...v3.6.0) (2022-11-22)
+
+
+### New Features and Enhancements
+
+* Add `id` and `type` field  to shared-links:create response ([#427](https://github.com/box/boxcli/issues/427)) ([5ea4cb8](https://github.com/box/boxcli/commit/5ea4cb82294188dd30563ef9cea2c8e0b76bbfae))
+* Add fields disposition_at field for files under retention ([#429](https://github.com/box/boxcli/issues/429)) ([db824ef](https://github.com/box/boxcli/commit/db824ef0b4111810b7902896062c950ef9ac01b3))
+
+### Bug Fixes
+
+* Fix `event:poll` polling-interval ([#430](https://github.com/box/boxcli/issues/430)) ([9ada74b](https://github.com/box/boxcli/commit/9ada74b09eb5aa0e09881946a4f7f30e2d68e037))
+
 ## [3.5.0](https://github.com/box/boxcli/compare/v3.4.0...v3.5.0) (2022-11-02)
 
 

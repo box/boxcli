@@ -9,7 +9,7 @@
 		"upload",
 		"download"
 	],
-	"version": "3.5.0",
+	"version": "3.6.0",
 	"author": "Box <oss@box.com>",
 	"license": "Apache-2.0",
 	"main": "src/index.js",
@@ -29,7 +29,7 @@
 		"@oclif/plugin-help": "^2.2.1",
 		"@oclif/plugin-not-found": "^1.2.0",
 		"archiver": "^3.0.0",
-		"box-node-sdk": "^2.7.1",
+		"box-node-sdk": "^2.7.2",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^3.1.0",

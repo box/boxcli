@@ -16,7 +16,7 @@ class FilesShareCommand extends BoxCommand {
 
 		let sharedLinksModule = new SharedLinksModule(this.client);
 		let updatedItem = await sharedLinksModule.createSharedLink(args, flags);
-		await this.output(updatedItem.shared_link);
+		await this.output(updatedItem);
 	}
 }
 
