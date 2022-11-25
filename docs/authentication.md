@@ -94,6 +94,12 @@ Remember to set your current environment to the proper one
 box configure:environments:set-current
 ```
 
+An environment for making calls as an App User or Managed User can be created just like a Service Account environment. You need to pass an additional `--ccg-user` flag with `userId` as the value
+
+```bash
+box configure:environments:add /path/to/file/config.json --ccg-auth --ccg-user "USER_ID"
+```
+
 ### Traditional 3-Legged OAuth2
 
 Refer to the [OAuth Guide](https://developer.box.com/guides/cli/quick-start) if you want to use OAuth2.
