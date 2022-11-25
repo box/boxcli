@@ -55,7 +55,7 @@ OPTIONS
       Set this new environment as your current environment
 ```
 
-_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/add.js)_
+_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/add.js)_
 
 ## `box configure:environments:delete [NAME]`
 
@@ -75,7 +75,7 @@ OPTIONS
   --no-color     Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/delete.js)_
+_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/delete.js)_
 
 ## `box configure:environments:get`
 
@@ -94,7 +94,7 @@ OPTIONS
   --no-color       Turn off colors for logging
 ```
 
-_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/get.js)_
+_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/get.js)_
 
 ## `box configure:environments:set-current [NAME]`
 
@@ -117,7 +117,7 @@ ALIASES
   $ box configure:environments:select
 ```
 
-_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/set-current.js)_
+_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/set-current.js)_
 
 ## `box configure:environments:switch-user [USERID]`
 
@@ -147,7 +147,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
-_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/switch-user.js)_
+_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/switch-user.js)_
 
 ## `box configure:environments:update [NAME]`
 
@@ -181,7 +181,7 @@ OPTIONS
                                        be stored for each Box environment
 ```
 
-_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/environments/update.js)_
+_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/environments/update.js)_
 
 ## `box configure:settings`
 
@@ -213,4 +213,4 @@ OPTIONS
   --reports-folder-path=reports-folder-path      Set folder path for the reports folder
 ```
 
-_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v3.5.0/src/commands/configure/settings.js)_
+_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/configure/settings.js)_
