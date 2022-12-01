@@ -7,7 +7,8 @@ const path = require('path');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
 
-const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
+// const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
+const CHUNKED_UPLOAD_FILE_SIZE = 0; // prevent uploadFile error on Node 16
 
 class FilesUploadCommand extends BoxCommand {
 	async run() {
