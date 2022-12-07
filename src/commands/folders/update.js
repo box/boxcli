@@ -11,6 +11,12 @@ class FoldersUpdateCommand extends BoxCommand {
 		if (flags.name) {
 			updates.name = flags.name;
 		}
+		if (flags.hasOwnProperty('can-non-owners-invite') ) {
+			updates.can_non_owners_invite = flags['can-non-owners-invite'];
+		}
+		if (flags.hasOwnProperty('can-non-owners-view-collaborators')) {
+			updates.can_non_owners_view_collaborators = flags['can-non-owners-view-collaborators'];
+		}
 		if (flags.hasOwnProperty('description')) {
 			updates.description = flags.description;
 		}
@@ -48,6 +54,14 @@ FoldersUpdateCommand._endpoint = 'put_folders_id';
 FoldersUpdateCommand.flags = {
 	...BoxCommand.flags,
 	name: flags.string({ description: 'New name for folder' }),
+	'can-non-owners-invite': flags.boolean({
+		description: 'Specifies if users who are not the owner of the folder can invite new collaborators to the folder.',
+		allowNo: true
+	}),
+	'can-non-owners-view-collaborators': flags.boolean({
+		description: 'Restricts collaborators who are not the owner of this folder from viewing other collaborations on this folder.',
+		allowNo: true,
+	}),
 	description: flags.string({ description: 'New description for folder' }),
 	'upload-email-access': flags.string({
 		description: 'Upload email access level',

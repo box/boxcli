@@ -1300,6 +1300,22 @@ describe('Folders', () => {
 				'--no-restrict-to-enterprise',
 				{is_collaboration_restricted_to_enterprise: false}
 			],
+			'can non owners invite flag': [
+				'--can-non-owners-invite',
+				{can_non_owners_invite: true}
+			],
+			'no can non owners invite flag': [
+				'--no-can-non-owners-invite',
+				{can_non_owners_invite: false}
+			],
+			'can non owners view collaborations flag': [
+				'--can-non-owners-view-collaborators',
+				{can_non_owners_view_collaborators: true}
+			],
+			'no can non owners view collaborations flag': [
+				'--no-can-non-owners-view-collaborators',
+				{can_non_owners_view_collaborators: false}
+			],
 			'upload email access flag': [
 				'--upload-email-access=open',
 				{folder_upload_email: {access: 'open'}}
