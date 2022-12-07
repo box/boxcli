@@ -7,7 +7,7 @@ const SharedLinksModule = require('../../modules/shared-links');
 class SharedLinksCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SharedLinksCreateCommand);
-		
+
 		let sharedLinksModule = new SharedLinksModule(this.client);
 		let updatedItem = await sharedLinksModule.createSharedLink(args, flags);
 		await this.output(updatedItem);
