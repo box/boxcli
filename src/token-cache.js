@@ -30,11 +30,16 @@ class CLITokenCache {
 
 		fs.readFile(this.filePath, 'utf8', (err, json) => {
 			if (err) {
-				// If file is not present or not valid JSON, treat that as empty (but available) cache
 				return callback(null, {});
 			}
 
-			return callback(null, JSON.parse(json));
+			let result = {};
+			try {
+				// If file is not present or not valid JSON, treat that as empty (but available) cache
+				result = JSON.parse(json);
+			} catch (e) {}
+
+			return callback(null, result);
 		});
 	}
 
