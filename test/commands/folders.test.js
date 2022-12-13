@@ -4,12 +4,24 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
-const rimraf = require('rimraf');
+const rimrafCb = require('rimraf');
 const path = require('path');
 const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDriveLetter, isWin } = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
 const _ = require('lodash');
+
+function rimraf(dirPath, opts) {
+	return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
+		rimrafCb(dirPath, opts || {}, (err, result) => { // eslint-disable-line promise/prefer-await-to-callbacks
+			if (err) {
+				reject(err);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+}
 
 describe('Folders', () => {
 
@@ -1537,7 +1549,7 @@ describe('Folders', () => {
 			.it('should download folder to specified path on disk when called with destination flag', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				rimraf.sync(downloadPath);
+				await rimraf(downloadPath);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1591,7 +1603,7 @@ describe('Folders', () => {
 				}
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				rimraf.sync(downloadPath);
+				await rimraf(downloadPath);
 
 				assert.deepEqual(actualContents, manyFilesExpectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1624,7 +1636,7 @@ describe('Folders', () => {
 			.it('should only download files in top-level folder when --depth=0 flag is passed', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				rimraf.sync(downloadPath);
+				await rimraf(downloadPath);
 
 				assert.deepEqual(actualContents, _.omit(expectedContents, 'subfolder'));
 				assert.equal(ctx.stdout, '');
@@ -1660,11 +1672,11 @@ describe('Folders', () => {
 				'--zip',
 				'--token=test'
 			])
-			.it('should download folder to zip file when --zip flag is passed', ctx => {
+			.it('should download folder to zip file when --zip flag is passed', async ctx => {
 				// Find zip file in directory
 				let filename = fs.readdirSync(downloadPath)
 					.find(f => f.startsWith(`folders-download-${folderID}`) && f.endsWith('.zip'));
-				rimraf.sync(downloadPath);
+				await rimraf(downloadPath);
 
 				// @TODO(2018-10-30): Verify contents of zip file
 
@@ -1728,7 +1740,7 @@ describe('Folders', () => {
 			.it('should download a folder a non-existent path', async(ctx) => {
 				let folderPath = path.join(destination, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				rimraf.sync(destination);
+				await rimraf(destination);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1765,7 +1777,7 @@ describe('Folders', () => {
 			.it('should download a folder to a default destination', async(ctx) => {
 				let folderPath = path.join(DEFAULT_DOWNLOAD_PATH, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				rimraf.sync(folderPath);
+				await rimraf(folderPath);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
