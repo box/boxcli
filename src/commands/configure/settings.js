@@ -3,7 +3,7 @@
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
 const fs = require('fs');
-const mkdirp = require('mkdirp'); // eslint-disable-line node/no-extraneous-require
+const mkdirp = require('mkdirp');
 const BoxCLIError = require('../../cli-error');
 const utils = require('../../util');
 

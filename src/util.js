@@ -5,7 +5,7 @@ const BoxCLIError = require('./cli-error');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
-const mkdirp = require('mkdirp'); // eslint-disable-line node/no-extraneous-require
+const mkdirp = require('mkdirp');
 
 const REQUIRED_CONFIG_VALUES = Object.freeze([
 	'boxAppSettings.clientID',
@@ -192,11 +192,11 @@ function parseMetadataString(input) {
  * @returns {Promise<void>} empty promise
  * @throws BoxCLIError
  */
-function checkDir(dirPath, shouldCreate) {
+async function checkDir(dirPath, shouldCreate) {
 	/* eslint-disable no-sync */
 	if (!fs.existsSync(dirPath)) {
 		if (shouldCreate) {
-			mkdirp.sync(dirPath);
+			await mkdirp(dirPath);
 		} else {
 			throw new BoxCLIError(
 				`The ${dirPath} path does not exist. Either create it, or pass the --create-path flag set to true`
