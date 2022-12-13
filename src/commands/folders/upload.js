@@ -6,6 +6,7 @@ const { flags } = require('@oclif/command');
 const fs = require('fs');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
+const utils = require('../../util');
 
 const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
@@ -23,7 +24,7 @@ class FoldersUploadCommand extends BoxCommand {
 
 		let folderItems;
 		try {
-			folderItems = fs.readdirSync(folderPath);
+			folderItems = await utils.readdirAsync(folderPath);
 		} catch (ex) {
 			throw new BoxCLIError(`Could not read directory ${folderPath}`, ex);
 		}

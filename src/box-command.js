@@ -915,8 +915,8 @@ class BoxCommand extends Command {
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => { // eslint-disable-line require-await
-				fs.writeFileSync(savePath, stringifiedOutput + os.EOL, {
+			writeFunc = async(savePath) => {
+				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
 			};

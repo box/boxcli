@@ -205,6 +205,54 @@ async function checkDir(dirPath, shouldCreate) {
 	}
 }
 
+/* eslint-disable require-jsdoc, require-await, no-shadow, promise/avoid-new, promise/prefer-await-to-callbacks */
+
+async function readFileAsync(path, options) {
+	return new Promise((resolve, reject) => {
+		fs.readFile(path, options || {}, (err, result) => {
+			if (err) {
+				return reject(err);
+			}
+			return resolve(result);
+		});
+	});
+}
+
+async function writeFileAsync(file, data, options) {
+	return new Promise((resolve, reject) => {
+		fs.writeFile(file, data, options || {}, (err, result) => {
+			if (err) {
+				return reject(err);
+			}
+			return resolve(result);
+		});
+	});
+}
+
+async function readdirAsync(path, options) {
+	return new Promise((resolve, reject) => {
+		fs.readdir(path, options || {}, (err, result) => {
+			if (err) {
+				return reject(err);
+			}
+			return resolve(result);
+		});
+	});
+}
+
+async function unlinkAsync(path, options) {
+	return new Promise((resolve, reject) => {
+		fs.unlink(path, options || {}, (err, result) => {
+			if (err) {
+				return reject(err);
+			}
+			return resolve(result);
+		});
+	});
+}
+
+/* eslint-enable require-jsdoc, require-await, no-shadow, promise/avoid-new, promise/prefer-await-to-callbacks */
+
 module.exports = {
 	/**
 	 * Validates the a configuration object has all required properties
@@ -282,4 +330,8 @@ module.exports = {
 		return parseMetadataString(value);
 	},
 	checkDir,
+	readFileAsync,
+	writeFileAsync,
+	readdirAsync,
+	unlinkAsync,
 };
