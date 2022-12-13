@@ -28,11 +28,14 @@ class CLITokenCache {
 	 */
 	read(callback) {
 
-		fs.readFile(this.filePath, 'utf8')
-			.then(json => JSON.parse(json))
-		// If file is not present or not valid JSON, treat that as empty (but available) cache
-			.catch(() => ({}))
-			.then(tokenInfo => callback(null, tokenInfo));
+		fs.readFile(this.filePath, 'utf8', (err, json) => {
+			if (err) {
+				// If file is not present or not valid JSON, treat that as empty (but available) cache
+				return callback(null, {});
+			}
+
+			return callback(null, JSON.parse(json));
+		});
 	}
 
 	/**
@@ -44,10 +47,14 @@ class CLITokenCache {
 	write(tokenInfo, callback) {
 
 		let output = JSON.stringify(tokenInfo, null, 4);
-		fs.writeFile(this.filePath, output, 'utf8')
-		// Pass success or error to the callback
-			.then(callback)
-			.catch(err => callback(new BoxCLIError('Failed to write to token cache', err)));
+		fs.writeFile(this.filePath, output, 'utf8', (err, result) => {
+			// Pass success or error to the callback
+			if (err) {
+				return callback(new BoxCLIError('Failed to write to token cache', err));
+			}
+
+			return callback(result);
+		});
 	}
 
 	/**
@@ -57,10 +64,14 @@ class CLITokenCache {
 	 */
 	clear(callback) {
 
-		fs.remove(this.filePath)
-		// Pass success or error to the callback
-			.then(callback)
-			.catch(err => callback(new BoxCLIError('Failed to delete token cache', err)));
+		fs.unlink(this.filePath, (err, result) => {
+			// Pass success or error to the callback
+			if (err) {
+				return callback(new BoxCLIError('Failed to delete token cache', err));
+			}
+
+			return callback(result);
+		});
 	}
 }
 
