@@ -45,8 +45,7 @@
 		"nanoid": "^3.3.1",
 		"open": "^8.0.4",
 		"ora": "^5.4.1",
-		"p-event": "^2.3.1",
-		"rimraf": "^3.0.2"
+		"p-event": "^2.3.1"
 	},
 	"devDependencies": {
 		"@oclif/dev-cli": "^1.19.5",
