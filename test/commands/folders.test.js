@@ -1,3 +1,4 @@
+/* eslint-disable no-sync */
 'use strict';
 
 const { test } = require('@oclif/test');
@@ -1487,15 +1488,15 @@ describe('Folders', () => {
 			}
 		};
 
-		async function getDirectoryContents(folderPath) {
+		function getDirectoryContents(folderPath) {
 
 			let obj = {};
 			let folderContents = fs.readdirSync(folderPath);
-			folderContents.forEach(async item => {
+			folderContents.forEach(item => {
 				let itemPath = path.join(folderPath, item);
 				let stat = fs.statSync(itemPath);
 				if (stat.isDirectory()) {
-					obj[item] = await getDirectoryContents(itemPath);
+					obj[item] = getDirectoryContents(itemPath);
 				} else {
 					obj[item] = fs.readFileSync(itemPath, 'utf8');
 				}
@@ -1659,7 +1660,7 @@ describe('Folders', () => {
 				'--zip',
 				'--token=test'
 			])
-			.it('should download folder to zip file when --zip flag is passed', async ctx => {
+			.it('should download folder to zip file when --zip flag is passed', ctx => {
 				// Find zip file in directory
 				let filename = fs.readdirSync(downloadPath)
 					.find(f => f.startsWith(`folders-download-${folderID}`) && f.endsWith('.zip'));

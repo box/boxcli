@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const util = require('util');
 const _ = require('lodash');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp'); // eslint-disable-line node/no-extraneous-require
 const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -915,7 +915,7 @@ class BoxCommand extends Command {
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = (savePath) => {
 				fs.writeFileSync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
