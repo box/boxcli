@@ -5,7 +5,8 @@ const { Command, flags } = require('@oclif/command');
 const chalk = require('chalk');
 const util = require('util');
 const _ = require('lodash');
-const fs = require('fs-extra');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -915,7 +916,7 @@ class BoxCommand extends Command {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
 			writeFunc = async(savePath) => {
-				await fs.writeFile(savePath, stringifiedOutput + os.EOL, {
+				fs.writeFileSync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
 			};
@@ -1495,7 +1496,7 @@ class BoxCommand extends Command {
 	async _loadSettings() {
 		try {
 			if (!fs.existsSync(CONFIG_FOLDER_PATH)) {
-				fs.mkdirpSync(CONFIG_FOLDER_PATH);
+				mkdirp.sync(CONFIG_FOLDER_PATH);
 				DEBUG.init('Created config folder at %s', CONFIG_FOLDER_PATH);
 			}
 			if (!fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
@@ -1529,14 +1530,14 @@ class BoxCommand extends Command {
 
 		try {
 			if (!fs.existsSync(settings.boxReportsFolderPath)) {
-				fs.mkdirpSync(settings.boxReportsFolderPath);
+				mkdirp.sync(settings.boxReportsFolderPath);
 				DEBUG.init(
 					'Created reports folder at %s',
 					settings.boxReportsFolderPath
 				);
 			}
 			if (!fs.existsSync(settings.boxDownloadsFolderPath)) {
-				fs.mkdirpSync(settings.boxDownloadsFolderPath);
+				mkdirp.sync(settings.boxDownloadsFolderPath);
 				DEBUG.init(
 					'Created downloads folder at %s',
 					settings.boxDownloadsFolderPath

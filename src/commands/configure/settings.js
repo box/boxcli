@@ -2,7 +2,8 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
-const fs = require('fs-extra');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const BoxCLIError = require('../../cli-error');
 const utils = require('../../util');
 
@@ -27,7 +28,7 @@ class ConfigureSettingsCommand extends BoxCommand {
 				}
 
 				try {
-					await fs.mkdirp(downloadsPath);
+					await mkdirp(downloadsPath);
 				} catch (ex) {
 					throw new BoxCLIError('Could not create downloads directory', ex);
 				}
@@ -54,7 +55,7 @@ class ConfigureSettingsCommand extends BoxCommand {
 				}
 
 				try {
-					await fs.mkdirp(reportsPath);
+					await mkdirp(reportsPath);
 				} catch (ex) {
 					throw new BoxCLIError('Could not create downloads directory', ex);
 				}

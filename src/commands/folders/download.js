@@ -2,7 +2,8 @@
 
 const { flags } = require('@oclif/command');
 const BoxCommand = require('../../box-command');
-const fs = require('fs-extra');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
@@ -79,7 +80,7 @@ class FoldersDownloadCommand extends BoxCommand {
 
 					spinner.text = `Creating folder ${item.id} at ${item.path}`;
 					try {
-						await fs.mkdir(path.join(destinationPath, item.path));
+						await mkdirp(path.join(destinationPath, item.path));
 					} catch (ex) {
 						throw new BoxCLIError(`Folder ${item.path} could not be created`, ex);
 					}

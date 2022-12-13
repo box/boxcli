@@ -2,7 +2,7 @@
 
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDriveLetter, isWin } = require('../helpers/test-helper');
 const os = require('os');
@@ -1489,14 +1489,14 @@ describe('Folders', () => {
 		async function getDirectoryContents(folderPath) {
 
 			let obj = {};
-			let folderContents = await fs.readdir(folderPath);
+			let folderContents = fs.readdirSync(folderPath);
 			folderContents.forEach(async item => {
 				let itemPath = path.join(folderPath, item);
-				let stat = await fs.stat(itemPath);
+				let stat = fs.statSync(itemPath);
 				if (stat.isDirectory()) {
 					obj[item] = await getDirectoryContents(itemPath);
 				} else {
-					obj[item] = await fs.readFile(itemPath, 'utf8');
+					obj[item] = fs.readFileSync(itemPath, 'utf8');
 				}
 			});
 
@@ -1535,7 +1535,7 @@ describe('Folders', () => {
 			.it('should download folder to specified path on disk when called with destination flag', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
+				fs.unlinkSync(downloadPath);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1589,7 +1589,7 @@ describe('Folders', () => {
 				}
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
+				fs.unlinkSync(downloadPath);
 
 				assert.deepEqual(actualContents, manyFilesExpectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1622,7 +1622,7 @@ describe('Folders', () => {
 			.it('should only download files in top-level folder when --depth=0 flag is passed', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
+				fs.unlinkSync(downloadPath);
 
 				assert.deepEqual(actualContents, _.omit(expectedContents, 'subfolder'));
 				assert.equal(ctx.stdout, '');
@@ -1660,9 +1660,9 @@ describe('Folders', () => {
 			])
 			.it('should download folder to zip file when --zip flag is passed', async ctx => {
 				// Find zip file in directory
-				let filename = (await fs.readdir(downloadPath))
+				let filename = fs.readdirSync(downloadPath)
 					.find(f => f.startsWith(`folders-download-${folderID}`) && f.endsWith('.zip'));
-				await fs.remove(downloadPath);
+				fs.unlinkSync(downloadPath);
 
 				// @TODO(2018-10-30): Verify contents of zip file
 
@@ -1726,7 +1726,7 @@ describe('Folders', () => {
 			.it('should download a folder a non-existent path', async(ctx) => {
 				let folderPath = path.join(destination, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				await fs.remove(destination);
+				fs.unlinkSync(destination);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
@@ -1763,7 +1763,7 @@ describe('Folders', () => {
 			.it('should download a folder to a default destination', async(ctx) => {
 				let folderPath = path.join(DEFAULT_DOWNLOAD_PATH, folderName);
 				let actualContents = await getDirectoryContents(folderPath);
-				await fs.remove(folderPath);
+				fs.unlinkSync(folderPath);
 
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');

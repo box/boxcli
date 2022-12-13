@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 
 class OSSLicensesCommand extends BoxCommand {
@@ -9,7 +9,7 @@ class OSSLicensesCommand extends BoxCommand {
 
 		let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
 
-		let licenseText = await fs.readFile(licensesFilePath, 'utf8');
+		let licenseText = fs.readFileSync(licensesFilePath, 'utf8');
 
 		await this.output(licenseText);
 	}

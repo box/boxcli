@@ -2,7 +2,7 @@
 
 /* eslint-disable promise/prefer-await-to-callbacks,promise/catch-or-return,promise/prefer-await-to-then,promise/no-callback-in-promise */
 
-const fs = require('fs-extra');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const BoxCLIError = require('./cli-error');

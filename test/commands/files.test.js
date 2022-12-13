@@ -1929,6 +1929,7 @@ describe('Files', () => {
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
+				console.error({ downloadedFilePath, testFilePath, downloadContent, expectedContent });
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});

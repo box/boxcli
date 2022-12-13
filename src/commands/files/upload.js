@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
@@ -12,7 +12,7 @@ const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 class FilesUploadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FilesUploadCommand);
-		let size = (await fs.stat(args.path)).size;
+		let size = fs.statSync(args.path).size;
 		let folderID = flags['parent-id'];
 		let stream;
 		try {
