@@ -10,7 +10,7 @@ class OSSLicensesCommand extends BoxCommand {
 
 		let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
 
-		let licenseText = await utils.readFile(licensesFilePath, 'utf8');
+		let licenseText = await utils.readFileAsync(licensesFilePath, 'utf8');
 
 		await this.output(licenseText);
 	}
