@@ -1,15 +1,16 @@
+/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../box-command');
-const fs = require('fs-extra');
 const path = require('path');
+const utils = require('../util');
 
 class OSSLicensesCommand extends BoxCommand {
 	async run() {
 
 		let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
 
-		let licenseText = await fs.readFile(licensesFilePath, 'utf8');
+		let licenseText = await utils.readFileAsync(licensesFilePath, 'utf8');
 
 		await this.output(licenseText);
 	}

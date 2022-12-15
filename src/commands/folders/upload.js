@@ -1,10 +1,12 @@
+/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
+const utils = require('../../util');
 
 const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
@@ -22,7 +24,7 @@ class FoldersUploadCommand extends BoxCommand {
 
 		let folderItems;
 		try {
-			folderItems = await fs.readdir(folderPath);
+			folderItems = await utils.readdirAsync(folderPath);
 		} catch (ex) {
 			throw new BoxCLIError(`Could not read directory ${folderPath}`, ex);
 		}
@@ -38,7 +40,7 @@ class FoldersUploadCommand extends BoxCommand {
 			// @TODO(2018-08-15): Improve performance by queueing async work and performing it in parallel
 			/* eslint-disable no-await-in-loop */
 			let itemPath = path.join(folderPath, item);
-			let itemStat = await fs.stat(itemPath);
+			let itemStat = fs.statSync(itemPath);
 			if (itemStat.isDirectory()) {
 				await this.uploadFolder(itemPath, folderId);
 			} else {

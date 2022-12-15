@@ -1,8 +1,9 @@
+/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../../box-command');
 const { flags } = require('@oclif/command');
-const fs = require('fs-extra');
+const fs = require('fs');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../../cli-error');
 
@@ -12,7 +13,7 @@ class FilesUploadVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags } = this.parse(FilesUploadVersionsCommand);
 		const { args } = this.parse(FilesUploadVersionsCommand);
-		let size = (await fs.stat(args.path)).size;
+		let size = fs.statSync(args.path).size;
 		let fileAttributes = {};
 		let stream;
 		try {

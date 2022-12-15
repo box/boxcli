@@ -2,7 +2,8 @@
 
 const { flags } = require('@oclif/command');
 const BoxCommand = require('../../box-command');
-const fs = require('fs-extra');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
@@ -57,7 +58,12 @@ class FoldersDownloadCommand extends BoxCommand {
 		}
 
 		/* eslint-disable no-sync */
-		if (!fs.existsSync(destinationPath) || !fs.statSync(destinationPath).isDirectory()) {
+		if (!fs.existsSync(destinationPath)) {
+			throw new BoxCLIError('Destination path must exist');
+		}
+
+		const fsStat = fs.statSync(destinationPath);
+		if (!fsStat.isDirectory()) {
 			throw new BoxCLIError('Destination path must be a directory');
 		}
 		/* eslint-enable no-sync */
@@ -79,7 +85,7 @@ class FoldersDownloadCommand extends BoxCommand {
 
 					spinner.text = `Creating folder ${item.id} at ${item.path}`;
 					try {
-						await fs.mkdir(path.join(destinationPath, item.path));
+						await mkdirp(path.join(destinationPath, item.path));
 					} catch (ex) {
 						throw new BoxCLIError(`Folder ${item.path} could not be created`, ex);
 					}
