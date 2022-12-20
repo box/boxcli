@@ -80,7 +80,7 @@ const FLAG_HANDLERS = Object.freeze({
 			fieldKey: value.input,
 		};
 	},
-	option(value, currentOp/* , ops*/) {
+	option(value, currentOp, ops) {
 
 		if (!currentOp) {
 			throw new BoxCLIError('Unexpected --option flag outside of option-related operation');
@@ -89,6 +89,13 @@ const FLAG_HANDLERS = Object.freeze({
 		let fieldType;
 		switch (currentOp.op) {
 		case 'addEnumOption':
+			if (currentOp.data.key) {
+				ops.push({...currentOp});
+				currentOp.data = {};
+			}
+
+			currentOp.data.key = value.input;
+			break;
 		case 'editEnumOption':
 		case 'addMultiSelectOption':
 			currentOp.data.key = value.input;
