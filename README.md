@@ -1,7 +1,7 @@
 # Box CLI
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
-![Platform](https://img.shields.io/badge/node-12--14-blue)
+![Platform](https://img.shields.io/badge/node-12--18-blue)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
 
@@ -178,7 +178,7 @@ A current release is on the leading edge of our SDK development, and is intended
 
 | Version | Supported Environments  | State     | First Release | EOL/Terminated |
 |---------|-------------------------|-----------|---------------|----------------|
-| 3       | Node.js >= 12 and <= 14 | Supported | 01 Feb 2022   | TBD            |
+| 3       | Node.js >= 12 and <= 18 | Supported | 01 Feb 2022   | TBD            |
 | 2       |                         | EOL       | 14 Dec 2018   | 01 Feb 2022    |
 | 1       |                         | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
