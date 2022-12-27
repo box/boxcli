@@ -240,9 +240,9 @@ async function readdirAsync(path, options) {
 	});
 }
 
-async function unlinkAsync(path, options) {
+async function unlinkAsync(path) {
 	return new Promise((resolve, reject) => {
-		fs.unlink(path, options || {}, (err, result) => {
+		fs.unlink(path, (err, result) => {
 			if (err) {
 				return reject(err);
 			}
