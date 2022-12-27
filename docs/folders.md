@@ -868,13 +868,27 @@ OPTIONS
   -y, --yes                                 Automatically respond yes to all confirmation prompts
   --as-user=as-user                         Provide an ID for a user
   --bulk-file-path=bulk-file-path           File path to bulk .csv or .json objects
+
+  --[no-]can-non-owners-invite              Specifies if users who are not the owner of the folder can invite new
+                                            collaborators to the folder.
+
+  --[no-]can-non-owners-view-collaborators  Restricts collaborators who are not the owner of this folder from viewing
+                                            other collaborations on this folder.
+
   --csv                                     Output formatted CSV
+
   --description=description                 New description for folder
+
   --etag=etag                               Only apply updates if the etag value matches
+
   --fields=fields                           Comma separated list of fields to show
+
   --json                                    Output formatted JSON
+
   --name=name                               New name for folder
+
   --no-color                                Turn off colors for logging
+
   --[no-]restrict-collaboration             Restrict collaboration so only owners can invite new collaborators
 
   --[no-]restrict-to-enterprise             Restrict collaboration so only users in the folder owner's enterprise can be
