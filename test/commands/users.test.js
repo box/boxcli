@@ -941,4 +941,33 @@ describe('Users', () => {
 			});
 	});
 
+	describe('users:terminate-session', () => {
+		let userIDs = ['12345', '67890'];
+		let userLogins = ['user1@example.com', 'user2@example.com'];
+		let fixture = getFixture('users/post_users_terminate_sessions');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/users/terminate_sessions', {
+					user_ids: userIDs,
+					user_logins: userLogins
+				})
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'users:terminate-session',
+				'--user-ids',
+				'12345',
+				'67890',
+				'--user-logins',
+				'user1@example.com',
+				'user2@example.com',
+				'--json',
+				'--token=test'
+			])
+			.it('should terminate sessions for the specified users', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+	});
 });

@@ -747,4 +747,29 @@ describe('Groups', () => {
 				});
 		});
 	});
+
+	describe('groups:terminate-session', () => {
+		let groupsIDs = ['12345', '67890'];
+		let fixture = getFixture('groups/post_groups_terminate_sessions');
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/groups/terminate_sessions', {
+					group_ids: groupsIDs
+				})
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'groups:terminate-session',
+				'--group-ids',
+				'12345',
+				'67890',
+				'--json',
+				'--token=test'
+			])
+			.it('should terminate sessions for the specified groups', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+	});
 });

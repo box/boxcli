@@ -541,6 +541,61 @@ describe('Bulk', () => {
 				'--token=test'
 			])
 			.it('should send empty As-User header when not present in the bulk file');
+
+		const terminateSessionFixture = getFixture('bulk/post_terminate_sessions');
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/users/terminate_sessions', {
+					user_logins: ['user1@example.com'],
+					user_ids: ['111']
+				})
+				.reply(201, terminateSessionFixture)
+				.post('/2.0/users/terminate_sessions', {
+					user_logins: ['user2@example.com'],
+					user_ids: ['222']
+				})
+				.reply(201, terminateSessionFixture)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'users:terminate-session',
+				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_users_terminate_sessions.csv')}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should send terminate sessions request with user ids and logins', ctx => {
+				let expectedOutput = [];
+				expectedOutput.push(JSON.parse(terminateSessionFixture));
+				expectedOutput.push(JSON.parse(terminateSessionFixture));
+				assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/groups/terminate_sessions', {
+					group_ids: ['111']
+				})
+				.reply(201, terminateSessionFixture)
+				.post('/2.0/groups/terminate_sessions', {
+					group_ids: ['222']
+				})
+				.reply(201, terminateSessionFixture)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'groups:terminate-session',
+				`--bulk-file-path=${path.join(__dirname, '../fixtures/bulk/input_groups_terminate_sessions.csv')}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should send terminate sessions request with groups ids', ctx => {
+				let expectedOutput = [];
+				expectedOutput.push(JSON.parse(terminateSessionFixture));
+				expectedOutput.push(JSON.parse(terminateSessionFixture));
+				assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+			});
 	});
 
 	describe('JSON Input', () => {

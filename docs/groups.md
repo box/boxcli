@@ -13,6 +13,7 @@ List all groups
 * [`box groups:memberships:get ID`](#box-groupsmembershipsget-id)
 * [`box groups:memberships:remove ID`](#box-groupsmembershipsremove-id)
 * [`box groups:memberships:update ID`](#box-groupsmembershipsupdate-id)
+* [`box groups:terminate-session`](#box-groupsterminate-session)
 * [`box groups:update ID`](#box-groupsupdate-id)
 
 ## `box groups`
@@ -388,6 +389,39 @@ EXAMPLE
 ```
 
 _See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/groups/memberships/update.js)_
+
+## `box groups:terminate-session`
+
+Validates the roles and permissions of the group, and creates asynchronous jobs to terminate the group's sessions.
+
+```
+USAGE
+  $ box groups:terminate-session
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --group-ids=group-ids                  (required) A list of group IDs
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+
+ALIASES
+  $ box groups:terminate-session
+
+EXAMPLE
+  box groups:terminate-session --group-ids 123 345
+```
+
+_See code: [src/commands/groups/terminate-session.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/groups/terminate-session.js)_
 
 ## `box groups:update ID`
 
