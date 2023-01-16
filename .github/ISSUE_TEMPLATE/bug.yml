@@ -5,101 +5,101 @@ title: "(short issue description)"
 labels: [bug,needs-triage]
 assignees: [mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejleszczynski, congminh1254]
 body:
-- type: checkboxes
-  id: sdk-docs-checked
-  attributes:
-  label: I have checked that the SDK documentation doesn't solve my issue.
-  description: <a href="/docs">SDK documentation</a> link
-  options:
-  - label: Yes I've checked them.
-  required: true
-- type: checkboxes
-  id: api-docs-checked
-  attributes:
-  label: I have checked that the API documentation doesn't solve my issue.
-  description: <a href="https://developer.box.com/docs">API documentation</a> link
-  options:
-  - label: Yes I've checked them.
-  required: true
-- type: checkboxes
-  id: dev-forums-checked
-  attributes:
-  label: I have checked that the Box Developer Forums doesn't solve my issue.
-  description: <a href="https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum">Box Developer Forums</a> link
-  options:
-  - label: Yes I've checked them.
-  required: true
-- type: checkboxes
-  id: github-repo-checked
-  attributes:
-  label: I have checked that the Box Developer Forums doesn't solve my issue.
-  description: <a href="https://github.com/box/boxcli/search?type=Issues">Box Developer Forums</a> link
-  options:
-  - label: Yes I've checked them.
-  required: true
-- type: textarea
-  id: description
-  attributes:
-  label: Describe the bug
-  description: |
-  Please include as much detail as possible to help us troubleshoot!
-  - App Access Level (found in application configuration):  App Access Only | App + Enterprise Access
-  - Are you using service account or user account? https://developer.box.com/guides/getting-started/user-types/service-account/
-  - Share the full error output you're seeing, if applicable.
-  - Please include the full stack trace to help us identify where the error is happening.
-  validations:
-  required: true
-- type: textarea
-  id: expected-behaviour
-  attributes:
-  label: Expected behavior
-  description: What did you expect to happen?
-  validations:
-  required: true
-- type: textarea
-  id: steps-to-reproduce
-  attributes:
-  label: Steps to reproduce
-  description: |
-  Steps to reproduce the problem help speed up debugging for us and gets your issue resolved sooner!
-  The code sample should be an SSCCE. See http://sscce.org/ for details.
-  Please provide a code sample that we can copy/paste, run and reproduce.
-  validations:
-  required: true
-- type: dropdown
-  id: authentication
-  attributes:
-  label: Authentication method used in your application
-  description: It can be found in your Application Configuration -> Configuration (TAB) -> Authentication Method
-  options:
-  -
-  - Server Authentication (with JWT)
-  - User Authentication (OAuth 2.0)
-  - Server Authentication (Client Credentials Grant)
-  - Developer Token
-  validations:
-  required: true
-- type: dropdown
-  id: app-access-level
-  attributes:
-  label: App Access Level
-  description: It can be found in your Application Configuration -> Configuration (TAB) -> App Access Level
-  options:
-  -
-  - App Access Only
-  - App + Enterprise Access
-  validations:
-  required: true
-- type: input
-  id: cli-version
-  attributes:
-  label: What is Box CLI Version and Node used?
-  placeholder: box --version
-  validations:
-  required: true
-- type: input
-  id: os-version
-  attributes:
-  label: What is your Operating  System Version?
-  validations:
-  required: true
+  - type: checkboxes
+    id: sdk-docs-checked
+    attributes:
+      label: I have checked that the SDK documentation doesn't solve my issue.
+      description: <a href="/docs">SDK documentation</a> link
+      options:
+        - label: Yes I've checked them.
+          required: true
+  - type: checkboxes
+    id: api-docs-checked
+    attributes:
+      label: I have checked that the API documentation doesn't solve my issue.
+      description: <a href="https://developer.box.com/docs">API documentation</a> link
+      options:
+        - label: Yes I've checked them.
+          required: true
+  - type: checkboxes
+    id: dev-forums-checked
+    attributes:
+      label: I have checked that the Box Developer Forums doesn't solve my issue.
+      description: <a href="https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum">Box Developer Forums</a> link
+      options:
+        - label: Yes I've checked them.
+          required: true
+  - type: checkboxes
+    id: github-repo-checked
+    attributes:
+      label: I have checked that the Box Developer Forums doesn't solve my issue.
+      description: <a href="https://github.com/box/boxcli/search?type=Issues">Box Developer Forums</a> link
+      options:
+        - label: Yes I've checked them.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: |
+        Please include as much detail as possible to help us troubleshoot!
+        - App Access Level (found in application configuration):  App Access Only | App + Enterprise Access
+        - Are you using service account or user account? https://developer.box.com/guides/getting-started/user-types/service-account/
+        - Share the full error output you're seeing, if applicable.
+        - Please include the full stack trace to help us identify where the error is happening.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Steps to reproduce the problem help speed up debugging for us and gets your issue resolved sooner!
+        The code sample should be an SSCCE. See http://sscce.org/ for details.
+        Please provide a code sample that we can copy/paste, run and reproduce.
+    validations:
+      required: true
+  - type: dropdown
+    id: authentication
+    attributes:
+      label: Authentication method used in your application
+      description: It can be found in your Application Configuration -> Configuration (TAB) -> Authentication Method
+      options:
+        -
+        - Server Authentication (with JWT)
+        - User Authentication (OAuth 2.0)
+        - Server Authentication (Client Credentials Grant)
+        - Developer Token
+    validations:
+      required: true
+  - type: dropdown
+    id: app-access-level
+    attributes:
+      label: App Access Level
+      description: It can be found in your Application Configuration -> Configuration (TAB) -> App Access Level
+      options:
+        -
+        - App Access Only
+        - App + Enterprise Access
+    validations:
+      required: true
+  - type: input
+    id: cli-version
+    attributes:
+      label: What is Box CLI Version and Node used?
+      placeholder: box --version
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: What is your Operating  System Version?
+    validations:
+      required: true
