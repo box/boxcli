@@ -1,48 +1,105 @@
 ---
-name: Bug
-about: Report a bug found in the SDK
-title: ''
-labels: bug
-assignees: mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejleszczynski
-
----
-
-- [ ] I have checked that the [SDK documentation][sdk-docs] doesn't solve my issue.
-- [ ] I have checked that the [API documentation][api-docs] doesn't solve my issue.
-- [ ] I have searched the [Box Developer Forums][dev-forums] and my issue isn't already reported (or if it has been reported, I have attached a link to it, for reference).
-- [ ] I have searched [Issues in this repo][github-repo] and my issue isn't already reported.
-
-### Description of the Issue
-<!-- Replace this text with a description of what problem you're having. -->
-<!-- Please include as much detail as possible to help us troubleshoot! -->
-<!-- If it isn't obvious, please include how the behavior you expect differs from what actually happened. -->
-<!-- This is really important so we know how to start troubleshooting your issue. -->
-
-### Steps to Reproduce
-<!-- Please include detailed steps to reproduce the issue you're seeing, if possible. -->
-<!-- If you don't have a reproducible error, please make sure that you give us as much detail -->
-<!-- as you can about what your application was doing when the error occurred. -->
-<!-- Good steps to reproduce the problem help speed up debugging for us and gets your issue resolved sooner! -->
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-### Expected Behavior
-<!-- What did you expect to happen? -->
-
-### Error Message, Including Stack Trace
-<!-- Share the full error output you're seeing, if applicable. -->
-<!-- Please include the full stack trace to help us identify where the error is happening. -->
-
-### Screenshots
-<!-- If applicable, add screenshots to help explain your problem. -->
-
-### Versions Used
-Box CLI: <!-- Replace with the version of the Box CLI you're using. -->
-Operating System: <!-- Replace with the operating system you run the CLI on. -->
-
-[sdk-docs]: ./doc
-[api-docs]: https://developer.box.com/docs
-[dev-forums]: https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum
-[github-repo]: https://github.com/box/boxcli/search?type=Issues
+name: "Bug"
+description: "Report a bug found in the CLI"
+title: "(short issue description)"
+labels: [bug,needs-triage]
+assignees: [mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejleszczynski, congminh1254]
+body:
+- type: checkboxes
+  id: sdk-docs-checked
+  attributes:
+  label: I have checked that the SDK documentation doesn't solve my issue.
+  description: <a href="/docs">SDK documentation</a> link
+  options:
+  - label: Yes I've checked them.
+  required: true
+- type: checkboxes
+  id: api-docs-checked
+  attributes:
+  label: I have checked that the API documentation doesn't solve my issue.
+  description: <a href="https://developer.box.com/docs">API documentation</a> link
+  options:
+  - label: Yes I've checked them.
+  required: true
+- type: checkboxes
+  id: dev-forums-checked
+  attributes:
+  label: I have checked that the Box Developer Forums doesn't solve my issue.
+  description: <a href="https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum">Box Developer Forums</a> link
+  options:
+  - label: Yes I've checked them.
+  required: true
+- type: checkboxes
+  id: github-repo-checked
+  attributes:
+  label: I have checked that the Box Developer Forums doesn't solve my issue.
+  description: <a href="https://github.com/box/boxcli/search?type=Issues">Box Developer Forums</a> link
+  options:
+  - label: Yes I've checked them.
+  required: true
+- type: textarea
+  id: description
+  attributes:
+  label: Describe the bug
+  description: |
+  Please include as much detail as possible to help us troubleshoot!
+  - App Access Level (found in application configuration):  App Access Only | App + Enterprise Access
+  - Are you using service account or user account? https://developer.box.com/guides/getting-started/user-types/service-account/
+  - Share the full error output you're seeing, if applicable.
+  - Please include the full stack trace to help us identify where the error is happening.
+  validations:
+  required: true
+- type: textarea
+  id: expected-behaviour
+  attributes:
+  label: Expected behavior
+  description: What did you expect to happen?
+  validations:
+  required: true
+- type: textarea
+  id: steps-to-reproduce
+  attributes:
+  label: Steps to reproduce
+  description: |
+  Steps to reproduce the problem help speed up debugging for us and gets your issue resolved sooner!
+  The code sample should be an SSCCE. See http://sscce.org/ for details.
+  Please provide a code sample that we can copy/paste, run and reproduce.
+  validations:
+  required: true
+- type: dropdown
+  id: authentication
+  attributes:
+  label: Authentication method used in your application
+  description: It can be found in your Application Configuration -> Configuration (TAB) -> Authentication Method
+  options:
+  -
+  - Server Authentication (with JWT)
+  - User Authentication (OAuth 2.0)
+  - Server Authentication (Client Credentials Grant)
+  - Developer Token
+  validations:
+  required: true
+- type: dropdown
+  id: app-access-level
+  attributes:
+  label: App Access Level
+  description: It can be found in your Application Configuration -> Configuration (TAB) -> App Access Level
+  options:
+  -
+  - App Access Only
+  - App + Enterprise Access
+  validations:
+  required: true
+- type: input
+  id: cli-version
+  attributes:
+  label: What is Box CLI Version and Node used?
+  placeholder: box --version
+  validations:
+  required: true
+- type: input
+  id: os-version
+  attributes:
+  label: What is your Operating  System Version?
+  validations:
+  required: true
