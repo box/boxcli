@@ -1765,12 +1765,6 @@ describe('Folders', () => {
 				let actualContents = await getDirectoryContents(folderPath);
 				await fs.remove(folderPath);
 
-				assert.equal(actualContents['file 1.txt'], expectedContents['file 1.txt']);
-				assert.equal(actualContents['file 2.txt'], expectedContents['file 2.txt']);
-				assert.equal(
-					actualContents.subfolder['subfolder file 1.txt'],
-					expectedContents.subfolder['subfolder file 1.txt']
-				);
 				assert.deepEqual(actualContents, expectedContents);
 				assert.equal(ctx.stdout, '');
 			});
