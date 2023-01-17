@@ -43,8 +43,6 @@ body:
       label: Describe the bug
       description: |
         Please include as much detail as possible to help us troubleshoot!
-        - App Access Level (found in application configuration):  App Access Only | App + Enterprise Access
-        - Are you using service account or user account? https://developer.box.com/guides/getting-started/user-types/service-account/
         - Share the full error output you're seeing, if applicable.
         - Please include the full stack trace to help us identify where the error is happening.
     validations:
