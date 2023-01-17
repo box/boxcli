@@ -32,8 +32,8 @@ body:
   - type: checkboxes
     id: github-repo-checked
     attributes:
-      label: I have checked that the Box Developer Forums doesn't solve my issue.
-      description: <a href="https://github.com/box/boxcli/search?type=Issues">Box Developer Forums</a> link
+      label: I have searched Issues in this repo and my issue isn't already reported.
+      description: <a href="https://github.com/box/boxcli/search?type=Issues">Github issues</a> link
       options:
         - label: Yes I've checked them.
           required: true
