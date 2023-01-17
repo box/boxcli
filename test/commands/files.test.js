@@ -1,21 +1,19 @@
 'use strict';
-
-const { test } = require('@oclif/test');
+const {test} = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT,
-	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, toUrlPath } = require('../helpers/test-helper');
+const {
+	getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT,
+	DEFAULT_DOWNLOAD_PATH, getDownloadProgressBar, toUrlPath
+} = require('../helpers/test-helper');
 const os = require('os');
 const leche = require('leche');
-
 describe('Files', () => {
-
 	describe('files:get', () => {
 		let fileId = '1234567890',
 			getFileFixture = getFixture('files/get_files_id'),
 			yamlOutput = getFixture('output/files_get_yaml.txt');
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -31,7 +29,6 @@ describe('Files', () => {
 			.it('should get a file\'s information (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, getFileFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -46,7 +43,6 @@ describe('Files', () => {
 			.it('should get a file\'s information (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -62,7 +58,6 @@ describe('Files', () => {
 			])
 			.it('should send fields param to the API when --fields flag is passed');
 	});
-
 	describe('files:copy', () => {
 		let fileId = '1234567890',
 			parentFolderId = '987654321',
@@ -70,13 +65,11 @@ describe('Files', () => {
 			version = '55555',
 			copyFixture = getFixture('files/post_files_id_copy'),
 			yamlOutput = getFixture('output/files_copy_yaml.txt');
-
 		let copyBody = {
 			parent: {
 				id: parentFolderId
 			}
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/copy`, copyBody)
@@ -93,7 +86,6 @@ describe('Files', () => {
 			.it('should copy a file to a different folder (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, copyFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/copy`, copyBody)
@@ -109,7 +101,6 @@ describe('Files', () => {
 			.it('should copy a file to a different folder (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/copy`, copyBody)
@@ -126,7 +117,6 @@ describe('Files', () => {
 			.it('should output only the ID of the copied file when --id-only flag is passed', ctx => {
 				assert.equal(ctx.stdout, `${JSON.parse(copyFixture).id}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/copy`, {
@@ -150,19 +140,16 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, copyFixture);
 			});
 	});
-
 	describe('files:move', () => {
 		let fileId = '1234567890',
 			parentFolderId = '987654321',
 			moveFixture = getFixture('files/put_files_id'),
 			yamlOutput = getFixture('output/files_move_yaml.txt');
-
 		let moveBody = {
 			parent: {
 				id: parentFolderId
 			}
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, moveBody)
@@ -179,7 +166,6 @@ describe('Files', () => {
 			.it('should move a file to a different folder (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, moveFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, moveBody)
@@ -195,7 +181,6 @@ describe('Files', () => {
 			.it('should move a file to a different folder (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, moveBody)
@@ -225,10 +210,8 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
 	});
-
 	describe('files:delete', () => {
 		let fileId = '1234567890';
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
@@ -243,7 +226,6 @@ describe('Files', () => {
 			.it('should delete a file', ctx => {
 				assert.equal(ctx.stderr, `Deleted file ${fileId}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
@@ -259,7 +241,6 @@ describe('Files', () => {
 			.it('should delete a file, but output no information to stderr', ctx => {
 				assert.equal(ctx.stderr, '');
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
@@ -277,7 +258,6 @@ describe('Files', () => {
 			.it('should permanently delete a file when -f flag is passed', ctx => {
 				assert.equal(ctx.stderr, `Deleted file ${fileId} permanently${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
@@ -304,7 +284,6 @@ describe('Files', () => {
 				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}`)
@@ -323,16 +302,13 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, `Deleted file ${fileId} permanently${os.EOL}`);
 			});
 	});
-
 	describe('files:unlock', () => {
 		let fileId = '1234567890',
 			lockFixture = getFixture('files/put_files_id_lock'),
 			yamlOutput = getFixture('output/files_unlock_yaml.txt');
-
 		let unlockBody = {
 			lock: null
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, unlockBody)
@@ -348,7 +324,6 @@ describe('Files', () => {
 			.it('should unlock a file (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, lockFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, unlockBody)
@@ -364,24 +339,20 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
-
 	leche.withData([
 		'files:lock',
 		'files:update-lock',
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				expireTime = '2030-01-01T08:00:00+00:00',
 				lockFixture = getFixture('files/put_files_id_lock'),
 				yamlOutput = getFixture('output/files_lock_yaml.txt');
-
 			let lockBody = {
 				lock: {
 					type: 'lock',
 				}
 			};
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, lockBody)
@@ -397,7 +368,6 @@ describe('Files', () => {
 				.it('should lock a file (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, lockFixture);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, lockBody)
@@ -412,7 +382,6 @@ describe('Files', () => {
 				.it('should lock a file (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, {
@@ -434,7 +403,6 @@ describe('Files', () => {
 				.it('should prevent download when the --prevent-download flag is passed', ctx => {
 					assert.equal(ctx.stdout, lockFixture);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, {
@@ -458,18 +426,15 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	leche.withData([
 		'files:comments',
 		'comments:list'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				fixture = getFixture('comments/get_files_id_comments_page_1'),
 				fixture2 = getFixture('comments/get_files_id_comments_page_2'),
 				jsonOutput = getFixture('output/comments_list_json.txt');
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/comments`)
@@ -490,7 +455,6 @@ describe('Files', () => {
 				.it('should list all comments on a file (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/comments`)
@@ -514,18 +478,15 @@ describe('Files', () => {
 				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
-
 	leche.withData([
 		'files:collaborations',
 		'files:collaborations:list'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				fixture = getFixture('files/get_files_id_collaborations_page_1'),
 				fixture2 = getFixture('files/get_files_id_collaborations_page_2'),
 				jsonOutput = getFixture('output/files_collaborations_list_json.txt');
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/collaborations`)
@@ -546,7 +507,6 @@ describe('Files', () => {
 				.it('should list all collaborations on a Box item (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/collaborations`)
@@ -570,12 +530,10 @@ describe('Files', () => {
 				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
-
 	describe('files:collaborations:add', () => {
 		let fileId = '1234567890',
 			addCollaborationFixture = getFixture('files/post_collaborations_user'),
 			yamlOutput = getFixture('output/files_collaborations_add_yaml.txt');
-
 		let addCollaborationBody = {
 			item: {
 				type: 'file',
@@ -587,7 +545,6 @@ describe('Files', () => {
 			},
 			role: 'previewer'
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', addCollaborationBody)
@@ -605,7 +562,6 @@ describe('Files', () => {
 			.it('should create a collaboration for a Box item (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, addCollaborationFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', addCollaborationBody)
@@ -622,7 +578,6 @@ describe('Files', () => {
 			.it('should create a collaboration for a Box item (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', addCollaborationBody)
@@ -640,7 +595,6 @@ describe('Files', () => {
 			.it('should output only the ID of the created collaboration when --id-only flag is passed', ctx => {
 				assert.equal(ctx.stdout, `${JSON.parse(addCollaborationFixture).id}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', addCollaborationBody)
@@ -659,17 +613,14 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, addCollaborationFixture);
 			});
 	});
-
 	describe('files:rename', () => {
 		let fileId = '1234567890',
 			renameFixture = getFixture('files/put_files_id'),
 			yamlOutput = getFixture('output/files_rename_yaml.txt');
-
 		let renameBody = {
 			name: 'test',
 			description: 'test description'
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, renameBody)
@@ -687,7 +638,6 @@ describe('Files', () => {
 			.it('should rename a file (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, renameFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, renameBody)
@@ -704,7 +654,6 @@ describe('Files', () => {
 			.it('should rename a file (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}`, renameBody)
@@ -735,14 +684,12 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
 	});
-
 	describe('files:metadata:get', () => {
 		let fileId = '1234567890',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
 			getMetadataFixture = getFixture('files/get_files_id_metadata_scope_template'),
 			yamlOutput = getFixture('output/files_metadata_get_yaml.txt');
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`)
@@ -759,7 +706,6 @@ describe('Files', () => {
 			.it('should get information about a metadata object (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, getMetadataFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`)
@@ -776,17 +722,14 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
-
 	leche.withData([
 		'files:metadata',
 		'files:metadata:get-all'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '123456789',
 				getAllMetadataFixture = getFixture('files/get_files_id_metadata'),
 				jsonOutput = getFixture('output/files_metadata_get_all_json.txt');
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/metadata`)
@@ -804,17 +747,14 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	leche.withData([
 		'files:metadata:remove',
 		'files:metadata:delete'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				metadataScope = 'enterprise',
 				metadataTemplate = 'testTemplate';
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.delete(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`)
@@ -832,14 +772,12 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	describe('files:metadata:update', () => {
 		let fileId = '1234567890',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
 			getMetadataFixture = getFixture('files/get_files_id_metadata_scope_template'),
 			yamlOutput = getFixture('output/files_metadata_update_yaml.txt');
-
 		let updateMetadataBody = [
 			{
 				op: 'test',
@@ -886,7 +824,6 @@ describe('Files', () => {
 				path: '/embargoed',
 			}
 		];
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`, updateMetadataBody)
@@ -912,7 +849,6 @@ describe('Files', () => {
 			.it('should update metadata object (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, getMetadataFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`, updateMetadataBody)
@@ -938,18 +874,16 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
-
 	leche.withData([
 		'files:metadata:add',
 		'files:metadata:create'
-	], function(command) {
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				metadataScope = 'enterprise',
 				metadataTemplate = 'testTemplate',
 				addMetadataFixture = getFixture('files/post_files_id_metadata_scope_template'),
 				yamlOutput = getFixture('output/files_metadata_create_yaml.txt');
-
 			let createMetadataBody = {
 				test: 'test123',
 				number: 1.9,
@@ -958,7 +892,6 @@ describe('Files', () => {
 					'bar'
 				]
 			};
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.post(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
@@ -978,7 +911,6 @@ describe('Files', () => {
 				.it('should add metadata object (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, addMetadataFixture);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.post(`/2.0/files/${fileId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
@@ -999,14 +931,12 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	describe('files:metadata:set', () => {
 		let fileID = '11111',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
 			addMetadataFixture = getFixture('files/post_files_id_metadata_scope_template'),
 			yamlOutput = getFixture('output/files_metadata_create_yaml.txt');
-
 		let createMetadataBody = {
 			test: 'test123',
 			number: 1.9,
@@ -1015,7 +945,6 @@ describe('Files', () => {
 				'bar'
 			]
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
@@ -1035,7 +964,6 @@ describe('Files', () => {
 			.it('should add metadata object with key/value pairs passed as a flag (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, addMetadataFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
@@ -1054,7 +982,6 @@ describe('Files', () => {
 			.it('should add metadata object with key/value pairs passed as a flag (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileID}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
@@ -1096,28 +1023,24 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, addMetadataFixture);
 			});
 	});
-
 	leche.withData([
 		'files:share',
 		'files:shared-links:create',
 		'files:shared-links:update'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				unsharedDate = '2030-11-18T19:44:17+00:00',
 				createSharedLinkFixture = getFixture('files/put_files_id_shared_link'),
 				jsonOutput = getFixture('output/files_share_json.txt'),
 				yamlOutput = getFixture('output/files_share_yaml.txt');
-
 			let sharedLinkBody = {
 				shared_link: {
-					permissions: { can_download: true, can_edit: true },
+					permissions: {can_download: true, can_edit: true},
 					access: 'test',
 					password: 'test'
 				}
 			};
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
@@ -1137,7 +1060,6 @@ describe('Files', () => {
 				.it('should create a shared link for a Box item (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}?fields=shared_link`, sharedLinkBody)
@@ -1156,7 +1078,6 @@ describe('Files', () => {
 				.it('should create a shared link for a Box item (YAML Output)', ctx => {
 					assert.equal(ctx.stdout, yamlOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}?fields=shared_link`, {
@@ -1178,7 +1099,6 @@ describe('Files', () => {
 				.it('should send unshared_at param when --unshared-at flag is passed', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}?fields=shared_link`, {
@@ -1202,20 +1122,16 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	leche.withData([
 		'files:unshare',
 		'files:shared-links:delete'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567809',
 				getFileFixture = getFixture('files/get_files_id');
-
 			let deleteSharedLinkBody = {
 				shared_link: null
 			};
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, deleteSharedLinkBody)
@@ -1234,7 +1150,6 @@ describe('Files', () => {
 					assert.equal(ctx.stdout, '');
 					assert.equal(ctx.stderr, `Removed shared link from file "test_file_download.txt"${os.EOL}`);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.put(`/2.0/files/${fileId}`, deleteSharedLinkBody)
@@ -1255,18 +1170,15 @@ describe('Files', () => {
 				});
 		});
 	});
-
 	leche.withData([
 		'files:tasks',
 		'files:tasks:list'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				fixture = getFixture('files/get_files_id_tasks_page_1'),
 				fixture2 = getFixture('files/get_files_id_tasks_page_2'),
 				jsonOutput = getFixture('output/files_tasks_list_json.txt');
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/tasks`)
@@ -1287,7 +1199,6 @@ describe('Files', () => {
 				.it('should list all tasks on this file (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/tasks`)
@@ -1311,18 +1222,15 @@ describe('Files', () => {
 				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
-
 	leche.withData([
 		'files:versions',
 		'files:versions:list'
-	], function(command) {
-
+	], function (command) {
 		describe(command, () => {
 			let fileId = '1234567890',
 				fixture = getFixture('files/get_files_id_versions_page_1'),
 				fixture2 = getFixture('files/get_files_id_versions_page_2'),
 				jsonOutput = getFixture('output/files_versions_list_json.txt');
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/versions`)
@@ -1343,7 +1251,6 @@ describe('Files', () => {
 				.it('should get a list of file versions (JSON Output)', ctx => {
 					assert.equal(ctx.stdout, jsonOutput);
 				});
-
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/files/${fileId}/versions`)
@@ -1367,11 +1274,9 @@ describe('Files', () => {
 				.it('should send fields param to the API when --fields flag is passed');
 		});
 	});
-
 	describe('files:versions:delete', () => {
 		let fileId = '1234567890',
 			versionId = '1234567890';
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}/versions/${versionId}`)
@@ -1387,7 +1292,6 @@ describe('Files', () => {
 			.it('should delete a file version', ctx => {
 				assert.equal(ctx.stderr, `Deleted file version ${versionId} from file ${fileId}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.delete(`/2.0/files/${fileId}/versions/${versionId}`)
@@ -1417,18 +1321,15 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
 	});
-
 	describe('files:versions:promote', () => {
 		let fileId = '1234567890',
 			versionId = '1234567890',
 			promoteVersionFixture = getFixture('files/post_files_id_versions_current'),
 			yamlOutput = getFixture('output/files_versions_promote_yaml.txt');
-
 		let promoteVersionBody = {
 			type: 'file_version',
 			id: versionId
 		};
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/versions/current`, promoteVersionBody)
@@ -1445,7 +1346,6 @@ describe('Files', () => {
 			.it('should promote a file version (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, promoteVersionFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post(`/2.0/files/${fileId}/versions/current`, promoteVersionBody)
@@ -1462,7 +1362,6 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
 	});
-
 	describe('files:update', () => {
 		let fileID = '55555',
 			name = 'Document v1.pdf',
@@ -1471,10 +1370,9 @@ describe('Files', () => {
 			fixture = getFixture('files/put_files_id'),
 			yamlOutput = getFixture('output/files_rename_yaml.txt'),
 			dispositionAt = '2025-12-09T04:07:18-08:00';
-
 		test
 			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/files/${fileID}`, { name })
+				.put(`/2.0/files/${fileID}`, {name})
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -1488,10 +1386,9 @@ describe('Files', () => {
 			.it('should update a file with name flag passed (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/files/${fileID}`, { name })
+				.put(`/2.0/files/${fileID}`, {name})
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -1504,7 +1401,6 @@ describe('Files', () => {
 			.it('should update a file with name flag passed (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileID}`, {
@@ -1527,10 +1423,9 @@ describe('Files', () => {
 			.it('should send optional params when flags are passed', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/files/${fileID}`, { name })
+				.put(`/2.0/files/${fileID}`, {name})
 				.matchHeader('If-Match', '5')
 				.reply(412, {
 					type: 'error',
@@ -1555,7 +1450,6 @@ describe('Files', () => {
 				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/files/${fileID}`, {
@@ -1575,7 +1469,6 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});
-
 	describe('files:versions:upload', () => {
 		let fileId = '1234567890',
 			testFileName = 'test_file.txt',
@@ -1585,26 +1478,26 @@ describe('Files', () => {
 			uploadFileFixture = getFixture('files/post_files_content'),
 			jsonOutput = getFixture('output/files_versions_upload_json.txt'),
 			yamlOutput = getFixture('output/files_versions_upload_yaml.txt');
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post(`/2.0/files/${fileId}/content`, function(body) {
-					try {
+				.post(`/2.0/files/${fileId}/content`, function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						assert.match(lines[0], /^-+\d+$/u);
 						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
 						assert.equal(lines[2], '');
-
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
-
 						assert.match(lines[4], /^-+\d+$/u);
 						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
 						assert.equal(lines[6], 'Content-Type: text/plain');
 						assert.equal(lines[7], '');
 						assert.equal(lines[8], testFileContent);
 						assert.match(lines[9], /^-+\d+-+$/u);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1623,26 +1516,26 @@ describe('Files', () => {
 			.it('should upload a new version of a file (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post(`/2.0/files/${fileId}/content`, function(body) {
-					try {
+				.post(`/2.0/files/${fileId}/content`, function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						assert.match(lines[0], /^-+\d+$/u);
 						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
 						assert.equal(lines[2], '');
-
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
-
 						assert.match(lines[4], /^-+\d+$/u);
 						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
 						assert.equal(lines[6], 'Content-Type: text/plain');
 						assert.equal(lines[7], '');
 						assert.equal(lines[8], testFileContent);
 						assert.match(lines[9], /^-+\d+-+$/u);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1660,16 +1553,18 @@ describe('Files', () => {
 			.it('should upload a new version of a file (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post(`/2.0/files/${fileId}/content`, function(body) {
-					try {
+				.post(`/2.0/files/${fileId}/content`, function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'content_modified_at', contentModifiedAt);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1689,7 +1584,6 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 	});
-
 	describe('files:upload', () => {
 		let parentFolderId = '987654321',
 			testFileName = 'test_file.txt',
@@ -1701,17 +1595,19 @@ describe('Files', () => {
 			uploadFileFixture = getFixture('files/post_files_content'),
 			jsonOutput = getFixture('output/files_upload_json.txt'),
 			yamlOutput = getFixture('output/files_upload_yaml.txt');
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', function(body) {
-					try {
+				.post('/2.0/files/content', function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
 						assert.nestedPropertyVal(attributes, 'parent.id', parentFolderId);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1730,17 +1626,19 @@ describe('Files', () => {
 			.it('should upload a file (JSON Output)', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', function(body) {
-					try {
+				.post('/2.0/files/content', function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
 						assert.nestedPropertyVal(attributes, 'parent.id', parentFolderId);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1757,17 +1655,19 @@ describe('Files', () => {
 			.it('should upload a file (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', function(body) {
-					try {
+				.post('/2.0/files/content', function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
 						assert.nestedPropertyVal(attributes, 'parent.id', parentFolderId);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1785,17 +1685,19 @@ describe('Files', () => {
 			.it('should output only the ID of the new file when --id-only flag is passed', ctx => {
 				assert.include(ctx.stdout, JSON.parse(uploadFileFixture).entries[0].id);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', function(body) {
-					try {
+				.post('/2.0/files/content', function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', newFileName);
 						assert.nestedPropertyVal(attributes, 'parent.id', parentFolderId);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1814,18 +1716,20 @@ describe('Files', () => {
 			.it('should upload file with new name when --name flag is passed', ctx => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
-
 		test
 			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', function(body) {
-					try {
+				.post('/2.0/files/content', function (body) {
+					try
+					{
 						let lines = body.split(/\r?\n/u);
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'content_created_at', contentCreatedAt);
 						assert.propertyVal(attributes, 'content_modified_at', contentModifiedAt);
 						assert.nestedPropertyVal(attributes, 'parent.id', parentFolderId);
 						assert.equal(lines[8], testFileContent);
-					} catch (error) {
+					}
+					catch (error)
+					{
 						return false;
 					}
 					return true;
@@ -1846,26 +1750,23 @@ describe('Files', () => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 	});
-
 	describe('files:download', () => {
 		let fileId = '12345',
-		fileName = 'test_file_download.txt',
-		saveAsFileName = 'new_file_name.txt',
-		fileVersionID = '8764569',
-		testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
-		fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
-		fileDownloadUrl = toUrlPath(fileDownloadPath),
-		tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
-		tempDestinationPath2 = path.join(fileDownloadPath, 'filesTemp2'),
-		getFileFixture = getFixture('files/get_files_id');
-
+			fileName = 'test_file_download.txt',
+			saveAsFileName = 'new_file_name.txt',
+			fileVersionID = '8764569',
+			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
+			fileDownloadUrl = toUrlPath(fileDownloadPath),
+			tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
+			tempDestinationPath2 = path.join(fileDownloadPath, 'filesTemp2'),
+			getFileFixture = getFixture('files/get_files_id');
 		after(() => {
 			/* eslint-disable no-sync */
 			fs.rmdirSync(tempDestinationPath);
 			fs.rmdirSync(tempDestinationPath2);
 			/* eslint-enable no-sync */
 		});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1877,7 +1778,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -1900,7 +1803,6 @@ describe('Files', () => {
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1912,7 +1814,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -1932,7 +1836,6 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1944,7 +1847,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -1963,7 +1868,6 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -1975,7 +1879,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -1996,7 +1902,6 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -2008,7 +1913,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.do(() => {
 				/* eslint-disable no-sync */
@@ -2033,20 +1940,21 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2071,7 +1979,6 @@ describe('Files', () => {
 				assert.equal(ctx.stderr, expectedMessage);
 			});
 	});
-
 	describe('files:versions:download', () => {
 		let fileId = '12345',
 			fileName = 'test_file_download.txt',
@@ -2083,27 +1990,27 @@ describe('Files', () => {
 			tempDestinationPath = path.join(fileDownloadPath, 'versionsTemp'),
 			tempDestinationPath2 = path.join(fileDownloadPath, 'versionsTemp2'),
 			getFileFixture = getFixture('files/get_files_id');
-
 		after(() => {
 			/* eslint-disable no-sync */
 			fs.rmdirSync(tempDestinationPath);
 			fs.rmdirSync(tempDestinationPath2);
 			/* eslint-enable no-sync */
 		});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2125,20 +2032,21 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2160,20 +2068,21 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stderr, `Downloaded file test_file_download.txt${os.EOL}`);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2193,20 +2102,21 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2227,20 +2137,21 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.stdout()
 			.stderr()
@@ -2262,20 +2173,21 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
 				.reply(200, getFileFixture)
 				.get(`/2.0/files/${fileId}/content`)
-				.query({ version: fileVersionID })
+				.query({version: fileVersionID})
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
 				})
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(fileDownloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.do(() => {
 				/* eslint-disable no-sync */
@@ -2302,9 +2214,7 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 			});
 	});
-
 	describe('files:zip', () => {
-
 		let fileName = 'test.zip',
 			items = [
 				{
@@ -2326,7 +2236,6 @@ describe('Files', () => {
 			statusUrl = '/2.0/zip_downloads/124hfiowk3fa8kmrwh/status',
 			createFileFixture = getFixture('files/post_zip_downloads'),
 			downloadStatusFixture = getFixture('files/get_zip_downloads_status');
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/zip_downloads', expectedBody)
@@ -2334,7 +2243,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(downloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.nock(TEST_API_ROOT, api => api
 				.get(statusUrl)
@@ -2360,9 +2271,7 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stdout, downloadStatusFixture);
 			});
-
 		const destination = path.join(fileDownloadPath, 'temp');
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/zip_downloads', expectedBody)
@@ -2370,7 +2279,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(downloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.nock(TEST_API_ROOT, api => api
 				.get(statusUrl)
@@ -2392,12 +2303,11 @@ describe('Files', () => {
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
 				fs.unlinkSync(downloadedFilePath);
-				fs.rmdirSync(destination);
+				fs.rmdirSync(destination, {recursive: true, force: true});
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stdout, downloadStatusFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/zip_downloads', expectedBody)
@@ -2405,7 +2315,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(downloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.nock(TEST_API_ROOT, api => api
 				.get(statusUrl)
@@ -2430,7 +2342,6 @@ describe('Files', () => {
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stdout, downloadStatusFixture);
 			});
-
 		test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/zip_downloads', expectedBody)
@@ -2438,7 +2349,9 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(downloadUrl)
-				.reply(200, function() { return fs.createReadStream(testFilePath, 'utf8'); })
+				.reply(200, function () {
+					return fs.createReadStream(testFilePath, 'utf8');
+				})
 			)
 			.nock(TEST_API_ROOT, api => api
 				.get(statusUrl)
