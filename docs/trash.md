@@ -38,7 +38,7 @@ EXAMPLE
   box trash
 ```
 
-_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/trash/index.js)_
+_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v3.7.0/src/commands/trash/index.js)_
 
 ## `box trash:delete TYPE ID`
 
@@ -71,7 +71,7 @@ EXAMPLE
   box trash:delete folder 22222
 ```
 
-_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/trash/delete.js)_
+_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v3.7.0/src/commands/trash/delete.js)_
 
 ## `box trash:get TYPE ID`
 
@@ -104,7 +104,7 @@ EXAMPLE
   box trash:get folder 22222
 ```
 
-_See code: [src/commands/trash/get.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/trash/get.js)_
+_See code: [src/commands/trash/get.js](https://github.com/box/boxcli/blob/v3.7.0/src/commands/trash/get.js)_
 
 ## `box trash:restore TYPE ID`
 
@@ -142,4 +142,4 @@ EXAMPLE
   box trash:restore folder 22222
 ```
 
-_See code: [src/commands/trash/restore.js](https://github.com/box/boxcli/blob/v3.6.0/src/commands/trash/restore.js)_
+_See code: [src/commands/trash/restore.js](https://github.com/box/boxcli/blob/v3.7.0/src/commands/trash/restore.js)_
