@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://github.com/box/boxcli/compare/v3.6.0...v3.7.0) (2023-01-19)
+
+
+### New Features and Enhancements
+
+* Add more flags for folder update collaborators ([#438](https://github.com/box/boxcli/issues/438)) ([83ac6d7](https://github.com/box/boxcli/commit/83ac6d7c8eeb7f3dc8562c8132cade4f5af80ee1))
+* Add support session termination ([#446](https://github.com/box/boxcli/issues/446)) ([aef15a8](https://github.com/box/boxcli/commit/aef15a8d2c7ee904db320d879deb6ebf0f934d22))
+
+### Bug Fixes
+
+* Fix delete token cache from disk ([#445](https://github.com/box/boxcli/issues/445)) ([aafb68a](https://github.com/box/boxcli/commit/aafb68ae38a8280bd97cf978042a8df5b71b2f52))
+* Fix metadata template update when adding multiple options to enum ([#442](https://github.com/box/boxcli/issues/442)) ([8779eec](https://github.com/box/boxcli/commit/8779eecf24bda5b093bc891f5097879e1876b601))
+* single file upload on Node 16 ([#441](https://github.com/box/boxcli/issues/441)) ([d94ab35](https://github.com/box/boxcli/commit/d94ab35a38938daf4edbbd134774a3809facecbd))
+
 ## [3.6.0](https://github.com/box/boxcli/compare/v3.5.0...v3.6.0) (2022-11-22)
 
 
