@@ -23,8 +23,9 @@ const utils = require('../../util');
  */
 function saveFileToDisk(folderPath, file, stream) {
 
+	let output;
 	try {
-		let output = fs.createWriteStream(path.join(folderPath, file.path));
+		output = fs.createWriteStream(path.join(folderPath, file.path));
 		stream.pipe(output);
 	} catch (ex) {
 		throw new BoxCLIError(`Error downloading file ${file.id} to ${file.path}`, ex);
@@ -33,7 +34,7 @@ function saveFileToDisk(folderPath, file, stream) {
 	/* eslint-disable promise/avoid-new */
 	// We need to await the end of the stream to avoid a race condition here
 	return new Promise((resolve, reject) => {
-		stream.on('end', resolve);
+		output.on('close', resolve);
 		stream.on('error', reject);
 	});
 	/* eslint-enable promise/avoid-new */
@@ -184,7 +185,6 @@ class FoldersDownloadCommand extends BoxCommand {
 		/* eslint-disable promise/avoid-new */
 		// We need to await the end of the stream to avoid a race condition here
 		return new Promise((resolve, reject) => {
-			output.on('end', resolve);
 			output.on('close', resolve);
 			output.on('error', reject);
 		});

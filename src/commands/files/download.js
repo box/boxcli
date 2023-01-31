@@ -42,8 +42,9 @@ class FilesDownloadCommand extends BoxCommand {
 		}
 
 		let stream = await this.client.files.getReadStream(args.id, options);
+		let output;
 		try {
-			let output = fs.createWriteStream(filePath);
+			output = fs.createWriteStream(filePath);
 			stream.pipe(output);
 		} catch (ex) {
 			throw new BoxCLIError(`Could not download to destination file ${filePath}`, ex);
@@ -69,7 +70,7 @@ class FilesDownloadCommand extends BoxCommand {
 		/* eslint-disable promise/avoid-new */
 		// We need to await the end of the stream to avoid a race condition here
 		await new Promise((resolve, reject) => {
-			stream.on('end', resolve);
+			output.on('close', resolve);
 			stream.on('error', reject);
 		});
 		clearInterval(intervalUpdate);

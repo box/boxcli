@@ -2349,7 +2349,7 @@ describe('Files', () => {
 			)
 			.nock(TEST_DOWNLOAD_ROOT, api => api
 				.get(downloadUrl)
-				.reply(200, function () {
+				.reply(200, function() {
 					return fs.createReadStream(testFilePath, 'utf8');
 				})
 			)
@@ -2357,9 +2357,9 @@ describe('Files', () => {
 				.get(statusUrl)
 				.reply(200, downloadStatusFixture)
 			)
-			.do(() => {
+			.do(async() => {
 				/* eslint-disable no-sync */
-				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, fileName), 'foo', 'utf8');
+				await fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, fileName), 'foo');
 				/* eslint-enable no-sync */
 			})
 			.stdout()
