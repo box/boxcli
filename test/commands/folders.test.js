@@ -1486,20 +1486,20 @@ describe('Folders', () => {
 			}
 		};
 
-		async function getDirectoryContents(folderPath) {
-
+		function getDirectoryContents(folderPath) {
+			/* eslint-disable no-sync */
 			let obj = {};
-			let folderContents = await fs.readdir(folderPath);
-			folderContents.forEach(async item => {
+			let folderContents = fs.readdirSync(folderPath);
+			folderContents.forEach(item => {
 				let itemPath = path.join(folderPath, item);
-				let stat = await fs.stat(itemPath);
+				let stat = fs.statSync(itemPath);
 				if (stat.isDirectory()) {
-					obj[item] = await getDirectoryContents(itemPath);
+					obj[item] = getDirectoryContents(itemPath);
 				} else {
-					obj[item] = await fs.readFile(itemPath, 'utf8');
+					obj[item] = fs.readFileSync(itemPath, 'utf8');
 				}
 			});
-
+			/* eslint-enable no-sync */
 			return obj;
 		}
 
@@ -1534,7 +1534,7 @@ describe('Folders', () => {
 			])
 			.it('should download folder to specified path on disk when called with destination flag', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = await getDirectoryContents(folderPath);
+				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(downloadPath);
 
 				assert.deepEqual(actualContents, expectedContents);
@@ -1588,7 +1588,7 @@ describe('Folders', () => {
 					manyFilesExpectedContents[`file ${i}.txt`] = `File ${i} contents`;
 				}
 				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = await getDirectoryContents(folderPath);
+				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(downloadPath);
 
 				assert.deepEqual(actualContents, manyFilesExpectedContents);
@@ -1621,7 +1621,7 @@ describe('Folders', () => {
 			])
 			.it('should only download files in top-level folder when --depth=0 flag is passed', async ctx => {
 				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = await getDirectoryContents(folderPath);
+				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(downloadPath);
 
 				assert.deepEqual(actualContents, _.omit(expectedContents, 'subfolder'));
@@ -1725,7 +1725,7 @@ describe('Folders', () => {
 			])
 			.it('should download a folder a non-existent path', async(ctx) => {
 				let folderPath = path.join(destination, folderName);
-				let actualContents = await getDirectoryContents(folderPath);
+				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(destination);
 
 				assert.deepEqual(actualContents, expectedContents);
@@ -1762,7 +1762,7 @@ describe('Folders', () => {
 			])
 			.it('should download a folder to a default destination', async(ctx) => {
 				let folderPath = path.join(DEFAULT_DOWNLOAD_PATH, folderName);
-				let actualContents = await getDirectoryContents(folderPath);
+				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(folderPath);
 
 				assert.deepEqual(actualContents, expectedContents);

@@ -36,7 +36,28 @@ class FilesZipCommand extends BoxCommand {
 		}
 
 		let output = fs.createWriteStream(filePath);
-		let downloadStatus = await this.client.files.downloadZip(fileName, flags.item, output);
+
+		let downloadStatus;
+		let outputFinished = false;
+		/* eslint-disable promise/avoid-new */
+		await new Promise((resolve, reject) => {
+			/* eslint-disable promise/always-return */
+			this.client.files.downloadZip(fileName, flags.item, output).then((status) => {
+				downloadStatus = status;
+				if (outputFinished) {
+					resolve();
+				}
+			})
+			.catch(reject);
+			output.on('close', () => {
+				output.close();
+				outputFinished = true;
+				if (downloadStatus) {
+					resolve();
+				}
+			});
+			output.on('error', reject);
+		});
 		await this.output(downloadStatus);
 	}
 }
