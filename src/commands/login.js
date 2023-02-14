@@ -24,48 +24,62 @@ class OAuthLoginCommand extends BoxCommand {
 		const environmentsObj = await this.getEnvironments();
 		const port = flags.port;
 		const redirectUri = `http://localhost:${port}/callback`;
+		let environment;
 
-		this.info(
-			chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
-		);
-		this.info(
-			chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
-		);
-		this.info(
-			chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
-		);
-		this.info(chalk`{cyan 3. Click on {bold Save Changes}.}`);
+		if (this.flags.reauthorize) {
+			if (
+				!environmentsObj.environments.hasOwnProperty(this.flags.name)
+			) {
+				this.error(`The ${this.flags.name} environment does not exist`);
+			}
 
-		const answers = await inquirer.prompt([
-			{
-				type: 'input',
-				name: 'clientID',
-				message: 'What is the OAuth Client ID of your application?',
-			},
-			{
-				type: 'input',
-				name: 'clientSecret',
-				message: 'What is the OAuth Client Secret of your application?',
-			},
-		]);
+			environment = environmentsObj.environments[this.flags.name];
+			if (environment.authMethod !== 'oauth20') {
+				this.error('The selected environment is not of type oauth20');
+			}
+		} else {
+			this.info(
+				chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
+			);
+			this.info(
+				chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
+			);
+			this.info(
+				chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
+			);
+			this.info(chalk`{cyan 3. Click on {bold Save Changes}.}`);
 
-		const environmentName = flags.name;
-		const newEnvironment = {
-			clientId: answers.clientID,
-			clientSecret: answers.clientSecret,
-			name: environmentName,
-			cacheTokens: true,
-			authMethod: 'oauth20',
-		};
+			const answers = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'clientID',
+					message: 'What is the OAuth Client ID of your application?',
+				},
+				{
+					type: 'input',
+					name: 'clientSecret',
+					message: 'What is the OAuth Client Secret of your application?',
+				},
+			]);
 
+			environment = {
+				clientId: answers.clientID,
+				clientSecret: answers.clientSecret,
+				name: this.flags.name,
+				cacheTokens: true,
+				authMethod: 'oauth20',
+			};
+		}
+
+		const environmentName = environment.name;
 		const sdkConfig = Object.freeze({
 			analyticsClient: {
 				version: pkg.version,
-			}
+			},
 		});
 		const sdk = new BoxSDK({
-			clientID: answers.clientID,
-			clientSecret: answers.clientSecret,
+			clientID: environment.clientId,
+			clientSecret: environment.clientSecret,
 		});
 		this._configureSdk(sdk, sdkConfig);
 
@@ -101,7 +115,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 				const user = await client.users.get('me');
 
-				environmentsObj.environments[environmentName] = newEnvironment;
+				environmentsObj.environments[environmentName] = environment;
 				environmentsObj.default = environmentName;
 				await this.updateEnvironments(environmentsObj);
 
@@ -112,12 +126,18 @@ class OAuthLoginCommand extends BoxCommand {
 				res.send(html);
 
 				this.info(chalk`{green Successfully logged in as ${user.login}!}`);
-				this.info(
-					chalk`{green New environment "${environmentName}" has been created and selected.}`
-				);
-				this.info(
-					chalk`{green You are set up to make your first API call. Refer to the CLI commands library (https://github.com/box/boxcli#command-topics) for examples.}`
-				);
+				if (this.flags.reauthorize) {
+					this.info(
+						chalk`{green Environment "${environmentName}" has been updated, selected and it's ready to use.}`
+					);
+				} else {
+					this.info(
+						chalk`{green New environment "${environmentName}" has been created and selected.}`
+					);
+					this.info(
+						chalk`{green You are set up to make your first API call. Refer to the CLI commands library (https://github.com/box/boxcli#command-topics) for examples.}`
+					);
+				}
 			} catch (err) {
 				throw new BoxCLIError(err);
 			} finally {
@@ -159,7 +179,9 @@ class OAuthLoginCommand extends BoxCommand {
 					message: 'What is your state code? (state=)',
 				},
 			]);
-			http.get(`http://localhost:${port}/callback?state=${authInfo.state}&code=${authInfo.code}`);
+			http.get(
+				`http://localhost:${port}/callback?state=${authInfo.state}&code=${authInfo.code}`
+			);
 		} else {
 			open(authorizeUrl);
 			this.info(
@@ -173,7 +195,8 @@ class OAuthLoginCommand extends BoxCommand {
 // @NOTE: This command MUST skip client setup, since it is used to add the first environment
 OAuthLoginCommand.noClient = true;
 
-OAuthLoginCommand.description = 'Sign in with OAuth and set a new environment';
+OAuthLoginCommand.description =
+	'Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
@@ -191,6 +214,12 @@ OAuthLoginCommand.flags = {
 		char: 'p',
 		description: 'Set the port number for the local OAuth callback server',
 		default: 3000,
+	}),
+	reauthorize: flags.boolean({
+		char: 'r',
+		description: 'Reauthorize the existing environment with given `name`',
+		dependsOn: ['name'],
+		default: false
 	}),
 };
 
