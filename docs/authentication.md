@@ -9,6 +9,8 @@ overview of how the Box API handles authentication.
   - [Server Auth with JWT](#server-auth-with-jwt)
   - [Server Auth with CCG](#server-auth-with-ccg)
   - [Traditional 3-Legged OAuth2](#traditional-3-legged-oauth2)
+     - [Reauthorize OAuth2](#reauthorize-oauth2)
+
 
 Ways to Authenticate
 --------------------
@@ -103,3 +105,30 @@ box configure:environments:add /path/to/file/config.json --ccg-auth --ccg-user "
 ### Traditional 3-Legged OAuth2
 
 Refer to the [OAuth Guide](https://developer.box.com/guides/cli/quick-start) if you want to use OAuth2.
+
+#### Reauthorize OAuth2
+
+After each successful OAuth2 authorization, a pair of tokens is generated, the Access Token and Refresh Token. 
+
+The first one, the  [Access Token](https://developer.box.com/guides/authentication/tokens/access-tokens/), is used to represent the authenticated user to the Box servers and is valid for 60 minutes.
+
+The second one, the [Refresh Token](https://developer.box.com/guides/authentication/tokens/refresh/), is used to refresh the Access Token when it has expired or is close to expiring. A Refresh Token is valid for 1 use within 60 days.
+
+However, it may happen that both mentioned tokens, `Access Token` and `Refresh Token`, have expired. You may then see following error:
+
+```bash
+Your refresh token has expired. 
+Please run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.
+```
+
+In this case, you need to log in again to obtain required tokens by using the following command:
+
+```bash
+box login --name "ENVIRONMENT_NAME" --reauthorize
+```
+
+where `ENVIRONMENT_NAME` is the name of the environment to be reauthorized.
+
+Thanks to the `--reauthorize` flag, the `clientID` and `clientSecret` parameters will be retrieved from the existing environment instead of asking the user for them.
+
+After a successful login, the `ENVIRONMENT_NAME` environment will be updated and set as the default.

@@ -324,7 +324,7 @@ class BoxCommand extends Command {
 				this.bulkErrors.push({
 					index: bulkEntryIndex,
 					data: bulkData,
-					error: err,
+					error: this.wrapError(err),
 				});
 			}
 			/* eslint-enable no-await-in-loop */
@@ -736,7 +736,7 @@ class BoxCommand extends Command {
 				client = sdk.getPersistentClient(tokenInfo, tokenCache);
 			} catch (err) {
 				throw new BoxCLIError(
-					`Can't load the default OAuth environment "${environmentsObj.default}". Please login again or provide a token.`
+					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`
 				);
 			}
 		} else if (environmentsObj.default) {
@@ -1187,6 +1187,27 @@ class BoxCommand extends Command {
 	}
 
 	/**
+	 * Wraps filtered error in an error with a user-friendly description
+	 *
+	 * @param {Error} err  The thrown error
+	 * @returns {Error} Error wrapped in an error with user friendly description
+	 */
+	wrapError(err) {
+		let messageMap = {
+			'invalid_grant - Refresh token has expired':
+			'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.'
+		};
+
+		for (const key in messageMap) {
+			if (err.message.includes(key)) {
+				return new BoxCLIError(messageMap[key], err);
+			}
+		}
+
+		return err;
+	}
+
+	/**
 	 * Handles an error thrown within a command
 	 *
 	 * @param {Error} err  The thrown error
@@ -1197,7 +1218,7 @@ class BoxCommand extends Command {
 			// Let the oclif default handler run first, since it handles the help and version flags there
 			/* eslint-disable promise/no-promise-in-callback */
 			DEBUG.execute('Running framework error handler');
-			await super.catch(err);
+			await super.catch(this.wrapError(err));
 			/* eslint-disable no-shadow,no-catch-shadow */
 		} catch (err) {
 			// The oclif default catch handler rethrows most errors; handle those here
