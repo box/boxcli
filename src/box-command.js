@@ -260,6 +260,7 @@ class BoxCommand extends Command {
 		this.args = args;
 		this.settings = await this._loadSettings();
 		this.client = await this.getClient();
+		this.markerBased = false;
 
 		if (this.isBulk) {
 			this.constructor.args = originalArgs;
@@ -901,7 +902,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -909,13 +910,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -946,14 +947,36 @@ class BoxCommand extends Command {
 		// Unroll iterator into array
 		if (typeof obj.next === 'function') {
 			output = [];
-			let entry = await obj.next();
-			while (!entry.done) {
-				output.push(entry.value);
-				/* eslint-disable no-await-in-loop */
-				entry = await obj.next();
-				/* eslint-enable no-await-in-loop */
+			// if no limit get all the records
+			if (!this.flags.limit) {
+				let entry = await obj.next();
+				while (!entry.done) {
+					output.push(entry.value);
+					/* eslint-disable no-await-in-loop */
+					entry = await obj.next();
+					/* eslint-enable no-await-in-loop */
+				}
+				DEBUG.output('Unrolled iterable into %d entries', output.length);
+			} else {
+				//TODO handle when limit > 1000 then we need to always page
+				if (this.markerBased) {
+					let entry = {};
+					for (let i = 1; i <= this.flags.page * this.flags.limit; i++) {
+						entry = await obj.next();
+						if (i > (this.flags.page - 1) * this.flags.limit) {
+							output.push(entry.value);
+						}
+
+						//TODO support case when input has greater page than paged result
+						//if (entry.done) {
+						//		break;
+						//}
+					}
+				} else {
+					//TODO handle when offset > 10000 then we need to page
+					output.push(obj.buffer);
+				}
 			}
-			DEBUG.output('Unrolled iterable into %d entries', output.length);
 		}
 
 		if (this.flags['id-only']) {
@@ -1195,7 +1218,7 @@ class BoxCommand extends Command {
 	wrapError(err) {
 		let messageMap = {
 			'invalid_grant - Refresh token has expired':
-			'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.'
+				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.',
 		};
 
 		for (const key in messageMap) {
