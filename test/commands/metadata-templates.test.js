@@ -48,8 +48,24 @@ describe('Metadata Templates', () => {
 			.it('should create cascade policy (YAML Output)', ctx => {
 				assert.equal(ctx.stdout, yamlOutput);
 			});
+		
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/metadata_cascade_policies', {scope, templateKey, folder_id: folderID })
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'metadata-cascade-policies:create',
+				templateKey,
+				`--folder=${folderID}`,
+				'--token=test'
+			])
+			.it('should create cascade policy (command alias)', ctx => {
+				assert.equal(ctx.stdout, yamlOutput);
+			})
 	});
-
+	
 	describe('metadata-templates:get', () => {
 		let scope = 'enterprise',
 			templateKey = 'testTemplate',
