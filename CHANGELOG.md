@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0](https://github.com/box/boxcli/compare/v3.7.0...v3.8.0) (2023-03-03)
+
+
+### New Features and Enhancements
+
+* add alias for metadata cascade policy create ([#460](https://github.com/box/boxcli/issues/460)) ([8d2f683](https://github.com/box/boxcli/commit/8d2f683e092c036efe352e6fd70904083ad7c208))
+* Add support for `--reauthorize` flag in login command ([#457](https://github.com/box/boxcli/issues/457)) ([f653a0d](https://github.com/box/boxcli/commit/f653a0d526c7194f0a5e80dc837f0f16a9d4f27b))
+
+### Bug Fixes
+
+* Fix `keychain` access by bumping `keychain` library to `1.4.0` ([#459](https://github.com/box/boxcli/issues/459)) ([56919ce](https://github.com/box/boxcli/commit/56919cefabef6de4d96a1f69f7c80740a680876c))
+* Fix unit tests ([#456](https://github.com/box/boxcli/issues/456)) ([f89d9ef](https://github.com/box/boxcli/commit/f89d9ef5c3c4e7bf00c0be40f128428b1e7e6983))
+
 ## [3.7.0](https://github.com/box/boxcli/compare/v3.6.0...v3.7.0) (2023-01-19)
 
 
