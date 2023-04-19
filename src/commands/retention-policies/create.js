@@ -28,6 +28,12 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 		} else if (flags['non-modifiable']) {
 			options.retention_type = this.client.retentionPolicies.retentionTypes.NON_MODIFIABLE;
 		}
+		if (flags.hasOwnProperty('description')) {
+			options.description = flags.description;
+		}
+		if (flags.hasOwnProperty('custom-notification-recipients')) {
+			options.custom_notification_recipients = flags['custom-notification-recipients'];
+		}
 
 		let policy = await this.client.retentionPolicies.create(args.policyName, policyType, dispositionAction, options);
 		await this.output(policy);
@@ -86,6 +92,30 @@ RetentionPoliciesCreateCommand.flags = {
 			'permanently_delete',
 			'remove_retention'
 		]
+	}),
+	description: flags.string({
+		required: false,
+		description: 'The additional text description of the retention policy'
+	}),
+	'can-owner-extend-retention': flags.boolean({
+		description: 'The owner of a file will be allowed to extend the retention',
+		allowNo: true
+	}),
+	'custom-notification-recipients': flags.string({
+		description: 'A list of users notified when the retention policy duration is about to end. ' +
+			'Allowed properties are: id, type, login, name',
+		multiple: true,
+		parse(input) {
+			const user = {
+				type: 'user',
+			};
+
+			for (const part of input.split(',')) {
+				const [key, value] = part.split('=');
+				user[key] = value;
+			}
+			return user;
+		}
 	}),
 };
 
