@@ -13,8 +13,8 @@ class RetentionPoliciesAssignCommand extends BoxCommand {
 		let assignID = flags['assign-to-id'];
 		let options = {};
 
-		if (flags.hasOwnProperty('filter-fields')) {
-			options.filter_fields = flags['filter-fields'];
+		if (flags.hasOwnProperty('filter-field')) {
+			options.filter_fields = flags['filter-field'];
 		}
 		if (flags.hasOwnProperty('start-date-field')) {
 			options.start_date_field = flags['start-date-field'];
@@ -33,7 +33,7 @@ class RetentionPoliciesAssignCommand extends BoxCommand {
 }
 
 RetentionPoliciesAssignCommand.description = 'Assign a retention policy assignment';
-RetentionPoliciesAssignCommand.examples = ['box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222'];
+RetentionPoliciesAssignCommand.examples = ['box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222 --filter-field=field=fieldName,value=fieldValue --start-date-field=upload_date'];
 RetentionPoliciesAssignCommand._endpoint = 'post_retention_policy_assignments';
 
 RetentionPoliciesAssignCommand.flags = {
@@ -50,8 +50,8 @@ RetentionPoliciesAssignCommand.flags = {
 	'assign-to-id': flags.string({
 		description: 'The ID of the content to assign the retention policy to',
 	}),
-	'filter-fields': flags.string({
-		description: ' Metadata fields to filter against, if assigning to a metadata template.' +
+	'filter-field': flags.string({
+		description: 'Metadata fields to filter against, if assigning to a metadata template.' +
 			'Allow properties: field, value. Example: field=foo,value=bar',
 		multiple: true,
 		parse(input) {
@@ -66,7 +66,7 @@ RetentionPoliciesAssignCommand.flags = {
 						filter.value = value;
 						break;
 					default:
-							throw new BoxCLIError(`Unknown property for signer: ${key}`);
+						throw new BoxCLIError(`Unknown property for field: ${key}`);
 				}
 			});
 			return filter;

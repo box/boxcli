@@ -123,6 +123,10 @@ describe('Retention Policies', () => {
 						type: 'user',
 						id: '12345',
 						login: 'user@box.com'
+					}, {
+						type: 'user',
+						id: '34567',
+						login: 'user2@box.com'
 					}]
 				})
 				.reply(201, fixture)
@@ -134,7 +138,8 @@ describe('Retention Policies', () => {
 				`--disposition-action=${dispositionAction}`,
 				`--retention-length=${retentionLength}`,
 				'--description=This is a description',
-				'--custom-notification-recipients=id=12345,login=user@box.com',
+				'--custom-notification-recipient=id=12345,login=user@box.com',
+				'--custom-notification-recipient=id=34567,login=user2@box.com',
 				'--json',
 				'--token=test'
 			])
@@ -520,7 +525,7 @@ describe('Retention Policies', () => {
 				'retention-policies:assign',
 				policyId,
 				'--assign-to-type=enterprise',
-				'--filter-fields=field=a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4,value=0c27b756-0p87-4fe0-a43a-59fb661ccc4e',
+				'--filter-field=field=a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4,value=0c27b756-0p87-4fe0-a43a-59fb661ccc4e',
 				'--start-date-field=upload_date',
 				'--json',
 				'--token=test'
