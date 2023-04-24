@@ -33,7 +33,7 @@ class RetentionPoliciesAssignCommand extends BoxCommand {
 }
 
 RetentionPoliciesAssignCommand.description = 'Assign a retention policy assignment';
-RetentionPoliciesAssignCommand.examples = ['box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222 --filter-field=field=fieldName,value=fieldValue --start-date-field=upload_date'];
+RetentionPoliciesAssignCommand.examples = ['box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222 --filter-field=fieldName=fieldValue --start-date-field=upload_date'];
 RetentionPoliciesAssignCommand._endpoint = 'post_retention_policy_assignments';
 
 RetentionPoliciesAssignCommand.flags = {
@@ -52,23 +52,16 @@ RetentionPoliciesAssignCommand.flags = {
 	}),
 	'filter-field': flags.string({
 		description: 'Metadata fields to filter against, if assigning to a metadata template.' +
-			'Allow properties: field, value. Example: field=foo,value=bar',
+			'Allow properties: field, value. Example: --filter-field=fieldName=fieldValue',
 		multiple: true,
 		parse(input) {
 			const filter = {};
-			input.split(',').forEach((pair) => {
-				const [key, value] = pair.split('=');
-				switch (key) {
-					case 'field':
-						filter.field = value;
-						break;
-					case 'value':
-						filter.value = value;
-						break;
-					default:
-						throw new BoxCLIError(`Unknown property for field: ${key}`);
-				}
-			});
+			input = input.split('=');
+			if (input.length !== 2) {
+				throw new BoxCLIError('Invalid filter field');
+			}
+			filter.field = input[0];
+			filter.value = input[1];
 			return filter;
 		}
 	}),

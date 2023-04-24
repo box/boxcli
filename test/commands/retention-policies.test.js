@@ -525,7 +525,7 @@ describe('Retention Policies', () => {
 				'retention-policies:assign',
 				policyId,
 				'--assign-to-type=enterprise',
-				'--filter-field=field=a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4,value=0c27b756-0p87-4fe0-a43a-59fb661ccc4e',
+				'--filter-field=a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4=0c27b756-0p87-4fe0-a43a-59fb661ccc4e',
 				'--start-date-field=upload_date',
 				'--json',
 				'--token=test'
