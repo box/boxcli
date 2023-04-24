@@ -111,6 +111,41 @@ describe('Retention Policies', () => {
 			.it('should send optional params when flags are passed', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/retention_policies', {
+					...expectedBody,
+					policy_type: 'finite',
+					retention_length: retentionLength,
+					description: 'This is a description',
+					custom_notification_recipients: [{
+						type: 'user',
+						id: '12345',
+						login: 'user@box.com'
+					}, {
+						type: 'user',
+						id: '34567',
+						login: 'user2@box.com'
+					}]
+				})
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:create',
+				policyName,
+				`--disposition-action=${dispositionAction}`,
+				`--retention-length=${retentionLength}`,
+				'--description=This is a description',
+				'--custom-notification-recipient=id=12345,login=user@box.com',
+				'--custom-notification-recipient=id=34567,login=user2@box.com',
+				'--json',
+				'--token=test'
+			])
+			.it('should create a new retention policy with custom description and custom notification recipients', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
 	});
 
 	describe('retention-policies:update', () => {
@@ -449,6 +484,7 @@ describe('Retention Policies', () => {
 				.post('/2.0/retention_policy_assignments', {
 					...expectedBody,
 					assign_to: {
+						id: null,
 						type: 'enterprise',
 					}
 				})
@@ -463,6 +499,38 @@ describe('Retention Policies', () => {
 				'--token=test'
 			])
 			.it('should assign policy to the enterprise without taking an ID argument', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/retention_policy_assignments', {
+					...expectedBody,
+					assign_to: {
+						type: 'enterprise',
+						id: null
+					},
+					filter_fields: [
+						{
+							field: 'a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4',
+							value: '0c27b756-0p87-4fe0-a43a-59fb661ccc4e'
+						}
+					],
+					start_date_field: 'upload_date',
+				})
+				.reply(201, fixture)
+			)
+			.stdout()
+			.command([
+				'retention-policies:assign',
+				policyId,
+				'--assign-to-type=enterprise',
+				'--filter-field=a0f4ee4e-1dc1-4h90-a8a9-aef55fc681d4=0c27b756-0p87-4fe0-a43a-59fb661ccc4e',
+				'--start-date-field=upload_date',
+				'--json',
+				'--token=test'
+			])
+			.it('should assign policy to the enterprise with custom filter fields and start date field', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 

@@ -28,6 +28,12 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 		} else if (flags['non-modifiable']) {
 			options.retention_type = this.client.retentionPolicies.retentionTypes.NON_MODIFIABLE;
 		}
+		if (flags.hasOwnProperty('description')) {
+			options.description = flags.description;
+		}
+		if (flags.hasOwnProperty('custom-notification-recipient')) {
+			options.custom_notification_recipients = flags['custom-notification-recipient'];
+		}
 
 		let policy = await this.client.retentionPolicies.create(args.policyName, policyType, dispositionAction, options);
 		await this.output(policy);
@@ -35,7 +41,7 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 }
 
 RetentionPoliciesCreateCommand.description = 'Create a new retention policy';
-RetentionPoliciesCreateCommand.examples = ['box retention-policies:create "Tax Documents" --retention-length 2555 --retention-type "non_modifiable" --disposition-action permanently_delete'];
+RetentionPoliciesCreateCommand.examples = ['box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action=remove_retention --notify-owners --allow-extension --description "Tax documents for 2018" --custom-notification-recipient=id=12345,login=user@box.com'];
 RetentionPoliciesCreateCommand._endpoint = 'post_retention_policies';
 
 RetentionPoliciesCreateCommand.flags = {
@@ -86,6 +92,26 @@ RetentionPoliciesCreateCommand.flags = {
 			'permanently_delete',
 			'remove_retention'
 		]
+	}),
+	description: flags.string({
+		required: false,
+		description: 'The additional text description of the retention policy'
+	}),
+	'custom-notification-recipient': flags.string({
+		description: 'A list of users notified when the retention policy duration is about to end. ' +
+			'Allowed properties are: id, type, login, name',
+		multiple: true,
+		parse(input) {
+			const user = {
+				type: 'user',
+			};
+
+			for (const part of input.split(',')) {
+				const [key, value] = part.split('=');
+				user[key] = value;
+			}
+			return user;
+		}
 	}),
 };
 
