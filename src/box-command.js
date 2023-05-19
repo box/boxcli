@@ -959,8 +959,13 @@ class BoxCommand extends Command {
 		if (typeof obj.next === 'function') {
 			output = [];
 				let entry = await obj.next();
-				while (!entry.done && !this.maxItemsReached(this.flags['max-items'], output.length)) {
+				while (!entry.done) {
 					output.push(entry.value);
+
+					if (this.maxItemsReached(this.flags['max-items'], output.length)) {
+						break;
+					}
+
 					/* eslint-disable no-await-in-loop */
 					entry = await obj.next();
 					/* eslint-enable no-await-in-loop */
