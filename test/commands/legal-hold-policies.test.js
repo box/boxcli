@@ -240,6 +240,7 @@ describe('Legal Hold Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/legal_hold_policies')
+				.query({limit: 1000})
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -255,6 +256,7 @@ describe('Legal Hold Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/legal_hold_policies')
+				.query({limit: 1000})
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -269,7 +271,7 @@ describe('Legal Hold Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/legal_hold_policies')
-				.query({ policy_name: policyNameFilter })
+				.query({ policy_name: policyNameFilter, limit: 1000 })
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -286,7 +288,7 @@ describe('Legal Hold Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/legal_hold_policies')
-				.query({fields: 'id'})
+				.query({fields: 'id', limit: 1000})
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -311,13 +313,15 @@ describe('Legal Hold Policies', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/legal_hold_policy_assignments')
 				.query({
-					policy_id: policyId
+					policy_id: policyId,
+					limit: 1000
 				})
 				.reply(200, fixture)
 				.get('/2.0/legal_hold_policy_assignments')
 				.query({
 					policy_id: policyId,
-					marker: 'ZDCE3'
+					marker: 'ZDCE3',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -339,6 +343,7 @@ describe('Legal Hold Policies', () => {
 					policy_id: policyId,
 					assign_to_type: assignToType,
 					assign_to_id: assignToID,
+					limit: 1000
 				})
 				.reply(200, fixture)
 				.get('/2.0/legal_hold_policy_assignments')
@@ -346,7 +351,8 @@ describe('Legal Hold Policies', () => {
 					policy_id: policyId,
 					assign_to_type: assignToType,
 					assign_to_id: assignToID,
-					marker: 'ZDCE3'
+					marker: 'ZDCE3',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -368,14 +374,16 @@ describe('Legal Hold Policies', () => {
 				.get('/2.0/legal_hold_policy_assignments')
 				.query({
 					fields: 'id',
-					policy_id: policyId
+					policy_id: policyId,
+					limit: 1000
 				})
 				.reply(200, fixture)
 				.get('/2.0/legal_hold_policy_assignments')
 				.query({
 					fields: 'id',
 					policy_id: policyId,
-					marker: 'ZDCE3'
+					marker: 'ZDCE3',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -575,13 +583,15 @@ describe('Legal Hold Policies', () => {
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/file_version_legal_holds')
 				.query({
-					policy_id: policyId
+					policy_id: policyId,
+					limit: 1000
 				})
 				.reply(200, fixture)
 				.get('/2.0/file_version_legal_holds')
 				.query({
 					policy_id: policyId,
-					marker: 'ZDCE3'
+					marker: 'ZDCE3',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -601,14 +611,16 @@ describe('Legal Hold Policies', () => {
 				.get('/2.0/file_version_legal_holds')
 				.query({
 					fields: 'id',
-					policy_id: policyId
+					policy_id: policyId,
+					limit: 1000
 				})
 				.reply(200, fixture)
 				.get('/2.0/file_version_legal_holds')
 				.query({
 					fields: 'id',
 					policy_id: policyId,
-					marker: 'ZDCE3'
+					marker: 'ZDCE3',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)

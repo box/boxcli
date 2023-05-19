@@ -927,6 +927,18 @@ class BoxCommand extends Command {
 	}
 
 	/**
+	 * Check if max-items has been reached.
+	 *
+	 * @param {number} maxItems Total number of items to return
+	 * @param {number} itemsCount Current number of items
+	 * @returns {boolean} True if limit has been reached, otherwise false
+	 * @private
+	 */
+	maxItemsReached(maxItems, itemsCount) {
+		return maxItems && itemsCount >= maxItems;
+	}
+
+	/**
 	 * Prepare the output data by:
 	 *   1) Unrolling an iterator into an array
 	 *   2) Filtering out unwanted object fields
@@ -946,14 +958,14 @@ class BoxCommand extends Command {
 		// Unroll iterator into array
 		if (typeof obj.next === 'function') {
 			output = [];
-			let entry = await obj.next();
-			while (!entry.done) {
-				output.push(entry.value);
-				/* eslint-disable no-await-in-loop */
-				entry = await obj.next();
-				/* eslint-enable no-await-in-loop */
-			}
-			DEBUG.output('Unrolled iterable into %d entries', output.length);
+				let entry = await obj.next();
+				while (!entry.done && !this.maxItemsReached(this.flags['max-items'], output.length)) {
+					output.push(entry.value);
+					/* eslint-disable no-await-in-loop */
+					entry = await obj.next();
+					/* eslint-enable no-await-in-loop */
+				}
+				DEBUG.output('Unrolled iterable into %d entries', output.length);
 		}
 
 		if (this.flags['id-only']) {
@@ -1195,7 +1207,7 @@ class BoxCommand extends Command {
 	wrapError(err) {
 		let messageMap = {
 			'invalid_grant - Refresh token has expired':
-			'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.'
+				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.'
 		};
 
 		for (const key in messageMap) {

@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const PaginationUtils = require('../../pagination-utils');
 
 class CommentsListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CommentsListCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -23,7 +24,8 @@ CommentsListCommand.examples = ['box files:comments 11111'];
 CommentsListCommand._endpoint = 'get_files_id_comments';
 
 CommentsListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.pagingFlag,
 };
 
 CommentsListCommand.args = [

@@ -1,0 +1,9 @@
+[
+    {
+        "type": "folder",
+        "id": "11111",
+        "sequence_id": "0",
+        "etag": "0",
+        "name": "SDK Test Folder"
+    }
+]

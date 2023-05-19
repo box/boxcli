@@ -216,12 +216,14 @@ describe('Users', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/users')
-					.query({ filter_term: 'AppUser_' })
+					.query({ filter_term: 'AppUser_', usemarker: true, limit: 1000 })
 					.reply(200, fixture)
 					.get('/2.0/users')
 					.query({
 						filter_term: 'AppUser_',
-						offset: 3
+						offset: 3,
+						usemarker: true,
+						limit: 1000,
 					})
 					.reply(200, fixture2)
 				)
@@ -239,12 +241,14 @@ describe('Users', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/users')
-					.query({fields: 'name,address'})
+					.query({fields: 'name,address', usemarker: true, limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/users')
 					.query({
 						fields: 'name,address',
-						offset: 3
+						offset: 3,
+						usemarker: true,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -273,10 +277,12 @@ describe('Users', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/users/${userId}/memberships`)
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/users/${userId}/memberships`)
 					.query({
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -294,12 +300,13 @@ describe('Users', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/users/${userId}/memberships`)
-					.query({fields: 'name'})
+					.query({fields: 'name', limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/users/${userId}/memberships`)
 					.query({
 						fields: 'name',
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

@@ -15,7 +15,7 @@ class MetadataCascadePoliciesCreateCommand extends BoxCommand {
 MetadataCascadePoliciesCreateCommand.description = 'Create a new metadata cascade policy on a folder';
 MetadataCascadePoliciesCreateCommand.examples = ['box metadata-templates:cascade employeeRecord --folder 22222'];
 MetadataCascadePoliciesCreateCommand._endpoint = 'post_metadata_cascade_policies';
-MetadataCascadePoliciesCreateCommand.aliases = ['metadata-cascade-policies:create']
+MetadataCascadePoliciesCreateCommand.aliases = ['metadata-cascade-policies:create'];
 
 MetadataCascadePoliciesCreateCommand.flags = {
 	...BoxCommand.flags,

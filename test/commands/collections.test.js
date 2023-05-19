@@ -52,10 +52,12 @@ describe('Collections', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/collections/${collectionId}/items`)
+				.query({limit: 1000})
 				.reply(200, fixture)
 				.get(`/2.0/collections/${collectionId}/items`)
 				.query({
-					offset: 2
+					offset: 2,
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -73,12 +75,13 @@ describe('Collections', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/collections/${collectionId}/items`)
-				.query({fields: 'name'})
+				.query({fields: 'name', limit: 1000})
 				.reply(200, fixture)
 				.get(`/2.0/collections/${collectionId}/items`)
 				.query({
 					fields: 'name',
-					offset: 2
+					offset: 2,
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)

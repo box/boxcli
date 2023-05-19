@@ -2,13 +2,16 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const PaginationUtils = require('../../pagination-utils');
 
 class CollaborationsGetPendingCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CollaborationsGetPendingCommand);
+		let options = PaginationUtils.handlePagination(flags);
 		let params = {
 			qs: {
-				status: 'pending'
+				status: 'pending',
+				limit: options.limit
 			}
 		};
 
@@ -30,6 +33,7 @@ CollaborationsGetPendingCommand._endpoint = 'get_collaborations pending';
 
 CollaborationsGetPendingCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 module.exports = CollaborationsGetPendingCommand;

@@ -2,13 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const PaginationUtils = require('../../pagination-utils');
 
 class FoldersListItemsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FoldersListItemsCommand);
-		let options = {
-			usemarker: true,
-		};
+		let options = PaginationUtils.forceMarkerPagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -34,6 +33,7 @@ FoldersListItemsCommand._endpoint = 'get_folders_id_items';
 
 FoldersListItemsCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 	direction: flags.string({
 		description: 'The direction to order returned items',
 		options: [

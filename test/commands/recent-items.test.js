@@ -14,10 +14,12 @@ describe('Recent Items', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/recent_items')
+				.query({limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/recent_items')
 				.query({
-					marker: 'ZDF123'
+					marker: 'ZDF123',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -34,12 +36,13 @@ describe('Recent Items', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/recent_items')
-				.query({fields: 'name'})
+				.query({fields: 'name', limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/recent_items')
 				.query({
 					fields: 'name',
-					marker: 'ZDF123'
+					marker: 'ZDF123',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)

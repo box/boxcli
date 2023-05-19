@@ -1136,7 +1136,7 @@ describe('Bulk', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/folders/0/items')
-				.query({ usemarker: true })
+				.query({ usemarker: true, limit: 1000 })
 				.reply(200, fixture3)
 			)
 			.stdout()
