@@ -8,7 +8,6 @@ class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RetentionPoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
-		// let options = {};
 
 		if (flags.type) {
 			options.type = flags.type;
