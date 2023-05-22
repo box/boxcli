@@ -44,6 +44,6 @@ module.exports = {
 module.exports.flags = Object.freeze({
 	'max-items': flags.integer({
 		description:
-			'A value that indicates the maximum number of results to return for a single request. This only specifies a maximum boundary and will not guarantee the minimum number of results returned.',
+			'A value that indicates the maximum number of results to return. This only specifies a maximum boundary and will not guarantee the minimum number of results returned. When the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will be made.',
 	}),
 });
