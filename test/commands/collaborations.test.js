@@ -593,13 +593,15 @@ describe('Collaborations', () => {
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/collaborations')
 					.query({
-						status: 'pending'
+						status: 'pending',
+						limit: 1000
 					})
 					.reply(200, fixture)
 					.get('/2.0/collaborations')
 					.query({
 						status: 'pending',
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

@@ -79,7 +79,7 @@ describe('Metadata Cascade Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/metadata_cascade_policies')
-				.query({ folder_id: folderID })
+				.query({ folder_id: folderID, limit: 1000 })
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -96,7 +96,7 @@ describe('Metadata Cascade Policies', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/metadata_cascade_policies')
-				.query({ folder_id: folderID })
+				.query({ folder_id: folderID, limit: 1000 })
 				.reply(200, fixture)
 			)
 			.stdout()
@@ -115,6 +115,7 @@ describe('Metadata Cascade Policies', () => {
 				.query({
 					folder_id: folderID,
 					owner_enterprise_id: enterpriseID,
+					limit: 1000
 				})
 				.reply(200, fixture)
 			)

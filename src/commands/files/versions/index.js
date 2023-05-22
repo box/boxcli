@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const PaginationUtils = require('../../../pagination-utils');
 
 class FilesListVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FilesListVersionsCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -23,7 +24,8 @@ FilesListVersionsCommand.examples = ['box files:versions 11111'];
 FilesListVersionsCommand._endpoint = 'get_files_id_versions';
 
 FilesListVersionsCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 FilesListVersionsCommand.args = [

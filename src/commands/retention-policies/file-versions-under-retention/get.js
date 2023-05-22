@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const PaginationUtils = require('../../../pagination-utils');
 
 class RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -20,7 +21,8 @@ RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.description = 'Get
 RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.examples = ['box retention-policies:file-versions-under-retention:get 77777'];
 RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand._endpoint = 'get_retention_policy_assignments_id_file_versions_under_retention';
 RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.args = [

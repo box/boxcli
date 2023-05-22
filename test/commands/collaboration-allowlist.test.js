@@ -131,10 +131,12 @@ describe('Collaboration-Allowlist', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/collaboration_whitelist_entries')
+				.query({limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/collaboration_whitelist_entries')
 				.query({
-					marker: 'ZEDFO9'
+					marker: 'ZEDFO9',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -151,12 +153,13 @@ describe('Collaboration-Allowlist', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/collaboration_whitelist_entries')
-				.query({fields: 'direction'})
+				.query({fields: 'direction', limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/collaboration_whitelist_entries')
 				.query({
 					fields: 'direction',
-					marker: 'ZEDFO9'
+					marker: 'ZEDFO9',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -274,10 +277,12 @@ describe('Collaboration-Allowlist', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/collaboration_whitelist_exempt_targets')
+				.query({limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/collaboration_whitelist_exempt_targets')
 				.query({
-					marker: 'ZDEH786'
+					marker: 'ZDEH786',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)
@@ -294,12 +299,13 @@ describe('Collaboration-Allowlist', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get('/2.0/collaboration_whitelist_exempt_targets')
-				.query({fields: 'id'})
+				.query({fields: 'id', limit: 1000})
 				.reply(200, fixture)
 				.get('/2.0/collaboration_whitelist_exempt_targets')
 				.query({
 					fields: 'id',
-					marker: 'ZDEH786'
+					marker: 'ZDEH786',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)

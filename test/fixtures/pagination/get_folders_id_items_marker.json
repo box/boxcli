@@ -1,0 +1,36 @@
+{
+    "total_count": 2,
+    "entries": [
+        {
+            "type": "folder",
+            "id": "11111",
+            "sequence_id": "0",
+            "etag": "0",
+            "name": "SDK Test Folder"
+        },
+        {
+            "type": "file",
+            "id": "22222",
+            "file_version": {
+                "type": "file_version",
+                "id": "222220",
+                "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd"
+            },
+            "sequence_id": "9",
+            "etag": "9",
+            "sha1": "97cc02de7c356f94e3beeb1e0c63f78a6edb01fd",
+            "name": "test file.txt"
+        }
+    ],
+    "marker": null,
+    "order": [
+        {
+            "by": "type",
+            "direction": "ASC"
+        },
+        {
+            "by": "name",
+            "direction": "ASC"
+        }
+    ]
+}

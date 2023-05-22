@@ -322,13 +322,13 @@ describe('Search', () => {
 						.get('/2.0/search')
 						.query({
 							query,
-							limit: 100,
+							limit: 1000,
 						})
 						.reply(200, fixture)
 						.get('/2.0/search')
 						.query({
 							query,
-							limit: 100,
+							limit: 1000,
 							offset: 5
 						})
 						.reply(200, fixture2)
@@ -350,7 +350,7 @@ describe('Search', () => {
 						.get('/2.0/search')
 						.query({
 							query,
-							limit: 100,
+							limit: 5
 						})
 						.reply(200, fixture)
 				)
@@ -379,5 +379,5 @@ describe('Search', () => {
 				.it('when both --all and --limit flag provided', ctx => {
 					assert.include(ctx.stderr, '--all and --limit flags cannot be used together.');
 				});
-	});
+		});
 });

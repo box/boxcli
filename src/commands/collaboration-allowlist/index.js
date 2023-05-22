@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const PaginationUtils = require('../../pagination-utils');
 
 class CollaborationAllowlistListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CollaborationAllowlistListCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -21,7 +22,8 @@ CollaborationAllowlistListCommand.examples = ['box collaboration-allowlist'];
 CollaborationAllowlistListCommand._endpoint = 'get_collaboration_whitelist_entries';
 
 CollaborationAllowlistListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 module.exports = CollaborationAllowlistListCommand;

@@ -1017,12 +1017,13 @@ describe('Folders', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/folders/${folderId}/items`)
-					.query({ usemarker: true })
+					.query({ usemarker: true, limit: 1000 })
 					.reply(200, fixture)
 					.get(`/2.0/folders/${folderId}/items`)
 					.query({
 						usemarker: true,
 						marker: 'page_1_marker',
+						limit: 1000,
 					})
 					.reply(200, fixture2)
 				)
@@ -1044,6 +1045,7 @@ describe('Folders', () => {
 						sort,
 						direction,
 						usemarker: true,
+						limit: 1000
 					})
 					.reply(200, fixture)
 					.get(`/2.0/folders/${folderId}/items`)
@@ -1052,6 +1054,7 @@ describe('Folders', () => {
 						direction,
 						usemarker: true,
 						marker: 'page_1_marker',
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -1074,6 +1077,7 @@ describe('Folders', () => {
 					.query({
 						fields: 'created_at',
 						usemarker: true,
+						limit: 1000
 					})
 					.reply(200, fixture)
 					.get(`/2.0/folders/${folderId}/items`)
@@ -1081,6 +1085,7 @@ describe('Folders', () => {
 						fields: 'created_at',
 						usemarker: true,
 						marker: 'page_1_marker',
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

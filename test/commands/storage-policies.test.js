@@ -58,10 +58,12 @@ describe('Storage-policies', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/storage_policies')
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/storage_policies')
 					.query({
-						marker: 'ZDE789'
+						marker: 'ZDE789',
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

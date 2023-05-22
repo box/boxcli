@@ -3,10 +3,14 @@
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
 const UserModule = require('../../modules/user');
+const PaginationUtils = require('../../pagination-utils');
 
 class UsersListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(UsersListCommand);
+		let options = PaginationUtils.forceMarkerPagination(flags);
+		flags.limit = options.limit;
+		flags.usemarker = options.usemarker;
 
 		let userModule = new UserModule(this.client);
 		let users = await userModule.listUsers(flags);
@@ -22,6 +26,7 @@ UsersListCommand._endpoint = 'get_users';
 
 UsersListCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 	'managed-users': flags.boolean({
 		char: 'm',
 		description: 'Limit results to managed users only',

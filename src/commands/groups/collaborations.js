@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const PaginationUtils = require('../../pagination-utils');
 
 class GroupsListCollaborationsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(GroupsListCollaborationsCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -26,7 +27,8 @@ GroupsListCollaborationsCommand.examples = ['box groups:collaborations 12345'];
 GroupsListCollaborationsCommand._endpoint = 'get_groups_id_collaborations';
 
 GroupsListCollaborationsCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flag,
 };
 
 GroupsListCollaborationsCommand.args = [

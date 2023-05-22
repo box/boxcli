@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const PaginationUtils = require('../../../pagination-utils');
 
 class LegalHoldPoliciesListVersionHoldsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(LegalHoldPoliciesListVersionHoldsCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -21,7 +22,8 @@ LegalHoldPoliciesListVersionHoldsCommand.examples = ['box legal-hold-policies:fi
 LegalHoldPoliciesListVersionHoldsCommand._endpoint = 'get_file_version_legal_holds';
 
 LegalHoldPoliciesListVersionHoldsCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 LegalHoldPoliciesListVersionHoldsCommand.args = [

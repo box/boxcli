@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const PaginationUtils = require('../../pagination-utils');
 
 class CollectionsListItemsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(CollectionsListItemsCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -21,7 +22,8 @@ CollectionsListItemsCommand.examples = ['box collections:items 12345'];
 CollectionsListItemsCommand._endpoint = 'get_collections_id_items';
 
 CollectionsListItemsCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
+	...PaginationUtils.flags,
 };
 
 CollectionsListItemsCommand.args = [

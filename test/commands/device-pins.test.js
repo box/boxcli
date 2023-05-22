@@ -79,12 +79,13 @@ describe('Device Pins', () => {
 				})
 				.reply(200, userMeFixture)
 				.get(`/2.0/enterprises/${enterpriseId}/device_pinners`)
-				.query({ direction })
+				.query({ direction, limit: 1000 })
 				.reply(200, fixture)
 				.get(`/2.0/enterprises/${enterpriseId}/device_pinners`)
 				.query({
 					direction,
-					marker: 'ZDEF67'
+					marker: 'ZDEF67',
+					limit: 1000
 				})
 				.reply(200, fixture2)
 			)

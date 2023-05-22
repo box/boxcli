@@ -2,11 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const PaginationUtils = require('../../pagination-utils');
 
 class MetadataCascadePoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(MetadataCascadePoliciesListCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['owner-enterprise-id']) {
 			options.owner_enterprise_id = flags['owner-enterprise-id'];
@@ -23,6 +24,7 @@ MetadataCascadePoliciesListCommand._endpoint = 'get_metadata_cascade_policies';
 
 MetadataCascadePoliciesListCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 	'owner-enterprise-id': flags.string({ description: 'The ID of the enterprise to filter cascade policies for '}),
 };
 

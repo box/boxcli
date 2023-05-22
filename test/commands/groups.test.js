@@ -73,10 +73,12 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/groups')
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/groups')
 					.query({
-						offset: 2
+						offset: 2,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -93,12 +95,13 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/groups')
-					.query({fields: 'id,name'})
+					.query({fields: 'id,name', limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/groups')
 					.query({
 						fields: 'id,name',
-						offset: 2
+						offset: 2,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -114,12 +117,13 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/groups')
-					.query({filter_term: 'Employees'})
+					.query({filter_term: 'Employees', limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/groups')
 					.query({
 						filter_term: 'Employees',
-						offset: 2
+						offset: 2,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -149,10 +153,11 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/groups/${groupId}/collaborations`)
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/groups/${groupId}/collaborations`)
 					.query({
-						offset: 1
+						offset: 1, limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -170,12 +175,13 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/groups/${groupId}/collaborations`)
-					.query({fields: 'item'})
+					.query({fields: 'item', limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/groups/${groupId}/collaborations`)
 					.query({
 						fields: 'item',
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -438,10 +444,12 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/groups/${groupId}/memberships`)
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/groups/${groupId}/memberships`)
 					.query({
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -459,12 +467,13 @@ describe('Groups', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get(`/2.0/groups/${groupId}/memberships`)
-					.query({fields: 'user'})
+					.query({fields: 'user', limit: 1000})
 					.reply(200, fixture)
 					.get(`/2.0/groups/${groupId}/memberships`)
 					.query({
 						fields: 'user',
-						offset: 1
+						offset: 1,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

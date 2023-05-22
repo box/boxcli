@@ -2,11 +2,12 @@
 
 const BoxCommand = require('../../../box-command');
 const { flags } = require('@oclif/command');
+const PaginationUtils = require('../../../pagination-utils');
 
 class RetentionPoliciesListVersionRetentionCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(RetentionPoliciesListVersionRetentionCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['disposition-action']) {
 			options.disposition_action = flags['disposition-action'];
@@ -42,6 +43,7 @@ RetentionPoliciesListVersionRetentionCommand._endpoint = 'get_file_version_reten
 
 RetentionPoliciesListVersionRetentionCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 	'disposition-action': flags.string({
 		description: 'A disposition action to filter by',
 		options: [

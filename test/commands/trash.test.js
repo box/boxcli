@@ -48,10 +48,13 @@ describe('Trash', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/folders/trash/items')
+					.query({usemarker: true, limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/folders/trash/items')
 					.query({
-						offset: 2
+						offset: 2,
+						usemarker: true,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)
@@ -68,12 +71,14 @@ describe('Trash', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/folders/trash/items')
-					.query({fields: 'name'})
+					.query({fields: 'name', usemarker: true, limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/folders/trash/items')
 					.query({
 						fields: 'name',
-						offset: 2
+						offset: 2,
+						usemarker: true,
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

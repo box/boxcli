@@ -37,6 +37,14 @@ class UserModule {
 			options.user_type = 'external';
 		}
 
+		if (flags.limit) {
+			options.limit = flags.limit;
+		}
+
+		if (flags.usemarker) {
+			options.usemarker = flags.usemarker;
+		}
+
 		if (flags.filter) {
 			options.filter_term = flags.filter;
 		}

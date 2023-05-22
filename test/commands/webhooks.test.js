@@ -58,10 +58,12 @@ describe('Webhooks', () => {
 			test
 				.nock(TEST_API_ROOT, api => api
 					.get('/2.0/webhooks')
+					.query({limit: 1000})
 					.reply(200, fixture)
 					.get('/2.0/webhooks')
 					.query({
-						marker: 'ZmlQZS0xLTE%3D'
+						marker: 'ZmlQZS0xLTE%3D',
+						limit: 1000
 					})
 					.reply(200, fixture2)
 				)

@@ -2,11 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const PaginationUtils = require('../../pagination-utils');
 
 class GroupsListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(GroupsListCommand);
-		let options = {};
+		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -29,6 +30,7 @@ GroupsListCommand._endpoint = 'get_groups';
 
 GroupsListCommand.flags = {
 	...BoxCommand.flags,
+	...PaginationUtils.flags,
 	filter: flags.string({
 		description: 'Search term to filter groups on; matches prefixes of group name',
 	})
