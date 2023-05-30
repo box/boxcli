@@ -1,0 +1,34 @@
+{
+    "id": "12345",
+    "type": "integration_mapping",
+    "box_item": {
+        "id": "23456",
+        "type": "folder",
+        "etag": "1",
+        "name": "Contracts",
+        "sequence_id": "3"
+    },
+    "created_at": "2012-12-12T10:53:43-08:00",
+    "created_by": {
+        "id": "11446498",
+        "type": "user",
+        "login": "ceo@example.com",
+        "name": "Aaron Levie"
+    },
+    "integration_type": "slack",
+    "is_manually_created": true,
+    "modified_at": "2012-12-12T10:53:43-08:00",
+    "modified_by": {
+        "id": "11446498",
+        "type": "user",
+        "login": "ceo@example.com",
+        "name": "Aaron Levie"
+    },
+    "options": {},
+    "partner_item": {
+        "id": "C12378991223",
+        "type": "channel",
+        "slack_org_id": "E1234567",
+        "slack_workspace_id": "T12352314"
+    }
+}
