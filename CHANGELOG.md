@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.9.0](https://github.com/box/boxcli/compare/v3.8.0...v3.9.0) (2023-06-02)
+
+
+### New Features and Enhancements
+
+* add `max-items`, improve list endpoints performance ([#470](https://github.com/box/boxcli/issues/470)) ([8f386f3](https://github.com/box/boxcli/commit/8f386f3b7c4ff4efbaa941321fd672694ce3c7a1))
+* Add support for Integration Mappings API ([#472](https://github.com/box/boxcli/issues/472)) ([bbf2548](https://github.com/box/boxcli/commit/bbf2548223e0d07ce2412c04991e7d8f00022fa7))
+* New fields in `retention-policy` and `retention-policy-assignment` ([#466](https://github.com/box/boxcli/issues/466)) ([f960e59](https://github.com/box/boxcli/commit/f960e59aaf55fe0a0507e9f4c9d867e7c3dd039a))
+
 ## [3.8.0](https://github.com/box/boxcli/compare/v3.7.0...v3.8.0) (2023-03-03)
 
 
