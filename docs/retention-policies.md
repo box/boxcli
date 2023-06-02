@@ -38,15 +38,23 @@ OPTIONS
   --csv                                        Output formatted CSV
   --fields=fields                              Comma separated list of fields to show
   --json                                       Output formatted JSON
+
+  --max-items=max-items                        A value that indicates the maximum number of results to return. This only
+                                               specifies a maximum boundary and will not guarantee the minimum number of
+                                               results returned. When the max-items (x) is greater than 1000, then the
+                                               maximum ceil(x/1000) requests will be made.
+
   --no-color                                   Turn off colors for logging
+
   --policy-type=finite|indefinite              A policy type to filter the retention policies by
+
   --save-to-file-path=save-to-file-path        Override default file path to save report
 
 EXAMPLE
   box retention-policies
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -78,17 +86,24 @@ OPTIONS
 
   --fields=fields                                       Comma separated list of fields to show
 
+  --filter-field=filter-field                           Metadata fields to filter against, if assigning to a metadata
+                                                        template.Allow properties: field, value. Example:
+                                                        --filter-field=fieldName=fieldValue
+
   --json                                                Output formatted JSON
 
   --no-color                                            Turn off colors for logging
 
   --save-to-file-path=save-to-file-path                 Override default file path to save report
 
+  --start-date-field=start-date-field                   The date the retention policy assignment begins
+
 EXAMPLE
-  box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222
+  box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222 --filter-field=fieldName=fieldValue 
+  --start-date-field=upload_date
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -113,15 +128,23 @@ OPTIONS
   --csv                                       Output formatted CSV
   --fields=fields                             Comma separated list of fields to show
   --json                                      Output formatted JSON
+
+  --max-items=max-items                       A value that indicates the maximum number of results to return. This only
+                                              specifies a maximum boundary and will not guarantee the minimum number of
+                                              results returned. When the max-items (x) is greater than 1000, then the
+                                              maximum ceil(x/1000) requests will be made.
+
   --no-color                                  Turn off colors for logging
+
   --save-to-file-path=save-to-file-path       Override default file path to save report
+
   --type=folder|enterprise|metadata_template  The type of the retention policy assignment to retrieve
 
 EXAMPLE
   box retention-policies:assignments 12345
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -153,7 +176,7 @@ EXAMPLE
   box retention-policies:assignments:get 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:assignments:remove ID`
 
@@ -185,7 +208,7 @@ EXAMPLE
   box retention-policies:assignments:remove 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/assignments/remove.js)_
+_See code: [src/commands/retention-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/assignments/remove.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -199,51 +222,59 @@ ARGUMENTS
   POLICYNAME  Name of retention policy to be created
 
 OPTIONS
-  -h, --help                                                Show CLI help
+  -h, --help                                                     Show CLI help
 
-  -l, --retention-length=retention-length                   The number of days to apply the retention policy. If not
-                                                            set, policy will be indefinite
+  -l, --retention-length=retention-length                        The number of days to apply the retention policy. If
+                                                                 not set, policy will be indefinite
 
-  -q, --quiet                                               Suppress any non-error output to stderr
+  -q, --quiet                                                    Suppress any non-error output to stderr
 
-  -s, --save                                                Save report to default reports folder on disk
+  -s, --save                                                     Save report to default reports folder on disk
 
-  -t, --token=token                                         Provide a token to perform this call
+  -t, --token=token                                              Provide a token to perform this call
 
-  -v, --verbose                                             Show verbose output, which can be helpful for debugging
+  -v, --verbose                                                  Show verbose output, which can be helpful for debugging
 
-  -y, --yes                                                 Automatically respond yes to all confirmation prompts
+  -y, --yes                                                      Automatically respond yes to all confirmation prompts
 
-  --[no-]allow-extension                                    The owner of a file will be allowed to extend the retention
+  --[no-]allow-extension                                         The owner of a file will be allowed to extend the
+                                                                 retention
 
-  --as-user=as-user                                         Provide an ID for a user
+  --as-user=as-user                                              Provide an ID for a user
 
-  --bulk-file-path=bulk-file-path                           File path to bulk .csv or .json objects
+  --bulk-file-path=bulk-file-path                                File path to bulk .csv or .json objects
 
-  --csv                                                     Output formatted CSV
+  --csv                                                          Output formatted CSV
 
-  --disposition-action=permanently_delete|remove_retention  (required) For indefinite policies, disposition action must
-                                                            be remove_retention
+  --custom-notification-recipient=custom-notification-recipient  A list of users notified when the retention policy
+                                                                 duration is about to end. Allowed properties are: id,
+                                                                 type, login, name
 
-  --fields=fields                                           Comma separated list of fields to show
+  --description=description                                      The additional text description of the retention policy
 
-  --json                                                    Output formatted JSON
+  --disposition-action=permanently_delete|remove_retention       (required) For indefinite policies, disposition action
+                                                                 must be remove_retention
 
-  --no-color                                                Turn off colors for logging
+  --fields=fields                                                Comma separated list of fields to show
 
-  --[no-]notify-owners                                      The owner or co-owner will get notified when a file is
-                                                            nearing expiration
+  --json                                                         Output formatted JSON
 
-  --retention-type=modifiable|non_modifiable                The type of retention for the new policy
+  --no-color                                                     Turn off colors for logging
 
-  --save-to-file-path=save-to-file-path                     Override default file path to save report
+  --[no-]notify-owners                                           The owner or co-owner will get notified when a file is
+                                                                 nearing expiration
+
+  --retention-type=modifiable|non_modifiable                     The type of retention for the new policy
+
+  --save-to-file-path=save-to-file-path                          Override default file path to save report
 
 EXAMPLE
-  box retention-policies:create "Tax Documents" --retention-length 2555 --retention-type "non_modifiable" 
-  --disposition-action permanently_delete
+  box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action=remove_retention 
+  --notify-owners --allow-extension --description "Tax documents for 2018" 
+  --custom-notification-recipient=id=12345,login=user@box.com
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/create.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -279,6 +310,12 @@ OPTIONS
 
   --json                                                    Output formatted JSON
 
+  --max-items=max-items                                     A value that indicates the maximum number of results to
+                                                            return. This only specifies a maximum boundary and will not
+                                                            guarantee the minimum number of results returned. When the
+                                                            max-items (x) is greater than 1000, then the maximum
+                                                            ceil(x/1000) requests will be made.
+
   --no-color                                                Turn off colors for logging
 
   --policy-id=policy-id                                     A policy id to filter the file version retentions by
@@ -289,7 +326,7 @@ EXAMPLE
   box retention-policies:file-version-retentions
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -321,7 +358,7 @@ EXAMPLE
   box retention-policies:file-version-retentions:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:file-versions-under-retention:get ID`
 
@@ -346,14 +383,21 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box retention-policies:file-versions-under-retention:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-versions-under-retention/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/file-versions-under-retention/get.js)_
+_See code: [src/commands/retention-policies/file-versions-under-retention/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/file-versions-under-retention/get.js)_
 
 ## `box retention-policies:files-under-retention:get ID`
 
@@ -378,14 +422,21 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box retention-policies:files-under-retention:get 77777
 ```
 
-_See code: [src/commands/retention-policies/files-under-retention/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/files-under-retention/get.js)_
+_See code: [src/commands/retention-policies/files-under-retention/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/files-under-retention/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -417,7 +468,7 @@ EXAMPLE
   box retention-policies:get 12345
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -477,4 +528,4 @@ EXAMPLE
   box retention-policies:update 12345
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/retention-policies/update.js)_

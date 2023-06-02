@@ -31,15 +31,23 @@ OPTIONS
   --csv                                      Output formatted CSV
   --fields=fields                            Comma separated list of fields to show
   --json                                     Output formatted JSON
+
+  --max-items=max-items                      A value that indicates the maximum number of results to return. This only
+                                             specifies a maximum boundary and will not guarantee the minimum number of
+                                             results returned. When the max-items (x) is greater than 1000, then the
+                                             maximum ceil(x/1000) requests will be made.
+
   --no-color                                 Turn off colors for logging
+
   --owner-enterprise-id=owner-enterprise-id  The ID of the enterprise to filter cascade policies for
+
   --save-to-file-path=save-to-file-path      Override default file path to save report
 
 EXAMPLE
   box metadata-cascade-policies 22222
 ```
 
-_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/metadata-cascade-policies/index.js)_
+_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/metadata-cascade-policies/index.js)_
 
 ## `box metadata-cascade-policies:delete ID`
 
@@ -71,7 +79,7 @@ EXAMPLE
   box metadata-cascade-policies:delete 12345
 ```
 
-_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/metadata-cascade-policies/delete.js)_
+_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/metadata-cascade-policies/delete.js)_
 
 ## `box metadata-cascade-policies:force-apply ID`
 
@@ -104,7 +112,7 @@ EXAMPLE
   box metadata-cascade-policies:force-apply 12345 --conflict-resolution overwrite
 ```
 
-_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/metadata-cascade-policies/force-apply.js)_
+_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/metadata-cascade-policies/force-apply.js)_
 
 ## `box metadata-cascade-policies:get ID`
 
@@ -136,4 +144,4 @@ EXAMPLE
   box metadata-cascade-policies:get 12345
 ```
 
-_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/metadata-cascade-policies/get.js)_
+_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/metadata-cascade-policies/get.js)_

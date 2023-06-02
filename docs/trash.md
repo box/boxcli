@@ -28,7 +28,14 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 ALIASES
@@ -38,7 +45,7 @@ EXAMPLE
   box trash
 ```
 
-_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/trash/index.js)_
+_See code: [src/commands/trash/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/trash/index.js)_
 
 ## `box trash:delete TYPE ID`
 
@@ -71,7 +78,7 @@ EXAMPLE
   box trash:delete folder 22222
 ```
 
-_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/trash/delete.js)_
+_See code: [src/commands/trash/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/trash/delete.js)_
 
 ## `box trash:get TYPE ID`
 
@@ -104,7 +111,7 @@ EXAMPLE
   box trash:get folder 22222
 ```
 
-_See code: [src/commands/trash/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/trash/get.js)_
+_See code: [src/commands/trash/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/trash/get.js)_
 
 ## `box trash:restore TYPE ID`
 
@@ -142,4 +149,4 @@ EXAMPLE
   box trash:restore folder 22222
 ```
 
-_See code: [src/commands/trash/restore.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/trash/restore.js)_
+_See code: [src/commands/trash/restore.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/trash/restore.js)_
