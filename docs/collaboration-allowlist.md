@@ -32,14 +32,21 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box collaboration-allowlist
 ```
 
-_See code: [src/commands/collaboration-allowlist/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/index.js)_
+_See code: [src/commands/collaboration-allowlist/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/index.js)_
 
 ## `box collaboration-allowlist:add DOMAIN`
 
@@ -72,7 +79,7 @@ EXAMPLE
   box collaboration-allowlist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/collaboration-allowlist/add.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/add.js)_
+_See code: [src/commands/collaboration-allowlist/add.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/add.js)_
 
 ## `box collaboration-allowlist:delete ID`
 
@@ -104,7 +111,7 @@ EXAMPLE
   box collaboration-allowlist:delete 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/delete.js)_
+_See code: [src/commands/collaboration-allowlist/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/delete.js)_
 
 ## `box collaboration-allowlist:exemptions`
 
@@ -126,14 +133,21 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box collaboration-allowlist:exemptions
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/exemptions/index.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/exemptions/index.js)_
 
 ## `box collaboration-allowlist:exemptions:create USERID`
 
@@ -165,7 +179,7 @@ EXAMPLE
   box collaboration-allowlist:exemptions:create 11111
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/create.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/exemptions/create.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/create.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/exemptions/create.js)_
 
 ## `box collaboration-allowlist:exemptions:delete ID`
 
@@ -197,7 +211,7 @@ EXAMPLE
   box collaboration-allowlist:exemptions:delete 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/exemptions/delete.js)_
 
 ## `box collaboration-allowlist:exemptions:get ID`
 
@@ -229,7 +243,7 @@ EXAMPLE
   box collaboration-allowlist:exemptions:get 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/exemptions/get.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/exemptions/get.js)_
 
 ## `box collaboration-allowlist:get ID`
 
@@ -261,4 +275,4 @@ EXAMPLE
   box collaboration-allowlist:get 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/collaboration-allowlist/get.js)_
+_See code: [src/commands/collaboration-allowlist/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/collaboration-allowlist/get.js)_

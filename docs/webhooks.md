@@ -29,7 +29,14 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 ALIASES
@@ -39,7 +46,7 @@ EXAMPLE
   box webhooks
 ```
 
-_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/webhooks/index.js)_
+_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/webhooks/index.js)_
 
 ## `box webhooks:create TARGETTYPE TARGETID`
 
@@ -91,7 +98,7 @@ EXAMPLE
   box webhooks:create folder 22222 --triggers FILE.DELETED --address https://example.com/webhook/deletion
 ```
 
-_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/webhooks/create.js)_
+_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/webhooks/create.js)_
 
 ## `box webhooks:delete ID`
 
@@ -123,7 +130,7 @@ EXAMPLE
   box webhooks:delete 12345
 ```
 
-_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/webhooks/delete.js)_
+_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/webhooks/delete.js)_
 
 ## `box webhooks:get ID`
 
@@ -155,7 +162,7 @@ EXAMPLE
   box webhooks:get 12345
 ```
 
-_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/webhooks/get.js)_
+_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/webhooks/get.js)_
 
 ## `box webhooks:update ID`
 
@@ -204,4 +211,4 @@ EXAMPLE
   box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED
 ```
 
-_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/webhooks/update.js)_
+_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/webhooks/update.js)_

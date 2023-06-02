@@ -28,14 +28,21 @@ OPTIONS
   --direction=ASC|DESC                   Set sorting (by id) direction. Default is ASC
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box device-pins
 ```
 
-_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/device-pins/index.js)_
+_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/device-pins/index.js)_
 
 ## `box device-pins:delete ID`
 
@@ -67,7 +74,7 @@ EXAMPLE
   box device-pins:delete 12345
 ```
 
-_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/device-pins/delete.js)_
+_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/device-pins/delete.js)_
 
 ## `box device-pins:get ID`
 
@@ -99,4 +106,4 @@ EXAMPLE
   box device-pins:get 12345
 ```
 
-_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/device-pins/get.js)_
+_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/device-pins/get.js)_

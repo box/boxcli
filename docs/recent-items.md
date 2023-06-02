@@ -25,11 +25,18 @@ OPTIONS
   --csv                                  Output formatted CSV
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
+
+  --max-items=max-items                  A value that indicates the maximum number of results to return. This only
+                                         specifies a maximum boundary and will not guarantee the minimum number of
+                                         results returned. When the max-items (x) is greater than 1000, then the maximum
+                                         ceil(x/1000) requests will be made.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box recent-items
 ```
 
-_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v3.8.0/src/commands/recent-items.js)_
+_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/recent-items.js)_
