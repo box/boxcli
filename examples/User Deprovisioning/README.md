@@ -6,7 +6,7 @@ This Box CLI script deprovision a list of users by first transfering user conten
 **For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/scripts/deprovision-users/).**
 
 ## Setup Pre-Requisites
-1. Clone this github repo or download files from the `/examples` directory
+1. Clone this github repo or download files from the `/examples` directory.
    ```bash
    git clone https://github.com/box/boxcli.git
    ```
