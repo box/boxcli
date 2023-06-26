@@ -1,7 +1,6 @@
 # Integration Mappings (Slack)
 
-This script helps manage the mappings between Slack and Box if using Box as the content store for Slack. It creates a list of current Slack channel and Box
-folder mappings and can update mappings based on input csv.
+This script helps manage the folder mappings between Slack and Box if using Box as the content store for Slack. It creates a list of current Slack channel and Box folder mappings and can create or update mappings based on input csv. This script will maintain all permissons. 
 
 ## Setup Pre-Requisites
 1. Clone this github repo or download files from the `/examples` directory
@@ -48,20 +47,34 @@ PS /home/rvb/box-cli/examples/Integration Mappings>
 
 Run the script with EXTRACT to extract current mappings:
 ```pwsh
-./integration-mappings.ps1 -action EXTRACT
+./integration-mappings.ps1 -Action EXTRACT
 ```
 
 or
 
-Run the script with APPLY to extract current mappings:
+Run the script with UPDATE to update current mappings:
 ```pwsh
-./integration-mappings.ps1 -action APPLY
+./integration-mappings.ps1 -Action UPDATE
 ```
 
-If you don't specify parameters, the script will prompt you to any.
+or
+
+Run the script with CREATE to create new mappings:
+```pwsh
+./integration-mappings.ps1 -Action CREATE -MappingPath ./mappings_example.csv
+```
+
+By default, the csv file will save to and load from ./mappings.csv. If you wish to change this location, you can pass in a new path like so:
+```pwsh
+./integration-mappings.ps1 -Action EXTRACT -MappingPath ./mappings_new_location.csv
+```
+
+If you don't specify parameters, the script will prompt you to enter them.
 
 When the script run is completed, you will see the following
 output or a similar one.
+
+When creating a mapping on a new channel, you must input a box folder id, slack channel id and slack org id.
 
 ```
 Starting Process

@@ -1,6 +1,7 @@
 # This script can do one of the following things: 
 # 1. Create a csv of all the current mappings between Box folders and Slack channels
 # 2. Create a mapping between a Box folder and a Slack channel based on a list in a csv file
+# 3. Update a mapping between a Box folder and a Slack channel based on a list in a csv file
 
 #APP SETUP
 #Oauth 2.0: User configured with CLI must be admin or co-admin
@@ -9,7 +10,11 @@
 #############################################################################
 
 param (
-    [string]$action
+    # The action to perform. Can be "EXTRACT", "CREATE", or "UPDATE"
+    [string]$Action, 
+
+    # The path to the csv file containing the mappings
+    [string]$MappingPath = "./mapping.csv"
 )
 
 #############################################################################
@@ -190,9 +195,9 @@ class AnalyticsClientManager
 
 # Check if any of the command-line arguments are missing
 # If so, prompt the user to enter them
-if (-not $action) {
-     Write-Log "Enter EXTRACT to grabbing current mappings or APPLY to apply new mappings:" -output true -color Yellow
-     $action = Read-Host
+if (-not $Action) {
+     Write-Log "Enter EXTRACT to grabbing current mappings, CREATE to create new mappings, or UPDATE to update existing mappings:" -output true -color Yellow
+     $Action = Read-Host
 }
 
 Function Start-Integrations-Mapping {
@@ -201,37 +206,53 @@ Function Start-Integrations-Mapping {
 
     try {
         #If a user inputs EXTRACT it will grab the current mappings and save them to a csv file
-        If ($action -eq "EXTRACT") {
+        If ($Action -eq "EXTRACT") {
             Write-Log "Extracting current mappings" -output true -color Green
-            if (Test-Path mappings.csv) {
-                Write-Log "Removing old mappings2.csv" -output true -color Green
-                Remove-Item -Path mappings.csv -Force
-                Write-Log "File mappings2.csv removed" -output true -color Green
+            if (Test-Path $MappingPath) {
+                Write-Log "Removing old $($MappingPath) file" -output true -color Green
+                Remove-Item -Path $MappingPath -Force
+                Write-Log "File $($MappingPath) removed" -output true -color Green
             }
             Write-Log "Pulling current mappings" -output true -color Green
-            $ExtractionResp = (box integration-mappings:slack:list --csv --save-to-file-path=mappings.csv 2>&1)
+            $ExtractionResp = (box integration-mappings:slack:list --fields='id,box_item.id,partner_item.id' --csv --save-to-file-path=$MappingPath 2>&1)
             Write-Log "Importing csv" -output true -color Green
             # Import the CSV file
-            $data = Import-Csv -Path ./mappings.csv
-            Write-Log "Selecting correct data with new columbns" -output true -color Green
+            $data = Import-Csv -Path $MappingPath
+            Write-Log "Renaming columns" -output true -color Green
             # Select the desired columns and rename them
-            $data = $data | Select-Object -Property "id", "box_item.id" |
+            $data = $data | Select-Object -Property "id", "box_item.id", "partner_item.id" |
                     Select-Object -Property @{Name = "Id"; Expression = {$_. "id"}},
-                                            @{Name = "BoxItemId"; Expression = {$_. "box_item.id"}}
+                                            @{Name = "BoxItemId"; Expression = {$_. "box_item.id"}}, 
+                                            @{Name = "PartnerItemId"; Expression = {$_. "partner_item.id"}}
             Write-Log "Saving new csv file to edit" -output true -color Green
             # Overwrite the original CSV file
-            $data | Export-Csv -Path ./mappings.csv -NoTypeInformation
+            $data | Export-Csv -Path $MappingPath -NoTypeInformation
 
             Write-Log "Extraction $($ExtractionResp | Out-String)" -output true -color Green
         
         }
-        # If a user inputs APPLY it will apply the new mappings from the csv file
-        elseif ($action -eq "APPLY") {
-            Write-Log "Applying new mappings" -output true -color Green
-            $EntriesResp = (box integration-mappings:slack:update --bulk-file-path=mappings.csv --json 2>&1)
+        # If a user inputs CREATE it will create new mappings based on the csv file located by default at ./mapping.csv
+        # You can use the mapping_example.csv file as a template
+        # You cannot create new mappings for channels that already have mappings, instead you must update them using the UPDATE option
+        # When creating mappings for new channels, you must input a box folder id, slack channel id and slack org id for each row.
+        elseif ($Action -eq "CREATE") {
+            Write-Log "Creating new mappings" -output true -color Green
+            $EntriesResp = (box integration-mappings:slack:create --bulk-file-path=$MappingPath --json 2>&1)
+            # If the response contains the word failed, it probably means the channel already has a mapping or you are missing persmissons
+            if($EntriesResp | Select-String -Pattern 'failed!' -CaseSensitive -SimpleMatch) {
+                Write-Log "Could not create mappings. See log for details." -errorMessage $EntriesResp -output true -color Red 
+            } else {
+                Write-Log "Output $($EntriesResp | Out-String)" -output true -color Green
+                continue
+            }
+        }
+        # If a user inputs UPDATE it will update the new mappings from the csv file
+        elseif ($Action -eq "UPDATE") {
+            Write-Log "Updating mappings" -output true -color Green
+            $EntriesResp = (box integration-mappings:slack:update --bulk-file-path=$MappingPath --json 2>&1)
             # If the response contains the word failed, it probably means the service account needs to be collabed into the folder(s)
             if($EntriesResp | Select-String -Pattern 'failed!' -CaseSensitive -SimpleMatch) {
-                Write-Log "Could not apply mappings. See log for details." -errorMessage $EntriesResp -output true -color Red 
+                Write-Log "Could not update mappings. See log for details." -errorMessage $EntriesResp -output true -color Red 
             } else {
                 Write-Log "Output $($EntriesResp | Out-String)" -output true -color Green
                 continue
