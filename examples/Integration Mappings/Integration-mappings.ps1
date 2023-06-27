@@ -206,6 +206,7 @@ Function Start-Integrations-Mapping {
 
     try {
         #If a user inputs EXTRACT it will grab the current mappings and save them to a csv file
+        #The csv is called mapping.csv by default and is saved in the same directory as the script
         If ($Action -eq "EXTRACT") {
             Write-Log "Extracting current mappings" -output true -color Green
             if (Test-Path $MappingPath) {
@@ -232,7 +233,7 @@ Function Start-Integrations-Mapping {
         
         }
         # If a user inputs CREATE it will create new mappings based on the csv file located by default at ./mapping.csv
-        # You can use the mapping_example.csv file as a template
+        # You can use the mapping_create_example.csv file as a template
         # You cannot create new mappings for channels that already have mappings, instead you must update them using the UPDATE option
         # When creating mappings for new channels, you must input a box folder id, slack channel id and slack org id for each row.
         elseif ($Action -eq "CREATE") {
@@ -247,6 +248,7 @@ Function Start-Integrations-Mapping {
             }
         }
         # If a user inputs UPDATE it will update the new mappings from the csv file
+        # You can use the mapping_update_example.csv file as a template
         elseif ($Action -eq "UPDATE") {
             Write-Log "Updating mappings" -output true -color Green
             $EntriesResp = (box integration-mappings:slack:update --bulk-file-path=$MappingPath --json 2>&1)

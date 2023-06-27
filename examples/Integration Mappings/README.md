@@ -61,7 +61,7 @@ or
 
 Run the script with CREATE to create new mappings:
 ```pwsh
-./integration-mappings.ps1 -Action CREATE -MappingPath ./mappings_example.csv
+./integration-mappings.ps1 -Action CREATE -MappingPath ./mapping_create_example.csv
 ```
 
 By default, the csv file will save to and load from ./mappings.csv. If you wish to change this location, you can pass in a new path like so:
@@ -74,7 +74,7 @@ If you don't specify parameters, the script will prompt you to enter them.
 When the script run is completed, you will see the following
 output or a similar one.
 
-When creating a mapping on a new channel, you must input a box folder id, slack channel id and slack org id.
+When creating a mapping on a new channel, you must input a Box folder id, Slack channel id and Slack org id. You may use a Slack workspace ID in lieu of the org id. In that case, you would replace the csv column header `SlackOrgId` with `SlackWorkspaceId`.
 
 ```
 Starting Process
