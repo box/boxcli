@@ -5,7 +5,7 @@ This PowerShell script uses the Box CLI to build and create a personal folder st
 **For detailed script overview, please follow [this guide](https://developer.box.com/guides/cli/quick-start/powershell-script-templates/).**
 
 ## Setup Pre-Requisites
-1. Clone this github repo or download files from the `/examples` directory
+1. Clone this github repo or download files from the `/examples` directory.
 	```bash
 	git clone https://github.com/box/boxcli.git
 	```
