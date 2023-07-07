@@ -118,7 +118,7 @@ SignRequestsCreateCommand.flags = {
 	'source-files': flags.string({
 		required: true,
 		description:
-			'Comma separated list of files to create a signing document from. This is currently limited to one file, e.g. 12345',
+			'Comma separated list of files to create a signing document from. This is currently limited to 10 files, e.g. 12345',
 		parse: input => input.split(',').map(id => ({
 			type: 'file',
 			id,
