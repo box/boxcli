@@ -171,7 +171,7 @@ OPTIONS
       supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url
 
   --source-files=source-files
-      (required) Comma separated list of files to create a signing document from. This is currently limited to one file, 
+      (required) Comma separated list of files to create a signing document from. This is currently limited to 10 files,
       e.g. 12345
 
   --[no-]text-signatures-enabled

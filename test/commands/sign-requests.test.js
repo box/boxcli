@@ -51,6 +51,7 @@ describe('Sign requests', () => {
 			signerRedirectUrl = 'https://box.com/redirect_url_signer_1',
 			signerDeclinedRedirectUrl = 'https://box.com/declined_redirect_url_signer_1',
 			fileId = '1234',
+			fileId2 = '2345',
 			parentFolderId = '2345',
 			documentTag1Id = '3456',
 			documentTag1Value = 'hello',
@@ -76,6 +77,10 @@ describe('Sign requests', () => {
 							type: 'file',
 							id: fileId,
 						},
+						{
+							type: 'file',
+							id: fileId2,
+						}
 					],
 					parent_folder: {
 						type: 'folder',
@@ -100,7 +105,7 @@ describe('Sign requests', () => {
 			.command([
 				'sign-requests:create',
 				`--signer=email=${signerEmail},role=approver,is_in_person=1,redirect_url=${signerRedirectUrl},declined_redirect_url=${signerDeclinedRedirectUrl}`,
-				`--source-files=${fileId}`,
+				`--source-files=${fileId},${fileId2}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
@@ -130,6 +135,10 @@ describe('Sign requests', () => {
 							type: 'file',
 							id: fileId,
 						},
+						{
+							type: 'file',
+							id: fileId2,
+						}
 					],
 					parent_folder: {
 						type: 'folder',
@@ -154,7 +163,7 @@ describe('Sign requests', () => {
 			.command([
 				'sign-requests:create',
 				`--signer=email=${signerEmail},role=approver,is-in-person=1,redirect-url=${signerRedirectUrl},declined-redirect-url=${signerDeclinedRedirectUrl}`,
-				`--source-files=${fileId}`,
+				`--source-files=${fileId},${fileId2}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
