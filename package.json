@@ -141,5 +141,10 @@
 		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/ && npm run binaries",
 		"binaries": "pkg --targets node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path ./dist .",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
+	},
+	"overrides": {
+		"leche": {
+			"mocha": ">=1.18"
+		}
 	}
 }
