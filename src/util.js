@@ -292,6 +292,20 @@ module.exports = {
 	},
 
 	/**
+	 * Unescape slashes from the given string.
+	 *
+	 * @param {string} value The raw string which can contains escaped slashes
+	 * @returns {string} A string with unescaped escaping in newline and tab characters.
+	 */
+	unescapeSlashes(value) {
+		try {
+			return JSON.parse(`"${value}"`);
+		} catch (e) {
+			return value;
+		}
+	},
+
+	/**
 	 * Parses the key=val string format for metadata into an object {key: val}
 	 *
 	 * @param {string} value The string containing metadata key and value

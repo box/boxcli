@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class FileRequestsCopyCommand extends BoxCommand {
 	async run() {
@@ -50,6 +51,7 @@ FileRequestsCopyCommand.flags = {
 	...BoxCommand.flags,
 	description: flags.string({
 		description: 'New description of file request',
+		parse: utils.unescapeSlashes
 	}),
 	'expires-at': flags.string({
 		description: 'New date when file request expires',

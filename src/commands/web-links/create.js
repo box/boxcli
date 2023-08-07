@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class WebLinksCreateCommand extends BoxCommand {
 	async run() {
@@ -28,7 +29,8 @@ WebLinksCreateCommand.flags = {
 	...BoxCommand.flags,
 	description: flags.string({
 		char: 'd',
-		description: 'Description of the web link'
+		description: 'Description of the web link',
+		parse: utils.unescapeSlashes
 	}),
 	name: flags.string({
 		char: 'n',

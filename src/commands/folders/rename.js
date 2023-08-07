@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class FoldersRenameCommand extends BoxCommand {
 	async run() {
@@ -28,7 +29,7 @@ FoldersRenameCommand.examples = ['box folders:rename 22222 "New Folder Name"'];
 
 FoldersRenameCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Change the folder description' }),
+	description: flags.string({ description: 'Change the folder description', parse: utils.unescapeSlashes }),
 	etag: flags.string({ description: 'Only rename if etag value matches' })
 };
 

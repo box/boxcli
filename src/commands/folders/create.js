@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class FoldersCreateCommand extends BoxCommand {
 	async run() {
@@ -31,7 +32,7 @@ FoldersCreateCommand._endpoint = 'post_folders';
 
 FoldersCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'A description for folder <DESCRIPTION>' }),
+	description: flags.string({ description: 'A description for folder <DESCRIPTION>', parse: utils.unescapeSlashes }),
 	'id-only': flags.boolean({
 		description: 'Return only an ID to output from this command'
 	})
