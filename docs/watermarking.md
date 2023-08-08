@@ -38,7 +38,7 @@ EXAMPLE
   box watermarking:apply folder 22222
 ```
 
-_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/watermarking/apply.js)_
+_See code: [src/commands/watermarking/apply.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/watermarking/apply.js)_
 
 ## `box watermarking:get ITEMTYPE ITEMID`
 
@@ -71,7 +71,7 @@ EXAMPLE
   box watermarking:get folder 22222
 ```
 
-_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/watermarking/get.js)_
+_See code: [src/commands/watermarking/get.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/watermarking/get.js)_
 
 ## `box watermarking:remove ITEMTYPE ITEMID`
 
@@ -104,4 +104,4 @@ EXAMPLE
   box watermarking:remove folder 22222
 ```
 
-_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v3.9.0/src/commands/watermarking/remove.js)_
+_See code: [src/commands/watermarking/remove.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/watermarking/remove.js)_
