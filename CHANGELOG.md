@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.9.2](https://github.com/box/boxcli/compare/v3.9.1...v3.9.2) (2023-08-08)
+
+
+### Bug Fixes
+
+* Fix escaped slashes when passing an input to command ([#486](https://github.com/box/boxcli/issues/486)) ([7670210](https://github.com/box/boxcli/commit/7670210ffb5c38cef8dd153e823029d5237080b6))
+
 ### [3.9.1](https://github.com/box/boxcli/compare/v3.9.0...v3.9.1) (2023-07-19)
 
 
