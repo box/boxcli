@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class FoldersUpdateCommand extends BoxCommand {
 	async run() {
@@ -62,7 +63,7 @@ FoldersUpdateCommand.flags = {
 		description: 'Restricts collaborators who are not the owner of this folder from viewing other collaborations on this folder.',
 		allowNo: true,
 	}),
-	description: flags.string({ description: 'New description for folder' }),
+	description: flags.string({ description: 'New description for folder', parse: utils.unescapeSlashes }),
 	'upload-email-access': flags.string({
 		description: 'Upload email access level',
 		options: [

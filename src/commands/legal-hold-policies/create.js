@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class LegalHoldPoliciesCreateCommand extends BoxCommand {
 	async run() {
@@ -32,7 +33,7 @@ LegalHoldPoliciesCreateCommand._endpoint = 'post_legal_hold_policies';
 
 LegalHoldPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Description of legal hold policy' }),
+	description: flags.string({ description: 'Description of legal hold policy', parse: utils.unescapeSlashes }),
 	'filter-started-at': flags.string({
 		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
 		dependsOn: ['filter-ended-at'],
