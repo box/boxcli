@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.10.0](https://github.com/box/boxcli/compare/v3.9.2...v3.10.0) (2023-08-16)
+
+
+### New Features and Enhancements
+
+* Support update user tracking codes ([#489](https://github.com/box/boxcli/issues/489)) ([159e6d0](https://github.com/box/boxcli/commit/159e6d07fa91f2b199ca85207a4cad5cf4274f0e))
+
 ### [3.9.2](https://github.com/box/boxcli/compare/v3.9.1...v3.9.2) (2023-08-08)
 
 
