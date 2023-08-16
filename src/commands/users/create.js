@@ -55,6 +55,9 @@ class UsersCreateCommand extends BoxCommand {
 		if (flags['external-id']) {
 			options.external_app_user_id = flags['external-id'];
 		}
+		if (flags['tracking-codes']) {
+			options.tracking_codes = flags['tracking-codes'];
+		}
 
 		if (flags['app-user']) {
 			user = await this.client.enterprise.addAppUser(args.name, options);
@@ -146,6 +149,17 @@ UsersCreateCommand.flags = {
 		]
 	}),
 	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
+	'tracking-codes': flags.string({
+		description: 'Comma-separated list of key-value pairs to associate with the user. Format is name=value,name=value',
+		parse: input => input.split(',').map(pair => {
+			const [name, value] = pair.split('=');
+			return {
+				type: 'tracking_code',
+				name,
+				value
+			};
+		}),
+	}),
 };
 
 UsersCreateCommand.args = [
