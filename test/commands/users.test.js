@@ -888,6 +888,23 @@ describe('Users', () => {
 			'external ID flag': [
 				'--external-id=foo',
 				{external_app_user_id: 'foo'}
+			],
+			'tracking codes': [
+				'--tracking-codes=name1=value1,name2=value2',
+				{
+					tracking_codes: [
+						{
+							type: 'tracking_code',
+							name: 'name1',
+							value: 'value1',
+						},
+						{
+							type: 'tracking_code',
+							name: 'name2',
+							value: 'value2',
+						},
+					],
+				}
 			]
 		}, function(flag, body) {
 

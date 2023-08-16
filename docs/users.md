@@ -598,6 +598,7 @@ OPTIONS
 
   --timezone=timezone                                                        The user's timezone. Input format follows
                                                                              tz database timezones
+  --tracking-codes=tracking-codes                                            Comma-separated list of key-value pairs to associate with the user. Format is name=value,name=value
 
 EXAMPLE
   box users:update 33333 --status inactive

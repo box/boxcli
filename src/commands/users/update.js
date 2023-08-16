@@ -62,6 +62,9 @@ class UsersUpdateCommand extends BoxCommand {
 		if (flags['external-id']) {
 			updates.external_app_user_id = flags['external-id'];
 		}
+		if (flags['tracking-codes']) {
+			updates.tracking_codes = flags['tracking-codes'];
+		}
 
 		let user = await this.client.users.update(args.id, updates);
 		await this.output(user);
@@ -146,6 +149,17 @@ UsersUpdateCommand.flags = {
 	login: flags.string({ description: 'Change the user\'s primary email address used for logging into Box '}),
 	'external-id': flags.string({
 		description: 'External ID for app users',
+	}),
+	'tracking-codes': flags.string({
+		description: 'Comma-separated list of key-value pairs to associate with the user. Format is name=value,name=value',
+		parse: input => input.split(',').map(pair => {
+			const [name, value] = pair.split('=');
+			return {
+				type: 'tracking_code',
+				name,
+				value
+			};
+		}),
 	}),
 };
 
