@@ -494,6 +494,7 @@ class BoxCommand extends Command {
 	 */
 	async _handleCsvFile(fileContents, fieldMapping) {
 		let parsedData = await csvParse(fileContents, {
+			bom: true,
 			delimiter: ',',
 			cast(value, context) {
 				if (value.length === 0) {
