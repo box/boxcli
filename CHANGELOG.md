@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.11.0](https://github.com/box/boxcli/compare/v3.10.0...v3.11.0) (2023-09-05)
+
+
+### New Features and Enhancements
+
+* detect and exclude the byte order mark (BOM) from the CSV input if present ([#492](https://github.com/box/boxcli/issues/492)) ([e147919](https://github.com/box/boxcli/commit/e14791955b53be5c15f8580ee1f9841d8227803b))
+
 ## [3.10.0](https://github.com/box/boxcli/compare/v3.9.2...v3.10.0) (2023-08-16)
 
 
