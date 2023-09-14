@@ -1,0 +1,100 @@
+{
+	"limit": 10,
+	"next_marker": null,
+	"prev_marker": null,
+	"entries": [
+		{
+			"id": "93153068-5420-467b-b8ef-aaaaaaaaaaa",
+			"name": "contract.pdf",
+			"email_message": "Please sign this document.\n\nKind regards,\n\nSomeone",
+			"email_subject": "Someone has requested your signature on a document",
+			"parent_folder": {
+				"id": "1234567890",
+				"etag": "0",
+				"type": "folder",
+				"sequence_id": "0",
+				"name": "My Sign Requests"
+			},
+			"auto_expire_days": null,
+			"source_files": [
+				{
+					"id": "1234567890",
+					"etag": "0",
+					"type": "file",
+					"sequence_id": "0",
+					"sha1": "082c9540e82e9c465309367a32404054b13aaaaaa",
+					"file_version": {
+						"id": "1234567890",
+						"type": "file_version",
+						"sha1": "082c9540e82e9c465309367a32404054b13aaaaaa"
+					}
+				}
+			],
+			"are_email_settings_locked": false,
+			"are_fields_locked": false,
+			"are_files_locked": false,
+			"are_options_locked": false,
+			"are_recipients_locked": false,
+			"signers": [
+				{
+					"email": "",
+					"label": "",
+					"public_id": "18K8KAAA",
+					"role": "final_copy_reader",
+					"is_in_person": false,
+					"order": 1,
+					"inputs": []
+				},
+				{
+					"email": "",
+					"label": "",
+					"public_id": "13XQXAAA",
+					"role": "signer",
+					"is_in_person": false,
+					"order": 1,
+					"inputs": [
+						{
+							"document_tag_id": null,
+							"id": "0260f921-3b52-477f-ae74-aaaaaaaaaaa",
+							"type": "signature",
+							"text_value": null,
+							"is_required": true,
+							"coordinates": {
+								"x": 0.27038464059712,
+								"y": 0.10051756244533624
+							},
+							"dimensions": {
+								"width": 0.23570031566618235,
+								"height": 0.04781003891921971
+							},
+							"date_value": null,
+							"page_index": 0,
+							"checkbox_value": null,
+							"document_id": "2fdf9003-d798-40ee-be7f-aaaaaaaaaaa",
+							"content_type": "signature",
+							"dropdown_choices": null,
+							"group_id": null,
+							"label": null
+						}
+					]
+				}
+			],
+			"ready_sign_link": {
+				"url": "https://app.box.com/sign/ready-sign-link/59917816-c12b-4ef6-8f1d-aaaaaaaaaaa",
+				"name": "contract.pdf",
+				"instructions": "Hello",
+				"folder_id": "1234567890",
+				"is_notification_disabled": true,
+				"is_active": true
+			},
+			"custom_branding": null,
+			"days_valid": 0,
+			"additional_info": {
+				"non_editable": [],
+				"required": {
+					"signers": [["email"], ["email"]]
+				}
+			}
+		}
+	]
+}

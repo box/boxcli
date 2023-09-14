@@ -69,7 +69,8 @@
             ],
             "embed_url": "https://example.com",
             "redirect_url": "https://box.com/redirect_url_signer_1",
-            "declined_redirect_url": "https://box.com/declined_redirect_url_signer_1"
+            "declined_redirect_url": "https://box.com/declined_redirect_url_signer_1",
+            "iframeable_embed_url": "https://app.box.com/embed/sign/document/bf7aaac6-0e77-47da-a86d-92aed1a8c043/bd13d452ea08c9e9e16ef01ecba52b14d337251593c82b850093c1563ee6cfd1/"
         }
     ],
     "signing_log": {
