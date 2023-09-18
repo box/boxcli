@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.12.0](https://github.com/box/boxcli/compare/v3.11.0...v3.12.0) (2023-09-18)
+
+
+### New Features and Enhancements
+
+* Support sign templates ([#496](https://github.com/box/boxcli/issues/496)) ([955106f](https://github.com/box/boxcli/commit/955106ffa5d7938c567e5440868f2ec3c87045ce))
+
 ## [3.11.0](https://github.com/box/boxcli/compare/v3.10.0...v3.11.0) (2023-09-05)
 
 
