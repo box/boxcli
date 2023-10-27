@@ -34,7 +34,7 @@
 		"cli-progress": "^2.1.0",
 		"csv": "^6.3.3",
 		"date-fns": "^1.29.0",
-		"debug": "^4.3.1",
+		"debug": "^4.3.4",
 		"express": "^4.17.1",
 		"fs-extra": "^10.1.0",
 		"inquirer": "^6.2.0",
