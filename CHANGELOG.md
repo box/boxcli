@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.12.1](https://github.com/box/boxcli/compare/v3.12.0...v3.12.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* force offset based pagination in get users ([#504](https://github.com/box/boxcli/issues/504)) ([9bed083](https://github.com/box/boxcli/commit/9bed083d59b2386d045619fdf2f3ea915e44d231))
+
 ## [3.12.0](https://github.com/box/boxcli/compare/v3.11.0...v3.12.0) (2023-09-18)
 
 
