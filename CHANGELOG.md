@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.12.2](https://github.com/box/boxcli/compare/v3.12.1...v3.12.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* Bump box-node-sdk ([#510](https://github.com/box/boxcli/issues/510)) ([2621f41](https://github.com/box/boxcli/commit/2621f4121999ff6e9d0cc0c391dfd3aa93aefe49))
+
 ### [3.12.1](https://github.com/box/boxcli/compare/v3.12.0...v3.12.1) (2023-11-06)
 
 
