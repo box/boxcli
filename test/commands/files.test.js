@@ -1925,6 +1925,32 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
+			test
+			.nock(TEST_API_ROOT, api => api
+				.get(`/2.0/files/${fileId}`)
+				.reply(200, getFileFixture)
+			)
+			.do(() => {
+				/* eslint-disable no-sync */
+				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName), 'foo', 'utf8');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.stderr()
+			.command([
+				'files:download',
+				fileId,
+				`--save-as=${saveAsFileName}`,
+				'--no-overwrite',
+				'--token=test'
+			])
+			.it('should skip downloading when file exists and --no-overwrite flag is used', ctx => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName);
+				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.equal(ctx.stderr, `Downloading the file will not occur because the file ${downloadedFilePath} already exists, and the --no-overwrite flag is set.${os.EOL}`);
+			});
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
@@ -2198,6 +2224,33 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 			});
+		test
+			.nock(TEST_API_ROOT, api => api
+					.get(`/2.0/files/${fileId}`)
+					.reply(200, getFileFixture)
+			)
+			.do(() => {
+				/* eslint-disable no-sync */
+				fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName), 'foo', 'utf8');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.stderr()
+			.command([
+				'files:versions:download',
+				fileId,
+				fileVersionID,
+				`--save-as=${saveAsFileName}`,
+				'--no-overwrite',
+				'--token=test'
+			])
+			.it('should skip downloading when file exists and --no-overwrite flag is used', ctx => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName);
+				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.equal(ctx.stderr, `Downloading the file will not occur because the file ${downloadedFilePath} already exists, and the --no-overwrite flag is set.${os.EOL}`);
+			});
 	});
 	describe('files:zip', () => {
 		let fileName = 'test.zip',
@@ -2366,6 +2419,30 @@ describe('Files', () => {
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
 				assert.equal(ctx.stdout, downloadStatusFixture);
+			});
+		test
+			.do(async() => {
+				/* eslint-disable no-sync */
+				await fs.writeFileSync(path.join(DEFAULT_DOWNLOAD_PATH, fileName), 'foo');
+				/* eslint-enable no-sync */
+			})
+			.stdout()
+			.stderr()
+			.command([
+				'files:zip',
+				fileName,
+				`--item=${items[0].type}:${items[0].id}`,
+				`--item=${items[1].type}:${items[1].id}`,
+				'--no-overwrite',
+				'--json',
+				'--token=test'
+			])
+			.it('should skip downloading zip file when exists and --no-overwrite flag is used', ctx => {
+				/* eslint-disable no-sync */
+				let downloadedFilePath = path.join(DEFAULT_DOWNLOAD_PATH, fileName);
+				fs.unlinkSync(downloadedFilePath);
+				/* eslint-enable no-sync */
+				assert.equal(ctx.stderr, `Downloading the file will not occur because the file ${downloadedFilePath} already exists, and the --no-overwrite flag is set.${os.EOL}`);
 			});
 	});
 });
