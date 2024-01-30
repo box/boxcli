@@ -259,7 +259,7 @@ FoldersDownloadCommand.flags = {
 	}),
 	'max-depth': flags.enum({
 		description:
-			'Maximum depth to verify if files and folders conflict, only used with --no-overwrite',
+			'Maximum depth to verify if files and folders are already exists, only used with --no-overwrite',
 		options: ['root', 'max'],
 		default: 'max',
 	}),
