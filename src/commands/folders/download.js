@@ -22,13 +22,15 @@ const utils = require('../../util');
  * @private
  */
 function saveFileToDisk(folderPath, file, stream) {
-
 	let output;
 	try {
 		output = fs.createWriteStream(path.join(folderPath, file.path));
 		stream.pipe(output);
 	} catch (ex) {
-		throw new BoxCLIError(`Error downloading file ${file.id} to ${file.path}`, ex);
+		throw new BoxCLIError(
+			`Error downloading file ${file.id} to ${file.path}`,
+			ex
+		);
 	}
 
 	/* eslint-disable promise/avoid-new */
@@ -44,11 +46,17 @@ class FoldersDownloadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(FoldersDownloadCommand);
 
-		this.maxDepth = flags.hasOwnProperty('depth') && flags.depth >= 0 ? flags.depth : Number.POSITIVE_INFINITY;
+		this.outputPath = null;
+		this.maxRecurDepth =
+			flags.hasOwnProperty('depth') && flags.depth >= 0
+				? flags.depth
+				: Number.POSITIVE_INFINITY;
+		this.overwrite = flags.overwrite;
+		this.maxDepth = flags['max-depth'];
 
-		let outputPath;
 		let id = args.id;
 		let outputFinalized = Promise.resolve();
+		let rootItemPath = null;
 
 		let destinationPath;
 		if (flags.destination) {
@@ -72,26 +80,31 @@ class FoldersDownloadCommand extends BoxCommand {
 		let spinner = ora('Starting download').start();
 
 		if (flags.zip) {
-			let fileName = `folders-download-${id}-${dateTime.format(new Date(), 'YYYY-MM-DDTHH_mm_ss_SSS')}.zip`;
-			outputPath = path.join(destinationPath, fileName);
-			outputFinalized = this._setupZip(outputPath);
+			let fileName = `folders-download-${id}-${dateTime.format(
+				new Date(),
+				'YYYY-MM-DDTHH_mm_ss_SSS'
+			)}.zip`;
+			this.outputPath = path.join(destinationPath, fileName);
+			outputFinalized = this._setupZip(this.outputPath);
 		}
 
 		try {
+			this.outputPath = destinationPath;
 			for await (let item of this._getItems(id, '')) {
 				if (item.type === 'folder' && !this.zip) {
-
 					// Set output path to the top-level folder, which is the first item in the generator
-					outputPath = outputPath || path.join(destinationPath, item.path);
+					rootItemPath = rootItemPath || item.path;
 
 					spinner.text = `Creating folder ${item.id} at ${item.path}`;
 					try {
 						await mkdirp(path.join(destinationPath, item.path));
 					} catch (ex) {
-						throw new BoxCLIError(`Folder ${item.path} could not be created`, ex);
+						throw new BoxCLIError(
+							`Folder ${item.path} could not be created`,
+							ex
+						);
 					}
 				} else if (item.type === 'file') {
-
 					spinner.text = `Downloading file ${item.id} to ${item.path}`;
 					let stream = await this.client.files.getReadStream(item.id);
 
@@ -112,7 +125,9 @@ class FoldersDownloadCommand extends BoxCommand {
 			this.zip.finalize();
 		}
 		await outputFinalized;
-		spinner.succeed(`Downloaded folder ${id} to ${outputPath}`);
+		spinner.succeed(
+			`Downloaded folder ${id} to ${path.join(this.outputPath, rootItemPath)}`
+		);
 	}
 
 	/**
@@ -124,7 +139,6 @@ class FoldersDownloadCommand extends BoxCommand {
 	 * @private
 	 */
 	async* _getItems(folderId, folderPath) {
-
 		let folder = await this.client.folders.get(folderId);
 		folderPath = path.join(folderPath, folder.name);
 
@@ -137,19 +151,46 @@ class FoldersDownloadCommand extends BoxCommand {
 
 		let folderItems = folder.item_collection.entries;
 		if (folder.item_collection.total_count > folderItems.length) {
-			let iterator = await this.client.folders.getItems(folderId, { usemarker: true, fields: 'type,id,name' });
+			let iterator = await this.client.folders.getItems(folderId, {
+				usemarker: true,
+				fields: 'type,id,name',
+			});
 			folderItems = { [Symbol.asyncIterator]: () => iterator };
 		}
 		for await (let item of folderItems) {
-			if (item.type === 'folder' && folderPath.split(path.sep).length <= this.maxDepth) {
-				yield* this._getItems(item.id, folderPath);
+			if (
+				item.type === 'folder' &&
+				folderPath.split(path.sep).length <= this.maxRecurDepth
+			) {
+				// We only recurse this folder by one of the following conditions:
+				// 1. The overwrite flag is true. We will download all files and folders.
+				// 2. The maxDepth flag is set to 'max'. We will go through all folders at any depth.
+				// 3. The folder does not exist. We will go through all folders at any depth and download all files.
+				/* eslint-disable no-sync */
+				if (
+					this.overwrite ||
+					this.maxDepth === 'max' ||
+					!fs.existsSync(path.join(this.outputPath, folderPath, item.name))
+				) {
+					/* eslint-enable no-sync */
+					yield* this._getItems(item.id, folderPath);
+				}
 			} else if (item.type === 'file') {
-				yield {
-					type: 'file',
-					id: item.id,
-					name: item.name,
-					path: path.join(folderPath, item.name),
-				};
+				// We only download file if overwrite is true or the file does not exist.
+				// Skip downloading if overwrite is false and the file exists.
+				/* eslint-disable no-sync */
+				if (
+					this.overwrite ||
+					!fs.existsSync(path.join(this.outputPath, folderPath, item.name))
+				) {
+					/* eslint-enable no-sync */
+					yield {
+						type: 'file',
+						id: item.id,
+						name: item.name,
+						path: path.join(folderPath, item.name),
+					};
+				}
 			}
 		}
 	}
@@ -163,20 +204,22 @@ class FoldersDownloadCommand extends BoxCommand {
 	 * @private
 	 */
 	_setupZip(destinationPath) {
-
 		// Set up archive stream
 		this.zip = archiver('zip', {
-			zlib: { level: 9 } // Use the best available compression
+			zlib: { level: 9 }, // Use the best available compression
 		});
 
 		let output;
 		try {
 			output = fs.createWriteStream(destinationPath);
 		} catch (ex) {
-			throw new BoxCLIError(`Could not write to destination path ${destinationPath}`, ex);
+			throw new BoxCLIError(
+				`Could not write to destination path ${destinationPath}`,
+				ex
+			);
 		}
 
-		this.zip.on('error', err => {
+		this.zip.on('error', (err) => {
 			throw new BoxCLIError('Error writing to zip file', err);
 		});
 
@@ -199,7 +242,7 @@ FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,
 	destination: flags.string({
 		description: 'The destination folder to download the Box folder into',
-		parse: utils.parsePath
+		parse: utils.parsePath,
 	}),
 	zip: flags.boolean({
 		description: 'Download the folder into a single .zip archive',
@@ -209,7 +252,19 @@ FoldersDownloadCommand.flags = {
 			'Number of levels deep to recurse when downloading the folder tree',
 	}),
 	'create-path': flags.boolean({
-		description: 'Recursively creates a path to a directory if it does not exist',
+		description:
+			'Recursively creates a path to a directory if it does not exist',
+		allowNo: true,
+		default: true,
+	}),
+	'max-depth': flags.enum({
+		description:
+			'Maximum depth to verify if files and folders conflict, only used with --no-overwrite',
+		options: ['root', 'max'],
+		default: 'max',
+	}),
+	overwrite: flags.boolean({
+		description: '[default: true] Overwrite the folder if it already exists.',
 		allowNo: true,
 		default: true,
 	}),
@@ -221,7 +276,7 @@ FoldersDownloadCommand.args = [
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to download',
-	}
+	},
 ];
 
 module.exports = FoldersDownloadCommand;
