@@ -11,7 +11,10 @@ param (
     [string]$FolderID = "",
 
 # Set to a specific Box user id if you would like to pull metadata as a specific user instead of the current user
-    [string]$UserId = ""
+    [string]$UserId = "",
+
+# If enabled, the "displayName" of the metadata template field will be used as the header instead of the "key"
+    [switch]$UseDisplayName = $false
 )
 
 #############################################################################
@@ -229,6 +232,7 @@ Function Start-Metadata-Extraction {
 
     Write-Log "Output $($Entries | Out-String)"
     $MetadataTemplatesHashmap = @{}
+    $HeaderFieldName = If ($UseDisplayName) { 'displayName' } Else { 'key' }
 
     ForEach ($Item in $Entries) {
         $ItemID = $Item.id
@@ -267,7 +271,6 @@ Function Start-Metadata-Extraction {
             $TemplateKey = $MetadataValue."`$template"
 
             #Pull MetadataTemplate to get access to all it's fields and put it in a hashmap.
-            #Next, to the first object being added, we include all missing fields from the metadata template to ensure the corresponding columns are added to the CSV file.
             if (!$MetadataTemplatesHashmap.ContainsKey($TemplateKey)) {
                 Write-Log "Pulling MetadataTemplate for templateKey: $TemplateKey" -output true -color Green
                 Try {
@@ -279,20 +282,22 @@ Function Start-Metadata-Extraction {
 
                     $MetadataTemplate = $MetadataTemplateResp | ConvertFrom-Json
                     $MetadataTemplatesHashmap[$TemplateKey] = $MetadataTemplate
-
-                    foreach ($MetadataTemplateField in $MetadataTemplatesHashmap[$TemplateKey].fields){
-                        #To maintain the continuity of fields from the metadata template in the resulting CSV file, we remove and then add them at the end
-                        if ($MetadataValue.PSObject.Properties.Name -contains $($MetadataTemplateField.key)) {
-                            $metadataFieldValue = $MetadataValue.$($MetadataTemplateField.key);
-                            $MetadataValue.PSObject.Properties.Remove($($MetadataTemplateField.key));
-                            $MetadataValue | Add-Member -NotePropertyName "$($MetadataTemplateField.key)" -NotePropertyValue $metadataFieldValue;
-                        } else {
-                            #We add a field with an empty value so that it's included in the CSV file header, ensuring that subsequent items with this field will also be added
-                            $MetadataValue | Add-Member -NotePropertyName "$($MetadataTemplateField.key)" -NotePropertyValue $null;
-                        }
-                    }
                 }  Catch {
                     Write-Log "Could not get the metadata template for item. See error log for details." -errorMessage $MetadataTemplateResp -output True -color Red
+                }
+            }
+
+            #Prepare the MetadataValue object by setting its fields name based on the passed UseDisplayName flag,
+            #which determines the name of the field used in the variable HeaderFieldName.
+            foreach ($MetadataTemplateField in $MetadataTemplatesHashmap[$TemplateKey].fields){
+                #To maintain the continuity of fields from the metadata template in the resulting CSV file, we remove and then add them at the end
+                if ($MetadataValue.PSObject.Properties.Name -contains $($MetadataTemplateField.key)) {
+                    $metadataFieldValue = $MetadataValue.$($MetadataTemplateField.key);
+                    $MetadataValue.PSObject.Properties.Remove($($MetadataTemplateField.key));
+                    $MetadataValue | Add-Member -NotePropertyName "$($MetadataTemplateField.$HeaderFieldName)" -NotePropertyValue $metadataFieldValue;
+                } else {
+                    #We add a field with an empty value so that it's included in the CSV file header, ensuring that subsequent items with this field will also be added
+                    $MetadataValue | Add-Member -NotePropertyName "$($MetadataTemplateField.$HeaderFieldName)" -NotePropertyValue $null;
                 }
             }
 
