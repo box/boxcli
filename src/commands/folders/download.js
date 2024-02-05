@@ -84,8 +84,8 @@ class FoldersDownloadCommand extends BoxCommand {
 				new Date(),
 				'YYYY-MM-DDTHH_mm_ss_SSS'
 			)}.zip`;
-			rootItemPath = path.join(destinationPath, fileName);
-			outputFinalized = this._setupZip(rootItemPath);
+			rootItemPath = fileName;
+			outputFinalized = this._setupZip(path.join(destinationPath, fileName));
 		}
 
 		try {
@@ -148,7 +148,7 @@ class FoldersDownloadCommand extends BoxCommand {
 	 * @returns {void}
 	 * @private
 	 */
-	async *_getItems(folderId, folderPath) {
+	async* _getItems(folderId, folderPath) {
 		let folder = await this.client.folders.get(folderId);
 		folderPath = path.join(folderPath, folder.name);
 
