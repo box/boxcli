@@ -1901,7 +1901,7 @@ describe('Folders', () => {
 				`--destination=${destination}`,
 				'--no-color',
 				'--no-overwrite',
-				'--max-depth=root',
+				'--depth=0',
 				'--token=test',
 			])
 			.it('should not overwrite existing file and folder in root folder when --no-overwrite and --max-depth=root flag is passed', async(ctx) => {
@@ -1950,10 +1950,10 @@ describe('Folders', () => {
 				`--destination=${destination}`,
 				'--no-color',
 				'--no-overwrite',
-				'--max-depth=max',
+				'--depth=10',
 				'--token=test',
 			])
-			.it('should not overwrite existing file and folder in folder recursively when --no-overwrite and --max-depth=max flag is passed', async(ctx) => {
+			.it('should not overwrite existing file and folder in folder recursively when --no-overwrite and --depth=10 flag is passed', async(ctx) => {
 				let folderPath = path.join(destination, folderName);
 				let actualContents = getDirectoryContents(folderPath);
 				await fs.remove(destination);
