@@ -265,16 +265,9 @@ OPTIONS
   --destination=destination              The destination folder to download the Box folder into
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
-
-  --max-depth=(root|max)                 [default: max] Maximum depth to verify if files and folders are already exists, only used with 
-                                         --no-overwrite
-
   --no-color                             Turn off colors for logging
-
   --[no-]overwrite                       [default: true] Overwrite the folder if it already exists.
-
   --save-to-file-path=save-to-file-path  Override default file path to save report
-
   --zip                                  Download the folder into a single .zip archive
 
 EXAMPLE
