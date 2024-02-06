@@ -32,6 +32,7 @@ Extracts metadata details for all the files and folders in any Box folder and sa
 ## 1. Script Parameters
 1. Set the [folderID][folderID-param] you want the script to scan for metadata details.
 2. Optional: To run the script as another user, set [userId][UserId-param] parameter.
+3. Optional: Use the [-UseDisplayName][UseDisplayName-param] switch when running the script to ensure that the headers of the resulting file correspond to the `displayName` field instead of the `key` in the metadata template.
 
 
 ## 2. Run the script
@@ -76,3 +77,4 @@ This project is a collection of open source examples and should not be treated a
 [oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 [FolderID-param]: /examples/Metadata%20Extraction/Metadata-extraction.ps1#L11
 [UserID-param]: /examples/Metadata%20Extraction/Metadata-extraction.ps1#L14
+[UseDisplayName-param]: /examples/Metadata%20Extraction/Metadata-extraction.ps1#L17
