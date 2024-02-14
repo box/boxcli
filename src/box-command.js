@@ -911,7 +911,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -919,13 +919,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1262,6 +1262,8 @@ class BoxCommand extends Command {
 				// Remove color codes from context info
 				// eslint-disable-next-line no-control-regex
 				contextInfo = contextInfo.replace(/\u001b\[\d+m/gu, '');
+				// Remove \n with os.EOL
+				contextInfo = contextInfo.replace(/\n/gu, os.EOL);
 			}
 			let errorMsg = chalk`{redBright ${
 				this.flags && this.flags.verbose ? err.stack : err.message
