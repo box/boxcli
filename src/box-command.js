@@ -367,6 +367,8 @@ class BoxCommand extends Command {
 				// Remove color codes from context info
 				// eslint-disable-next-line no-control-regex
 				contextInfo = contextInfo.replace(/\u001b\[\d+m/gu, '');
+				// Remove \n with os.EOL
+				contextInfo = contextInfo.replace(/\n/gu, os.EOL);
 			}
 			let errMsg = chalk`{redBright ${
 				this.flags && this.flags.verbose ? err.stack : err.message
