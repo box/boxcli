@@ -361,9 +361,16 @@ class BoxCommand extends Command {
 				}) failed with error:}`
 			);
 			let err = errorInfo.error;
+			let contextInfo;
+			if (err.response && err.response.body && err.response.body.context_info) {
+				contextInfo = formatObject(err.response.body.context_info);
+				// Remove color codes from context info
+				// eslint-disable-next-line no-control-regex
+				contextInfo = contextInfo.replace(/\u001b\[\d+m/gu, '');
+			}
 			let errMsg = chalk`{redBright ${
 				this.flags && this.flags.verbose ? err.stack : err.message
-			}${os.EOL}}`;
+			}${os.EOL}${contextInfo ? contextInfo + os.EOL : ''}}`;
 			this.info(errMsg);
 		});
 	}
@@ -959,19 +966,19 @@ class BoxCommand extends Command {
 		// Unroll iterator into array
 		if (typeof obj.next === 'function') {
 			output = [];
-				let entry = await obj.next();
-				while (!entry.done) {
-					output.push(entry.value);
+			let entry = await obj.next();
+			while (!entry.done) {
+				output.push(entry.value);
 
-					if (this.maxItemsReached(this.flags['max-items'], output.length)) {
-						break;
-					}
-
-					/* eslint-disable no-await-in-loop */
-					entry = await obj.next();
-					/* eslint-enable no-await-in-loop */
+				if (this.maxItemsReached(this.flags['max-items'], output.length)) {
+					break;
 				}
-				DEBUG.output('Unrolled iterable into %d entries', output.length);
+
+				/* eslint-disable no-await-in-loop */
+				entry = await obj.next();
+				/* eslint-enable no-await-in-loop */
+			}
+			DEBUG.output('Unrolled iterable into %d entries', output.length);
 		}
 
 		if (this.flags['id-only']) {
@@ -1213,7 +1220,7 @@ class BoxCommand extends Command {
 	wrapError(err) {
 		let messageMap = {
 			'invalid_grant - Refresh token has expired':
-				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.'
+				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.',
 		};
 
 		for (const key in messageMap) {
@@ -1247,10 +1254,16 @@ class BoxCommand extends Command {
 				DEBUG.execute('Got EEXIT code, exiting immediately');
 				return;
 			}
-
+			let contextInfo;
+			if (err.response && err.response.body && err.response.body.context_info) {
+				contextInfo = formatObject(err.response.body.context_info);
+				// Remove color codes from context info
+				// eslint-disable-next-line no-control-regex
+				contextInfo = contextInfo.replace(/\u001b\[\d+m/gu, '');
+			}
 			let errorMsg = chalk`{redBright ${
 				this.flags && this.flags.verbose ? err.stack : err.message
-			}${os.EOL}}`;
+			}${os.EOL}${contextInfo ? contextInfo + os.EOL : ''}}`;
 
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!

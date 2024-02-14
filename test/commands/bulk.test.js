@@ -451,6 +451,10 @@ describe('Bulk', () => {
 				expectedErrorOutput += `    login=wario@example.com${os.EOL}`;
 				expectedErrorOutput += `) failed with error:${os.EOL}`;
 				expectedErrorOutput += `Unexpected API Response [409 Conflict | 170397861659135cc65a65] collaboration_already_exists${os.EOL}`;
+				expectedErrorOutput += `Conflicts:${os.EOL}`;
+				expectedErrorOutput += `    -${os.EOL}`;
+				expectedErrorOutput += `        Type: collaboration${os.EOL}`;
+				expectedErrorOutput += `        ID: '871642494'${os.EOL}`;
 				expectedErrorOutput += os.EOL;
 
 				assert.equal(ctx.stdout, expectedOutput + os.EOL);
