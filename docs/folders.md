@@ -266,6 +266,7 @@ OPTIONS
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
   --no-color                             Turn off colors for logging
+  --[no-]overwrite                       [default: true] Overwrite the folder if it already exists.
   --save-to-file-path=save-to-file-path  Override default file path to save report
   --zip                                  Download the folder into a single .zip archive
 
