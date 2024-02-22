@@ -1171,9 +1171,26 @@ describe('Folders', () => {
 					...expectedBody,
 					description,
 				})
-				.reply(201, fixture)
+				.reply(409, {
+					type: 'error',
+					status: 409,
+					code: 'item_name_in_use',
+					context_info: {
+						conflicts: [
+							{
+								type: 'folder',
+								id: '12345',
+								name: 'New Folder'
+							}
+						]
+					},
+					help_url: 'http://developers.box.com/docs/#errors',
+					message: 'Item with the same name already exists',
+					request_id: '1wne91fxf8871ide'
+				})
 			)
 			.stdout()
+			.stderr()
 			.command([
 				'folders:create',
 				parentFolderId,
@@ -1182,8 +1199,16 @@ describe('Folders', () => {
 				'--json',
 				'--token=test'
 			])
-			.it('should send the description param when --description is passed', ctx => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should catch and report errors with detailed context info', ctx => {
+				let expectedErrorOutput = `Unexpected API Response [409 Conflict | 1wne91fxf8871ide] item_name_in_use - Item with the same name already exists${os.EOL}`;
+				expectedErrorOutput += `Conflicts:${os.EOL}`;
+				expectedErrorOutput += `    -${os.EOL}`;
+				expectedErrorOutput += `        Type: folder${os.EOL}`;
+				expectedErrorOutput += `        ID: '12345'${os.EOL}`;
+				expectedErrorOutput += `        Name: New Folder${os.EOL}`;
+
+				assert.equal(ctx.stdout, '');
+				assert.equal(ctx.stderr, expectedErrorOutput);
 			});
 	});
 
