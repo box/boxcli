@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.13.0](https://github.com/box/boxcli/compare/v3.12.2...v3.13.0) (2024-02-22)
+
+
+### New Features and Enhancements
+
+* Add additional `UseDisplayName` flag to metadata extraction script ([#515](https://github.com/box/boxcli/issues/515)) ([b900fdb](https://github.com/box/boxcli/commit/b900fdb984345c0fdfeb09e531f6a358ad8c3b8e))
+* Add additional context info when throw exception ([#519](https://github.com/box/boxcli/issues/519)) ([b99a58d](https://github.com/box/boxcli/commit/b99a58d930eccf5363c82b84e4415336d7d69541))
+* Support overwrite/skip folder download ([#516](https://github.com/box/boxcli/issues/516)) ([300f914](https://github.com/box/boxcli/commit/300f914ba8bb94d9c399699d126d81aba0b22142))
+
+### Bug Fixes
+
+* Fix metadata extraction script ([#514](https://github.com/box/boxcli/issues/514)) ([2fad540](https://github.com/box/boxcli/commit/2fad540badf60538fe1456f8071b74bf917f7464))
+* Fix the functionality of the overwrite flag ([#513](https://github.com/box/boxcli/issues/513)) ([f4bf7af](https://github.com/box/boxcli/commit/f4bf7af8e0bbdf7e73fab23d920259ef16672be0))
+
 ### [3.12.2](https://github.com/box/boxcli/compare/v3.12.1...v3.12.2) (2023-11-08)
 
 
