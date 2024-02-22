@@ -58,7 +58,8 @@ describe('Sign requests', () => {
 			documentTag2Id = '4567',
 			fixture = getFixture('sign-requests/post_sign_requests'),
 			redirectUrl = 'https://box.com/redirect_url',
-			declinedRedirectUrl = 'https://box.com/declined_redirect_url';
+			declinedRedirectUrl = 'https://box.com/declined_redirect_url',
+			signerGroupId = 'signers';
 
 		test
 			.nock(TEST_API_ROOT, api => api
@@ -69,7 +70,8 @@ describe('Sign requests', () => {
 							email: signerEmail,
 							is_in_person: true,
 							redirect_url: signerRedirectUrl,
-							declined_redirect_url: signerDeclinedRedirectUrl
+							declined_redirect_url: signerDeclinedRedirectUrl,
+							signer_group_id: signerGroupId
 						},
 					],
 					source_files: [
@@ -104,7 +106,7 @@ describe('Sign requests', () => {
 			.stdout()
 			.command([
 				'sign-requests:create',
-				`--signer=email=${signerEmail},role=approver,is_in_person=1,redirect_url=${signerRedirectUrl},declined_redirect_url=${signerDeclinedRedirectUrl}`,
+				`--signer=email=${signerEmail},role=approver,is_in_person=1,redirect_url=${signerRedirectUrl},declined_redirect_url=${signerDeclinedRedirectUrl},group_id=${signerGroupId}`,
 				`--source-files=${fileId},${fileId2}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
@@ -127,7 +129,8 @@ describe('Sign requests', () => {
 							email: signerEmail,
 							is_in_person: true,
 							redirect_url: signerRedirectUrl,
-							declined_redirect_url: signerDeclinedRedirectUrl
+							declined_redirect_url: signerDeclinedRedirectUrl,
+							signer_group_id: signerGroupId
 						},
 					],
 					source_files: [
@@ -162,7 +165,7 @@ describe('Sign requests', () => {
 			.stdout()
 			.command([
 				'sign-requests:create',
-				`--signer=email=${signerEmail},role=approver,is-in-person=1,redirect-url=${signerRedirectUrl},declined-redirect-url=${signerDeclinedRedirectUrl}`,
+				`--signer=email=${signerEmail},role=approver,is-in-person=1,redirect-url=${signerRedirectUrl},declined-redirect-url=${signerDeclinedRedirectUrl},group-id=${signerGroupId}`,
 				`--source-files=${fileId},${fileId2}`,
 				`--parent-folder=${parentFolderId}`,
 				`--prefill-tag=id=${documentTag1Id},text=${documentTag1Value}`,
@@ -175,6 +178,7 @@ describe('Sign requests', () => {
 			.it('should create a sign request with kebab case', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
+
 	});
 
 	describe('sign-requests:cancel', () => {

@@ -48,8 +48,8 @@ SignRequestsCreateCommand.flags = {
 		required: true,
 		description:
 			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. ' +
-			'Allowed (recommended) properties: email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url ' +
-			'but snake case is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url',
+			'Allowed (recommended) properties: email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url,group-id ' +
+			'but snake case is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url,group_id',
 		multiple: true,
 		parse(input) {
 			const signer = {
@@ -107,6 +107,12 @@ SignRequestsCreateCommand.flags = {
 					signer.declined_redirect_url = value;
 					break;
 
+				case 'signer-group-id':
+				case 'signer_group_id':
+				case 'group-id':
+				case 'group_id':
+					signer.signer_group_id = value;
+					break;
 				default:
 					throw new BoxCLIError(`Unknown property for signer: ${key}`);
 				}
