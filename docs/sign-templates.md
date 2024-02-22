@@ -1,7 +1,7 @@
 `box sign-templates`
-===================
+====================
 
-Manage sign templates
+List sign templates
 
 * [`box sign-templates`](#box-sign-templates)
 * [`box sign-templates:get ID`](#box-sign-templatesget-id)
@@ -27,18 +27,20 @@ OPTIONS
   --fields=fields                        Comma separated list of fields to show
   --json                                 Output formatted JSON
   --limit=limit                          The maximum number of items to return per page.
-  --marker=marker                        Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
+
+  --marker=marker                        Defines the position marker at which to begin returning results. This is used
+                                         when paginating using marker-based pagination. This requires `usemarker` to be
+                                         set to `true`.
+
   --no-color                             Turn off colors for logging
+
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
   box sign-templates
-
-COMMANDS
-  sign-templates:get  Get sign template by ID
 ```
 
-_See code: [src/commands/sign-templates/index.js](https://github.com/box/boxcli/blob/v3.12.0/src/commands/sign-templates/index.js)_
+_See code: [src/commands/sign-templates/index.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-templates/index.js)_
 
 ## `box sign-templates:get ID`
 
@@ -70,4 +72,4 @@ EXAMPLE
   box sign-templates:get 12345
 ```
 
-_See code: [src/commands/sign-templates/get.js](https://github.com/box/boxcli/blob/v3.12.0/src/commands/sign-templates/get.js)_
+_See code: [src/commands/sign-templates/get.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-templates/get.js)_
