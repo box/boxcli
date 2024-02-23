@@ -151,6 +151,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box search`](docs/search.md) - Search for files and folders in your Enterprise
 * [`box shared-links`](docs/shared-links.md) - Manage shared links
 * [`box sign-requests`](docs/sign-requests.md) - List sign requests
+* [`box sign-templates`](docs/sign-templates.md) - List sign templates
 * [`box storage-policies`](docs/storage-policies.md) - List storage policies
 * [`box tasks`](docs/tasks.md) - Manage tasks
 * [`box terms-of-service`](docs/terms-of-service.md) - List terms of services for your enterprise
