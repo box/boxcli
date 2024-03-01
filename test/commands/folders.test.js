@@ -893,6 +893,7 @@ describe('Folders', () => {
 
 		describe(command, () => {
 			let folderId = '0',
+				vanityName = 'my-custom-name-123',
 				createSharedLinkFixture = getFixture('folders/put_folders_id_shared_link'),
 				unshareDate = '2030-03-04T12:34:56+00:00',
 				jsonOutput = getFixture('output/folders_share_json.txt'),
@@ -902,7 +903,8 @@ describe('Folders', () => {
 				shared_link: {
 					permissions: { can_download: true },
 					access: 'test',
-					password: 'test'
+					password: 'test',
+					vanity_name: vanityName
 				}
 			};
 
@@ -918,6 +920,7 @@ describe('Folders', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					`--vanity-name=${vanityName}`,
 					'--json',
 					'--token=test'
 				])
@@ -937,6 +940,7 @@ describe('Folders', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					`--vanity-name=${vanityName}`,
 					'--token=test'
 				])
 				.it('should create a shared link for a Box item with access, password and can-download flags passed (YAML Output)', ctx => {

@@ -36,6 +36,9 @@ class SharedLinksModule {
 		if (flags.hasOwnProperty('can-download')) {
 			updates.shared_link.permissions.can_download = flags['can-download'];
 		}
+		if (flags['vanity-name']) {
+			updates.shared_link.vanity_name = flags['vanity-name'];
+		}
 
 		if (args.itemType === 'file') {
 			if (flags.hasOwnProperty('can-edit')) {

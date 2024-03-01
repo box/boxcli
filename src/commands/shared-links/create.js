@@ -17,7 +17,7 @@ class SharedLinksCreateCommand extends BoxCommand {
 SharedLinksCreateCommand.aliases = ['shared-links:update'];
 
 SharedLinksCreateCommand.description = 'Create a shared link for a Box item';
-SharedLinksCreateCommand.examples = ['box shared-links:create 22222 folder --access company'];
+SharedLinksCreateCommand.examples = ['box shared-links:create 22222 folder --access company --vanity-name my-custom-name-123'];
 
 const sharedLinkFlags = {
 	...BoxCommand.flags,
@@ -30,7 +30,10 @@ const sharedLinkFlags = {
 	'can-download': flags.boolean({
 		description: 'Whether the shared link allows downloads',
 		allowNo: true
-	})
+	}),
+	'vanity-name': flags.string({
+		description: 'Defines a custom vanity name to use in the shared link URL. It should be between 12 and 30 characters. This field can contains only letters, numbers and hyphens.'
+	}),
 };
 
 const sharedLinkFileFlags = {
