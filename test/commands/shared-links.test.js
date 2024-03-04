@@ -50,6 +50,7 @@ describe('Shared-Links', () => {
 
 	describe('shared-links:create', () => {
 		let fileId = '1234567890',
+			vanityName = 'my-custom-name-123',
 			createFileSharedLinkFixture = getFixture(
 				'files/put_files_id_shared_link'
 			),
@@ -59,6 +60,7 @@ describe('Shared-Links', () => {
 		let fileSharedLinkBody = {
 			shared_link: {
 				permissions: { can_download: true, can_edit: true },
+				vanity_name: vanityName
 			},
 		};
 
@@ -75,6 +77,7 @@ describe('Shared-Links', () => {
 				'file',
 				'--can-download',
 				'--can-edit',
+				`--vanity-name=${vanityName}`,
 				'--token=test',
 			])
 			.it('should create a shared link for a Box file (YAML Output)', (ctx) => {
@@ -94,6 +97,7 @@ describe('Shared-Links', () => {
 				'file',
 				'--can-download',
 				'--can-edit',
+				`--vanity-name=${vanityName}`,
 				'--token=test',
 				'--json',
 			])

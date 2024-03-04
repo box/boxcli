@@ -1036,6 +1036,7 @@ describe('Files', () => {
 	], function(command) {
 		describe(command, () => {
 			let fileId = '1234567890',
+				vanityName = 'my-custom-name-123',
 				unsharedDate = '2030-11-18T19:44:17+00:00',
 				createSharedLinkFixture = getFixture('files/put_files_id_shared_link'),
 				jsonOutput = getFixture('output/files_share_json.txt'),
@@ -1044,7 +1045,8 @@ describe('Files', () => {
 				shared_link: {
 					permissions: {can_download: true, can_edit: true},
 					access: 'test',
-					password: 'test'
+					password: 'test',
+					vanity_name: vanityName
 				}
 			};
 			test
@@ -1059,6 +1061,7 @@ describe('Files', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					`--vanity-name=${vanityName}`,
 					'--can-edit',
 					'--json',
 					'--token=test'
@@ -1078,6 +1081,7 @@ describe('Files', () => {
 					'--access=test',
 					'--password=test',
 					'--can-download',
+					`--vanity-name=${vanityName}`,
 					'--can-edit',
 					'--token=test'
 				])

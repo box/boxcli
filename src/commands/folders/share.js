@@ -26,7 +26,7 @@ FoldersShareCommand.aliases = [
 ];
 
 FoldersShareCommand.description = 'Create a shared link for a folder';
-FoldersShareCommand.examples = ['box folders:share 22222 --access company'];
+FoldersShareCommand.examples = ['box folders:share 22222 --access company --vanity-name my-custom-name-123'];
 FoldersShareCommand._endpoint = 'put_folders_id create_shared_link';
 
 FoldersShareCommand.flags = {
