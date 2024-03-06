@@ -43,7 +43,7 @@ EXAMPLE
   box sign-requests
 ```
 
-_See code: [src/commands/sign-requests/index.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-requests/index.js)_
+_See code: [src/commands/sign-requests/index.js](https://github.com/box/boxcli/blob/v3.14.0/src/commands/sign-requests/index.js)_
 
 ## `box sign-requests:cancel ID`
 
@@ -75,7 +75,7 @@ EXAMPLE
   box sign-requests:cancel 12345
 ```
 
-_See code: [src/commands/sign-requests/cancel.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-requests/cancel.js)_
+_See code: [src/commands/sign-requests/cancel.js](https://github.com/box/boxcli/blob/v3.14.0/src/commands/sign-requests/cancel.js)_
 
 ## `box sign-requests:create`
 
@@ -167,8 +167,8 @@ OPTIONS
   --signer=signer
       (required) A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. 
       Allowed (recommended) properties: 
-      email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url,group-id but snake case is also 
-      supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url,group_id
+      email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url,group-id but snake case 
+      is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url,group_id
 
   --source-files=source-files
       (required) Comma separated list of files to create a signing document from. This is currently limited to 10 files, 
@@ -182,7 +182,7 @@ EXAMPLE
   id=1,value=Test
 ```
 
-_See code: [src/commands/sign-requests/create.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-requests/create.js)_
+_See code: [src/commands/sign-requests/create.js](https://github.com/box/boxcli/blob/v3.14.0/src/commands/sign-requests/create.js)_
 
 ## `box sign-requests:get ID`
 
@@ -214,7 +214,7 @@ EXAMPLE
   box sign-requests:get 12345
 ```
 
-_See code: [src/commands/sign-requests/get.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-requests/get.js)_
+_See code: [src/commands/sign-requests/get.js](https://github.com/box/boxcli/blob/v3.14.0/src/commands/sign-requests/get.js)_
 
 ## `box sign-requests:resend ID`
 
@@ -246,4 +246,4 @@ EXAMPLE
   box sign-requests:resend 12345
 ```
 
-_See code: [src/commands/sign-requests/resend.js](https://github.com/box/boxcli/blob/v3.13.0/src/commands/sign-requests/resend.js)_
+_See code: [src/commands/sign-requests/resend.js](https://github.com/box/boxcli/blob/v3.14.0/src/commands/sign-requests/resend.js)_
