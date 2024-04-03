@@ -79,7 +79,7 @@ Function Write-Log { param ([string]$message, [string]$errorMessage = $null, [Ex
     }
 
     if ($output -eq "true") {
-        Write-Host $message -ForegroundColor $color
+        Write-Host $logMessage -ForegroundColor $color
     }
 
     if ($logLevel -eq "all") {
