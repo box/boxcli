@@ -6,15 +6,18 @@ on:
       - main
   push:
     branches:
-      - main
+      - aj/test_gh
 jobs:
   build-and-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest-large]
         node: ['14', '16', '18']
+        exclude:
+          - os: macos-latest
+            node: 14
     name: Node ${{ matrix.node }} on ${{ matrix.os }}
     steps:
       - name: Checkout
