@@ -1,0 +1,3 @@
+signer,source-files,parent-folder
+"email=userA@email.com,role=approver","2468135790,2468135791","1357902468"
+"email=userB@email.com,role=signer","2468135799","1357902460"
