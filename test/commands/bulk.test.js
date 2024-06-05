@@ -35,7 +35,9 @@ describe('Bulk', () => {
 			multipleFlagValuesInputFilePath = path.join(__dirname, '../fixtures/bulk/input_multiple_same_flag.csv'),
 			emptyStringInputFilePath = path.join(__dirname, '../fixtures/bulk/input_with_empty_string.csv'),
 			metadataUpdateInputFilePath = path.join(__dirname, '../fixtures/bulk/input_metadata_update.csv'),
-			tableOutput = getFixture('bulk/post_collaborations_table.txt');
+			signRequestCreateInputFilePath = path.join(__dirname, '../fixtures/bulk/input_sign_request_create.csv'),
+			tableOutput = getFixture('bulk/post_collaborations_table.txt'),
+			createSignRequestFixture = getFixture('bulk/post_sign_requests');
 
 		let addCollaborationBody1 = {
 			item: {
@@ -600,6 +602,25 @@ describe('Bulk', () => {
 				expectedOutput.push(JSON.parse(terminateSessionFixture));
 				assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
 			});
+
+		test
+		.nock(TEST_API_ROOT, api => api
+			.post('/2.0/sign_requests')
+			.reply(200, createSignRequestFixture)
+		)
+		.stdout()
+		.stderr()
+		.command([
+			'sign-requests:create',
+			`--bulk-file-path=${signRequestCreateInputFilePath}`,
+			'--json',
+			'--token=test'
+		])
+		.it('should correctly process commands that do not contain argument parameters', ctx => {
+			let expectedOutput = [];
+			expectedOutput.push(JSON.parse(createSignRequestFixture));
+			assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+		});
 	});
 
 	describe('JSON Input', () => {
