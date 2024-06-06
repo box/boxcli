@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.14.1](https://github.com/box/boxcli/compare/v3.14.0...v3.14.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fix bulk action in `search` command ([#528](https://github.com/box/boxcli/issues/528)) ([782b0e6](https://github.com/box/boxcli/commit/782b0e6b00905d9724289cb05cf03a708c32ebb3))
+* Fix bulk operation for `sign-requests:create` command ([#531](https://github.com/box/boxcli/issues/531)) ([6d9cd6b](https://github.com/box/boxcli/commit/6d9cd6b82088185c1b98e8c4ed9ac26af4ee3362))
+
 ## [3.14.0](https://github.com/box/boxcli/compare/v3.13.0...v3.14.0) (2024-03-06)
 
 
