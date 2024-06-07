@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.14.2](https://github.com/box/boxcli/compare/v3.14.1...v3.14.2) (2024-06-07)
+
+
 ### [3.14.1](https://github.com/box/boxcli/compare/v3.14.0...v3.14.1) (2024-06-06)
 
 
