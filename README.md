@@ -125,6 +125,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 <!-- commands -->
 # Command Topics
 
+* [`box ai`](docs/ai.md) - Sends an AI request to supported LLMs and returns an answer
 * [`box autocomplete`](docs/autocomplete.md) - Display autocomplete installation instructions
 * [`box collaboration-allowlist`](docs/collaboration-allowlist.md) - List collaboration allowlist entries
 * [`box collaborations`](docs/collaborations.md) - Manage collaborations
