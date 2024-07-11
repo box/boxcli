@@ -66,8 +66,7 @@
 		"nyc": "^15.1.0",
 		"pkg": "^5.5.2",
 		"sinon": "^15.0.1",
-		"standard-version": "^9.5.0",
-		"stdout-stderr": "0.1.9"
+		"standard-version": "^9.5.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"
