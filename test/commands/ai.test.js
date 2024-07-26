@@ -22,8 +22,8 @@ describe('AI', () => {
 			created_at: '2024-07-09T11:29:46.835Z',
 			completion_reason: 'done',
 		};
-		const fixture = getFixture('ai/post_ai_ask_resonse');
-		const yamlFixture = getFixture('ai/post_ai_ask_resonse_yaml.txt');
+		const fixture = getFixture('ai/post_ai_ask_response');
+		const yamlFixture = getFixture('ai/post_ai_ask_response_yaml.txt');
 
 		test
 			.nock(TEST_API_ROOT, (api) =>
