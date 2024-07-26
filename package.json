@@ -132,7 +132,7 @@
 		"scripts": "./src/**/*.js"
 	},
 	"scripts": {
-		"test": "nyc mocha /Users/mcong/Downloads/boxcli/test/commands/ai.test.js",
+		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
 		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
