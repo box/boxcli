@@ -11,6 +11,7 @@ describe('AI', () => {
 				{
 					id: '12345',
 					type: 'file',
+					content: 'one,two,three',
 				},
 			],
 			mode: 'single_item_qa',
@@ -34,7 +35,7 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=id=12345,type=file',
+				'--items=content="one,two,three",id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
 				'--mode',
@@ -58,7 +59,7 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=id=12345,type=file',
+				'--items=content="one,two,three",id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
 				'--mode',
@@ -76,12 +77,12 @@ describe('AI', () => {
 	describe('ai:text-gen', () => {
 		const expectedRequestBody = {
 			prompt: 'What is the status of this document?',
-			items: [{ id: '12345', type: 'file' }],
+			items: [{ id: '12345', type: 'file', content: 'one,two,three' }],
 			dialogue_history: [
 				{
-					prompt: 'What is the status of this document?',
-					answer: 'It is in review',
-                    created_at: '2024-07-09T11:29:46.835Z'
+					prompt: 'What is the status of this document, signatures?',
+					answer: 'It is in review, waiting for signatures.',
+                    created_at: '2024-07-09T11:29:46+00:00'
 				},
 			],
 		};
@@ -102,9 +103,9 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:text-gen',
-				'--dialogue_history',
-                'prompt=What is the status of this document?,answer=It is in review,created_at=2024-07-09T11:29:46.835Z',
-				'--items=id=12345,type=file',
+				'--dialogue-history',
+                'prompt="What is the status of this document, signatures?",answer="It is in review, waiting for signatures.",created-at=2024-07-09T11:29:46.835Z',
+				'--items=content="one,two,three",id=12345,type=file',
 				'--prompt',
                 'What is the status of this document?',
 				'--json',
@@ -126,9 +127,9 @@ describe('AI', () => {
             .stdout()
             .command([
                 'ai:text-gen',
-                '--dialogue_history',
-                'prompt=What is the status of this document?,answer=It is in review,created_at=2024-07-09T11:29:46.835Z',
-                '--items=id=12345,type=file',
+                '--dialogue-history',
+                'prompt="What is the status of this document, signatures?",answer="It is in review, waiting for signatures.",created-at=2024-07-09T11:29:46.835Z',
+                '--items=content="one,two,three",id=12345,type=file',
                 '--prompt',
                 'What is the status of this document?',
                 '--token=test',

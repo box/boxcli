@@ -2,6 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class AiAskCommand extends BoxCommand {
 	async run() {
@@ -52,25 +53,16 @@ AiAskCommand.flags = {
                 id: '',
                 type: 'file'
             };
-
-            for (const part of input.split(',')) {
-                const [
-                    key,
-                    value,
-                ] = part.split('=');
-
-                switch (key) {
-                    case 'id':
-                        item.id = value;
-                        break;
-                    case 'type':
-                        item.type = value;
-                        break;
-                    case 'content':
-                        item.content = value;
-                        break;
-                    default:
-                        throw new Error(`Invalid item key ${key}`);
+            const obj = utils.parseStringToObject(input);
+            for (const key in obj) {
+                if (key === 'id') {
+                    item.id = obj[key];
+                } else if (key === 'type') {
+                    item.type = obj[key];
+                } else if (key === 'content') {
+                    item.content = obj[key];
+                } else {
+                    throw new Error(`Invalid item key ${key}`);
                 }
             }
 

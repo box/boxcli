@@ -185,6 +185,30 @@ function parseMetadataString(input) {
 }
 
 /**
+ * Parse a string into an JSON object
+ *
+ * @param {string} str The string to parse
+ * @returns {Object} The parsed object
+ */
+function parseStringToObject(str) {
+    const obj = {};
+    const regex = /([\w-]+)=((?:"[^"]*")|[^,]*)/g; // Regular expression to match key=value pairs, including keys with dashes and quoted values
+    let match;
+
+    while ((match = regex.exec(str)) !== null) {
+        const key = match[1].trim();
+        let value = match[2].trim();
+        // Remove surrounding quotes if present
+        if (value.startsWith('"') && value.endsWith('"')) {
+            value = value.slice(1, -1);
+        }
+        obj[key] = value;
+    }
+
+    return obj;
+}
+
+/**
  * Check if directory exists and creates it if shouldCreate flag was passed.
  *
  * @param {string} dirPath Directory path to check and create
@@ -343,6 +367,7 @@ module.exports = {
 	parseMetadataOp(value) {
 		return parseMetadataString(value);
 	},
+	parseStringToObject,
 	checkDir,
 	readFileAsync,
 	writeFileAsync,
