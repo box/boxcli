@@ -192,7 +192,7 @@ function parseMetadataString(input) {
  */
 function parseStringToObject(str) {
     const obj = {};
-    const regex = /([\w-]+)=((?:"[^"]*")|[^,]*)/g; // Regular expression to match key=value pairs, including keys with dashes and quoted values
+    const regex = /([\w-]+)=((?:"[^"]*")|[^,]*)/gu; // Regular expression to match key=value pairs, including keys with dashes and quoted values
     let match;
 
     while ((match = regex.exec(str)) !== null) {
