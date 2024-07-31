@@ -185,27 +185,41 @@ function parseMetadataString(input) {
 }
 
 /**
- * Parse a string into an JSON object
+ * Parse a string into a JSON object
  *
- * @param {string} str The string to parse
+ * @param {string} inputString The string to parse
+ * @param {string[]} keys The keys to parse from the string
  * @returns {Object} The parsed object
  */
-function parseStringToObject(str) {
-    const obj = {};
-    const regex = /([\w-]+)=((?:"[^"]*")|[^,]*)/gu; // Regular expression to match key=value pairs, including keys with dashes and quoted values
-    let match;
+function parseStringToObject(inputString, keys) {
+	const result = {};
 
-    while ((match = regex.exec(str)) !== null) {
-        const key = match[1].trim();
-        let value = match[2].trim();
-        // Remove surrounding quotes if present
-        if (value.startsWith('"') && value.endsWith('"')) {
-            value = value.slice(1, -1);
-        }
-        obj[key] = value;
-    }
+	while (inputString.length > 0) {
+		inputString = inputString.trim();
+		let parsedKey = inputString.split('=')[0];
+		inputString = inputString.substring(inputString.indexOf('=') + 1);
 
-    return obj;
+		// Find the next key or the end of the string
+		let nextKeyIndex = inputString.length;
+		for (let key of keys) {
+			let keyIndex = inputString.indexOf(key);
+			if (keyIndex !== -1 && keyIndex < nextKeyIndex) {
+				nextKeyIndex = keyIndex;
+			}
+		}
+
+		let parsedValue = inputString.substring(0, nextKeyIndex).trim();
+		if (parsedValue.endsWith(',') && nextKeyIndex !== inputString.length) {
+			parsedValue = parsedValue.substring(0, parsedValue.length - 1);
+		}
+		if (parsedValue.startsWith('"') && parsedValue.endsWith('"')) {
+			parsedValue = parsedValue.substring(1, parsedValue.length - 1);
+		}
+
+		result[parsedKey] = parsedValue;
+		inputString = inputString.substring(nextKeyIndex);
+	}
+	return result;
 }
 
 /**

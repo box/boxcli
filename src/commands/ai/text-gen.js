@@ -25,7 +25,7 @@ class AiTextGenCommand extends BoxCommand {
 }
 
 AiTextGenCommand.description = 'Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text.';
-AiTextGenCommand.examples = ['box ai:text-gen --dialogue_history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"'];
+AiTextGenCommand.examples = ['box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"'];
 AiTextGenCommand._endpoint = 'post_ai_text_gen';
 
 AiTextGenCommand.flags = {
@@ -37,7 +37,7 @@ AiTextGenCommand.flags = {
         multiple: true,
         parse(input) {
             const record = {};
-            const obj = utils.parseStringToObject(input);
+            const obj = utils.parseStringToObject(input, ['prompt', 'answer', 'created-at']);
             for (const key in obj) {
                 if (key === 'prompt') {
                     record.prompt = obj[key];
@@ -62,7 +62,7 @@ AiTextGenCommand.flags = {
                 id: '',
                 type: 'file'
             };
-            const obj = utils.parseStringToObject(input);
+            const obj = utils.parseStringToObject(input, ['id', 'type', 'content']);
             for (const key in obj) {
                 if (key === 'id') {
                     item.id = obj[key];

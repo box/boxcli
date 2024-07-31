@@ -53,7 +53,7 @@ AiAskCommand.flags = {
                 id: '',
                 type: 'file'
             };
-            const obj = utils.parseStringToObject(input);
+            const obj = utils.parseStringToObject(input, ['id', 'type', 'content']);
             for (const key in obj) {
                 if (key === 'id') {
                     item.id = obj[key];

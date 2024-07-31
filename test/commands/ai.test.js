@@ -35,7 +35,7 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=content="one,two,three",id=12345,type=file',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
 				'--mode',
@@ -59,7 +59,7 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=content="one,two,three",id=12345,type=file',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
 				'--mode',
@@ -104,8 +104,8 @@ describe('AI', () => {
 			.command([
 				'ai:text-gen',
 				'--dialogue-history',
-                'prompt="What is the status of this document, signatures?",answer="It is in review, waiting for signatures.",created-at=2024-07-09T11:29:46.835Z',
-				'--items=content="one,two,three",id=12345,type=file',
+                'prompt=What is the status of this document, signatures?,answer=It is in review, waiting for signatures.,created-at=2024-07-09T11:29:46.835Z',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
                 'What is the status of this document?',
 				'--json',
@@ -128,8 +128,8 @@ describe('AI', () => {
             .command([
                 'ai:text-gen',
                 '--dialogue-history',
-                'prompt="What is the status of this document, signatures?",answer="It is in review, waiting for signatures.",created-at=2024-07-09T11:29:46.835Z',
-                '--items=content="one,two,three",id=12345,type=file',
+                'prompt=What is the status of this document, signatures?,answer=It is in review, waiting for signatures.,created-at=2024-07-09T11:29:46.835Z',
+                '--items=content=one,two,three,id=12345,type=file',
                 '--prompt',
                 'What is the status of this document?',
                 '--token=test',
