@@ -27,7 +27,7 @@ class AiAskCommand extends BoxCommand {
 }
 
 AiAskCommand.description = 'Sends an AI request to supported LLMs and returns an answer';
-AiAskCommand.examples = ['box ai:ask --mode single_item_qa --items=id=12345,type=file --prompt "What is the status of this document?"'];
+AiAskCommand.examples = ['box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"'];
 AiAskCommand._endpoint = 'post_ai_ask';
 
 AiAskCommand.flags = {

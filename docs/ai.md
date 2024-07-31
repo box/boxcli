@@ -32,7 +32,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box ai:ask --mode single_item_qa --items=id=12345,type=file --prompt "What is the status of this document?"
+  box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
 ```
 
 _See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/ai/ask.js)_
