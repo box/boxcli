@@ -27,14 +27,8 @@ OPTIONS
   --fields=fields                        Comma separated list of fields to show
   --items=items                          (required) The items for the AI request
   --json                                 Output formatted JSON
-
-  --mode=mode                            The mode of the AI request, should be 'single_item_qa' for one item or
-                                         'multi_item_qa' for multiple items
-
   --no-color                             Turn off colors for logging
-
   --prompt=prompt                        (required) The prompt for the AI request
-
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
@@ -76,7 +70,7 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box ai:text-gen --dialogue_history=prompt="What is the status of this document?",answer="It is in 
+  box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in 
   review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this 
   document?"
 ```

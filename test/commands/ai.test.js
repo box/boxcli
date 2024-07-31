@@ -38,8 +38,6 @@ describe('AI', () => {
 				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
-				'--mode',
-				'single_item_qa',
 				'--json',
 				'--token=test',
 			])
@@ -62,8 +60,6 @@ describe('AI', () => {
 				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
-				'--mode',
-				'single_item_qa',
 				'--token=test',
 			])
 			.it(

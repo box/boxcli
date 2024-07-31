@@ -8,12 +8,8 @@ class AiAskCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(AiAskCommand);
 		let options = {};
+        options.mode = flags.items.length > 1 ? 'multi_item_qa' : 'single_item_qa';
 
-        if (flags.mode) {
-            options.mode = flags.mode;
-        } else {
-            options.mode = flags.items.length > 1 ? 'multi_item_qa' : 'single_item_qa';
-        }
         if (flags.prompt) {
             options.prompt = flags.prompt;
         }
@@ -36,10 +32,6 @@ AiAskCommand._endpoint = 'post_ai_ask';
 
 AiAskCommand.flags = {
 	...BoxCommand.flags,
-    mode: flags.string({
-        required: false,
-        description: 'The mode of the AI request, should be \'single_item_qa\' for one item or \'multi_item_qa\' for multiple items',
-    }),
     prompt: flags.string({
         required: true,
         description: 'The prompt for the AI request',
