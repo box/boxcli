@@ -216,6 +216,12 @@ function parseStringToObject(inputString, keys) {
 			parsedValue = parsedValue.substring(1, parsedValue.length - 1);
 		}
 
+		if (!keys.includes(parsedKey)) {
+			throw new BoxCLIError(
+				`Invalid key '${parsedKey}'. Valid keys are ${keys.join(', ')}`
+			);
+		}
+
 		result[parsedKey] = parsedValue;
 		inputString = inputString.substring(nextKeyIndex);
 	}
