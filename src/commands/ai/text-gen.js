@@ -14,6 +14,7 @@ class AiTextGenCommand extends BoxCommand {
         }
         options.prompt = flags.prompt;
         options.items = flags.items;
+
         let answer = await this.client.ai.textGen({
             prompt: options.prompt,
             items: options.items,

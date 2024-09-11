@@ -527,8 +527,10 @@ OPTIONS
 ALIASES
   $ box folders:metadata:create
 
-EXAMPLE
+EXAMPLES
   box folders:metadata:add 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales
+  box folders:metadata:add 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data 
+  "multiselectkey2=[option2A]"
 ```
 
 _See code: [src/commands/folders/metadata/add.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/folders/metadata/add.js)_
@@ -641,8 +643,10 @@ OPTIONS
 
   --template-key=template-key            (required) The key of the metadata template to use
 
-EXAMPLE
+EXAMPLES
   box folders:metadata:set 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales
+  box folders:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data 
+  "multiselectkey2=[option2A]"
 ```
 
 _See code: [src/commands/folders/metadata/set.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/folders/metadata/set.js)_
