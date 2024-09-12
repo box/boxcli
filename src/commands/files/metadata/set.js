@@ -18,7 +18,10 @@ class FilesSetMetadataCommand extends BoxCommand {
 }
 
 FilesSetMetadataCommand.description = 'Set metadata on a file';
-FilesSetMetadataCommand.examples = ['box files:metadata:set 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales'];
+FilesSetMetadataCommand.examples = [
+	'box files:metadata:set 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales',
+	'box files:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"',
+];
 
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,
