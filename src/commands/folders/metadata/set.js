@@ -18,7 +18,10 @@ class FoldersSetMetadataCommand extends BoxCommand {
 }
 
 FoldersSetMetadataCommand.description = 'Set metadata on a folder';
-FoldersSetMetadataCommand.examples = ['box folders:metadata:set 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales'];
+FoldersSetMetadataCommand.examples = [
+	'box folders:metadata:set 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales',
+	'box folders:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"',
+];
 
 FoldersSetMetadataCommand.flags = {
 	...BoxCommand.flags,

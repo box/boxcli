@@ -5,12 +5,13 @@ const assert = require('chai').assert;
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
 describe('AI', () => {
-	describe.skip('ai:ask', () => {
+	describe('ai:ask', () => {
 		const expectedRequestBody = {
 			items: [
 				{
 					id: '12345',
 					type: 'file',
+					content: 'one,two,three',
 				},
 			],
 			mode: 'single_item_qa',
@@ -34,11 +35,9 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=id=12345,type=file',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
-				'--mode',
-				'single_item_qa',
 				'--json',
 				'--token=test',
 			])
@@ -58,11 +57,9 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:ask',
-				'--items=id=12345,type=file',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
-				'--mode',
-				'single_item_qa',
 				'--token=test',
 			])
 			.it(
@@ -73,14 +70,14 @@ describe('AI', () => {
 			);
 	});
 
-	describe.skip('ai:text-gen', () => {
+	describe('ai:text-gen', () => {
 		const expectedRequestBody = {
 			prompt: 'What is the status of this document?',
-			items: [{ id: '12345', type: 'file' }],
+			items: [{ id: '12345', type: 'file', content: 'one,two,three' }],
 			dialogue_history: [
 				{
-					prompt: 'What is the status of this document?',
-					answer: 'It is in review',
+					prompt: 'What is the status of this document, signatures?',
+					answer: 'It is in review, waiting for signatures.',
                     created_at: '2024-07-09T11:29:46+00:00'
 				},
 			],
@@ -102,9 +99,9 @@ describe('AI', () => {
 			.stdout()
 			.command([
 				'ai:text-gen',
-				'--dialogue_history',
-                'prompt=What is the status of this document?,answer=It is in review,created_at=2024-07-09T11:29:46.835Z',
-				'--items=id=12345,type=file',
+				'--dialogue-history',
+                'prompt=What is the status of this document, signatures?,answer=It is in review, waiting for signatures.,created-at=2024-07-09T11:29:46.835Z',
+				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
                 'What is the status of this document?',
 				'--json',
@@ -126,9 +123,9 @@ describe('AI', () => {
             .stdout()
             .command([
                 'ai:text-gen',
-                '--dialogue_history',
-                'prompt=What is the status of this document?,answer=It is in review,created_at=2024-07-09T11:29:46.835Z',
-                '--items=id=12345,type=file',
+                '--dialogue-history',
+                'prompt=What is the status of this document, signatures?,answer=It is in review, waiting for signatures.,created-at=2024-07-09T11:29:46.835Z',
+                '--items=content=one,two,three,id=12345,type=file',
                 '--prompt',
                 'What is the status of this document?',
                 '--token=test',

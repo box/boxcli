@@ -1,7 +1,5 @@
 {
     "answer": "The document is currently in review and awaiting approval.",
-    "createdAt": {
-        "value": "2024-07-09T11:29:46.835Z"
-    },
-    "completionReason": "done"
+    "created_at": "2024-07-09T11:29:46.835Z",
+    "completion_reason": "done"
 }

@@ -47,7 +47,7 @@ EXAMPLE
   box metadata-cascade-policies 22222
 ```
 
-_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/metadata-cascade-policies/index.js)_
+_See code: [src/commands/metadata-cascade-policies/index.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/metadata-cascade-policies/index.js)_
 
 ## `box metadata-cascade-policies:delete ID`
 
@@ -79,7 +79,7 @@ EXAMPLE
   box metadata-cascade-policies:delete 12345
 ```
 
-_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/metadata-cascade-policies/delete.js)_
+_See code: [src/commands/metadata-cascade-policies/delete.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/metadata-cascade-policies/delete.js)_
 
 ## `box metadata-cascade-policies:force-apply ID`
 
@@ -112,7 +112,7 @@ EXAMPLE
   box metadata-cascade-policies:force-apply 12345 --conflict-resolution overwrite
 ```
 
-_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/metadata-cascade-policies/force-apply.js)_
+_See code: [src/commands/metadata-cascade-policies/force-apply.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/metadata-cascade-policies/force-apply.js)_
 
 ## `box metadata-cascade-policies:get ID`
 
@@ -144,4 +144,4 @@ EXAMPLE
   box metadata-cascade-policies:get 12345
 ```
 
-_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/metadata-cascade-policies/get.js)_
+_See code: [src/commands/metadata-cascade-policies/get.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/metadata-cascade-policies/get.js)_

@@ -2,56 +2,52 @@
 
 const BoxCommand = require('../../box-command');
 const { flags } = require('@oclif/command');
+const utils = require('../../util');
 
 class AiTextGenCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(AiTextGenCommand);
 		let options = {};
 
-        if (flags.dialogue_history) {
-            options.dialogueHistory = flags.dialogue_history;
+        if (flags['dialogue-history']) {
+            options.dialogueHistory = flags['dialogue-history'];
         }
         options.prompt = flags.prompt;
         options.items = flags.items;
 
-        let answer = await this.tsClient.ai.createAiTextGen(options);
+        let answer = await this.client.ai.textGen({
+            prompt: options.prompt,
+            items: options.items,
+            dialogue_history: options.dialogueHistory,
+        });
+
         await this.output(answer);
 	}
 }
 
 AiTextGenCommand.description = 'Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text.';
-AiTextGenCommand.examples = ['box ai:text-gen --dialogue_history=prompt="What is the status of this document?",answer="It is in review" --items=id=12345,type=file --prompt="What is the status of this document?"'];
+AiTextGenCommand.examples = ['box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"'];
 AiTextGenCommand._endpoint = 'post_ai_text_gen';
 
 AiTextGenCommand.flags = {
 	...BoxCommand.flags,
-    dialogue_history: flags.string({
+
+    'dialogue-history': flags.string({
         required: false,
         description: 'The history of prompts and answers previously passed to the LLM.',
         multiple: true,
         parse(input) {
             const record = {};
-            for (const part of input.split(',')) {
-                const [
-                    key,
-                    value,
-                ] = part.split('=');
-
-                switch (key) {
-                    case 'prompt':
-                        record.prompt = value;
-                        break;
-                    case 'answer':
-                        record.answer = value;
-                        break;
-                    case 'created_at':
-                    case 'createdAt':
-                        record.createdAt = {
-                            value: new Date(value),
-                        };
-                        break;
-                    default:
-                        throw new Error(`Invalid record key: ${key}`);
+            const obj = utils.parseStringToObject(input, ['prompt', 'answer', 'created-at']);
+            for (const key in obj) {
+                if (key === 'prompt') {
+                    record.prompt = obj[key];
+                } else if (key === 'answer') {
+                    record.answer = obj[key];
+                } else if (key === 'created-at') {
+                    record.created_at = BoxCommand.normalizeDateString(obj[key]);
+                } else {
+                    throw new Error(`Invalid record key ${key}`);
                 }
             }
 
@@ -67,24 +63,16 @@ AiTextGenCommand.flags = {
                 id: '',
                 type: 'file'
             };
-            for (const part of input.split(',')) {
-                const [
-                    key,
-                    value,
-                ] = part.split('=');
-
-                switch (key) {
-                    case 'id':
-                        item.id = value;
-                        break;
-                    case 'type':
-                        item.type = value;
-                        break;
-                    case 'content':
-                        item.content = value;
-                        break;
-                    default:
-                        throw new Error(`Invalid item key ${key}`);
+            const obj = utils.parseStringToObject(input, ['id', 'type', 'content']);
+            for (const key in obj) {
+                if (key === 'id') {
+                    item.id = obj[key];
+                } else if (key === 'type') {
+                    item.type = obj[key];
+                } else if (key === 'content') {
+                    item.content = obj[key];
+                } else {
+                    throw new Error(`Invalid item key ${key}`);
                 }
             }
             return item;

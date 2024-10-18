@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.15.0](https://github.com/box/boxcli/compare/v3.14.1...v3.15.0) (2024-08-06)
+
+
+### New Features and Enhancements
+
+* Support AI APIs using Box Node SDK ([#539](https://github.com/box/boxcli/issues/539)) ([59551d2](https://github.com/box/boxcli/commit/59551d2153549b5a87b2c3fae01eb3089d640c89))
+
 ### [3.14.1](https://github.com/box/boxcli/compare/v3.14.0...v3.14.1) (2024-06-06)
 
 

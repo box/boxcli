@@ -3,8 +3,9 @@
 
 Sends an AI request to supported LLMs and returns an answer
 
-* [`box ai:ask`](#box-aiask)
-* [`box ai:text-gen`](#box-aitext-gen)
+- [`box ai`](#box-ai)
+  - [`box ai:ask`](#box-aiask)
+  - [`box ai:text-gen`](#box-aitext-gen)
 
 ## `box ai:ask`
 
@@ -27,21 +28,15 @@ OPTIONS
   --fields=fields                        Comma separated list of fields to show
   --items=items                          (required) The items for the AI request
   --json                                 Output formatted JSON
-
-  --mode=mode                            The mode of the AI request, should be 'single_item_qa' for one item or
-                                         'multi_item_qa' for multiple items
-
   --no-color                             Turn off colors for logging
-
   --prompt=prompt                        (required) The prompt for the AI request
-
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box ai:ask --mode single_item_qa --items=id=12345,type=file --prompt "What is the status of this document?"
+  box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/ai/ask.js)_
+_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/ai/ask.js)_
 
 ## `box ai:text-gen`
 
@@ -61,7 +56,7 @@ OPTIONS
   --as-user=as-user                      Provide an ID for a user
   --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
   --csv                                  Output formatted CSV
-  --dialogue_history=dialogue_history    The history of prompts and answers previously passed to the LLM.
+  --dialogue-history=dialogue-history    The history of prompts and answers previously passed to the LLM.
   --fields=fields                        Comma separated list of fields to show
 
   --items=items                          (required) The items to be processed by the LLM, often files. The array can
@@ -76,8 +71,9 @@ OPTIONS
   --save-to-file-path=save-to-file-path  Override default file path to save report
 
 EXAMPLE
-  box ai:text-gen --dialogue_history=prompt="What is the status of this document?",answer="It is in review" 
-  --items=id=12345,type=file --prompt="What is the status of this document?"
+  box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in 
+  review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this 
+  document?"
 ```
 
-_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v3.14.1/src/commands/ai/text-gen.js)_
+_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/ai/text-gen.js)_
