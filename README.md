@@ -5,7 +5,7 @@
 # Box CLI
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
-![Platform](https://img.shields.io/badge/node-16--20-blue)
+![Platform](https://img.shields.io/badge/node-18--22-blue)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
 
@@ -21,17 +21,21 @@ Among other features, Box CLI includes the following functionality:
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Getting Started](#getting-started)
-  - [CLI Installation](#cli-installation)
-  - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
-- [Usage](#usage)
+- [Box CLI](#box-cli)
+  - [Table of contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [CLI Installation](#cli-installation)
+      - [Windows \& macOS Installers](#windows--macos-installers)
+      - [Linux \& Node install](#linux--node-install)
+    - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
+  - [Usage](#usage)
 - [Command Topics](#command-topics)
-- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-- [Versions](#versions)
-  - [Supported Version](#supported-version)
-  - [Version schedule](#version-schedule)
-- [Contributing to the Box CLI](#contributing-to-the-box-cli)
-- [Copyright and License](#copyright-and-license)
+  - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+  - [Versions](#versions)
+    - [Supported Version](#supported-version)
+    - [Version schedule](#version-schedule)
+  - [Contributing to the Box CLI](#contributing-to-the-box-cli)
+  - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -185,7 +189,7 @@ A current release is on the leading edge of our SDK development, and is intended
 
 | Version | Supported Environments  | State     | First Release | EOL/Terminated |
 |---------|-------------------------|-----------|---------------|----------------|
-| 3       | Node.js >= 16           | Supported | 01 Feb 2022   | TBD            |
+| 3       | Node.js >= 18           | Supported | 01 Feb 2022   | TBD            |
 | 2       |                         | EOL       | 14 Dec 2018   | 01 Feb 2022    |
 | 1       |                         | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 

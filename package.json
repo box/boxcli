@@ -36,7 +36,7 @@
 		"csv": "^6.3.3",
 		"date-fns": "^1.29.0",
 		"debug": "^4.3.4",
-		"express": "^4.17.1",
+		"express": "^4.21.1",
 		"fs-extra": "^10.1.0",
 		"inquirer": "^6.2.0",
 		"js-yaml": "^3.13.1",
@@ -64,12 +64,11 @@
 		"mockery": "^2.1.0",
 		"nock": "^10.0.0",
 		"nyc": "^15.1.0",
-		"pkg": "^5.5.2",
 		"sinon": "^15.0.1",
 		"standard-version": "^9.5.0"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": ">=18.0.0"
 	},
 	"files": [
 		"/bin",
@@ -129,9 +128,6 @@
 			}
 		}
 	},
-	"pkg": {
-		"scripts": "./src/**/*.js"
-	},
 	"scripts": {
 		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
@@ -139,8 +135,7 @@
 		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif-dev readme --multi && git add README.md && git add docs",
-		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/ && npm run binaries",
-		"binaries": "pkg --targets node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path ./dist .",
+		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
 	},
 	"overrides": {
