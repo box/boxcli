@@ -56,11 +56,52 @@ class CLITokenCache {
 	 * @returns {void}
 	 */
 	clear(callback) {
-
 		utils.unlinkAsync(this.filePath)
 		// Pass success or error to the callback
 			.then(callback)
 			.catch(err => callback(new BoxCLIError('Failed to delete token cache', err)));
+	}
+
+	/**
+	 * Write the token to disk, complatible with TS SDK
+	 * @param {AccessToken} token The token to write
+	 * @returns {Promise<undefined>} A promise resolving to undefined
+	 */
+	store(token) {
+		// eslint-disable-next-line promise/avoid-new
+		return new Promise((resolve, reject) => {
+			const accquiredAtMS = (new Date()).getTime();
+			const tokenInfo = {
+				accessToken: token.accessToken,
+				accessTokenTTLMS: token.expiresIn * 1000,
+				refreshToken: token.refreshToken,
+				acquiredAtMS: accquiredAtMS
+			};
+			this.write(tokenInfo, err => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
+		});
+	}
+
+	/**
+	 * Read the token from disk, compatible with TS SDK
+	 * @returns {Promise<undefined | AccessToken>} A promise resolving to the token
+	 */
+	get() {
+		// eslint-disable-next-line promise/avoid-new
+		return new Promise((resolve, reject) => {
+			this.read((err, tokenInfo) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(tokenInfo.accessToken ? tokenInfo : undefined);
+				}
+			});
+		});
 	}
 }
 
