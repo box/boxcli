@@ -189,7 +189,8 @@ A current release is on the leading edge of our SDK development, and is intended
 
 | Version | Supported Environments  | State     | First Release | EOL/Terminated |
 |---------|-------------------------|-----------|---------------|----------------|
-| 3       | Node.js >= 18           | Supported | 01 Feb 2022   | TBD            |
+| 4       | Node.js >= 18           |           |               |                |
+| 3       | Node.js >= 16           | Supported | 01 Feb 2022   | TBD            |
 | 2       |                         | EOL       | 14 Dec 2018   | 01 Feb 2022    |
 | 1       |                         | EOL       | 01 Nov 2017   | 14 Dec 2018    |
 
