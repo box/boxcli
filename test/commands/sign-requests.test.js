@@ -59,49 +59,52 @@ describe('Sign requests', () => {
 			fixture = getFixture('sign-requests/post_sign_requests'),
 			redirectUrl = 'https://box.com/redirect_url',
 			declinedRedirectUrl = 'https://box.com/declined_redirect_url',
-			signerGroupId = 'signers';
+			signerGroupId = 'signers',
+			templateId = 'c606e094-a843-4f67-9e00-542b6ce4b080';
 
 		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/sign_requests', {
-					signers: [
-						{
-							role: 'approver',
-							email: signerEmail,
-							is_in_person: true,
-							redirect_url: signerRedirectUrl,
-							declined_redirect_url: signerDeclinedRedirectUrl,
-							signer_group_id: signerGroupId
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.post('/2.0/sign_requests', {
+						signers: [
+							{
+								role: 'approver',
+								email: signerEmail,
+								is_in_person: true,
+								redirect_url: signerRedirectUrl,
+								declined_redirect_url: signerDeclinedRedirectUrl,
+								signer_group_id: signerGroupId,
+							},
+						],
+						source_files: [
+							{
+								type: 'file',
+								id: fileId,
+							},
+							{
+								type: 'file',
+								id: fileId2,
+							},
+						],
+						parent_folder: {
+							type: 'folder',
+							id: parentFolderId,
 						},
-					],
-					source_files: [
-						{
-							type: 'file',
-							id: fileId,
-						},
-						{
-							type: 'file',
-							id: fileId2,
-						}
-					],
-					parent_folder: {
-						type: 'folder',
-						id: parentFolderId,
-					},
-					prefill_tags: [
-						{
-							document_tag_id: documentTag1Id,
-							text_value: documentTag1Value,
-						},
-						{
-							document_tag_id: documentTag2Id,
-							checkbox_value: false,
-						},
-					],
-					redirect_url: redirectUrl,
-					declined_redirect_url: declinedRedirectUrl
-				})
-				.reply(200, fixture)
+						prefill_tags: [
+							{
+								document_tag_id: documentTag1Id,
+								text_value: documentTag1Value,
+							},
+							{
+								document_tag_id: documentTag2Id,
+								checkbox_value: false,
+							},
+						],
+						redirect_url: redirectUrl,
+						declined_redirect_url: declinedRedirectUrl,
+						template_id: templateId
+					})
+					.reply(200, fixture)
 			)
 			.stdout()
 			.command([
@@ -113,10 +116,11 @@ describe('Sign requests', () => {
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
 				`--redirect-url=${redirectUrl}`,
 				`--declined-redirect-url=${declinedRedirectUrl}`,
+				`--template-id=${templateId}`,
 				'--json',
 				'--token=test',
 			])
-			.it('should create a sign request with snake case', ctx => {
+			.it('should create a sign request with snake case', (ctx) => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
@@ -158,7 +162,8 @@ describe('Sign requests', () => {
 						},
 					],
 					redirect_url: redirectUrl,
-					declined_redirect_url: declinedRedirectUrl
+					declined_redirect_url: declinedRedirectUrl,
+					template_id: templateId
 				})
 				.reply(200, fixture)
 			)
@@ -172,6 +177,7 @@ describe('Sign requests', () => {
 				`--prefill-tag=id=${documentTag2Id},checkbox=0`,
 				`--redirect-url=${redirectUrl}`,
 				`--declined-redirect-url=${declinedRedirectUrl}`,
+				`--template-id=${templateId}`,
 				'--json',
 				'--token=test',
 			])
