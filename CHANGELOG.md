@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.16.0](https://github.com/box/boxcli/compare/v3.15.0...v3.16.0) (2024-11-25)
+
+
+### New Features and Enhancements
+
+* add support for `template_id` during sign request creation ([#549](https://github.com/box/boxcli/issues/549)) ([95963c1](https://github.com/box/boxcli/commit/95963c19650937f9d67c47184cc8a743166eae60))
+
+### Bug Fixes
+
+* Change zone name in the mass update user zone script ([#546](https://github.com/box/boxcli/issues/546)) ([1a1d603](https://github.com/box/boxcli/commit/1a1d603267b928e08df32394637f53264e9e57c9))
+
 ## [3.15.0](https://github.com/box/boxcli/compare/v3.14.1...v3.15.0) (2024-08-06)
 
 
