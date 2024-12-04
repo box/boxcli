@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class TrashGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TrashGetCommand);
+		const { flags, args } = await this.parse(TrashGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -29,8 +30,8 @@ TrashGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-TrashGetCommand.args = [
-	{
+TrashGetCommand.args = {
+	type: Args.string({
 		name: 'type',
 		required: true,
 		hidden: false,
@@ -40,13 +41,13 @@ TrashGetCommand.args = [
 			'folder',
 			'web_link'
 		],
-	},
-	{
+	}),
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the item to get',
-	}
-];
+	}),
+};
 
 module.exports = TrashGetCommand;

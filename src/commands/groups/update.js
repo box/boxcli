@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class GroupsUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsUpdateCommand);
+		const { flags, args } = await this.parse(GroupsUpdateCommand);
 		let updates = {};
 
 		if (flags.name) {
@@ -39,14 +39,14 @@ GroupsUpdateCommand._endpoint = 'put_groups_id';
 
 GroupsUpdateCommand.flags = {
 	...BoxCommand.flags,
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'The name of the group',
 	}),
-	description: flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
-	'external-sync-identifier': flags.string({ description: 'group identifier for groups coming from an external source' }),
-	provenance: flags.string({ description: 'Track the external source where the group is coming from' }),
-	invite: flags.string({
+	description: Flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
+	'external-sync-identifier': Flags.string({ description: 'group identifier for groups coming from an external source' }),
+	provenance: Flags.string({ description: 'Track the external source where the group is coming from' }),
+	invite: Flags.string({
 		char: 'i',
 		description: 'Specifies who can invite the group to collaborate',
 		options: [
@@ -55,7 +55,7 @@ GroupsUpdateCommand.flags = {
 			'all_managed_users'
 		]
 	}),
-	'view-members': flags.string({
+	'view-members': Flags.string({
 		char: 'm',
 		description: 'Specifies who can view the members of the group',
 		options: [
@@ -66,13 +66,13 @@ GroupsUpdateCommand.flags = {
 	})
 };
 
-GroupsUpdateCommand.args = [
-	{
+GroupsUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the group to update',
-	}
-];
+	}),
+};
 
 module.exports = GroupsUpdateCommand;

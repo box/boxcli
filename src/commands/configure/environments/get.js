@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const _ = require('lodash');
 
 class EnvironmentsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsGetCommand);
+		const { flags, args } = await this.parse(EnvironmentsGetCommand);
 		let environmentsObj = await this.getEnvironments();
 		let environment;
 
@@ -34,12 +34,12 @@ EnvironmentsGetCommand.description = 'Get a Box environment';
 
 EnvironmentsGetCommand.flags = {
 	...BoxCommand.minFlags,
-	current: flags.boolean({
+	current: Flags.boolean({
 		char: 'c',
 		description: 'Get the current default Box environment',
 		exclusive: ['name']
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Get a Box environment with this name',
 		exclusive: ['current']

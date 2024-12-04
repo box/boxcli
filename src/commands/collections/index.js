@@ -4,7 +4,7 @@ const BoxCommand = require('../../box-command');
 
 class CollectionsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollectionsListCommand);
+		await this.parse(CollectionsListCommand);
 
 		let collections = await this.client.collections.getAll();
 		await this.output(collections);

@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class LegalHoldPoliciesAssignCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesAssignCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesAssignCommand);
 
 		let assignType = flags['assign-to-type'];
 		let assignID = flags['assign-to-id'];
@@ -20,7 +20,7 @@ LegalHoldPoliciesAssignCommand.examples = ['box legal-hold-policies:assign 99999
 
 LegalHoldPoliciesAssignCommand.flags = {
 	...BoxCommand.flags,
-	'assign-to-type': flags.string({
+	'assign-to-type': Flags.string({
 		required: true,
 		description: 'Type of object to assign the policy to',
 		options: [
@@ -30,19 +30,19 @@ LegalHoldPoliciesAssignCommand.flags = {
 			'user'
 		],
 	}),
-	'assign-to-id': flags.string({
+	'assign-to-id': Flags.string({
 		description: 'ID of the object to assign the policy to',
 		required: true,
 	}),
 };
 
-LegalHoldPoliciesAssignCommand.args = [
-	{
+LegalHoldPoliciesAssignCommand.args = {
+	policyID: Args.string({
 		name: 'policyID',
 		required: true,
 		hidden: false,
 		description: 'ID of the legal hold policy to assign',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesAssignCommand;

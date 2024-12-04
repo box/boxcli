@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class GroupsTerminateSessionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsTerminateSessionCommand);
+		const { flags, args } = await this.parse(GroupsTerminateSessionCommand);
 
         let response = await this.client.groups.terminateSession(flags['group-ids']);
         await this.output(response);
@@ -20,13 +20,13 @@ GroupsTerminateSessionCommand._endpoint = 'post_groups_terminate_sessions';
 
 GroupsTerminateSessionCommand.flags = {
     ...BoxCommand.flags,
-    'group-ids': flags.string({
+    'group-ids': Flags.string({
         description: 'A list of group IDs',
         multiple: true,
         required: true
     }),
 };
 
-GroupsTerminateSessionCommand.args = [];
+GroupsTerminateSessionCommand.args = {};
 
 module.exports = GroupsTerminateSessionCommand;

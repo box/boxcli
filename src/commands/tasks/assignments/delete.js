@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class TaskAssignmentsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(TaskAssignmentsDeleteCommand);
-		const { args } = this.parse(TaskAssignmentsDeleteCommand);
+		const { flags } = await this.parse(TaskAssignmentsDeleteCommand);
+		const { args } = await this.parse(TaskAssignmentsDeleteCommand);
 
 		await this.client.tasks.deleteAssignment(args.id);
 		this.info(`Successfully deleted task assignment ${args.id}`);
@@ -22,13 +23,13 @@ TaskAssignmentsDeleteCommand.flags = {
 	...BoxCommand.flags
 };
 
-TaskAssignmentsDeleteCommand.args = [
-	{
+TaskAssignmentsDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the task assignment to delete',
-	}
-];
+	}),
+};
 
 module.exports = TaskAssignmentsDeleteCommand;

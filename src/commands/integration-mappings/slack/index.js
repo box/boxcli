@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../../pagination-utils');
 
 class IntegrationMappingsSlackListCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(IntegrationMappingsSlackListCommand);
+		const { flags } = await this.parse(IntegrationMappingsSlackListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['partner-item-id']) {
@@ -36,15 +36,15 @@ IntegrationMappingsSlackListCommand._endpoint = 'get_integration_mappings_slack'
 IntegrationMappingsSlackListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'partner-item-id': flags.string({
+	'partner-item-id': Flags.string({
 		hidden: false,
 		description: 'ID of the mapped Slack channel, for which the mapping should be returned',
 	}),
-	'box-item-id': flags.string({
+	'box-item-id': Flags.string({
 		hidden: false,
 		description: 'ID of the mapped Box folder, for which the mapping should be returned',
 	}),
-	'manually-created': flags.boolean({
+	'manually-created': Flags.boolean({
 		description: 'Whether the mapping has been manually created',
 		allowNo: true
 	})

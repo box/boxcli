@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class UsersUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersUpdateCommand);
+		const { flags, args } = await this.parse(UsersUpdateCommand);
 		let updates = {};
 
 		if (flags.hasOwnProperty('sync-enable')) {
@@ -77,37 +77,37 @@ UsersUpdateCommand._endpoint = 'put_users_id';
 
 UsersUpdateCommand.flags = {
 	...BoxCommand.flags,
-	remove: flags.boolean({
+	remove: Flags.boolean({
 		description: 'Remove the user from the enterprise, convert to free account'
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Set the user\'s name',
 	}),
-	'sync-enable': flags.boolean({
+	'sync-enable': Flags.boolean({
 		description: 'Enable Box Sync for this user',
 		allowNo: true,
 	}),
-	'exempt-from-device-limits': flags.boolean({
+	'exempt-from-device-limits': Flags.boolean({
 		description: 'Exempt user from device limits',
 		allowNo: true
 	}),
-	'exempt-from-2fa': flags.boolean({
+	'exempt-from-2fa': Flags.boolean({
 		description: 'Exempt user from two-factor auth',
 		allowNo: true
 	}),
-	'restrict-external-collab': flags.boolean({
+	'restrict-external-collab': Flags.boolean({
 		description: 'Restrict user from external collaboration',
 		allowNo: true
 	}),
-	'can-see-managed-users': flags.boolean({
+	'can-see-managed-users': Flags.boolean({
 		description: 'User can see managed users',
 		allowNo: true
 	}),
-	'password-reset': flags.boolean({
+	'password-reset': Flags.boolean({
 		description: 'Force the user to reset password'
 	}),
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'Role of user. Enter user or coadmin',
 		options: [
@@ -115,27 +115,27 @@ UsersUpdateCommand.flags = {
 			'coadmin'
 		]
 	}),
-	language: flags.string({
+	language: Flags.string({
 		char: 'l',
 		description: 'Language of the user (ISO 639-1 Language Code). https://developer.box.com/v2.0/docs/api-language-codes'
 	}),
-	'job-title': flags.string({
+	'job-title': Flags.string({
 		char: 'j',
 		description: 'Job title of the user'
 	}),
-	'phone-number': flags.string({
+	'phone-number': Flags.string({
 		char: 'p',
 		description: 'Phone number of the user'
 	}),
-	address: flags.string({
+	address: Flags.string({
 		char: 'a',
 		description: 'Address of the user'
 	}),
-	'disk-space': flags.string({
+	'disk-space': Flags.string({
 		char: 'd',
 		description: 'User\'s available storage in bytes. Value of -1 grants unlimited storage'
 	}),
-	status: flags.string({
+	status: Flags.string({
 		char: 'S',
 		description: 'User status. Enter active, inactive, cannot_delete_edit, or cannot_delete_edit_upload',
 		options: [
@@ -145,12 +145,12 @@ UsersUpdateCommand.flags = {
 			'cannot_delete_edit_upload'
 		]
 	}),
-	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
-	login: flags.string({ description: 'Change the user\'s primary email address used for logging into Box '}),
-	'external-id': flags.string({
+	timezone: Flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
+	login: Flags.string({ description: 'Change the user\'s primary email address used for logging into Box '}),
+	'external-id': Flags.string({
 		description: 'External ID for app users',
 	}),
-	'tracking-codes': flags.string({
+	'tracking-codes': Flags.string({
 		description: 'Comma-separated list of key-value pairs to associate with the user. Format is name=value,name=value',
 		parse: input => input.split(',').map(pair => {
 			const [name, value] = pair.split('=');
@@ -163,13 +163,13 @@ UsersUpdateCommand.flags = {
 	}),
 };
 
-UsersUpdateCommand.args = [
-	{
+UsersUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'User ID to update',
-	}
-];
+	}),
+};
 
 module.exports = UsersUpdateCommand;

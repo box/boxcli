@@ -3,7 +3,7 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 const fs = require('fs');
 const BoxSDK = require('box-node-sdk');
 const BoxCLIError = require('../cli-error');
@@ -20,7 +20,7 @@ const { nanoid } = require('nanoid');
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(OAuthLoginCommand);
+		const { flags } = await this.parse(OAuthLoginCommand);
 		const environmentsObj = await this.getEnvironments();
 		const port = flags.port;
 		const redirectUri = `http://localhost:${port}/callback`;
@@ -200,22 +200,22 @@ OAuthLoginCommand.description =
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
-	code: flags.boolean({
+	code: Flags.boolean({
 		char: 'c',
 		description: 'Manually visit authorize URL and input code',
 		default: false,
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Set a name for the environment',
 		default: 'oauth',
 	}),
-	port: flags.integer({
+	port: Flags.integer({
 		char: 'p',
 		description: 'Set the port number for the local OAuth callback server',
 		default: 3000,
 	}),
-	reauthorize: flags.boolean({
+	reauthorize: Flags.boolean({
 		char: 'r',
 		description: 'Reauthorize the existing environment with given `name`',
 		dependsOn: ['name'],

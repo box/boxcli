@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class FoldersDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersDeleteCommand);
+		const { flags, args } = await this.parse(FoldersDeleteCommand);
 		let options = {};
 
 		if (flags.hasOwnProperty('recursive')) {
@@ -39,24 +39,24 @@ FoldersDeleteCommand._endpoint = 'delete_folders_id';
 
 FoldersDeleteCommand.flags = {
 	...BoxCommand.flags,
-	etag: flags.string({ description: 'Only delete if etag value matches' }),
-	recursive: flags.boolean({
+	etag: Flags.string({ description: 'Only delete if etag value matches' }),
+	recursive: Flags.boolean({
 		char: 'r',
 		description: 'Delete the folder, even if it still has items in it',
 	}),
-	force: flags.boolean({
+	force: Flags.boolean({
 		char: 'f',
 		description: 'Permanently delete the folder, bypassing the trash',
 	})
 };
 
-FoldersDeleteCommand.args = [
-	{
+FoldersDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to delete',
-	}
-];
+	})
+};
 
 module.exports = FoldersDeleteCommand;

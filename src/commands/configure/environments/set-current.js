@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const inquirer = require('inquirer');
 
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsSetCurrentCommand);
+		const { flags, args } = await this.parse(EnvironmentsSetCurrentCommand);
 		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 
@@ -41,13 +42,13 @@ EnvironmentsSetCurrentCommand.flags = {
 	...BoxCommand.minFlags,
 };
 
-EnvironmentsSetCurrentCommand.args = [
-	{
+EnvironmentsSetCurrentCommand.args = {
+	id: Args.string({
 		name: 'name',
 		required: false,
 		hidden: false,
 		description: 'Name of the environment'
-	}
-];
+	})
+};
 
 module.exports = EnvironmentsSetCurrentCommand;

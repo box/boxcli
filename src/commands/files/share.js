@@ -1,13 +1,13 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const { sharedLinkFlags, sharedLinkFileFlags } = require('../shared-links/create');
 const SharedLinksModule = require('../../modules/shared-links');
 
 class FilesShareCommand extends BoxCommand {
 	async run() {
-		const { args, flags } = this.parse(FilesShareCommand);
+		const { args, flags } = await this.parse(FilesShareCommand);
 
 		// Transform arguments for generic module
 		args.itemType = 'file';
@@ -34,13 +34,13 @@ FilesShareCommand.flags = {
 	...sharedLinkFileFlags
 };
 
-FilesShareCommand.args = [
-	{
+FilesShareCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to share',
-	},
-];
+	}),
+};
 
 module.exports = FilesShareCommand;

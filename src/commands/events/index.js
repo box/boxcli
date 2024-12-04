@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const date = require('date-fns');
 
 const DEFAULT_START_TIME = '-5d';
@@ -14,7 +14,7 @@ const eventReplacements = {
 
 class EventsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EventsGetCommand);
+		const { flags, args } = await this.parse(EventsGetCommand);
 		let options = {};
 
 		if (flags.enterprise) {
@@ -81,39 +81,39 @@ EventsGetCommand._endpoint = 'get_events';
 
 EventsGetCommand.flags = {
 	...BoxCommand.flags,
-	enterprise: flags.boolean({
+	enterprise: Flags.boolean({
 		char: 'e',
 		description: 'Get all enterprise events form a given criteria.\n' +
 		'CLI will use the `next_stream_position` automatically to fetch all records.'
 	}),
-	'created-after': flags.string({
+	'created-after': Flags.string({
 		description: 'Return enterprise events that occurred after a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to 5 days before the end date',
 		exclusive: ['stream_position'],
 		dependsOn: ['enterprise'],
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'created-before': flags.string({
+	'created-before': Flags.string({
 		description: 'Return enterprise events that occurred before a time. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. If not used, defaults to now',
 		exclusive: ['stream_position'],
 		dependsOn: ['enterprise'],
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'event-types': flags.string({
+	'event-types': Flags.string({
 		description: 'Return enterprise events filtered by event types. Format using a comma delimited list: NEW_USER,DELETE_USER,EDIT_USER',
 	}),
-	'stream-position': flags.string({
+	'stream-position': Flags.string({
 		description: 'The location in the event stream from which you want to start receiving events',
 		exclusive: [
 			'created-before',
 			'created-after'
 		]
 	}),
-	limit: flags.integer({
+	limit: Flags.integer({
 		description: 'The maximum number of items to return.\n' +
 		'When using it with `enterprise` events, it determines the number of items to return per API call. ' +
 		'The CLI will automatically use the `next_stream_position` to fetch all records.'
 	}),
-	'stream-type': flags.string(
+	'stream-type': Flags.string(
 		{
 			description: 'Stream type admin_logs or admin_logs_streaming.\n' +
 				'Unless specified `admin_logs` stream type is used.\n\n' +

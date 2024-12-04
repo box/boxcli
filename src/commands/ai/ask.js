@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 const utils = require('../../util');
 
 class AiAskCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(AiAskCommand);
+		const { flags, args } = await this.parse(AiAskCommand);
 		let options = {};
         options.mode = flags.items.length > 1 ? 'multi_item_qa' : 'single_item_qa';
 
@@ -32,11 +32,11 @@ AiAskCommand._endpoint = 'post_ai_ask';
 
 AiAskCommand.flags = {
 	...BoxCommand.flags,
-    prompt: flags.string({
+    prompt: Flags.string({
         required: true,
         description: 'The prompt for the AI request',
     }),
-    items: flags.string({
+    items: Flags.string({
         required: true,
         description: 'The items for the AI request',
         multiple: true,

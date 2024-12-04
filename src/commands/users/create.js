@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const BoxCLIError = require('../../cli-error');
 
 class UsersCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersCreateCommand);
+		const { flags, args } = await this.parse(UsersCreateCommand);
 		let options = {};
 		let user;
 
@@ -76,41 +76,41 @@ UsersCreateCommand._endpoint = 'post_users';
 
 UsersCreateCommand.flags = {
 	...BoxCommand.flags,
-	'app-user': flags.boolean({
+	'app-user': Flags.boolean({
 		description: 'Set this user as an app user'
 	}),
-	'external-id': flags.string({
+	'external-id': Flags.string({
 		description: 'External ID for app users',
 		dependsOn: ['app-user'],
 	}),
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command'
 	}),
-	'sync-enable': flags.boolean({
+	'sync-enable': Flags.boolean({
 		description: 'Enable Box Sync for this user',
 		exclusive: ['sync-disable'],
 		allowNo: true
 	}),
-	'exempt-from-device-limits': flags.boolean({
+	'exempt-from-device-limits': Flags.boolean({
 		description: 'Exempt user from device limits',
 		allowNo: true
 	}),
-	'exempt-from-2fa': flags.boolean({
+	'exempt-from-2fa': Flags.boolean({
 		description: 'Exempt user from two-factor auth',
 		allowNo: true
 	}),
-	'restrict-external-collab': flags.boolean({
+	'restrict-external-collab': Flags.boolean({
 		description: 'Restrict user from external collaboration',
 		allowNo: true
 	}),
-	'can-see-managed-users': flags.boolean({
+	'can-see-managed-users': Flags.boolean({
 		description: 'User can see managed users',
 		allowNo: true
 	}),
-	'password-reset': flags.boolean({
+	'password-reset': Flags.boolean({
 		description: 'Force the user to reset password'
 	}),
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'Role of user. Enter user or coadmin',
 		options: [
@@ -118,27 +118,27 @@ UsersCreateCommand.flags = {
 			'coadmin'
 		]
 	}),
-	language: flags.string({
+	language: Flags.string({
 		char: 'l',
 		description: 'Language of the user (ISO 639-1 Language Code). https://developer.box.com/v2.0/docs/api-language-codes'
 	}),
-	'job-title': flags.string({
+	'job-title': Flags.string({
 		char: 'j',
 		description: 'Job title of the user'
 	}),
-	'phone-number': flags.string({
+	'phone-number': Flags.string({
 		char: 'p',
 		description: 'Phone number of the user'
 	}),
-	address: flags.string({
+	address: Flags.string({
 		char: 'a',
 		description: 'Address of the user'
 	}),
-	'disk-space': flags.string({
+	'disk-space': Flags.string({
 		char: 'd',
 		description: 'User\'s available storage in bytes. Value of -1 grants unlimited storage'
 	}),
-	status: flags.string({
+	status: Flags.string({
 		char: 'S',
 		description: 'User status',
 		options: [
@@ -148,8 +148,8 @@ UsersCreateCommand.flags = {
 			'cannot_delete_edit_upload'
 		]
 	}),
-	timezone: flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
-	'tracking-codes': flags.string({
+	timezone: Flags.string({ description: 'The user\'s timezone. Input format follows tz database timezones' }),
+	'tracking-codes': Flags.string({
 		description: 'Comma-separated list of key-value pairs to associate with the user. Format is name=value,name=value',
 		parse: input => input.split(',').map(pair => {
 			const [name, value] = pair.split('=');
@@ -162,19 +162,19 @@ UsersCreateCommand.flags = {
 	}),
 };
 
-UsersCreateCommand.args = [
-	{
+UsersCreateCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'The user\'s name'
-	},
-	{
+	}),
+	login: Args.string({
 		name: 'login',
 		required: false,
 		hidden: false,
 		description: 'The user\'s email address, not required when creating app users'
-	}
-];
+	}),
+};
 
 module.exports = UsersCreateCommand;

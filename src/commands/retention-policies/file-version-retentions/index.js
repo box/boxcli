@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../../pagination-utils');
 
 class RetentionPoliciesListVersionRetentionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesListVersionRetentionCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesListVersionRetentionCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['disposition-action']) {
@@ -44,24 +44,24 @@ RetentionPoliciesListVersionRetentionCommand._endpoint = 'get_file_version_reten
 RetentionPoliciesListVersionRetentionCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'disposition-action': flags.string({
+	'disposition-action': Flags.string({
 		description: 'A disposition action to filter by',
 		options: [
 			'permanently_delete',
 			'remove_retention'
 		]
 	}),
-	'disposition-after': flags.string({
+	'disposition-after': Flags.string({
 		description: 'A date to filter retention policies that complete after a certain time',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'disposition-before': flags.string({
+	'disposition-before': Flags.string({
 		description: 'A date to filter retention policies that complete before a certain time',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'file-id': flags.string({ description: 'A file id to filter the file version retentions by' }),
-	'file-version-id': flags.string({ description: 'A file version id to filter the file version retentions by' }),
-	'policy-id': flags.string({ description: 'A policy id to filter the file version retentions by' })
+	'file-id': Flags.string({ description: 'A file id to filter the file version retentions by' }),
+	'file-version-id': Flags.string({ description: 'A file version id to filter the file version retentions by' }),
+	'policy-id': Flags.string({ description: 'A policy id to filter the file version retentions by' })
 };
 
 module.exports = RetentionPoliciesListVersionRetentionCommand;

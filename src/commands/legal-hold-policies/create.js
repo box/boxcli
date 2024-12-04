@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class LegalHoldPoliciesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesCreateCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesCreateCommand);
 		let options = {};
 
 		if (flags.description) {
@@ -33,20 +33,20 @@ LegalHoldPoliciesCreateCommand._endpoint = 'post_legal_hold_policies';
 
 LegalHoldPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Description of legal hold policy', parse: utils.unescapeSlashes }),
-	'filter-started-at': flags.string({
+	description: Flags.string({ description: 'Description of legal hold policy', parse: utils.unescapeSlashes }),
+	'filter-started-at': Flags.string({
 		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
 		dependsOn: ['filter-ended-at'],
 		exclusive: ['is-ongoing'],
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'filter-ended-at': flags.string({
+	'filter-ended-at': Flags.string({
 		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
 		dependsOn: ['filter-started-at'],
 		exclusive: ['is-ongoing'],
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	ongoing: flags.boolean({
+	ongoing: Flags.boolean({
 		description: 'Assignments under this policy will continue applying to files based on events, indefinitely',
 		exclusive: [
 			'filter-started-at',
@@ -55,13 +55,13 @@ LegalHoldPoliciesCreateCommand.flags = {
 	})
 };
 
-LegalHoldPoliciesCreateCommand.args = [
-	{
+LegalHoldPoliciesCreateCommand.args = {
+	policyName: Args.string({
 		name: 'policyName',
 		required: true,
 		hidden: false,
 		description: 'Name of the legal hold policy',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesCreateCommand;

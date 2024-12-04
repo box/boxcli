@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../pagination-utils');
 
 class DevicePinsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(DevicePinsListCommand);
+		const { flags, args } = await this.parse(DevicePinsListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.direction) {
@@ -25,7 +25,7 @@ DevicePinsListCommand._endpoint = 'get_enterprises_id_device_pinners';
 DevicePinsListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	direction: flags.string({
+	direction: Flags.string({
 		description: 'Set sorting (by id) direction. Default is ASC',
 		options: [
 			'ASC',

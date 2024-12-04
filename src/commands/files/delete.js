@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class FilesDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesDeleteCommand);
+		const { flags, args } = await this.parse(FilesDeleteCommand);
 
 		let options = flags.etag ? { etag: flags.etag } : null;
 
@@ -32,20 +32,20 @@ FilesDeleteCommand._endpoint = 'delete_files_id';
 
 FilesDeleteCommand.flags = {
 	...BoxCommand.flags,
-	force: flags.boolean({
+	force: Flags.boolean({
 		char: 'f',
 		description: 'Permanently delete the item, bypassing the trash',
 	}),
-	etag: flags.string({ description: 'Only delete if etag value matches' })
+	etag: Flags.string({ description: 'Only delete if etag value matches' })
 };
 
-FilesDeleteCommand.args = [
-	{
+FilesDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to delete'
-	}
-];
+	}),
+};
 
 module.exports = FilesDeleteCommand;

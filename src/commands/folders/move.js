@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class FoldersMoveCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersMoveCommand);
+		const { flags, args } = await this.parse(FoldersMoveCommand);
 		let updates = {
 			parent: {
 				id: args.parentID,
@@ -27,22 +27,22 @@ FoldersMoveCommand._endpoint = 'put_folders_id move';
 
 FoldersMoveCommand.flags = {
 	...BoxCommand.flags,
-	etag: flags.string({ description: 'Only move if etag value matches' }),
+	etag: Flags.string({ description: 'Only move if etag value matches' }),
 };
 
-FoldersMoveCommand.args = [
-	{
+FoldersMoveCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of folder to copy',
-	},
-	{
+	}),
+	parentID: Args.string({
 		name: 'parentID',
 		required: true,
 		hidden: false,
 		description: 'ID of the new parent folder to move the folder into',
-	}
-];
+	})
+};
 
 module.exports = FoldersMoveCommand;

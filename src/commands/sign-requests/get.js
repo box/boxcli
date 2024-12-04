@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class SignRequestsGetCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(SignRequestsGetCommand);
+		const { args } = await this.parse(SignRequestsGetCommand);
 
 		const signRequest = await this.client.signRequests.getById({
 			sign_request_id: args.id,
@@ -21,13 +22,13 @@ SignRequestsGetCommand.flags = {
 	...BoxCommand.flags,
 };
 
-SignRequestsGetCommand.args = [
-	{
+SignRequestsGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'The ID of the sign request',
-	},
-];
+	}),
+};
 
 module.exports = SignRequestsGetCommand;
