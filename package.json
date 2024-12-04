@@ -50,12 +50,18 @@
 		"p-event": "^2.3.1"
 	},
 	"devDependencies": {
+		"@oclif/prettier-config": "^0.2.1",
 		"@oclif/test": "^3.2.15",
+		"@typescript-eslint/eslint-plugin": "^8.17.0",
 		"chai": "^4.1.2",
 		"chai-as-promised": "^7.1.1",
-		"eslint": "^5.3.0",
-		"eslint-plugin-node": "^7.0.1",
-		"eslint-plugin-promise": "^3.8.0",
+		"eslint": "^8",
+		"eslint-config-oclif": "^5",
+		"eslint-config-oclif-typescript": "^3",
+		"eslint-config-prettier": "^9",
+		"eslint-plugin-jsdoc": "^50.6.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-promise": "^7.2.1",
 		"eslint-plugin-unicorn": "^5.0.0",
 		"jsonwebtoken": "^8.3.0",
 		"leche": "^2.3.0",
@@ -65,7 +71,8 @@
 		"nyc": "^17.1.0",
 		"oclif": "^4.16.0",
 		"sinon": "^19.0.2",
-		"standard-version": "^9.5.0"
+		"standard-version": "^9.5.0",
+		"typescript": "^5.7.2"
 	},
 	"engines": {
 		"node": ">=18.0.0"
@@ -139,7 +146,9 @@
 		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
-		"prepack": "oclif manifest && oclif readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
+		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
+		"prepack": "oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif readme --multi && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",

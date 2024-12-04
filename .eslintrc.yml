@@ -23,6 +23,8 @@ extends:
     - 'plugin:promise/recommended'
     - 'plugin:unicorn/recommended'
     - 'plugin:node/recommended'
+    # - 'oclif'
+    # - 'prettier'
 
 rules:
 
