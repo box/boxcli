@@ -3,8 +3,7 @@
 
 Display autocomplete installation instructions
 
-- [`box autocomplete`](#box-autocomplete)
-  - [`box autocomplete [SHELL]`](#box-autocomplete-shell)
+* [`box autocomplete [SHELL]`](#box-autocomplete-shell)
 
 ## `box autocomplete [SHELL]`
 
