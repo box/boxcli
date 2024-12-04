@@ -36,7 +36,7 @@ EXAMPLE
   box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/ai/ask.js)_
+_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/ai/ask.js)_
 
 ## `box ai:text-gen`
 
@@ -76,4 +76,4 @@ EXAMPLE
   document?"
 ```
 
-_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v3.15.0/src/commands/ai/text-gen.js)_
+_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/ai/text-gen.js)_
