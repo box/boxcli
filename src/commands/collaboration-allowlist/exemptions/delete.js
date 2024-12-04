@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class CollaborationAllowlistDeleteExemptionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationAllowlistDeleteExemptionCommand);
+		const { args } = await this.parse(CollaborationAllowlistDeleteExemptionCommand);
 
 		await this.client.collaborationAllowlist.removeExemption(args.id);
 		this.info(`Deleted collaboration allowlist exemption ${args.id}`);
@@ -19,13 +20,13 @@ CollaborationAllowlistDeleteExemptionCommand.flags = {
 	...BoxCommand.flags
 };
 
-CollaborationAllowlistDeleteExemptionCommand.args = [
-	{
+CollaborationAllowlistDeleteExemptionCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the allowlist exemption record to delete'
-	}
-];
+	})
+};
 
 module.exports = CollaborationAllowlistDeleteExemptionCommand;

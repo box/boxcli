@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class WebLinksMoveCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebLinksMoveCommand);
+		const { flags, args } = await this.parse(WebLinksMoveCommand);
 		let updates = { parent: { id: args.parentID } };
 
 		let weblink = await this.client.weblinks.update(args.id, updates);
@@ -20,19 +21,19 @@ WebLinksMoveCommand.flags = {
 	...BoxCommand.flags
 };
 
-WebLinksMoveCommand.args = [
-	{
+WebLinksMoveCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the web link to move',
-	},
-	{
+	}),
+	parentID: Args.string({
 		name: 'parentID',
 		required: true,
 		hidden: false,
 		description: 'ID of the parent folder to move the web link into',
-	}
-];
+	}),
+};
 
 module.exports = WebLinksMoveCommand;

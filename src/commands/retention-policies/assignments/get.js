@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class RetentionPoliciesGetAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesGetAssignmentCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesGetAssignmentCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ RetentionPoliciesGetAssignmentCommand.flags = {
 	...BoxCommand.flags
 };
 
-RetentionPoliciesGetAssignmentCommand.args = [
-	{
+RetentionPoliciesGetAssignmentCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the retention policy assignment to get',
-	}
-];
+	})
+};
 
 module.exports = RetentionPoliciesGetAssignmentCommand;

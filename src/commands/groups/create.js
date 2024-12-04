@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class GroupsCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsCreateCommand);
+		const { flags, args } = await this.parse(GroupsCreateCommand);
 		let options = {};
 
 		if (flags.description) {
@@ -36,12 +36,12 @@ GroupsCreateCommand._endpoint = 'post_groups';
 
 GroupsCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
-	'external-sync-identifier': flags.string({
+	description: Flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
+	'external-sync-identifier': Flags.string({
 		description: 'Group identifier for groups coming from an external source',
 	}),
-	provenance: flags.string({ description: 'Track the external source where the group is coming from' }),
-	invite: flags.string({
+	provenance: Flags.string({ description: 'Track the external source where the group is coming from' }),
+	invite: Flags.string({
 		char: 'i',
 		description: 'Specifies who can invite the group to collaborate',
 		options: [
@@ -50,7 +50,7 @@ GroupsCreateCommand.flags = {
 			'all_managed_users'
 		]
 	}),
-	'view-members': flags.string({
+	'view-members': Flags.string({
 		char: 'm',
 		description: 'Specifies who can view the members of the group',
 		options: [
@@ -59,18 +59,18 @@ GroupsCreateCommand.flags = {
 			'all_managed_users'
 		]
 	}),
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command'
 	})
 };
 
-GroupsCreateCommand.args = [
-	{
+GroupsCreateCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'Group name'
-	}
-];
+	}),
+};
 
 module.exports = GroupsCreateCommand;

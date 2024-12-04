@@ -4,10 +4,11 @@ const BoxCommand = require('../../box-command');
 const SharedLinksDeleteCommand = require('../shared-links/delete');
 const SharedLinksModule = require('../../modules/shared-links');
 const chalk = require('chalk');
+const { Args } = require('@oclif/core');
 
 class FoldersUnshareCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(FoldersUnshareCommand);
+		const { args } = await this.parse(FoldersUnshareCommand);
 
 		// Transform arguments for generic module
 		args.itemType = 'folder';
@@ -30,13 +31,13 @@ FoldersUnshareCommand.flags = {
 	...SharedLinksDeleteCommand.flags,
 };
 
-FoldersUnshareCommand.args = [
-	{
+FoldersUnshareCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to unshare',
-	}
-];
+	})
+};
 
 module.exports = FoldersUnshareCommand;

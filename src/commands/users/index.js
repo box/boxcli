@@ -1,13 +1,13 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const UserModule = require('../../modules/user');
 const PaginationUtils = require('../../pagination-utils');
 
 class UsersListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersListCommand);
+		const { flags, args } = await this.parse(UsersListCommand);
 		let options = PaginationUtils.forceMarkerPagination(flags);
 		flags.limit = options.limit;
 		flags.usemarker = options.usemarker;
@@ -27,7 +27,7 @@ UsersListCommand._endpoint = 'get_users';
 UsersListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'managed-users': flags.boolean({
+	'managed-users': Flags.boolean({
 		char: 'm',
 		description: 'Limit results to managed users only',
 		exclusive: [
@@ -35,7 +35,7 @@ UsersListCommand.flags = {
 			'all-users'
 		]
 	}),
-	'app-users': flags.boolean({
+	'app-users': Flags.boolean({
 		description: 'Limit results to app users only',
 		exclusive: [
 			'managed-users',
@@ -43,7 +43,7 @@ UsersListCommand.flags = {
 			'filter'
 		]
 	}),
-	'external-users': flags.boolean({
+	'external-users': Flags.boolean({
 		char: 'e',
 		description: 'Limit results to external users only',
 		exclusive: [
@@ -51,7 +51,7 @@ UsersListCommand.flags = {
 			'all-users'
 		]
 	}),
-	'all-users': flags.boolean({
+	'all-users': Flags.boolean({
 		char: 'a',
 		description: 'Results from all users',
 		exclusive: [
@@ -60,7 +60,7 @@ UsersListCommand.flags = {
 			'app-users'
 		]
 	}),
-	filter: flags.string({
+	filter: Flags.string({
 		description: 'Search term to filter users on; matches prefixes of user name and login fields',
 		exclusive: ['app-users'],
 	})

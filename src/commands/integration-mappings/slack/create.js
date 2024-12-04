@@ -2,11 +2,11 @@
 
 const BoxCommand = require('../../../box-command');
 const BoxCLIError = require('../../../cli-error');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class IntegrationMappingsSlackCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(IntegrationMappingsSlackCreateCommand);
+		const { flags, args } = await this.parse(IntegrationMappingsSlackCreateCommand);
 		let body = {};
 		body.box_item = {
 			type: 'folder',
@@ -43,34 +43,34 @@ IntegrationMappingsSlackCreateCommand._endpoint = 'post_integration_mappings_sla
 
 IntegrationMappingsSlackCreateCommand.flags = {
 	...BoxCommand.flags,
-	'slack-workspace-id': flags.string({
+	'slack-workspace-id': Flags.string({
 		description: 'ID of the Slack workspace with which the item would be associated',
 		exclusive: ['slack-org-id']
 	}),
-	'slack-org-id': flags.string({
+	'slack-org-id': Flags.string({
 		description: 'ID of the Slack organization with which the item would be associated',
 		exclusive: ['slack-workspace-id']
 	}),
-	'disable-access-management': flags.boolean({
+	'disable-access-management': Flags.boolean({
 		description: 'Indicates whether or not channel member access to the underlying box item should be automatically managed. ' +
 			'Depending on type of channel, access is managed through creating collaborations or shared links.',
 		allowNo: true
 	})
 };
 
-IntegrationMappingsSlackCreateCommand.args = [
-	{
+IntegrationMappingsSlackCreateCommand.args = {
+	boxItemID: Args.string({
 		name: 'boxItemID',
 		required: true,
 		hidden: false,
 		description: 'ID of the mapped folder'
-	},
-	{
+	}),
+	channelID: Args.string({
 		name: 'channelID',
 		required: true,
 		hidden: false,
 		description: 'ID of the mapped Slack channel'
-	}
-];
+	}),
+};
 
 module.exports = IntegrationMappingsSlackCreateCommand;

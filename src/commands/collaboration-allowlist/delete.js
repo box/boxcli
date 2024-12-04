@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class CollaborationAllowlistDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationAllowlistDeleteCommand);
+		const { args } = await this.parse(CollaborationAllowlistDeleteCommand);
 
 		await this.client.collaborationAllowlist.removeDomain(args.id);
 		this.info(`Deleted collaboration allowlist entry ${args.id}`);
@@ -19,13 +20,13 @@ CollaborationAllowlistDeleteCommand.flags = {
 	...BoxCommand.flags
 };
 
-CollaborationAllowlistDeleteCommand.args = [
-	{
+CollaborationAllowlistDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the collaboration allowlist entry record to delete'
-	}
-];
+	}),
+};
 
 module.exports = CollaborationAllowlistDeleteCommand;

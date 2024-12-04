@@ -2,7 +2,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const path = require('path');
 const progress = require('cli-progress');
@@ -12,7 +12,7 @@ const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
 class FilesUploadCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesUploadCommand);
+		const { flags, args } = await this.parse(FilesUploadCommand);
 		let size = fs.statSync(args.path).size;
 		let folderID = flags['parent-id'];
 		let stream;
@@ -69,35 +69,35 @@ FilesUploadCommand._endpoint = 'post_files_content';
 
 FilesUploadCommand.flags = {
 	...BoxCommand.flags,
-	'parent-id': flags.string({
+	'parent-id': Flags.string({
 		char: 'p',
 		description: 'ID of the parent folder to upload the file to; defaults to the root folder',
 		default: '0'
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Provide different name for uploaded file'
 	}),
-	'content-created-at': flags.string({
+	'content-created-at': Flags.string({
 		description: 'The creation date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'content-modified-at': flags.string({
+	'content-modified-at': Flags.string({
 		description: 'The modification date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',
 	}),
 };
 
-FilesUploadCommand.args = [
-	{
+FilesUploadCommand.args = {
+	path: Args.string({
 		name: 'path',
 		required: true,
 		hidden: false,
 		description: 'Path to the file to be uploaded',
-	}
-];
+	}),
+};
 
 module.exports = FilesUploadCommand;

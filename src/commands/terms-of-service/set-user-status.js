@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const BoxCLIError = require('../../cli-error');
 
 class TermsOfServiceSetUserStatusCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TermsOfServiceSetUserStatusCommand);
+		const { flags, args } = await this.parse(TermsOfServiceSetUserStatusCommand);
 		let options = {};
 
 		if (flags['user-id']) {
@@ -32,26 +32,26 @@ TermsOfServiceSetUserStatusCommand.examples = ['box terms-of-service:set-user-st
 
 TermsOfServiceSetUserStatusCommand.flags = {
 	...BoxCommand.flags,
-	accept: flags.boolean({
+	accept: Flags.boolean({
 		description: 'Set the user\'s status as accepted',
 		exclusive: [ 'reject' ],
 	}),
-	reject: flags.boolean({
+	reject: Flags.boolean({
 		description: 'Set the user\'s status as rejected',
 		exclusive: [ 'accept' ],
 	}),
-	'user-id': flags.string({
+	'user-id': Flags.string({
 		description: 'ID of the user to set status for; defaults to the current user',
 	}),
 };
 
-TermsOfServiceSetUserStatusCommand.args = [
-	{
+TermsOfServiceSetUserStatusCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the terms of service to set the user status on',
-	},
-];
+	}),
+};
 
 module.exports = TermsOfServiceSetUserStatusCommand;

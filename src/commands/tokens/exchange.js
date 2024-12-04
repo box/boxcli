@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TokensExchangeCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TokensExchangeCommand);
+		const { flags, args } = await this.parse(TokensExchangeCommand);
 
 		let client = this.client;
 		if (flags.token) {
@@ -30,31 +30,31 @@ class TokensExchangeCommand extends BoxCommand {
 
 TokensExchangeCommand.description = 'Get a token. Returns the service account token by default';
 
-TokensExchangeCommand.args = [
-	{
+TokensExchangeCommand.args = {
+	scope: Args.string({
 		name: 'scope',
 		required: true,
 		hidden: false,
 		description: 'The scope(s) for the new token, separated by a comma if multiple are present'
-	}
-];
+	}),
+};
 
 TokensExchangeCommand.flags = {
 	...BoxCommand.minFlags,
-	'user-id': flags.string({
+	'user-id': Flags.string({
 		char: 'u',
 		description: 'Get a user token from a user ID',
 		exclusive: ['token'],
 	}),
-	'file-id': flags.string({
+	'file-id': Flags.string({
 		description: 'Scope the token to a specific file',
 		exclusive: ['folder-id'],
 	}),
-	'folder-id': flags.string({
+	'folder-id': Flags.string({
 		description: 'Scope the token to a specific folder',
 		exclusive: ['file-id'],
 	}),
-	token: flags.string({
+	token: Flags.string({
 		char: 't',
 		description: 'Specify the token to exchange',
 		exclusive: ['user-id'],

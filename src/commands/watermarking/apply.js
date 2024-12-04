@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class WatermarkingApplyCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WatermarkingApplyCommand);
+		const { args } = await this.parse(WatermarkingApplyCommand);
 		let watermark;
 
 		if (args.itemType === 'file') {
@@ -23,8 +24,8 @@ WatermarkingApplyCommand.flags = {
 	...BoxCommand.flags
 };
 
-WatermarkingApplyCommand.args = [
-	{
+WatermarkingApplyCommand.args = {
+	itemType: Args.string({
 		name: 'itemType',
 		required: true,
 		hidden: false,
@@ -33,13 +34,13 @@ WatermarkingApplyCommand.args = [
 			'file',
 			'folder'
 		],
-	},
-	{
+	}),
+	itemID: Args.string({
 		name: 'itemID',
 		required: true,
 		hidden: false,
 		description: 'ID of the item to apply a watermark to'
-	}
-];
+	}),
+};
 
 module.exports = WatermarkingApplyCommand;

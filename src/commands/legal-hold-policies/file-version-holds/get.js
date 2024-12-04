@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class LegalHoldPoliciesGetVersionHoldCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesGetVersionHoldCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesGetVersionHoldCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ LegalHoldPoliciesGetVersionHoldCommand.flags = {
 	...BoxCommand.flags
 };
 
-LegalHoldPoliciesGetVersionHoldCommand.args = [
-	{
+LegalHoldPoliciesGetVersionHoldCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file version legal hold to get',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesGetVersionHoldCommand;

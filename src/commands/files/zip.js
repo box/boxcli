@@ -1,14 +1,14 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const path = require('path');
 const utils = require('../../util');
 
 class FilesZipCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesZipCommand);
+		const { flags, args } = await this.parse(FilesZipCommand);
 
 		let fileName = args.name;
 		if (!fileName.includes('.zip')) {
@@ -73,11 +73,11 @@ FilesZipCommand._endpoint = 'zip_downloads';
 
 FilesZipCommand.flags = {
 	...BoxCommand.flags,
-	destination: flags.string({
+	destination: Flags.string({
 		description: 'The destination folder to write the zip file to',
 		parse: utils.parsePath,
 	}),
-	item: flags.string({
+	item: Flags.string({
 		description:
 			'Files or folders to be part of zip in the form type:ID (i.e. file:1374652)',
 		multiple: true,
@@ -87,24 +87,24 @@ FilesZipCommand.flags = {
 			return { type: splitVal[0], id: splitVal[1] };
 		},
 	}),
-	'create-path': flags.boolean({
+	'create-path': Flags.boolean({
 		description: 'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
 		default: true,
 	}),
-	overwrite: flags.boolean({
+	overwrite: Flags.boolean({
 		description: 'Overwrite a zip file if it already exists',
 		allowNo: true
 	}),
 };
 
-FilesZipCommand.args = [
-	{
+FilesZipCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'Name of the zip to be created and downloaded',
-	}
-];
+	}),
+};
 
 module.exports = FilesZipCommand;

@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class SignTemplatesGetCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(SignTemplatesGetCommand);
+		const { args } = await this.parse(SignTemplatesGetCommand);
 
 		const signTemplate = await this.client.signTemplates.getById({
 			template_id: args.id,
@@ -21,13 +22,13 @@ SignTemplatesGetCommand.flags = {
 	...BoxCommand.flags,
 };
 
-SignTemplatesGetCommand.args = [
-	{
+SignTemplatesGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'The ID of the sign template',
-	},
-];
+	}),
+};
 
 module.exports = SignTemplatesGetCommand;

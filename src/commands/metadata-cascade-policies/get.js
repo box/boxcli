@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class MetadataCascadePoliciesGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(MetadataCascadePoliciesGetCommand);
+		const { flags, args } = await this.parse(MetadataCascadePoliciesGetCommand);
 
 		let policy = await this.client.metadata.getCascadePolicy(args.id);
 		await this.output(policy);
@@ -19,13 +20,13 @@ MetadataCascadePoliciesGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-MetadataCascadePoliciesGetCommand.args = [
-	{
+MetadataCascadePoliciesGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'The ID of the cascade policy to get',
-	}
-];
+	}),
+};
 
 module.exports = MetadataCascadePoliciesGetCommand;

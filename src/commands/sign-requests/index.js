@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class SignRequestsListCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(SignRequestsListCommand);
+		const { flags } = await this.parse(SignRequestsListCommand);
 		const { limit, marker } = flags;
 
 		const signRequests = await this.client.signRequests.getAll({
@@ -23,10 +23,10 @@ SignRequestsListCommand._endpoint = 'get_sign_requests';
 
 SignRequestsListCommand.flags = {
 	...BoxCommand.flags,
-	limit: flags.integer({
+	limit: Flags.integer({
 		description: 'The maximum number of items to return per page.',
 	}),
-	marker: flags.string({
+	marker: Flags.string({
 		description:
 			'Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.',
 	}),

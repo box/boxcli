@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class TrashDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TrashDeleteCommand);
+		const { flags, args } = await this.parse(TrashDeleteCommand);
 
 		if (args.type === 'file') {
 			await this.client.files.deletePermanently(args.id);
@@ -24,8 +25,8 @@ TrashDeleteCommand.flags = {
 	...BoxCommand.flags
 };
 
-TrashDeleteCommand.args = [
-	{
+TrashDeleteCommand.args = {
+	type: Args.string({
 		name: 'type',
 		required: true,
 		hidden: false,
@@ -35,13 +36,13 @@ TrashDeleteCommand.args = [
 			'folder',
 			'web_link'
 		],
-	},
-	{
+	}),
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the item to permanently delete',
-	}
-];
+	}),
+};
 
 module.exports = TrashDeleteCommand;

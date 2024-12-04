@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const BoxCLIError = require('../../cli-error');
@@ -11,7 +11,7 @@ const utils = require('../../util');
 
 class ConfigureSettingsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(ConfigureSettingsCommand);
+		const { flags, args } = await this.parse(ConfigureSettingsCommand);
 		let settings = this.settings;
 
 		if (flags['downloads-folder-path']) {
@@ -99,46 +99,46 @@ ConfigureSettingsCommand.description =
 
 ConfigureSettingsCommand.flags = {
 	...BoxCommand.minFlags,
-	json: flags.boolean({
+	json: Flags.boolean({
 		description: 'Output CLI configuration settings in JSON format'
 	}),
-	'enable-proxy': flags.boolean({
+	'enable-proxy': Flags.boolean({
 		description: 'Enable or disable proxy',
 		allowNo: true,
 	}),
-	'proxy-url': flags.string({
+	'proxy-url': Flags.string({
 		description:
 			'Set proxy url, which should contain the protocol, url, and port (i.e. http://sample.proxyurl.com:80)',
 	}),
-	'proxy-username': flags.string({
+	'proxy-username': Flags.string({
 		description: 'Set username for proxy',
 		dependsOn: ['proxy-password'],
 	}),
-	'proxy-password': flags.string({
+	'proxy-password': Flags.string({
 		description: 'Set password for proxy',
 		dependsOn: ['proxy-username'],
 	}),
-	'downloads-folder-path': flags.string({
+	'downloads-folder-path': Flags.string({
 		description: 'Set folder path for the downloads folder',
 		parse: utils.parsePath,
 	}),
-	'file-format': flags.string({
+	'file-format': Flags.string({
 		description: 'Set the file format for generated reports',
 		options: ['csv', 'json', 'txt'],
 	}),
-	'output-json': flags.boolean({
+	'output-json': Flags.boolean({
 		description: 'Default to JSON output for all commands',
 		allowNo: true,
 	}),
-	'reports-folder-path': flags.string({
+	'reports-folder-path': Flags.string({
 		description: 'Set folder path for the reports folder',
 		parse: utils.parsePath,
 	}),
-	'enable-analytics-client': flags.boolean({
+	'enable-analytics-client': Flags.boolean({
 		description: 'Enable or disable custom analytics client',
 		allowNo: true,
 	}),
-	'analytics-client-name': flags.string({
+	'analytics-client-name': Flags.string({
 		description: 'Set custom analytics client header value',
 	}),
 };

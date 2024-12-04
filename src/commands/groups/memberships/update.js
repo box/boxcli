@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class GroupsUpdateMembershipCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsUpdateMembershipCommand);
+		const { flags, args } = await this.parse(GroupsUpdateMembershipCommand);
 		let options = { configurable_permissions: {} };
 
 		if (flags.hasOwnProperty('can-run-reports')) {
@@ -42,7 +42,7 @@ GroupsUpdateMembershipCommand._endpoint = 'put_group_memberships_id';
 
 GroupsUpdateMembershipCommand.flags = {
 	...BoxCommand.flags,
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'Set the user\'s role in the group',
 		options: [
@@ -54,7 +54,7 @@ GroupsUpdateMembershipCommand.flags = {
 			'set-member'
 		],
 	}),
-	'set-admin': flags.boolean({
+	'set-admin': Flags.boolean({
 		description: 'Set the user\'s role to Group Admin',
 		exclusive: [
 			'set-member',
@@ -62,7 +62,7 @@ GroupsUpdateMembershipCommand.flags = {
 		],
 		hidden: true,
 	}),
-	'set-member': flags.boolean({
+	'set-member': Flags.boolean({
 		description: 'Set the user\'s role to Group Member',
 		exclusive: [
 			'set-admin',
@@ -70,31 +70,31 @@ GroupsUpdateMembershipCommand.flags = {
 		],
 		hidden: true,
 	}),
-	'can-run-reports': flags.boolean({
+	'can-run-reports': Flags.boolean({
 		description: 'If the user is a group admin, allow them to run reports',
 		allowNo: true,
 	}),
-	'can-instant-login': flags.boolean({
+	'can-instant-login': Flags.boolean({
 		description: 'If the user is a group admin, allow them to instant login',
 		allowNo: true,
 	}),
-	'can-create-accounts': flags.boolean({
+	'can-create-accounts': Flags.boolean({
 		description: 'If the user is a group admin, allow them to create new users',
 		allowNo: true,
 	}),
-	'can-edit-accounts': flags.boolean({
+	'can-edit-accounts': Flags.boolean({
 		description: 'If the user is a group admin, allow them to edit user accounts',
 		allowNo: true,
 	}),
 };
 
-GroupsUpdateMembershipCommand.args = [
-	{
+GroupsUpdateMembershipCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the group membership to update',
-	}
-];
+	}),
+};
 
 module.exports = GroupsUpdateMembershipCommand;

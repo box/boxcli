@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class LegalHoldPoliciesUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesUpdateCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesUpdateCommand);
 		let updates = {};
 
 		if (flags.description) {
@@ -30,18 +30,18 @@ LegalHoldPoliciesUpdateCommand._endpoint = 'put_legal_hold_policies_id';
 
 LegalHoldPoliciesUpdateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Description of legal hold policy. Max characters 500', parse: utils.unescapeSlashes }),
-	'policy-name': flags.string({ description: 'Name of legal hold policy. Max characters 254' }),
-	'release-notes': flags.string({ description: 'Notes around why the policy was released. Max characters 500' })
+	description: Flags.string({ description: 'Description of legal hold policy. Max characters 500', parse: utils.unescapeSlashes }),
+	'policy-name': Flags.string({ description: 'Name of legal hold policy. Max characters 254' }),
+	'release-notes': Flags.string({ description: 'Notes around why the policy was released. Max characters 500' })
 };
 
-LegalHoldPoliciesUpdateCommand.args = [
-	{
+LegalHoldPoliciesUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of a legal hold policy to update',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesUpdateCommand;

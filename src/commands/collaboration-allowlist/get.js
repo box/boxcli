@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class CollaborationAllowlistGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationAllowlistGetCommand);
+		const { flags, args } = await this.parse(CollaborationAllowlistGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ CollaborationAllowlistGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-CollaborationAllowlistGetCommand.args = [
-	{
+CollaborationAllowlistGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the collaboration allowlist entry record to get'
-	}
-];
+	})
+};
 
 module.exports = CollaborationAllowlistGetCommand;

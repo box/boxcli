@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class UsersDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersDeleteCommand);
+		const { flags, args } = await this.parse(UsersDeleteCommand);
 		let options = {};
 
 		if (flags.hasOwnProperty('notify')) {
@@ -26,23 +26,23 @@ UsersDeleteCommand._endpoint = 'delete_users_id';
 
 UsersDeleteCommand.flags = {
 	...BoxCommand.flags,
-	notify: flags.boolean({
+	notify: Flags.boolean({
 		description: 'The user should be notified',
 		allowNo: true
 	}),
-	force: flags.boolean({
+	force: Flags.boolean({
 		char: 'f',
 		description: 'Delete user even if they own files',
 	}),
 };
 
-UsersDeleteCommand.args = [
-	{
+UsersDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'User ID to delete',
-	}
-];
+	}),
+};
 
 module.exports = UsersDeleteCommand;

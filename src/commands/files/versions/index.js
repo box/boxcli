@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const PaginationUtils = require('../../../pagination-utils');
 
 class FilesListVersionsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesListVersionsCommand);
+		const { flags, args } = await this.parse(FilesListVersionsCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
@@ -28,13 +29,13 @@ FilesListVersionsCommand.flags = {
 	...PaginationUtils.flags,
 };
 
-FilesListVersionsCommand.args = [
-	{
+FilesListVersionsCommand.args = {
+	fileID: Args.string({
 		name: 'fileID',
 		required: true,
 		hidden: false,
 		description: 'ID of file to get versions for'
-	}
-];
+	}),
+};
 
 module.exports = FilesListVersionsCommand;

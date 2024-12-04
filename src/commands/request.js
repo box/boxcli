@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const querystring = require('querystring');
 
 class ManualRequestCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(ManualRequestCommand);
+		const { flags, args } = await this.parse(ManualRequestCommand);
 
 		let url = args.resource;
 		let params = {};
@@ -68,7 +68,7 @@ ManualRequestCommand.description = 'Manually specify a Box API request';
 
 ManualRequestCommand.flags = {
 	...BoxCommand.flags,
-	method: flags.string({
+	method: Flags.string({
 		description: 'The HTTP method for the request',
 		options: [
 			'GET',
@@ -80,28 +80,28 @@ ManualRequestCommand.flags = {
 		default: 'GET',
 		char: 'X'
 	}),
-	query: flags.string({
+	query: Flags.string({
 		description: 'Query params to use for the request, either as k1=v1&k2=v2 or as JSON',
 		default: '',
 	}),
-	body: flags.string({
+	body: Flags.string({
 		description: 'Body of the request',
 		default: ''
 	}),
-	header: flags.string({
+	header: Flags.string({
 		description: 'HTTP header to add to the request, e.g. "Header: value"',
 		multiple: true,
 		char: 'H',
 	})
 };
 
-ManualRequestCommand.args = [
-	{
+ManualRequestCommand.args = {
+	resource: Args.string({
 		name: 'resource',
 		required: true,
 		hidden: false,
 		description: 'The Box API resource to make a request against, e.g. /search or https://api.box.com/2.0/search',
-	}
-];
+	})
+};
 
 module.exports = ManualRequestCommand;

@@ -23,11 +23,11 @@
 	"bugs": "https://github.com/box/boxcli/issues",
 	"dependencies": {
 		"@discoveryjs/json-ext": "^0.5.7",
-		"@oclif/command": "^1.5.5",
-		"@oclif/config": "^1.7.6",
-		"@oclif/plugin-autocomplete": "^0.1.0",
-		"@oclif/plugin-help": "^2.2.1",
-		"@oclif/plugin-not-found": "^1.2.0",
+		"@oclif/core": "^4.0.33",
+		"@oclif/plugin-autocomplete": "^3.2.11",
+		"@oclif/plugin-help": "^6.2.18",
+		"@oclif/plugin-not-found": "^3.2.29",
+		"@oclif/plugin-version": "^2.2.16",
 		"archiver": "^3.0.0",
 		"box-node-sdk": "^3.7.0",
 		"box-typescript-sdk-gen": "^1.2.0",
@@ -50,8 +50,7 @@
 		"p-event": "^2.3.1"
 	},
 	"devDependencies": {
-		"@oclif/dev-cli": "^1.19.5",
-		"@oclif/test": "^1.1.0",
+		"@oclif/test": "^3.2.15",
 		"chai": "^4.1.2",
 		"chai-as-promised": "^7.1.1",
 		"eslint": "^5.3.0",
@@ -59,13 +58,15 @@
 		"eslint-plugin-promise": "^3.8.0",
 		"eslint-plugin-unicorn": "^5.0.0",
 		"jsonwebtoken": "^8.3.0",
-		"leche": "^2.2.3",
-		"mocha": "^10.0.0",
+		"leche": "^2.3.0",
+		"mocha": "^10.8.2",
 		"mockery": "^2.1.0",
-		"nock": "^10.0.0",
-		"nyc": "^15.1.0",
-		"sinon": "^15.0.1",
-		"standard-version": "^9.5.0"
+		"nock": "^13.5.6",
+		"nyc": "^17.1.0",
+		"oclif": "^4.16.0",
+		"sinon": "^19.0.2",
+		"standard-version": "^9.5.0",
+		"typescript": "^5.7.2"
 	},
 	"engines": {
 		"node": ">=18.0.0"
@@ -79,6 +80,12 @@
 	"oclif": {
 		"commands": "./src/commands",
 		"bin": "box",
+		"additionalHelpFlags": [
+			"-h"
+		],
+		"additionalVersionFlags": [
+			"-v"
+		],
 		"hooks": {
 			"init": [
 				"./src/hooks/init/verbose"
@@ -90,7 +97,8 @@
 		"plugins": [
 			"@oclif/plugin-help",
 			"@oclif/plugin-not-found",
-			"@oclif/plugin-autocomplete"
+			"@oclif/plugin-autocomplete",
+			"@oclif/plugin-version"
 		],
 		"topics": {
 			"autocomplete": {
@@ -132,10 +140,10 @@
 		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
-		"prepack": "oclif-dev manifest && oclif-dev readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"prepack": "oclif manifest && oclif readme --multi && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
-		"version": "oclif-dev readme --multi && git add README.md && git add docs",
-		"build": "oclif-dev pack:macos && rm -rf tmp/ && oclif-dev pack:win && rm -rf tmp/",
+		"version": "oclif readme --multi && git add README.md && git add docs",
+		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
 	},
 	"overrides": {

@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class CommentsReplyCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CommentsReplyCommand);
+		const { flags, args } = await this.parse(CommentsReplyCommand);
 		let params = {
 			body: {
 				item: {
@@ -34,23 +34,23 @@ CommentsReplyCommand.examples = ['box comments:reply 12345 --message "No problem
 
 CommentsReplyCommand.flags = {
 	...BoxCommand.flags,
-	message: flags.string({
+	message: Flags.string({
 		description: 'Message of comment',
 		exclusive: ['tagged-message']
 	}),
-	'tagged-message': flags.string({
+	'tagged-message': Flags.string({
 		description: 'The text of the comment, including @[userid:Username] somewhere in the message to mention the user',
 		exclusive: ['message']
 	})
 };
 
-CommentsReplyCommand.args = [
-	{
+CommentsReplyCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the comment to reply to'
-	}
-];
+	}),
+};
 
 module.exports = CommentsReplyCommand;
