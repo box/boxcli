@@ -68,7 +68,7 @@ EXAMPLES
   $ box users
 ```
 
-_See code: [src/commands/users/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/index.ts)_
+_See code: [src/commands/users/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/index.js)_
 
 ## `box users:add-email-alias USERID EMAIL`
 
@@ -171,7 +171,7 @@ EXAMPLES
   $ box users:create "John Doe" jdoe@example.com
 ```
 
-_See code: [src/commands/users/create.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/create.ts)_
+_See code: [src/commands/users/create.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/create.js)_
 
 ## `box users:delete ID`
 
@@ -209,7 +209,7 @@ EXAMPLES
   $ box users:delete 33333
 ```
 
-_See code: [src/commands/users/delete.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/delete.ts)_
+_See code: [src/commands/users/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/delete.js)_
 
 ## `box users:delete-email-alias USERID ALIASID`
 
@@ -286,7 +286,7 @@ EXAMPLES
   $ box users:email-aliases 33333
 ```
 
-_See code: [src/commands/users/email-aliases/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/index.ts)_
+_See code: [src/commands/users/email-aliases/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/index.js)_
 
 ## `box users:email-aliases:add USERID EMAIL`
 
@@ -328,7 +328,7 @@ EXAMPLES
   $ box users:email-aliases:add 33333 user+alias@example.com
 ```
 
-_See code: [src/commands/users/email-aliases/add.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/add.ts)_
+_See code: [src/commands/users/email-aliases/add.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/add.js)_
 
 ## `box users:email-aliases:remove USERID ALIASID`
 
@@ -368,7 +368,7 @@ EXAMPLES
   $ box users:email-aliases:remove 33333 12345
 ```
 
-_See code: [src/commands/users/email-aliases/remove.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/remove.ts)_
+_See code: [src/commands/users/email-aliases/remove.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/email-aliases/remove.js)_
 
 ## `box users:get [ID]`
 
@@ -404,7 +404,7 @@ EXAMPLES
   $ box users:get 33333
 ```
 
-_See code: [src/commands/users/get.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/get.ts)_
+_See code: [src/commands/users/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/get.js)_
 
 ## `box users:get-email-aliases USERID`
 
@@ -484,7 +484,7 @@ EXAMPLES
   $ box users:groups 33333
 ```
 
-_See code: [src/commands/users/groups.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/groups.ts)_
+_See code: [src/commands/users/groups.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/groups.js)_
 
 ## `box users:invite EMAIL ENTERPRISEID`
 
@@ -524,7 +524,7 @@ EXAMPLES
   $ box users:invite user@example.com 12345
 ```
 
-_See code: [src/commands/users/invite.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/invite.ts)_
+_See code: [src/commands/users/invite.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/invite.js)_
 
 ## `box users:invite-user EMAIL ENTERPRISEID`
 
@@ -725,7 +725,7 @@ EXAMPLES
   $ box users:search "John Doe"
 ```
 
-_See code: [src/commands/users/search.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/search.ts)_
+_See code: [src/commands/users/search.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/search.js)_
 
 ## `box users:terminate-session`
 
@@ -764,7 +764,7 @@ EXAMPLES
   $ box users:terminate-session --user-ids 123 345 --user-logins abc@example.com def@example.com
 ```
 
-_See code: [src/commands/users/terminate-session.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/terminate-session.ts)_
+_See code: [src/commands/users/terminate-session.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/terminate-session.js)_
 
 ## `box users:transfer-content USERID NEWUSERID`
 
@@ -805,7 +805,7 @@ EXAMPLES
   $ box users:transfer-content 33333 44444
 ```
 
-_See code: [src/commands/users/transfer-content.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/transfer-content.ts)_
+_See code: [src/commands/users/transfer-content.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/transfer-content.js)_
 
 ## `box users:update ID`
 
@@ -869,4 +869,4 @@ EXAMPLES
   $ box users:update 33333 --status inactive
 ```
 
-_See code: [src/commands/users/update.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/update.ts)_
+_See code: [src/commands/users/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/users/update.js)_

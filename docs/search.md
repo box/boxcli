@@ -76,4 +76,4 @@ EXAMPLES
   $ box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/search.ts)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/search.js)_

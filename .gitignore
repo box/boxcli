@@ -71,3 +71,6 @@ typings/
 #Intelij Idea
 *.iml
 .idea
+
+# Oclif Build files
+tmp/

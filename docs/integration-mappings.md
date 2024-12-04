@@ -53,7 +53,7 @@ EXAMPLES
   $ box integration-mappings:slack --box-item-id 456 --no-manually-created
 ```
 
-_See code: [src/commands/integration-mappings/slack/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/index.ts)_
+_See code: [src/commands/integration-mappings/slack/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/index.js)_
 
 ## `box integration-mappings:slack:create BOXITEMID CHANNELID`
 
@@ -98,7 +98,7 @@ EXAMPLES
   $ box integration-mappings:slack:create 123 AB89X56Y --slack-workspace-id 999 --disable-access-management
 ```
 
-_See code: [src/commands/integration-mappings/slack/create.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/create.ts)_
+_See code: [src/commands/integration-mappings/slack/create.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/create.js)_
 
 ## `box integration-mappings:slack:delete ID`
 
@@ -134,7 +134,7 @@ EXAMPLES
   $ box integration-mappings:slack:delete 123
 ```
 
-_See code: [src/commands/integration-mappings/slack/delete.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/delete.ts)_
+_See code: [src/commands/integration-mappings/slack/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/delete.js)_
 
 ## `box integration-mappings:slack:list`
 
@@ -219,4 +219,4 @@ EXAMPLES
   $ box integration-mappings:slack:update 123 --box-item-id 789 --disable-access-management
 ```
 
-_See code: [src/commands/integration-mappings/slack/update.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/update.ts)_
+_See code: [src/commands/integration-mappings/slack/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/integration-mappings/slack/update.js)_

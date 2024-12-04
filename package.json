@@ -65,8 +65,7 @@
 		"nyc": "^17.1.0",
 		"oclif": "^4.16.0",
 		"sinon": "^19.0.2",
-		"standard-version": "^9.5.0",
-		"typescript": "^5.7.2"
+		"standard-version": "^9.5.0"
 	},
 	"engines": {
 		"node": ">=18.0.0"

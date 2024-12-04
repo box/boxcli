@@ -85,7 +85,7 @@ EXAMPLES
   $ box files:collaborations 11111
 ```
 
-_See code: [src/commands/files/collaborations/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/collaborations/index.ts)_
+_See code: [src/commands/files/collaborations/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/collaborations/index.js)_
 
 ## `box files:collaborations:add ID`
 
@@ -132,7 +132,7 @@ EXAMPLES
   $ box files:collaborations:add 11111 --role editor --user-id 22222
 ```
 
-_See code: [src/commands/files/collaborations/add.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/collaborations/add.ts)_
+_See code: [src/commands/files/collaborations/add.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/collaborations/add.js)_
 
 ## `box files:collaborations:delete ID`
 
@@ -297,7 +297,7 @@ EXAMPLES
   $ box files:comments 11111
 ```
 
-_See code: [src/commands/files/comments.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/comments.ts)_
+_See code: [src/commands/files/comments.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/comments.js)_
 
 ## `box files:copy ID PARENTID`
 
@@ -338,7 +338,7 @@ EXAMPLES
   $ box files:copy 11111 22222
 ```
 
-_See code: [src/commands/files/copy.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/copy.ts)_
+_See code: [src/commands/files/copy.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/copy.js)_
 
 ## `box files:delete ID`
 
@@ -376,7 +376,7 @@ EXAMPLES
   $ box files:delete 11111
 ```
 
-_See code: [src/commands/files/delete.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/delete.ts)_
+_See code: [src/commands/files/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/delete.js)_
 
 ## `box files:download ID`
 
@@ -418,7 +418,7 @@ EXAMPLES
   $ box files:download 11111 --destination /path/to/destinationFolder
 ```
 
-_See code: [src/commands/files/download.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/download.ts)_
+_See code: [src/commands/files/download.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/download.js)_
 
 ## `box files:get ID`
 
@@ -454,7 +454,7 @@ EXAMPLES
   $ box files:get 11111
 ```
 
-_See code: [src/commands/files/get.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/get.ts)_
+_See code: [src/commands/files/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/get.js)_
 
 ## `box files:lock ID`
 
@@ -496,7 +496,7 @@ EXAMPLES
   $ box files:lock 11111
 ```
 
-_See code: [src/commands/files/lock.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/lock.ts)_
+_See code: [src/commands/files/lock.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/lock.js)_
 
 ## `box files:metadata ID`
 
@@ -535,7 +535,7 @@ EXAMPLES
   $ box files:metadata 11111
 ```
 
-_See code: [src/commands/files/metadata/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/index.ts)_
+_See code: [src/commands/files/metadata/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/index.js)_
 
 ## `box files:metadata:add ID`
 
@@ -581,7 +581,7 @@ EXAMPLES
   $ box files:metadata:add 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"
 ```
 
-_See code: [src/commands/files/metadata/add.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/add.ts)_
+_See code: [src/commands/files/metadata/add.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/add.js)_
 
 ## `box files:metadata:create ID`
 
@@ -702,7 +702,7 @@ EXAMPLES
   $ box files:metadata:get 11111 --template-key employeeRecord
 ```
 
-_See code: [src/commands/files/metadata/get.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/get.ts)_
+_See code: [src/commands/files/metadata/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/get.js)_
 
 ## `box files:metadata:get-all ID`
 
@@ -780,7 +780,7 @@ EXAMPLES
   $ box files:metadata:remove 11111 --scope global --template-key properties
 ```
 
-_See code: [src/commands/files/metadata/remove.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/remove.ts)_
+_See code: [src/commands/files/metadata/remove.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/remove.js)_
 
 ## `box files:metadata:set ID`
 
@@ -823,7 +823,7 @@ EXAMPLES
   $ box files:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"
 ```
 
-_See code: [src/commands/files/metadata/set.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/set.ts)_
+_See code: [src/commands/files/metadata/set.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/set.js)_
 
 ## `box files:metadata:update ID`
 
@@ -869,7 +869,7 @@ EXAMPLES
   $ box files:metadata:update 11111 --template-key employeeRecord --replace department=Finance
 ```
 
-_See code: [src/commands/files/metadata/update.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/update.ts)_
+_See code: [src/commands/files/metadata/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/metadata/update.js)_
 
 ## `box files:move ID PARENTID`
 
@@ -907,7 +907,7 @@ EXAMPLES
   $ box files:move 11111 22222
 ```
 
-_See code: [src/commands/files/move.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/move.ts)_
+_See code: [src/commands/files/move.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/move.js)_
 
 ## `box files:rename ID NAME`
 
@@ -947,7 +947,7 @@ EXAMPLES
   $ box files:rename 11111 "New File Name.pdf"
 ```
 
-_See code: [src/commands/files/rename.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/rename.ts)_
+_See code: [src/commands/files/rename.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/rename.js)_
 
 ## `box files:share ID`
 
@@ -997,7 +997,7 @@ EXAMPLES
   $ box files:share 11111 --access company --vanity-name my-custom-name-123
 ```
 
-_See code: [src/commands/files/share.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/share.ts)_
+_See code: [src/commands/files/share.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/share.js)_
 
 ## `box files:shared-links:create ID`
 
@@ -1169,7 +1169,7 @@ EXAMPLES
   $ box files:tasks 11111
 ```
 
-_See code: [src/commands/files/tasks/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/tasks/index.ts)_
+_See code: [src/commands/files/tasks/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/tasks/index.js)_
 
 ## `box files:tasks:list ID`
 
@@ -1242,7 +1242,7 @@ EXAMPLES
   $ box files:unlock 11111
 ```
 
-_See code: [src/commands/files/unlock.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/unlock.ts)_
+_See code: [src/commands/files/unlock.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/unlock.js)_
 
 ## `box files:unshare ID`
 
@@ -1281,7 +1281,7 @@ EXAMPLES
   $ box files:unshare 11111
 ```
 
-_See code: [src/commands/files/unshare.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/unshare.ts)_
+_See code: [src/commands/files/unshare.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/unshare.js)_
 
 ## `box files:update ID`
 
@@ -1324,7 +1324,7 @@ EXAMPLES
   $ box files:update 11111 --name "New File Name.pdf"
 ```
 
-_See code: [src/commands/files/update.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/update.ts)_
+_See code: [src/commands/files/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/update.js)_
 
 ## `box files:update-lock ID`
 
@@ -1409,7 +1409,7 @@ EXAMPLES
   $ box files:upload /path/to/file.pdf --parent-id 22222
 ```
 
-_See code: [src/commands/files/upload.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/upload.ts)_
+_See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/upload.js)_
 
 ## `box files:versions FILEID`
 
@@ -1452,7 +1452,7 @@ EXAMPLES
   $ box files:versions 11111
 ```
 
-_See code: [src/commands/files/versions/index.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/index.ts)_
+_See code: [src/commands/files/versions/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/index.js)_
 
 ## `box files:versions:delete FILEID FILEVERSIONID`
 
@@ -1490,7 +1490,7 @@ EXAMPLES
   $ box files:versions:delete 11111 55555
 ```
 
-_See code: [src/commands/files/versions/delete.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/delete.ts)_
+_See code: [src/commands/files/versions/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/delete.js)_
 
 ## `box files:versions:download FILEID FILEVERSIONID`
 
@@ -1532,7 +1532,7 @@ EXAMPLES
   $ box files:versions:download 11111 55555
 ```
 
-_See code: [src/commands/files/versions/download.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/download.ts)_
+_See code: [src/commands/files/versions/download.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/download.js)_
 
 ## `box files:versions:list FILEID`
 
@@ -1610,7 +1610,7 @@ EXAMPLES
   $ box files:versions:promote 11111 55555
 ```
 
-_See code: [src/commands/files/versions/promote.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/promote.ts)_
+_See code: [src/commands/files/versions/promote.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/promote.js)_
 
 ## `box files:versions:upload FILEID PATH`
 
@@ -1651,7 +1651,7 @@ EXAMPLES
   $ box files:versions:upload 11111 /path/to/file.pdf
 ```
 
-_See code: [src/commands/files/versions/upload.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/upload.ts)_
+_See code: [src/commands/files/versions/upload.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/versions/upload.js)_
 
 ## `box files:zip NAME`
 
@@ -1692,4 +1692,4 @@ EXAMPLES
   $ box files:zip sample_file.zip --item=file:12421 --item=folder:48291
 ```
 
-_See code: [src/commands/files/zip.ts](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/zip.ts)_
+_See code: [src/commands/files/zip.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/files/zip.js)_
