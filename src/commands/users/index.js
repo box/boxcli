@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Flags } = require('@oclif/core');
 const UserModule = require('../../modules/user');
 const PaginationUtils = require('../../pagination-utils');
 

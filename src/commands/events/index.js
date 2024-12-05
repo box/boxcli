@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Flags } = require('@oclif/core');
 const date = require('date-fns');
 
 const DEFAULT_START_TIME = '-5d';

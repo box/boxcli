@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Args } = require('@oclif/core');
 const { sharedLinkFlags, sharedLinkFileFlags } = require('../shared-links/create');
 const SharedLinksModule = require('../../modules/shared-links');
 

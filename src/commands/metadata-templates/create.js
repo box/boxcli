@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Flags } = require('@oclif/core');
 const BoxCLIError = require('../../cli-error');
 
 const FLAG_HANDLERS = Object.freeze({

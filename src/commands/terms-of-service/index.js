@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Flags } = require('@oclif/core');
 
 class TermsOfServiceListCommand extends BoxCommand {
 	async run() {

@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { Flags, Args } = require('@oclif/core');
+const { Args } = require('@oclif/core');
 
 class FoldersCollaborationsListCommand extends BoxCommand {
 	async run() {

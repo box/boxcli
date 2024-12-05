@@ -16,15 +16,15 @@ globals:
 plugins:
     - promise
     - unicorn
-    - node
+    - n
 
 extends:
     - 'eslint:recommended'
     - 'plugin:promise/recommended'
     - 'plugin:unicorn/recommended'
-    - 'plugin:node/recommended'
+    - 'plugin:n/recommended'
     # - 'oclif'
-    # - 'prettier'
+    - 'prettier'
 
 rules:
 
@@ -330,8 +330,8 @@ rules:
     unicorn/no-new-buffer: error
 
 ### NODE
-    node/no-deprecated-api: error
-    node/exports-style:
+    n/no-deprecated-api: error
+    n/exports-style:
         - error
         - module.exports
 
