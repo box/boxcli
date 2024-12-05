@@ -1745,7 +1745,9 @@ describe('Files', () => {
 			saveAsFileName = 'new_file_name.txt',
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+			/* eslint-disable no-sync */
 			testFileStat = fs.statSync(testFilePath),
+			/* eslint-enable no-sync */
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
 			fileDownloadUrl = toUrlPath(fileDownloadPath),
 			tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
