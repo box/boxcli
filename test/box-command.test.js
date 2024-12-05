@@ -68,6 +68,24 @@ describe('BoxCommand', () => {
 				const stderr = isWin() ? ctx.stderr.replace(':', '') : ctx.stderr;
 				assert.notInclude(stderr, ':');
 			});
+
+		describe('As-User', () => {
+			test
+				.nock(TEST_API_ROOT, api => api
+					.get('/2.0/users/me')
+					.matchHeader('As-user', '12345')
+					.reply(200, {})
+				)
+				.stdout()
+				.stderr()
+				.command([
+					'users:get',
+					'me',
+					'--token=test',
+					'--as-user=12345'
+				])
+				.it('should send as-user header when --as-user flag is passed');
+		});
 	});
 
 	describe('normalizeDateString()', () => {

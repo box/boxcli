@@ -794,13 +794,6 @@ class BoxCommand extends Command {
 			);
 			DEBUG.init('Initialized client from environment config');
 
-			if (environment.useDefaultAsUser) {
-				client.asUser(environment.defaultAsUserId);
-				DEBUG.init(
-					'Impersonating default user ID %s',
-					environment.defaultAsUserId
-				);
-			}
 		} else {
 			// No environments set up yet!
 			throw new BoxCLIError(
@@ -810,11 +803,18 @@ class BoxCommand extends Command {
 				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, '')
 			);
 		}
+
+		// Using the as-user flag should have precedence over the environment setting
 		if (this.flags['as-user']) {
 			client.asUser(this.flags['as-user']);
-			DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
+			DEBUG.init('Impersonating user ID %s using the ID provided via the --as-user flag', this.flags['as-user']);
+		} else if (!this.flags.token && environment.useDefaultAsUser) { // We don't want to use any environment settings if a token is passed in the command
+			client.asUser(environment.defaultAsUserId);
+			DEBUG.init(
+				'Impersonating default user ID %s using environment configuration',
+				environment.defaultAsUserId
+			);
 		}
-
 		return client;
 	}
 
