@@ -3,7 +3,7 @@
 const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const { mkdirp } = require('mkdirp');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');

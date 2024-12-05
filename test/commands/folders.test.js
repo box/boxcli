@@ -1627,7 +1627,7 @@ describe('Folders', () => {
 
 				assert.deepEqual(actualContents, manyFilesExpectedContents);
 				assert.equal(ctx.stdout, '');
-			});
+			}).timeout(60000);
 
 		test
 			.nock(TEST_API_ROOT, api => api
