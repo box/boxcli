@@ -282,8 +282,8 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async bulkOutputRun() {
-		const allPossibleArgs = this.constructor.args.map((arg) => arg.name);
-		const allPossibleFlags = Object.keys(this.constructor.flags);
+		const allPossibleArgs = (this.constructor.args || []).map((arg) => arg.name);
+		const allPossibleFlags = Object.keys(this.constructor.flags || []);
 		// Map from matchKey (arg/flag name in all lower-case characters) => {type, fieldKey}
 		let fieldMapping = Object.assign(
 			{},
@@ -649,12 +649,17 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	disableRequiredArgsAndFlags() {
-		Object.keys(this.constructor.args).forEach((key) => {
-			this.constructor.args[key].required = false;
-		});
-		Object.keys(this.constructor.flags).forEach((key) => {
-			this.constructor.flags[key].required = false;
-		});
+		if (this.constructor.args !== undefined) {
+			Object.keys(this.constructor.args).forEach((key) => {
+				this.constructor.args[key].required = false;
+			});
+		}
+
+		if (this.constructor.flags !== undefined) {
+			Object.keys(this.constructor.flags).forEach((key) => {
+				this.constructor.flags[key].required = false;
+			});
+		}
 	}
 
 	/**

@@ -4,7 +4,7 @@ Shared Link:
     URL: 'https://blosserdemoaccount.box.com/s/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p'
     Download URL: >-
         https://blosserdemoaccount.box.com/shared/static/7mcmdlavtye5o5i0ue8xmtwh2sx5bv8p.png
-    Vanity URL: null
+    Vanity URL: 'https://app.box.com/v/my-custom-name-123'
     Effective Access: open
     Is Password Enabled: true
     Unshared At: null

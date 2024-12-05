@@ -28,11 +28,15 @@ class SearchCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = this.parse(SearchCommand);
 
-		if (flags.all && flags.limit) {
-			throw new BoxCLIError('--all and --limit flags cannot be used together.');
+		if (flags.all && (flags.limit || flags['max-items'])) {
+			throw new BoxCLIError('--all and --limit(--max-items) flags cannot be used together.');
 		}
 
-		if (!flags.all) {
+		if (flags.limit && flags['max-items'] && flags.limit !== flags['max-items']) {
+			throw new BoxCLIError(' --limit and --max-items flags cannot be used together.');
+		}
+
+		if (!flags.all && !flags['max-items']) {
 			flags['max-items'] = flags.limit || RESULTS_LIMIT;
 			this.flags['max-items'] = flags['max-items'];
 		}
@@ -288,6 +292,10 @@ SearchCommand.flags = {
 	}),
 	limit: flags.integer({
 		description: 'Defines the maximum number of items to return. Default value is 100.',
+	}),
+	'max-items': flags.integer({
+		description: 'A value that indicates the maximum number of results to return.',
+		hidden: true
 	}),
 	all: flags.boolean({
 		description: 'Returns all search results.',

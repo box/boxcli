@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.16.0](https://github.com/box/boxcli/compare/v3.15.0...v3.16.0) (2024-11-25)
+
+
+### New Features and Enhancements
+
+* add support for `template_id` during sign request creation ([#549](https://github.com/box/boxcli/issues/549)) ([95963c1](https://github.com/box/boxcli/commit/95963c19650937f9d67c47184cc8a743166eae60))
+
+### Bug Fixes
+
+* Change zone name in the mass update user zone script ([#546](https://github.com/box/boxcli/issues/546)) ([1a1d603](https://github.com/box/boxcli/commit/1a1d603267b928e08df32394637f53264e9e57c9))
+
+## [3.15.0](https://github.com/box/boxcli/compare/v3.14.1...v3.15.0) (2024-08-06)
+
+
+### New Features and Enhancements
+
+* Support AI APIs using Box Node SDK ([#539](https://github.com/box/boxcli/issues/539)) ([59551d2](https://github.com/box/boxcli/commit/59551d2153549b5a87b2c3fae01eb3089d640c89))
+
+### [3.14.1](https://github.com/box/boxcli/compare/v3.14.0...v3.14.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fix bulk action in `search` command ([#528](https://github.com/box/boxcli/issues/528)) ([782b0e6](https://github.com/box/boxcli/commit/782b0e6b00905d9724289cb05cf03a708c32ebb3))
+* Fix bulk operation for `sign-requests:create` command ([#531](https://github.com/box/boxcli/issues/531)) ([6d9cd6b](https://github.com/box/boxcli/commit/6d9cd6b82088185c1b98e8c4ed9ac26af4ee3362))
+
+## [3.14.0](https://github.com/box/boxcli/compare/v3.13.0...v3.14.0) (2024-03-06)
+
+
+### New Features and Enhancements
+
+* Add support for `vanity_name` when creating `shared-links` ([#524](https://github.com/box/boxcli/issues/524)) ([38164bc](https://github.com/box/boxcli/commit/38164bc716879aef0a8a2b973a9c6fc7eb705978))
+* Support sign request signer group ID ([#521](https://github.com/box/boxcli/issues/521)) ([f7b1b44](https://github.com/box/boxcli/commit/f7b1b4409e0f72c264cc23a0f1ca1849060bf121))
+
+## [3.13.0](https://github.com/box/boxcli/compare/v3.12.2...v3.13.0) (2024-02-22)
+
+
+### New Features and Enhancements
+
+* Add additional `UseDisplayName` flag to metadata extraction script ([#515](https://github.com/box/boxcli/issues/515)) ([b900fdb](https://github.com/box/boxcli/commit/b900fdb984345c0fdfeb09e531f6a358ad8c3b8e))
+* Add additional context info when throw exception ([#519](https://github.com/box/boxcli/issues/519)) ([b99a58d](https://github.com/box/boxcli/commit/b99a58d930eccf5363c82b84e4415336d7d69541))
+* Support overwrite/skip folder download ([#516](https://github.com/box/boxcli/issues/516)) ([300f914](https://github.com/box/boxcli/commit/300f914ba8bb94d9c399699d126d81aba0b22142))
+
+### Bug Fixes
+
+* Fix metadata extraction script ([#514](https://github.com/box/boxcli/issues/514)) ([2fad540](https://github.com/box/boxcli/commit/2fad540badf60538fe1456f8071b74bf917f7464))
+* Fix the functionality of the overwrite flag ([#513](https://github.com/box/boxcli/issues/513)) ([f4bf7af](https://github.com/box/boxcli/commit/f4bf7af8e0bbdf7e73fab23d920259ef16672be0))
+
 ### [3.12.2](https://github.com/box/boxcli/compare/v3.12.1...v3.12.2) (2023-11-08)
 
 

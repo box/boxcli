@@ -185,6 +185,50 @@ function parseMetadataString(input) {
 }
 
 /**
+ * Parse a string into a JSON object
+ *
+ * @param {string} inputString The string to parse
+ * @param {string[]} keys The keys to parse from the string
+ * @returns {Object} The parsed object
+ */
+function parseStringToObject(inputString, keys) {
+	const result = {};
+
+	while (inputString.length > 0) {
+		inputString = inputString.trim();
+		let parsedKey = inputString.split('=')[0];
+		inputString = inputString.substring(inputString.indexOf('=') + 1);
+
+		// Find the next key or the end of the string
+		let nextKeyIndex = inputString.length;
+		for (let key of keys) {
+			let keyIndex = inputString.indexOf(key);
+			if (keyIndex !== -1 && keyIndex < nextKeyIndex) {
+				nextKeyIndex = keyIndex;
+			}
+		}
+
+		let parsedValue = inputString.substring(0, nextKeyIndex).trim();
+		if (parsedValue.endsWith(',') && nextKeyIndex !== inputString.length) {
+			parsedValue = parsedValue.substring(0, parsedValue.length - 1);
+		}
+		if (parsedValue.startsWith('"') && parsedValue.endsWith('"')) {
+			parsedValue = parsedValue.substring(1, parsedValue.length - 1);
+		}
+
+		if (!keys.includes(parsedKey)) {
+			throw new BoxCLIError(
+				`Invalid key '${parsedKey}'. Valid keys are ${keys.join(', ')}`
+			);
+		}
+
+		result[parsedKey] = parsedValue;
+		inputString = inputString.substring(nextKeyIndex);
+	}
+	return result;
+}
+
+/**
  * Check if directory exists and creates it if shouldCreate flag was passed.
  *
  * @param {string} dirPath Directory path to check and create
@@ -343,6 +387,7 @@ module.exports = {
 	parseMetadataOp(value) {
 		return parseMetadataString(value);
 	},
+	parseStringToObject,
 	checkDir,
 	readFileAsync,
 	writeFileAsync,

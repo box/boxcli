@@ -57,7 +57,7 @@ If you would like to use Admin Console for zone assignment, see [here](https://s
      Japan = "100004"          #Japan with in region uploads/downloads/previews
      Canada = "100005"         #Canada
      JapanSingapore = "100007" #Japan/Singapore with in region uploads/downloads/previews
-     UKGermany = "100008"      #UK/Germany
+     GermanyUK = "100008"      #Germany/UK
      UK = "100009"             #UK with in region uploads/downloads/previews
      France = "100012"         #France
      }

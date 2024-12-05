@@ -1,0 +1,127 @@
+{
+	"is_document_preparation_needed": false,
+	"redirect_url": null,
+	"declined_redirect_url": null,
+	"are_text_signatures_enabled": true,
+	"signature_color": null,
+	"is_phone_verification_required_to_view": false,
+	"email_subject": null,
+	"email_message": null,
+	"are_reminders_enabled": false,
+	"signers": [
+		{
+			"email": "user@email.com",
+			"role": "final_copy_reader",
+			"is_in_person": false,
+			"order": 0,
+			"verification_phone_number": null,
+			"embed_url_external_user_id": null,
+			"redirect_url": null,
+			"declined_redirect_url": null,
+			"login_required": false,
+			"has_viewed_document": false,
+			"signer_decision": null,
+			"signer_group_id": null,
+			"inputs": [],
+			"embed_url": null,
+			"iframeable_embed_url": null,
+			"suppress_notifications": false
+		},
+		{
+			"email": "userA@email.com",
+			"role": "approver",
+			"is_in_person": false,
+			"order": 0,
+			"verification_phone_number": null,
+			"embed_url_external_user_id": null,
+			"redirect_url": null,
+			"declined_redirect_url": null,
+			"login_required": false,
+			"has_viewed_document": false,
+			"signer_decision": null,
+			"signer_group_id": null,
+			"inputs": [],
+			"embed_url": null,
+			"iframeable_embed_url": null,
+			"suppress_notifications": false
+		}
+	],
+	"id": "ce25caf8-54e5-4860-8006-f9f6886551c5",
+	"prefill_tags": [],
+	"days_valid": null,
+	"prepare_url": null,
+	"source_files": [
+		{
+			"id": "2468135790",
+			"etag": "0",
+			"type": "file",
+			"sequence_id": "0",
+			"name": "report1.xlsx",
+			"sha1": "2150fa7e04d87e776ee8fc04fc098b6d977c0ca5",
+			"file_version": {
+				"id": "1702075180104",
+				"type": "file_version",
+				"sha1": "2150fa7e04d87e776ee8fc04fc098b6d977c0ca5"
+			}
+		},
+		{
+			"id": "2468135791",
+			"etag": "0",
+			"type": "file",
+			"sequence_id": "0",
+			"name": "report2.xlsx",
+			"sha1": "f75575f090598f46fbde405e3ea4424c1e7fd6c8",
+			"file_version": {
+				"id": "1702075180105",
+				"type": "file_version",
+				"sha1": "f75575f090598f46fbde405e3ea4424c1e7fd6c8"
+			}
+		}
+	],
+	"parent_folder": {
+		"id": "1357902468",
+		"etag": "0",
+		"type": "folder",
+		"sequence_id": "0",
+		"name": "myReports"
+	},
+	"name": "sign1",
+	"external_id": null,
+	"type": "sign-request",
+	"signing_log": null,
+	"status": "converting",
+	"sign_files": {
+		"files": [
+			{
+				"id": "4568135987",
+				"etag": "0",
+				"type": "file",
+				"sequence_id": "0",
+				"name": "report1.xlsx",
+				"sha1": "2150fa7e04d87e776ee8fc04fc098b6d977c0ca5",
+				"file_version": {
+					"id": "1702075180104",
+					"type": "file_version",
+					"sha1": "2150fa7e04d87e776ee8fc04fc098b6d977c0ca5"
+				}
+			},
+			{
+				"id": "4568135988",
+				"etag": "0",
+				"type": "file",
+				"sequence_id": "0",
+				"name": "report2.xlsx",
+				"sha1": "f75575f090598f46fbde405e3ea4424c1e7fd6c8",
+				"file_version": {
+					"id": "1702075180105",
+					"type": "file_version",
+					"sha1": "f75575f090598f46fbde405e3ea4424c1e7fd6c8"
+				}
+			}
+		],
+		"is_ready_for_download": true
+	},
+	"auto_expire_at": null,
+	"template_id": null,
+	"external_system_name": null
+}

@@ -42,14 +42,18 @@ OPTIONS
                                          for hours, d for days, w for weeks, M for months. For example, 30 seconds is
                                          30s from now.
 
+  --vanity-name=vanity-name              Defines a custom vanity name to use in the shared link URL. It should be
+                                         between 12 and 30 characters. This field can contains only letters, numbers and
+                                         hyphens.
+
 ALIASES
   $ box shared-links:update
 
 EXAMPLE
-  box shared-links:create 22222 folder --access company
+  box shared-links:create 22222 folder --access company --vanity-name my-custom-name-123
 ```
 
-_See code: [src/commands/shared-links/create.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/shared-links/create.js)_
+_See code: [src/commands/shared-links/create.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/shared-links/create.js)_
 
 ## `box shared-links:delete ITEMID ITEMTYPE`
 
@@ -82,7 +86,7 @@ EXAMPLE
   box shared-links:delete 22222 folder
 ```
 
-_See code: [src/commands/shared-links/delete.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/shared-links/delete.js)_
+_See code: [src/commands/shared-links/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/shared-links/delete.js)_
 
 ## `box shared-links:get URL`
 
@@ -115,4 +119,4 @@ EXAMPLE
   box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3
 ```
 
-_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v3.9.2/src/commands/shared-links/get.js)_
+_See code: [src/commands/shared-links/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/shared-links/get.js)_

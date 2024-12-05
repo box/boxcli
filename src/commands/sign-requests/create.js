@@ -21,6 +21,7 @@ class SignRequestsCreateCommand extends BoxCommand {
 			document_preparation_needed: isDocumentPreparationNeeded,
 			text_signatures_enabled: areTextSignaturesEnabled,
 			reminders_enabled: areRemindersEnabled,
+			template_id: templateId,
 			...rest
 		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) => snakeCase(key)
 		);
@@ -31,6 +32,7 @@ class SignRequestsCreateCommand extends BoxCommand {
 			is_document_preparation_needed: isDocumentPreparationNeeded,
 			are_text_signatures_enabled: areTextSignaturesEnabled,
 			are_reminders_enabled: areRemindersEnabled,
+			template_id: templateId,
 			...rest,
 		});
 
@@ -48,8 +50,8 @@ SignRequestsCreateCommand.flags = {
 		required: true,
 		description:
 			'A signer for the sign request. 35 is the max number of signers permitted. Can be added multiple times. ' +
-			'Allowed (recommended) properties: email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url ' +
-			'but snake case is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url',
+			'Allowed (recommended) properties: email,role,is-in-person,order,embed-url-external-user-id,redirect-url,declined-redirect-url,group-id ' +
+			'but snake case is also supported for: is_in_person,order,embed_url_external_user_id,redirect_url,declined_redirect_url,group_id',
 		multiple: true,
 		parse(input) {
 			const signer = {
@@ -57,58 +59,61 @@ SignRequestsCreateCommand.flags = {
 			};
 
 			for (const part of input.split(',')) {
-				const [
-					key,
-					value
-				] = part.split('=');
+				const [key, value] = part.split('=');
 
 				switch (key) {
-				case 'email':
-					signer.email = value;
-					break;
+					case 'email':
+						signer.email = value;
+						break;
 
-				case 'role':
-					if (!ALLOWED_SIGNER_ROLES.includes(value)) {
-						throw new BoxCLIError(
-							`Invalid value for role property of signer: ${value}. Expecting one of: ${ALLOWED_SIGNER_ROLES.join(
-								', '
-							)}.`
-						);
-					}
-					signer.role = value;
-					break;
+					case 'role':
+						if (!ALLOWED_SIGNER_ROLES.includes(value)) {
+							throw new BoxCLIError(
+								`Invalid value for role property of signer: ${value}. Expecting one of: ${ALLOWED_SIGNER_ROLES.join(
+									', '
+								)}.`
+							);
+						}
+						signer.role = value;
+						break;
 
-				case 'is-in-person':
-				case 'is_in_person':
-					if (value !== '0' && value !== '1') {
-						throw new BoxCLIError(
-							`Invalid value for is_in_person property of signer: ${value}. Expecting either 0 or 1.`
-						);
-					}
-					signer.is_in_person = value === '1';
-					break;
+					case 'is-in-person':
+					case 'is_in_person':
+						if (value !== '0' && value !== '1') {
+							throw new BoxCLIError(
+								`Invalid value for is_in_person property of signer: ${value}. Expecting either 0 or 1.`
+							);
+						}
+						signer.is_in_person = value === '1';
+						break;
 
-				case 'order':
-					signer.order = value;
-					break;
+					case 'order':
+						signer.order = value;
+						break;
 
-				case 'embed-url-external-user-id':
-				case 'embed_url_external_user_id':
-					signer.embed_url_external_user_id = value;
-					break;
+					case 'embed-url-external-user-id':
+					case 'embed_url_external_user_id':
+						signer.embed_url_external_user_id = value;
+						break;
 
-				case 'redirect_url':
-				case 'redirect-url':
-					signer.redirect_url = value;
-					break;
+					case 'redirect_url':
+					case 'redirect-url':
+						signer.redirect_url = value;
+						break;
 
-				case 'declined-redirect-url':
-				case 'declined_redirect_url':
-					signer.declined_redirect_url = value;
-					break;
+					case 'declined-redirect-url':
+					case 'declined_redirect_url':
+						signer.declined_redirect_url = value;
+						break;
 
-				default:
-					throw new BoxCLIError(`Unknown property for signer: ${key}`);
+					case 'signer-group-id':
+					case 'signer_group_id':
+					case 'group-id':
+					case 'group_id':
+						signer.signer_group_id = value;
+						break;
+					default:
+						throw new BoxCLIError(`Unknown property for signer: ${key}`);
 				}
 			}
 
@@ -116,19 +121,18 @@ SignRequestsCreateCommand.flags = {
 		},
 	}),
 	'source-files': flags.string({
-		required: true,
 		description:
 			'Comma separated list of files to create a signing document from. This is currently limited to 10 files, e.g. 12345',
-		parse: input => input.split(',').map(id => ({
-			type: 'file',
-			id,
-		})),
+		parse: (input) =>
+			input.split(',').map((id) => ({
+				type: 'file',
+				id,
+			})),
 	}),
 	'parent-folder': flags.string({
-		required: true,
 		description:
 			'The destination folder to place final, signed document and signing log',
-		parse: input => ({
+		parse: (input) => ({
 			type: 'folder',
 			id: input,
 		}),
@@ -163,35 +167,32 @@ SignRequestsCreateCommand.flags = {
 			const prefillTag = {};
 
 			for (const part of input.split(',')) {
-				const [
-					key,
-					value
-				] = part.split('=');
+				const [key, value] = part.split('=');
 
 				switch (key) {
-				case 'id':
-					prefillTag.document_tag_id = value;
-					break;
+					case 'id':
+						prefillTag.document_tag_id = value;
+						break;
 
-				case 'text':
-					prefillTag.text_value = value;
-					break;
+					case 'text':
+						prefillTag.text_value = value;
+						break;
 
-				case 'checkbox':
-					if (value !== '0' && value !== '1') {
-						throw new BoxCLIError(
-							`Invalid value for checkbox property of prefill-tag: ${value}. Expecting either 0 or 1.`
-						);
-					}
-					prefillTag.checkbox_value = value === '1';
-					break;
+					case 'checkbox':
+						if (value !== '0' && value !== '1') {
+							throw new BoxCLIError(
+								`Invalid value for checkbox property of prefill-tag: ${value}. Expecting either 0 or 1.`
+							);
+						}
+						prefillTag.checkbox_value = value === '1';
+						break;
 
-				case 'date':
-					prefillTag.date_value = value;
-					break;
+					case 'date':
+						prefillTag.date_value = value;
+						break;
 
-				default:
-					throw new BoxCLIError(`Unknown property for prefill-tag: ${key}`);
+					default:
+						throw new BoxCLIError(`Unknown property for prefill-tag: ${key}`);
 				}
 			}
 
@@ -208,11 +209,15 @@ SignRequestsCreateCommand.flags = {
 	}),
 	'redirect-url': flags.string({
 		description:
-		'The URL that a signer will be redirected to after signing a document. Defining this URL overrides the default redirect URL for all signers. If no declined redirect URL is specified, this URL will be used for decline actions as well.',
+			'The URL that a signer will be redirected to after signing a document. Defining this URL overrides the default redirect URL for all signers. If no declined redirect URL is specified, this URL will be used for decline actions as well.',
 	}),
 	'declined-redirect-url': flags.string({
 		description:
 			'The URL that a signer will be redirected to after declining to sign a document. Defining this URL overrides the default redirect URL for all signers.',
+	}),
+	'template-id': flags.string({
+		description:
+			'When a signature request is created from a template this field will indicate the id of that template.',
 	}),
 };
 

@@ -4,10 +4,12 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 const leche = require('leche');
-
+const os = require('os');
+const path = require('path');
 describe('Search', () => {
 
 	let query = 'Test',
+			bulkInputFilePath = path.join(__dirname, '../fixtures/search/bulk/bulk_get_search_query_input.csv'),
 			fixture = getFixture('search/get_search_query_page_1'),
 			fixture2 = getFixture('search/get_search_query_page_2'),
 			jsonOutput = getFixture('output/search_json.txt'),
@@ -365,7 +367,61 @@ describe('Search', () => {
 				.it('should return limited results when --limit flag provided', ctx => {
 					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
 				});
+
+		test
+				.nock(TEST_API_ROOT, api => api
+						.get('/2.0/search')
+						.query({
+							query,
+							limit: 5
+						})
+						.reply(200, fixture)
+				)
+				.stdout()
+				.command([
+					'search',
+					query,
+					'--json',
+					'--max-items=5',
+					'--token=test'
+				])
+				.it('should return same limited results when --max-items flag provided instead of --limit', ctx => {
+					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
+				});
 	});
+	describe('bulk', () => {
+		test
+				.nock(TEST_API_ROOT, api => api
+						.get('/2.0/search')
+						.query({
+							limit: 100,
+							query: '',
+							scope: 'enterprise_content',
+							type: 'file'
+						})
+						.reply(200, { entries: [] })
+						.get('/2.0/search')
+						.query({
+							limit: 100,
+							query: '',
+							scope: 'enterprise_content',
+							type: 'folder',
+						})
+						.reply(200, { entries: [] })
+				)
+				.stdout()
+				.stderr()
+				.command([
+					'search',
+					`--bulk-file-path=${bulkInputFilePath}`,
+					'--json',
+					'--token=test'
+				])
+				.it('should make a successful search call for each entry in a bulk file', ctx => {
+					let expectedMessage = `All bulk input entries processed successfully.${os.EOL}`;
+					assert.equal(ctx.stderr, expectedMessage);
+				});
+		});
 	describe('fails', () => {
 		test
 				.stderr()
@@ -377,7 +433,7 @@ describe('Search', () => {
 					'--token=test'
 				])
 				.it('when both --all and --limit flag provided', ctx => {
-					assert.include(ctx.stderr, '--all and --limit flags cannot be used together.');
+					assert.include(ctx.stderr, '--all and --limit(--max-items) flags cannot be used together.');
 				});
-		});
+	});
 });
