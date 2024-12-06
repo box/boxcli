@@ -16,31 +16,26 @@ List terms of services for your enterprise
 
 ```
 USAGE
-  $ box terms-of-service [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--type managed|external]
-
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
-      --type=<option>              Filter by terms of service type
-                                   <options: managed|external>
-
-DESCRIPTION
-  List terms of services for your enterprise
-
-EXAMPLES
   $ box terms-of-service
+
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+  --type=managed|external                Filter by terms of service type
+
+EXAMPLE
+  box terms-of-service
 ```
 
 _See code: [src/commands/terms-of-service/index.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/index.js)_
@@ -51,35 +46,28 @@ Create a terms of service
 
 ```
 USAGE
-  $ box terms-of-service:create --type managed|external --status enabled|disabled --text <value> [-t <value>] [--as-user
-    <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path
-    <value>] [-h] [-v] [-y] [-q]
+  $ box terms-of-service:create
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
-      --status=<option>            (required) Status of the terms of service
-                                   <options: enabled|disabled>
-      --text=<value>               (required) Text for the terms of service
-      --type=<option>              (required) Type of terms of service
-                                   <options: managed|external>
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+  --status=enabled|disabled              (required) Status of the terms of service
+  --text=text                            (required) Text for the terms of service
+  --type=managed|external                (required) Type of terms of service
 
-DESCRIPTION
-  Create a terms of service
-
-EXAMPLES
-  $ box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."
+EXAMPLE
+  box terms-of-service:create --type external --status enabled --text "By using this service, you agree to...."
 ```
 
 _See code: [src/commands/terms-of-service/create.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/create.js)_
@@ -90,32 +78,28 @@ Get information on a terms of service
 
 ```
 USAGE
-  $ box terms-of-service:get ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+  $ box terms-of-service:get ID
 
 ARGUMENTS
   ID  ID for the terms of service to get
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Get information on a terms of service
-
-EXAMPLES
-  $ box terms-of-service:get 55555
+EXAMPLE
+  box terms-of-service:get 55555
 ```
 
 _See code: [src/commands/terms-of-service/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/get.js)_
@@ -126,33 +110,29 @@ Get a user's status on a terms of service
 
 ```
 USAGE
-  $ box terms-of-service:get-user-status TOSID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
-    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--user-id <value>]
+  $ box terms-of-service:get-user-status TOSID
 
 ARGUMENTS
   TOSID  ID of the terms of service to get user status for
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
-      --user-id=<value>            ID for a user to get status for; defaults to the current user ID
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+  --user-id=user-id                      ID for a user to get status for; defaults to the current user ID
 
-DESCRIPTION
-  Get a user's status on a terms of service
-
-EXAMPLES
-  $ box terms-of-service:get-user-status 55555
+EXAMPLE
+  box terms-of-service:get-user-status 55555
 ```
 
 _See code: [src/commands/terms-of-service/get-user-status.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/get-user-status.js)_
@@ -163,35 +143,31 @@ Set a user's status on a terms of service with a terms of service Id
 
 ```
 USAGE
-  $ box terms-of-service:set-user-status ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--accept | --reject] [--user-id <value>]
+  $ box terms-of-service:set-user-status ID
 
 ARGUMENTS
   ID  ID of the terms of service to set the user status on
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --accept                     Set the user's status as accepted
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --reject                     Set the user's status as rejected
-      --save-to-file-path=<value>  Override default file path to save report
-      --user-id=<value>            ID of the user to set status for; defaults to the current user
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --accept                               Set the user's status as accepted
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --reject                               Set the user's status as rejected
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+  --user-id=user-id                      ID of the user to set status for; defaults to the current user
 
-DESCRIPTION
-  Set a user's status on a terms of service with a terms of service Id
-
-EXAMPLES
-  $ box terms-of-service:set-user-status 55555 --accept
+EXAMPLE
+  box terms-of-service:set-user-status 55555 --accept
 ```
 
 _See code: [src/commands/terms-of-service/set-user-status.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/set-user-status.js)_
@@ -202,36 +178,30 @@ Update a terms of service
 
 ```
 USAGE
-  $ box terms-of-service:update ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--status enabled|disabled] [--text
-    <value>]
+  $ box terms-of-service:update ID
 
 ARGUMENTS
   ID  ID of the terms of service to update
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
-      --status=<option>            Status of the terms of service
-                                   <options: enabled|disabled>
-      --text=<value>               Text for the terms of service
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
+  --status=enabled|disabled              Status of the terms of service
+  --text=text                            Text for the terms of service
 
-DESCRIPTION
-  Update a terms of service
-
-EXAMPLES
-  $ box terms-of-service:update 55555 --status disabled
+EXAMPLE
+  box terms-of-service:update 55555 --status disabled
 ```
 
 _See code: [src/commands/terms-of-service/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/terms-of-service/update.js)_

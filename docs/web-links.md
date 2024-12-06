@@ -15,36 +15,31 @@ Create a new web link
 
 ```
 USAGE
-  $ box web-links:create URL --parent-id <value> [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
-    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [-d <value>] [-n
-    <value>]
+  $ box web-links:create URL
 
 ARGUMENTS
   URL  The URL the web link points to. Must start with "http://" or "https://"
 
-FLAGS
-  -d, --description=<value>        Description of the web link
-  -h, --help                       Show CLI help
-  -n, --name=<value>               Name of the web link. Defaults to the URL if not set
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --parent-id=<value>          (required) ID of the folder to create the web link in
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -d, --description=description          Description of the web link
+  -h, --help                             Show CLI help
+  -n, --name=name                        Name of the web link. Defaults to the URL if not set
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --parent-id=parent-id                  (required) ID of the folder to create the web link in
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Create a new web link
-
-EXAMPLES
-  $ box web-links:create http://example.com --parent-id 0
+EXAMPLE
+  box web-links:create http://example.com --parent-id 0
 ```
 
 _See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/web-links/create.js)_
@@ -55,32 +50,28 @@ Delete a web link
 
 ```
 USAGE
-  $ box web-links:delete ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+  $ box web-links:delete ID
 
 ARGUMENTS
   ID  ID of the web link to delete
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Delete a web link
-
-EXAMPLES
-  $ box web-links:delete 12345
+EXAMPLE
+  box web-links:delete 12345
 ```
 
 _See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/web-links/delete.js)_
@@ -91,32 +82,28 @@ Get information about a web link
 
 ```
 USAGE
-  $ box web-links:get ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+  $ box web-links:get ID
 
 ARGUMENTS
   ID  ID of the web link to get
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Get information about a web link
-
-EXAMPLES
-  $ box web-links:get 12345
+EXAMPLE
+  box web-links:get 12345
 ```
 
 _See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/web-links/get.js)_
@@ -127,33 +114,29 @@ Move a web link
 
 ```
 USAGE
-  $ box web-links:move ID PARENTID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
-    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+  $ box web-links:move ID PARENTID
 
 ARGUMENTS
   ID        ID of the web link to move
   PARENTID  ID of the parent folder to move the web link into
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Move a web link
-
-EXAMPLES
-  $ box web-links:move 12345 22222
+EXAMPLE
+  box web-links:move 12345 22222
 ```
 
 _See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/web-links/move.js)_
@@ -164,35 +147,31 @@ Update a web link
 
 ```
 USAGE
-  $ box web-links:update ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [-d <value>] [-n <value>] [-u <value>]
+  $ box web-links:update ID
 
 ARGUMENTS
   ID  ID of the web link to update
 
-FLAGS
-  -d, --description=<value>        Description of the web link
-  -h, --help                       Show CLI help
-  -n, --name=<value>               Name of the web link
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -u, --url=<value>                The URL the web link points to. Must start with "http://" or "https://"
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
+OPTIONS
+  -d, --description=description          Description of the web link
+  -h, --help                             Show CLI help
+  -n, --name=name                        Name of the web link
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -u, --url=url                          The URL the web link points to. Must start with "http://" or "https://"
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 
-DESCRIPTION
-  Update a web link
-
-EXAMPLES
-  $ box web-links:update 12345 --name "Example Site"
+EXAMPLE
+  box web-links:update 12345 --name "Example Site"
 ```
 
 _See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/web-links/update.js)_

@@ -6,8 +6,7 @@ Configure the Box CLI
 * [`box configure:environments:add PATH`](#box-configureenvironmentsadd-path)
 * [`box configure:environments:delete [NAME]`](#box-configureenvironmentsdelete-name)
 * [`box configure:environments:get`](#box-configureenvironmentsget)
-* [`box configure:environments:select [ID]`](#box-configureenvironmentsselect-id)
-* [`box configure:environments:set-current [ID]`](#box-configureenvironmentsset-current-id)
+* [`box configure:environments:set-current [NAME]`](#box-configureenvironmentsset-current-name)
 * [`box configure:environments:switch-user [USERID]`](#box-configureenvironmentsswitch-user-userid)
 * [`box configure:environments:update [NAME]`](#box-configureenvironmentsupdate-name)
 * [`box configure:settings`](#box-configuresettings)
@@ -18,17 +17,16 @@ Add a new Box environment
 
 ```
 USAGE
-  $ box configure:environments:add PATH [--no-color] [-h] [-v] [-q] [--private-key-path <value>] [--set-as-current] [-n <value>]
-    [--ccg-user <value> --ccg-auth]
+  $ box configure:environments:add PATH
 
 ARGUMENTS
   PATH  Provide a file path to configuration file
 
-FLAGS
+OPTIONS
   -h, --help
       Show CLI help
 
-  -n, --name=<value>
+  -n, --name=name
       [default: default] Set a name for the environment
 
   -q, --quiet
@@ -38,26 +36,23 @@ FLAGS
       Show verbose output, which can be helpful for debugging
 
   --ccg-auth
-      Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and
+      Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and 
       secret.
 
-  --ccg-user=<value>
-      Provide an ID for a user for CCG. Use it to obtain user token. In order to enable generating user token you have to
+  --ccg-user=ccg-user
+      Provide an ID for a user for CCG. Use it to obtain user token. In order to enable generating user token you have to 
       go to your application configuration that can be found here https://app.box.com/developers/console.
-      In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`.
+      In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. 
       Do not forget to re-authorize application if it was already authorized.
 
   --no-color
       Turn off colors for logging
 
-  --private-key-path=<value>
+  --private-key-path=private-key-path
       Provide a path to application private key
 
   --set-as-current
       Set this new environment as your current environment
-
-DESCRIPTION
-  Add a new Box environment
 ```
 
 _See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/environments/add.js)_
@@ -68,19 +63,16 @@ Delete a Box environment
 
 ```
 USAGE
-  $ box configure:environments:delete [NAME] [--no-color] [-h] [-v] [-q]
+  $ box configure:environments:delete [NAME]
 
 ARGUMENTS
   NAME  Name of the environment
 
-FLAGS
-  -h, --help      Show CLI help
-  -q, --quiet     Suppress any non-error output to stderr
-  -v, --verbose   Show verbose output, which can be helpful for debugging
-      --no-color  Turn off colors for logging
-
-DESCRIPTION
-  Delete a Box environment
+OPTIONS
+  -h, --help     Show CLI help
+  -q, --quiet    Suppress any non-error output to stderr
+  -v, --verbose  Show verbose output, which can be helpful for debugging
+  --no-color     Turn off colors for logging
 ```
 
 _See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/environments/delete.js)_
@@ -91,65 +83,35 @@ Get a Box environment
 
 ```
 USAGE
-  $ box configure:environments:get [--no-color] [-h] [-v] [-q] [-c | -n <value>]
+  $ box configure:environments:get
 
-FLAGS
-  -c, --current       Get the current default Box environment
-  -h, --help          Show CLI help
-  -n, --name=<value>  Get a Box environment with this name
-  -q, --quiet         Suppress any non-error output to stderr
-  -v, --verbose       Show verbose output, which can be helpful for debugging
-      --no-color      Turn off colors for logging
-
-DESCRIPTION
-  Get a Box environment
+OPTIONS
+  -c, --current    Get the current default Box environment
+  -h, --help       Show CLI help
+  -n, --name=name  Get a Box environment with this name
+  -q, --quiet      Suppress any non-error output to stderr
+  -v, --verbose    Show verbose output, which can be helpful for debugging
+  --no-color       Turn off colors for logging
 ```
 
 _See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/environments/get.js)_
 
-## `box configure:environments:select [ID]`
+## `box configure:environments:set-current [NAME]`
 
 Set your current Box environment to use
 
 ```
 USAGE
-  $ box configure:environments:select [ID] [--no-color] [-h] [-v] [-q]
+  $ box configure:environments:set-current [NAME]
 
 ARGUMENTS
-  ID  Name of the environment
+  NAME  Name of the environment
 
-FLAGS
-  -h, --help      Show CLI help
-  -q, --quiet     Suppress any non-error output to stderr
-  -v, --verbose   Show verbose output, which can be helpful for debugging
-      --no-color  Turn off colors for logging
-
-DESCRIPTION
-  Set your current Box environment to use
-
-ALIASES
-  $ box configure:environments:select
-```
-
-## `box configure:environments:set-current [ID]`
-
-Set your current Box environment to use
-
-```
-USAGE
-  $ box configure:environments:set-current [ID] [--no-color] [-h] [-v] [-q]
-
-ARGUMENTS
-  ID  Name of the environment
-
-FLAGS
-  -h, --help      Show CLI help
-  -q, --quiet     Suppress any non-error output to stderr
-  -v, --verbose   Show verbose output, which can be helpful for debugging
-      --no-color  Turn off colors for logging
-
-DESCRIPTION
-  Set your current Box environment to use
+OPTIONS
+  -h, --help     Show CLI help
+  -q, --quiet    Suppress any non-error output to stderr
+  -v, --verbose  Show verbose output, which can be helpful for debugging
+  --no-color     Turn off colors for logging
 
 ALIASES
   $ box configure:environments:select
@@ -163,30 +125,26 @@ Switch the default Box user to run commands as
 
 ```
 USAGE
-  $ box configure:environments:switch-user [USERID] [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
-    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--default]
+  $ box configure:environments:switch-user [USERID]
 
 ARGUMENTS
   USERID  The user ID to switch to
 
-FLAGS
-  -h, --help                       Show CLI help
-  -q, --quiet                      Suppress any non-error output to stderr
-  -s, --save                       Save report to default reports folder on disk
-  -t, --token=<value>              Provide a token to perform this call
-  -v, --verbose                    Show verbose output, which can be helpful for debugging
-  -y, --yes                        Automatically respond yes to all confirmation prompts
-      --as-user=<value>            Provide an ID for a user
-      --bulk-file-path=<value>     File path to bulk .csv or .json objects
-      --csv                        Output formatted CSV
-      --default                    Switch to the default user, i.e. the Service Account
-      --fields=<value>             Comma separated list of fields to show
-      --json                       Output formatted JSON
-      --no-color                   Turn off colors for logging
-      --save-to-file-path=<value>  Override default file path to save report
-
-DESCRIPTION
-  Switch the default Box user to run commands as
+OPTIONS
+  -h, --help                             Show CLI help
+  -q, --quiet                            Suppress any non-error output to stderr
+  -s, --save                             Save report to default reports folder on disk
+  -t, --token=token                      Provide a token to perform this call
+  -v, --verbose                          Show verbose output, which can be helpful for debugging
+  -y, --yes                              Automatically respond yes to all confirmation prompts
+  --as-user=as-user                      Provide an ID for a user
+  --bulk-file-path=bulk-file-path        File path to bulk .csv or .json objects
+  --csv                                  Output formatted CSV
+  --default                              Switch to the default user, i.e. the Service Account
+  --fields=fields                        Comma separated list of fields to show
+  --json                                 Output formatted JSON
+  --no-color                             Turn off colors for logging
+  --save-to-file-path=save-to-file-path  Override default file path to save report
 ```
 
 _See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/environments/switch-user.js)_
@@ -197,28 +155,30 @@ Update a Box environment
 
 ```
 USAGE
-  $ box configure:environments:update [NAME] [--no-color] [-h] [-v] [-q] [--config-file-path <value>] [--name <value>]
-    [--private-key-path <value>] [--user-id <value>] [--cache-tokens]
+  $ box configure:environments:update [NAME]
 
 ARGUMENTS
   NAME  The name of the environment
 
-FLAGS
-  -h, --help                      Show CLI help
-  -q, --quiet                     Suppress any non-error output to stderr
-  -v, --verbose                   Show verbose output, which can be helpful for debugging
-      --[no-]cache-tokens         Enable token caching, which significantly improves performance. Run with
-                                  --no-cache-tokens and then --cache-tokens if your application config updates are not
-                                  reflected in your requests.
-      --config-file-path=<value>  Provide a file path to configuration file
-      --name=<value>              New name of the environment
-      --no-color                  Turn off colors for logging
-      --private-key-path=<value>  Provide a file path to application private key
-      --user-id=<value>           Store a default user ID to use with the session commands. A default user ID can be
-                                  stored for each Box environment
+OPTIONS
+  -h, --help                           Show CLI help
+  -q, --quiet                          Suppress any non-error output to stderr
+  -v, --verbose                        Show verbose output, which can be helpful for debugging
 
-DESCRIPTION
-  Update a Box environment
+  --[no-]cache-tokens                  Enable token caching, which significantly improves performance. Run with
+                                       --no-cache-tokens and then --cache-tokens if your application config updates are
+                                       not reflected in your requests.
+
+  --config-file-path=config-file-path  Provide a file path to configuration file
+
+  --name=name                          New name of the environment
+
+  --no-color                           Turn off colors for logging
+
+  --private-key-path=private-key-path  Provide a file path to application private key
+
+  --user-id=user-id                    Store a default user ID to use with the session commands. A default user ID can
+                                       be stored for each Box environment
 ```
 
 _See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/environments/update.js)_
@@ -229,31 +189,28 @@ View and update CLI configuration settings
 
 ```
 USAGE
-  $ box configure:settings [--no-color] [-h] [-v] [-q] [--json] [--enable-proxy] [--proxy-url <value>] [--proxy-username
-    <value> --proxy-password <value>] [--downloads-folder-path <value>] [--file-format csv|json|txt] [--output-json]
-    [--reports-folder-path <value>] [--enable-analytics-client] [--analytics-client-name <value>]
+  $ box configure:settings
 
-FLAGS
-  -h, --help                           Show CLI help
-  -q, --quiet                          Suppress any non-error output to stderr
-  -v, --verbose                        Show verbose output, which can be helpful for debugging
-      --analytics-client-name=<value>  Set custom analytics client header value
-      --downloads-folder-path=<value>  Set folder path for the downloads folder
-      --[no-]enable-analytics-client   Enable or disable custom analytics client
-      --[no-]enable-proxy              Enable or disable proxy
-      --file-format=<option>           Set the file format for generated reports
-                                       <options: csv|json|txt>
-      --json                           Output CLI configuration settings in JSON format
-      --no-color                       Turn off colors for logging
-      --[no-]output-json               Default to JSON output for all commands
-      --proxy-password=<value>         Set password for proxy
-      --proxy-url=<value>              Set proxy url, which should contain the protocol, url, and port (i.e.
-                                       http://sample.proxyurl.com:80)
-      --proxy-username=<value>         Set username for proxy
-      --reports-folder-path=<value>    Set folder path for the reports folder
+OPTIONS
+  -h, --help                                     Show CLI help
+  -q, --quiet                                    Suppress any non-error output to stderr
+  -v, --verbose                                  Show verbose output, which can be helpful for debugging
+  --analytics-client-name=analytics-client-name  Set custom analytics client header value
+  --downloads-folder-path=downloads-folder-path  Set folder path for the downloads folder
+  --[no-]enable-analytics-client                 Enable or disable custom analytics client
+  --[no-]enable-proxy                            Enable or disable proxy
+  --file-format=csv|json|txt                     Set the file format for generated reports
+  --json                                         Output CLI configuration settings in JSON format
+  --no-color                                     Turn off colors for logging
+  --[no-]output-json                             Default to JSON output for all commands
+  --proxy-password=proxy-password                Set password for proxy
 
-DESCRIPTION
-  View and update CLI configuration settings
+  --proxy-url=proxy-url                          Set proxy url, which should contain the protocol, url, and port (i.e.
+                                                 http://sample.proxyurl.com:80)
+
+  --proxy-username=proxy-username                Set username for proxy
+
+  --reports-folder-path=reports-folder-path      Set folder path for the reports folder
 ```
 
 _See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v3.16.0/src/commands/configure/settings.js)_

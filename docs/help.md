@@ -7,20 +7,17 @@ Display help for the Box CLI
 
 ## `box help [COMMAND]`
 
-Display help for box.
+display help for box
 
 ```
 USAGE
-  $ box help [COMMAND...] [-n]
+  $ box help [COMMAND]
 
 ARGUMENTS
-  COMMAND...  Command to show help for.
+  COMMAND  command to show help for
 
-FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
-
-DESCRIPTION
-  Display help for box.
+OPTIONS
+  --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.18/src/commands/help.js)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
