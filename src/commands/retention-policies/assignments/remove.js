@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class RetentionPoliciesRemoveAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesRemoveAssignmentCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesRemoveAssignmentCommand);
 
 		await this.client.retentionPolicies.deleteAssignment(args.id);
 		this.info(`Removed retention policy assignment ${args.id}`);
@@ -19,13 +20,13 @@ RetentionPoliciesRemoveAssignmentCommand.flags = {
 	...BoxCommand.flags
 };
 
-RetentionPoliciesRemoveAssignmentCommand.args = [
-	{
+RetentionPoliciesRemoveAssignmentCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the retention policy assignment to remove',
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesRemoveAssignmentCommand;

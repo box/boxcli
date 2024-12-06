@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FoldersCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersCreateCommand);
+		const { flags, args } = await this.parse(FoldersCreateCommand);
 		let params = {
 			body: {
 				name: args.name,
@@ -32,25 +32,25 @@ FoldersCreateCommand._endpoint = 'post_folders';
 
 FoldersCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'A description for folder <DESCRIPTION>', parse: utils.unescapeSlashes }),
-	'id-only': flags.boolean({
+	description: Flags.string({ description: 'A description for folder <DESCRIPTION>', parse: utils.unescapeSlashes }),
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command'
 	})
 };
 
-FoldersCreateCommand.args = [
-	{
+FoldersCreateCommand.args = {
+	parentID: Args.string({
 		name: 'parentID',
 		required: true,
 		hidden: false,
 		description: 'ID of parent folder to add new folder to, use \'0\' for the root folder'
-	},
-	{
+	}),
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'Name of new folder'
-	}
-];
+	})
+};
 
 module.exports = FoldersCreateCommand;

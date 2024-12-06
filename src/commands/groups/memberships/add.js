@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class GroupsAddMembershipCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsAddMembershipCommand);
+		const { flags, args } = await this.parse(GroupsAddMembershipCommand);
 		let options = { configurable_permissions: {} };
 
 		if (flags.hasOwnProperty('can-run-reports')) {
@@ -43,7 +43,7 @@ GroupsAddMembershipCommand._endpoint = 'post_group_memberships';
 
 GroupsAddMembershipCommand.flags = {
 	...BoxCommand.flags,
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'Set the user\'s role in the group',
 		default: 'member',
@@ -52,47 +52,47 @@ GroupsAddMembershipCommand.flags = {
 			'admin'
 		]
 	}),
-	'set-admin': flags.boolean({
+	'set-admin': Flags.boolean({
 		description: 'Set the user\'s role to Group Admin',
 		exclusive: ['set-member'],
 		hidden: true,
 	}),
-	'set-member': flags.boolean({
+	'set-member': Flags.boolean({
 		description: 'Set the user\'s role to Group Member',
 		exclusive: ['set-admin'],
 		hidden: true,
 	}),
-	'can-run-reports': flags.boolean({
+	'can-run-reports': Flags.boolean({
 		description: 'If the user is a group admin, allow them to run reports',
 		allowNo: true,
 	}),
-	'can-instant-login': flags.boolean({
+	'can-instant-login': Flags.boolean({
 		description: 'If the user is a group admin, allow them to instant login',
 		allowNo: true,
 	}),
-	'can-create-accounts': flags.boolean({
+	'can-create-accounts': Flags.boolean({
 		description: 'If the user is a group admin, allow them to create new users',
 		allowNo: true,
 	}),
-	'can-edit-accounts': flags.boolean({
+	'can-edit-accounts': Flags.boolean({
 		description: 'If the user is a group admin, allow them to edit user accounts',
 		allowNo: true,
 	}),
 };
 
-GroupsAddMembershipCommand.args = [
-	{
+GroupsAddMembershipCommand.args = {
+	userID: Args.string({
 		name: 'userID',
 		required: true,
 		hidden: false,
 		description: 'ID of the user to add to the group',
-	},
-	{
+	}),
+	groupID: Args.string({
 		name: 'groupID',
 		required: true,
 		hidden: false,
 		description: 'ID of the group to add the user to',
-	}
-];
+	}),
+};
 
 module.exports = GroupsAddMembershipCommand;

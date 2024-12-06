@@ -1,12 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
 const PaginationUtils = require('../../pagination-utils');
 
 class CollaborationsGetPendingCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationsGetPendingCommand);
+		const { flags } = await this.parse(CollaborationsGetPendingCommand);
 		let options = PaginationUtils.handlePagination(flags);
 		let params = {
 			qs: {

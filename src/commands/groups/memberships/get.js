@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class GroupsGetMembershipCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(GroupsGetMembershipCommand);
+		const { flags, args } = await this.parse(GroupsGetMembershipCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -26,13 +27,13 @@ GroupsGetMembershipCommand.flags = {
 	...BoxCommand.flags
 };
 
-GroupsGetMembershipCommand.args = [
-	{
+GroupsGetMembershipCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the group membership to get',
-	}
-];
+	}),
+};
 
 module.exports = GroupsGetMembershipCommand;

@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 const utils = require('../../util');
 
 class AiTextGenCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(AiTextGenCommand);
+		const { flags } = await this.parse(AiTextGenCommand);
 		let options = {};
 
         if (flags['dialogue-history']) {
@@ -32,7 +32,7 @@ AiTextGenCommand._endpoint = 'post_ai_text_gen';
 AiTextGenCommand.flags = {
 	...BoxCommand.flags,
 
-    'dialogue-history': flags.string({
+    'dialogue-history': Flags.string({
         required: false,
         description: 'The history of prompts and answers previously passed to the LLM.',
         multiple: true,
@@ -54,7 +54,7 @@ AiTextGenCommand.flags = {
             return record;
         },
     }),
-    items: flags.string({
+    items: Flags.string({
         required: true,
         description: 'The items to be processed by the LLM, often files. The array can include exactly one element.',
         multiple: true,
@@ -78,7 +78,7 @@ AiTextGenCommand.flags = {
             return item;
         }
     }),
-    prompt: flags.string({
+    prompt: Flags.string({
         required: true,
         description: 'The prompt for the AI request',
     })

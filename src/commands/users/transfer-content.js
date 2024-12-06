@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class UsersMoveRootContentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersMoveRootContentCommand);
+		const { flags, args } = await this.parse(UsersMoveRootContentCommand);
 		let params = {
 			body: {
 				owned_by: {
@@ -33,25 +33,25 @@ UsersMoveRootContentCommand._endpoint = 'put_users_id_folders_id';
 
 UsersMoveRootContentCommand.flags = {
 	...BoxCommand.flags,
-	notify: flags.boolean({
+	notify: Flags.boolean({
 		description: 'Notify the user that their content has been moved',
 		allowNo: true
 	})
 };
 
-UsersMoveRootContentCommand.args = [
-	{
+UsersMoveRootContentCommand.args = {
+	userID: Args.string({
 		name: 'userID',
 		required: true,
 		hidden: false,
 		description: 'User whose content should be moved'
-	},
-	{
+	}),
+	newUserID: Args.string({
 		name: 'newUserID',
 		required: true,
 		hidden: false,
 		description: 'User to whom the content should be moved'
-	}
-];
+	}),
+};
 
 module.exports = UsersMoveRootContentCommand;

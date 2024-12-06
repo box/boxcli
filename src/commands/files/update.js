@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FileUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FileUpdateCommand);
+		const { flags, args } = await this.parse(FileUpdateCommand);
 		let updates = {};
 
 		if (flags.name) {
@@ -38,20 +38,20 @@ FileUpdateCommand._endpoint = 'put_files_id';
 
 FileUpdateCommand.flags = {
 	...BoxCommand.flags,
-	name: flags.string({ description: 'New name for the file' }),
-	description: flags.string({ description: 'New description for the file', parse: utils.unescapeSlashes }),
-	tags: flags.string({ description: 'Set tags on the file, specified as comma-separated tags' }),
-	etag: flags.string({ description: 'Only apply updates if the ETag value matches' }),
-	'disposition-at': flags.string({ description: 'The retention expiration timestamp for the given file. This date cannot be shortened once set on a file'})
+	name: Flags.string({ description: 'New name for the file' }),
+	description: Flags.string({ description: 'New description for the file', parse: utils.unescapeSlashes }),
+	tags: Flags.string({ description: 'Set tags on the file, specified as comma-separated tags' }),
+	etag: Flags.string({ description: 'Only apply updates if the ETag value matches' }),
+	'disposition-at': Flags.string({ description: 'The retention expiration timestamp for the given file. This date cannot be shortened once set on a file'})
 };
 
-FileUpdateCommand.args = [
-	{
+FileUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to update'
-	}
-];
+	}),
+};
 
 module.exports = FileUpdateCommand;

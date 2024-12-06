@@ -1,12 +1,12 @@
 /* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
 
-const { Command, flags } = require('@oclif/command');
+const { Command, Flags } = require('@oclif/core');
 const chalk = require('chalk');
 const util = require('util');
 const _ = require('lodash');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const { mkdirp } = require('mkdirp');
 const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -263,7 +263,7 @@ class BoxCommand extends Command {
 		}
 
 		/* eslint-disable no-shadow */
-		let { flags, args } = this.parse(this.constructor);
+		let { flags, args } = await this.parse(this.constructor);
 		/* eslint-enable no-shadow */
 		this.flags = flags;
 		this.args = args;
@@ -292,8 +292,8 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async bulkOutputRun() {
-		const allPossibleArgs = (this.constructor.args || []).map((arg) => arg.name);
-		const allPossibleFlags = Object.keys(this.constructor.flags || []);
+		const allPossibleArgs = Object.keys(this.constructor.args || {});
+		const allPossibleFlags = Object.keys(this.constructor.flags || {});
 		// Map from matchKey (arg/flag name in all lower-case characters) => {type, fieldKey}
 		let fieldMapping = Object.assign(
 			{},
@@ -433,8 +433,10 @@ class BoxCommand extends Command {
 	 * @private
 	 */
 	_setFlagsForBulkInput(bulkData) {
+		const bulkDataFlags = bulkData.filter((o) => o.type === 'flag' && !_.isNil(o.value)).map((o) => o.fieldKey);
 		Object.keys(this.flags)
 			.filter((flag) => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
+			.filter((flag) => !bulkDataFlags.includes(flag))
 			.forEach((flag) => {
 				// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
 				// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
@@ -1515,7 +1517,10 @@ class BoxCommand extends Command {
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!
 			/* eslint-disable no-process-exit,unicorn/no-process-exit */
-			process.stderr.write(errorMsg, 'utf8', () => process.exit(2));
+			process.stderr.setEncoding('utf8');
+			process.stderr.write(errorMsg, () => {
+				process.exitCode = 2;
+			});
 			/* eslint-enable no-process-exit,unicorn/no-process-exit */
 		}
 	}
@@ -1892,53 +1897,53 @@ class BoxCommand extends Command {
 }
 
 BoxCommand.flags = {
-	token: flags.string({
+	token: Flags.string({
 		char: 't',
 		description: 'Provide a token to perform this call',
 	}),
-	'as-user': flags.string({ description: 'Provide an ID for a user' }),
+	'as-user': Flags.string({ description: 'Provide an ID for a user' }),
 	// @NOTE: This flag is not read anywhere directly; the chalk library automatically turns off color when it's passed
-	'no-color': flags.boolean({
+	'no-color': Flags.boolean({
 		description: 'Turn off colors for logging',
 	}),
-	json: flags.boolean({
+	json: Flags.boolean({
 		description: 'Output formatted JSON',
 		exclusive: ['csv'],
 	}),
-	csv: flags.boolean({
+	csv: Flags.boolean({
 		description: 'Output formatted CSV',
 		exclusive: ['json'],
 	}),
-	save: flags.boolean({
+	save: Flags.boolean({
 		char: 's',
 		description: 'Save report to default reports folder on disk',
 		exclusive: ['save-to-file-path'],
 	}),
-	'save-to-file-path': flags.string({
+	'save-to-file-path': Flags.string({
 		description: 'Override default file path to save report',
 		exclusive: ['save'],
 		parse: utils.parsePath,
 	}),
-	fields: flags.string({
+	fields: Flags.string({
 		description: 'Comma separated list of fields to show',
 	}),
-	'bulk-file-path': flags.string({
+	'bulk-file-path': Flags.string({
 		description: 'File path to bulk .csv or .json objects',
 		parse: utils.parsePath,
 	}),
-	help: flags.help({
+	help: Flags.help({
 		char: 'h',
 		description: 'Show CLI help',
 	}),
-	verbose: flags.boolean({
+	verbose: Flags.boolean({
 		char: 'v',
 		description: 'Show verbose output, which can be helpful for debugging',
 	}),
-	yes: flags.boolean({
+	yes: Flags.boolean({
 		char: 'y',
 		description: 'Automatically respond yes to all confirmation prompts',
 	}),
-	quiet: flags.boolean({
+	quiet: Flags.boolean({
 		char: 'q',
 		description: 'Suppress any non-error output to stderr',
 	}),

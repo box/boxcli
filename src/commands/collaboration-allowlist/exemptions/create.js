@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class CollaborationAllowlistCreateExemptionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationAllowlistCreateExemptionCommand);
+		const { args } = await this.parse(CollaborationAllowlistCreateExemptionCommand);
 
 		let exemptEntry = await this.client.collaborationAllowlist.addExemption(args.userID);
 		await this.output(exemptEntry);
@@ -19,13 +20,13 @@ CollaborationAllowlistCreateExemptionCommand.flags = {
 	...BoxCommand.flags
 };
 
-CollaborationAllowlistCreateExemptionCommand.args = [
-	{
+CollaborationAllowlistCreateExemptionCommand.args = {
+	userID: Args.string({
 		name: 'userID',
 		required: true,
 		hidden: false,
 		description: 'ID of the user to exempt from the collaboration allowlist'
-	}
-];
+	})
+};
 
 module.exports = CollaborationAllowlistCreateExemptionCommand;

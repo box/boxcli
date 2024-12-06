@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const { omit, mapKeys, snakeCase } = require('lodash');
 
 class MetadataQueryCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(MetadataQueryCommand);
+		const { flags, args } = await this.parse(MetadataQueryCommand);
 
 		const { extra_fields: extraFields, ...rest } = mapKeys(
 			omit(flags, Object.keys(BoxCommand.flags)),
@@ -32,10 +32,10 @@ MetadataQueryCommand._endpoint = 'post_metadata_queries_execute_read';
 
 MetadataQueryCommand.flags = {
 	...BoxCommand.flags,
-	query: flags.string({
+	query: Flags.string({
 		description: 'The logical expression of the query',
 	}),
-	'query-params': flags.string({
+	'query-params': Flags.string({
 		description: 'Required if query present. The arguments for the query.',
 		dependsOn: ['query'],
 		parse(input) {
@@ -58,10 +58,10 @@ MetadataQueryCommand.flags = {
 			);
 		},
 	}),
-	'use-index': flags.string({
+	'use-index': Flags.string({
 		description: 'The name of the search index to use for this query.',
 	}),
-	'order-by': flags.string({
+	'order-by': Flags.string({
 		description:
 			'A list of template fields and directions to sort the metadata query results by.',
 		parse(input) {
@@ -74,14 +74,14 @@ MetadataQueryCommand.flags = {
 			});
 		},
 	}),
-	limit: flags.integer({
+	limit: Flags.integer({
 		description:
 			'A value between 0 and 100 that indicates the maximum number of results to return for a single request. This only specifies a maximum boundary and will not guarantee the minimum number of results returned.',
 	}),
-	marker: flags.string({
+	marker: Flags.string({
 		description: 'Marker to use for requesting the next page.',
 	}),
-	'extra-fields': flags.string({
+	'extra-fields': Flags.string({
 		description:
 			'A list of additional attributes to return for any item, including its metadata.',
 		parse(input) {
@@ -90,18 +90,18 @@ MetadataQueryCommand.flags = {
 	}),
 };
 
-MetadataQueryCommand.args = [
-	{
+MetadataQueryCommand.args = {
+	from: Args.string({
 		name: 'from',
 		required: true,
 		description:
 			'The template used in the query. Must be in the form scope.templateKey',
-	},
-	{
+	}),
+	ancestorFolderId: Args.string({
 		name: 'ancestorFolderId',
 		required: true,
 		description: 'The folder_id to which to restrain the query',
-	},
-];
+	}),
+};
 
 module.exports = MetadataQueryCommand;

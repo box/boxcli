@@ -5,7 +5,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class WebhooksListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebhooksListCommand);
+		const { flags } = await this.parse(WebhooksListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		let webhooks = await this.client.webhooks.getAll(options);

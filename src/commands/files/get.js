@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class FilesGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesGetCommand);
+		const { flags, args } = await this.parse(FilesGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ FilesGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-FilesGetCommand.args = [
-	{
+FilesGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to get'
-	}
-];
+	})
+};
 
 module.exports = FilesGetCommand;

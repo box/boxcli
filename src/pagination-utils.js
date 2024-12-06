@@ -1,6 +1,6 @@
 'use strict';
 
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 
 const MAX_LIMIT = 1000;
 
@@ -42,7 +42,7 @@ module.exports = {
 };
 
 module.exports.flags = Object.freeze({
-	'max-items': flags.integer({
+	'max-items': Flags.integer({
 		description:
 			'A value that indicates the maximum number of results to return. This only specifies a maximum boundary and will not guarantee the minimum number of results returned. When the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will be made.',
 	}),

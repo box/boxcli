@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class WebhooksGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebhooksGetCommand);
+		const { args } = await this.parse(WebhooksGetCommand);
 
 		let webhook = await this.client.webhooks.get(args.id);
 		await this.output(webhook);
@@ -19,13 +20,13 @@ WebhooksGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-WebhooksGetCommand.args = [
-	{
+WebhooksGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the webhook to get',
-	}
-];
+	}),
+};
 
 module.exports = WebhooksGetCommand;

@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class FoldersLocksDeleteCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(FoldersLocksDeleteCommand);
+		const { args } = await this.parse(FoldersLocksDeleteCommand);
 
 		await this.client.folders.deleteLock(args.id);
 		this.info(`Delete folder lock with ID ${args.id}`);
@@ -19,13 +20,13 @@ FoldersLocksDeleteCommand.flags = {
 	...BoxCommand.flags,
 };
 
-FoldersLocksDeleteCommand.args = [
-	{
+FoldersLocksDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder lock to delete',
-	}
-];
+	})
+};
 
 module.exports = FoldersLocksDeleteCommand;

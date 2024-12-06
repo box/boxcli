@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../../util');
 
 class FoldersSetMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersSetMetadataCommand);
+		const { flags, args } = await this.parse(FoldersSetMetadataCommand);
 
 		let metadataValues = Object.assign({}, ...flags.data);
 		let templateKey = flags['template-key'];
@@ -25,29 +25,29 @@ FoldersSetMetadataCommand.examples = [
 
 FoldersSetMetadataCommand.flags = {
 	...BoxCommand.flags,
-	data: flags.string({
+	data: Flags.string({
 		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		required: true,
 		multiple: true,
 		parse: utils.parseMetadata,
 	}),
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope of the metadata template to use',
 		default: 'enterprise',
 	}),
-	'template-key': flags.string({
+	'template-key': Flags.string({
 		description: 'The key of the metadata template to use',
 		required: true,
 	}),
 };
 
-FoldersSetMetadataCommand.args = [
-	{
+FoldersSetMetadataCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to add metadata to',
-	}
-];
+	}),
+};
 
 module.exports = FoldersSetMetadataCommand;

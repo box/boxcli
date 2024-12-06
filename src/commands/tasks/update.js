@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TasksUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TasksUpdateCommand);
+		const { flags, args } = await this.parse(TasksUpdateCommand);
 		let options = {};
 
 		if (flags.message) {
@@ -29,12 +29,12 @@ TasksUpdateCommand._endpoint = 'put_tasks_id';
 
 TasksUpdateCommand.flags = {
 	...BoxCommand.flags,
-	message: flags.string({ description: 'Message for task' }),
-	'due-at': flags.string({
+	message: Flags.string({ description: 'Message for task' }),
+	'due-at': Flags.string({
 		description: 'When this task is due, use format 05h for 5 hours for example',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'completion-rule': flags.string({
+	'completion-rule': Flags.string({
 		description: 'Rule for how many assignees must complete the task to consider it completed',
 		options: [
 			'all_assignees',
@@ -43,13 +43,13 @@ TasksUpdateCommand.flags = {
 	}),
 };
 
-TasksUpdateCommand.args = [
-	{
+TasksUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the task to update',
-	}
-];
+	}),
+};
 
 module.exports = TasksUpdateCommand;

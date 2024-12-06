@@ -11,7 +11,6 @@ const {
 } = require('../helpers/test-helper');
 const os = require('os');
 const debug = require('debug');
-const sinon = require('sinon');
 
 describe('Bulk', () => {
 
@@ -22,11 +21,6 @@ describe('Bulk', () => {
 		addCollaborationFixture3 = getFixture('bulk/post_collaborations_user_3'),
 		jsonOutput = getFixture('output/bulk_output_json.txt');
 
-	const sandbox = sinon.createSandbox();
-
-	afterEach(() => {
-		sandbox.verifyAndRestore();
-	});
 
 	describe('CSV Input', () => {
 		let inputFilePath = path.join(__dirname, '..', 'fixtures/bulk/input.csv'),
@@ -876,7 +870,7 @@ describe('Bulk', () => {
 				assert.equal(ctx.stderr, expectedMessage);
 			});
 
-		test
+			test
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/collaborations', addCollaborationBody1)
 				.reply(200, addCollaborationFixture1)
@@ -887,11 +881,6 @@ describe('Bulk', () => {
 			)
 			.stdout()
 			.stderr()
-			.do(() => {
-				// @NOTE: This date is 2018-11-18T12:34:56.000 (the Date constructor takes zero-indexed month)
-				let currentTime = new Date(2018, 10, 18, 12, 34, 56, 0);
-				sandbox.useFakeTimers(currentTime);
-			})
 			.command([
 				'collaborations:create',
 				boxItemId,
@@ -905,8 +894,11 @@ describe('Bulk', () => {
 				'--token=test'
 			])
 			.it('should write file with default name when save path is a directory', ctx => {
-				let expectedFilename = 'collaborations-create-2018-11-18_12_34_56_000.json';
-				let filePath = path.join(path.dirname(saveFilePath), expectedFilename);
+				let outputMessage = ctx.stderr;
+				let expectedFilenameRegex = /collaborations-create-\d{4}-\d{2}-\d{2}_\d{2}_\d{2}_\d{2}_\d{3}\.json/u;
+				assert.match(outputMessage, expectedFilenameRegex);
+				let outputFilename = outputMessage.match(expectedFilenameRegex)[0];
+				let filePath = path.join(path.dirname(saveFilePath), outputFilename);
 				/* eslint-disable no-sync */
 				let savedFileContents = fs.readFileSync(filePath, 'utf8');
 				fs.unlinkSync(filePath);

@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class RetentionPoliciesGetVersionRetentionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesGetVersionRetentionCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesGetVersionRetentionCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ RetentionPoliciesGetVersionRetentionCommand.flags = {
 	...BoxCommand.flags
 };
 
-RetentionPoliciesGetVersionRetentionCommand.args = [
-	{
+RetentionPoliciesGetVersionRetentionCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file version retention to get',
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesGetVersionRetentionCommand;

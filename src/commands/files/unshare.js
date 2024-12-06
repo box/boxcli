@@ -1,5 +1,6 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const SharedLinksDeleteCommand = require('../shared-links/delete');
 const SharedLinksModule = require('../../modules/shared-links');
@@ -7,7 +8,7 @@ const chalk = require('chalk');
 
 class FilesUnshareCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(FilesUnshareCommand);
+		const { args } = await this.parse(FilesUnshareCommand);
 
 		// Transform arguments for generic module
 		args.itemType = 'file';
@@ -30,13 +31,13 @@ FilesUnshareCommand.flags = {
 	...SharedLinksDeleteCommand.flags,
 };
 
-FilesUnshareCommand.args = [
-	{
+FilesUnshareCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to unshare'
-	}
-];
+	})
+};
 
 module.exports = FilesUnshareCommand;

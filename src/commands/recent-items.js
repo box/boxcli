@@ -5,7 +5,7 @@ const PaginationUtils = require('../pagination-utils');
 
 class RecentItems extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RecentItems);
+		const { flags } = await this.parse(RecentItems);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {

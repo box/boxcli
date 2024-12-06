@@ -1,7 +1,7 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+const {assert} = require('chai');
 const BoxCommand = require('../src/box-command');
 const sinon = require('sinon');
 const leche = require('leche');
@@ -11,28 +11,33 @@ const { TEST_API_ROOT, isWin } = require('./helpers/test-helper');
 
 describe('BoxCommand', () => {
 
-	let sandbox = sinon.createSandbox();
+	const sandbox = sinon.createSandbox();
 
 	afterEach(() => {
 		sandbox.verifyAndRestore();
 	});
 
 	describe('Command', () => {
-
 		test
+			.nock(TEST_API_ROOT, api => api
+				.get('/2.0/users/me')
+				.reply(200, {})
+			)
 			.stdout()
 			.stderr()
 			.command([
-				'help',
+				'users:get',
+				'me',
+				'--token=test',
 				'--verbose'
 			])
 			.it('should enable framework debugging when verbose flag is passed', ctx => {
 				debug.disable();
-				let debugLines = ctx.stderr.split('\n');
+				const debugLines = ctx.stderr.split('\n');
 				assert.include(debugLines[0], 'box:@box/cli:hooks:init');
-				assert.include(debugLines[1], 'box:help');
+				assert.include(debugLines[1], 'box-cli:init');
 			})
-			.timeout(30000);
+			.timeout(10000);
 
 		test
 			.nock(TEST_API_ROOT, api => api

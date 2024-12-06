@@ -1,10 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
+const { Args } = require('@oclif/core');
 
 class FoldersGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersGetCommand);
+		const { flags, args } = await this.parse(FoldersGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ FoldersGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-FoldersGetCommand.args = [
-	{
+FoldersGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of folder to get; use 0 for the root folder'
-	}
-];
+	})
+};
 
 module.exports = FoldersGetCommand;
