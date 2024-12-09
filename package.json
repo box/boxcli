@@ -56,12 +56,11 @@
 		"chai": "^4.1.2",
 		"chai-as-promised": "^7.1.1",
 		"eslint": "^8.57.1",
-		"eslint-config-oclif": "^5",
-		"eslint-config-oclif-typescript": "^3",
 		"eslint-config-prettier": "^9",
 		"eslint-plugin-n": "^17.14.0",
 		"eslint-plugin-promise": "^7.2.1",
 		"eslint-plugin-unicorn": "^5.0.0",
+		"generate-license-file": "^3.6.0",
 		"jsonwebtoken": "^8.3.0",
 		"leche": "^2.3.0",
 		"mocha": "^10.8.2",
@@ -147,11 +146,12 @@
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
-		"prepack": "oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"prepack": "npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif readme --multi && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
-		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
+		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
+		"license": "generate-license-file --overwrite"
 	},
 	"overrides": {
 		"leche": {
