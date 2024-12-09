@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../../pagination-utils');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesListCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.type) {
@@ -29,7 +29,7 @@ RetentionPoliciesListCommand._endpoint = 'get_retention_policies_id_assignments'
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	type: flags.string({
+	type: Flags.string({
 		description: 'The type of the retention policy assignment to retrieve',
 		options: [
 			'folder',
@@ -39,13 +39,13 @@ RetentionPoliciesListCommand.flags = {
 	})
 };
 
-RetentionPoliciesListCommand.args = [
-	{
+RetentionPoliciesListCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the retention policy to get assignments for',
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesListCommand;

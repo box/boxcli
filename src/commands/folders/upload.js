@@ -2,7 +2,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
@@ -12,7 +12,7 @@ const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
 class FoldersUploadCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersUploadCommand);
+		const { flags, args } = await this.parse(FoldersUploadCommand);
 
 		let folderId = await this.uploadFolder(args.path, flags['parent-folder'], flags['folder-name']);
 		let folder = await this.client.folders.get(folderId);
@@ -69,24 +69,24 @@ FoldersUploadCommand.examples = ['box folders:upload /path/to/folder'];
 
 FoldersUploadCommand.flags = {
 	...BoxCommand.flags,
-	'folder-name': flags.string({ description: 'Name to use for folder if not using local folder name' }),
-	'id-only': flags.boolean({
+	'folder-name': Flags.string({ description: 'Name to use for folder if not using local folder name' }),
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',
 	}),
-	'parent-folder': flags.string({
+	'parent-folder': Flags.string({
 		char: 'p',
 		description: 'Folder to upload this folder into; defaults to the root folder',
 		default: '0',
 	})
 };
 
-FoldersUploadCommand.args = [
-	{
+FoldersUploadCommand.args = {
+	path: Args.string({
 		name: 'path',
 		required: true,
 		hidden: false,
 		description: 'Local path to the folder to upload',
-	}
-];
+	})
+};
 
 module.exports = FoldersUploadCommand;

@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class FoldersLocksListCommand extends BoxCommand {
 	async run() {
-		const { args } = this.parse(FoldersLocksListCommand);
+		const { args } = await this.parse(FoldersLocksListCommand);
 
 		let locks = await this.client.folders.getLocks(args.id);
 		await this.output(locks);
@@ -21,13 +22,13 @@ FoldersLocksListCommand.flags = {
 	...BoxCommand.flags,
 };
 
-FoldersLocksListCommand.args = [
-	{
+FoldersLocksListCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to get the locks on',
-	}
-];
+	})
+};
 
 module.exports = FoldersLocksListCommand;

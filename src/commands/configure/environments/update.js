@@ -1,14 +1,14 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const BoxCLIError = require('../../../cli-error');
 const utils = require('../../../util');
 
 class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsUpdateCommand);
+		const { flags, args } = await this.parse(EnvironmentsUpdateCommand);
 		let environmentsObj = await this.getEnvironments();
 		let environment = environmentsObj.environments[args.name || environmentsObj.default];
 
@@ -66,29 +66,29 @@ EnvironmentsUpdateCommand.description = 'Update a Box environment';
 
 EnvironmentsUpdateCommand.flags = {
 	...BoxCommand.minFlags,
-	'config-file-path': flags.string({
+	'config-file-path': Flags.string({
 		description: 'Provide a file path to configuration file',
 		parse: utils.parsePath,
 	}),
-	name: flags.string({ description: 'New name of the environment' }),
-	'private-key-path': flags.string({
+	name: Flags.string({ description: 'New name of the environment' }),
+	'private-key-path': Flags.string({
 		description: 'Provide a file path to application private key',
 		parse: utils.parsePath,
 	}),
-	'user-id': flags.string({ description: 'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment' }),
-	'cache-tokens': flags.boolean({
+	'user-id': Flags.string({ description: 'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment' }),
+	'cache-tokens': Flags.boolean({
 		description: 'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
 		allowNo: true,
 	}),
 };
 
-EnvironmentsUpdateCommand.args = [
-	{
+EnvironmentsUpdateCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: false,
 		hidden: false,
 		description: 'The name of the environment'
-	}
-];
+	})
+};
 
 module.exports = EnvironmentsUpdateCommand;

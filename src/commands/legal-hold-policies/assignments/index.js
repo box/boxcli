@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../../pagination-utils');
 
 class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesListAssignmentsCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesListAssignmentsCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['assign-to-type']) {
@@ -32,7 +32,7 @@ LegalHoldPoliciesListAssignmentsCommand._endpoint = 'get_legal_hold_policy_assig
 LegalHoldPoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'assign-to-type': flags.string({
+	'assign-to-type': Flags.string({
 		description: 'Filter by assignment type',
 		options: [
 			'file_version',
@@ -41,16 +41,16 @@ LegalHoldPoliciesListAssignmentsCommand.flags = {
 			'user'
 		]
 	}),
-	'assign-to-id': flags.string({ description: 'Filter by assignment Id' })
+	'assign-to-id': Flags.string({ description: 'Filter by assignment Id' })
 };
 
-LegalHoldPoliciesListAssignmentsCommand.args = [
-	{
+LegalHoldPoliciesListAssignmentsCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the legal hold policy get get assignments for',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesListAssignmentsCommand;

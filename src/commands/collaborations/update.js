@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const chalk = require('chalk');
 
 class CollaborationsUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationsUpdateCommand);
+		const { flags, args } = await this.parse(CollaborationsUpdateCommand);
 		let params = { body: {}, qs: {} };
 
 		if (flags.fields) {
@@ -64,7 +64,7 @@ CollaborationsUpdateCommand._endpoint = 'put_collaborations_id';
 
 CollaborationsUpdateCommand.flags = {
 	...BoxCommand.flags,
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'An option to manually enter the role',
 		exclusive: [
@@ -88,7 +88,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	status: flags.string({
+	status: Flags.string({
 		description: 'Update the collaboration status',
 		options: [
 			'accepted',
@@ -96,7 +96,7 @@ CollaborationsUpdateCommand.flags = {
 			'rejected'
 		]
 	}),
-	editor: flags.boolean({
+	editor: Flags.boolean({
 		description: 'Set the role to editor',
 		hidden: true,
 		exclusive: [
@@ -110,7 +110,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	viewer: flags.boolean({
+	viewer: Flags.boolean({
 		description: 'Set the role to viewer',
 		hidden: true,
 		exclusive: [
@@ -124,7 +124,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	previewer: flags.boolean({
+	previewer: Flags.boolean({
 		description: 'Set the role to previewer',
 		hidden: true,
 		exclusive: [
@@ -138,7 +138,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	uploader: flags.boolean({
+	uploader: Flags.boolean({
 		description: 'Set the role to uploader',
 		hidden: true,
 		exclusive: [
@@ -152,7 +152,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	'previewer-uploader': flags.boolean({
+	'previewer-uploader': Flags.boolean({
 		description: 'Set the role to previewer-uploader',
 		hidden: true,
 		exclusive: [
@@ -166,7 +166,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	'viewer-uploader': flags.boolean({
+	'viewer-uploader': Flags.boolean({
 		description: 'Set the role to viewer-uploader',
 		hidden: true,
 		exclusive: [
@@ -180,7 +180,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	'co-owner': flags.boolean({
+	'co-owner': Flags.boolean({
 		description: 'Set the role to co-owner',
 		hidden: true,
 		exclusive: [
@@ -194,7 +194,7 @@ CollaborationsUpdateCommand.flags = {
 			'owner'
 		]
 	}),
-	owner: flags.boolean({
+	owner: Flags.boolean({
 		description: 'Set the role to owner',
 		hidden: true,
 		exclusive: [
@@ -208,23 +208,23 @@ CollaborationsUpdateCommand.flags = {
 			'co-owner'
 		]
 	}),
-	'can-view-path': flags.boolean({
+	'can-view-path': Flags.boolean({
 		description: 'Whether view path collaboration feature is enabled or not',
 		allowNo: true
 	}),
-	'expires-at': flags.string({
+	'expires-at': Flags.string({
 		description: 'When the collaboration should expire',
 		parse: input => BoxCommand.normalizeDateString(input),
 	})
 };
 
-CollaborationsUpdateCommand.args = [
-	{
+CollaborationsUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'The ID of the collaboration to update'
-	}
-];
+	}),
+};
 
 module.exports = CollaborationsUpdateCommand;

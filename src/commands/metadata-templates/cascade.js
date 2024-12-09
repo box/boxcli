@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class MetadataCascadePoliciesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(MetadataCascadePoliciesCreateCommand);
+		const { flags, args } = await this.parse(MetadataCascadePoliciesCreateCommand);
 
 		let policy = await this.client.metadata.createCascadePolicy(flags.scope, args.templateKey, flags.folder);
 		await this.output(policy);
@@ -19,26 +19,26 @@ MetadataCascadePoliciesCreateCommand.aliases = ['metadata-cascade-policies:creat
 
 MetadataCascadePoliciesCreateCommand.flags = {
 	...BoxCommand.flags,
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command'
 	}),
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope of the metadata template to cascade',
 		default: 'enterprise',
 	}),
-	folder: flags.string({
+	folder: Flags.string({
 		required: true,
 		description: 'The ID of the folder to cascade metadata on',
 	})
 };
 
-MetadataCascadePoliciesCreateCommand.args = [
-	{
+MetadataCascadePoliciesCreateCommand.args = {
+	templateKey: Args.string({
 		name: 'templateKey',
 		required: true,
 		hidden: false,
 		description: 'The template key of the metadata template to cascade'
-	}
-];
+	}),
+};
 
 module.exports = MetadataCascadePoliciesCreateCommand;

@@ -22,6 +22,4 @@ OSSLicensesCommand.flags = {
 	...BoxCommand.minFlags,
 };
 
-OSSLicensesCommand.args = [];
-
 module.exports = OSSLicensesCommand;

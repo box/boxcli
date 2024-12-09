@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const PaginationUtils = require('../../../pagination-utils');
 
 class RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
@@ -25,13 +26,13 @@ RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.flags = {
 	...PaginationUtils.flags,
 };
 
-RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.args = [
-	{
+RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the retention policy assignment',
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesGetFileVersionsRetentionForAssignmentCommand;

@@ -1,11 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class StoragePoliciesListAssignmentsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(StoragePoliciesListAssignmentsCommand);
+		const { flags, args } = await this.parse(StoragePoliciesListAssignmentsCommand);
+
 		let options = {
 			targetType: flags.type
 		};
@@ -21,7 +22,7 @@ StoragePoliciesListAssignmentsCommand._endpoint = 'get_storage_policy_assignment
 
 StoragePoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,
-	type: flags.string({
+	type: Flags.string({
 		required: true,
 		description: 'Type of object to look up the storage policy for',
 		options: [
@@ -32,13 +33,13 @@ StoragePoliciesListAssignmentsCommand.flags = {
 	})
 };
 
-StoragePoliciesListAssignmentsCommand.args = [
-	{
+StoragePoliciesListAssignmentsCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the object to look up the storage policy for',
-	}
-];
+	}),
+};
 
 module.exports = StoragePoliciesListAssignmentsCommand;

@@ -5,7 +5,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class StoragePoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(StoragePoliciesListCommand);
+		const { flags } = await this.parse(StoragePoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		let storagePolicies = await this.client.storagePolicies.getAll(options);

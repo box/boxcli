@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const PaginationUtils = require('../../pagination-utils');
 
 class FoldersListItemsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersListItemsCommand);
+		const { flags, args } = await this.parse(FoldersListItemsCommand);
 		let options = PaginationUtils.forceMarkerPagination(flags);
 
 		if (flags.fields) {
@@ -34,14 +34,14 @@ FoldersListItemsCommand._endpoint = 'get_folders_id_items';
 FoldersListItemsCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	direction: flags.string({
+	direction: Flags.string({
 		description: 'The direction to order returned items',
 		options: [
 			'ASC',
 			'DESC'
 		]
 	}),
-	sort: flags.string({
+	sort: Flags.string({
 		description: 'The parameter to sort returned items',
 		options: [
 			'id',
@@ -51,13 +51,13 @@ FoldersListItemsCommand.flags = {
 	}),
 };
 
-FoldersListItemsCommand.args = [
-	{
+FoldersListItemsCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to get the items in, use 0 for the root folder',
-	}
-];
+	})
+};
 
 module.exports = FoldersListItemsCommand;

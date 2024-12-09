@@ -2,7 +2,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../../cli-error');
@@ -11,8 +11,8 @@ const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
 class FilesUploadVersionsCommand extends BoxCommand {
 	async run() {
-		const { flags } = this.parse(FilesUploadVersionsCommand);
-		const { args } = this.parse(FilesUploadVersionsCommand);
+		const { flags } = await this.parse(FilesUploadVersionsCommand);
+		const { args } = await this.parse(FilesUploadVersionsCommand);
 		let size = fs.statSync(args.path).size;
 		let fileAttributes = {};
 		let stream;
@@ -60,26 +60,26 @@ FilesUploadVersionsCommand._endpoint = 'post_files_id_content';
 
 FilesUploadVersionsCommand.flags = {
 	...BoxCommand.flags,
-	'content-modified-at': flags.string({ description: 'The last modification date of the file version. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
-	name: flags.string({
+	'content-modified-at': Flags.string({ description: 'The last modification date of the file version. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
+	name: Flags.string({
 		char: 'n',
 		description: 'Provide different name for uploaded file'
 	})
 };
 
-FilesUploadVersionsCommand.args = [
-	{
+FilesUploadVersionsCommand.args = {
+	fileID: Args.string({
 		name: 'fileID',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to upload a new version of'
-	},
-	{
+	}),
+	path: Args.string({
 		name: 'path',
 		required: true,
 		hidden: false,
 		description: 'Local path to the file to upload'
-	}
-];
+	}),
+};
 
 module.exports = FilesUploadVersionsCommand;

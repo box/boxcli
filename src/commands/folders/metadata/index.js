@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class FoldersGetAllMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersGetAllMetadataCommand);
+		const { args } = await this.parse(FoldersGetAllMetadataCommand);
 
 		let metadata = await this.client.folders.getAllMetadata(args.id);
 		await this.output(metadata);
@@ -21,13 +22,13 @@ FoldersGetAllMetadataCommand.flags = {
 	...BoxCommand.flags
 };
 
-FoldersGetAllMetadataCommand.args = [
-	{
+FoldersGetAllMetadataCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to get all metadata on',
-	}
-];
+	}),
+};
 
 module.exports = FoldersGetAllMetadataCommand;

@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TaskAssignmentsUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TaskAssignmentsUpdateCommand);
+		const { flags, args } = await this.parse(TaskAssignmentsUpdateCommand);
 		let options = {};
 
 		if (flags.message) {
@@ -37,10 +37,10 @@ TaskAssignmentsUpdateCommand._endpoint = 'put_task_assignments_id';
 
 TaskAssignmentsUpdateCommand.flags = {
 	...BoxCommand.flags,
-	message: flags.string({
+	message: Flags.string({
 		description: 'A message from the assignee about this task'
 	}),
-	status: flags.string({
+	status: Flags.string({
 		description: 'Set the resolution state of the task assignment',
 		exclusive: [
 			'completed',
@@ -55,7 +55,7 @@ TaskAssignmentsUpdateCommand.flags = {
 			'rejected'
 		],
 	}),
-	completed: flags.boolean({
+	completed: Flags.boolean({
 		description: 'Change resolution state to completed',
 		hidden: true,
 		exclusive: [
@@ -65,7 +65,7 @@ TaskAssignmentsUpdateCommand.flags = {
 			'status'
 		]
 	}),
-	incomplete: flags.boolean({
+	incomplete: Flags.boolean({
 		description: 'Change resolution state to incomplete',
 		hidden: true,
 		exclusive: [
@@ -75,7 +75,7 @@ TaskAssignmentsUpdateCommand.flags = {
 			'status'
 		]
 	}),
-	approved: flags.boolean({
+	approved: Flags.boolean({
 		description: 'Change resolution state to approved',
 		hidden: true,
 		exclusive: [
@@ -85,7 +85,7 @@ TaskAssignmentsUpdateCommand.flags = {
 			'status'
 		]
 	}),
-	rejected: flags.boolean({
+	rejected: Flags.boolean({
 		description: 'Change resolution state to rejected',
 		hidden: true,
 		exclusive: [
@@ -97,13 +97,13 @@ TaskAssignmentsUpdateCommand.flags = {
 	})
 };
 
-TaskAssignmentsUpdateCommand.args = [
-	{
+TaskAssignmentsUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the task assignment to update',
-	}
-];
+	}),
+};
 
 module.exports = TaskAssignmentsUpdateCommand;

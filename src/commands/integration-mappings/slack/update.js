@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class IntegrationMappingsSlackUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(IntegrationMappingsSlackUpdateCommand);
+		const { flags, args } = await this.parse(IntegrationMappingsSlackUpdateCommand);
 		let options = {integration_mapping_id: args.id};
 		let body = {};
 
@@ -32,23 +32,23 @@ IntegrationMappingsSlackUpdateCommand._endpoint = 'put_integration_mappings_slac
 
 IntegrationMappingsSlackUpdateCommand.flags = {
 	...BoxCommand.flags,
-	'box-item-id': flags.string({
+	'box-item-id': Flags.string({
 		description: 'ID of the mapped folder',
 	}),
-	'disable-access-management': flags.boolean({
+	'disable-access-management': Flags.boolean({
 		description: 'Indicates whether or not channel member access to the underlying box item should be automatically managed. ' +
 			'Depending on type of channel, access is managed through creating collaborations or shared links.',
 		allowNo: true,
 	})
 };
 
-IntegrationMappingsSlackUpdateCommand.args = [
-	{
+IntegrationMappingsSlackUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of an integration mapping',
-	}
-];
+	}),
+};
 
 module.exports = IntegrationMappingsSlackUpdateCommand;

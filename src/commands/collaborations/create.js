@@ -1,13 +1,13 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const CollaborationModule = require('../../modules/collaboration');
 
 class CollaborationsAddCommand extends BoxCommand {
 
 	async run() {
-		const { flags, args } = this.parse(CollaborationsAddCommand);
+		const { flags, args } = await this.parse(CollaborationsAddCommand);
 
 		let collabModule = new CollaborationModule(this.client);
 		let collaboration = await collabModule.createCollaboration(args, flags);
@@ -23,7 +23,7 @@ CollaborationsAddCommand._endpoint = 'post_collaborations';
 
 CollaborationsAddCommand.flags = {
 	...BoxCommand.flags,
-	role: flags.string({
+	role: Flags.string({
 		char: 'r',
 		description: 'An option to manually enter the role',
 		exclusive: [
@@ -45,28 +45,28 @@ CollaborationsAddCommand.flags = {
 			'co-owner'
 		]
 	}),
-	'user-id': flags.string({
+	'user-id': Flags.string({
 		description: 'Id for user to collaborate',
 		exclusive: [
 			'group-id',
 			'login'
 		]
 	}),
-	'group-id': flags.string({
+	'group-id': Flags.string({
 		description: 'Id for group to collaborate',
 		exclusive: [
 			'user-id',
 			'login'
 		]
 	}),
-	login: flags.string({
+	login: Flags.string({
 		description: 'Login for user to collaborate',
 		exclusive: [
 			'group-id',
 			'user-id'
 		]
 	}),
-	editor: flags.boolean({
+	editor: Flags.boolean({
 		description: 'Set the role to editor',
 		hidden: true,
 		exclusive: [
@@ -79,7 +79,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	viewer: flags.boolean({
+	viewer: Flags.boolean({
 		description: 'Set the role to viewer',
 		hidden: true,
 		exclusive: [
@@ -92,7 +92,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	previewer: flags.boolean({
+	previewer: Flags.boolean({
 		description: 'Set the role to previewer',
 		hidden: true,
 		exclusive: [
@@ -105,7 +105,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	uploader: flags.boolean({
+	uploader: Flags.boolean({
 		description: 'Set the role to uploader',
 		hidden: true,
 		exclusive: [
@@ -118,7 +118,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	'previewer-uploader': flags.boolean({
+	'previewer-uploader': Flags.boolean({
 		description: 'Set the role to previewer-uploader',
 		hidden: true,
 		exclusive: [
@@ -131,7 +131,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	'viewer-uploader': flags.boolean({
+	'viewer-uploader': Flags.boolean({
 		description: 'Set the role to viewer-uploader',
 		hidden: true,
 		exclusive: [
@@ -144,7 +144,7 @@ CollaborationsAddCommand.flags = {
 			'co-owner',
 		]
 	}),
-	'co-owner': flags.boolean({
+	'co-owner': Flags.boolean({
 		description: 'Set the role to co-owner',
 		hidden: true,
 		exclusive: [
@@ -157,25 +157,25 @@ CollaborationsAddCommand.flags = {
 			'editor',
 		]
 	}),
-	'can-view-path': flags.boolean({
+	'can-view-path': Flags.boolean({
 		description: 'Whether view path collaboration feature is enabled or not',
 		allowNo: true
 	}),
-	'id-only': flags.boolean({ description: 'Return only an ID to output from this command' }),
-	notify: flags.boolean({
+	'id-only': Flags.boolean({ description: 'Return only an ID to output from this command' }),
+	notify: Flags.boolean({
 		description: 'All users will receive email notification of the collaboration',
 		allowNo: true,
 	})
 };
 
-CollaborationsAddCommand.args = [
-	{
+CollaborationsAddCommand.args = {
+	itemID: Args.string({
 		name: 'itemID',
 		required: true,
 		hidden: false,
 		description: 'The ID of the Box item to add the collaboration to',
-	},
-	{
+	}),
+	itemType: Args.string({
 		name: 'itemType',
 		required: true,
 		hidden: false,
@@ -184,7 +184,7 @@ CollaborationsAddCommand.args = [
 			'file',
 			'folder'
 		]
-	}
-];
+	}),
+};
 
 module.exports = CollaborationsAddCommand;

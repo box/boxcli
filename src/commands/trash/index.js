@@ -5,7 +5,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class TrashListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TrashListCommand);
+		const { flags } = await this.parse(TrashListCommand);
 		let options = PaginationUtils.forceMarkerPagination(flags);
 
 		if (flags.fields) {

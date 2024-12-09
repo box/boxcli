@@ -1745,11 +1745,17 @@ describe('Files', () => {
 			saveAsFileName = 'new_file_name.txt',
 			fileVersionID = '8764569',
 			testFilePath = path.join(__dirname, '..', 'fixtures/files/epic-poem.txt'),
+			/* eslint-disable no-sync */
+			testFileStat = fs.statSync(testFilePath),
+			/* eslint-enable no-sync */
 			fileDownloadPath = path.join(__dirname, '..', 'fixtures/files'),
 			fileDownloadUrl = toUrlPath(fileDownloadPath),
 			tempDestinationPath = path.join(fileDownloadPath, 'filesTemp'),
 			tempDestinationPath2 = path.join(fileDownloadPath, 'filesTemp2'),
-			getFileFixture = getFixture('files/get_files_id');
+			getFileFixture = getFixture('files/get_files_id'),
+			testFileInfo = JSON.parse(getFileFixture);
+		testFileInfo.size = testFileStat.size;
+
 		after(() => {
 			/* eslint-disable no-sync */
 			fs.rmdirSync(tempDestinationPath);
@@ -1759,7 +1765,7 @@ describe('Files', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
-				.reply(200, getFileFixture)
+				.reply(200, JSON.stringify(testFileInfo))
 				.get(`/2.0/files/${fileId}/content`)
 				.reply(302, '', {
 					Location: TEST_DOWNLOAD_ROOT + fileDownloadUrl
@@ -1785,10 +1791,12 @@ describe('Files', () => {
 				let downloadedFilePath = path.join(fileDownloadPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
+				let downloadedFileStat = fs.statSync(downloadedFilePath);
+				assert.equal(testFileStat.size, downloadedFileStat.size);
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				let expectedMessage = getDownloadProgressBar(295191);
+				let expectedMessage = getDownloadProgressBar(testFileStat.size);
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});
@@ -1958,7 +1966,7 @@ describe('Files', () => {
 		test
 			.nock(TEST_API_ROOT, api => api
 				.get(`/2.0/files/${fileId}`)
-				.reply(200, getFileFixture)
+				.reply(200, JSON.stringify(testFileInfo))
 				.get(`/2.0/files/${fileId}/content`)
 				.query({version: fileVersionID})
 				.reply(302, '', {
@@ -1986,10 +1994,12 @@ describe('Files', () => {
 				let downloadedFilePath = path.join(fileDownloadPath, fileName);
 				let downloadContent = fs.readFileSync(downloadedFilePath);
 				let expectedContent = fs.readFileSync(testFilePath);
+				let downloadedFileStat = fs.statSync(downloadedFilePath);
+				assert.equal(testFileStat.size, downloadedFileStat.size);
 				fs.unlinkSync(downloadedFilePath);
 				/* eslint-enable no-sync */
 				assert.ok(downloadContent.equals(expectedContent));
-				let expectedMessage = getDownloadProgressBar(295191);
+				let expectedMessage = getDownloadProgressBar(testFileStat.size);
 				expectedMessage += `Downloaded file test_file_download.txt${os.EOL}`;
 				assert.equal(ctx.stderr, expectedMessage);
 			});

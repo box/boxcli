@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TermsOfServiceGetUserStatusCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TermsOfServiceGetUserStatusCommand);
+		const { flags, args } = await this.parse(TermsOfServiceGetUserStatusCommand);
 		let options = {};
 
 		if (flags['user-id']) {
@@ -23,18 +23,18 @@ TermsOfServiceGetUserStatusCommand._endpoint = 'get_terms_of_service_user_status
 
 TermsOfServiceGetUserStatusCommand.flags = {
 	...BoxCommand.flags,
-	'user-id': flags.string({
+	'user-id': Flags.string({
 		description: 'ID for a user to get status for; defaults to the current user ID',
 	}),
 };
 
-TermsOfServiceGetUserStatusCommand.args = [
-	{
+TermsOfServiceGetUserStatusCommand.args = {
+	tosID: Args.string({
 		name: 'tosID',
 		required: true,
 		hidden: false,
 		description: 'ID of the terms of service to get user status for',
-	}
-];
+	}),
+};
 
 module.exports = TermsOfServiceGetUserStatusCommand;

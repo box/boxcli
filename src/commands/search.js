@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const _ = require('lodash');
 const BoxCLIError = require('../cli-error');
 const PaginationUtils = require('../pagination-utils');
@@ -26,7 +26,7 @@ function parseMetadataValue(value) {
 
 class SearchCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(SearchCommand);
+		const { flags, args } = await this.parse(SearchCommand);
 
 		if (flags.all && (flags.limit || flags['max-items'])) {
 			throw new BoxCLIError('--all and --limit(--max-items) flags cannot be used together.');
@@ -175,14 +175,14 @@ SearchCommand._endpoint = 'get_search';
 
 SearchCommand.flags = {
 	...BoxCommand.flags,
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope on which you want search',
 		options: [
 			'user_content',
 			'enterprise_content'
 		]
 	}),
-	type: flags.string({
+	type: Flags.string({
 		description: 'The type of objects you want to include in the search results',
 		options: [
 			'file',
@@ -190,8 +190,8 @@ SearchCommand.flags = {
 			'web_link'
 		]
 	}),
-	'file-extensions': flags.string({ description: 'Limit searches to specific file extensions i.e. png,md,pdf' }),
-	'md-filter-scope': flags.string({
+	'file-extensions': Flags.string({ description: 'Limit searches to specific file extensions i.e. png,md,pdf' }),
+	'md-filter-scope': Flags.string({
 		description: 'Scope for metadata filter, can use multiple times',
 		dependsOn: [
 			'md-filter-template-key',
@@ -200,7 +200,7 @@ SearchCommand.flags = {
 		hidden: true,
 		multiple: true
 	}),
-	'md-filter-template-key': flags.string({
+	'md-filter-template-key': Flags.string({
 		description: 'Template key for metadata filter, can use multiple times',
 		dependsOn: [
 			'md-filter-scope',
@@ -209,7 +209,7 @@ SearchCommand.flags = {
 		hidden: true,
 		multiple: true
 	}),
-	'md-filter-json': flags.string({
+	'md-filter-json': Flags.string({
 		description: 'JSON string of metadata to filter search, can use multiple times',
 		dependsOn: [
 			'md-filter-scope',
@@ -218,7 +218,7 @@ SearchCommand.flags = {
 		hidden: true,
 		multiple: true
 	}),
-	mdfilter: flags.string({
+	mdfilter: Flags.string({
 		description: 'Metadata value to filter on, in the format <scope>.<templateKey>.<field>=<value>',
 		exclusive: [
 			'md-filter-scope',
@@ -247,42 +247,42 @@ SearchCommand.flags = {
 			};
 		}
 	}),
-	'content-types': flags.string({ description: 'Search for objects of specified content types. Requires a content type or a set of comma-delimited content types' }),
-	'ancestor-folder-ids': flags.string({ description: 'Search for the contents of specific folders (and folders within them). Requires a folder ID or a set of comma-delimited folder IDs' }),
-	'owner-user-ids': flags.string({ description: 'Search for objects by owner. Requires a user ID or a set of comma-delimited user IDs' }),
-	'created-at-from': flags.string({
+	'content-types': Flags.string({ description: 'Search for objects of specified content types. Requires a content type or a set of comma-delimited content types' }),
+	'ancestor-folder-ids': Flags.string({ description: 'Search for the contents of specific folders (and folders within them). Requires a folder ID or a set of comma-delimited folder IDs' }),
+	'owner-user-ids': Flags.string({ description: 'Search for objects by owner. Requires a user ID or a set of comma-delimited user IDs' }),
+	'created-at-from': Flags.string({
 		description: 'Start of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'created-at-to': flags.string({
+	'created-at-to': Flags.string({
 		description: 'End of created date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'updated-at-from': flags.string({
+	'updated-at-from': Flags.string({
 		description: 'Start of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'updated-at-to': flags.string({
+	'updated-at-to': Flags.string({
 		description: 'End of updated date range. Use a RFC3339 timestamp or shorthand syntax 0t, like 5w for 5 weeks',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'trash-content': flags.string({
+	'trash-content': Flags.string({
 		description: 'Controls whether to search in the trash. Defaults to non_trashed_only',
 		options: [
 			'trashed_only',
 			'non_trashed_only'
 		]
 	}),
-	'size-from': flags.integer({
+	'size-from': Flags.integer({
 		description: 'Lower bound for file size, in bytes',
 	}),
-	'size-to': flags.integer({
+	'size-to': Flags.integer({
 		description: 'Upper bound for file size, in bytes',
 	}),
-	sort: flags.string({
+	sort: Flags.string({
 		description: 'The field to sort results by'
 	}),
-	direction: flags.string({
+	direction: Flags.string({
 		description: 'The direction to sort results (ascending or descending)',
 		dependsOn: ['sort'],
 		options: [
@@ -290,29 +290,29 @@ SearchCommand.flags = {
 			'desc'
 		]
 	}),
-	limit: flags.integer({
+	limit: Flags.integer({
 		description: 'Defines the maximum number of items to return. Default value is 100.',
 	}),
-	'max-items': flags.integer({
+	'max-items': Flags.integer({
 		description: 'A value that indicates the maximum number of results to return.',
 		hidden: true
 	}),
-	all: flags.boolean({
+	all: Flags.boolean({
 		description: 'Returns all search results.',
 	}),
-	'include-recent-shared-links': flags.boolean({
+	'include-recent-shared-links': Flags.boolean({
 		description: 'Returns shared links that the user recently accessed'
 	}),
 };
 
-SearchCommand.args = [
-	{
+SearchCommand.args = {
+	query: Args.string({
 		name: 'query',
 		required: false,
 		hidden: false,
 		description: 'The search term',
 		default: ''
-	}
-];
+	}),
+};
 
 module.exports = SearchCommand;

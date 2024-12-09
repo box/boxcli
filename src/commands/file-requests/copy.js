@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FileRequestsCopyCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FileRequestsCopyCommand);
+		const { flags, args } = await this.parse(FileRequestsCopyCommand);
 		let options = { folder: { type: 'folder' }};
 
 		if (args.folderID) {
@@ -49,44 +49,44 @@ FileRequestsCopyCommand._endpoint = 'post_file_requests_id_copy';
 
 FileRequestsCopyCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({
+	description: Flags.string({
 		description: 'New description of file request',
 		parse: utils.unescapeSlashes
 	}),
-	'expires-at': flags.string({
+	'expires-at': Flags.string({
 		description: 'New date when file request expires',
 		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
-	'description-required': flags.boolean({
+	'description-required': Flags.boolean({
 		description:
 			'is file request submitter required to provide a description of the files they are submitting',
 		allowNo: true,
 	}),
-	'email-required': flags.boolean({
+	'email-required': Flags.boolean({
 		description: 'New date when file request expires',
 		allowNo: true,
 	}),
-	status: flags.string({
+	status: Flags.string({
 		description: 'New status of file request',
 		options: ['active', 'inactive'],
 	}),
-	title: flags.string({
+	title: Flags.string({
 		description: 'New title of file request',
 	}),
 };
-FileRequestsCopyCommand.args = [
-	{
+FileRequestsCopyCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file request to copy',
-	},
-	{
+	}),
+	folderID: Args.string({
 		name: 'folderID',
 		required: true,
 		hidden: false,
 		description: 'ID of folder to which file request will be copied',
-	},
-];
+	}),
+};
 
 module.exports = FileRequestsCopyCommand;

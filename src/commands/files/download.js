@@ -1,6 +1,6 @@
 'use strict';
 
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const fs = require('fs');
 const path = require('path');
@@ -10,7 +10,7 @@ const utils = require('../../util');
 
 class FilesDownloadCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesDownloadCommand);
+		const { flags, args } = await this.parse(FilesDownloadCommand);
 
 		let file = await this.client.files.get(args.id);
 		let fileName = flags['save-as'] ? flags['save-as'] : file.name;
@@ -90,34 +90,34 @@ FilesDownloadCommand._endpoint = 'get_files_id_content';
 
 FilesDownloadCommand.flags = {
 	...BoxCommand.flags,
-	version: flags.string({
+	version: Flags.string({
 		description: 'File version ID of the specific file version to download',
 	}),
-	destination: flags.string({
+	destination: Flags.string({
 		description: 'The destination folder to write the file to',
 		parse: utils.parsePath,
 	}),
-	'create-path': flags.boolean({
+	'create-path': Flags.boolean({
 		description: 'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
 		default: true
 	}),
-	overwrite: flags.boolean({
+	overwrite: Flags.boolean({
 		description: 'Overwrite a file if it already exists',
 		allowNo: true
 	}),
-	'save-as': flags.string({
+	'save-as': Flags.string({
 		description: 'The filename used when saving the file'
 	})
 };
 
-FilesDownloadCommand.args = [
-	{
+FilesDownloadCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to download'
-	}
-];
+	}),
+};
 
 module.exports = FilesDownloadCommand;

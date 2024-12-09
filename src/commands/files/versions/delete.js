@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class FilesDeleteVersionsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesDeleteVersionsCommand);
+		const { flags, args } = await this.parse(FilesDeleteVersionsCommand);
 
 		let options = flags.etag ? { etag: flags.etag } : null;
 
@@ -20,22 +20,22 @@ FilesDeleteVersionsCommand._endpoint = 'delete_files_id_versions_id';
 
 FilesDeleteVersionsCommand.flags = {
 	...BoxCommand.flags,
-	etag: flags.string({ description: 'Only delete if etag value matches' })
+	etag: Flags.string({ description: 'Only delete if etag value matches' })
 };
 
-FilesDeleteVersionsCommand.args = [
-	{
+FilesDeleteVersionsCommand.args = {
+	fileID: Args.string({
 		name: 'fileID',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to get versions for'
-	},
-	{
+	}),
+	fileVersionID: Args.string({
 		name: 'fileVersionID',
 		required: true,
 		hidden: false,
 		description: 'ID of the file version to delete'
-	}
-];
+	}),
+};
 
 module.exports = FilesDeleteVersionsCommand;

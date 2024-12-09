@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../../util');
 
 class FilesCreateMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesCreateMetadataCommand);
+		const { flags, args } = await this.parse(FilesCreateMetadataCommand);
 
 		let metadataValues = Object.assign({}, ...flags.data);
 
@@ -27,29 +27,29 @@ FilesCreateMetadataCommand._endpoint = 'post_files_id_metadata_id_id';
 
 FilesCreateMetadataCommand.flags = {
 	...BoxCommand.flags,
-	data: flags.string({
+	data: Flags.string({
 		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		multiple: true,
 		required: true,
 		parse: utils.parseMetadata,
 	}),
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope of the metadata template to use',
 		default: 'enterprise',
 	}),
-	'template-key': flags.string({
+	'template-key': Flags.string({
 		description: 'The key of the metadata template to use',
 		required: true,
 	}),
 };
 
-FilesCreateMetadataCommand.args = [
-	{
+FilesCreateMetadataCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to add metadata to'
-	}
-];
+	}),
+};
 
 module.exports = FilesCreateMetadataCommand;

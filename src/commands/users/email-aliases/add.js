@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class UsersAddEmailAliasCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersAddEmailAliasCommand);
+		const { flags, args } = await this.parse(UsersAddEmailAliasCommand);
 
 		let options = {};
 
@@ -26,25 +26,25 @@ UsersAddEmailAliasCommand._endpoint = 'post_users_id_email_aliases';
 
 UsersAddEmailAliasCommand.flags = {
 	...BoxCommand.flags,
-	confirm: flags.boolean({
+	confirm: Flags.boolean({
 		allowNo: true,
 		description: 'Whether or not to confirm the email alias.  Only Admins may automatically confirm an alias.'
 	}),
 };
 
-UsersAddEmailAliasCommand.args = [
-	{
+UsersAddEmailAliasCommand.args = {
+	userID: Args.string({
 		name: 'userID',
 		required: true,
 		hidden: false,
 		description: 'User ID to add email alias'
-	},
-	{
+	}),
+	email: Args.string({
 		name: 'email',
 		required: true,
 		hidden: false,
 		description: 'Email to add as alias'
-	}
-];
+	}),
+};
 
 module.exports = UsersAddEmailAliasCommand;

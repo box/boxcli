@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FoldersRenameCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersRenameCommand);
+		const { flags, args } = await this.parse(FoldersRenameCommand);
 		let updates = {
 			name: args.name,
 		};
@@ -29,23 +29,23 @@ FoldersRenameCommand.examples = ['box folders:rename 22222 "New Folder Name"'];
 
 FoldersRenameCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({ description: 'Change the folder description', parse: utils.unescapeSlashes }),
-	etag: flags.string({ description: 'Only rename if etag value matches' })
+	description: Flags.string({ description: 'Change the folder description', parse: utils.unescapeSlashes }),
+	etag: Flags.string({ description: 'Only rename if etag value matches' })
 };
 
-FoldersRenameCommand.args = [
-	{
+FoldersRenameCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to rename',
-	},
-	{
+	}),
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'New name for the folder',
-	}
-];
+	}),
+};
 
 module.exports = FoldersRenameCommand;

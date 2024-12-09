@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const chalk = require('chalk');
 
 class EnvironmentsSwitchUserCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsSwitchUserCommand);
+		const { flags, args } = await this.parse(EnvironmentsSwitchUserCommand);
 
 		let environmentsObj = await this.getEnvironments();
 		let environment = environmentsObj.environments[environmentsObj.default];
@@ -34,18 +34,18 @@ EnvironmentsSwitchUserCommand.flags = {
 	...BoxCommand.minFlags,
 };
 
-EnvironmentsSwitchUserCommand.args = [
-	{
+EnvironmentsSwitchUserCommand.args = {
+	userID: Args.string({
 		name: 'userID',
 		hidden: false,
 		required: false,
 		description: 'The user ID to switch to'
-	}
-];
+	})
+};
 
 EnvironmentsSwitchUserCommand.flags = {
 	...BoxCommand.flags,
-	default: flags.boolean({
+	default: Flags.boolean({
 		description: 'Switch to the default user, i.e. the Service Account'
 	}),
 };

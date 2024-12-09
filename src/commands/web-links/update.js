@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class WebLinksUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebLinksUpdateCommand);
+		const { flags, args } = await this.parse(WebLinksUpdateCommand);
 		let updates = {};
 
 		if (flags.description) {
@@ -30,28 +30,28 @@ WebLinksUpdateCommand._endpoint = 'put_web_links_id';
 
 WebLinksUpdateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({
+	description: Flags.string({
 		char: 'd',
 		description: 'Description of the web link',
 		parse: utils.unescapeSlashes
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Name of the web link'
 	}),
-	url: flags.string({
+	url: Flags.string({
 		char: 'u',
 		description: 'The URL the web link points to. Must start with "http://" or "https://"'
 	})
 };
 
-WebLinksUpdateCommand.args = [
-	{
+WebLinksUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the web link to update',
-	}
-];
+	}),
+};
 
 module.exports = WebLinksUpdateCommand;

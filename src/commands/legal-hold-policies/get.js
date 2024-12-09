@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class LegalHoldPoliciesGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesGetCommand);
+		const { flags, args } = await this.parse(LegalHoldPoliciesGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ LegalHoldPoliciesGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-LegalHoldPoliciesGetCommand.args = [
-	{
+LegalHoldPoliciesGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the legal hold policy to get',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesGetCommand;

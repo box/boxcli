@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class RetentionPoliciesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesCreateCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesCreateCommand);
 
 		let policyType = 'indefinite';
 		let dispositionAction = flags['disposition-action'];
@@ -47,19 +47,19 @@ RetentionPoliciesCreateCommand._endpoint = 'post_retention_policies';
 
 RetentionPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,
-	'notify-owners': flags.boolean({
+	'notify-owners': Flags.boolean({
 		description: 'The owner or co-owner will get notified when a file is nearing expiration',
 		allowNo: true
 	}),
-	'allow-extension': flags.boolean({
+	'allow-extension': Flags.boolean({
 		description: 'The owner of a file will be allowed to extend the retention',
 		allowNo: true
 	}),
-	'retention-length': flags.integer({
+	'retention-length': Flags.integer({
 		char: 'l',
 		description: 'The number of days to apply the retention policy. If not set, policy will be indefinite',
 	}),
-	'retention-type': flags.string({
+	'retention-type': Flags.string({
 		description: 'The type of retention for the new policy',
 		exclusive: [
 			'modifiable',
@@ -70,7 +70,7 @@ RetentionPoliciesCreateCommand.flags = {
 			'non_modifiable'
 		]
 	}),
-	modifiable: flags.boolean({
+	modifiable: Flags.boolean({
 		description: 'Set retention type to modifiable',
 		hidden: true,
 		exclusive: [
@@ -78,7 +78,7 @@ RetentionPoliciesCreateCommand.flags = {
 			'non-modifiable',
 		]
 	}),
-	'non-modifiable': flags.boolean({
+	'non-modifiable': Flags.boolean({
 		description: 'Set retention type to non_modifiable',
 		hidden: true,
 		exclusive: [
@@ -86,7 +86,7 @@ RetentionPoliciesCreateCommand.flags = {
 			'modifiable',
 		]
 	}),
-	'disposition-action': flags.string({
+	'disposition-action': Flags.string({
 		required: true,
 		description: 'For indefinite policies, disposition action must be remove_retention',
 		options: [
@@ -94,12 +94,12 @@ RetentionPoliciesCreateCommand.flags = {
 			'remove_retention'
 		]
 	}),
-	description: flags.string({
+	description: Flags.string({
 		required: false,
 		description: 'The additional text description of the retention policy',
 		parse: utils.unescapeSlashes
 	}),
-	'custom-notification-recipient': flags.string({
+	'custom-notification-recipient': Flags.string({
 		description: 'A list of users notified when the retention policy duration is about to end. ' +
 			'Allowed properties are: id, type, login, name',
 		multiple: true,
@@ -117,13 +117,13 @@ RetentionPoliciesCreateCommand.flags = {
 	}),
 };
 
-RetentionPoliciesCreateCommand.args = [
-	{
+RetentionPoliciesCreateCommand.args = {
+	policyName: Args.string({
 		name: 'policyName',
 		required: true,
 		hidden: false,
 		description: 'Name of retention policy to be created'
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesCreateCommand;

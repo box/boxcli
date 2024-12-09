@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 
 class TermsOfServiceCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TermsOfServiceCreateCommand);
+		const { flags } = await this.parse(TermsOfServiceCreateCommand);
 
 		let termsOfService = await this.client.termsOfService.create(flags.type, flags.status, flags.text);
 		await this.output(termsOfService);
@@ -18,7 +18,7 @@ TermsOfServiceCreateCommand._endpoint = 'post_terms_of_services';
 
 TermsOfServiceCreateCommand.flags = {
 	...BoxCommand.flags,
-	type: flags.string({
+	type: Flags.string({
 		description: 'Type of terms of service',
 		required: true,
 		options: [
@@ -26,7 +26,7 @@ TermsOfServiceCreateCommand.flags = {
 			'external'
 		]
 	}),
-	status: flags.string({
+	status: Flags.string({
 		description: 'Status of the terms of service',
 		required: true,
 		options: [
@@ -34,12 +34,10 @@ TermsOfServiceCreateCommand.flags = {
 			'disabled'
 		]
 	}),
-	text: flags.string({
+	text: Flags.string({
 		description: 'Text for the terms of service',
 		required: true,
 	}),
 };
-
-TermsOfServiceCreateCommand.args = [];
 
 module.exports = TermsOfServiceCreateCommand;

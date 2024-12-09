@@ -1,9 +1,9 @@
 'use strict';
 
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const { mkdirp } = require('mkdirp');
 const path = require('path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
@@ -44,7 +44,7 @@ function saveFileToDisk(folderPath, file, stream) {
 
 class FoldersDownloadCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersDownloadCommand);
+		const { flags, args } = await this.parse(FoldersDownloadCommand);
 
 		this.outputPath = null;
 		this.maxDepth =
@@ -256,37 +256,37 @@ FoldersDownloadCommand.examples = ['box folders:download 22222'];
 
 FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,
-	destination: flags.string({
+	destination: Flags.string({
 		description: 'The destination folder to download the Box folder into',
 		parse: utils.parsePath,
 	}),
-	zip: flags.boolean({
+	zip: Flags.boolean({
 		description: 'Download the folder into a single .zip archive',
 	}),
-	depth: flags.integer({
+	depth: Flags.integer({
 		description:
 			'Number of levels deep to recurse when downloading the folder tree',
 	}),
-	'create-path': flags.boolean({
+	'create-path': Flags.boolean({
 		description:
 			'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
 		default: true,
 	}),
-	overwrite: flags.boolean({
+	overwrite: Flags.boolean({
 		description: '[default: true] Overwrite the folder if it already exists.',
 		allowNo: true,
 		default: true,
 	}),
 };
 
-FoldersDownloadCommand.args = [
-	{
+FoldersDownloadCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to download',
-	},
-];
+	}),
+};
 
 module.exports = FoldersDownloadCommand;

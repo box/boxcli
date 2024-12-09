@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class WebhooksDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebhooksDeleteCommand);
+		const { args } = await this.parse(WebhooksDeleteCommand);
 
 		await this.client.webhooks.delete(args.id);
 		this.info(`Deleted webhook ${args.id}`);
@@ -19,13 +20,13 @@ WebhooksDeleteCommand.flags = {
 	...BoxCommand.flags
 };
 
-WebhooksDeleteCommand.args = [
-	{
+WebhooksDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the webhook to delete',
-	}
-];
+	}),
+};
 
 module.exports = WebhooksDeleteCommand;

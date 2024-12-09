@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class SharedLinksGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(SharedLinksGetCommand);
+		const { flags, args } = await this.parse(SharedLinksGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -23,19 +23,19 @@ SharedLinksGetCommand._endpoint = 'get_shared_items';
 
 SharedLinksGetCommand.flags = {
 	...BoxCommand.flags,
-	password: flags.string({
+	password: Flags.string({
 		description: 'Shared item password',
 		default: null
 	})
 };
 
-SharedLinksGetCommand.args = [
-	{
+SharedLinksGetCommand.args = {
+	url: Args.string({
 		name: 'url',
 		required: true,
 		hidden: false,
 		description: 'Shared item URL to resolve',
-	}
-];
+	}),
+};
 
 module.exports = SharedLinksGetCommand;

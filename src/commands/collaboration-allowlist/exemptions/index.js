@@ -5,7 +5,7 @@ const PaginationUtils = require('../../../pagination-utils');
 
 class CollaborationAllowlistListExemptUserCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollaborationAllowlistListExemptUserCommand);
+		const { flags } = await this.parse(CollaborationAllowlistListExemptUserCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {

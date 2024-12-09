@@ -3,9 +3,8 @@
 
 Sends an AI request to supported LLMs and returns an answer
 
-- [`box ai`](#box-ai)
-  - [`box ai:ask`](#box-aiask)
-  - [`box ai:text-gen`](#box-aitext-gen)
+* [`box ai:ask`](#box-aiask)
+* [`box ai:text-gen`](#box-aitext-gen)
 
 ## `box ai:ask`
 
