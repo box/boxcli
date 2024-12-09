@@ -6,7 +6,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(RetentionPoliciesListCommand);
+		const { flags } = await this.parse(RetentionPoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['policy-name']) {

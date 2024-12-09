@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class LegalHoldPoliciesDeleteAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(LegalHoldPoliciesDeleteAssignmentCommand);
+		const { args } = await this.parse(LegalHoldPoliciesDeleteAssignmentCommand);
 
 		await this.client.legalHoldPolicies.deleteAssignment(args.id);
 		this.info(`Delete policy assignment ${args.id}`);

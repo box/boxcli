@@ -23,7 +23,6 @@ extends:
     - 'plugin:promise/recommended'
     - 'plugin:unicorn/recommended'
     - 'plugin:n/recommended'
-    # - 'oclif'
     - 'prettier'
 
 rules:
@@ -126,11 +125,7 @@ rules:
     no-shadow-restricted-names: error
     # Turn on someday, just use null everywhere if we can
     no-undefined: off
-    # We allow some unused args
-    no-unused-vars:
-        - error
-        -
-            args: after-used
+    no-unused-vars: error
     no-use-before-define: error
 
 ### NODE AND COMMONJS

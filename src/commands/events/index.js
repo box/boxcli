@@ -14,7 +14,7 @@ const eventReplacements = {
 
 class EventsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(EventsGetCommand);
+		const { flags } = await this.parse(EventsGetCommand);
 		let options = {};
 
 		if (flags.enterprise) {

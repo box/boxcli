@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class TrashDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TrashDeleteCommand);
+		const { args } = await this.parse(TrashDeleteCommand);
 
 		if (args.type === 'file') {
 			await this.client.files.deletePermanently(args.id);

@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class FileRequestsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(FileRequestsGetCommand);
+		const { args } = await this.parse(FileRequestsGetCommand);
 
 		let fileRequest = await this.client.fileRequests.getById(args.id);
 		await this.output(fileRequest);
@@ -19,7 +19,6 @@ FileRequestsGetCommand._endpoint = 'get_file_requests_id';
 FileRequestsGetCommand.flags = {
 	...BoxCommand.flags,
 };
-
 FileRequestsGetCommand.args = {
 	id: Args.string({
 		name: 'id',

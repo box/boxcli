@@ -6,7 +6,7 @@ const pEvent = require('p-event');
 
 class EventsPollCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(EventsPollCommand);
+		const { flags } = await this.parse(EventsPollCommand);
 		let stream;
 		let options = {};
 

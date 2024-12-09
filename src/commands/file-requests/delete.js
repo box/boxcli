@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class FileRequestsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(FileRequestsDeleteCommand);
+		const { args } = await this.parse(FileRequestsDeleteCommand);
 
 		await this.client.fileRequests.delete(args.id);
 		this.info(`Deleted file request ${args.id}`);

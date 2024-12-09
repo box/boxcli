@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class CommentsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(CommentsDeleteCommand);
+		const { args } = await this.parse(CommentsDeleteCommand);
 
 		await this.client.comments.delete(args.id);
 		this.info(`Successfully deleted comment ${args.id}`);

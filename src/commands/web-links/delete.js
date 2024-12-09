@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class WebLinksDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(WebLinksDeleteCommand);
+		const { args } = await this.parse(WebLinksDeleteCommand);
 
 		await this.client.weblinks.delete(args.id);
 		this.info(`Deleted weblink ${args.id}`);

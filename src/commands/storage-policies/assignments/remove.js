@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class StoragePoliciesDeleteAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(StoragePoliciesDeleteAssignmentCommand);
+		const { args } = await this.parse(StoragePoliciesDeleteAssignmentCommand);
 
 		await this.client.storagePolicies.removeAssignment(args.id);
 		this.info(`Deleted storage policy assignment ${args.id}`);

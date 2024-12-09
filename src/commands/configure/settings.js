@@ -11,7 +11,7 @@ const utils = require('../../util');
 
 class ConfigureSettingsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(ConfigureSettingsCommand);
+		const { flags } = await this.parse(ConfigureSettingsCommand);
 		let settings = this.settings;
 
 		if (flags['downloads-folder-path']) {

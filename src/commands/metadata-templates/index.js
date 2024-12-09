@@ -4,7 +4,7 @@ const BoxCommand = require('../../box-command');
 
 class MetadataTemplatesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(MetadataTemplatesListCommand);
+		await this.parse(MetadataTemplatesListCommand);
 
 		let templates = await this.client.metadata.getTemplates('enterprise');
 		await this.output(templates);

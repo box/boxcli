@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class UsersDeleteEmailAliasCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(UsersDeleteEmailAliasCommand);
+		const { args } = await this.parse(UsersDeleteEmailAliasCommand);
 
 		await this.client.users.removeEmailAlias(args.userID, args.aliasID);
 		this.info(`Removed alias ${args.aliasID} from user ${args.userID}`);

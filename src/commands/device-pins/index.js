@@ -6,7 +6,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class DevicePinsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(DevicePinsListCommand);
+		const { flags } = await this.parse(DevicePinsListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.direction) {

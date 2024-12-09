@@ -6,7 +6,7 @@ const chalk = require('chalk');
 
 class MetadataCascadePoliciesDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(MetadataCascadePoliciesDeleteCommand);
+		const { args } = await this.parse(MetadataCascadePoliciesDeleteCommand);
 
 		await this.client.metadata.deleteCascadePolicy(args.id);
 		this.info(chalk`{green Successfully deleted policy ${args.id}}`);

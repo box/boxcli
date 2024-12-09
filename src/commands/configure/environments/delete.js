@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(EnvironmentsDeleteCommand);
+		const { args } = await this.parse(EnvironmentsDeleteCommand);
 		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 

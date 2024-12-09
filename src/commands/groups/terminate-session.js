@@ -5,7 +5,7 @@ const { Flags } = require('@oclif/core');
 
 class GroupsTerminateSessionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(GroupsTerminateSessionCommand);
+		const { flags } = await this.parse(GroupsTerminateSessionCommand);
 
         let response = await this.client.groups.terminateSession(flags['group-ids']);
         await this.output(response);
@@ -26,7 +26,5 @@ GroupsTerminateSessionCommand.flags = {
         required: true
     }),
 };
-
-GroupsTerminateSessionCommand.args = {};
 
 module.exports = GroupsTerminateSessionCommand;

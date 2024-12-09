@@ -5,7 +5,7 @@ const { Flags } = require('@oclif/core');
 
 class TokensGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TokensGetCommand);
+		const { flags } = await this.parse(TokensGetCommand);
 		let token;
 
 		if (flags['user-id']) {

@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class TermsOfServiceGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TermsOfServiceGetCommand);
+		const { args } = await this.parse(TermsOfServiceGetCommand);
 
 		let termsOfService = await this.client.termsOfService.get(args.id);
 		await this.output(termsOfService);

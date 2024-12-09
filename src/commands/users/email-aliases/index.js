@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class UsersGetEmailAliasesCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(UsersGetEmailAliasesCommand);
+		const { args } = await this.parse(UsersGetEmailAliasesCommand);
 
 		let emailAliases = await this.client.users.getEmailAliases(args.userID);
 		await this.output(emailAliases);

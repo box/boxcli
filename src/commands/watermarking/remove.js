@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class WatermarkingRemoveCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(WatermarkingRemoveCommand);
+		const { args } = await this.parse(WatermarkingRemoveCommand);
 
 		if (args.itemType === 'file') {
 			await this.client.files.removeWatermark(args.itemID);

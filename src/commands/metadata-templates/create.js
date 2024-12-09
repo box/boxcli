@@ -116,7 +116,7 @@ function _parseFlags(preparsedArgv) {
 
 class MetadataTemplatesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = await this.parse(MetadataTemplatesCreateCommand);
+		const { flags, raw } = await this.parse(MetadataTemplatesCreateCommand);
 
 		let options = _parseFlags(raw);
 
@@ -198,7 +198,5 @@ MetadataTemplatesCreateCommand.flags = {
 		description: 'Whether to include the metadata when a file or folder is copied',
 	})
 };
-
-MetadataTemplatesCreateCommand.args = {};
 
 module.exports = MetadataTemplatesCreateCommand;

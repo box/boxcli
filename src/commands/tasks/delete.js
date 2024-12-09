@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class TasksDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TasksDeleteCommand);
+		const { args } = await this.parse(TasksDeleteCommand);
 
 		await this.client.tasks.delete(args.id);
 		this.info(`Successfully deleted task ${args.id}`);

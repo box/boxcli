@@ -6,7 +6,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class LegalHoldPoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(LegalHoldPoliciesListCommand);
+		const { flags } = await this.parse(LegalHoldPoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['policy-name']) {

@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class WatermarkingGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(WatermarkingGetCommand);
+		const { args } = await this.parse(WatermarkingGetCommand);
 		let watermark;
 
 		if (args.itemType === 'file') {

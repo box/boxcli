@@ -6,7 +6,7 @@ const inquirer = require('inquirer');
 
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(EnvironmentsSetCurrentCommand);
+		const { args } = await this.parse(EnvironmentsSetCurrentCommand);
 		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 

@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class FilesUnlockCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(FilesUnlockCommand);
+		const { args } = await this.parse(FilesUnlockCommand);
 
 		let file = await this.client.files.unlock(args.id);
 		await this.output(file);

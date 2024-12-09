@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class UsersInviteUserCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(UsersInviteUserCommand);
+		const { args } = await this.parse(UsersInviteUserCommand);
 
 		let user = await this.client.enterprise.inviteUser(args.enterpriseID, args.email);
 		await this.output(user);

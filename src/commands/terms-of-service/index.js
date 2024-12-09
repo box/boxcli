@@ -5,7 +5,7 @@ const { Flags } = require('@oclif/core');
 
 class TermsOfServiceListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TermsOfServiceListCommand);
+		const { flags } = await this.parse(TermsOfServiceListCommand);
 		let options = {};
 
 		if (flags.type) {

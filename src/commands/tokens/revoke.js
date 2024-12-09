@@ -6,7 +6,7 @@ const chalk = require('chalk');
 
 class TokensRevokeCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TokensRevokeCommand);
+		const { args } = await this.parse(TokensRevokeCommand);
 
 		let response = await this.sdk.revokeTokens(args.token);
 

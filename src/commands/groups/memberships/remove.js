@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class GroupsRemoveMembershipCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(GroupsRemoveMembershipCommand);
+		const { args } = await this.parse(GroupsRemoveMembershipCommand);
 
 		await this.client.groups.removeMembership(args.id);
 		this.info(`Removed membership ${args.id}`);

@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class RetentionPoliciesRemoveAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(RetentionPoliciesRemoveAssignmentCommand);
+		const { args } = await this.parse(RetentionPoliciesRemoveAssignmentCommand);
 
 		await this.client.retentionPolicies.deleteAssignment(args.id);
 		this.info(`Removed retention policy assignment ${args.id}`);

@@ -6,7 +6,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class GroupsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(GroupsListCommand);
+		const { flags } = await this.parse(GroupsListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {

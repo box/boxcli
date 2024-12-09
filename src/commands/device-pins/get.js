@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class DevicePinsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(DevicePinsGetCommand);
+		const { args } = await this.parse(DevicePinsGetCommand);
 
 		let pin = await this.client.devicePins.get(args.id);
 		await this.output(pin);

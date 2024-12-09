@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class WebLinksMoveCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(WebLinksMoveCommand);
+		const { args } = await this.parse(WebLinksMoveCommand);
 		let updates = { parent: { id: args.parentID } };
 
 		let weblink = await this.client.weblinks.update(args.id, updates);

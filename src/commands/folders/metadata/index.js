@@ -5,7 +5,7 @@ const BoxCommand = require('../../../box-command');
 
 class FoldersGetAllMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(FoldersGetAllMetadataCommand);
+		const { args } = await this.parse(FoldersGetAllMetadataCommand);
 
 		let metadata = await this.client.folders.getAllMetadata(args.id);
 		await this.output(metadata);

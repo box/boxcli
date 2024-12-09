@@ -5,7 +5,7 @@ const { Flags } = require('@oclif/core');
 
 class TermsOfServiceCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TermsOfServiceCreateCommand);
+		const { flags } = await this.parse(TermsOfServiceCreateCommand);
 
 		let termsOfService = await this.client.termsOfService.create(flags.type, flags.status, flags.text);
 		await this.output(termsOfService);
@@ -39,7 +39,5 @@ TermsOfServiceCreateCommand.flags = {
 		required: true,
 	}),
 };
-
-TermsOfServiceCreateCommand.args = {};
 
 module.exports = TermsOfServiceCreateCommand;

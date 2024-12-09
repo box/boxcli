@@ -7,7 +7,7 @@ const SharedLinksModule = require('../../modules/shared-links');
 
 class SharedLinksDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(SharedLinksDeleteCommand);
+		const { args } = await this.parse(SharedLinksDeleteCommand);
 
 		let sharedLinksModule = new SharedLinksModule(this.client);
 		let item = await sharedLinksModule.removeSharedLink(args);

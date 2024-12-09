@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class WebLinksGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(WebLinksGetCommand);
+		const { args } = await this.parse(WebLinksGetCommand);
 
 		let weblink = await this.client.weblinks.get(args.id);
 		await this.output(weblink);

@@ -5,7 +5,7 @@ const { Flags } = require('@oclif/core');
 
 class UsersTerminateSessionCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(UsersTerminateSessionCommand);
+		const { flags } = await this.parse(UsersTerminateSessionCommand);
 
         if (!flags['user-ids'] && !flags['user-logins']) {
             throw new Error('You must specify at least one user ID or login');
@@ -35,7 +35,5 @@ UsersTerminateSessionCommand.flags = {
         multiple: true,
     }),
 };
-
-UsersTerminateSessionCommand.args = {};
 
 module.exports = UsersTerminateSessionCommand;

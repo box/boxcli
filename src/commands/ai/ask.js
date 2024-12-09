@@ -6,7 +6,7 @@ const utils = require('../../util');
 
 class AiAskCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(AiAskCommand);
+		const { flags } = await this.parse(AiAskCommand);
 		let options = {};
         options.mode = flags.items.length > 1 ? 'multi_item_qa' : 'single_item_qa';
 

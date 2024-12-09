@@ -5,7 +5,7 @@ const BoxCommand = require('../../box-command');
 
 class StoragePoliciesAssignCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(StoragePoliciesAssignCommand);
+		const { args } = await this.parse(StoragePoliciesAssignCommand);
 
 		let assignment = await this.client.storagePolicies.assign(args.storagePolicyID, args.userID);
 		await this.output(assignment);

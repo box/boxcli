@@ -5,7 +5,6 @@ const BoxCommand = require('../../box-command');
 
 class GroupsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags } = await this.parse(GroupsDeleteCommand);
 		const { args } = await this.parse(GroupsDeleteCommand);
 
 		await this.client.groups.delete(args.id);

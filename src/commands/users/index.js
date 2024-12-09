@@ -7,7 +7,7 @@ const PaginationUtils = require('../../pagination-utils');
 
 class UsersListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(UsersListCommand);
+		const { flags } = await this.parse(UsersListCommand);
 		let options = PaginationUtils.forceMarkerPagination(flags);
 		flags.limit = options.limit;
 		flags.usemarker = options.usemarker;
