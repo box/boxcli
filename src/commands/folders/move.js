@@ -12,6 +12,9 @@ class FoldersMoveCommand extends BoxCommand {
 			},
 		};
 
+		if (args.parentUserID) {
+			updates.parent.user_id = args.parentUserID;
+		}
 		if (flags.etag) {
 			updates.etag = flags.etag;
 		}
@@ -42,6 +45,12 @@ FoldersMoveCommand.args = [
 		required: true,
 		hidden: false,
 		description: 'ID of the new parent folder to move the folder into',
+	},
+	{
+		name: 'parentUserID',
+		required: false,
+		hidden: false,
+		description: 'Moving to non-root folder is not allowed when user_id is present. Parent folder id should be zero when user_id is provided.',
 	}
 ];
 

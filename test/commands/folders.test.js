@@ -135,13 +135,21 @@ describe('Folders', () => {
 
 	describe('folders:move', () => {
 		let folderId = '0',
+			rootFolderId = '0',
 			parentFolderId = '987654321',
+			parentUserID = '123456789',
 			moveFixture = getFixture('folders/put_folders_id'),
 			yamlOutput = getFixture('output/folders_move_yaml.txt');
 
 		let moveBody = {
 			parent: {
 				id: parentFolderId
+			}
+		};
+		let moveBodyWithUserID = {
+			parent: {
+				id: rootFolderId,
+				user_id: parentUserID
 			}
 		};
 
@@ -162,6 +170,24 @@ describe('Folders', () => {
 				assert.equal(ctx.stdout, moveFixture);
 			});
 
+		test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/folders/${folderId}`, moveBodyWithUserID)
+				.reply(200, moveFixture)
+			)
+			.stdout()
+			.command([
+				'folders:move',
+				folderId,
+				rootFolderId,
+				parentUserID,
+				'--json',
+				'--token=test'
+			])
+			.it('should move a folder to a different folder with user ID (JSON Output)', ctx => {
+				assert.equal(ctx.stdout, moveFixture);
+			});
+			
 		test
 			.nock(TEST_API_ROOT, api => api
 				.put(`/2.0/folders/${folderId}`, moveBody)
