@@ -28,17 +28,21 @@ Among other features, Box CLI includes the following functionality:
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Getting Started](#getting-started)
-  - [CLI Installation](#cli-installation)
-  - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
-- [Usage](#usage)
+- [Box CLI](#box-cli)
+  - [Table of contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [CLI Installation](#cli-installation)
+      - [Windows \& macOS Installers](#windows--macos-installers)
+      - [Linux \& Node install](#linux--node-install)
+    - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
+  - [Usage](#usage)
 - [Command Topics](#command-topics)
-- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-- [Versions](#versions)
-  - [Supported Version](#supported-version)
-  - [Version schedule](#version-schedule)
-- [Contributing to the Box CLI](#contributing-to-the-box-cli)
-- [Copyright and License](#copyright-and-license)
+  - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+  - [Versions](#versions)
+    - [Supported Version](#supported-version)
+    - [Version schedule](#version-schedule)
+  - [Contributing to the Box CLI](#contributing-to-the-box-cli)
+  - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,7 +66,7 @@ npm install --global @box/cli
 ### CLI and Server Authentication with JWT
 
 Alternatively, to get started with the Box CLI, [download and install](#CLI-Installation) CLI, set up a Box application using Server Authentication with JWT and
-download the JSON configuration file from the Configuration page of your app in the
+download the JSON configuration file from the Configuration page of your platform app in the
 [Box Developer Console][dev-console] following [JWT CLI Guide][jwt-guide].  Then, set up the CLI by pointing it to your configuration file:
 
 ```sh-session
