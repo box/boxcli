@@ -8,6 +8,13 @@
 ![Platform](https://img.shields.io/badge/node-14--18-blue)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
+> 🚨**NEW MAJOR VERSION ALERT**
+>
+> We’re excited to announce that by the end of January 2025, we’ll be releasing Box CLI 4.0.0! This new major version introduces exciting features and improvements, including:
+> * Upgrading the oclif framework from v1 to v4
+> * Adding support for Node 20 and 22, while dropping support for Node 14 and 16
+>
+> Stay tuned!
 
 The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
