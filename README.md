@@ -10,11 +10,11 @@
 
 > 🚨**NEW MAJOR VERSION ALERT**
 >
-> We’re excited to announce that by the end of January 2025, we’ll be releasing Box CLI 4.0.0! This new major version introduces exciting features and improvements, including:
+> We’re excited to announce that we have just released Box CLI 4.0.0! This new major version introduces exciting features and improvements, including:
 > * Upgrading the oclif framework from v1 to v4
 > * Adding support for Node 20 and 22, while dropping support for Node 14 and 16
 >
-> Stay tuned!
+> Please refer to the [CHANGELOG](CHANGELOG.md) for more information on the changes in this release.
 
 The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
