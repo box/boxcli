@@ -8,6 +8,13 @@
 ![Platform](https://img.shields.io/badge/node-18--22-blue)
 [![Coverage](https://coveralls.io/repos/github/box/boxcli/badge.svg?branch=main)](https://coveralls.io/github/box/boxcli?branch=main)
 
+> 🚨**NEW MAJOR VERSION ALERT**
+>
+> We’re excited to announce that we have just released Box CLI 4.0.0! This new major version introduces exciting features and improvements, including:
+> * Upgrading the oclif framework from v1 to v4
+> * Adding support for Node 20 and 22, while dropping support for Node 14 and 16
+>
+> Please refer to the [CHANGELOG](CHANGELOG.md) for more information on the changes in this release.
 
 The Box CLI is a user-friendly command line tool which allows both technical and non-technical users to leverage the Box API to perform routine or bulk actions. There is no need to write any code, as these actions are executed through a [set of commands](#command-topics).
 
@@ -59,7 +66,7 @@ npm install --global @box/cli
 ### CLI and Server Authentication with JWT
 
 Alternatively, to get started with the Box CLI, [download and install](#CLI-Installation) CLI, set up a Box application using Server Authentication with JWT and
-download the JSON configuration file from the Configuration page of your app in the
+download the JSON configuration file from the Configuration page of your platform app in the
 [Box Developer Console][dev-console] following [JWT CLI Guide][jwt-guide].  Then, set up the CLI by pointing it to your configuration file:
 
 ```sh-session
