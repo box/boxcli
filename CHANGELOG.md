@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/box/boxcli/compare/v3.16.0...v4.0.0) (2025-01-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support old Node version and integrate typescript SDK (#548)
+
+### New Features and Enhancements
+
+* Drop support old Node version and integrate typescript SDK ([#548](https://github.com/box/boxcli/issues/548)) ([22179ec](https://github.com/box/boxcli/commit/22179ecfc68b8dd315339ac204a7274d712d5a8e))
+* Incognito browser option for box login ([#561](https://github.com/box/boxcli/issues/561)) ([a666766](https://github.com/box/boxcli/commit/a6667664d6b43fd80de9e57482b0f4138efcd6cf))
+* Replace `@oclif/command` to `@oclif/core` library ([#553](https://github.com/box/boxcli/issues/553)) ([aed470b](https://github.com/box/boxcli/commit/aed470b22d28ed19040b4417e3143f3323b9a916))
+
+### Bug Fixes
+
+* Respect using environment `defaultAsUserId` for CCG Auth and OAuth ([#554](https://github.com/box/boxcli/issues/554)) ([b3a691e](https://github.com/box/boxcli/commit/b3a691e8c886f7bb3a25ae8f7986f284a695f046))
+
 ## [3.16.0](https://github.com/box/boxcli/compare/v3.15.0...v3.16.0) (2024-11-25)
 
 

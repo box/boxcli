@@ -9,7 +9,7 @@
 		"upload",
 		"download"
 	],
-	"version": "3.16.0",
+	"version": "4.0.0",
 	"author": "Box <oss@box.com>",
 	"license": "Apache-2.0",
 	"main": "src/index.js",
