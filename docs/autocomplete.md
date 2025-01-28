@@ -7,23 +7,31 @@ Display autocomplete installation instructions
 
 ## `box autocomplete [SHELL]`
 
-display autocomplete installation instructions
+Display autocomplete installation instructions.
 
 ```
 USAGE
-  $ box autocomplete [SHELL]
+  $ box autocomplete [SHELL] [-r]
 
 ARGUMENTS
-  SHELL  shell type
+  SHELL  (zsh|bash|powershell) Shell type
 
-OPTIONS
+FLAGS
   -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+DESCRIPTION
+  Display autocomplete installation instructions.
 
 EXAMPLES
   $ box autocomplete
+
   $ box autocomplete bash
+
   $ box autocomplete zsh
+
+  $ box autocomplete powershell
+
   $ box autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.1.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.2.18/src/commands/autocomplete/index.js)_
