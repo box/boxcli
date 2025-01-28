@@ -142,7 +142,7 @@
 		}
 	},
 	"scripts": {
-		"test": "npm run clean && nyc mocha \"test/**/*.test.js\"",
+		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
