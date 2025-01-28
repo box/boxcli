@@ -7,13 +7,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### ⚠ BREAKING CHANGES
 
-* Drop support old Node version and integrate typescript SDK (#548)
+* Drop support old Node version and integrate typescript SDK ([#548](https://github.com/box/boxcli/issues/548)) ([22179ec](https://github.com/box/boxcli/commit/22179ecfc68b8dd315339ac204a7274d712d5a8e))
+* Replace `@oclif/command` to `@oclif/core` library ([#553](https://github.com/box/boxcli/issues/553)) ([aed470b](https://github.com/box/boxcli/commit/aed470b22d28ed19040b4417e3143f3323b9a916))
 
 ### New Features and Enhancements
 
-* Drop support old Node version and integrate typescript SDK ([#548](https://github.com/box/boxcli/issues/548)) ([22179ec](https://github.com/box/boxcli/commit/22179ecfc68b8dd315339ac204a7274d712d5a8e))
 * Incognito browser option for box login ([#561](https://github.com/box/boxcli/issues/561)) ([a666766](https://github.com/box/boxcli/commit/a6667664d6b43fd80de9e57482b0f4138efcd6cf))
-* Replace `@oclif/command` to `@oclif/core` library ([#553](https://github.com/box/boxcli/issues/553)) ([aed470b](https://github.com/box/boxcli/commit/aed470b22d28ed19040b4417e3143f3323b9a916))
 
 ### Bug Fixes
 
