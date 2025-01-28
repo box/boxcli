@@ -6,8 +6,9 @@ env:
     es6: true
 
 parserOptions:
-    sourceType: script
-    ecmaVersion: 2018
+    parser: 'babel-eslint'
+    sourceType: 'script'
+    allowImportExportEverywhere: true
 
 globals:
     # Allow the Intl global but don't allow it to be overwritten

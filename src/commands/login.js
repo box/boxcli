@@ -10,7 +10,6 @@ const BoxCLIError = require('../cli-error');
 const CLITokenCache = require('../token-cache');
 const pkg = require('../../package.json');
 const chalk = require('chalk');
-const open = require('open');
 const express = require('express');
 const inquirer = require('inquirer');
 const path = require('path');
@@ -20,6 +19,10 @@ const { nanoid } = require('nanoid');
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
+		const openModule = await import('open');
+		const open = openModule.default;
+		const apps = openModule.apps;
+
 		const { flags } = await this.parse(OAuthLoginCommand);
 		const environmentsObj = await this.getEnvironments();
 		const port = flags.port;
@@ -183,7 +186,11 @@ class OAuthLoginCommand extends BoxCommand {
 				`http://localhost:${port}/callback?state=${authInfo.state}&code=${authInfo.code}`
 			);
 		} else {
-			open(authorizeUrl);
+			if (flags['incognito-browser']) {
+				open(authorizeUrl, {newInstance: true, app: {name: apps.browserPrivate}});
+			} else {
+				open(authorizeUrl);
+			}
 			this.info(
 				chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
 			);
@@ -220,6 +227,11 @@ OAuthLoginCommand.flags = {
 		description: 'Reauthorize the existing environment with given `name`',
 		dependsOn: ['name'],
 		default: false
+	}),
+	'incognito-browser': Flags.boolean({
+		char: 'i',
+		description: 'Visit authorize URL with incognito browser',
+		default: false,
 	}),
 };
 
