@@ -15,6 +15,8 @@ const csvParse = util.promisify(csv.parse);
 const csvStringify = util.promisify(csv.stringify);
 const dateTime = require('date-fns');
 const BoxSDK = require('box-node-sdk');
+const BoxTSSDK = require('box-typescript-sdk-gen');
+const BoxTsErrors = require('box-typescript-sdk-gen/lib/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
 const utils = require('./util');
@@ -153,7 +155,9 @@ function offsetDate(date, timeLength, timeUnit) {
  * @private
  */
 function formatKey(key) {
+	// Converting camel case to snake case and then to title case
 	return key
+		.replace(/[A-Z]/gu, letter => `_${letter.toLowerCase()}`)
 		.split('_')
 		.map((s) => KEY_MAPPINGS[s] || _.capitalize(s))
 		.join(' ');
@@ -169,6 +173,11 @@ function formatObjectKeys(obj) {
 	// No need to process primitive values
 	if (typeof obj !== 'object' || obj === null) {
 		return obj;
+	}
+
+	// If type is Date, convert to ISO string
+	if (obj instanceof Date) {
+		return obj.toISOString();
 	}
 
 	// Don't format metadata objects to avoid mangling keys
@@ -260,6 +269,7 @@ class BoxCommand extends Command {
 		this.args = args;
 		this.settings = await this._loadSettings();
 		this.client = await this.getClient();
+		this.tsClient = await this.getTsClient();
 
 		if (this.isBulk) {
 			this.constructor.args = originalArgs;
@@ -824,6 +834,168 @@ class BoxCommand extends Command {
 	}
 
 	/**
+	 * Instantiate the TypeScript SDK client for making API calls
+	 *
+	 * @returns {BoxTSSDK.BoxClient} The TypeScript SDK client for making API calls in the command
+	 */
+	async getTsClient() {
+		// Allow some commands (e.g. configure:environments:add, login) to skip client setup so they can run
+		if (this.constructor.noClient) {
+			return null;
+		}
+		let environmentsObj = await this.getEnvironments();
+		const environment =
+			environmentsObj.environments[environmentsObj.default] || {};
+		const { authMethod } = environment;
+
+		let client;
+		if (this.flags.token) {
+			DEBUG.init('Using passed in token %s', this.flags.token);
+			let tsSdkAuth = new BoxTSSDK.BoxDeveloperTokenAuth({
+				token: this.flags.token,
+			});
+			client = new BoxTSSDK.BoxClient({
+				auth: tsSdkAuth,
+			});
+			client = this._configureTsSdk(client, SDK_CONFIG);
+		} else if (authMethod === 'ccg') {
+			DEBUG.init('Using Client Credentials Grant Authentication');
+
+			const { clientId, clientSecret, ccgUser } = environment;
+
+			if (!clientId || !clientSecret) {
+				throw new BoxCLIError(
+					'You need to have a default environment with clientId and clientSecret in order to use CCG'
+				);
+			}
+
+			let configObj;
+			try {
+				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+			} catch (ex) {
+				throw new BoxCLIError('Could not read environments config file', ex);
+			}
+
+			const { enterpriseID } = configObj;
+			const tokenCache = environment.cacheTokens === false
+				? null
+				: new CLITokenCache(environmentsObj.default);
+			let ccgConfig = new BoxTSSDK.CcgConfig(ccgUser ? {
+				clientId,
+				clientSecret,
+				userId: ccgUser,
+				tokenStorage: tokenCache,
+			} : {
+				clientId,
+				clientSecret,
+				enterpriseId: enterpriseID,
+				tokenStorage: tokenCache,
+			});
+			let ccgAuth = new BoxTSSDK.BoxCcgAuth({config: ccgConfig});
+			client = new BoxTSSDK.BoxClient({
+				auth: ccgAuth,
+			});
+			client = this._configureTsSdk(client, SDK_CONFIG);
+		} else if (
+			environmentsObj.default &&
+			environmentsObj.environments[environmentsObj.default].authMethod ===
+				'oauth20'
+		) {
+			try {
+				DEBUG.init(
+					'Using environment %s %O',
+					environmentsObj.default,
+					environment
+				);
+				const tokenCache = new CLITokenCache(environmentsObj.default);
+				const oauthConfig = new BoxTSSDK.OAuthConfig({
+					clientId: environment.clientId,
+					clientSecret: environment.clientSecret,
+					tokenStorage: tokenCache,
+				});
+				const oauthAuth = new BoxTSSDK.BoxOAuth({
+					config: oauthConfig,
+				});
+				client = new BoxTSSDK.BoxClient({auth: oauthAuth});
+				client = this._configureTsSdk(client, SDK_CONFIG);
+			} catch (err) {
+				throw new BoxCLIError(
+					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`
+				);
+			}
+		} else if (environmentsObj.default) {
+			DEBUG.init(
+				'Using environment %s %O',
+				environmentsObj.default,
+				environment
+			);
+			let tokenCache =
+				environment.cacheTokens === false
+					? null
+					: new CLITokenCache(environmentsObj.default);
+			let configObj;
+			try {
+				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+			} catch (ex) {
+				throw new BoxCLIError('Could not read environments config file', ex);
+			}
+
+			if (!environment.hasInLinePrivateKey) {
+				try {
+					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(
+						environment.privateKeyPath,
+						'utf8'
+					);
+					DEBUG.init(
+						'Loaded JWT private key from %s',
+						environment.privateKeyPath
+					);
+				} catch (ex) {
+					throw new BoxCLIError(
+						`Could not read private key file ${environment.privateKeyPath}`,
+						ex
+					);
+				}
+			}
+
+			const jwtConfig = new BoxTSSDK.JwtConfig({
+				clientId: configObj.boxAppSettings.clientID,
+				clientSecret: configObj.boxAppSettings.clientSecret,
+				jwtKeyId: configObj.boxAppSettings.appAuth.publicKeyID,
+				privateKey: configObj.boxAppSettings.appAuth.privateKey,
+				privateKeyPassphrase: configObj.boxAppSettings.appAuth.passphrase,
+				enterpriseId: environment.enterpriseId,
+				tokenStorage: tokenCache,
+			});
+			let jwtAuth = new BoxTSSDK.BoxJwtAuth({config: jwtConfig});
+			client = new BoxTSSDK.BoxClient({auth: jwtAuth});
+
+			DEBUG.init('Initialized client from environment config');
+			if (environment.useDefaultAsUser) {
+				client = client.withAsUserHeader(environment.defaultAsUserId);
+				DEBUG.init(
+					'Impersonating default user ID %s',
+					environment.defaultAsUserId
+				);
+			}
+			client = this._configureTsSdk(client, SDK_CONFIG);
+		} else {
+			// No environments set up yet!
+			throw new BoxCLIError(
+				`No default environment found.
+				It looks like you haven't configured the Box CLI yet.
+				See this command for help adding an environment: box configure:environments:add --help
+				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, '')
+			);
+		}
+		if (this.flags['as-user']) {
+			client = client.withAsUserHeader(this.flags['as-user']);
+			DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
+		}
+		return client;
+	}
+
+	/**
 	 * Configures SDK by using values from settings.json file
 	 * @param {*} sdk to configure
 	 * @param {*} config Additional options to use while building configuration
@@ -866,6 +1038,57 @@ class BoxCommand extends Command {
 			DEBUG.init('SDK client settings %s', clientSettings);
 			sdk.configure(clientSettings);
 		}
+	}
+
+	/**
+	 * Configures TS SDK by using values from settings.json file
+	 *
+	 * @param {BoxTSSDK.BoxClient} client to configure
+	 * @param {Object} config Additional options to use while building configuration
+	 * @returns {BoxTSSDK.BoxClient} The configured client
+	 */
+	_configureTsSdk(client, config) {
+		let additionalHeaders = config.request.headers;
+		let customBaseURL = {
+			baseUrl: 'https://api.box.com',
+			uploadUrl: 'https://upload.box.com/api',
+			oauth2Url: 'https://account.box.com/api/oauth2',
+		};
+		if (this.settings.enableProxy) {
+			// Not supported in TS SDK
+		}
+		if (this.settings.apiRootURL) {
+			customBaseURL.baseUrl = this.settings.apiRootURL;
+		}
+		if (this.settings.uploadAPIRootURL) {
+			customBaseURL.uploadUrl = this.settings.uploadAPIRootURL;
+		}
+		if (this.settings.authorizeRootURL) {
+			customBaseURL.oauth2Url = this.settings.authorizeRootURL;
+		}
+		client = client.withCustomBaseUrls(customBaseURL);
+
+		if (this.settings.numMaxRetries) {
+			// Not supported in TS SDK
+		}
+		if (this.settings.retryIntervalMS) {
+			// Not supported in TS SDK
+		}
+		if (this.settings.uploadRequestTimeoutMS) {
+			// Not supported in TS SDK
+		}
+		if (
+			this.settings.enableAnalyticsClient &&
+			this.settings.analyticsClient.name
+		) {
+			additionalHeaders['X-Box-UA'] = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
+		} else {
+			additionalHeaders['X-Box-UA'] = DEFAULT_ANALYTICS_CLIENT_NAME;
+		}
+		client = client.withExtraHeaders(additionalHeaders);
+		DEBUG.init('TS SDK configured with settings from settings.json');
+
+		return client;
 	}
 
 	/**
@@ -916,7 +1139,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -924,13 +1147,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async () => {
+			logFunc = async() => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async (savePath) => {
+			writeFunc = async(savePath) => {
 				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1246,6 +1469,21 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async catch(err) {
+		if (err instanceof BoxTsErrors.BoxApiError && err.responseInfo && err.responseInfo.body) {
+			const responseInfo = err.responseInfo;
+			let errorMessage = `Unexpected API Response [${responseInfo.body.status} ${responseInfo.body.message} | ${responseInfo.body.request_id}] ${responseInfo.body.code} - ${responseInfo.body.message}`;
+			err = new BoxCLIError(errorMessage, err);
+		}
+		if (err instanceof BoxTsErrors.BoxSdkError) {
+			try {
+				let errorObj = JSON.parse(err.message);
+				if (errorObj.message) {
+					err = new BoxCLIError(errorObj.message, err);
+				}
+			} catch (ex) {
+				// eslint-disable-next-line no-empty
+			}
+		}
 		try {
 			// Let the oclif default handler run first, since it handles the help and version flags there
 			/* eslint-disable promise/no-promise-in-callback */
