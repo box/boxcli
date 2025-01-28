@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 
 class TermsOfServiceListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TermsOfServiceListCommand);
+		const { flags } = await this.parse(TermsOfServiceListCommand);
 		let options = {};
 
 		if (flags.type) {
@@ -23,7 +23,7 @@ TermsOfServiceListCommand._endpoint = 'get_terms_of_services';
 
 TermsOfServiceListCommand.flags = {
 	...BoxCommand.flags,
-	type: flags.string({
+	type: Flags.string({
 		description: 'Filter by terms of service type',
 		options: [
 			'managed',

@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class LegalHoldPoliciesDeleteAssignmentCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(LegalHoldPoliciesDeleteAssignmentCommand);
+		const { args } = await this.parse(LegalHoldPoliciesDeleteAssignmentCommand);
 
 		await this.client.legalHoldPolicies.deleteAssignment(args.id);
 		this.info(`Delete policy assignment ${args.id}`);
@@ -19,13 +20,13 @@ LegalHoldPoliciesDeleteAssignmentCommand.flags = {
 	...BoxCommand.flags
 };
 
-LegalHoldPoliciesDeleteAssignmentCommand.args = [
-	{
+LegalHoldPoliciesDeleteAssignmentCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the policy assignment to delete',
-	}
-];
+	}),
+};
 
 module.exports = LegalHoldPoliciesDeleteAssignmentCommand;

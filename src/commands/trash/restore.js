@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TrashRestoreCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TrashRestoreCommand);
+		const { flags, args } = await this.parse(TrashRestoreCommand);
 		let options = {};
 
 		if (flags.name) {
@@ -33,16 +33,16 @@ TrashRestoreCommand.examples = ['box trash:restore folder 22222'];
 
 TrashRestoreCommand.flags = {
 	...BoxCommand.flags,
-	name: flags.string({
+	name: Flags.string({
 		description: 'The new name for the item'
 	}),
-	'parent-id': flags.string({
+	'parent-id': Flags.string({
 		description: 'ID of a folder to restore the item to only when the original folder no longer exists'
 	})
 };
 
-TrashRestoreCommand.args = [
-	{
+TrashRestoreCommand.args = {
+	type: Args.string({
 		name: 'type',
 		required: true,
 		hidden: false,
@@ -52,13 +52,13 @@ TrashRestoreCommand.args = [
 			'folder',
 			'web_link'
 		],
-	},
-	{
+	}),
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the item to restore',
-	}
-];
+	}),
+};
 
 module.exports = TrashRestoreCommand;

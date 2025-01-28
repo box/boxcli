@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class CommentsGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CommentsGetCommand);
+		const { flags, args } = await this.parse(CommentsGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ CommentsGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-CommentsGetCommand.args = [
-	{
+CommentsGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the comment to get'
-	}
-];
+	}),
+};
 
 module.exports = CommentsGetCommand;

@@ -4,10 +4,11 @@ const BoxCommand = require('../../box-command');
 const UsersListCommand = require('.'); // This points to ./index.js
 const UserModule = require('../../modules/user');
 const _ = require('lodash');
+const { Args } = require('@oclif/core');
 
 class UsersSearchCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(UsersSearchCommand);
+		const { flags, args } = await this.parse(UsersSearchCommand);
 
 		flags.filter = args.name;
 
@@ -29,13 +30,13 @@ UsersSearchCommand.flags = {
 	]),
 };
 
-UsersSearchCommand.args = [
-	{
+UsersSearchCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
 		description: 'Name of user to search for'
-	}
-];
+	}),
+};
 
 module.exports = UsersSearchCommand;

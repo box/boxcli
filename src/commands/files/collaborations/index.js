@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Args } = require('@oclif/core');
 const PaginationUtils = require('../../../pagination-utils');
 
 class FilesCollaborationsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesCollaborationsListCommand);
+		const { flags, args } = await this.parse(FilesCollaborationsListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
@@ -29,13 +29,13 @@ FilesCollaborationsListCommand.flags = {
 	...PaginationUtils.flags,
 };
 
-FilesCollaborationsListCommand.args = [
-	{
+FilesCollaborationsListCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to get collaborations for'
-	}
-];
+	}),
+};
 
 module.exports = FilesCollaborationsListCommand;

@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const PaginationUtils = require('../../pagination-utils');
 
 class CommentsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CommentsListCommand);
+		const { flags, args } = await this.parse(CommentsListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags.fields) {
@@ -28,13 +29,13 @@ CommentsListCommand.flags = {
 	...PaginationUtils.pagingFlag,
 };
 
-CommentsListCommand.args = [
-	{
+CommentsListCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to get comments for'
-	}
-];
+	}),
+};
 
 module.exports = CommentsListCommand;

@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const fs = require('fs');
 const BoxCLIError = require('../../../cli-error');
 const chalk = require('chalk');
@@ -9,7 +9,7 @@ const utils = require('../../../util');
 
 class EnvironmentsAddCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsAddCommand);
+		const { flags, args } = await this.parse(EnvironmentsAddCommand);
 		let environmentsObj = await this.getEnvironments();
 		let environmentName = flags.name;
 		let configFilePath = utils.parsePath(args.path);
@@ -121,22 +121,22 @@ EnvironmentsAddCommand.description = 'Add a new Box environment';
 
 EnvironmentsAddCommand.flags = {
 	...BoxCommand.minFlags,
-	'private-key-path': flags.string({
+	'private-key-path': Flags.string({
 		description: 'Provide a path to application private key',
 		parse: utils.parsePath,
 	}),
-	'set-as-current': flags.boolean({
+	'set-as-current': Flags.boolean({
 		description: 'Set this new environment as your current environment',
 	}),
-	name: flags.string({
+	name: Flags.string({
 		char: 'n',
 		description: 'Set a name for the environment',
 		default: 'default',
 	}),
-	'ccg-auth': flags.boolean({
+	'ccg-auth': Flags.boolean({
 		description: 'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
 	}),
-	'ccg-user': flags.string({
+	'ccg-user': Flags.string({
 		description: 'Provide an ID for a user for CCG. Use it to obtain user token. ' +
 			'In order to enable generating user token you have to go to your application ' +
 			'configuration that can be found here https://app.box.com/developers/console.\n' +
@@ -146,13 +146,13 @@ EnvironmentsAddCommand.flags = {
 	}),
 };
 
-EnvironmentsAddCommand.args = [
-	{
+EnvironmentsAddCommand.args = {
+	path: Args.string({
 		name: 'path',
 		required: true,
 		hidden: false,
 		description: 'Provide a file path to configuration file',
-	},
-];
+	}),
+};
 
 module.exports = EnvironmentsAddCommand;

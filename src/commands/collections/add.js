@@ -1,11 +1,12 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 const chalk = require('chalk');
 
 class CollectionsAddCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CollectionsAddCommand);
+		const { args } = await this.parse(CollectionsAddCommand);
 		let item;
 
 		if (args.itemType === 'file') {
@@ -27,8 +28,8 @@ CollectionsAddCommand.flags = {
 	...BoxCommand.flags
 };
 
-CollectionsAddCommand.args = [
-	{
+CollectionsAddCommand.args = {
+	itemType: Args.string({
 		name: 'itemType',
 		required: true,
 		hidden: false,
@@ -38,19 +39,19 @@ CollectionsAddCommand.args = [
 			'file',
 			'web_link'
 		]
-	},
-	{
+	}),
+	itemID: Args.string({
 		name: 'itemID',
 		required: true,
 		hidden: false,
 		description: 'ID of the of item'
-	},
-	{
+	}),
+	collectionID: Args.string({
 		name: 'collectionID',
 		required: true,
 		hidden: false,
 		description: 'ID of collection'
-	}
-];
+	}),
+};
 
 module.exports = CollectionsAddCommand;

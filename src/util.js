@@ -5,7 +5,7 @@ const BoxCLIError = require('./cli-error');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const { mkdirp } = require('mkdirp');
 
 const REQUIRED_CONFIG_VALUES = Object.freeze([
 	'boxAppSettings.clientID',
@@ -331,7 +331,6 @@ module.exports = {
 			/^~(\/|\\|$)/u,
 			(match, ending) => os.homedir() + ending
 		);
-
 		return path.resolve(value);
 	},
 

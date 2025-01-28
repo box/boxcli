@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class StoragePoliciesGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(StoragePoliciesGetCommand);
+		const { args } = await this.parse(StoragePoliciesGetCommand);
 
 		let storagePolicy = await this.client.storagePolicies.get(args.id);
 		await this.output(storagePolicy);
@@ -20,13 +21,13 @@ StoragePoliciesGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-StoragePoliciesGetCommand.args = [
-	{
+StoragePoliciesGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the storage policy to get',
-	}
-];
+	}),
+};
 
 module.exports = StoragePoliciesGetCommand;

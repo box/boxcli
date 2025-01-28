@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 const BoxCLIError = require('../../cli-error');
 
 const FLAG_HANDLERS = Object.freeze({
@@ -116,7 +116,7 @@ function _parseFlags(preparsedArgv) {
 
 class MetadataTemplatesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = this.parse(MetadataTemplatesCreateCommand);
+		const { flags, raw } = await this.parse(MetadataTemplatesCreateCommand);
 
 		let options = _parseFlags(raw);
 
@@ -144,61 +144,59 @@ MetadataTemplatesCreateCommand._endpoint = 'post_metadata_templates_schema';
 
 MetadataTemplatesCreateCommand.flags = {
 	...BoxCommand.flags,
-	'display-name': flags.string({
+	'display-name': Flags.string({
 		description: 'The display name of the metadata template',
 		required: true,
 	}),
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope of the metadata template',
 		default: 'enterprise',
 	}),
-	'template-key': flags.string({
+	'template-key': Flags.string({
 		description: 'A unique identifier for the template.  If not specified, will be derived from the display name',
 	}),
-	hidden: flags.boolean({
+	hidden: Flags.boolean({
 		description: 'Whether this template or field is hidden in the UI',
 		allowNo: true,
 	}),
-	string: flags.string({
+	string: Flags.string({
 		description: 'Add a string field with the provided name',
 		multiple: true,
 	}),
-	enum: flags.string({
+	enum: Flags.string({
 		description: 'Add an enum field with the provided display name',
 		multiple: true,
 	}),
-	date: flags.string({
+	date: Flags.string({
 		description: 'Add a date field with the provided display name',
 		multiple: true,
 	}),
-	number: flags.string({
+	number: Flags.string({
 		description: 'Add a numeric field with the provided display name',
 		multiple: true,
 	}),
-	'multi-select': flags.string({
+	'multi-select': Flags.string({
 		description: 'Add a multi-select field with the provided display name',
 		multiple: true,
 	}),
-	'field-key': flags.string({
+	'field-key': Flags.string({
 		description: 'Set the key of a field',
 		multiple: true,
 	}),
-	description: flags.string({
+	description: Flags.string({
 		description: 'Set the description of a field',
 		multiple: true,
 	}),
-	option: flags.string({
+	option: Flags.string({
 		description: 'Add an option to a field',
 		multiple: true,
 	}),
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',
 	}),
-	'copy-instance-on-item-copy': flags.boolean({
+	'copy-instance-on-item-copy': Flags.boolean({
 		description: 'Whether to include the metadata when a file or folder is copied',
 	})
 };
-
-MetadataTemplatesCreateCommand.args = [];
 
 module.exports = MetadataTemplatesCreateCommand;

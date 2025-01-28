@@ -16,13 +16,14 @@ globals:
 plugins:
     - promise
     - unicorn
-    - node
+    - n
 
 extends:
     - 'eslint:recommended'
     - 'plugin:promise/recommended'
     - 'plugin:unicorn/recommended'
-    - 'plugin:node/recommended'
+    - 'plugin:n/recommended'
+    - 'prettier'
 
 rules:
 
@@ -124,11 +125,7 @@ rules:
     no-shadow-restricted-names: error
     # Turn on someday, just use null everywhere if we can
     no-undefined: off
-    # We allow some unused args
-    no-unused-vars:
-        - error
-        -
-            args: after-used
+    no-unused-vars: error
     no-use-before-define: error
 
 ### NODE AND COMMONJS
@@ -328,8 +325,8 @@ rules:
     unicorn/no-new-buffer: error
 
 ### NODE
-    node/no-deprecated-api: error
-    node/exports-style:
+    n/no-deprecated-api: error
+    n/exports-style:
         - error
         - module.exports
 

@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FileRequestsUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FileRequestsUpdateCommand);
+		const { flags, args } = await this.parse(FileRequestsUpdateCommand);
 		let updates = {};
 		let etag = '';
 
@@ -55,42 +55,42 @@ FileRequestsUpdateCommand._endpoint = 'put_file_requests_id';
 
 FileRequestsUpdateCommand.flags = {
 	...BoxCommand.flags,
-	description: flags.string({
+	description: Flags.string({
 		description: 'New description of file request',
 		parse: utils.unescapeSlashes
 	}),
-	'expires-at': flags.string({
+	'expires-at': Flags.string({
 		description: 'New date when file request expires',
 		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
-	'description-required': flags.boolean({
+	'description-required': Flags.boolean({
 		description:
 			'is file request submitter required to provide a description of the files they are submitting',
 		allowNo: true,
 	}),
-	'email-required': flags.boolean({
+	'email-required': Flags.boolean({
 		description: 'New date when file request expires',
 		allowNo: true,
 	}),
-	status: flags.string({
+	status: Flags.string({
 		description: 'New status of file request',
 		options: ['active', 'inactive'],
 	}),
-	title: flags.string({
+	title: Flags.string({
 		description: 'New title of file request',
 	}),
-	etag: flags.string({
+	etag: Flags.string({
 		description: 'Pass in the item\'s last observed etag value into this header and the endpoint will fail with a 412 Precondition Failed if it has changed since.',
 	}),
 };
 
-FileRequestsUpdateCommand.args = [
-	{
+FileRequestsUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the file request to update',
-	},
-];
+	}),
+};
 
 module.exports = FileRequestsUpdateCommand;

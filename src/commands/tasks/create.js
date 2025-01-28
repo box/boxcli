@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TasksCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TasksCreateCommand);
+		const { flags, args } = await this.parse(TasksCreateCommand);
 		let options = {};
 
 		if (flags.message) {
@@ -29,15 +29,15 @@ TasksCreateCommand._endpoint = 'post_tasks';
 
 TasksCreateCommand.flags = {
 	...BoxCommand.flags,
-	message: flags.string({ description: 'Message for task' }),
-	'due-at': flags.string({
+	message: Flags.string({ description: 'Message for task' }),
+	'due-at': Flags.string({
 		description: 'When this task is due, use format 05h for 5 hours for example',
 		parse: input => BoxCommand.normalizeDateString(input),
 	}),
-	'id-only': flags.boolean({
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command'
 	}),
-	'completion-rule': flags.string({
+	'completion-rule': Flags.string({
 		description: 'Rule for how many assignees must complete the task to consider it completed',
 		options: [
 			'all_assignees',
@@ -46,13 +46,13 @@ TasksCreateCommand.flags = {
 	}),
 };
 
-TasksCreateCommand.args = [
-	{
+TasksCreateCommand.args = {
+	fileID: Args.string({
 		name: 'fileID',
 		required: true,
 		hidden: false,
 		description: 'ID of the file to create a task on',
-	}
-];
+	}),
+};
 
 module.exports = TasksCreateCommand;

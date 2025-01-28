@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const utils = require('../../util');
 
 class FoldersUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersUpdateCommand);
+		const { flags, args } = await this.parse(FoldersUpdateCommand);
 		let updates = {};
 
 		if (flags.name) {
@@ -54,46 +54,46 @@ FoldersUpdateCommand._endpoint = 'put_folders_id';
 
 FoldersUpdateCommand.flags = {
 	...BoxCommand.flags,
-	name: flags.string({ description: 'New name for folder' }),
-	'can-non-owners-invite': flags.boolean({
+	name: Flags.string({ description: 'New name for folder' }),
+	'can-non-owners-invite': Flags.boolean({
 		description: 'Specifies if users who are not the owner of the folder can invite new collaborators to the folder.',
 		allowNo: true
 	}),
-	'can-non-owners-view-collaborators': flags.boolean({
+	'can-non-owners-view-collaborators': Flags.boolean({
 		description: 'Restricts collaborators who are not the owner of this folder from viewing other collaborations on this folder.',
 		allowNo: true,
 	}),
-	description: flags.string({ description: 'New description for folder', parse: utils.unescapeSlashes }),
-	'upload-email-access': flags.string({
+	description: Flags.string({ description: 'New description for folder', parse: utils.unescapeSlashes }),
+	'upload-email-access': Flags.string({
 		description: 'Upload email access level',
 		options: [
 			'open',
 			'collaborators'
 		],
 	}),
-	tags: flags.string({ description: 'Comma seperated tags' }),
-	sync: flags.boolean({
+	tags: Flags.string({ description: 'Comma seperated tags' }),
+	sync: Flags.boolean({
 		description: 'Whether the folder is synced to desktop',
 		allowNo: true
 	}),
-	'restrict-collaboration': flags.boolean({
+	'restrict-collaboration': Flags.boolean({
 		description: 'Restrict collaboration so only owners can invite new collaborators',
 		allowNo: true
 	}),
-	'restrict-to-enterprise': flags.boolean({
+	'restrict-to-enterprise': Flags.boolean({
 		description: 'Restrict collaboration so only users in the folder owner\'s enterprise can be added',
 		allowNo: true
 	}),
-	etag: flags.string({ description: 'Only apply updates if the etag value matches' }),
+	etag: Flags.string({ description: 'Only apply updates if the etag value matches' }),
 };
 
-FoldersUpdateCommand.args = [
-	{
+FoldersUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to update',
-	}
-];
+	})
+};
 
 module.exports = FoldersUpdateCommand;

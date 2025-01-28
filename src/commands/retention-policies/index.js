@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 const PaginationUtils = require('../../pagination-utils');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesListCommand);
+		const { flags } = await this.parse(RetentionPoliciesListCommand);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['policy-name']) {
@@ -35,18 +35,18 @@ RetentionPoliciesListCommand._endpoint = 'get_retention_policies';
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'policy-name': flags.string({
+	'policy-name': Flags.string({
 		char: 'n',
 		description: 'A name to filter the retention policies by'
 	}),
-	'policy-type': flags.string({
+	'policy-type': Flags.string({
 		description: 'A policy type to filter the retention policies by',
 		options: [
 			'finite',
 			'indefinite'
 		]
 	}),
-	'created-by-user-id': flags.string({
+	'created-by-user-id': Flags.string({
 		char: 'u',
 		description: 'A user id to filter the retention policies by'
 	})

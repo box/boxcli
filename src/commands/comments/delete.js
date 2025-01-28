@@ -1,11 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const {flags} = require('@oclif/command');
 
 class CommentsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CommentsDeleteCommand);
+		const { args } = await this.parse(CommentsDeleteCommand);
 
 		await this.client.comments.delete(args.id);
 		this.info(`Successfully deleted comment ${args.id}`);
@@ -20,13 +20,13 @@ CommentsDeleteCommand.flags = {
 	...BoxCommand.flags
 };
 
-CommentsDeleteCommand.args = [
-	{
+CommentsDeleteCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the comment to delete'
-	}
-];
+	}),
+};
 
 module.exports = CommentsDeleteCommand;

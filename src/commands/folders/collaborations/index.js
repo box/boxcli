@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
-const { flags } = require('@oclif/command');
+const { Args } = require('@oclif/core');
 
 class FoldersCollaborationsListCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersCollaborationsListCommand);
+		const { flags, args } = await this.parse(FoldersCollaborationsListCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -27,13 +27,13 @@ FoldersCollaborationsListCommand.flags = {
 	...BoxCommand.flags,
 };
 
-FoldersCollaborationsListCommand.args = [
-	{
+FoldersCollaborationsListCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to get the collaborations on',
-	}
-];
+	})
+};
 
 module.exports = FoldersCollaborationsListCommand;

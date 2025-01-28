@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class FoldersCopyCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FoldersCopyCommand);
+		const { flags, args } = await this.parse(FoldersCopyCommand);
 		let options = {};
 
 		if (flags.name) {
@@ -23,25 +23,25 @@ FoldersCopyCommand._endpoint = 'post_folders_id_copy';
 
 FoldersCopyCommand.flags = {
 	...BoxCommand.flags,
-	name: flags.string({ description: 'An optional new name for the folder' }),
-	'id-only': flags.boolean({
+	name: Flags.string({ description: 'An optional new name for the folder' }),
+	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',
 	}),
 };
 
-FoldersCopyCommand.args = [
-	{
+FoldersCopyCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to copy',
-	},
-	{
+	}),
+	parentID: Args.string({
 		name: 'parentID',
 		required: true,
 		hidden: false,
 		description: 'ID of the new parent folder to copy the folder into',
-	}
-];
+	})
+};
 
 module.exports = FoldersCopyCommand;

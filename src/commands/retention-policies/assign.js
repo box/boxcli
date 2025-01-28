@@ -2,11 +2,11 @@
 
 const BoxCommand = require('../../box-command');
 const BoxCLIError = require('../../cli-error');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class RetentionPoliciesAssignCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(RetentionPoliciesAssignCommand);
+		const { flags, args } = await this.parse(RetentionPoliciesAssignCommand);
 		let assignment;
 
 		let assignType = flags['assign-to-type'];
@@ -38,7 +38,7 @@ RetentionPoliciesAssignCommand._endpoint = 'post_retention_policy_assignments';
 
 RetentionPoliciesAssignCommand.flags = {
 	...BoxCommand.flags,
-	'assign-to-type': flags.string({
+	'assign-to-type': Flags.string({
 		description: 'The type of the content to assign the retention policy to',
 		required: true,
 		options: [
@@ -47,10 +47,10 @@ RetentionPoliciesAssignCommand.flags = {
 			'metadata_template'
 		],
 	}),
-	'assign-to-id': flags.string({
+	'assign-to-id': Flags.string({
 		description: 'The ID of the content to assign the retention policy to',
 	}),
-	'filter-field': flags.string({
+	'filter-field': Flags.string({
 		description: 'Metadata fields to filter against, if assigning to a metadata template.' +
 			'Allow properties: field, value. Example: --filter-field=fieldName=fieldValue',
 		multiple: true,
@@ -65,18 +65,18 @@ RetentionPoliciesAssignCommand.flags = {
 			return filter;
 		}
 	}),
-	'start-date-field': flags.string({
+	'start-date-field': Flags.string({
 		description: 'The date the retention policy assignment begins',
 	}),
 };
 
-RetentionPoliciesAssignCommand.args = [
-	{
+RetentionPoliciesAssignCommand.args = {
+	policyID: Args.string({
 		name: 'policyID',
 		required: true,
 		hidden: false,
 		description: 'The ID of the retention policy to assign this content to',
-	}
-];
+	}),
+};
 
 module.exports = RetentionPoliciesAssignCommand;

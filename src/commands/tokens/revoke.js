@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Args } = require('@oclif/core');
 const chalk = require('chalk');
 
 class TokensRevokeCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TokensRevokeCommand);
+		const { args } = await this.parse(TokensRevokeCommand);
 
 		let response = await this.sdk.revokeTokens(args.token);
 
@@ -20,14 +20,14 @@ class TokensRevokeCommand extends BoxCommand {
 
 TokensRevokeCommand.description = 'Revoke a token.  The token will no longer be valid for making API calls.';
 
-TokensRevokeCommand.args = [
-	{
+TokensRevokeCommand.args = {
+	token: Args.string({
 		name: 'token',
 		required: true,
 		hidden: false,
 		description: 'The token to revoke'
-	}
-];
+	}),
+};
 
 TokensRevokeCommand.flags = {
 	...BoxCommand.minFlags,

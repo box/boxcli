@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class WebhooksUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(WebhooksUpdateCommand);
+		const { flags, args } = await this.parse(WebhooksUpdateCommand);
 		let updates = {};
 
 		if (flags.triggers) {
@@ -26,23 +26,23 @@ WebhooksUpdateCommand._endpoint = 'put_webhooks_id';
 
 WebhooksUpdateCommand.flags = {
 	...BoxCommand.flags,
-	triggers: flags.string({
+	triggers: Flags.string({
 		char: 'T',
 		description: 'Triggers for webhook, enter as comma separated list. For example: FILE.DELETED,FILE.PREVIEWED'
 	}),
-	address: flags.string({
+	address: Flags.string({
 		char: 'a',
 		description: 'URL for your webhook handler'
 	})
 };
 
-WebhooksUpdateCommand.args = [
-	{
+WebhooksUpdateCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the webhook to update',
-	}
-];
+	}),
+};
 
 module.exports = WebhooksUpdateCommand;

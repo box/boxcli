@@ -1,7 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 const BoxCLIError = require('../../cli-error');
 
 const UNESCAPED_COMMA_REGEX = /(?<![^\\](?:\\\\)*\\),/gu;
@@ -286,7 +286,7 @@ function _parseOperations(preparsedArgv) {
 
 class MetadataTemplatesUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = this.parse(MetadataTemplatesUpdateCommand);
+		const { flags, args, raw } = await this.parse(MetadataTemplatesUpdateCommand);
 		let operations = _parseOperations(raw);
 
 		let template = await this.client.metadata.updateTemplate(flags.scope, args.templateKey, operations);
@@ -300,90 +300,90 @@ MetadataTemplatesUpdateCommand._endpoints = 'put_metadata_templates_id_id_schema
 
 MetadataTemplatesUpdateCommand.flags = {
 	...BoxCommand.flags,
-	'display-name': flags.string({
+	'display-name': Flags.string({
 		description: 'The display name of the metadata template or field',
 		multiple: true,
 	}),
-	scope: flags.string({
+	scope: Flags.string({
 		description: 'The scope of the metadata template',
 		default: 'enterprise',
 	}),
-	hidden: flags.boolean({
+	hidden: Flags.boolean({
 		description: 'Whether this template or field is hidden in the UI',
 		allowNo: true,
 	}),
-	string: flags.string({
+	string: Flags.string({
 		description: 'Add a string field with the provided name',
 		multiple: true,
 	}),
-	enum: flags.string({
+	enum: Flags.string({
 		description: 'Add an enum field with the provided display name',
 		multiple: true,
 	}),
-	date: flags.string({
+	date: Flags.string({
 		description: 'Add a date field with the provided display name',
 		multiple: true,
 	}),
-	number: flags.string({
+	number: Flags.string({
 		description: 'Add a numeric field with the provided display name',
 		multiple: true,
 	}),
-	'multi-select': flags.string({
+	'multi-select': Flags.string({
 		description: 'Add a multi-select field with the provided display name',
 		multiple: true,
 	}),
-	'add-multi-select-option': flags.string({
+	'add-multi-select-option': Flags.string({
 		description: 'Add an option to a specified multiselect field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
-	'field-key': flags.string({
+	'field-key': Flags.string({
 		description: 'Set the key of a field',
 		multiple: true,
 	}),
-	description: flags.string({
+	description: Flags.string({
 		description: 'Set the description of a field',
 		multiple: true,
 	}),
-	option: flags.string({
+	option: Flags.string({
 		description: 'Specify a field option',
 		multiple: true,
 	}),
-	'add-enum-option': flags.string({
+	'add-enum-option': Flags.string({
 		description: 'Add an enum option to the specified field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
-	'reorder-enum-options': flags.string({
+	'reorder-enum-options': Flags.string({
 		description: 'Reorder the options for a given field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
-	'reorder-fields': flags.string({
+	'reorder-fields': Flags.string({
 		description: 'Reorder the template fields; must be in the form first_key,second_key,...',
 	}),
-	'edit-field': flags.string({
+	'edit-field': Flags.string({
 		description: 'Edit the specified field; must be followed by flags to apply to the field',
 	}),
-	'edit-enum-option': flags.string({
+	'edit-enum-option': Flags.string({
 		description: 'Edit the specified enum option; must be followed by an --option flag',
 	}),
-	'remove-enum-option': flags.string({
+	'remove-enum-option': Flags.string({
 		description: 'Removes the specified enum field option; must be in the form fieldKey.optionKey',
 	}),
-	'remove-field': flags.string({
+	'remove-field': Flags.string({
 		description: 'Remove the specified field',
 	}),
-	'copy-instance-on-item-copy': flags.boolean({
+	'copy-instance-on-item-copy': Flags.boolean({
 		description: 'Whether to include the metadata when a file or folder is copied',
 		allowNo: true,
 	})
 };
 
-MetadataTemplatesUpdateCommand.args = [
-	{
+MetadataTemplatesUpdateCommand.args = {
+	templateKey: Args.string({
 		name: 'templateKey',
 		description: 'The key of the template to update',
 		hidden: false,
 		required: true,
-	}
-];
+	}),
+};
 
 module.exports = MetadataTemplatesUpdateCommand;

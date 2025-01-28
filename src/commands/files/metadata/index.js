@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 
 class FilesGetAllMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(FilesGetAllMetadataCommand);
+		const { args } = await this.parse(FilesGetAllMetadataCommand);
 
 		let metadata = await this.client.files.getAllMetadata(args.id);
 		await this.output(metadata);
@@ -21,13 +22,13 @@ FilesGetAllMetadataCommand.flags = {
 	...BoxCommand.flags
 };
 
-FilesGetAllMetadataCommand.args = [
-	{
+FilesGetAllMetadataCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'Id of the file'
-	}
-];
+	})
+};
 
 module.exports = FilesGetAllMetadataCommand;

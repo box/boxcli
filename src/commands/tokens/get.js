@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags } = require('@oclif/core');
 
 class TokensGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TokensGetCommand);
+		const { flags } = await this.parse(TokensGetCommand);
 		let token;
 
 		if (flags['user-id']) {
@@ -22,7 +22,7 @@ TokensGetCommand.description = 'Get a token. Returns the service account token b
 
 TokensGetCommand.flags = {
 	...BoxCommand.minFlags,
-	'user-id': flags.string({
+	'user-id': Flags.string({
 		char: 'u',
 		description: 'Get a user token from a user ID',
 	})

@@ -1,12 +1,13 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const BoxCLIError = require('../../../cli-error');
 const inquirer = require('inquirer');
 
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(EnvironmentsDeleteCommand);
+		const { args } = await this.parse(EnvironmentsDeleteCommand);
 		let environmentsObj = await this.getEnvironments();
 		let name = args.name;
 
@@ -48,13 +49,13 @@ EnvironmentsDeleteCommand.flags = {
 	...BoxCommand.minFlags,
 };
 
-EnvironmentsDeleteCommand.args = [
-	{
+EnvironmentsDeleteCommand.args = {
+	name: Args.string({
 		name: 'name',
 		required: false,
 		hidden: false,
 		description: 'Name of the environment'
-	}
-];
+	})
+};
 
 module.exports = EnvironmentsDeleteCommand;

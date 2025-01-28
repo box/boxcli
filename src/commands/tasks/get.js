@@ -1,10 +1,11 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
 
 class TasksGetCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TasksGetCommand);
+		const { flags, args } = await this.parse(TasksGetCommand);
 		let options = {};
 
 		if (flags.fields) {
@@ -24,13 +25,13 @@ TasksGetCommand.flags = {
 	...BoxCommand.flags
 };
 
-TasksGetCommand.args = [
-	{
+TasksGetCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the task to get',
-	}
-];
+	}),
+};
 
 module.exports = TasksGetCommand;

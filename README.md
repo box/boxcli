@@ -170,6 +170,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box tokens`](docs/tokens.md) - Get a token. Returns the service account token by default
 * [`box trash`](docs/trash.md) - List all items in trash
 * [`box users`](docs/users.md) - List all Box users
+* [`box version`](docs/version.md)
 * [`box watermarking`](docs/watermarking.md) - Apply a watermark on an item
 * [`box web-links`](docs/web-links.md) - Manage web links
 * [`box webhooks`](docs/webhooks.md) - List all webhooks

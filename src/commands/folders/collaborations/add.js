@@ -1,12 +1,13 @@
 'use strict';
 
+const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const CollaborationsCreateCommand = require('../../collaborations/create');
 const CollaborationModule = require('../../../modules/collaboration');
 
 class FoldersCollaborationsAddCommand extends BoxCommand {
 	async run() {
-		const { args, flags } = this.parse(FoldersCollaborationsAddCommand);
+		const { args, flags } = await this.parse(FoldersCollaborationsAddCommand);
 
 		// Transform arguments for generic module
 		args.itemType = 'folder';
@@ -26,13 +27,13 @@ FoldersCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,
 };
 
-FoldersCollaborationsAddCommand.args = [
-	{
+FoldersCollaborationsAddCommand.args = {
+	id: Args.string({
 		name: 'id',
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to add a collaboration to',
-	}
-];
+	}),
+};
 
 module.exports = FoldersCollaborationsAddCommand;

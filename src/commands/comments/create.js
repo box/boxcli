@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class CommentsCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(CommentsCreateCommand);
+		const { flags, args } = await this.parse(CommentsCreateCommand);
 		let comment;
 
 		if (flags.message) {
@@ -23,23 +23,23 @@ CommentsCreateCommand._endpoint = 'post_comments';
 
 CommentsCreateCommand.flags = {
 	...BoxCommand.flags,
-	message: flags.string({
+	message: Flags.string({
 		description: 'Message of comment',
 		exclusive: ['tagged-message']
 	}),
-	'tagged-message': flags.string({
+	'tagged-message': Flags.string({
 		description: 'The text of the comment, including @[userid:Username] somewhere in the message to mention the user',
 		exclusive: ['message']
 	})
 };
 
-CommentsCreateCommand.args = [
-	{
+CommentsCreateCommand.args = {
+	fileID: Args.string({
 		name: 'fileID',
 		required: true,
 		hidden: false,
 		description: 'ID of file on which to comment'
-	}
-];
+	}),
+};
 
 module.exports = CommentsCreateCommand;

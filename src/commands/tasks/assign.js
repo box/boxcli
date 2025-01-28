@@ -1,11 +1,11 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const { flags } = require('@oclif/command');
+const { Flags, Args } = require('@oclif/core');
 
 class TaskAssignmentsCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = this.parse(TaskAssignmentsCreateCommand);
+		const { flags, args } = await this.parse(TaskAssignmentsCreateCommand);
 		let assignment;
 
 		if (flags['assign-to-user-id']) {
@@ -25,23 +25,23 @@ TaskAssignmentsCreateCommand._endpoint = 'post_task_assignments';
 
 TaskAssignmentsCreateCommand.flags = {
 	...BoxCommand.flags,
-	'assign-to-user-id': flags.string({
+	'assign-to-user-id': Flags.string({
 		description: 'Assign task by user ID',
 		exclusive: ['assign-to-user-login']
 	}),
-	'assign-to-user-login': flags.string({
+	'assign-to-user-login': Flags.string({
 		description: 'Assign task by user login',
 		exclusive: ['assign-to-user-id']
 	})
 };
 
-TaskAssignmentsCreateCommand.args = [
-	{
+TaskAssignmentsCreateCommand.args = {
+	taskID: Args.string({
 		name: 'taskID',
 		required: true,
 		hidden: false,
 		description: 'ID of the task to assign',
-	}
-];
+	}),
+};
 
 module.exports = TaskAssignmentsCreateCommand;
