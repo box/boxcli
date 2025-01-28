@@ -145,7 +145,7 @@
 		"test": "nyc mocha \"test/**/*.test.js\"",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
-		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
+		"clean": "rm -rf tmp; rm -rf dist; find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
 		"prepack": "npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
