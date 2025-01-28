@@ -47,7 +47,7 @@ EXAMPLES
   $ box web-links:create http://example.com --parent-id 0
 ```
 
-_See code: [src/commands/web-links/create.ts](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/create.ts)_
+_See code: [src/commands/web-links/create.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/create.js)_
 
 ## `box web-links:delete ID`
 
@@ -83,7 +83,7 @@ EXAMPLES
   $ box web-links:delete 12345
 ```
 
-_See code: [src/commands/web-links/delete.ts](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/delete.ts)_
+_See code: [src/commands/web-links/delete.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/delete.js)_
 
 ## `box web-links:get ID`
 
@@ -119,7 +119,7 @@ EXAMPLES
   $ box web-links:get 12345
 ```
 
-_See code: [src/commands/web-links/get.ts](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/get.ts)_
+_See code: [src/commands/web-links/get.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/get.js)_
 
 ## `box web-links:move ID PARENTID`
 
@@ -156,7 +156,7 @@ EXAMPLES
   $ box web-links:move 12345 22222
 ```
 
-_See code: [src/commands/web-links/move.ts](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/move.ts)_
+_See code: [src/commands/web-links/move.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/move.js)_
 
 ## `box web-links:update ID`
 
@@ -195,4 +195,4 @@ EXAMPLES
   $ box web-links:update 12345 --name "Example Site"
 ```
 
-_See code: [src/commands/web-links/update.ts](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/update.ts)_
+_See code: [src/commands/web-links/update.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/web-links/update.js)_

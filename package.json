@@ -149,7 +149,7 @@
 		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
 		"prepack": "npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
-		"version": "oclif readme --multi && git add README.md && git add docs",
+		"version": "oclif readme --multi && npm run updatemd && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
 		"license": "generate-license-file --overwrite"
