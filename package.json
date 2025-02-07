@@ -143,7 +143,7 @@
 	},
 	"scripts": {
 		"test": "nyc mocha \"test/commands/**/*.test.js\"",
-		"test:integration": "mocha test/integration/__tests__/**/*.test.js --timeout 60000",
+		"test:integration": "mocha --timeout 60000 test/integration/__tests__/**/*.test.js",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
