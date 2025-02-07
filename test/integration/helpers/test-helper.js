@@ -62,15 +62,20 @@ const setupEnvironment = async() => {
   }
 };
 
-const cleanupEnvironment = () => {
+const cleanupEnvironment = async() => {
   try {
-    execSync(`${CLI_PATH} configure:environments:delete integration-test`);
+    await exec(`${CLI_PATH} configure:environments:delete integration-test`);
+    const configPath = '/tmp/jwt-config.json';
+    await fs.unlink(configPath).catch(() => {});
   } catch (error) {
-    // Environment might not exist, ignore error
+    console.error('Error cleaning up environment:', error);
   }
 };
 
-const execCLI = (command) => execSync(`${CLI_PATH} ${command}`).toString();
+const execCLI = async(command) => {
+  const { stdout } = await exec(`${CLI_PATH} ${command}`);
+  return stdout;
+};
 
 module.exports = {
   getJWTConfig,

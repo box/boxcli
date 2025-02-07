@@ -12,25 +12,19 @@ describe('Users Integration Tests', () => {
     await setupEnvironment();
   });
 
-  after(() => {
-    cleanupEnvironment();
-  });
-
-  after(() => {
-    if (testUser) {
-      execCLI(`users:delete ${testUser.id} --force`);
+  after(async() => {
+    try {
+      if (testUser) {
+        await execCLI(`users:delete ${testUser.id} --force`);
+      }
+    } finally {
+      await cleanupEnvironment();
     }
   });
 
   describe('User Operations', () => {
-    it('should get user info', () => {
-      const output = execCLI(`users:get ${adminUserId} --json`);
-      const user = JSON.parse(output);
-      expect(user.id).to.equal(adminUserId);
-    });
-
-    it('should get user info', () => {
-      const output = execCLI(`users:get ${adminUserId} --json`);
+    it('should get user info', async() => {
+      const output = await execCLI(`users:get ${adminUserId} --json`);
       const user = JSON.parse(output);
       expect(user.id).to.equal(adminUserId);
       expect(user.type).to.equal('user');
@@ -38,8 +32,8 @@ describe('Users Integration Tests', () => {
       expect(user.name).to.be.a('string');
     });
 
-    it('should list group memberships', () => {
-      const output = execCLI(`users:groups ${adminUserId} --json`);
+    it('should list group memberships', async() => {
+      const output = await execCLI(`users:groups ${adminUserId} --json`);
       const memberships = JSON.parse(output);
       expect(memberships).to.be.an('array');
       memberships.forEach(membership => {
@@ -47,12 +41,6 @@ describe('Users Integration Tests', () => {
         expect(membership.user.id).to.equal(adminUserId);
         expect(membership.group).to.be.an('object');
       });
-    });
-
-    it('should list group memberships', () => {
-      const output = execCLI(`users:groups ${adminUserId} --json`);
-      const memberships = JSON.parse(output);
-      expect(memberships).to.be.an('array');
     });
   });
 });
