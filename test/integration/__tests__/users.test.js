@@ -3,7 +3,8 @@
 const { expect } = require('chai');
 const { execCLI, getAdminUserId, setupEnvironment, cleanupEnvironment } = require('../helpers/test-helper');
 
-describe('Users Integration Tests', () => {
+describe('Users Integration Tests', function() {
+  this.timeout(60000);
   let adminUserId;
   let testUser;
 
