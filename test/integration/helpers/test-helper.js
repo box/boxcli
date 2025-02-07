@@ -1,7 +1,9 @@
 'use strict';
 
-const { execSync } = require('child_process');
 const path = require('path');
+const fs = require('fs').promises;
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
 
 const CLI_PATH = path.resolve(__dirname, '../../../bin/run');
 
@@ -21,19 +23,18 @@ const getAdminUserId = () => {
   return userId;
 };
 
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+
 
 const setupEnvironment = async() => {
   const jwtConfig = getJWTConfig();
   const configPath = '/tmp/jwt-config.json';
   const boxConfigDir = `${process.env.HOME}/.box`;
 
-  // Ensure Box config directory exists with correct permissions
-  const fs = require('fs').promises;
-  await fs.access(boxConfigDir).catch(async() => {
+  try {
+    await fs.access(boxConfigDir);
+  } catch {
     await fs.mkdir(boxConfigDir, { mode: 0o700 });
-  });
+  }
 
   try {
     // Write config to temp file for CLI command
