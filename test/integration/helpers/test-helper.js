@@ -1,7 +1,9 @@
 'use strict';
 
-const fs = require('fs');
-const BoxCLI = require('../../../src/cli');
+const { execSync } = require('child_process');
+const path = require('path');
+
+const CLI_PATH = path.resolve(__dirname, '../../../bin/run');
 
 const getJWTConfig = () => {
   const config = process.env.BOX_JWT_CONFIG;
@@ -19,17 +21,12 @@ const getAdminUserId = () => {
   return userId;
 };
 
-const setupCLI = async () => {
-  const cli = new BoxCLI();
-  await cli.configure({
-    jwtConfig: getJWTConfig(),
-    adminUserId: getAdminUserId()
-  });
-  return cli;
+const execCLI = (command) => {
+  return execSync(`${CLI_PATH} ${command}`).toString();
 };
 
 module.exports = {
   getJWTConfig,
   getAdminUserId,
-  setupCLI
+  execCLI
 };

@@ -1,54 +1,60 @@
 'use strict';
 
 const { expect } = require('chai');
-const { setupCLI, getAdminUserId } = require('../helpers/test-helper');
+const { execCLI, getAdminUserId } = require('../helpers/test-helper');
 
 describe('Users Integration Tests', () => {
-  let cli;
   let adminUserId;
   let testUser;
 
-  before(async () => {
-    cli = await setupCLI();
+  before(() => {
     adminUserId = getAdminUserId();
   });
 
   after(async () => {
     if (testUser) {
-      await cli.users.delete(testUser.id);
+      execCLI(`users:delete ${testUser.id} --force --token=test`);
     }
   });
 
   describe('User Operations', () => {
-    it('should get user info', async () => {
-      const user = await cli.users.get(adminUserId);
+    it('should get user info', () => {
+      const output = execCLI(`users:get ${adminUserId} --json --token=test`);
+      const user = JSON.parse(output);
       expect(user.id).to.equal(adminUserId);
     });
 
-    it('should create and delete user', async () => {
-      testUser = await cli.users.create({
-        name: 'Test User',
-        login: `test-${Date.now()}@example.com`
-      });
-      expect(testUser.id).to.be.a('string');
+    it('should create and delete user', () => {
+      const name = 'Test User';
+      const login = `test-${Date.now()}@example.com`;
       
-      await cli.users.delete(testUser.id);
+      const output = execCLI(`users:create "${name}" "${login}" --json --token=test`);
+      testUser = JSON.parse(output);
+      expect(testUser.id).to.be.a('string');
+      expect(testUser.name).to.equal(name);
+      expect(testUser.login).to.equal(login);
+
+      execCLI(`users:delete ${testUser.id} --force --token=test`);
       testUser = null;
     });
 
-    it('should manage email aliases', async () => {
+    it('should manage email aliases', () => {
       const alias = `alias-${Date.now()}@example.com`;
-      const addedAlias = await cli.users.addEmailAlias(adminUserId, alias);
+      
+      const addOutput = execCLI(`users:email-aliases:add ${adminUserId} "${alias}" --json --token=test`);
+      const addedAlias = JSON.parse(addOutput);
       expect(addedAlias.email).to.equal(alias);
 
-      const aliases = await cli.users.getEmailAliases(adminUserId);
+      const listOutput = execCLI(`users:email-aliases ${adminUserId} --json --token=test`);
+      const aliases = JSON.parse(listOutput);
       expect(aliases).to.be.an('array');
 
-      await cli.users.removeEmailAlias(adminUserId, addedAlias.id);
+      execCLI(`users:email-aliases:remove ${adminUserId} ${addedAlias.id} --token=test`);
     });
 
-    it('should list group memberships', async () => {
-      const memberships = await cli.users.getGroupMemberships(adminUserId);
+    it('should list group memberships', () => {
+      const output = execCLI(`users:groups ${adminUserId} --json --token=test`);
+      const memberships = JSON.parse(output);
       expect(memberships).to.be.an('array');
     });
   });

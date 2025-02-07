@@ -19,11 +19,7 @@
 
 ## Running Tests
 ```bash
-# Run all integration tests
 npm run test:integration
-
-# Run specific test file
-npm run test:integration -- test/integration/__tests__/users.test.js
 ```
 
 ## Notes
