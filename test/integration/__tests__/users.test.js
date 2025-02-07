@@ -7,7 +7,7 @@ describe('Users Integration Tests', () => {
   let adminUserId;
   let testUser;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     adminUserId = getAdminUserId();
     await setupEnvironment();
   });
@@ -16,7 +16,7 @@ describe('Users Integration Tests', () => {
     cleanupEnvironment();
   });
 
-  after(async () => {
+  after(() => {
     if (testUser) {
       execCLI(`users:delete ${testUser.id} --force`);
     }
