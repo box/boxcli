@@ -26,9 +26,12 @@ const getAdminUserId = () => {
 
 
 const setupEnvironment = async() => {
+  console.log('Setting up test environment...');
   const jwtConfig = getJWTConfig();
+  console.log('JWT config loaded');
   const configPath = '/tmp/jwt-config.json';
   const boxConfigDir = `${process.env.HOME}/.box`;
+  console.log('Creating Box config directory...');
 
   try {
     await fs.access(boxConfigDir);
@@ -37,18 +40,20 @@ const setupEnvironment = async() => {
   }
 
   try {
-    // Write config to temp file for CLI command
+    console.log('Writing JWT config file...');
     await fs.writeFile(configPath, JSON.stringify(jwtConfig), { mode: 0o600 });
 
-    // Clean up any existing environment first
+    console.log('Setting up Box environment...');
     try {
+      console.log('Cleaning up existing environment...');
       await exec(`${CLI_PATH} configure:environments:delete integration-test`);
-    } catch (error) {
-      // Environment might not exist, ignore error
+    } catch {
+      console.log('No existing environment to clean up');
     }
 
-    // Add new environment and set as current
+    console.log('Adding new environment...');
     await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
+    console.log('Setting current environment...');
     await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
 
     // Verify environment is set up by running a simple command
