@@ -21,34 +21,38 @@ const getAdminUserId = () => {
   return userId;
 };
 
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
+
 const setupEnvironment = async () => {
   const jwtConfig = getJWTConfig();
   const configPath = '/tmp/jwt-config.json';
   const boxConfigDir = `${process.env.HOME}/.box`;
   
   // Ensure Box config directory exists with correct permissions
-  if (!require('fs').existsSync(boxConfigDir)) {
-    require('fs').mkdirSync(boxConfigDir, { mode: 0o700 });
-  }
+  const fs = require('fs').promises;
+  await fs.access(boxConfigDir).catch(async () => {
+    await fs.mkdir(boxConfigDir, { mode: 0o700 });
+  });
   
   try {
     // Write config to temp file for CLI command
-    require('fs').writeFileSync(configPath, JSON.stringify(jwtConfig), { mode: 0o600 });
+    await fs.writeFile(configPath, JSON.stringify(jwtConfig), { mode: 0o600 });
     
     // Clean up any existing environment first
     try {
-      execSync(`${CLI_PATH} configure:environments:delete integration-test`);
+      await exec(`${CLI_PATH} configure:environments:delete integration-test`);
     } catch (error) {
       // Environment might not exist, ignore error
     }
     
     // Add new environment and set as current
-    execSync(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
-    execSync(`${CLI_PATH} configure:environments:set-current integration-test`);
+    await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
+    await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
     
     // Verify environment is set up by running a simple command
-    const testOutput = execSync(`${CLI_PATH} users:get ${getAdminUserId()} --json`).toString();
-    const user = JSON.parse(testOutput);
+    const { stdout } = await exec(`${CLI_PATH} users:get ${getAdminUserId()} --json`);
+    const user = JSON.parse(stdout);
     if (!user.id || user.id !== getAdminUserId()) {
       throw new Error('Failed to set up environment');
     }
