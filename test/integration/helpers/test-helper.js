@@ -22,7 +22,12 @@ const getAdminUserId = () => {
 };
 
 const execCLI = (command) => {
-  return execSync(`${CLI_PATH} ${command}`).toString();
+  const jwtConfig = getJWTConfig();
+  const configPath = '/tmp/jwt-config.json';
+  require('fs').writeFileSync(configPath, JSON.stringify(jwtConfig));
+  const result = execSync(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test && ${CLI_PATH} ${command} --env=integration-test`).toString();
+  require('fs').unlinkSync(configPath);
+  return result;
 };
 
 module.exports = {
