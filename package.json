@@ -142,8 +142,8 @@
 		}
 	},
 	"scripts": {
-		"test": "nyc mocha \"test/**/*.test.js\" --require test/setup.js",
-		"test:integration": "mocha \"test/integration/__tests__/**/*.test.js\" --timeout 180000",
+		"test": "nyc mocha \"test/**/*.test.js\" --timeout 60000",
+		"test:integration": "mocha \"integration-tests/__tests__/**/*.test.js\" --timeout 180000",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
