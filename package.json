@@ -142,7 +142,7 @@
 		}
 	},
 	"scripts": {
-		"test": "nyc mocha \"test/commands/**/*.test.js\"",
+		"test": "nyc mocha \"test/**/*.test.js\" \"!test/integration/**/*.test.js\"",
 		"test:integration": "mocha \"test/integration/__tests__/**/*.test.js\" --timeout 180000",
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
