@@ -25,4 +25,4 @@ jobs:
         env:
           BOX_JWT_CONFIG: ${{ secrets.BOX_JWT_CONFIG }}
           BOX_ADMIN_USER_ID: ${{ secrets.BOX_ADMIN_USER_ID }}
-        run: npm run test:integration || true # Allow integration tests to fail until secrets are configured
+        run: npm run test:integration
