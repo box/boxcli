@@ -1,0 +1,37 @@
+name: integration-tests
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    name: Integration Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      - name: npm install
+        run: npm install
+      - name: Setup Integration Test Environment
+        env:
+          BOX_JWT_CONFIG: ${{ secrets.BOX_JWT_CONFIG }}
+          BOX_ADMIN_USER_ID: ${{ secrets.BOX_ADMIN_USER_ID }}
+        run: |
+          mkdir -p ~/.box
+          chmod 700 ~/.box
+          echo '{"cacheTokens":true,"boxReportsFolderPath":"/tmp/box-reports","boxDownloadsFolderPath":"/tmp/box-downloads"}' > ~/.box/settings.json
+          chmod 600 ~/.box/settings.json
+      - name: Run Integration Tests
+        env:
+          BOX_JWT_CONFIG: ${{ secrets.BOX_JWT_CONFIG }}
+          BOX_ADMIN_USER_ID: ${{ secrets.BOX_ADMIN_USER_ID }}
+        run: npm run test:integration
