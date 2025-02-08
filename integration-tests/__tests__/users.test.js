@@ -7,12 +7,12 @@ describe('Users Integration Tests', () => {
   let adminUserId;
   let testUser;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     adminUserId = getAdminUserId();
     await setupEnvironment();
   });
 
-  after(async () => {
+  after(async() => {
     try {
       if (testUser) {
         await execCLI(`users:delete ${testUser.id} --force`);
@@ -23,7 +23,7 @@ describe('Users Integration Tests', () => {
   });
 
   describe('User Operations', () => {
-    it('should get user info', async () => {
+    it('should get user info', async() => {
       const output = await execCLI(`users:get ${adminUserId} --json`);
       const user = JSON.parse(output);
       expect(user).to.be.an('object');
@@ -35,7 +35,7 @@ describe('Users Integration Tests', () => {
       expect(user.modified_at).to.be.a('string');
     });
 
-    it('should list group memberships', async () => {
+    it('should list group memberships', async() => {
       const output = await execCLI(`users:groups ${adminUserId} --json`);
       const memberships = JSON.parse(output);
       expect(memberships).to.be.an('array');
