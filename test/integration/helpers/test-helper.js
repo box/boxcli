@@ -52,13 +52,17 @@ const setupEnvironment = async() => {
     }
 
     console.log('Adding new environment...');
-    await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
-    console.log('Setting current environment...');
-    await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
+    const { stdout: addOutput } = await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
+    console.log('Add environment output:', addOutput);
 
-    // Verify environment is set up by running a simple command
+    console.log('Setting current environment...');
+    const { stdout: setOutput } = await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
+    console.log('Set environment output:', setOutput);
+
+    console.log('Verifying environment setup...');
     const { stdout } = await exec(`${CLI_PATH} users:get ${getAdminUserId()} --json`);
     const user = JSON.parse(stdout);
+    console.log('Environment verification complete');
     if (!user.id || user.id !== getAdminUserId()) {
       throw new Error('Failed to set up environment');
     }
