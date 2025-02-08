@@ -24,25 +24,36 @@ const getAdminUserId = () => {
   return userId;
 };
 
-const execWithTimeout = async(command, timeoutMs = TIMEOUT) => {
+function execWithTimeout(command, timeoutMs = TIMEOUT) {
+  let timeoutId;
   return Promise.race([
     exec(command),
-    new Promise((_, reject) => 
-      setTimeout(() => reject(new Error(`Command timed out after ${timeoutMs}ms: ${command}`)), timeoutMs)
-    )
-  ]);
-};
+    new Promise((resolve, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error(`Command timed out after ${timeoutMs}ms: ${command}`));
+      }, timeoutMs);
+    })
+  ]).finally(() => {
+    clearTimeout(timeoutId);
+  });
+}
 
 const setupEnvironment = async() => {
-  console.log('Setting up test environment...');
+  const startTime = Date.now();
+  const logWithTime = (msg) => {
+    const elapsed = Date.now() - startTime;
+    console.log(`[${elapsed}ms] ${msg}`);
+  };
+
+  logWithTime('Setting up test environment...');
   const jwtConfig = getJWTConfig();
-  console.log('JWT config loaded');
+  logWithTime('JWT config loaded');
   const configPath = '/tmp/jwt-config.json';
   const boxConfigDir = `${process.env.HOME}/.box`;
 
   try {
     // Create Box config directory if it doesn't exist
-    console.log('Creating Box config directory...');
+    logWithTime('Creating Box config directory...');
     try {
       await fs.access(boxConfigDir);
     } catch {
@@ -50,29 +61,30 @@ const setupEnvironment = async() => {
     }
 
     // Write JWT config
-    console.log('Writing JWT config file...');
+    logWithTime('Writing JWT config file...');
     await fs.writeFile(configPath, JSON.stringify(jwtConfig), { mode: 0o600 });
 
-    // Clean up existing environment
-    console.log('Cleaning up existing environment...');
+    // Clean up existing environment with shorter timeout
+    logWithTime('Cleaning up existing environment...');
     try {
-      await execWithTimeout(`${CLI_PATH} configure:environments:delete integration-test`);
-      console.log('Existing environment deleted');
+      await execWithTimeout(`${CLI_PATH} configure:environments:delete integration-test`, 10000);
+      logWithTime('Existing environment deleted');
     } catch (error) {
-      console.log('No existing environment to delete');
+      logWithTime('No existing environment to delete');
     }
 
-    // Add new environment
-    console.log('Adding new environment...');
+    // Add new environment with shorter timeout
+    logWithTime('Adding new environment...');
     const { stdout: addOutput } = await execWithTimeout(
-      `${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`
+      `${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`,
+      15000
     );
-    console.log('Add environment output:', addOutput);
+    logWithTime('Add environment output: ' + addOutput);
 
-    // Set current environment with timeout
-    console.log('Setting current environment...');
+    // Set current environment with shorter timeout
+    logWithTime('Setting current environment...');
     const setProcess = require('child_process').spawn(
-      CLI_PATH, 
+      CLI_PATH,
       ['configure:environments:set-current', 'integration-test'],
       { stdio: ['pipe', 'pipe', 'pipe'] }
     );
@@ -81,23 +93,30 @@ const setupEnvironment = async() => {
     const timeoutId = setTimeout(() => {
       if (!resolved) {
         setProcess.kill();
-        throw new Error('Environment selection timed out');
+        throw new Error('Environment selection timed out after 15s');
       }
-    }, TIMEOUT);
+    }, 15000);
 
-    // Handle environment selection
+    // Handle environment selection with immediate response
     setProcess.stdout.on('data', (data) => {
-      console.log('Environment selection output:', data.toString());
-      if (data.toString().includes('Which environment?')) {
+      const output = data.toString();
+      logWithTime('Environment selection output: ' + output);
+      if (output.includes('Which environment?')) {
+        logWithTime('Selecting environment...');
         setProcess.stdin.write('\n');
       }
     });
 
-    // Wait for process to complete
+    // Wait for process to complete with proper cleanup
     await new Promise((resolve, reject) => {
-      setProcess.on('close', (code) => {
+      const cleanup = () => {
         resolved = true;
         clearTimeout(timeoutId);
+        setProcess.removeAllListeners();
+      };
+
+      setProcess.on('close', (code) => {
+        cleanup();
         if (code === 0) {
           resolve();
         } else {
@@ -106,21 +125,20 @@ const setupEnvironment = async() => {
       });
 
       setProcess.on('error', (error) => {
-        resolved = true;
-        clearTimeout(timeoutId);
+        cleanup();
         reject(error);
       });
     });
-    console.log('Environment set successfully');
+    logWithTime('Environment set successfully');
 
-    // Verify environment setup
-    console.log('Verifying environment setup...');
-    const { stdout } = await execWithTimeout(`${CLI_PATH} users:get ${getAdminUserId()} --json`);
+    // Verify environment setup with shorter timeout
+    logWithTime('Verifying environment setup...');
+    const { stdout } = await execWithTimeout(`${CLI_PATH} users:get ${getAdminUserId()} --json`, 15000);
     const user = JSON.parse(stdout);
     if (!user.id || user.id !== getAdminUserId()) {
       throw new Error('Failed to verify environment setup');
     }
-    console.log('Environment verification complete');
+    logWithTime('Environment verification complete');
 
   } catch (error) {
     console.error('Error setting up environment:', error);
