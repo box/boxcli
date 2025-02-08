@@ -22,7 +22,7 @@ const CONFIG_FOLDER_PATH = path.join(os.homedir(), '.box');
 const SETTINGS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'settings.json');
 const ENVIRONMENTS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'box_environments.json');
 
-const CLI_PATH = path.resolve(__dirname, '../../../bin/run');
+const CLI_PATH = process.env.CI ? '/home/runner/work/boxcli/boxcli/bin/run' : path.resolve(__dirname, '../../bin/run');
 const TIMEOUT = 60000; // 60 second timeout for operations
 
 const getJWTConfig = () => {
