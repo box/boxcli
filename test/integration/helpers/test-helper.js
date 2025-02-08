@@ -53,8 +53,26 @@ const setupEnvironment = async() => {
     console.log('Add environment output:', addOutput);
 
     console.log('Setting current environment...');
-    const { stdout: setOutput } = await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
-    console.log('Set environment output:', setOutput);
+    const setProcess = require('child_process').spawn(CLI_PATH, ['configure:environments:set-current', 'integration-test'], { stdio: ['pipe', 'pipe', 'pipe'] });
+    
+    // Wait for the environment selection prompt and press Enter
+    setProcess.stdout.on('data', (data) => {
+      if (data.toString().includes('Which environment?')) {
+        setProcess.stdin.write('\n');
+      }
+    });
+
+    // Wait for process to complete
+    await new Promise((resolve, reject) => {
+      setProcess.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`Failed to set environment (exit code: ${code})`));
+        }
+      });
+    });
+    console.log('Environment set successfully');
 
     console.log('Verifying environment setup...');
     const { stdout } = await exec(`${CLI_PATH} users:get ${getAdminUserId()} --json`);
