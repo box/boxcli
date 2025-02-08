@@ -46,18 +46,16 @@ const setupEnvironment = async() => {
     console.log('Setting up Box environment...');
     try {
       console.log('Cleaning up existing environment...');
-      await exec(`${CLI_PATH} configure:environments:delete integration-test`);
-    } catch {
-      console.log('No existing environment to clean up');
-    }
+      await exec(`${CLI_PATH} configure:environments:delete integration-test`).catch(() => {});
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for cleanup to complete
 
-    console.log('Adding new environment...');
-    const { stdout: addOutput } = await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
-    console.log('Add environment output:', addOutput);
+      console.log('Adding new environment...');
+      const { stdout: addOutput } = await exec(`${CLI_PATH} configure:environments:add ${configPath} --name=integration-test`);
+      console.log('Add environment output:', addOutput);
 
-    console.log('Setting current environment...');
-    const { stdout: setOutput } = await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
-    console.log('Set environment output:', setOutput);
+      console.log('Setting current environment...');
+      const { stdout: setOutput } = await exec(`${CLI_PATH} configure:environments:set-current integration-test`);
+      console.log('Set environment output:', setOutput);
 
     console.log('Verifying environment setup...');
     const { stdout } = await exec(`${CLI_PATH} users:get ${getAdminUserId()} --json`);
