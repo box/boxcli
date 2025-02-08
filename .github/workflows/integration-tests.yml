@@ -26,6 +26,10 @@ jobs:
           BOX_JWT_CONFIG: ${{ secrets.BOX_JWT_CONFIG }}
           BOX_ADMIN_USER_ID: ${{ secrets.BOX_ADMIN_USER_ID }}
         run: |
+          if [ -z "$BOX_JWT_CONFIG" ] || [ -z "$BOX_ADMIN_USER_ID" ]; then
+            echo "Missing required environment variables"
+            exit 1
+          fi
           mkdir -p ~/.box
           chmod 700 ~/.box
           echo '{"cacheTokens":true,"boxReportsFolderPath":"/tmp/box-reports","boxDownloadsFolderPath":"/tmp/box-downloads"}' > ~/.box/settings.json
