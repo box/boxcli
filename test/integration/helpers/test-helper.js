@@ -24,18 +24,21 @@ const getAdminUserId = () => {
   return userId;
 };
 
-function execWithTimeout(command, timeoutMs = TIMEOUT) {
-  let timeoutId;
-  return Promise.race([
-    exec(command),
-    new Promise((resolve, reject) => {
-      timeoutId = setTimeout(() => {
-        reject(new Error(`Command timed out after ${timeoutMs}ms: ${command}`));
-      }, timeoutMs);
-    })
-  ]).finally(() => {
-    clearTimeout(timeoutId);
+async function execWithTimeout(command, timeoutMs = TIMEOUT) {
+  const timeoutError = new Error(`Command timed out after ${timeoutMs}ms: ${command}`);
+  const timeoutPromise = new Promise(resolve => {
+    setTimeout(() => resolve(timeoutError), timeoutMs);
   });
+
+  try {
+    const result = await Promise.race([exec(command), timeoutPromise]);
+    if (result === timeoutError) {
+      throw timeoutError;
+    }
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }
 
 const setupEnvironment = async() => {
@@ -108,27 +111,36 @@ const setupEnvironment = async() => {
     });
 
     // Wait for process to complete with proper cleanup
-    await new Promise((resolve, reject) => {
+    const waitForProcess = async () => {
       const cleanup = () => {
         resolved = true;
         clearTimeout(timeoutId);
         setProcess.removeAllListeners();
       };
 
-      setProcess.on('close', (code) => {
-        cleanup();
-        if (code === 0) {
-          resolve();
-        } else {
-          reject(new Error(`Failed to set environment (exit code: ${code})`));
-        }
-      });
+      try {
+        await new Promise((resolve, reject) => {
+          setProcess.on('close', (code) => {
+            cleanup();
+            if (code === 0) {
+              resolve();
+            } else {
+              reject(new Error(`Failed to set environment (exit code: ${code})`));
+            }
+          });
 
-      setProcess.on('error', (error) => {
+          setProcess.on('error', (error) => {
+            cleanup();
+            reject(error);
+          });
+        });
+      } catch (error) {
         cleanup();
-        reject(error);
-      });
-    });
+        throw error;
+      }
+    };
+
+    await waitForProcess();
     logWithTime('Environment set successfully');
 
     // Verify environment setup with shorter timeout
