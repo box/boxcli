@@ -145,7 +145,7 @@
 		"test": "nyc mocha \"test/**/*.test.js\" --timeout 60000",
 		"test:integration": "mocha \"integration-tests/__tests__/**/*.test.js\" --timeout 180000",
 		"posttest": "npm run lint",
-		"lint": "eslint --fix ./src ./test",
+		"lint": "eslint --fix ./src ./test ./integration-tests",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
 		"prepack": "npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
