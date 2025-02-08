@@ -4,19 +4,20 @@ const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
 const util = require('util');
-const { once } = require('events');
 const os = require('os');
 const exec = promisify(require('child_process').exec);
 const { validateConfigObject } = require('../../src/util');
 const darwinKeychain = require('keychain');
 const darwinKeychainSetPassword = util.promisify(darwinKeychain.setPassword.bind(darwinKeychain));
-const darwinKeychainGetPassword = util.promisify(darwinKeychain.getPassword.bind(darwinKeychain));
-let keytar = null;
-try {
-  keytar = require('keytar');
-} catch (ex) {
-  // keytar cannot be imported because the library is not provided for this operating system / architecture
+function loadKeytar() {
+  if (process.platform !== 'win32') {
+    return null;
+  }
+  // eslint-disable-next-line global-require
+  return require('keytar');
 }
+
+const keytar = loadKeytar();
 
 const CONFIG_FOLDER_PATH = path.join(os.homedir(), '.box');
 const SETTINGS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'settings.json');
@@ -25,13 +26,31 @@ const ENVIRONMENTS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'box_environments.j
 const CLI_PATH = process.env.CI ? '/home/runner/work/boxcli/boxcli/bin/run' : path.resolve(__dirname, '../../bin/run');
 const TIMEOUT = 60000; // 60 second timeout for operations
 
+const execCLI = async(command) => {
+  try {
+    const { stdout, stderr } = await exec(`${CLI_PATH} ${command}`, { timeout: TIMEOUT });
+    if (stderr && !stderr.includes('DeprecationWarning')) {
+      throw new Error(`Command failed: ${stderr}`);
+    }
+    if (!stdout) {
+      throw new Error('Command produced no output');
+    }
+    return stdout.trim();
+  } catch (error) {
+    if (error.stderr && !error.stderr.includes('DeprecationWarning')) {
+      throw new Error(`Command failed: ${error.stderr}`);
+    }
+    throw error;
+  }
+};
+
 const getJWTConfig = () => {
   const config = process.env.BOX_JWT_CONFIG;
   if (!config) {
     throw new Error('Missing BOX_JWT_CONFIG environment variable');
   }
   const jwtConfig = JSON.parse(Buffer.from(config, 'base64').toString());
-  
+
   // Validate JWT config
   const requiredFields = ['boxAppSettings', 'enterpriseID'];
   const requiredAppFields = ['clientID', 'clientSecret', 'appAuth'];
@@ -76,7 +95,7 @@ async function execWithTimeout(command, timeoutMs = TIMEOUT) {
   }
 }
 
-const setupEnvironment = async () => {
+const setupEnvironment = async() => {
   const startTime = Date.now();
   const logWithTime = (msg) => {
     const elapsed = Date.now() - startTime;
@@ -92,7 +111,7 @@ const setupEnvironment = async () => {
     // Clean up any existing environment first
     logWithTime('Cleaning up existing environment...');
     try {
-      const { stdout, stderr } = await exec(`${CLI_PATH} configure:environments:delete integration-test`, { timeout: 30000 });
+      await exec(`${CLI_PATH} configure:environments:delete integration-test`, { timeout: 30000 });
       logWithTime('Existing environment deleted');
     } catch (error) {
       // Ignore errors about non-existent environments
@@ -103,13 +122,14 @@ const setupEnvironment = async () => {
     }
 
     // Remove existing config directory and files
-    if (fs.existsSync(CONFIG_FOLDER_PATH)) {
-      fs.rmSync(CONFIG_FOLDER_PATH, { recursive: true, force: true });
+    try {
+      await fs.promises.rm(CONFIG_FOLDER_PATH, { recursive: true, force: true });
+    } catch {
+      // Directory might not exist
     }
 
     // Create fresh config directory
-    fs.mkdirSync(CONFIG_FOLDER_PATH, { recursive: true });
-    fs.chmodSync(CONFIG_FOLDER_PATH, 0o700);
+    await fs.promises.mkdir(CONFIG_FOLDER_PATH, { recursive: true, mode: 0o700 });
 
     // Write settings and environment configuration
     logWithTime('Writing configuration files...');
@@ -133,8 +153,8 @@ const setupEnvironment = async () => {
       },
       enterpriseID: jwtConfig.enterpriseID
     };
-    fs.writeFileSync(configFilePath, JSON.stringify(configJson, null, 2));
-    fs.chmodSync(configFilePath, 0o600);
+    await fs.promises.writeFile(configFilePath, JSON.stringify(configJson, null, 2));
+    await fs.promises.chmod(configFilePath, 0o600);
     logWithTime(`JWT config written to: ${configFilePath}`);
 
     const environmentConfig = {
@@ -158,8 +178,8 @@ const setupEnvironment = async () => {
 
     // Write settings file
     const settingsJson = JSON.stringify(settings, null, 2);
-    fs.writeFileSync(SETTINGS_FILE_PATH, settingsJson);
-    fs.chmodSync(SETTINGS_FILE_PATH, 0o600);
+    await fs.promises.writeFile(SETTINGS_FILE_PATH, settingsJson);
+    await fs.promises.chmod(SETTINGS_FILE_PATH, 0o600);
     logWithTime(`Settings file written: ${settingsJson}`);
 
     // Write environment config
@@ -201,12 +221,12 @@ const setupEnvironment = async () => {
     }
 
     // Always write to file system as fallback
-    fs.writeFileSync(ENVIRONMENTS_FILE_PATH, environmentsJson);
-    fs.chmodSync(ENVIRONMENTS_FILE_PATH, 0o600);
+    await fs.promises.writeFile(ENVIRONMENTS_FILE_PATH, environmentsJson);
+    await fs.promises.chmod(ENVIRONMENTS_FILE_PATH, 0o600);
     logWithTime(`Environment config written to file: ${environmentsJson}`);
 
     // Verify environment config was written correctly
-    const writtenConfig = JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH, 'utf8'));
+    const writtenConfig = JSON.parse(await fs.promises.readFile(ENVIRONMENTS_FILE_PATH, 'utf8'));
     if (!writtenConfig.environments || !writtenConfig.environments['integration-test']) {
       throw new Error('Failed to write environment configuration');
     }
@@ -217,8 +237,10 @@ const setupEnvironment = async () => {
 
     // Verify files exist and are readable
     logWithTime('Verifying configuration files...');
-    const settingsContent = fs.readFileSync(SETTINGS_FILE_PATH, 'utf8');
-    const environmentsContent = fs.readFileSync(ENVIRONMENTS_FILE_PATH, 'utf8');
+    const [settingsContent, environmentsContent] = await Promise.all([
+      fs.promises.readFile(SETTINGS_FILE_PATH, 'utf8'),
+      fs.promises.readFile(ENVIRONMENTS_FILE_PATH, 'utf8')
+    ]);
     logWithTime(`Settings file content: ${settingsContent}`);
     logWithTime(`Environments file content: ${environmentsContent}`);
 
@@ -226,23 +248,27 @@ const setupEnvironment = async () => {
     logWithTime('Verifying environment by getting user info...');
     let retries = 3;
     let lastError;
-    while (retries > 0) {
-      try {
-        const output = await execCLI(`users:get ${getAdminUserId()} --json`);
-        const user = JSON.parse(output);
-        if (!user.id || user.id !== getAdminUserId()) {
-          throw new Error('Failed to verify user info');
-        }
-        logWithTime('Environment verified successfully');
-        break;
-      } catch (error) {
-        lastError = error;
-        retries--;
-        if (retries > 0) {
-          logWithTime(`Verification failed, retrying... (${retries} attempts left): ${error.message}`);
-          await new Promise(resolve => setTimeout(resolve, 5000));
-        }
+    const verifyEnvironment = async() => {
+      const output = await execCLI(`users:get ${getAdminUserId()} --json`);
+      const user = JSON.parse(output);
+      if (!user.id || user.id !== getAdminUserId()) {
+        throw new Error('Failed to verify user info');
       }
+      return true;
+    };
+
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort('Timeout'), 15000);
+
+    try {
+      await verifyEnvironment();
+      clearTimeout(timeoutId);
+      logWithTime('Environment verified successfully');
+    } catch (error) {
+      clearTimeout(timeoutId);
+      lastError = error;
+      logWithTime(`Environment verification failed: ${error.message}`);
+      throw error;
     }
 
     if (retries === 0) {
@@ -255,7 +281,7 @@ const setupEnvironment = async () => {
   }
 };
 
-const cleanupEnvironment = async () => {
+const cleanupEnvironment = async() => {
   try {
     await execWithTimeout(`${CLI_PATH} configure:environments:delete integration-test`);
     console.log('Environment cleanup complete');
@@ -264,23 +290,6 @@ const cleanupEnvironment = async () => {
   }
 };
 
-const execCLI = async (command) => {
-  try {
-    const { stdout, stderr } = await exec(`${CLI_PATH} ${command}`, { timeout: TIMEOUT });
-    if (stderr && !stderr.includes('DeprecationWarning')) {
-      throw new Error(`Command failed: ${stderr}`);
-    }
-    if (!stdout) {
-      throw new Error('Command produced no output');
-    }
-    return stdout.trim();
-  } catch (error) {
-    if (error.stderr && !error.stderr.includes('DeprecationWarning')) {
-      throw new Error(`Command failed: ${error.stderr}`);
-    }
-    throw error;
-  }
-};
 
 module.exports = {
   getJWTConfig,
