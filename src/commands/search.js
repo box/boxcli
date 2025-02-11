@@ -166,7 +166,7 @@ class SearchCommand extends BoxCommand {
 	}
 }
 
-SearchCommand.description = 'Search for files and folders in your Enterprise';
+SearchCommand.description = 'Search for files and folders in your Enterprise.';
 SearchCommand.examples = [
 	'box search "Q3 OKR"',
 	'box search --mdfilter "enterprise.employeeRecord.name=John Doe"'
