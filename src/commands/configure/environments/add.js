@@ -93,8 +93,9 @@ class EnvironmentsAddCommand extends BoxCommand {
 			newEnvironment.hasInLinePrivateKey = false;
 		}
 		if (flags['set-as-current']) {
-			configObj.default = args.name;
+			environmentsObj.default = environmentName;
 		}
+
 		// If no default environment is defined, this newly added environment will be set as the default
 		if (!environmentsObj.default) {
 			environmentsObj.default = environmentName;
