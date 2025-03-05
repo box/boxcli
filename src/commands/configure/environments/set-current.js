@@ -8,7 +8,7 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(EnvironmentsSetCurrentCommand);
 		let environmentsObj = await this.getEnvironments();
-		let name = args.name;
+		let name = args.id;
 
 		if (!name) {
 			let answers = await inquirer.prompt([
@@ -44,7 +44,7 @@ EnvironmentsSetCurrentCommand.flags = {
 
 EnvironmentsSetCurrentCommand.args = {
 	id: Args.string({
-		name: 'name',
+		name: 'id',
 		required: false,
 		hidden: false,
 		description: 'Name of the environment'
