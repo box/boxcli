@@ -39,7 +39,7 @@ EXAMPLES
   $ box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/ai/ask.js)_
+_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/ai/ask.js)_
 
 ## `box ai:text-gen`
 
@@ -77,4 +77,4 @@ EXAMPLES
   $ box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/ai/text-gen.js)_
+_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/ai/text-gen.js)_

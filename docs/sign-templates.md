@@ -41,7 +41,7 @@ EXAMPLES
   $ box sign-templates
 ```
 
-_See code: [src/commands/sign-templates/index.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/sign-templates/index.js)_
+_See code: [src/commands/sign-templates/index.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/sign-templates/index.js)_
 
 ## `box sign-templates:get ID`
 
@@ -77,4 +77,4 @@ EXAMPLES
   $ box sign-templates:get 12345
 ```
 
-_See code: [src/commands/sign-templates/get.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/sign-templates/get.js)_
+_See code: [src/commands/sign-templates/get.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/sign-templates/get.js)_

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/box/boxcli/compare/v4.0.0...v4.0.1) (2025-03-07)
+
+
+### Bug Fixes
+
+* Fix `configure:environments:set-current` command ([#568](https://github.com/box/boxcli/issues/568)) ([dc0905f](https://github.com/box/boxcli/commit/dc0905f7b85a32373e93ec7726afb261223e9fac))
+
 ## [4.0.0](https://github.com/box/boxcli/compare/v3.16.0...v4.0.0) (2025-01-28)
 
 
