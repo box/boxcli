@@ -107,7 +107,7 @@ EXAMPLES
   $ box events --enterprise --created-after 2019-01-01
 ```
 
-_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/events/index.js)_
+_See code: [src/commands/events/index.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/events/index.js)_
 
 ## `box events:get`
 
@@ -246,4 +246,4 @@ DESCRIPTION
   Poll the event stream
 ```
 
-_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v4.0.0/src/commands/events/poll.js)_
+_See code: [src/commands/events/poll.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/events/poll.js)_
