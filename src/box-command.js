@@ -1517,7 +1517,6 @@ class BoxCommand extends Command {
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!
 			/* eslint-disable no-process-exit,unicorn/no-process-exit */
-			process.stderr.setEncoding('utf8');
 			process.stderr.write(errorMsg, () => {
 				process.exitCode = 2;
 			});
