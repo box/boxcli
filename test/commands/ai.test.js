@@ -110,7 +110,6 @@ describe('AI', () => {
 			})
 	})
 
-	//test to check if ai:extract command is working
 	describe('ai:extract', () => {
 		const expectedRequestBody = {
 			prompt: 'firstName, lastName, location, yearOfBirth, company',
@@ -123,14 +122,15 @@ describe('AI', () => {
 			],
 		}
 		const expectedResponseBody = {
-            answer: '{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
-            created_at: '2024-07-09T11:29:46.835Z',
-            completion_reason: 'done',
-        };
-		
-		const fixture = getFixture('ai/post_ai_extract_response') //This is the response we are expecting from the server
+			answer:
+				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
+			created_at: '2024-07-09T11:29:46.835Z',
+			completion_reason: 'done',
+		}
 
-		//Calling the test API
+		const fixture = getFixture('ai/post_ai_extract_response')
+		const yamlFixture = getFixture('ai/post_ai_extract_response_yaml.txt')
+
 		test
 			.nock(TEST_API_ROOT, (api) => {
 				api.post('/2.0/ai/extract', expectedRequestBody).reply(200, expectedResponseBody)
@@ -144,11 +144,90 @@ describe('AI', () => {
 				'--json',
 				'--token=test',
 			])
-			
+
 			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
-				fs.writeFileSync('test/commands/test_output.json', ctx.stdout)
-				fs.writeFileSync('test/commands/expected_output.json', fixture)
-				assert.equal(ctx.stdout, fixture);
+				assert.equal(ctx.stdout, fixture)
+			})
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract', expectedRequestBody).reply(200, expectedResponseBody)
+			})
+			.stdout()
+			.command([
+				'ai:extract',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'firstName, lastName, location, yearOfBirth, company',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
+				assert.equal(ctx.stdout, yamlFixture)
+			})
+	})
+
+	describe('ai:extract-structured', () => {
+		const expectedRequestBody = {
+			items: [
+				{
+					id: '12345',
+					type: 'file',
+					content: 'one,two,three',
+				},
+			],
+			fields: [
+				{
+					key: 'firstName',
+					type: 'string',
+					description: 'Person first name',
+					prompt: 'What is the first name?',
+					displayName: 'First name',
+				},
+			],
+		}
+		const expectedResponseBody = {
+			answer: '{"firstName":"John"}',
+			created_at: '2025-04-28T05:21:32.462-07:00',
+			completion_reason: 'done',
+		}
+
+		const fixture = getFixture('ai/post_ai_extract_structured_response')
+		const yamlFixture = getFixture('ai/post_ai_extract_structured_response_yaml.txt')
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody)
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--fields',
+				'[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}]',
+				'--json',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+				assert.equal(ctx.stdout, fixture)
+			})
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody)
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--fields',
+				'[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}]',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+				assert.equal(ctx.stdout, yamlFixture)
 			})
 	})
 })

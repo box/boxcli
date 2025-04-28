@@ -112,3 +112,35 @@ EXAMPLES
   $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=1845363820118,type=file" --json --as-user 40900117868
 ```
 
+## `box ai:extract-structured`
+
+Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+```
+USAGE
+  $ box ai:extract-structured --items <value> --fields <value>... [-t <value>] [--as-user <value>] [--no-color] [--json |
+    --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --items=<value>...           (required) The items for the AI request
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --prompt=<value>             (required) The prompt for the AI request
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+EXAMPLES
+  $ box ai:extract-structured --items "id=1845363820118,type=file"   --fields '[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"},{"key":"lastName","type":"string","description":"Person last name","prompt":"What is the last name?","displayName":"Last name"}]' --json
+```
