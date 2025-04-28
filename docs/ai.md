@@ -109,7 +109,7 @@ DESCRIPTION
   Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
 
 EXAMPLES
-  $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=1845363820118,type=file" --json --as-user 40900117868
+  $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --json
 ```
 
 ## `box ai:extract-structured`
@@ -142,5 +142,5 @@ DESCRIPTION
   Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
 
 EXAMPLES
-  $ box ai:extract-structured --items "id=1845363820118,type=file"   --fields '[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"},{"key":"lastName","type":"string","description":"Person last name","prompt":"What is the last name?","displayName":"Last name"}]' --json
+  $ box ai:extract-structured --items "id=12345,type=file"   --fields '[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"},{"key":"lastName","type":"string","description":"Person last name","prompt":"What is the last name?","displayName":"Last name"}]' --json
 ```
