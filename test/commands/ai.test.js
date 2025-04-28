@@ -3,7 +3,6 @@
 const {test} = require('@oclif/test')
 const assert = require('chai').assert
 const {TEST_API_ROOT, getFixture} = require('../helpers/test-helper')
-const fs = require('fs')
 
 describe('AI', () => {
 	describe('ai:ask', () => {
