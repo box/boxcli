@@ -186,9 +186,13 @@ describe('AI', () => {
 			],
 		}
 		const expectedResponseBody = {
-			answer: '{"firstName":"John"}',
-			created_at: '2025-04-28T05:21:32.462-07:00',
-			completion_reason: 'done',
+			answer: {
+					"firstName": "John",
+					"lastName": "Doe"
+				},
+			created_at: "2025-04-29T07:25:24.366-07:00",
+			completion_reason: "done"
+			
 		}
 
 		const fixture = getFixture('ai/post_ai_extract_structured_response')
@@ -225,7 +229,7 @@ describe('AI', () => {
 				'--token=test',
 			])
 
-			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
 				assert.equal(ctx.stdout, yamlFixture)
 			})
 	})
