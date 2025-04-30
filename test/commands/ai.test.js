@@ -3,7 +3,6 @@
 const {test} = require('@oclif/test');
 const assert = require('chai').assert;
 const {TEST_API_ROOT, getFixture} = require('../helpers/test-helper');
-const fs = require('fs');
 
 describe('AI', () => {
 	describe('ai:ask', () => {
@@ -248,8 +247,6 @@ describe('AI', () => {
 			])
 
 			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
-				fs.writeFileSync('test/commands/test_output.txt', ctx.stdout);
-				fs.writeFileSync('test/commands/expected.txt', fixture);
 				assert.equal(ctx.stdout, yamlFixture);
 			});
 	});
