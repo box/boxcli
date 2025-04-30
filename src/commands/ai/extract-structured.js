@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const BoxCommand = require('../../box-command');
 const {Flags} = require('@oclif/core');
@@ -19,7 +19,6 @@ class AiExtractStructuredCommand extends BoxCommand {
 		}
 
 		let answer = await this.tsClient.ai.createAiExtractStructured(options);
-		delete answer.rawData.ai_agent_info;
 		await this.output(answer.rawData);
 	}
 }
@@ -64,6 +63,6 @@ AiExtractStructuredCommand.flags = {
 		description:
 			'JSON string of fields to extract (e.g., [{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}])',
 	}),
-}
+};
 
 module.exports = AiExtractStructuredCommand;

@@ -3,6 +3,7 @@
 const {test} = require('@oclif/test')
 const assert = require('chai').assert
 const {TEST_API_ROOT, getFixture} = require('../helpers/test-helper')
+const fs = require('fs');
 
 describe('AI', () => {
 	describe('ai:ask', () => {
@@ -121,10 +122,18 @@ describe('AI', () => {
 			],
 		}
 		const expectedResponseBody = {
-			answer:
-				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
+			answer: "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"location\": \"San Francisco\", \"yearOfBirth\": \"1990\", \"company\": \"Box\"}",
 			created_at: '2024-07-09T11:29:46.835Z',
 			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: "google__gemini_2_0_flash_001",
+						provider: "google"
+					}
+				],
+				processor: "basic_text"
+			}
 		}
 
 		const fixture = getFixture('ai/post_ai_extract_response')
@@ -191,7 +200,16 @@ describe('AI', () => {
 					"lastName": "Doe"
 				},
 			created_at: "2025-04-29T07:25:24.366-07:00",
-			completion_reason: "done"
+			completion_reason: "done",
+			ai_agent_info: {
+				models: [
+					{
+						name: "google__gemini_2_0_flash_001",
+						provider: "google"
+					}
+				],
+				processor: "basic_text"
+			}
 			
 		}
 
@@ -230,6 +248,8 @@ describe('AI', () => {
 			])
 
 			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
+				fs.writeFileSync('test/commands/test_output.txt', ctx.stdout)
+				fs.writeFileSync('test/commands/expected.txt',fixture)
 				assert.equal(ctx.stdout, yamlFixture)
 			})
 	})

@@ -3,5 +3,14 @@
     "createdAt": {
         "value": "2024-07-09T11:29:46.835Z"
     },
-    "completionReason": "done"
+    "completionReason": "done",
+    "aiAgentInfo": {
+        "models": [
+            {
+                "name": "google__gemini_2_0_flash_001",
+                "provider": "google"
+            }
+        ],
+        "processor": "basic_text"
+    }
 }

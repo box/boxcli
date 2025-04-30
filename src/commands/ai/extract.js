@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const BoxCommand = require('../../box-command');
 const {Flags} = require('@oclif/core');
@@ -20,20 +20,22 @@ class AiExtractCommand extends BoxCommand {
 			prompt: options.prompt,
 			items: options.items,
 		});
+
+		delete answer.aiAgentInfo.models[0].supportedPurpose;
 		delete answer.rawData;
-		delete answer.aiAgentInfo;
 
 		await this.output(answer);
 	}
 }
 
-AiExtractCommand.description = 'Sends an AI request to supported LLMs and extracts metadata in the form of key value pairs';
+AiExtractCommand.description =
+	'Sends an AI request to supported LLMs and extracts metadata in the form of key value pairs';
 AiExtractCommand.examples = [
 	'box ai:extract --items=id=12345,type=file --prompt "firstName, lastName, location, yearOfBirth, company"',
 ];
 AiExtractCommand._endpoint = 'post_ai_extract';
 
-//Flags definition
+// Flags definition
 AiExtractCommand.flags = {
 	...BoxCommand.flags,
 	prompt: Flags.string({
@@ -65,6 +67,6 @@ AiExtractCommand.flags = {
 			return item;
 		},
 	}),
-}
+};
 
 module.exports = AiExtractCommand;

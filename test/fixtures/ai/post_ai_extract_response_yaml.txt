@@ -4,3 +4,9 @@ Answer: >-
 Created At:
     Value: '2024-07-09T11:29:46.835Z'
 Completion Reason: done
+Ai Agent Info:
+    Models:
+        -
+            Name: google__gemini_2_0_flash_001
+            Provider: google
+    Processor: basic_text
