@@ -119,6 +119,36 @@ function getBooleanFlagValue(value) {
 }
 
 /**
+ * Removes all the undefined values from the object
+ *
+ * @param {Object} obj The object to format for display
+ * @returns {Object} The formatted object output
+ * @private
+ */
+
+function removeUndefinedValues(obj) {
+
+	if (typeof obj !== 'object' || obj === null) {
+		return obj;
+	  }
+
+	  if (Array.isArray(obj)) {
+		return obj.map(item => removeUndefinedValues(item));
+	  }
+
+	  Object.keys(obj).forEach(key => {
+		if (obj[key] === undefined) {
+		  delete obj[key]; // Remove keys with undefined values
+		} else {
+		  // Recursively process nested objects or arrays
+		  obj[key] = removeUndefinedValues(obj[key]);
+		}
+	  });
+	
+	  return obj;
+}
+
+/**
  * Add or subtract a given offset from a date
  *
  * @param {Date} date The date to offset
@@ -1127,6 +1157,9 @@ class BoxCommand extends Command {
 		let writeFunc;
 		let logFunc;
 		let stringifiedOutput;
+
+		//remove all the undefined values from the object
+		formattedOutputData = removeUndefinedValues(formattedOutputData);
 
 		if (outputFormat === 'json') {
 			stringifiedOutput = stringifyStream(formattedOutputData, null, 4);

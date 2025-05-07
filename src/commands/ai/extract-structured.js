@@ -16,8 +16,11 @@ class AiExtractStructuredCommand extends BoxCommand {
 		if (flags.fields) {
 			options.fields = JSON.parse(flags.fields);
 			delete this.flags.fields;
+		} else if (flags['metadata-template']) {
+			options.metadataTemplate = flags['metadata-template'];
+		} else {
+			throw new Error('Either fields or metadata_template must be provided');
 		}
-
 		let answer = await this.tsClient.ai.createAiExtractStructured(options);
 		await this.output(answer.rawData);
 	}
@@ -26,6 +29,7 @@ class AiExtractStructuredCommand extends BoxCommand {
 AiExtractStructuredCommand.description = 'Extract structured metadata from a file using Box AI';
 AiExtractStructuredCommand.examples = [
 	'box ai:extract-structured --items=id=12345,type=file --fields \'[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}]\'',
+	'box ai:extract-structured --items="id=12345,type=file" --metadata-template="type=metadata_template,scope=enterprise,template_key=test"',
 ];
 AiExtractStructuredCommand._endpoint = 'post_ai_extract_structured';
 
@@ -58,8 +62,30 @@ AiExtractStructuredCommand.flags = {
 			return item;
 		},
 	}),
+	'metadata-template': Flags.string({
+		description: 'metadata template to use for the AI request',
+		parse(input) {
+			const metadataTemplate = {
+				type: 'metadata_template',
+				scope: '',
+				templateKey: '',
+			};
+			const obj = utils.parseStringToObject(input, ['type', 'scope', 'template_key']);
+			for (const key in obj) {
+				if (key === 'type') {
+					metadataTemplate.type = obj[key];
+				} else if (key === 'scope') {
+					metadataTemplate.scope = obj[key];
+				} else if (key === 'template_key') {
+					metadataTemplate.templateKey = obj[key];
+				} else {
+					throw new Error(`Invalid item key ${key}`);
+				}
+			}
+			return metadataTemplate;
+		},
+	}),
 	fields: Flags.string({
-		required: true,
 		description:
 			'JSON string of fields to extract (e.g., [{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}])',
 	}),

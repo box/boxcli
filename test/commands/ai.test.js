@@ -3,6 +3,7 @@
 const {test} = require('@oclif/test');
 const assert = require('chai').assert;
 const {TEST_API_ROOT, getFixture} = require('../helpers/test-helper');
+const fs = require('fs');
 
 describe('AI', () => {
 	describe('ai:ask', () => {
@@ -123,7 +124,7 @@ describe('AI', () => {
 		const expectedResponseBody = {
 			answer:
 				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
-			created_at: '2024-07-09T11:29:46.835Z',
+			created_at: '2025-05-02T14:51:30.567Z',
 			completion_reason: 'done',
 			ai_agent_info: {
 				models: [
