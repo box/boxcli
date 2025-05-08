@@ -85,7 +85,7 @@ Sends an AI request to supported LLMs and returns metadata in form of key-value 
 
 ```
 USAGE
-  $ box ai:extract --prompt <value> --items <value>... [-t <value>] [--as-user <value>] [--no-color] [--json |
+  $ box ai:extract --prompt <value> --items <value>... --ai_agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
 
 FLAGS
@@ -109,7 +109,7 @@ DESCRIPTION
   Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
 
 EXAMPLES
-  $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --json
+  $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai_agent \'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'
 ```
 
 ## `box ai:extract-structured`
@@ -118,7 +118,7 @@ Sends an AI request to supported LLMs and returns metadata in form of key-value 
 
 ```
 USAGE
-  $ box ai:extract-structured --items <value> --fields <value>... [-t <value>] [--as-user <value>] [--no-color] [--json |
+  $ box ai:extract-structured --items <value> --fields <value>... --metadata-template <value> --ai_agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
 
 FLAGS
@@ -142,5 +142,5 @@ DESCRIPTION
   Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
 
 EXAMPLES
-  $ box ai:extract-structured --items "id=12345,type=file"   --fields '[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"},{"key":"lastName","type":"string","description":"Person last name","prompt":"What is the last name?","displayName":"Last name"}]' --json
+  $ box ai:extract-structured --items="id=12345,type=file" --fields "key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name" --fields "key=lastName,type=string,description=Person last name,prompt=What is the last name?,displayName=Last name" --ai_agent \'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'
 ```

@@ -224,8 +224,7 @@ describe('AI', () => {
 			.command([
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
-				'--fields',
-				'[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}]',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
 				'--json',
 				'--token=test',
 			])
@@ -242,8 +241,265 @@ describe('AI', () => {
 			.command([
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
-				'--fields',
-				'[{"key":"firstName","type":"string","description":"Person first name","prompt":"What is the first name?","displayName":"First name"}]',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
+				assert.equal(ctx.stdout, yamlFixture);
+			});
+	});
+
+	describe('ai:extract-structured with ai_agent', () => {
+		const expectedRequestBody = {
+			items: [
+				{
+					id: '12345',
+					type: 'file',
+					content: 'one,two,three',
+				},
+			],
+			fields: [
+				{
+					key: 'firstName',
+					type: 'string',
+					description: 'Person first name',
+					prompt: 'What is the first name?',
+					displayName: 'First name',
+				},
+			],
+			ai_agent: {
+				type: 'ai_agent_extract_structured',
+			},
+		};
+		const expectedResponseBody = {
+			answer: {
+				firstName: 'John',
+				lastName: 'Doe',
+			},
+			created_at: '2025-04-29T07:25:24.366-07:00',
+			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: 'google__gemini_2_0_flash_001',
+						provider: 'google',
+					},
+				],
+				processor: 'basic_text',
+			},
+		};
+
+		const fixture = getFixture('ai/post_ai_extract_structured_response');
+		const yamlFixture = getFixture('ai/post_ai_extract_structured_response_yaml.txt');
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
+				'--ai_agent',
+				'{"type":"ai_agent_extract_structured"}',
+				'--json',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
+				'--ai_agent',
+				'{"type":"ai_agent_extract_structured"}',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
+				assert.equal(ctx.stdout, yamlFixture);
+			});
+	});
+	describe('ai:extract with ai agent', () => {
+		const expectedRequestBody = {
+			prompt: 'firstName, lastName, location, yearOfBirth, company',
+			items: [
+				{
+					id: '12345',
+					type: 'file',
+					content: 'one,two,three',
+				},
+			],
+			ai_agent: {
+				type: 'ai_agent_extract',
+				basic_text: {
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template: 'It is, consider these travel options and answer the.',
+					system_message: 'You are a helpful travel assistant specialized in budget travel',
+				},
+				long_text: {
+					embeddings: {
+						model: 'azure__openai__text_embedding_ada_002',
+						strategy: {
+							id: 'basic',
+							num_tokens_per_chunk: 64,
+						},
+					},
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template: 'It is , consider these travel options and answer the.',
+					system_message: 'You are a helpful travel assistant specialized in budget travel',
+				},
+			},
+		};
+		const expectedResponseBody = {
+			answer:
+				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
+			created_at: '2025-05-02T14:51:30.567Z',
+			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: 'google__gemini_2_0_flash_001',
+						provider: 'google',
+					},
+				],
+				processor: 'basic_text',
+			},
+		};
+
+		const fixture = getFixture('ai/post_ai_extract_response');
+		const yamlFixture = getFixture('ai/post_ai_extract_response_yaml.txt');
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'firstName, lastName, location, yearOfBirth, company',
+				'--ai_agent',
+				'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
+				'--json',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'firstName, lastName, location, yearOfBirth, company',
+				'--ai_agent',
+				'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (YAML Output)', (ctx) => {
+				assert.equal(ctx.stdout, yamlFixture);
+			});
+	});
+
+	describe('ai:extract-structured with metadata template', () => {
+		const expectedRequestBody = {
+			items: [
+				{
+					id: '12345',
+					type: 'file',
+					content: 'one,two,three',
+				},
+			],
+			metadata_template: {
+				type: 'metadata_template',
+				scope: 'enterprise',
+				template_key: 'test',
+			},
+		};
+		const expectedResponseBody = {
+			answer: {
+				firstName: 'John',
+				lastName: 'Doe',
+			},
+			created_at: '2025-04-29T07:25:24.366-07:00',
+			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: 'google__gemini_2_0_flash_001',
+						provider: 'google',
+					},
+				],
+				processor: 'basic_text',
+			},
+		};
+
+		const fixture = getFixture('ai/post_ai_extract_structured_response');
+		const yamlFixture = getFixture('ai/post_ai_extract_structured_response_yaml.txt');
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--metadata-template=type=metadata_template,scope=enterprise,template_key=test',
+				'--json',
+				'--token=test',
+			])
+
+			.it('should send the correct request and output the response (JSON Output)', (ctx) => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:extract-structured',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--metadata-template=type=metadata_template,scope=enterprise,template_key=test',
 				'--token=test',
 			])
 
