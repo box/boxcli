@@ -85,7 +85,7 @@ Sends an AI request to supported LLMs and returns metadata in form of key-value 
 
 ```
 USAGE
-  $ box ai:extract --prompt <value> --items <value>... --ai_agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
+  $ box ai:extract --prompt <value> --items <value>... --ai-agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
 
 FLAGS
@@ -103,6 +103,7 @@ FLAGS
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
       --prompt=<value>             (required) The prompt for the AI request
+      --ai-agent=<value>           The AI agent to used for extraction
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
@@ -118,7 +119,7 @@ Sends an AI request to supported LLMs and returns metadata in form of key-value 
 
 ```
 USAGE
-  $ box ai:extract-structured --items <value> --fields <value>... --metadata-template <value> --ai_agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
+  $ box ai:extract-structured --items <value> --fields <value>... --metadata-template <value> --ai-agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
 
 FLAGS
@@ -136,6 +137,7 @@ FLAGS
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
       --prompt=<value>             (required) The prompt for the AI request
+      --ai-agent=<value>           The AI agent to be used for structured extraction
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION

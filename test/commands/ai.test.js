@@ -3,7 +3,6 @@
 const {test} = require('@oclif/test');
 const assert = require('chai').assert;
 const {TEST_API_ROOT, getFixture} = require('../helpers/test-helper');
-const fs = require('fs');
 
 describe('AI', () => {
 	describe('ai:ask', () => {
@@ -270,6 +269,41 @@ describe('AI', () => {
 			],
 			ai_agent: {
 				type: 'ai_agent_extract_structured',
+				basic_text: {
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template: 'It is, consider these travel options and answer the.',
+					system_message: 'You are a helpful travel assistant specialized in budget travel',
+				},
+				long_text: {
+					embeddings: {
+						model: 'azure__openai__text_embedding_ada_002',
+						strategy: {
+							id: 'basic',
+							num_tokens_per_chunk: 64,
+						},
+					},
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template: 'It is , consider these travel options and answer the.',
+					system_message: 'You are a helpful travel assistant specialized in budget travel',
+				},
 			},
 		};
 		const expectedResponseBody = {
@@ -302,8 +336,8 @@ describe('AI', () => {
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
 				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
-				'--ai_agent',
-				'{"type":"ai_agent_extract_structured"}',
+				'--ai-agent',
+				'{"type":"ai_agent_extract_structured","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
 				'--json',
 				'--token=test',
 			])
@@ -321,8 +355,8 @@ describe('AI', () => {
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
 				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name',
-				'--ai_agent',
-				'{"type":"ai_agent_extract_structured"}',
+				'--ai-agent',
+				'{"type":"ai_agent_extract_structured","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
 				'--token=test',
 			])
 
@@ -408,7 +442,7 @@ describe('AI', () => {
 				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'firstName, lastName, location, yearOfBirth, company',
-				'--ai_agent',
+				'--ai-agent',
 				'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
 				'--json',
 				'--token=test',
@@ -428,7 +462,7 @@ describe('AI', () => {
 				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'firstName, lastName, location, yearOfBirth, company',
-				'--ai_agent',
+				'--ai-agent',
 				'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
 				'--token=test',
 			])

@@ -15,8 +15,8 @@ class AiExtractCommand extends BoxCommand {
 		if (flags.items) {
 			options.items = flags.items;
 		}
-		if (flags.ai_agent) {
-			options.aiAgent = flags.ai_agent;
+		if (flags['ai-agent']) {
+			options.aiAgent = flags['ai-agent'];
 		}
 
 		let answer = await this.tsClient.ai.createAiExtract(options);
@@ -30,7 +30,7 @@ AiExtractCommand.description =
 	'Sends an AI request to supported LLMs and extracts metadata in the form of key value pairs';
 AiExtractCommand.examples = [
 	'box ai:extract --items=id=12345,type=file --prompt "firstName, lastName, location, yearOfBirth, company"',
-	'box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai_agent \'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'',
+	'box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai-agent \'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'',
 ];
 AiExtractCommand._endpoint = 'post_ai_extract';
 
@@ -66,7 +66,7 @@ AiExtractCommand.flags = {
 			return item;
 		},
 	}),
-	ai_agent: Flags.string({
+	'ai-agent': Flags.string({
 		required: false,
 		description: 'The AI agent to be used for extraction',
 		parse(input) {
