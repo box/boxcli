@@ -1,0 +1,12 @@
+Answer: >-
+    {"firstName": "John", "lastName": "Doe", "location": "San Francisco",
+    "yearOfBirth": "1990", "company": "Box"}
+Created At:
+    Value: '2025-05-02T14:51:30.567Z'
+Completion Reason: done
+Ai Agent Info:
+    Models:
+        -
+            Name: google__gemini_2_0_flash_001
+            Provider: google
+    Processor: basic_text

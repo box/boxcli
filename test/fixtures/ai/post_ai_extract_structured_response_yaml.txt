@@ -1,0 +1,11 @@
+Answer:
+    First Name: John
+    Last Name: Doe
+Created At: '2025-04-29T07:25:24.366-07:00'
+Completion Reason: done
+Ai Agent Info:
+    Models:
+        -
+            Name: google__gemini_2_0_flash_001
+            Provider: google
+    Processor: basic_text

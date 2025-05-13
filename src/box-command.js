@@ -119,6 +119,32 @@ function getBooleanFlagValue(value) {
 }
 
 /**
+ * Removes all the undefined values from the object
+ *
+ * @param {Object} obj The object to format for display
+ * @returns {Object} The formatted object output
+ */
+function removeUndefinedValues(obj) {
+	if (typeof obj !== 'object' || obj === null) {
+		return obj;
+	}
+
+	if (Array.isArray(obj)) {
+		return obj.map((item) => removeUndefinedValues(item));
+	}
+
+	Object.keys(obj).forEach((key) => {
+		if (obj[key] === undefined) {
+			delete obj[key];
+		} else {
+			obj[key] = removeUndefinedValues(obj[key]);
+		}
+	});
+
+	return obj;
+}
+
+/**
  * Add or subtract a given offset from a date
  *
  * @param {Date} date The date to offset
@@ -157,7 +183,7 @@ function offsetDate(date, timeLength, timeUnit) {
 function formatKey(key) {
 	// Converting camel case to snake case and then to title case
 	return key
-		.replace(/[A-Z]/gu, letter => `_${letter.toLowerCase()}`)
+		.replace(/[A-Z]/gu, (letter) => `_${letter.toLowerCase()}`)
 		.split('_')
 		.map((s) => KEY_MAPPINGS[s] || _.capitalize(s))
 		.join(' ');
@@ -433,7 +459,9 @@ class BoxCommand extends Command {
 	 * @private
 	 */
 	_setFlagsForBulkInput(bulkData) {
-		const bulkDataFlags = bulkData.filter((o) => o.type === 'flag' && !_.isNil(o.value)).map((o) => o.fieldKey);
+		const bulkDataFlags = bulkData
+			.filter((o) => o.type === 'flag' && !_.isNil(o.value))
+			.map((o) => o.fieldKey);
 		Object.keys(this.flags)
 			.filter((flag) => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
 			.filter((flag) => !bulkDataFlags.includes(flag))
@@ -810,7 +838,6 @@ class BoxCommand extends Command {
 				tokenCache
 			);
 			DEBUG.init('Initialized client from environment config');
-
 		} else {
 			// No environments set up yet!
 			throw new BoxCLIError(
@@ -824,8 +851,12 @@ class BoxCommand extends Command {
 		// Using the as-user flag should have precedence over the environment setting
 		if (this.flags['as-user']) {
 			client.asUser(this.flags['as-user']);
-			DEBUG.init('Impersonating user ID %s using the ID provided via the --as-user flag', this.flags['as-user']);
-		} else if (!this.flags.token && environment.useDefaultAsUser) { // We don't want to use any environment settings if a token is passed in the command
+			DEBUG.init(
+				'Impersonating user ID %s using the ID provided via the --as-user flag',
+				this.flags['as-user']
+			);
+		} else if (!this.flags.token && environment.useDefaultAsUser) {
+			// We don't want to use any environment settings if a token is passed in the command
 			client.asUser(environment.defaultAsUserId);
 			DEBUG.init(
 				'Impersonating default user ID %s using environment configuration',
@@ -879,21 +910,26 @@ class BoxCommand extends Command {
 			}
 
 			const { enterpriseID } = configObj;
-			const tokenCache = environment.cacheTokens === false
-				? null
-				: new CLITokenCache(environmentsObj.default);
-			let ccgConfig = new BoxTSSDK.CcgConfig(ccgUser ? {
-				clientId,
-				clientSecret,
-				userId: ccgUser,
-				tokenStorage: tokenCache,
-			} : {
-				clientId,
-				clientSecret,
-				enterpriseId: enterpriseID,
-				tokenStorage: tokenCache,
-			});
-			let ccgAuth = new BoxTSSDK.BoxCcgAuth({config: ccgConfig});
+			const tokenCache =
+				environment.cacheTokens === false
+					? null
+					: new CLITokenCache(environmentsObj.default);
+			let ccgConfig = new BoxTSSDK.CcgConfig(
+				ccgUser
+					? {
+							clientId,
+							clientSecret,
+							userId: ccgUser,
+							tokenStorage: tokenCache,
+					  }
+					: {
+							clientId,
+							clientSecret,
+							enterpriseId: enterpriseID,
+							tokenStorage: tokenCache,
+					  }
+			);
+			let ccgAuth = new BoxTSSDK.BoxCcgAuth({ config: ccgConfig });
 			client = new BoxTSSDK.BoxClient({
 				auth: ccgAuth,
 			});
@@ -918,7 +954,7 @@ class BoxCommand extends Command {
 				const oauthAuth = new BoxTSSDK.BoxOAuth({
 					config: oauthConfig,
 				});
-				client = new BoxTSSDK.BoxClient({auth: oauthAuth});
+				client = new BoxTSSDK.BoxClient({ auth: oauthAuth });
 				client = this._configureTsSdk(client, SDK_CONFIG);
 			} catch (err) {
 				throw new BoxCLIError(
@@ -969,8 +1005,8 @@ class BoxCommand extends Command {
 				enterpriseId: environment.enterpriseId,
 				tokenStorage: tokenCache,
 			});
-			let jwtAuth = new BoxTSSDK.BoxJwtAuth({config: jwtConfig});
-			client = new BoxTSSDK.BoxClient({auth: jwtAuth});
+			let jwtAuth = new BoxTSSDK.BoxJwtAuth({ config: jwtConfig });
+			client = new BoxTSSDK.BoxClient({ auth: jwtAuth });
 
 			DEBUG.init('Initialized client from environment config');
 			if (environment.useDefaultAsUser) {
@@ -1083,7 +1119,9 @@ class BoxCommand extends Command {
 			this.settings.enableAnalyticsClient &&
 			this.settings.analyticsClient.name
 		) {
-			additionalHeaders['X-Box-UA'] = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
+			additionalHeaders[
+				'X-Box-UA'
+			] = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
 		} else {
 			additionalHeaders['X-Box-UA'] = DEFAULT_ANALYTICS_CLIENT_NAME;
 		}
@@ -1128,6 +1166,9 @@ class BoxCommand extends Command {
 		let logFunc;
 		let stringifiedOutput;
 
+		// remove all the undefined values from the object
+		formattedOutputData = removeUndefinedValues(formattedOutputData);
+
 		if (outputFormat === 'json') {
 			stringifiedOutput = stringifyStream(formattedOutputData, null, 4);
 
@@ -1141,7 +1182,7 @@ class BoxCommand extends Command {
 				},
 			});
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
@@ -1149,13 +1190,13 @@ class BoxCommand extends Command {
 				);
 			};
 
-			logFunc = async() => {
+			logFunc = async () => {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
 			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
 
-			writeFunc = async(savePath) => {
+			writeFunc = async (savePath) => {
 				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
 					encoding: 'utf8',
 				});
@@ -1471,7 +1512,11 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async catch(err) {
-		if (err instanceof BoxTsErrors.BoxApiError && err.responseInfo && err.responseInfo.body) {
+		if (
+			err instanceof BoxTsErrors.BoxApiError &&
+			err.responseInfo &&
+			err.responseInfo.body
+		) {
 			const responseInfo = err.responseInfo;
 			let errorMessage = `Unexpected API Response [${responseInfo.body.status} ${responseInfo.body.message} | ${responseInfo.body.request_id}] ${responseInfo.body.code} - ${responseInfo.body.message}`;
 			err = new BoxCLIError(errorMessage, err);

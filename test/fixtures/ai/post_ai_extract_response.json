@@ -1,0 +1,16 @@
+{
+    "answer": "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"location\": \"San Francisco\", \"yearOfBirth\": \"1990\", \"company\": \"Box\"}",
+    "createdAt": {
+        "value": "2025-05-02T14:51:30.567Z"
+    },
+    "completionReason": "done",
+    "aiAgentInfo": {
+        "models": [
+            {
+                "name": "google__gemini_2_0_flash_001",
+                "provider": "google"
+            }
+        ],
+        "processor": "basic_text"
+    }
+}
