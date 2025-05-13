@@ -78,3 +78,71 @@ EXAMPLES
 ```
 
 _See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/ai/text-gen.js)_
+
+## `box ai:extract`
+
+Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+```
+USAGE
+  $ box ai:extract --prompt <value> --items <value>... --ai-agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
+    --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --items=<value>...           (required) The items for the AI request
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --prompt=<value>             (required) The prompt for the AI request
+      --ai-agent=<value>           The AI agent to used for extraction
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+EXAMPLES
+  $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai-agent \'{"type":"ai_agent_extract","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'
+```
+
+## `box ai:extract-structured`
+
+Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+```
+USAGE
+  $ box ai:extract-structured --items <value> --fields <value>... --metadata-template <value> --ai-agent <value> [-t <value>] [--as-user <value>] [--no-color] [--json |
+    --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --items=<value>...           (required) The items for the AI request
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --prompt=<value>             (required) The prompt for the AI request
+      --ai-agent=<value>           The AI agent to be used for structured extraction
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Sends an AI request to supported LLMs and returns metadata in form of key-value pairs.
+
+EXAMPLES
+  $ box ai:extract-structured --items="id=12345,type=file" --fields "key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name" --fields "key=lastName,type=string,description=Person last name,prompt=What is the last name?,displayName=Last name" --ai-agent \'{"type":"ai_agent_extract_structured","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}\'
+```
