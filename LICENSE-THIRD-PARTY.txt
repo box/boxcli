@@ -826,7 +826,7 @@ Apache License
 The following npm packages may be included in this product:
 
  - box-node-sdk@3.7.0
- - box-typescript-sdk-gen@1.8.0
+ - box-typescript-sdk-gen@1.15.1
 
 These packages each contain the following license:
 
@@ -1003,7 +1003,7 @@ The following npm packages may be included in this product:
 
  - @types/bluebird@3.5.42
  - @types/node@18.19.43
- - @types/node@22.10.1
+ - @types/node@22.10.10
 
 These packages each contain the following license:
 
@@ -1096,7 +1096,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - express@4.21.1
+ - express@4.21.2
 
 This package contains the following license:
 
@@ -1976,7 +1976,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - debug@4.3.7
+ - debug@4.4.0
 
 This package contains the following license:
 
@@ -2990,6 +2990,36 @@ THE SOFTWARE.
 
 -----------
 
+The following npm package may be included in this product:
+
+ - mkdirp@3.0.1
+
+This package contains the following license:
+
+Copyright (c) 2011-2023 James Halliday (mail@substack.net) and Isaac Z. Schlueter (i@izs.me)
+
+This project is free software released under the MIT license:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-----------
+
 The following npm packages may be included in this product:
 
  - form-data@2.3.3
@@ -3694,24 +3724,54 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @inquirer/checkbox@4.0.2
- - @inquirer/confirm@5.0.2
- - @inquirer/core@10.1.0
- - @inquirer/editor@4.1.0
- - @inquirer/expand@4.0.2
- - @inquirer/figures@1.0.8
- - @inquirer/input@4.0.2
- - @inquirer/number@3.0.2
- - @inquirer/password@4.0.2
- - @inquirer/prompts@7.1.0
- - @inquirer/rawlist@4.0.2
- - @inquirer/search@3.0.2
- - @inquirer/select@4.0.2
- - @inquirer/type@3.0.1
+ - @inquirer/figures@1.0.9
+ - @inquirer/type@3.0.2
 
 These packages each contain the following license:
 
 Copyright (c) 2023 Simon Boudrias
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+
+The following npm packages may be included in this product:
+
+ - @inquirer/checkbox@4.0.6
+ - @inquirer/confirm@5.1.3
+ - @inquirer/core@10.1.4
+ - @inquirer/editor@4.2.3
+ - @inquirer/expand@4.0.6
+ - @inquirer/input@4.1.3
+ - @inquirer/number@3.0.6
+ - @inquirer/password@4.0.6
+ - @inquirer/prompts@7.2.3
+ - @inquirer/rawlist@4.0.6
+ - @inquirer/search@3.0.6
+ - @inquirer/select@4.0.6
+
+These packages each contain the following license:
+
+Copyright (c) 2025 Simon Boudrias
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -3866,36 +3926,6 @@ SOFTWARE.
 
 -----------
 
-The following npm package may be included in this product:
-
- - mkdirp@3.0.1
-
-This package contains the following license:
-
-Copyright James Halliday (mail@substack.net) and Isaac Z. Schlueter (i@izs.me)
-
-This project is free software released under the MIT license:
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
------------
-
 The following npm packages may be included in this product:
 
  - getpass@0.1.7
@@ -4024,7 +4054,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The following npm packages may be included in this product:
 
  - emoji-regex@8.0.0
- - punycode@2.1.1
  - punycode@2.3.1
 
 These packages each contain the following license:
@@ -4352,25 +4381,20 @@ http://github.com/estools/esutils/raw/master/LICENSE.BSD
 
 The following npm package may be included in this product:
 
- - ansis@3.3.2
+ - ansis@3.9.0
 
 This package contains the following license:
 
 ISC License
 
-Copyright (c) 2024, webdiscus
+Copyright (c) 2025, webdiscus
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
+Permission is granted to use, copy, modify, and distribute this software for any
+purpose with or without fee, provided the copyright and permission notices appear in all copies.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS.
+THE AUTHOR SHALL NOT BE LIABLE FOR ANY DAMAGES ARISING FROM THE USE OF THIS SOFTWARE.
 
 -----------
 
@@ -4495,7 +4519,7 @@ MIT
 
 The following npm package may be included in this product:
 
- - object-inspect@1.13.3
+ - object-inspect@1.13.2
 
 This package contains the following license:
 
@@ -4586,7 +4610,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - has-symbols@1.1.0
+ - has-symbols@1.0.3
 
 This package contains the following license:
 
@@ -4737,11 +4761,11 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @oclif/core@4.0.34
- - @oclif/plugin-autocomplete@3.2.11
- - @oclif/plugin-help@6.2.18
- - @oclif/plugin-not-found@3.2.29
- - @oclif/plugin-version@2.2.16
+ - @oclif/core@4.2.4
+ - @oclif/plugin-autocomplete@3.2.18
+ - @oclif/plugin-help@6.2.23
+ - @oclif/plugin-not-found@3.2.38
+ - @oclif/plugin-version@2.2.21
 
 These packages each contain the following license:
 
@@ -5030,7 +5054,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - gopd@1.2.0
+ - gopd@1.0.1
 
 This package contains the following license:
 
@@ -5201,17 +5225,25 @@ SOFTWARE.
 The following npm packages may be included in this product:
 
  - ansi-escapes@4.3.2
+ - bundle-name@4.1.0
  - clean-stack@3.0.1
  - cli-spinners@2.9.2
  - decompress-response@6.0.0
+ - default-browser-id@5.0.0
+ - default-browser@5.2.1
+ - define-lazy-prop@3.0.0
  - escape-string-regexp@4.0.0
  - is-docker@2.2.1
+ - is-docker@3.0.0
+ - is-inside-container@1.0.0
  - is-unicode-supported@0.1.0
+ - is-wsl@3.1.0
  - log-symbols@4.1.0
  - mimic-response@3.1.0
  - onetime@5.1.2
- - open@8.4.0
+ - open@10.1.0
  - ora@5.4.1
+ - run-applescript@7.0.0
  - supports-color@8.1.1
  - wrap-ansi@7.0.0
  - yoctocolors-cjs@2.1.2
@@ -5259,7 +5291,6 @@ The following npm packages may be included in this product:
  - chalk@2.4.1
  - chalk@4.1.2
  - cli-cursor@3.1.0
- - define-lazy-prop@2.0.0
  - globby@11.1.0
  - has-flag@3.0.0
  - has-flag@4.0.0
@@ -5811,6 +5842,7 @@ PERFORMANCE OF THIS SOFTWARE.
 The following npm packages may be included in this product:
 
  - chownr@1.1.1
+ - glob@7.1.2
  - ini@1.3.8
  - json-stringify-safe@5.0.1
  - lru-cache@6.0.0
@@ -5892,36 +5924,6 @@ the licensed code:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
-
------------
-
-The following npm package may be included in this product:
-
- - glob@7.2.3
-
-This package contains the following license:
-
-The ISC License
-
-Copyright (c) Isaac Z. Schlueter and Contributors
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-## Glob Logo
-
-Glob's logo created by Tanya Brassie <http://tanyabrassie.com/>, licensed
-under a Creative Commons Attribution-ShareAlike 4.0 International License
-https://creativecommons.org/licenses/by-sa/4.0/
 
 -----------
 
@@ -6245,7 +6247,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 The following npm packages may be included in this product:
 
  - array-flatten@1.1.1
- - path-to-regexp@0.1.10
+ - path-to-regexp@0.1.12
 
 These packages each contain the following license:
 
@@ -6367,7 +6369,7 @@ The following npm packages may be included in this product:
 
  - end-of-stream@1.4.1
  - pump@3.0.0
- - tar-fs@2.1.1
+ - tar-fs@2.1.2
  - tar-stream@1.6.2
  - tar-stream@2.2.0
 
@@ -6548,12 +6550,11 @@ THE SOFTWARE.
 
 -----------
 
-The following npm packages may be included in this product:
+The following npm package may be included in this product:
 
- - braces@3.0.2
  - normalize-path@3.0.0
 
-These packages each contain the following license:
+This package contains the following license:
 
 The MIT License (MIT)
 
@@ -6611,9 +6612,10 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - fill-range@7.0.1
+ - braces@3.0.3
+ - fill-range@7.1.1
  - is-number@7.0.0
- - micromatch@4.0.5
+ - micromatch@4.0.8
 
 These packages each contain the following license:
 
@@ -6885,7 +6887,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - node-fetch@2.6.7
+ - node-fetch@2.7.0
 
 This package contains the following license:
 
@@ -6973,11 +6975,12 @@ THE SOFTWARE.
 
 -----------
 
-The following npm package may be included in this product:
+The following npm packages may be included in this product:
 
  - ms@2.0.0
+ - ms@2.1.1
 
-This package contains the following license:
+These packages each contain the following license:
 
 The MIT License (MIT)
 
@@ -7236,7 +7239,7 @@ The following npm packages may be included in this product:
  - @nodelib/fs.scandir@2.1.5
  - @nodelib/fs.stat@2.0.5
  - @nodelib/fs.walk@1.2.8
- - fast-glob@3.3.2
+ - fast-glob@3.3.3
 
 These packages each contain the following license:
 
@@ -7431,7 +7434,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - nanoid@3.3.1
+ - nanoid@3.3.8
 
 This package contains the following license:
 
