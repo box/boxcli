@@ -76,8 +76,7 @@ AiExtractStructuredCommand.flags = {
 		},
 	}),
 	'metadata-template': Flags.string({
-		description:
-			'The metadata template containing the fields to extract. Example: {"type": "metadata_template", "scope": "enterprise", "template_key": "test"}',
+		description: 'The metadata template containing the fields to extract.',
 		parse(input) {
 			const metadataTemplate = {
 				type: 'metadata_template',
@@ -108,7 +107,6 @@ AiExtractStructuredCommand.flags = {
 		description: 'The fields to be extracted from the provided items.',
 		parse(input) {
 			const fields = {};
-
 			const obj = utils.parseStringToObject(input, [
 				'key',
 				'type',
@@ -133,7 +131,7 @@ AiExtractStructuredCommand.flags = {
 						const parsedOptions = obj[key]
 							.split(';')
 							.filter((item) => item)
-							.map((item) => ({ key: item }));
+							.map((item) => ({ key: item.trim() }));
 						if (parsedOptions.length === 0) {
 							throw new Error('Options field must contain at least one value');
 						}

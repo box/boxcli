@@ -3,10 +3,11 @@
 
 Sends an AI request to supported LLMs and returns an answer
 
-* [`box ai:ask`](#box-aiask)
-* [`box ai:extract`](#box-aiextract)
-* [`box ai:extract-structured`](#box-aiextract-structured)
-* [`box ai:text-gen`](#box-aitext-gen)
+- [`box ai`](#box-ai)
+  - [`box ai:ask`](#box-aiask)
+  - [`box ai:extract`](#box-aiextract)
+  - [`box ai:extract-structured`](#box-aiextract-structured)
+  - [`box ai:text-gen`](#box-aitext-gen)
 
 ## `box ai:ask`
 
@@ -111,8 +112,7 @@ FLAGS
       --fields=<value>...          The fields to be extracted from the provided items.
       --items=<value>...           (required) The items that LLM will process.
       --json                       Output formatted JSON
-      --metadata-template=<value>  The metadata template containing the fields to extract. Example: {"type":
-                                   "metadata_template", "scope": "enterprise", "template_key": "test"}
+      --metadata-template=<value>  The metadata template containing the fields to extract.
       --no-color                   Turn off colors for logging
       --save-to-file-path=<value>  Override default file path to save report
 

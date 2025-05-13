@@ -230,7 +230,7 @@ describe('AI', () => {
 					description: 'Person first name',
 					prompt: 'What is the first name?',
 					displayName: 'First name',
-					options: [{key:'First Name'}],
+					options: [{ key: 'First Name' }, { key: 'Last Name' }],
 				},
 			],
 		};
@@ -267,7 +267,7 @@ describe('AI', () => {
 			.command([
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
-				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name,options=First Name',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name,options=First Name; Last Name',
 				'--json',
 				'--token=test',
 			])
@@ -289,7 +289,7 @@ describe('AI', () => {
 			.command([
 				'ai:extract-structured',
 				'--items=content=one,two,three,id=12345,type=file',
-				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name,options=First Name',
+				'--fields=key=firstName,type=string,description=Person first name,prompt=What is the first name?,displayName=First name,options=First Name;Last Name',
 				'--token=test',
 			])
 
@@ -317,7 +317,7 @@ describe('AI', () => {
 					description: 'Person first name',
 					prompt: 'What is the first name?',
 					displayName: 'First name',
-					options: [{key:'First Name'}],
+					options: [{ key: 'First Name' }],
 				},
 			],
 			ai_agent: {
