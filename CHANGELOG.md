@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/box/boxcli/compare/v4.0.1...v4.1.0) (2025-05-15)
+
+
+### New Features and Enhancements
+
+* Support AI Extract endpoints ([#574](https://github.com/box/boxcli/issues/574)) ([0b4ff6b](https://github.com/box/boxcli/commit/0b4ff6b63c8707c6842f3812d2a69071d195b799))
+
+### Bug Fixes
+
+* Remove invalid `process.stderr.setEncoding` call ([486779e](https://github.com/box/boxcli/commit/486779ee3b8403805286b7ae6d3ab5c802c6f948)), closes [#571](https://github.com/box/boxcli/issues/571)
+
 ### [4.0.1](https://github.com/box/boxcli/compare/v4.0.0...v4.0.1) (2025-03-07)
 
 

@@ -62,7 +62,7 @@ EXAMPLES
   $ box groups
 ```
 
-_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/index.js)_
+_See code: [src/commands/groups/index.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/index.js)_
 
 ## `box groups:collaborations ID`
 
@@ -102,7 +102,7 @@ EXAMPLES
   $ box groups:collaborations 12345
 ```
 
-_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/collaborations.js)_
+_See code: [src/commands/groups/collaborations.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/collaborations.js)_
 
 ## `box groups:create NAME`
 
@@ -148,7 +148,7 @@ EXAMPLES
   $ box groups:create "US Employees"
 ```
 
-_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/create.js)_
+_See code: [src/commands/groups/create.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/create.js)_
 
 ## `box groups:delete ID`
 
@@ -184,7 +184,7 @@ EXAMPLES
   $ box groups:delete 12345
 ```
 
-_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/delete.js)_
+_See code: [src/commands/groups/delete.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/delete.js)_
 
 ## `box groups:get ID`
 
@@ -220,7 +220,7 @@ EXAMPLES
   $ box groups:get 12345
 ```
 
-_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/get.js)_
+_See code: [src/commands/groups/get.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/get.js)_
 
 ## `box groups:list`
 
@@ -544,7 +544,7 @@ EXAMPLES
   $ box groups:memberships 12345
 ```
 
-_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/memberships/index.js)_
+_See code: [src/commands/groups/memberships/index.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/memberships/index.js)_
 
 ## `box groups:memberships:add USERID GROUPID`
 
@@ -591,7 +591,7 @@ EXAMPLES
   $ box groups:memberships:add 33333 12345
 ```
 
-_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/memberships/add.js)_
+_See code: [src/commands/groups/memberships/add.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/memberships/add.js)_
 
 ## `box groups:memberships:get ID`
 
@@ -630,7 +630,7 @@ EXAMPLES
   $ box groups:memberships:get 12345
 ```
 
-_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/memberships/get.js)_
+_See code: [src/commands/groups/memberships/get.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/memberships/get.js)_
 
 ## `box groups:memberships:remove ID`
 
@@ -669,7 +669,7 @@ EXAMPLES
   $ box groups:memberships:remove 12345
 ```
 
-_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/memberships/remove.js)_
+_See code: [src/commands/groups/memberships/remove.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/memberships/remove.js)_
 
 ## `box groups:memberships:update ID`
 
@@ -715,7 +715,7 @@ EXAMPLES
   $ box groups:memberships:update
 ```
 
-_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/memberships/update.js)_
+_See code: [src/commands/groups/memberships/update.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/memberships/update.js)_
 
 ## `box groups:terminate-session`
 
@@ -752,7 +752,7 @@ EXAMPLES
   $ box groups:terminate-session --group-ids 123 345
 ```
 
-_See code: [src/commands/groups/terminate-session.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/terminate-session.js)_
+_See code: [src/commands/groups/terminate-session.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/terminate-session.js)_
 
 ## `box groups:update ID`
 
@@ -798,4 +798,4 @@ EXAMPLES
   $ box groups:update 12345 --name "U.S. Employees"
 ```
 
-_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/groups/update.js)_
+_See code: [src/commands/groups/update.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/groups/update.js)_
