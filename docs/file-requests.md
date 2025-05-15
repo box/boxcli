@@ -53,7 +53,7 @@ EXAMPLES
   $ box file-requests:copy 22222 44444
 ```
 
-_See code: [src/commands/file-requests/copy.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/file-requests/copy.js)_
+_See code: [src/commands/file-requests/copy.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/file-requests/copy.js)_
 
 ## `box file-requests:delete ID`
 
@@ -89,7 +89,7 @@ EXAMPLES
   $ box file-requests:delete 12345
 ```
 
-_See code: [src/commands/file-requests/delete.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/file-requests/delete.js)_
+_See code: [src/commands/file-requests/delete.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/file-requests/delete.js)_
 
 ## `box file-requests:get ID`
 
@@ -125,7 +125,7 @@ EXAMPLES
   $ box file-requests:get 12345
 ```
 
-_See code: [src/commands/file-requests/get.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/file-requests/get.js)_
+_See code: [src/commands/file-requests/get.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/file-requests/get.js)_
 
 ## `box file-requests:update ID`
 
@@ -172,4 +172,4 @@ EXAMPLES
   $ box file-requests:update 12345 --description "New file request description!"
 ```
 
-_See code: [src/commands/file-requests/update.js](https://github.com/box/boxcli/blob/v4.0.1/src/commands/file-requests/update.js)_
+_See code: [src/commands/file-requests/update.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/file-requests/update.js)_
