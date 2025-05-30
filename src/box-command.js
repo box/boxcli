@@ -26,10 +26,10 @@ const darwinKeychain = require('keychain');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
 const darwinKeychainSetPassword = util.promisify(
-	darwinKeychain.setPassword.bind(darwinKeychain)
+	darwinKeychain.setPassword.bind(darwinKeychain),
 );
 const darwinKeychainGetPassword = util.promisify(
-	darwinKeychain.getPassword.bind(darwinKeychain)
+	darwinKeychain.getPassword.bind(darwinKeychain),
 );
 let keytar = null;
 try {
@@ -91,7 +91,7 @@ const CONFIG_FOLDER_PATH = path.join(os.homedir(), '.box');
 const SETTINGS_FILE_PATH = path.join(CONFIG_FOLDER_PATH, 'settings.json');
 const ENVIRONMENTS_FILE_PATH = path.join(
 	CONFIG_FOLDER_PATH,
-	'box_environments.json'
+	'box_environments.json',
 );
 
 const DEFAULT_ANALYTICS_CLIENT_NAME = 'box-cli';
@@ -114,7 +114,7 @@ function getBooleanFlagValue(value) {
 	}
 	let possibleValues = trueValues.concat(falseValues).join(', ');
 	throw new Error(
-		`Incorrect boolean value "${value}" passed. Possible values are ${possibleValues}`
+		`Incorrect boolean value "${value}" passed. Possible values are ${possibleValues}`,
 	);
 }
 
@@ -309,7 +309,7 @@ class BoxCommand extends Command {
 		DEBUG.execute(
 			'Starting execution command: %s argv: %O',
 			this.id,
-			this.argv
+			this.argv,
 		);
 	}
 
@@ -328,11 +328,11 @@ class BoxCommand extends Command {
 			})),
 			...allPossibleFlags.map((flag) => ({
 				[flag.replace(/-/gu, '')]: { type: 'flag', fieldKey: flag },
-			}))
+			})),
 		);
 		let bulkCalls = await this._parseBulkFile(
 			this.flags['bulk-file-path'],
-			fieldMapping
+			fieldMapping,
 		);
 		let bulkEntryIndex = 0;
 		let progressBar = new progress.Bar({
@@ -384,7 +384,9 @@ class BoxCommand extends Command {
 			return;
 		}
 		this.info(
-			chalk`{redBright ${numErrors} entr${numErrors > 1 ? 'ies' : 'y'} failed!}`
+			chalk`{redBright ${numErrors} entr${
+				numErrors > 1 ? 'ies' : 'y'
+			} failed!}`,
 		);
 		this.bulkErrors.forEach((errorInfo) => {
 			this.info(chalk`{dim ----------}`);
@@ -394,7 +396,7 @@ class BoxCommand extends Command {
 			this.info(
 				chalk`{redBright Entry ${errorInfo.index} (${
 					os.EOL + entryData + os.EOL
-				}) failed with error:}`
+				}) failed with error:}`,
 			);
 			let err = errorInfo.error;
 			let contextInfo;
@@ -430,13 +432,13 @@ class BoxCommand extends Command {
 					DEBUG.init(
 						'Using environment %s %O',
 						environmentsObj.default,
-						environment
+						environment,
 					);
 					if (environment.useDefaultAsUser) {
 						this.client.asUser(environment.defaultAsUserId);
 						DEBUG.init(
 							'Impersonating default user ID %s',
-							environment.defaultAsUserId
+							environment.defaultAsUserId,
 						);
 					} else {
 						this.client.asSelf();
@@ -521,7 +523,7 @@ class BoxCommand extends Command {
 			bulkCalls = await this._handleCsvFile(fileContents, fieldMapping);
 		} else {
 			throw new Error(
-				`Input file had extension "${fileExtension}", but only .json and .csv are supported`
+				`Input file had extension "${fileExtension}", but only .json and .csv are supported`,
 			);
 		}
 		// Filter out any undefined values, which can arise when the input file contains extraneous keys
@@ -529,7 +531,7 @@ class BoxCommand extends Command {
 		DEBUG.execute(
 			'Read %d entries from bulk file %s',
 			bulkCalls.length,
-			this.flags['bulk-file-path']
+			this.flags['bulk-file-path'],
 		);
 		return bulkCalls;
 	}
@@ -555,7 +557,7 @@ class BoxCommand extends Command {
 		});
 		if (parsedData.length < 2) {
 			throw new Error(
-				'CSV input file should contain the headers row and at least on data row'
+				'CSV input file should contain the headers row and at least on data row',
 			);
 		}
 		// @NOTE: We don't parse the CSV into an aray of Objects
@@ -571,7 +573,7 @@ class BoxCommand extends Command {
 				let key = headers[index];
 				let field = fieldMapping[key];
 				return field ? { ...field, value } : undefined;
-			})
+			}),
 		);
 	}
 
@@ -592,12 +594,12 @@ class BoxCommand extends Command {
 		} catch (e) {
 			throw new BoxCLIError(
 				`Could not parse JSON input file ${this.flags['bulk-file-path']}`,
-				e
+				e,
 			);
 		}
 		if (!Array.isArray(parsedData)) {
 			throw new TypeError(
-				'Expected input file to contain an array of input objects, but none found'
+				'Expected input file to contain an array of input objects, but none found',
 			);
 		}
 		// Translate each row object to an array of {type, fieldKey, value}, to be handled below
@@ -627,7 +629,7 @@ class BoxCommand extends Command {
 						types.some((t) => t === 'object')
 					) {
 						throw new BoxCLIError(
-							'Mixed types in bulk input JSON array; use strings or Objects'
+							'Mixed types in bulk input JSON array; use strings or Objects',
 						);
 					}
 					// If everything in the array is objects, handle each one as a group of flags and args
@@ -735,7 +737,7 @@ class BoxCommand extends Command {
 
 			if (!clientId || !clientSecret) {
 				throw new BoxCLIError(
-					'You need to have a default environment with clientId and clientSecret in order to use CCG'
+					'You need to have a default environment with clientId and clientSecret in order to use CCG',
 				);
 			}
 
@@ -767,7 +769,7 @@ class BoxCommand extends Command {
 				DEBUG.init(
 					'Using environment %s %O',
 					environmentsObj.default,
-					environment
+					environment,
 				);
 				let tokenCache = new CLITokenCache(environmentsObj.default);
 
@@ -791,14 +793,14 @@ class BoxCommand extends Command {
 				client = sdk.getPersistentClient(tokenInfo, tokenCache);
 			} catch (err) {
 				throw new BoxCLIError(
-					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`
+					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`,
 				);
 			}
 		} else if (environmentsObj.default) {
 			DEBUG.init(
 				'Using environment %s %O',
 				environmentsObj.default,
-				environment
+				environment,
 			);
 			let tokenCache =
 				environment.cacheTokens === false
@@ -815,16 +817,16 @@ class BoxCommand extends Command {
 				try {
 					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(
 						environment.privateKeyPath,
-						'utf8'
+						'utf8',
 					);
 					DEBUG.init(
 						'Loaded JWT private key from %s',
-						environment.privateKeyPath
+						environment.privateKeyPath,
 					);
 				} catch (ex) {
 					throw new BoxCLIError(
 						`Could not read private key file ${environment.privateKeyPath}`,
-						ex
+						ex,
 					);
 				}
 			}
@@ -835,7 +837,7 @@ class BoxCommand extends Command {
 			client = this.sdk.getAppAuthClient(
 				'enterprise',
 				environment.enterpriseId,
-				tokenCache
+				tokenCache,
 			);
 			DEBUG.init('Initialized client from environment config');
 		} else {
@@ -844,7 +846,7 @@ class BoxCommand extends Command {
 				`No default environment found.
 				It looks like you haven't configured the Box CLI yet.
 				See this command for help adding an environment: box configure:environments:add --help
-				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, '')
+				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, ''),
 			);
 		}
 
@@ -853,14 +855,14 @@ class BoxCommand extends Command {
 			client.asUser(this.flags['as-user']);
 			DEBUG.init(
 				'Impersonating user ID %s using the ID provided via the --as-user flag',
-				this.flags['as-user']
+				this.flags['as-user'],
 			);
 		} else if (!this.flags.token && environment.useDefaultAsUser) {
 			// We don't want to use any environment settings if a token is passed in the command
 			client.asUser(environment.defaultAsUserId);
 			DEBUG.init(
 				'Impersonating default user ID %s using environment configuration',
-				environment.defaultAsUserId
+				environment.defaultAsUserId,
 			);
 		}
 		return client;
@@ -898,7 +900,7 @@ class BoxCommand extends Command {
 
 			if (!clientId || !clientSecret) {
 				throw new BoxCLIError(
-					'You need to have a default environment with clientId and clientSecret in order to use CCG'
+					'You need to have a default environment with clientId and clientSecret in order to use CCG',
 				);
 			}
 
@@ -927,7 +929,7 @@ class BoxCommand extends Command {
 							clientSecret,
 							enterpriseId: enterpriseID,
 							tokenStorage: tokenCache,
-					  }
+					  },
 			);
 			let ccgAuth = new BoxTSSDK.BoxCcgAuth({ config: ccgConfig });
 			client = new BoxTSSDK.BoxClient({
@@ -943,7 +945,7 @@ class BoxCommand extends Command {
 				DEBUG.init(
 					'Using environment %s %O',
 					environmentsObj.default,
-					environment
+					environment,
 				);
 				const tokenCache = new CLITokenCache(environmentsObj.default);
 				const oauthConfig = new BoxTSSDK.OAuthConfig({
@@ -958,14 +960,14 @@ class BoxCommand extends Command {
 				client = this._configureTsSdk(client, SDK_CONFIG);
 			} catch (err) {
 				throw new BoxCLIError(
-					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`
+					`Can't load the default OAuth environment "${environmentsObj.default}". Please reauthorize selected environment, login again or provide a token.`,
 				);
 			}
 		} else if (environmentsObj.default) {
 			DEBUG.init(
 				'Using environment %s %O',
 				environmentsObj.default,
-				environment
+				environment,
 			);
 			let tokenCache =
 				environment.cacheTokens === false
@@ -982,16 +984,16 @@ class BoxCommand extends Command {
 				try {
 					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(
 						environment.privateKeyPath,
-						'utf8'
+						'utf8',
 					);
 					DEBUG.init(
 						'Loaded JWT private key from %s',
-						environment.privateKeyPath
+						environment.privateKeyPath,
 					);
 				} catch (ex) {
 					throw new BoxCLIError(
 						`Could not read private key file ${environment.privateKeyPath}`,
-						ex
+						ex,
 					);
 				}
 			}
@@ -1013,7 +1015,7 @@ class BoxCommand extends Command {
 				client = client.withAsUserHeader(environment.defaultAsUserId);
 				DEBUG.init(
 					'Impersonating default user ID %s',
-					environment.defaultAsUserId
+					environment.defaultAsUserId,
 				);
 			}
 			client = this._configureTsSdk(client, SDK_CONFIG);
@@ -1023,7 +1025,7 @@ class BoxCommand extends Command {
 				`No default environment found.
 				It looks like you haven't configured the Box CLI yet.
 				See this command for help adding an environment: box configure:environments:add --help
-				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, '')
+				Or, supply a token with your command with --token.`.replace(/^\s+/gmu, ''),
 			);
 		}
 		if (this.flags['as-user']) {
@@ -1130,7 +1132,7 @@ class BoxCommand extends Command {
 
 		return client;
 	}
-	
+
 	/**
 	 * Format data for output to stdout
 	 * @param {*} content The content to output
@@ -1141,7 +1143,7 @@ class BoxCommand extends Command {
 			this.bulkOutputList.push(content);
 			DEBUG.output(
 				'Added command output to bulk list total: %d',
-				this.bulkOutputList.length
+				this.bulkOutputList.length,
 			);
 			return undefined;
 		}
@@ -1151,7 +1153,7 @@ class BoxCommand extends Command {
 			// Format each object individually and then flatten in case this an array of arrays,
 			// which happens when a command that outputs a collection gets run in bulk
 			formattedOutputData = _.flatten(
-				await Promise.all(content.map((o) => this._formatOutputObject(o)))
+				await Promise.all(content.map((o) => this._formatOutputObject(o))),
 			);
 			DEBUG.output('Formatted %d output entries for display', content.length);
 		} else {
@@ -1186,7 +1188,7 @@ class BoxCommand extends Command {
 				await pipeline(
 					stringifiedOutput,
 					appendNewLineTransform,
-					fs.createWriteStream(savePath, { encoding: 'utf8' })
+					fs.createWriteStream(savePath, { encoding: 'utf8' }),
 				);
 			};
 
@@ -1307,7 +1309,7 @@ class BoxCommand extends Command {
 			return String(outputData);
 		} else if (outputFormat === 'csv') {
 			let csvString = await csvStringify(
-				this.formatForTableAndCSVOutput(outputData)
+				this.formatForTableAndCSVOutput(outputData),
 			);
 			// The CSV library puts a trailing newline at the end of the string, which is
 			// redundant with the automatic newline added by oclif when writing to stdout
@@ -1337,7 +1339,7 @@ class BoxCommand extends Command {
 		let extension = this._getOutputFormat();
 		return `${this.id.replace(/:/gu, '-')}-${dateTime.format(
 			new Date(),
-			'YYYY-MM-DD_HH_mm_ss_SSS'
+			'YYYY-MM-DD_HH_mm_ss_SSS',
 		)}.${extension}`;
 	}
 
@@ -1353,14 +1355,14 @@ class BoxCommand extends Command {
 			DEBUG.output('Writing output to default location on disk');
 			let filePath = path.join(
 				this.settings.boxReportsFolderPath,
-				this._getOutputFileName()
+				this._getOutputFileName(),
 			);
 			try {
 				await writeFunc(filePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${filePath}`,
-					ex
+					ex,
 				);
 			}
 			this.info(chalk`{green Output written to ${filePath}}`);
@@ -1372,13 +1374,13 @@ class BoxCommand extends Command {
 					savePath = path.join(savePath, this._getOutputFileName());
 					DEBUG.output(
 						'Output path is a directory, will write to %s',
-						savePath
+						savePath,
 					);
 				} else {
 					DEBUG.output('File already exists at %s', savePath);
 					// Ask if the user want to overwrite the file
 					let shouldOverwrite = await this.confirm(
-						`File ${savePath} already exists — overwrite?`
+						`File ${savePath} already exists — overwrite?`,
 					);
 
 					if (!shouldOverwrite) {
@@ -1389,13 +1391,13 @@ class BoxCommand extends Command {
 			try {
 				DEBUG.output(
 					'Writing output to specified location on disk: %s',
-					savePath
+					savePath,
 				);
 				await writeFunc(savePath);
 			} catch (ex) {
 				throw new BoxCLIError(
 					`Could not write output to file at ${savePath}`,
-					ex
+					ex,
 				);
 			}
 			this.info(chalk`{green Output written to ${savePath}}`);
@@ -1590,12 +1592,12 @@ class BoxCommand extends Command {
 			return output;
 		}
 		fields = REQUIRED_FIELDS.concat(
-			fields.split(',').filter((f) => !REQUIRED_FIELDS.includes(f))
+			fields.split(',').filter((f) => !REQUIRED_FIELDS.includes(f)),
 		);
 		DEBUG.output('Filtering output with fields: %O', fields);
 		if (Array.isArray(output)) {
 			output = output.map((o) =>
-				typeof o === 'object' ? _.pick(o, fields) : o
+				typeof o === 'object' ? _.pick(o, fields) : o,
 			);
 		} else if (typeof output === 'object') {
 			output = _.pick(output, fields);
@@ -1642,7 +1644,7 @@ class BoxCommand extends Command {
 		}
 		DEBUG.output(
 			'Processed %d rows of tabular output',
-			formattedData.length - 1
+			formattedData.length - 1,
 		);
 		return formattedData;
 	}
@@ -1690,13 +1692,13 @@ class BoxCommand extends Command {
 				// Transform a string like "-1d2h3m" into an array of arg arrays, e.g.:
 				// [ [-1, "d"], [-2, "h"], [-3, "m"] ]
 				let argPairs = _.chunk(offset.split(/(\d+)/u).slice(1), 2).map(
-					(pair) => [sign * parseInt(pair[0], 10), pair[1]]
+					(pair) => [sign * parseInt(pair[0], 10), pair[1]],
 				);
 
 				// Successively apply the offsets to the current time
 				newDate = argPairs.reduce(
 					(d, args) => offsetDate(d, ...args),
-					new Date()
+					new Date(),
 				);
 			} else if (time === 'now') {
 				newDate = new Date();
@@ -1722,12 +1724,12 @@ class BoxCommand extends Command {
 			fs.writeFileSync(
 				SETTINGS_FILE_PATH,
 				JSON.stringify(this.settings, null, 4),
-				'utf8'
+				'utf8',
 			);
 		} catch (ex) {
 			throw new BoxCLIError(
 				`Could not write settings file ${SETTINGS_FILE_PATH}`,
-				ex
+				ex,
 			);
 		}
 		return this.settings;
@@ -1761,7 +1763,7 @@ class BoxCommand extends Command {
 						}
 						const password = await keytar.getPassword(
 							'boxcli' /* service */,
-							'Box' /* account */
+							'Box' /* account */,
 						);
 						if (password) {
 							return JSON.parse(password);
@@ -1778,7 +1780,7 @@ class BoxCommand extends Command {
 		} catch (ex) {
 			throw new BoxCLIError(
 				`Could not read environments config file ${ENVIRONMENTS_FILE_PATH}`,
-				ex
+				ex,
 			);
 		}
 	}
@@ -1815,7 +1817,7 @@ class BoxCommand extends Command {
 					await keytar.setPassword(
 						'boxcli' /* service */,
 						'Box' /* account */,
-						JSON.stringify(environments) /* password */
+						JSON.stringify(environments) /* password */,
 					);
 					fileContents = '';
 					break;
@@ -1828,7 +1830,7 @@ class BoxCommand extends Command {
 		} catch (ex) {
 			throw new BoxCLIError(
 				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
-				ex
+				ex,
 			);
 		}
 		return environments;
@@ -1857,7 +1859,7 @@ class BoxCommand extends Command {
 				DEBUG.init(
 					'Created settings file at %s %O',
 					SETTINGS_FILE_PATH,
-					settingsJSON
+					settingsJSON,
 				);
 			}
 		} catch (ex) {
@@ -1872,7 +1874,7 @@ class BoxCommand extends Command {
 		} catch (ex) {
 			throw new BoxCLIError(
 				`Could not read CLI settings file at ${SETTINGS_FILE_PATH}`,
-				ex
+				ex,
 			);
 		}
 
@@ -1881,14 +1883,14 @@ class BoxCommand extends Command {
 				mkdirp.sync(settings.boxReportsFolderPath);
 				DEBUG.init(
 					'Created reports folder at %s',
-					settings.boxReportsFolderPath
+					settings.boxReportsFolderPath,
 				);
 			}
 			if (!fs.existsSync(settings.boxDownloadsFolderPath)) {
 				mkdirp.sync(settings.boxDownloadsFolderPath);
 				DEBUG.init(
 					'Created downloads folder at %s',
-					settings.boxDownloadsFolderPath
+					settings.boxDownloadsFolderPath,
 				);
 			}
 		} catch (ex) {
@@ -1910,7 +1912,7 @@ class BoxCommand extends Command {
 			boxReportsFileFormat: 'txt',
 			boxDownloadsFolderPath: path.join(
 				os.homedir(),
-				'Downloads/Box-Downloads'
+				'Downloads/Box-Downloads',
 			),
 			outputJson: false,
 			enableProxy: false,
