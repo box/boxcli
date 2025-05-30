@@ -1093,7 +1093,7 @@ class BoxCommand extends Command {
 			oauth2Url: 'https://account.box.com/api/oauth2',
 		};
 		if (this.settings.enableProxy) {
-			// Not supported in TS SDK
+			client = client.withProxy(this.settings.proxy);
 		}
 		if (this.settings.apiRootURL) {
 			customBaseURL.baseUrl = this.settings.apiRootURL;
@@ -1130,7 +1130,7 @@ class BoxCommand extends Command {
 
 		return client;
 	}
-
+	
 	/**
 	 * Format data for output to stdout
 	 * @param {*} content The content to output
