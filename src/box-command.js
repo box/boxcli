@@ -1130,6 +1130,7 @@ class BoxCommand extends Command {
 
 		return client;
 	}
+
 	/**
 	 * Format data for output to stdout
 	 * @param {*} content The content to output
