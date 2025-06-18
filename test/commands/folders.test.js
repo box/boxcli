@@ -136,12 +136,21 @@ describe('Folders', () => {
 	describe('folders:move', () => {
 		let folderId = '0',
 			parentFolderId = '987654321',
+			ownedById = '1234567890',
 			moveFixture = getFixture('folders/put_folders_id'),
 			yamlOutput = getFixture('output/folders_move_yaml.txt');
 
 		let moveBody = {
 			parent: {
 				id: parentFolderId
+			}
+		},
+		moveBodyWithOwnedBy = {
+			parent: {
+				id: parentFolderId
+			},
+			owned_by: {
+				id: ownedById
 			}
 		};
 
@@ -204,6 +213,24 @@ describe('Folders', () => {
 			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
 				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
 				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.put(`/2.0/folders/${folderId}`, moveBodyWithOwnedBy)
+				.reply(200, moveFixture)
+			)
+			.stdout()
+			.command([
+				'folders:move',
+				folderId,
+				parentFolderId,
+				`--owned-by=${ownedById}`,
+				'--json',
+				'--token=test'
+			])
+			.it('should move a folder to a different folder and set the owner', ctx => {
+				assert.equal(ctx.stdout, moveFixture);
 			});
 	});
 

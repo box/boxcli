@@ -8,18 +8,38 @@ class MetadataQueryCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(MetadataQueryCommand);
 
-		const { extra_fields: extraFields, ...rest } = mapKeys(
-			omit(flags, Object.keys(BoxCommand.flags)),
-			(value, key) => snakeCase(key)
+		const {
+			extra_fields: extraFields,
+			query_params: queryParams,
+			query_param: queryParam,
+			query_param_array: queryParamArray,
+			...rest
+		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) =>
+			snakeCase(key),
 		);
+
+		let combinedQueryParams = queryParams || {};
+		if (queryParam) {
+			combinedQueryParams = {
+				...combinedQueryParams,
+				...queryParam,
+			};
+		}
+		if (queryParamArray) {
+			combinedQueryParams = {
+				...combinedQueryParams,
+				...queryParamArray,
+			};
+		}
 
 		const items = await this.client.metadata.query(
 			args.from,
 			args.ancestorFolderId,
 			{
 				...(extraFields && { fields: extraFields }),
+				...(combinedQueryParams && { query_params: combinedQueryParams }),
 				...rest,
-			}
+			},
 		);
 		await this.output(items);
 	}
@@ -27,7 +47,9 @@ class MetadataQueryCommand extends BoxCommand {
 
 MetadataQueryCommand.description =
 	'Create a search using SQL-like syntax to return items that match specific metadata';
-MetadataQueryCommand.examples = ['box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts'];
+MetadataQueryCommand.examples = [
+	'box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts',
+];
 MetadataQueryCommand._endpoint = 'post_metadata_queries_execute_read';
 
 MetadataQueryCommand.flags = {
@@ -36,16 +58,14 @@ MetadataQueryCommand.flags = {
 		description: 'The logical expression of the query',
 	}),
 	'query-params': Flags.string({
-		description: 'Required if query present. The arguments for the query.',
+		description:
+			'The arguments for the query. Can be specified as a comma-separated list of key-value pairs. i.e. key1=value1,key2=value2',
 		dependsOn: ['query'],
 		parse(input) {
 			return Object.assign(
 				{},
-				...input.split(',').map(param => {
-					const [
-						key,
-						value
-					] = param.split('=');
+				...input.split(',').map((param) => {
+					const [key, value] = param.split('=');
 					/* eslint-disable multiline-ternary */
 					return {
 						[key]:
@@ -54,8 +74,31 @@ MetadataQueryCommand.flags = {
 								: value,
 					};
 					/* eslint-enable multiline-ternary */
-				})
+				}),
 			);
+		},
+	}),
+	'query-param': Flags.string({
+		description: 'One query param key-value pair, i.e. key=value. If this key duplicates with query-params, this flag will take precedence.',
+		dependsOn: ['query'],
+		parse(input) {
+			const key = input.split('=')[0];
+			const value = input.substring(key.length + 1);
+			return {
+				[key]: value,
+			};
+		},
+	}),
+	'query-param-array': Flags.string({
+		description:
+			'One query param key-multiple-value pair, use for multiple-values fields, i.e. key=value1,value2,value3. If this key duplicates with query-params or query-param, this flag will take precedence.',
+		dependsOn: ['query'],
+		parse(input) {
+			const key = input.split('=')[0];
+			const value = input.substring(key.length + 1).split(',');
+			return {
+				[key]: value,
+			};
 		},
 	}),
 	'use-index': Flags.string({
@@ -65,11 +108,8 @@ MetadataQueryCommand.flags = {
 		description:
 			'A list of template fields and directions to sort the metadata query results by.',
 		parse(input) {
-			return input.split(',').map(param => {
-				const [
-					fieldKey,
-					direction
-				] = param.split('=');
+			return input.split(',').map((param) => {
+				const [fieldKey, direction] = param.split('=');
 				return { field_key: fieldKey, direction };
 			});
 		},
