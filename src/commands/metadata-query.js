@@ -32,8 +32,6 @@ class MetadataQueryCommand extends BoxCommand {
 			};
 		}
 
-		// console.log('combinedQueryParams', JSON.stringify(combinedQueryParams, null, 2));
-
 		const items = await this.client.metadata.query(
 			args.from,
 			args.ancestorFolderId,
