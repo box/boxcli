@@ -79,7 +79,7 @@ MetadataQueryCommand.flags = {
 		},
 	}),
 	'query-param': Flags.string({
-		description: 'One query param key-value pair, i.e. key=value',
+		description: 'One query param key-value pair, i.e. key=value. If this key duplicates with query-params, this flag will take precedence.',
 		dependsOn: ['query'],
 		parse(input) {
 			const key = input.split('=')[0];
@@ -91,7 +91,7 @@ MetadataQueryCommand.flags = {
 	}),
 	'query-param-array': Flags.string({
 		description:
-			'One query param key-multiple-value pair, use for multiple-values fields, i.e. key=value1,value2,value3',
+			'One query param key-multiple-value pair, use for multiple-values fields, i.e. key=value1,value2,value3. If this key duplicates with query-params or query-param, this flag will take precedence.',
 		dependsOn: ['query'],
 		parse(input) {
 			const key = input.split('=')[0];
