@@ -26,6 +26,26 @@ describe('Metadata Query', () => {
 				],
 				limit: 100,
 			},
+			requestWithMultipleValues = {
+				from: 'enterprise_123456.contractTemplate',
+				query: 'name = :customerName',
+				query_params: {
+					customerName: ['John Doe', 'Jane Doe'],
+				},
+				fields: [
+					'created_at',
+					'metadata.enterprise_123456.contractTemplate.amount',
+					'metadata.enterprise_123456.contractTemplate.customerName',
+				],
+				ancestor_folder_id: '5555',
+				order_by: [
+					{
+						field_key: 'amount',
+						direction: 'asc',
+					},
+				],
+				limit: 100,
+			},
 			fixture = getFixture('metadata-query/post_metadata_queries_execute_read');
 
 		test
@@ -47,6 +67,28 @@ describe('Metadata Query', () => {
 				'--token=test',
 			])
 			.it('should query metadata', ctx => {
+				assert.equal(ctx.stdout, fixture);
+			});
+
+		test
+			.nock(TEST_API_ROOT, api => api
+				.post('/2.0/metadata_queries/execute_read', requestWithMultipleValues)
+				.reply(200, fixture)
+			)
+			.stdout()
+			.command([
+				'metadata-query',
+				requestWithMultipleValues.from,
+				requestWithMultipleValues.ancestor_folder_id,
+				`--query=${requestWithMultipleValues.query}`,
+				`--query-param-array=customerName=${requestWithMultipleValues.query_params.customerName.join(',')}`,
+				`--extra-fields=${requestWithMultipleValues.fields.join(',')}`,
+				`--order-by=${requestWithMultipleValues.order_by[0].field_key}=${requestWithMultipleValues.order_by[0].direction}`,
+				`--limit=${requestWithMultipleValues.limit}`,
+				'--json',
+				'--token=test',
+			])
+			.it('should query metadata with query-param', ctx => {
 				assert.equal(ctx.stdout, fixture);
 			});
 	});
