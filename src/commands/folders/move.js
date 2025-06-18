@@ -16,6 +16,12 @@ class FoldersMoveCommand extends BoxCommand {
 			updates.etag = flags.etag;
 		}
 
+		if (flags['owned-by']) {
+			updates.owned_by = {
+				id: flags['owned-by'],
+			};
+		}
+
 		let movedFolder = await this.client.folders.update(args.id, updates);
 		await this.output(movedFolder);
 	}
@@ -28,6 +34,7 @@ FoldersMoveCommand._endpoint = 'put_folders_id move';
 FoldersMoveCommand.flags = {
 	...BoxCommand.flags,
 	etag: Flags.string({ description: 'Only move if etag value matches' }),
+	'owned-by': Flags.string({ description: 'ID of the user to own the folder' }),
 };
 
 FoldersMoveCommand.args = {
