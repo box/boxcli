@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/box/boxcli/compare/v4.1.0...v4.2.0) (2025-06-20)
+
+
+### New Features and Enhancements
+
+* Setup proxy for Box CLI with TS SDK ([#577](https://github.com/box/boxcli/issues/577)) ([ec42077](https://github.com/box/boxcli/commit/ec4207715360cc284574e1cbb573586218379517))
+* Support `owned-by` flag when moving folder ([#580](https://github.com/box/boxcli/issues/580)) ([2ec8e7f](https://github.com/box/boxcli/commit/2ec8e7fcf241dcd2c5841b8912e178e2384db426))
+* Support integration mappings for Teams ([#579](https://github.com/box/boxcli/issues/579)) ([163a367](https://github.com/box/boxcli/commit/163a36727c5f76b0e3b1c36049b3abae50148eb6))
+* Support metadata query with array ([#581](https://github.com/box/boxcli/issues/581)) ([6750708](https://github.com/box/boxcli/commit/675070856eac6d06f2091203f4f19e41055dd97d))
+
 ## [4.1.0](https://github.com/box/boxcli/compare/v4.0.1...v4.1.0) (2025-05-15)
 
 

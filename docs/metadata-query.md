@@ -13,8 +13,8 @@ Create a search using SQL-like syntax to return items that match specific metada
 USAGE
   $ box metadata-query FROM ANCESTORFOLDERID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
     --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--query-params
-    <value> --query <value>] [--use-index <value>] [--order-by <value>] [--limit <value>] [--marker <value>]
-    [--extra-fields <value>]
+    <value> --query <value>] [--query-param <value> ] [--query-param-array <value> ] [--use-index <value>] [--order-by
+    <value>] [--limit <value>] [--marker <value>] [--extra-fields <value>]
 
 ARGUMENTS
   FROM              The template used in the query. Must be in the form scope.templateKey
@@ -40,7 +40,13 @@ FLAGS
       --no-color                   Turn off colors for logging
       --order-by=<value>           A list of template fields and directions to sort the metadata query results by.
       --query=<value>              The logical expression of the query
-      --query-params=<value>       Required if query present. The arguments for the query.
+      --query-param=<value>        One query param key-value pair, i.e. key=value. If this key duplicates with
+                                   query-params, this flag will take precedence.
+      --query-param-array=<value>  One query param key-multiple-value pair, use for multiple-values fields, i.e.
+                                   key=value1,value2,value3. If this key duplicates with query-params or query-param,
+                                   this flag will take precedence.
+      --query-params=<value>       The arguments for the query. Can be specified as a comma-separated list of key-value
+                                   pairs. i.e. key1=value1,key2=value2
       --save-to-file-path=<value>  Override default file path to save report
       --use-index=<value>          The name of the search index to use for this query.
 
@@ -51,4 +57,4 @@ EXAMPLES
   $ box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts
 ```
 
-_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/metadata-query.js)_
+_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/metadata-query.js)_
