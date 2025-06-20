@@ -28,4 +28,4 @@ DESCRIPTION
   Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used
 ```
 
-_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/login.js)_
+_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/login.js)_
