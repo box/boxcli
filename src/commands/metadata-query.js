@@ -4,6 +4,13 @@ const BoxCommand = require('../box-command');
 const { Flags, Args } = require('@oclif/core');
 const { omit, mapKeys, snakeCase } = require('lodash');
 
+const parseQueryValue = (value) => {
+	if (value.endsWith('f') && !isNaN(parseFloat(value))) {
+		return parseFloat(value);
+	}
+	return value;
+};
+
 class MetadataQueryCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(MetadataQueryCommand);
@@ -22,13 +29,13 @@ class MetadataQueryCommand extends BoxCommand {
 		if (queryParam) {
 			combinedQueryParams = {
 				...combinedQueryParams,
-				...queryParam,
+				...queryParam.reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 			};
 		}
 		if (queryParamArray) {
 			combinedQueryParams = {
 				...combinedQueryParams,
-				...queryParamArray,
+				...queryParamArray.reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 			};
 		}
 
@@ -69,9 +76,7 @@ MetadataQueryCommand.flags = {
 					/* eslint-disable multiline-ternary */
 					return {
 						[key]:
-							value.endsWith('f') && !isNaN(parseFloat(value))
-								? parseFloat(value)
-								: value,
+							parseQueryValue(value),
 					};
 					/* eslint-enable multiline-ternary */
 				}),
@@ -81,11 +86,12 @@ MetadataQueryCommand.flags = {
 	'query-param': Flags.string({
 		description: 'One query param key-value pair, i.e. key=value. If this key duplicates with query-params, this flag will take precedence.',
 		dependsOn: ['query'],
+		multiple: true,
 		parse(input) {
 			const key = input.split('=')[0];
 			const value = input.substring(key.length + 1);
 			return {
-				[key]: value,
+				[key]: parseQueryValue(value),
 			};
 		},
 	}),
@@ -93,11 +99,12 @@ MetadataQueryCommand.flags = {
 		description:
 			'One query param key-multiple-value pair, use for multiple-values fields, i.e. key=value1,value2,value3. If this key duplicates with query-params or query-param, this flag will take precedence.',
 		dependsOn: ['query'],
+		multiple: true,
 		parse(input) {
 			const key = input.split('=')[0];
 			const value = input.substring(key.length + 1).split(',');
 			return {
-				[key]: value,
+				[key]: value.map(x => parseQueryValue(x)),
 			};
 		},
 	}),
