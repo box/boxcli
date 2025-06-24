@@ -33,7 +33,7 @@ DESCRIPTION
   Get a token. Returns the service account token by default
 ```
 
-_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/tokens/exchange.js)_
+_See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/tokens/exchange.js)_
 
 ## `box tokens:get`
 
@@ -54,7 +54,7 @@ DESCRIPTION
   Get a token. Returns the service account token by default
 ```
 
-_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/tokens/get.js)_
+_See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/tokens/get.js)_
 
 ## `box tokens:revoke TOKEN`
 
@@ -77,4 +77,4 @@ DESCRIPTION
   Revoke a token.  The token will no longer be valid for making API calls.
 ```
 
-_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v4.1.0/src/commands/tokens/revoke.js)_
+_See code: [src/commands/tokens/revoke.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/tokens/revoke.js)_
