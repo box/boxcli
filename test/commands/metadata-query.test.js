@@ -31,7 +31,7 @@ describe('Metadata Query', () => {
 				query: 'name = :customerName',
 				query_params: {
 					value: 100,
-					value2: 200,
+					value2: 'String',
 				},
 				fields: [
 					'created_at',
@@ -72,7 +72,7 @@ describe('Metadata Query', () => {
 				query: 'name = :customerName',
 				query_params: {
 					customerName: ['John Doe', 'Jane Doe'],
-					customerName2: ['John Doe', 'Jane Doe'],
+					customerName2: ['Doe John', 'Doe Jane'],
 				},
 				fields: [
 					'created_at',
@@ -123,8 +123,8 @@ describe('Metadata Query', () => {
 				requestWithMultipleValues.from,
 				requestWithMultipleValues.ancestor_folder_id,
 				`--query=${requestWithMultipleValues.query}`,
-				'--query-param=value=100f',
-				'--query-param=value2=200f',
+				`--query-param=value=${requestWithMultipleValues.query_params.value}f`,
+				`--query-param=value2=${requestWithMultipleValues.query_params.value2}`,
 				`--extra-fields=${requestWithMultipleValues.fields.join(',')}`,
 				`--order-by=${requestWithMultipleValues.order_by[0].field_key}=${requestWithMultipleValues.order_by[0].direction}`,
 				`--limit=${requestWithMultipleValues.limit}`,
@@ -169,7 +169,7 @@ describe('Metadata Query', () => {
 				requestWithMultipleArrayQueryParams.ancestor_folder_id,
 				`--query=${requestWithMultipleArrayQueryParams.query}`,
 				`--query-param-array=customerName=${requestWithMultipleArrayQueryParams.query_params.customerName.join(',')}`,
-				`--query-param-array=customerName2=${requestWithMultipleArrayQueryParams.query_params.customerName.join(',')}`,
+				`--query-param-array=customerName2=${requestWithMultipleArrayQueryParams.query_params.customerName2.join(',')}`,
 				`--extra-fields=${requestWithMultipleArrayQueryParams.fields.join(',')}`,
 				`--order-by=${requestWithMultipleArrayQueryParams.order_by[0].field_key}=${requestWithMultipleArrayQueryParams.order_by[0].direction}`,
 				`--limit=${requestWithMultipleArrayQueryParams.limit}`,
