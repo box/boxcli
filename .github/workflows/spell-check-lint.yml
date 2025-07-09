@@ -15,7 +15,7 @@ jobs:
         with:
           ref: refs/heads/main
           repository: box/box-sdk-spellchecker
-          token: ${{ secrets.DISPATCH_ACCESS_TOKEN }}
+          token: ${{ secrets.TEST }}
           path: spellchecker
       - name: Execute spellchecker
         uses: ./spellchecker
