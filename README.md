@@ -87,13 +87,18 @@ Successfully added CLI environment "ManualKey"
 [jwt-guide]: https://developer.box.com/guides/cli/cli-docs/jwt-cli/
 
 ## Usage
-
-```sh-session
+```
 $ box --version
 box-cli/0.0.0 darwin-x64 node-v10.10.0
+```
+![showversion](.dg/svg/showversion-dark.svg)
+```
 $ box users:get --help
 Get information about a Box user
+```
+![showhelp](.dg/svg/showhelp-dark.svg)
 
+```sh-session
 USAGE
   $ box users:get [ID]
 
