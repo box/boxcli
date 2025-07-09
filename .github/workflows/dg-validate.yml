@@ -24,3 +24,9 @@ jobs:
     
     - name: Validate demos
       run: npx @deepguide-ai/dg validate --non-interactive
+
+    - name: Install box CLI
+      run: npm install -g @box/cli
+
+    - name: Validate demos
+      run: npx @deepguide-ai/dg validate --non-interactive
