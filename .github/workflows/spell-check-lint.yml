@@ -1,6 +1,6 @@
 name: spell-check-lint
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, edited]
     branches:
       - main
@@ -15,7 +15,7 @@ jobs:
         with:
           ref: refs/heads/main
           repository: box/box-sdk-spellchecker
-          token: ${{ secrets.TEST }}
+          token: ${{ secrets.TEST  }}
           path: spellchecker
       - name: Execute spellchecker
         uses: ./spellchecker
