@@ -1,6 +1,6 @@
 name: spell-check-lint
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, edited]
     branches:
       - main
