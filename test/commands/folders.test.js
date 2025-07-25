@@ -1135,7 +1135,6 @@ describe('Folders', () => {
 	describe('folders:create', () => {
 		let parentFolderId = '0',
 			name = 'New Folder',
-			description = 'This is my new folder',
 			fixture = getFixture('folders/post_folders'),
 			yamlOutput = getFixture('output/folders_create_yaml.txt');
 
@@ -1200,7 +1199,6 @@ describe('Folders', () => {
 			.nock(TEST_API_ROOT, api => api
 				.post('/2.0/folders', {
 					...expectedBody,
-					description,
 				})
 				.reply(409, {
 					type: 'error',
@@ -1226,7 +1224,6 @@ describe('Folders', () => {
 				'folders:create',
 				parentFolderId,
 				name,
-				`--description=${description}`,
 				'--json',
 				'--token=test'
 			])
