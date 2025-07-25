@@ -1496,17 +1496,17 @@ describe('Files', () => {
 				.post(`/2.0/files/${fileId}/content`, function(body) {
 					try {
 						let lines = body.split(/\r?\n/u);
-						assert.match(lines[0], /^-+\d+$/u);
+						assert.match(lines[0], /^-+[a-f0-9]+$/u);
 						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
 						assert.equal(lines[2], '');
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
-						assert.match(lines[4], /^-+\d+$/u);
+						assert.match(lines[4], /^-+[a-f0-9]+$/u);
 						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
 						assert.equal(lines[6], 'Content-Type: text/plain');
 						assert.equal(lines[7], '');
 						assert.equal(lines[8], testFileContent);
-						assert.match(lines[9], /^-+\d+-+$/u);
+						assert.match(lines[9], /^-+[a-f0-9]+-+$/u);
 					} catch (error) {
 						return false;
 					}
@@ -1531,17 +1531,17 @@ describe('Files', () => {
 				.post(`/2.0/files/${fileId}/content`, function(body) {
 					try {
 						let lines = body.split(/\r?\n/u);
-						assert.match(lines[0], /^-+\d+$/u);
+						assert.match(lines[0], /^-+[a-f0-9]+$/u);
 						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
 						assert.equal(lines[2], '');
 						let attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', testFileName);
-						assert.match(lines[4], /^-+\d+$/u);
+						assert.match(lines[4], /^-+[a-f0-9]+$/u);
 						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
 						assert.equal(lines[6], 'Content-Type: text/plain');
 						assert.equal(lines[7], '');
 						assert.equal(lines[8], testFileContent);
-						assert.match(lines[9], /^-+\d+-+$/u);
+						assert.match(lines[9], /^-+[a-f0-9]+-+$/u);
 					} catch (error) {
 						return false;
 					}
