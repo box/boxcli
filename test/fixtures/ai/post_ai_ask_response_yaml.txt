@@ -1,3 +1,10 @@
-Answer: This document is currently in progress and being actively worked on.
-Created At: '2024-07-09T11:29:46.835Z'
+Answer: The document is currently in review and awaiting approval.
+Created At:
+    Value: '2024-07-09T11:29:46.835Z'
 Completion Reason: done
+Ai Agent Info:
+    Models:
+        -
+            Name: google__gemini_2_0_flash_001
+            Provider: google
+    Processor: basic_text

@@ -5,6 +5,52 @@ const assert = require('chai').assert;
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
 describe('AI', () => {
+	const getAgentInRequestBody = (type) => {
+		const agent = {
+				type,
+				basic_text: {
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template:
+						'It is, consider these travel options and answer the.',
+					system_message:
+						'You are a helpful travel assistant specialized in budget travel',
+				},
+				long_text: {
+					embeddings: {
+						model: 'azure__openai__text_embedding_ada_002',
+						strategy: {
+							id: 'basic',
+							num_tokens_per_chunk: 64,
+						},
+					},
+					llm_endpoint_params: {
+						type: 'openai_params',
+						frequency_penalty: 1.5,
+						presence_penalty: 1.5,
+						stop: '<|im_end|>',
+						temperature: 0,
+						top_p: 1,
+					},
+					model: 'azure__openai__gpt_4o_mini',
+					num_tokens_for_completion: 8400,
+					prompt_template:
+						'It is , consider these travel options and answer the.',
+					system_message:
+						'You are a helpful travel assistant specialized in budget travel',
+				}
+			};
+		return agent;
+	};
+
 	describe('ai:ask', () => {
 		const expectedRequestBody = {
 			items: [
@@ -17,12 +63,22 @@ describe('AI', () => {
 			mode: 'single_item_qa',
 			prompt: 'What is the status of this document?',
 		};
+
 		const expectedResponseBody = {
-			answer:
-				'This document is currently in progress and being actively worked on.',
+			answer: 'The document is currently in review and awaiting approval.',
 			created_at: '2024-07-09T11:29:46.835Z',
 			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: 'google__gemini_2_0_flash_001',
+						provider: 'google',
+					},
+				],
+				processor: 'basic_text',
+			},
 		};
+
 		const fixture = getFixture('ai/post_ai_ask_response');
 		const yamlFixture = getFixture('ai/post_ai_ask_response_yaml.txt');
 
@@ -62,6 +118,88 @@ describe('AI', () => {
 				'What is the status of this document?',
 				'--token=test',
 			])
+			.it(
+				'should send the correct request and output the response (YAML Output)',
+				(ctx) => {
+					assert.equal(ctx.stdout, yamlFixture);
+				},
+			);
+	});
+
+	describe('ai:ask with ai_agent', () => {
+		const expectedRequestBody = {
+			items: [
+				{
+					id: '12345',
+					type: 'file',
+					content: 'one,two,three',
+				},
+			],
+			mode: 'single_item_qa',
+			prompt: 'What is the status of this document?',
+			ai_agent: getAgentInRequestBody('ai_agent_ask')
+		};
+
+		const expectedResponseBody = {
+			answer: 'The document is currently in review and awaiting approval.',
+			created_at: '2024-07-09T11:29:46.835Z',
+			completion_reason: 'done',
+			ai_agent_info: {
+				models: [
+					{
+						name: 'google__gemini_2_0_flash_001',
+						provider: 'google',
+					},
+				],
+				processor: 'basic_text',
+			},
+		};
+
+		const fixture = getFixture('ai/post_ai_ask_response');
+		const yamlFixture = getFixture('ai/post_ai_ask_response_yaml.txt');
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api
+					.post('/2.0/ai/ask', expectedRequestBody)
+					.reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:ask',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'What is the status of this document?',
+				'--ai-agent',
+				'{"type":"ai_agent_ask","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
+				'--json',
+				'--token=test',
+			])
+
+			.it(
+				'should send the correct request and output the response (JSON Output)',
+				(ctx) => {
+					assert.equal(ctx.stdout, fixture);
+				},
+			);
+
+		test
+			.nock(TEST_API_ROOT, (api) => {
+				api
+					.post('/2.0/ai/ask', expectedRequestBody)
+					.reply(200, expectedResponseBody);
+			})
+			.stdout()
+			.command([
+				'ai:ask',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'What is the status of this document?',
+				'--ai-agent',
+				'{"type":"ai_agent_ask","basicText":{"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model": "azure__openai__gpt_4o_mini","numTokensForCompletion": 8400,"promptTemplate": "It is, consider these travel options and answer the.","systemMessage": "You are a helpful travel assistant specialized in budget travel"},"longText":{"embeddings":{ "model": "azure__openai__text_embedding_ada_002","strategy":{"id": "basic","numTokensPerChunk": 64}},"llmEndpointParams":{"type":"openai_params","frequencyPenalty": 1.5,"presencePenalty": 1.5,"stop": "<|im_end|>","temperature": 0,"topP": 1},"model":"azure__openai__gpt_4o_mini","numTokensForCompletion":8400,"promptTemplate":"It is , consider these travel options and answer the.","systemMessage":"You are a helpful travel assistant specialized in budget travel"}}',
+				'--token=test',
+			])
+
 			.it(
 				'should send the correct request and output the response (YAML Output)',
 				(ctx) => {
@@ -320,48 +458,7 @@ describe('AI', () => {
 					options: [{ key: 'First Name' }],
 				},
 			],
-			ai_agent: {
-				type: 'ai_agent_extract_structured',
-				basic_text: {
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is, consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
-				},
-				long_text: {
-					embeddings: {
-						model: 'azure__openai__text_embedding_ada_002',
-						strategy: {
-							id: 'basic',
-							num_tokens_per_chunk: 64,
-						},
-					},
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is , consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
-				},
-			},
+			ai_agent: getAgentInRequestBody('ai_agent_extract_structured')
 		};
 		const expectedResponseBody = {
 			answer: {
@@ -443,48 +540,7 @@ describe('AI', () => {
 					content: 'one,two,three',
 				},
 			],
-			ai_agent: {
-				type: 'ai_agent_extract',
-				basic_text: {
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is, consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
-				},
-				long_text: {
-					embeddings: {
-						model: 'azure__openai__text_embedding_ada_002',
-						strategy: {
-							id: 'basic',
-							num_tokens_per_chunk: 64,
-						},
-					},
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is , consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
-				},
-			},
+			ai_agent: getAgentInRequestBody('ai_agent_extract')
 		};
 		const expectedResponseBody = {
 			answer:

@@ -1,5 +1,16 @@
 {
-    "answer": "This document is currently in progress and being actively worked on.",
-    "created_at": "2024-07-09T11:29:46.835Z",
-    "completion_reason": "done"
+    "answer": "The document is currently in review and awaiting approval.",
+    "createdAt": {
+        "value": "2024-07-09T11:29:46.835Z"
+    },
+    "completionReason": "done",
+    "aiAgentInfo": {
+        "models": [
+            {
+                "name": "google__gemini_2_0_flash_001",
+                "provider": "google"
+            }
+        ],
+        "processor": "basic_text"
+    }
 }

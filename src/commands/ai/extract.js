@@ -70,7 +70,7 @@ AiExtractCommand.flags = {
 	'ai-agent': Flags.string({
 		required: false,
 		description:
-			'The AI agent to be used for the extraction, provided as a JSON string. Example: {"type": "ai_agent_extract", "basic_text": {"model": "azure__openai__gpt_4o_mini", "prompt_template": "Answer the question based on {content}"}}',
+			'The AI agent to be used for the extraction, provided as a JSON string. Example: {"type": "ai_agent_extract", "basicText": {"model": "azure__openai__gpt_4o_mini", "promptTemplate": "Answer the question based on {content}"}}',
 		parse(input) {
 			try {
 				return JSON.parse(input);
