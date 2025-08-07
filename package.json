@@ -30,7 +30,7 @@
 		"@oclif/plugin-version": "^2.2.16",
 		"archiver": "^3.0.0",
 		"box-node-sdk": "^3.7.0",
-		"box-typescript-sdk-gen": "^1.17.0",
+		"box-typescript-sdk-gen": "^1.17.1",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^6.3.3",
