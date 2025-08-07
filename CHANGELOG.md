@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/box/boxcli/compare/v4.2.0...v4.3.0) (2025-08-07)
+
+
+### New Features and Enhancements
+
+* add agent support to `ai:ask` command ([#589](https://github.com/box/boxcli/issues/589)) ([095f411](https://github.com/box/boxcli/commit/095f4110274f67c5b1024de49a256b5bbe35cf18))
+
+### Bug Fixes
+
+* Fix support metadata query array ([#583](https://github.com/box/boxcli/issues/583)) ([112db16](https://github.com/box/boxcli/commit/112db160230e5bb75f84e44cb86a8372341dd8ad))
+* Remove `description` flag from folders:create command ([#587](https://github.com/box/boxcli/issues/587)) ([adca76b](https://github.com/box/boxcli/commit/adca76b5fb03f62daf2104500b87f8a962382a35))
+
 ## [4.2.0](https://github.com/box/boxcli/compare/v4.1.0...v4.2.0) (2025-06-20)
 
 

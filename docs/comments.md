@@ -48,7 +48,7 @@ EXAMPLES
   $ box comments:create 11111 --message "Thanks for the update!"
 ```
 
-_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/comments/create.js)_
+_See code: [src/commands/comments/create.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/comments/create.js)_
 
 ## `box comments:delete ID`
 
@@ -84,7 +84,7 @@ EXAMPLES
   $ box comments:delete 12345
 ```
 
-_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/comments/delete.js)_
+_See code: [src/commands/comments/delete.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/comments/delete.js)_
 
 ## `box comments:get ID`
 
@@ -120,7 +120,7 @@ EXAMPLES
   $ box comments:get 12345
 ```
 
-_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/comments/get.js)_
+_See code: [src/commands/comments/get.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/comments/get.js)_
 
 ## `box comments:list ID`
 
@@ -197,7 +197,7 @@ EXAMPLES
   $ box comments:reply 12345 --message "No problem!"
 ```
 
-_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/comments/reply.js)_
+_See code: [src/commands/comments/reply.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/comments/reply.js)_
 
 ## `box comments:update ID`
 
@@ -236,4 +236,4 @@ EXAMPLES
   $ box comments:update 12345 --message "Thank you for the update!"
 ```
 
-_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/comments/update.js)_
+_See code: [src/commands/comments/update.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/comments/update.js)_

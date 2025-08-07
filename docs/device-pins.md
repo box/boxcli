@@ -45,7 +45,7 @@ EXAMPLES
   $ box device-pins
 ```
 
-_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/device-pins/index.js)_
+_See code: [src/commands/device-pins/index.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/device-pins/index.js)_
 
 ## `box device-pins:delete ID`
 
@@ -81,7 +81,7 @@ EXAMPLES
   $ box device-pins:delete 12345
 ```
 
-_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/device-pins/delete.js)_
+_See code: [src/commands/device-pins/delete.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/device-pins/delete.js)_
 
 ## `box device-pins:get ID`
 
@@ -117,4 +117,4 @@ EXAMPLES
   $ box device-pins:get 12345
 ```
 
-_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v4.2.0/src/commands/device-pins/get.js)_
+_See code: [src/commands/device-pins/get.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/device-pins/get.js)_
