@@ -38,7 +38,7 @@
 		"debug": "^4.4.0",
 		"express": "^4.21.1",
 		"fs-extra": "^10.1.0",
-		"inquirer": "^6.2.0",
+		"inquirer": "^12.9.6",
 		"js-yaml": "^3.13.1",
 		"keychain": "^1.4.0",
 		"keytar": "^7.9.0",
