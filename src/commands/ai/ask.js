@@ -8,7 +8,8 @@ class AiAskCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(AiAskCommand);
 		let options = {};
-		options.mode = flags.items.length > 1 ? 'multi_item_qa' : 'single_item_qa';
+		options.mode =
+			flags.items.length > 1 ? 'multiple_item_qa' : 'single_item_qa';
 
 		if (flags.prompt) {
 			options.prompt = flags.prompt;
@@ -16,7 +17,7 @@ class AiAskCommand extends BoxCommand {
 		if (flags.items) {
 			options.items = flags.items;
 		}
-        if (flags['ai-agent']) {
+		if (flags['ai-agent']) {
 			options.aiAgent = flags['ai-agent'];
 		}
 
@@ -70,7 +71,7 @@ AiAskCommand.flags = {
 			'The AI agent to be used for the ask, provided as a JSON string. Example: {"type": "ai_agent_ask", "basicText": {"model": "openai__gpt_3_5_turbo"}}',
 		parse(input) {
 			try {
-                return JSON.parse(input);
+				return JSON.parse(input);
 			} catch (error) {
 				throw ('Error parsing AI agent ', error);
 			}
