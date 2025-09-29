@@ -42,4 +42,4 @@ DESCRIPTION
   Manually specify a Box API request
 ```
 
-_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/request.js)_
+_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/request.js)_
