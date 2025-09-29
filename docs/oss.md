@@ -23,4 +23,4 @@ DESCRIPTION
   Print a list of open-source licensed packages used in the Box CLI
 ```
 
-_See code: [src/commands/oss.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/oss.js)_
+_See code: [src/commands/oss.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/oss.js)_

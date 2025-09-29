@@ -40,4 +40,4 @@ EXAMPLES
   $ box recent-items
 ```
 
-_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v4.3.0/src/commands/recent-items.js)_
+_See code: [src/commands/recent-items.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/recent-items.js)_
