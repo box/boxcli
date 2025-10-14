@@ -26,6 +26,13 @@ class UsersUpdateCommand extends BoxCommand {
 		if (flags.hasOwnProperty('can-see-managed-users')) {
 			updates.can_see_managed_users = flags['can-see-managed-users'];
 		}
+		if (flags.hasOwnProperty('notification-email')) {
+			if (flags['notification-email'] === '') {
+				updates.notification_email = null;
+			} else {
+				updates.notification_email = { email: flags['notification-email'] };
+			}
+		}
 		if (flags.role) {
 			updates.role = flags.role;
 		}
@@ -160,6 +167,9 @@ UsersUpdateCommand.flags = {
 				value
 			};
 		}),
+	}),
+	'notification-email': Flags.string({
+		description: 'Notification email address for the user, set to empty string to remove',
 	}),
 };
 

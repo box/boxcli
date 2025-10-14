@@ -818,7 +818,7 @@ USAGE
     [--exempt-from-device-limits] [--exempt-from-2fa] [--restrict-external-collab] [--can-see-managed-users]
     [--password-reset] [-r user|coadmin] [-l <value>] [-j <value>] [-p <value>] [-a <value>] [-d <value>] [-S
     active|inactive|cannot_delete_edit|cannot_delete_edit_upload] [--timezone <value>] [--login <value>] [--external-id
-    <value>] [--tracking-codes <value>]
+    <value>] [--tracking-codes <value>] [--notification-email <value>]
 
 ARGUMENTS
   ID  User ID to update
@@ -853,6 +853,7 @@ FLAGS
       --json                            Output formatted JSON
       --login=<value>                   Change the user's primary email address used for logging into Box
       --no-color                        Turn off colors for logging
+      --notification-email=<value>      Notification email address for the user, set to empty string to remove
       --password-reset                  Force the user to reset password
       --remove                          Remove the user from the enterprise, convert to free account
       --[no-]restrict-external-collab   Restrict user from external collaboration
