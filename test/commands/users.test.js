@@ -920,6 +920,14 @@ describe('Users', () => {
 						},
 					],
 				}
+			],
+			'notification email flag': [
+				'--notification-email=notify@example.com',
+				{notification_email: {email: 'notify@example.com'}}
+			],
+			'notification email remove flag': [
+				'--notification-email=',
+				{notification_email: null}
 			]
 		}, function(flag, body) {
 
