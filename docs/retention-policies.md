@@ -56,7 +56,7 @@ EXAMPLES
   $ box retention-policies
 ```
 
-_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/index.js)_
+_See code: [src/commands/retention-policies/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/index.js)_
 
 ## `box retention-policies:assign POLICYID`
 
@@ -99,7 +99,7 @@ EXAMPLES
   $ box retention-policies:assign 12345 --assign-to-type folder --assign-to-id 22222 --filter-field=fieldName=fieldValue --start-date-field=upload_date
 ```
 
-_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/assign.js)_
+_See code: [src/commands/retention-policies/assign.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/assign.js)_
 
 ## `box retention-policies:assignments ID`
 
@@ -142,7 +142,7 @@ EXAMPLES
   $ box retention-policies:assignments 12345
 ```
 
-_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/assignments/index.js)_
+_See code: [src/commands/retention-policies/assignments/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/assignments/index.js)_
 
 ## `box retention-policies:assignments:get ID`
 
@@ -178,7 +178,7 @@ EXAMPLES
   $ box retention-policies:assignments:get 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/assignments/get.js)_
+_See code: [src/commands/retention-policies/assignments/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/assignments/get.js)_
 
 ## `box retention-policies:assignments:remove ID`
 
@@ -214,7 +214,7 @@ EXAMPLES
   $ box retention-policies:assignments:remove 1235
 ```
 
-_See code: [src/commands/retention-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/assignments/remove.js)_
+_See code: [src/commands/retention-policies/assignments/remove.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/assignments/remove.js)_
 
 ## `box retention-policies:create POLICYNAME`
 
@@ -265,7 +265,7 @@ EXAMPLES
   $ box retention-policies:create "Tax Documents" --retention-length 2555 --disposition-action=remove_retention --notify-owners --allow-extension --description "Tax documents for 2018" --custom-notification-recipient=id=12345,login=user@box.com
 ```
 
-_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/create.js)_
+_See code: [src/commands/retention-policies/create.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/create.js)_
 
 ## `box retention-policies:file-version-retentions`
 
@@ -311,7 +311,7 @@ EXAMPLES
   $ box retention-policies:file-version-retentions
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/file-version-retentions/index.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/file-version-retentions/index.js)_
 
 ## `box retention-policies:file-version-retentions:get ID`
 
@@ -347,7 +347,7 @@ EXAMPLES
   $ box retention-policies:file-version-retentions:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/file-version-retentions/get.js)_
+_See code: [src/commands/retention-policies/file-version-retentions/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/file-version-retentions/get.js)_
 
 ## `box retention-policies:file-versions-under-retention:get ID`
 
@@ -387,7 +387,7 @@ EXAMPLES
   $ box retention-policies:file-versions-under-retention:get 77777
 ```
 
-_See code: [src/commands/retention-policies/file-versions-under-retention/get.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/file-versions-under-retention/get.js)_
+_See code: [src/commands/retention-policies/file-versions-under-retention/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/file-versions-under-retention/get.js)_
 
 ## `box retention-policies:files-under-retention:get ID`
 
@@ -427,7 +427,7 @@ EXAMPLES
   $ box retention-policies:files-under-retention:get 77777
 ```
 
-_See code: [src/commands/retention-policies/files-under-retention/get.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/files-under-retention/get.js)_
+_See code: [src/commands/retention-policies/files-under-retention/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/files-under-retention/get.js)_
 
 ## `box retention-policies:get ID`
 
@@ -463,7 +463,7 @@ EXAMPLES
   $ box retention-policies:get 12345
 ```
 
-_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/get.js)_
+_See code: [src/commands/retention-policies/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/get.js)_
 
 ## `box retention-policies:update ID`
 
@@ -510,4 +510,4 @@ EXAMPLES
   $ box retention-policies:update 12345
 ```
 
-_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v4.3.1/src/commands/retention-policies/update.js)_
+_See code: [src/commands/retention-policies/update.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/retention-policies/update.js)_

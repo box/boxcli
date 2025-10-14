@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/box/boxcli/compare/v4.3.1...v4.4.0) (2025-10-14)
+
+
+### New Features and Enhancements
+
+* Support update users notification email ([#596](https://github.com/box/boxcli/issues/596)) ([49356f4](https://github.com/box/boxcli/commit/49356f4ad954caf0c0d60646debc2bc047bddf7a))
+
 ### [4.3.1](https://github.com/box/boxcli/compare/v4.3.0...v4.3.1) (2025-09-29)
 
 
