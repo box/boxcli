@@ -20,7 +20,7 @@ class UsersCreateCommand extends BoxCommand {
 			options.is_exempt_from_device_limits = flags['exempt-from-device-limits'];
 		}
 		if (flags.hasOwnProperty('exempt-from-2fa')) {
-			options.is_exempt_login_verification = flags['exempt-from-2fa'];
+			options.is_exempt_from_login_verification = flags['exempt-from-2fa'];
 		}
 		if (flags.hasOwnProperty('restrict-external-collab')) {
 			options.is_external_collab_restricted = flags['restrict-external-collab'];

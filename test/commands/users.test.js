@@ -659,11 +659,11 @@ describe('Users', () => {
 			],
 			'exempt from login verification flag': [
 				'--exempt-from-2fa',
-				{is_exempt_login_verification: true}
+				{is_exempt_from_login_verification: true}
 			],
 			'no exempt from login verification flag': [
 				'--no-exempt-from-2fa',
-				{is_exempt_login_verification: false}
+				{is_exempt_from_login_verification: false}
 			],
 			'external collab restricted flag': [
 				'--restrict-external-collab',
@@ -842,11 +842,11 @@ describe('Users', () => {
 			],
 			'exempt from login verification flag': [
 				'--exempt-from-2fa',
-				{is_exempt_login_verification: true}
+				{is_exempt_from_login_verification: true}
 			],
 			'no exempt from login verification flag': [
 				'--no-exempt-from-2fa',
-				{is_exempt_login_verification: false}
+				{is_exempt_from_login_verification: false}
 			],
 			'external collab restricted flag': [
 				'--restrict-external-collab',
