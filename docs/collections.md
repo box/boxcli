@@ -43,7 +43,7 @@ EXAMPLES
   $ box collections
 ```
 
-_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collections/index.js)_
+_See code: [src/commands/collections/index.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collections/index.js)_
 
 ## `box collections:add ITEMTYPE ITEMID COLLECTIONID`
 
@@ -81,7 +81,7 @@ EXAMPLES
   $ box collections:add file 11111 12345
 ```
 
-_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collections/add.js)_
+_See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collections/add.js)_
 
 ## `box collections:items ID`
 
@@ -121,7 +121,7 @@ EXAMPLES
   $ box collections:items 12345
 ```
 
-_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collections/items.js)_
+_See code: [src/commands/collections/items.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collections/items.js)_
 
 ## `box collections:list`
 
@@ -193,4 +193,4 @@ EXAMPLES
   $ box collections:remove file 11111 12345
 ```
 
-_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collections/remove.js)_
+_See code: [src/commands/collections/remove.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collections/remove.js)_

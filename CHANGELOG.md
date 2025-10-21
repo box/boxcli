@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.1](https://github.com/box/boxcli/compare/v4.4.0...v4.4.1) (2025-10-21)
+
+
+### Bug Fixes
+
+* Fix `--exempt-from-2fa` flag in `create` and `update` users and commands ([#598](https://github.com/box/boxcli/issues/598)) ([8f897fe](https://github.com/box/boxcli/commit/8f897feb677a0089e7854aaf8ef6b2babb70ab16))
+
 ## [4.4.0](https://github.com/box/boxcli/compare/v4.3.1...v4.4.0) (2025-10-14)
 
 

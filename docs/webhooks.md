@@ -48,7 +48,7 @@ EXAMPLES
   $ box webhooks
 ```
 
-_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/webhooks/index.js)_
+_See code: [src/commands/webhooks/index.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/webhooks/index.js)_
 
 ## `box webhooks:create TARGETTYPE TARGETID`
 
@@ -90,7 +90,7 @@ EXAMPLES
   $ box webhooks:create folder 22222 --triggers FILE.DELETED --address https://example.com/webhook/deletion
 ```
 
-_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/webhooks/create.js)_
+_See code: [src/commands/webhooks/create.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/webhooks/create.js)_
 
 ## `box webhooks:delete ID`
 
@@ -126,7 +126,7 @@ EXAMPLES
   $ box webhooks:delete 12345
 ```
 
-_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/webhooks/delete.js)_
+_See code: [src/commands/webhooks/delete.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/webhooks/delete.js)_
 
 ## `box webhooks:get ID`
 
@@ -162,7 +162,7 @@ EXAMPLES
   $ box webhooks:get 12345
 ```
 
-_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/webhooks/get.js)_
+_See code: [src/commands/webhooks/get.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/webhooks/get.js)_
 
 ## `box webhooks:list`
 
@@ -239,4 +239,4 @@ EXAMPLES
   $ box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED
 ```
 
-_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/webhooks/update.js)_
+_See code: [src/commands/webhooks/update.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/webhooks/update.js)_
