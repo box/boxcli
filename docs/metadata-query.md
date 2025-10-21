@@ -57,4 +57,4 @@ EXAMPLES
   $ box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts
 ```
 
-_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/metadata-query.js)_
+_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/metadata-query.js)_

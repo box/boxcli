@@ -47,7 +47,7 @@ EXAMPLES
   $ box collaboration-allowlist
 ```
 
-_See code: [src/commands/collaboration-allowlist/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/index.js)_
+_See code: [src/commands/collaboration-allowlist/index.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/index.js)_
 
 ## `box collaboration-allowlist:add DOMAIN`
 
@@ -86,7 +86,7 @@ EXAMPLES
   $ box collaboration-allowlist:add example.com --direction outbound
 ```
 
-_See code: [src/commands/collaboration-allowlist/add.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/add.js)_
+_See code: [src/commands/collaboration-allowlist/add.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/add.js)_
 
 ## `box collaboration-allowlist:delete ID`
 
@@ -122,7 +122,7 @@ EXAMPLES
   $ box collaboration-allowlist:delete 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/delete.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/delete.js)_
+_See code: [src/commands/collaboration-allowlist/delete.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/delete.js)_
 
 ## `box collaboration-allowlist:exemptions`
 
@@ -159,7 +159,7 @@ EXAMPLES
   $ box collaboration-allowlist:exemptions
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/index.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/exemptions/index.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/index.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/exemptions/index.js)_
 
 ## `box collaboration-allowlist:exemptions:create USERID`
 
@@ -195,7 +195,7 @@ EXAMPLES
   $ box collaboration-allowlist:exemptions:create 11111
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/create.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/exemptions/create.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/create.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/exemptions/create.js)_
 
 ## `box collaboration-allowlist:exemptions:delete ID`
 
@@ -231,7 +231,7 @@ EXAMPLES
   $ box collaboration-allowlist:exemptions:delete 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/delete.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/exemptions/delete.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/delete.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/exemptions/delete.js)_
 
 ## `box collaboration-allowlist:exemptions:get ID`
 
@@ -267,7 +267,7 @@ EXAMPLES
   $ box collaboration-allowlist:exemptions:get 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/exemptions/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/exemptions/get.js)_
+_See code: [src/commands/collaboration-allowlist/exemptions/get.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/exemptions/get.js)_
 
 ## `box collaboration-allowlist:get ID`
 
@@ -303,4 +303,4 @@ EXAMPLES
   $ box collaboration-allowlist:get 12345
 ```
 
-_See code: [src/commands/collaboration-allowlist/get.js](https://github.com/box/boxcli/blob/v4.4.0/src/commands/collaboration-allowlist/get.js)_
+_See code: [src/commands/collaboration-allowlist/get.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/collaboration-allowlist/get.js)_
