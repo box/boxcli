@@ -1,5 +1,6 @@
 /* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
+process.removeAllListeners('warning');
 
 const { Command, Flags } = require('@oclif/core');
 const chalk = require('chalk');
@@ -16,7 +17,7 @@ const csvStringify = util.promisify(csv.stringify);
 const dateTime = require('date-fns');
 const BoxSDK = require('box-node-sdk').default;
 const BoxTSSDK = require('box-node-sdk/sdk-gen');
-const BoxTsErrors = require('box-node-sdk/sdk-gen/box');
+const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
 const utils = require('./util');
