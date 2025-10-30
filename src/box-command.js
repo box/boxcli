@@ -1,6 +1,16 @@
 /* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
-process.removeAllListeners('warning');
+
+const originalEmitWarning = process.emitWarning;
+process.emitWarning = (warning, ...args) => {
+  const message = typeof warning === 'string' ? warning : warning?.message || '';
+
+  if (message.includes('This BoxClient class and the entire manual/legacy SDK package is deprecated and will be removed in the future version.')) {
+	return;
+}
+  // If not the BoxClient deprecation warning, call the original emitWarning function
+  originalEmitWarning.call(process, warning, ...args);
+};
 
 const { Command, Flags } = require('@oclif/core');
 const chalk = require('chalk');
