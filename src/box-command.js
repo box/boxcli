@@ -5,7 +5,7 @@ const originalEmitWarning = process.emitWarning;
 process.emitWarning = (warning, ...args) => {
   const message = typeof warning === 'string' ? warning : warning?.message || '';
 
-  if (message.includes('This BoxClient class and the entire manual/legacy SDK package is deprecated and will be removed in the future version.')) {
+  if (message.includes('DEPRECATION WARNING')) {
 	return;
 }
   // If not the BoxClient deprecation warning, call the original emitWarning function
