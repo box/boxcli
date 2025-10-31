@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Metadata Cascade Policies', () => {
-	describe('metadata-cascade-policies:get', () => {
+describe('Metadata Cascade Policies', function () {
+	describe('metadata-cascade-policies:get', function () {
 		let cascadePolicyID = '84113349-794d-445c-b93c-d8481b223434',
 			fixture = getFixture(
 				'metadata-cascade-policies/get_metadata_cascade_policies_id_200'
@@ -27,9 +27,12 @@ describe('Metadata Cascade Policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should get metadata cascade policy (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should get metadata cascade policy (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -42,12 +45,15 @@ describe('Metadata Cascade Policies', () => {
 				cascadePolicyID,
 				'--token=test',
 			])
-			.it('should get metadata cascade policy (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should get metadata cascade policy (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 	});
 
-	describe('metadata-cascade-policies:delete', () => {
+	describe('metadata-cascade-policies:delete', function () {
 		let cascadePolicyID = '84113349-794d-445c-b93c-d8481b223434';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -63,16 +69,16 @@ describe('Metadata Cascade Policies', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should delete the cascade policy', (ctx) => {
-				assert.equal(ctx.stdout, '');
+			.it('should delete the cascade policy', (context) => {
+				assert.equal(context.stdout, '');
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Successfully deleted policy ${cascadePolicyID}${os.EOL}`
 				);
 			});
 	});
 
-	describe('metadata-cascade-policies', () => {
+	describe('metadata-cascade-policies', function () {
 		let folderID = '22222',
 			enterpriseID = '11111',
 			fixture = getFixture(
@@ -100,8 +106,8 @@ describe('Metadata Cascade Policies', () => {
 			])
 			.it(
 				'should output cascade policies for folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -115,8 +121,8 @@ describe('Metadata Cascade Policies', () => {
 			.command(['metadata-cascade-policies', folderID, '--token=test'])
 			.it(
 				'should output cascade policies for folder (Table Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, tableOutput);
+				(context) => {
+					assert.equal(context.stdout, tableOutput);
 				}
 			);
 
@@ -140,13 +146,13 @@ describe('Metadata Cascade Policies', () => {
 			])
 			.it(
 				'should output only cascade policies for enterprise when --owner-enterprise-id flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 	});
 
-	describe('metadata-cascade-policies:force-apply', () => {
+	describe('metadata-cascade-policies:force-apply', function () {
 		let cascadePolicyID = '84113349-794d-445c-b93c-d8481b223434',
 			resolution = 'overwrite';
 
@@ -169,10 +175,10 @@ describe('Metadata Cascade Policies', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should force apply the cascade policy', (ctx) => {
-				assert.equal(ctx.stdout, '');
+			.it('should force apply the cascade policy', (context) => {
+				assert.equal(context.stdout, '');
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Successfully applied policy ${cascadePolicyID}${os.EOL}`
 				);
 			});

@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('File Requests', () => {
-	describe('file-requests:get', () => {
+describe('File Requests', function () {
+	describe('file-requests:get', function () {
 		let fileRequestId = '123456789',
 			fixture = getFixture('file-requests/get_file_requests_id'),
 			yamlOutput = getFixture('output/file_requests_get_yaml.txt');
@@ -23,8 +23,8 @@ describe('File Requests', () => {
 			])
 			.it(
 				'should get information about an individual file request (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -35,13 +35,13 @@ describe('File Requests', () => {
 			.command(['file-requests:get', fileRequestId, '--token=test'])
 			.it(
 				'should get information about an individual file request (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('file-requests:delete', () => {
+	describe('file-requests:delete', function () {
 		let fileRequestId = '123456789';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -49,9 +49,9 @@ describe('File Requests', () => {
 		)
 			.stderr()
 			.command(['file-requests:delete', fileRequestId, '--token=test'])
-			.it('should delete individual file request', (ctx) => {
+			.it('should delete individual file request', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted file request ${fileRequestId}${os.EOL}`
 				);
 			});
@@ -72,7 +72,7 @@ describe('File Requests', () => {
 	let expiresAt = '2023-01-01T08:00:00+00:00';
 	let status = 'active';
 
-	let addParams = {
+	let addParameters = {
 		title,
 		description,
 		expires_at: expiresAt,
@@ -90,14 +90,14 @@ describe('File Requests', () => {
 		`--status=${status}`,
 	];
 
-	describe('file-requests:update', () => {
+	describe('file-requests:update', function () {
 		let updateFixture = getFixture('file-requests/put_file_requests_id'),
 			yamlOutput = getFixture('output/file_requests_update_yaml.txt');
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.put(`/2.0/file_requests/${fileRequestId}`, {
-					...addParams,
+					...addParameters,
 				})
 				.reply(200, updateFixture)
 		)
@@ -109,14 +109,14 @@ describe('File Requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update a file request (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, updateFixture);
+			.it('should update a file request (JSON Output)', (context) => {
+				assert.equal(context.stdout, updateFixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.put(`/2.0/file_requests/${fileRequestId}`, {
-					...addParams,
+					...addParameters,
 				})
 				.reply(200, updateFixture)
 		)
@@ -127,12 +127,12 @@ describe('File Requests', () => {
 				...addFlags,
 				'--token=test',
 			])
-			.it('should update a file request (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should update a file request (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('file-requests:copy', () => {
+	describe('file-requests:copy', function () {
 		let copyFixture = getFixture(
 				'file-requests/post_file_requests_id_copy'
 			),
@@ -153,8 +153,8 @@ describe('File Requests', () => {
 			])
 			.it(
 				'should copy a file request to a different folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, copyFixture);
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
 				}
 			);
 
@@ -172,8 +172,8 @@ describe('File Requests', () => {
 			])
 			.it(
 				'should copy a file request to a different folder (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -181,7 +181,7 @@ describe('File Requests', () => {
 			api
 				.post(`/2.0/file_requests/${fileRequestId}/copy`, {
 					...requestBody,
-					...addParams,
+					...addParameters,
 				})
 				.reply(201, copyFixture)
 		)
@@ -196,8 +196,8 @@ describe('File Requests', () => {
 			])
 			.it(
 				'should send optional parameters when optional flags are passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, copyFixture);
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
 				}
 			);
 	});

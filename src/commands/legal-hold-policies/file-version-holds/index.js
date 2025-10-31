@@ -2,14 +2,14 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class LegalHoldPoliciesListVersionHoldsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(
 			LegalHoldPoliciesListVersionHoldsCommand
 		);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -34,7 +34,7 @@ LegalHoldPoliciesListVersionHoldsCommand._endpoint =
 
 LegalHoldPoliciesListVersionHoldsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 LegalHoldPoliciesListVersionHoldsCommand.args = {

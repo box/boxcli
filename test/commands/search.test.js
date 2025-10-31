@@ -8,10 +8,10 @@ const {
 	getBulkProgressBar,
 } = require('../helpers/test-helper');
 const leche = require('leche');
-const os = require('os');
-const path = require('path');
+const os = require('node:os');
+const path = require('node:path');
 
-describe('Search', () => {
+describe('Search', function () {
 	let query = 'Test',
 		bulkInputFilePath = path.join(
 			__dirname,
@@ -22,7 +22,7 @@ describe('Search', () => {
 		jsonOutput = getFixture('output/search_json.txt'),
 		jsonOutputLimitedTo5 = getFixture('output/search_json_limit_5.txt');
 
-	describe('search', () => {
+	describe('search', function () {
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.get('/2.0/search')
@@ -41,8 +41,8 @@ describe('Search', () => {
 		)
 			.stdout()
 			.command(['search', query, '--json', '--token=test'])
-			.it('should search with query (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should search with query (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -106,8 +106,8 @@ describe('Search', () => {
 			])
 			.it(
 				'should search for files and folders in your Enterprise with NO QUERY and md-filter-scope, md-filter-template-key, md-filter-json flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -287,20 +287,20 @@ describe('Search', () => {
 					{ include_recent_shared_links: true },
 				],
 			},
-			function (flags, params) {
+			function (flags, parameters) {
 				test.nock(TEST_API_ROOT, (api) =>
 					api
 						.get('/2.0/search')
 						.query({
 							query,
 							limit: 100,
-							...params,
+							...parameters,
 						})
 						.reply(200, fixture)
 						.get('/2.0/search')
 						.query({
 							query,
-							...params,
+							...parameters,
 							limit: 100,
 							offset: 5,
 						})
@@ -316,8 +316,8 @@ describe('Search', () => {
 					])
 					.it(
 						'should send search params when flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			}
@@ -341,9 +341,12 @@ describe('Search', () => {
 		)
 			.stdout()
 			.command(['search', query, '--json', '--all', '--token=test'])
-			.it('should return all results when --all flag provided', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.it(
+				'should return all results when --all flag provided',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -358,8 +361,8 @@ describe('Search', () => {
 			.command(['search', query, '--json', '--limit=5', '--token=test'])
 			.it(
 				'should return limited results when --limit flag provided',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
+				(context) => {
+					assert.equal(context.stdout, jsonOutputLimitedTo5);
 				}
 			);
 
@@ -382,12 +385,13 @@ describe('Search', () => {
 			])
 			.it(
 				'should return same limited results when --max-items flag provided instead of --limit',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
+				(context) => {
+					assert.equal(context.stdout, jsonOutputLimitedTo5);
 				}
 			);
 	});
-	describe('bulk', () => {
+
+	describe('bulk', function () {
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.get('/2.0/search')
@@ -417,19 +421,20 @@ describe('Search', () => {
 			])
 			.it(
 				'should make a successful search call for each entry in a bulk file',
-				(ctx) => {
+				(context) => {
 					let expectedMessage = getBulkProgressBar(2);
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 	});
-	describe('fails', () => {
+
+	describe('fails', function () {
 		test.stderr()
 			.command(['search', query, '--limit=80', '--all', '--token=test'])
-			.it('when both --all and --limit flag provided', (ctx) => {
+			.it('when both --all and --limit flag provided', (context) => {
 				assert.include(
-					ctx.stderr,
+					context.stderr,
 					'--all and --limit(--max-items) flags cannot be used together.'
 				);
 			});

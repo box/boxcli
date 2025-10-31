@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Web Links', () => {
-	describe('web-links:get', () => {
+describe('Web Links', function () {
+	describe('web-links:get', function () {
 		let webLinkId = '6742981',
 			fixture = getFixture('web-links/get_web_links_id'),
 			yamlOutput = getFixture('output/web_links_get_yaml.txt');
@@ -18,8 +18,8 @@ describe('Web Links', () => {
 			.command(['web-links:get', webLinkId, '--json', '--token=test'])
 			.it(
 				'should get information about a web link (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -30,13 +30,13 @@ describe('Web Links', () => {
 			.command(['web-links:get', webLinkId, '--token=test'])
 			.it(
 				'should get information about a web link (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('web-links:create', () => {
+	describe('web-links:create', function () {
 		let url = 'https://www.box.com',
 			parentId = '848123342',
 			name = 'Box Website!',
@@ -65,8 +65,8 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should create a web link with the name flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -85,8 +85,8 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should create a web link with the name flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -106,13 +106,13 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should create a web link with the description flag passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('web-links:update', () => {
+	describe('web-links:update', function () {
 		let webLinkId = '6742981',
 			url = 'https://www.box.com',
 			name = 'Box Website!',
@@ -136,8 +136,8 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should update a web link with url and name flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -156,8 +156,8 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should update a web link with url and name flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -176,13 +176,13 @@ describe('Web Links', () => {
 			])
 			.it(
 				'should update a web link with description flag passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('web-links:move', () => {
+	describe('web-links:move', function () {
 		let webLinkId = '6742981',
 			parentFolderId = '848123342',
 			fixture = getFixture('web-links/put_web_links_id'),
@@ -205,8 +205,8 @@ describe('Web Links', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should move a web link (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should move a web link (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -221,12 +221,12 @@ describe('Web Links', () => {
 				parentFolderId,
 				'--token=test',
 			])
-			.it('should move a web link (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should move a web link (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('web-links:delete', () => {
+	describe('web-links:delete', function () {
 		let webLinkId = '6742981';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -234,9 +234,9 @@ describe('Web Links', () => {
 		)
 			.stderr()
 			.command(['web-links:delete', webLinkId, '--token=test'])
-			.it('should delete a weblink', (ctx) => {
+			.it('should delete a weblink', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted weblink ${webLinkId}${os.EOL}`
 				);
 			});

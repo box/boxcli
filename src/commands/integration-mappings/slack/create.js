@@ -9,14 +9,15 @@ class IntegrationMappingsSlackCreateCommand extends BoxCommand {
 		const { flags, args } = await this.parse(
 			IntegrationMappingsSlackCreateCommand
 		);
-		let body = {};
-		body.box_item = {
-			type: 'folder',
-			id: args.boxItemID,
-		};
-		body.partner_item = {
-			type: 'channel',
-			id: args.channelID,
+		let body = {
+			box_item: {
+				type: 'folder',
+				id: args.boxItemID,
+			},
+			partner_item: {
+				type: 'channel',
+				id: args.channelID,
+			},
 		};
 		if (flags['slack-workspace-id']) {
 			body.partner_item.slack_workspace_id = flags['slack-workspace-id'];

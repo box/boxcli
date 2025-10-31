@@ -30,13 +30,12 @@ class UsersUpdateCommand extends BoxCommand {
 			updates.can_see_managed_users = flags['can-see-managed-users'];
 		}
 		if (flags.hasOwnProperty('notification-email')) {
-			if (flags['notification-email'] === '') {
-				updates.notification_email = null;
-			} else {
-				updates.notification_email = {
-					email: flags['notification-email'],
-				};
-			}
+			updates.notification_email =
+				flags['notification-email'] === ''
+					? null
+					: {
+							email: flags['notification-email'],
+						};
 		}
 		if (flags.role) {
 			updates.role = flags.role;
@@ -54,7 +53,7 @@ class UsersUpdateCommand extends BoxCommand {
 			updates.address = flags.address;
 		}
 		if (flags['disk-space']) {
-			updates.space_amount = parseInt(flags['disk-space'], 10);
+			updates.space_amount = Number.parseInt(flags['disk-space'], 10);
 		}
 		if (flags.status) {
 			updates.status = flags.status;

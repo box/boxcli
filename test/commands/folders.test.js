@@ -3,7 +3,7 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs-extra');
-const path = require('path');
+const path = require('node:path');
 const {
 	getFixture,
 	TEST_API_ROOT,
@@ -13,12 +13,12 @@ const {
 	getDriveLetter,
 	isWin,
 } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 const _ = require('lodash');
 
-describe('Folders', () => {
-	describe('folders:get', () => {
+describe('Folders', function () {
+	describe('folders:get', function () {
 		let folderId = '0',
 			getFolderFixture = getFixture('folders/get_folders_id'),
 			yamlOutput = getFixture('output/folders_get_yaml.txt');
@@ -30,8 +30,8 @@ describe('Folders', () => {
 			.command(['folders:get', folderId, '--json', '--token=test'])
 			.it(
 				'should get information about a folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, getFolderFixture);
+				(context) => {
+					assert.equal(context.stdout, getFolderFixture);
 				}
 			);
 
@@ -42,13 +42,13 @@ describe('Folders', () => {
 			.command(['folders:get', folderId, '--token=test'])
 			.it(
 				'should get information about a folder (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('folders:copy', () => {
+	describe('folders:copy', function () {
 		let folderId = '0',
 			parentFolderId = '987654321',
 			name = 'Rename on copy.txt',
@@ -76,8 +76,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should copy a folder to a different folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, copyFixture);
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
 				}
 			);
 
@@ -90,8 +90,8 @@ describe('Folders', () => {
 			.command(['folders:copy', folderId, parentFolderId, '--token=test'])
 			.it(
 				'should copy a folder to a different folder (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -110,9 +110,9 @@ describe('Folders', () => {
 			])
 			.it(
 				'should copy a folder to a different folder (ID Output)',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(copyFixture).id}${os.EOL}`
 					);
 				}
@@ -137,13 +137,13 @@ describe('Folders', () => {
 			])
 			.it(
 				'should set optional name param when --name flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, copyFixture);
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
 				}
 			);
 	});
 
-	describe('folders:move', () => {
+	describe('folders:move', function () {
 		let folderId = '0',
 			parentFolderId = '987654321',
 			ownedById = '1234567890',
@@ -179,8 +179,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should move a folder to a different folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, moveFixture);
+				(context) => {
+					assert.equal(context.stdout, moveFixture);
 				}
 			);
 
@@ -193,8 +193,8 @@ describe('Folders', () => {
 			.command(['folders:move', folderId, parentFolderId, '--token=test'])
 			.it(
 				'should move a folder to a different folder (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -224,10 +224,10 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send If-Match header and throw error when etag flag is passed but does not match',
-				(ctx) => {
-					let msg =
+				(context) => {
+					let message =
 						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-					assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+					assert.equal(context.stderr, `${message}${os.EOL}`);
 				}
 			);
 
@@ -247,13 +247,13 @@ describe('Folders', () => {
 			])
 			.it(
 				'should move a folder to a different folder and set the owner',
-				(ctx) => {
-					assert.equal(ctx.stdout, moveFixture);
+				(context) => {
+					assert.equal(context.stdout, moveFixture);
 				}
 			);
 	});
 
-	describe('folders:delete', () => {
+	describe('folders:delete', function () {
 		let folderId = '0';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -261,8 +261,11 @@ describe('Folders', () => {
 		)
 			.stderr()
 			.command(['folders:delete', folderId, '--token=test'])
-			.it('should delete a folder', (ctx) => {
-				assert.equal(ctx.stderr, `Deleted folder ${folderId}${os.EOL}`);
+			.it('should delete a folder', (context) => {
+				assert.equal(
+					context.stderr,
+					`Deleted folder ${folderId}${os.EOL}`
+				);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -280,9 +283,9 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send recursive param when --recursive flag is passed',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Deleted folder ${folderId}${os.EOL}`
 					);
 				}
@@ -299,9 +302,9 @@ describe('Folders', () => {
 			.command(['folders:delete', folderId, '-f', '--token=test'])
 			.it(
 				'should delete a folder permanently when -f flag is passed',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Deleted folder ${folderId} permanently${os.EOL}`
 					);
 				}
@@ -332,10 +335,10 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send If-Match header and throw error when etag flag is passed but does not match',
-				(ctx) => {
-					let msg =
+				(context) => {
+					let message =
 						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-					assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+					assert.equal(context.stderr, `${message}${os.EOL}`);
 				}
 			);
 
@@ -350,9 +353,9 @@ describe('Folders', () => {
 			.command(['folders:delete', folderId, '-f', '--token=test'])
 			.it(
 				'should force delete successfully when user does not have trash enabled',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Deleted folder ${folderId} permanently${os.EOL}`
 					);
 				}
@@ -362,7 +365,8 @@ describe('Folders', () => {
 	leche.withData(
 		['folders:collaborations', 'folders:collaborations:list'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					getCollaborationFixture = getFixture(
 						'folders/get_folders_id_collaborations'
@@ -380,15 +384,15 @@ describe('Folders', () => {
 					.command([command, folderId, '--json', '--token=test'])
 					.it(
 						'should list all collaborations on a Box item (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			});
 		}
 	);
 
-	describe('folders:collaborations:add', () => {
+	describe('folders:collaborations:add', function () {
 		let folderId = '0',
 			addCollaborationFixture = getFixture(
 				'folders/post_collaborations_user'
@@ -425,8 +429,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should create a collaboration for a Box item with the previewer and login flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, addCollaborationFixture);
+				(context) => {
+					assert.equal(context.stdout, addCollaborationFixture);
 				}
 			);
 
@@ -445,8 +449,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should create a collaboration for a Box item with the previewer and login flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -466,9 +470,9 @@ describe('Folders', () => {
 			])
 			.it(
 				'should output only the ID of the created collaboration when the --id-only flag is passed',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(addCollaborationFixture).id}${os.EOL}`
 					);
 				}
@@ -488,12 +492,12 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should work with args in non-standard order', (ctx) => {
-				assert.equal(ctx.stdout, addCollaborationFixture);
+			.it('should work with args in non-standard order', (context) => {
+				assert.equal(context.stdout, addCollaborationFixture);
 			});
 	});
 
-	describe('folders:rename', () => {
+	describe('folders:rename', function () {
 		let folderId = '0',
 			description = 'test description',
 			renameFixture = getFixture('folders/put_folders_id'),
@@ -516,8 +520,8 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should rename a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, renameFixture);
+			.it('should rename a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, renameFixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -527,8 +531,8 @@ describe('Folders', () => {
 		)
 			.stdout()
 			.command(['folders:rename', folderId, 'test', '--token=test'])
-			.it('should rename a folder (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should rename a folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -550,8 +554,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send the description param when the --description flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, renameFixture);
+				(context) => {
+					assert.equal(context.stdout, renameFixture);
 				}
 			);
 
@@ -585,15 +589,15 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send If-Match header and throw error when etag flag is passed but does not match',
-				(ctx) => {
-					let msg =
+				(context) => {
+					let message =
 						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-					assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+					assert.equal(context.stderr, `${message}${os.EOL}`);
 				}
 			);
 	});
 
-	describe('folders:metadata:get', () => {
+	describe('folders:metadata:get', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
@@ -619,8 +623,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should get information about a metadata object (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, getMetadataFixture);
+				(context) => {
+					assert.equal(context.stdout, getMetadataFixture);
 				}
 			);
 
@@ -640,8 +644,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should get information about a metadata object (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
@@ -649,7 +653,8 @@ describe('Folders', () => {
 	leche.withData(
 		['folders:metadata', 'folders:metadata:get-all'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					getAllMetadataFixture = getFixture(
 						'folders/get_folders_id_metadata'
@@ -667,8 +672,8 @@ describe('Folders', () => {
 					.command([command, folderId, '--json', '--token=test'])
 					.it(
 						'should get all metadata on a Box item (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			});
@@ -678,7 +683,8 @@ describe('Folders', () => {
 	leche.withData(
 		['folders:metadata:remove', 'folders:metadata:delete'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					metadataScope = 'enterprise',
 					metadataTemplate = 'testTemplate';
@@ -697,9 +703,9 @@ describe('Folders', () => {
 						`--template-key=${metadataTemplate}`,
 						'--token=test',
 					])
-					.it('should delete metadata from an item', (ctx) => {
+					.it('should delete metadata from an item', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`Successfully deleted metadata ${metadataTemplate}${os.EOL}`
 						);
 					});
@@ -707,7 +713,7 @@ describe('Folders', () => {
 		}
 	);
 
-	describe('folders:metadata:update', () => {
+	describe('folders:metadata:update', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
@@ -790,8 +796,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should update metadata object with all op flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, getMetadataFixture);
+				(context) => {
+					assert.equal(context.stdout, getMetadataFixture);
 				}
 			);
 
@@ -821,8 +827,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should update metadata object with all flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
@@ -830,7 +836,8 @@ describe('Folders', () => {
 	leche.withData(
 		['folders:metadata:add', 'folders:metadata:create'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					metadataScope = 'enterprise',
 					metadataTemplate = 'testTemplate',
@@ -868,8 +875,8 @@ describe('Folders', () => {
 					])
 					.it(
 						'should add metadata object with key/value pairs passed as a flag (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, addMetadataFixture);
+						(context) => {
+							assert.equal(context.stdout, addMetadataFixture);
 						}
 					);
 
@@ -893,15 +900,15 @@ describe('Folders', () => {
 					])
 					.it(
 						'should add metadata object with key/value pairs passed as a flag (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 			});
 		}
 	);
 
-	describe('folders:metadata:set', () => {
+	describe('folders:metadata:set', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
@@ -937,8 +944,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should add metadata object with key/value pairs passed as a flag (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, addMetadataFixture);
+				(context) => {
+					assert.equal(context.stdout, addMetadataFixture);
 				}
 			);
 
@@ -962,8 +969,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should add metadata object with key/value pairs passed as a flag (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -1009,8 +1016,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should update metadata object with key/value pairs passed as a flag when creation conflicts',
-				(ctx) => {
-					assert.equal(ctx.stdout, addMetadataFixture);
+				(context) => {
+					assert.equal(context.stdout, addMetadataFixture);
 				}
 			);
 	});
@@ -1022,7 +1029,8 @@ describe('Folders', () => {
 			'folders:shared-links:update',
 		],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					vanityName = 'my-custom-name-123',
 					createSharedLinkFixture = getFixture(
@@ -1062,8 +1070,8 @@ describe('Folders', () => {
 					])
 					.it(
 						'should create a shared link for a Box item with access, password and can-download flags passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 
@@ -1087,8 +1095,8 @@ describe('Folders', () => {
 					])
 					.it(
 						'should create a shared link for a Box item with access, password and can-download flags passed (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -1112,8 +1120,8 @@ describe('Folders', () => {
 					])
 					.it(
 						'should send unshared_at param when --unshared-at flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			});
@@ -1123,7 +1131,8 @@ describe('Folders', () => {
 	leche.withData(
 		['folders:unshare', 'folders:shared-links:delete'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let folderId = '0',
 					getFolderFixture = getFixture('folders/get_folders_id');
 
@@ -1145,19 +1154,23 @@ describe('Folders', () => {
 						'--no-color',
 						'--token=test',
 					])
-					.it('should delete a shared link for a folder', (ctx) => {
-						assert.equal(ctx.stdout, '');
-						assert.equal(
-							ctx.stderr,
-							`Removed shared link from folder "All Files"${os.EOL}`
-						);
-					});
+					.it(
+						'should delete a shared link for a folder',
+						(context) => {
+							assert.equal(context.stdout, '');
+							assert.equal(
+								context.stderr,
+								`Removed shared link from folder "All Files"${os.EOL}`
+							);
+						}
+					);
 			});
 		}
 	);
 
 	leche.withData(['folders:items', 'folders:list-items'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let folderId = '0',
 				sort = 'date',
 				direction = 'DESC',
@@ -1180,9 +1193,12 @@ describe('Folders', () => {
 			)
 				.stdout()
 				.command([command, folderId, '--json', '--token=test'])
-				.it('should list items in a folder (JSON Output)', (ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.it(
+					'should list items in a folder (JSON Output)',
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
+					}
+				);
 
 			test.nock(TEST_API_ROOT, (api) =>
 				api
@@ -1215,8 +1231,8 @@ describe('Folders', () => {
 				])
 				.it(
 					'should send sorting params when --sort and --direction flags are passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 
@@ -1252,7 +1268,7 @@ describe('Folders', () => {
 		});
 	});
 
-	describe('folders:create', () => {
+	describe('folders:create', function () {
 		let parentFolderId = '0',
 			name = 'New Folder',
 			fixture = getFixture('folders/post_folders'),
@@ -1276,8 +1292,8 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a new folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a new folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -1285,8 +1301,8 @@ describe('Folders', () => {
 		)
 			.stdout()
 			.command(['folders:create', parentFolderId, name, '--token=test'])
-			.it('should create a new folder (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create a new folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -1302,9 +1318,9 @@ describe('Folders', () => {
 			])
 			.it(
 				'should create a new folder with the id-only flagged passed (ID Output)',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(fixture).id}${os.EOL}`
 					);
 				}
@@ -1344,7 +1360,7 @@ describe('Folders', () => {
 			])
 			.it(
 				'should catch and report errors with detailed context info',
-				(ctx) => {
+				(context) => {
 					let expectedErrorOutput = `Unexpected API Response [409 Conflict | 1wne91fxf8871ide] item_name_in_use - Item with the same name already exists${os.EOL}`;
 					expectedErrorOutput += `Conflicts:${os.EOL}`;
 					expectedErrorOutput += `    -${os.EOL}`;
@@ -1352,13 +1368,13 @@ describe('Folders', () => {
 					expectedErrorOutput += `        ID: '12345'${os.EOL}`;
 					expectedErrorOutput += `        Name: New Folder${os.EOL}`;
 
-					assert.equal(ctx.stdout, '');
-					assert.equal(ctx.stderr, expectedErrorOutput);
+					assert.equal(context.stdout, '');
+					assert.equal(context.stderr, expectedErrorOutput);
 				}
 			);
 	});
 
-	describe('folders:update', () => {
+	describe('folders:update', function () {
 		let folderId = '0',
 			name = 'New Folder',
 			description = 'New \ndescription',
@@ -1387,8 +1403,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should update a folder with name and synced flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -1407,8 +1423,8 @@ describe('Folders', () => {
 			])
 			.it(
 				'should update a folder with name and synced flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -1432,9 +1448,12 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send optional params when flags are passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -1463,10 +1482,10 @@ describe('Folders', () => {
 			])
 			.it(
 				'should send If-Match header and throw error when etag flag is passed but does not match',
-				(ctx) => {
-					let msg =
+				(context) => {
+					let message =
 						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-					assert.equal(ctx.stderr, `${msg}${os.EOL}`);
+					assert.equal(context.stderr, `${message}${os.EOL}`);
 				}
 			);
 
@@ -1525,7 +1544,7 @@ describe('Folders', () => {
 		);
 	});
 
-	describe('folders:upload', () => {
+	describe('folders:upload', function () {
 		let parentFolderId = '1234',
 			name1 = 'test_folder',
 			name2 = 'nested_folder',
@@ -1572,7 +1591,7 @@ describe('Folders', () => {
 								'name',
 								testFileName
 							);
-						} catch (error) {
+						} catch {
 							return false;
 						}
 						return true;
@@ -1587,7 +1606,7 @@ describe('Folders', () => {
 								'name',
 								testFileName
 							);
-						} catch (error) {
+						} catch {
 							return false;
 						}
 						return true;
@@ -1605,8 +1624,8 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should upload a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, getFolderFixture);
+			.it('should upload a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, getFolderFixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -1627,7 +1646,7 @@ describe('Folders', () => {
 								'name',
 								testFileName
 							);
-						} catch (error) {
+						} catch {
 							return false;
 						}
 						return true;
@@ -1642,7 +1661,7 @@ describe('Folders', () => {
 								'name',
 								testFileName
 							);
-						} catch (error) {
+						} catch {
 							return false;
 						}
 						return true;
@@ -1659,12 +1678,12 @@ describe('Folders', () => {
 				`--parent-folder=${parentFolderId}`,
 				'--token=test',
 			])
-			.it('should upload a folder (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should upload a folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('folders:download', () => {
+	describe('folders:download', function () {
 		let downloadPath = path.join(
 				__dirname,
 				'../fixtures/folders/test_folder_download'
@@ -1696,20 +1715,17 @@ describe('Folders', () => {
 		};
 
 		function getDirectoryContents(folderPath) {
-			/* eslint-disable no-sync */
-			let obj = {};
+			let object = {};
 			let folderContents = fs.readdirSync(folderPath);
-			folderContents.forEach((item) => {
+			for (const item of folderContents) {
 				let itemPath = path.join(folderPath, item);
 				let stat = fs.statSync(itemPath);
-				if (stat.isDirectory()) {
-					obj[item] = getDirectoryContents(itemPath);
-				} else {
-					obj[item] = fs.readFileSync(itemPath, 'utf8');
-				}
-			});
-			/* eslint-enable no-sync */
-			return obj;
+				object[item] = stat.isDirectory()
+					? getDirectoryContents(itemPath)
+					: fs.readFileSync(itemPath, 'utf8');
+			}
+
+			return object;
 		}
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -1747,13 +1763,13 @@ describe('Folders', () => {
 			])
 			.it(
 				'should download folder to specified path on disk when called with destination flag',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(downloadPath, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(downloadPath);
 
 					assert.deepEqual(actualContents, expectedContents);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -1774,15 +1790,15 @@ describe('Folders', () => {
 				})
 				.reply(200, largeFolderPage2Fixture);
 
-			for (let i = 1; i <= 200; i++) {
-				api.get(`/2.0/files/${i}/content`).reply(302, '', {
-					Location: `${TEST_DOWNLOAD_ROOT}/${i}`,
+			for (let index = 1; index <= 200; index++) {
+				api.get(`/2.0/files/${index}/content`).reply(302, '', {
+					Location: `${TEST_DOWNLOAD_ROOT}/${index}`,
 				});
 			}
 		})
 			.nock(TEST_DOWNLOAD_ROOT, (api) => {
-				for (let i = 1; i <= 200; i++) {
-					api.get(`/${i}`).reply(200, `File ${i} contents`);
+				for (let index = 1; index <= 200; index++) {
+					api.get(`/${index}`).reply(200, `File ${index} contents`);
 				}
 			})
 			.stdout()
@@ -1795,21 +1811,21 @@ describe('Folders', () => {
 			])
 			.it(
 				'should correctly download contents when Box folder has many items',
-				async (ctx) => {
+				async (context) => {
 					let manyFilesExpectedContents = {};
-					for (let i = 1; i <= 200; i++) {
-						manyFilesExpectedContents[`file ${i}.txt`] =
-							`File ${i} contents`;
+					for (let index = 1; index <= 200; index++) {
+						manyFilesExpectedContents[`file ${index}.txt`] =
+							`File ${index} contents`;
 					}
 					let folderPath = path.join(downloadPath, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(downloadPath);
 
 					assert.deepEqual(actualContents, manyFilesExpectedContents);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			)
-			.timeout(60000);
+			.timeout(60_000);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -1838,7 +1854,7 @@ describe('Folders', () => {
 			])
 			.it(
 				'should only download files in top-level folder when --depth=0 flag is passed',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(downloadPath, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(downloadPath);
@@ -1847,7 +1863,7 @@ describe('Folders', () => {
 						actualContents,
 						_.omit(expectedContents, 'subfolder')
 					);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -1887,7 +1903,7 @@ describe('Folders', () => {
 			])
 			.it(
 				'should download folder to zip file when --zip flag is passed',
-				async (ctx) => {
+				async (context) => {
 					// Find zip file in directory
 					let filename = (await fs.readdir(downloadPath)).find(
 						(f) =>
@@ -1899,7 +1915,7 @@ describe('Folders', () => {
 					// @TODO(2018-10-30): Verify contents of zip file
 
 					assert.ok(filename, 'File shoudl have been found');
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -1915,13 +1931,13 @@ describe('Folders', () => {
 			])
 			.it(
 				'should output error when destination directory does not exist',
-				(ctx) => {
+				(context) => {
 					const filePath = isWin()
-						? `${getDriveLetter()}\\path\\really\\should\\not\\exist`
+						? String.raw`${getDriveLetter()}\path\really\should\not\exist`
 						: '/path/really/should/not/exist';
 
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`The ${filePath} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
 					);
 				}
@@ -1962,14 +1978,17 @@ describe('Folders', () => {
 				`--destination=${destination}`,
 				'--token=test',
 			])
-			.it('should download a folder a non-existent path', async (ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
+			.it(
+				'should download a folder a non-existent path',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
 
-				assert.deepEqual(actualContents, expectedContents);
-				assert.equal(ctx.stdout, '');
-			});
+					assert.deepEqual(actualContents, expectedContents);
+					assert.equal(context.stdout, '');
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -2001,7 +2020,7 @@ describe('Folders', () => {
 			.command(['folders:download', folderID, '--token=test'])
 			.it(
 				'should download a folder to a default destination',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(
 						DEFAULT_DOWNLOAD_PATH,
 						folderName
@@ -2010,7 +2029,7 @@ describe('Folders', () => {
 					await fs.remove(folderPath);
 
 					assert.deepEqual(actualContents, expectedContents);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -2040,7 +2059,6 @@ describe('Folders', () => {
 					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -2051,7 +2069,6 @@ describe('Folders', () => {
 					path.join(folderPath, 'file 1.txt'),
 					'test123'
 				);
-				/* eslint-enable no-sync */
 			})
 			.stdout()
 			.stderr()
@@ -2064,13 +2081,13 @@ describe('Folders', () => {
 			])
 			.it(
 				'should download and overwrite existing folder',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(destination, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(destination);
 
 					assert.deepEqual(actualContents, expectedContents);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -2096,7 +2113,6 @@ describe('Folders', () => {
 					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -2107,7 +2123,6 @@ describe('Folders', () => {
 					path.join(folderPath, 'file 1.txt'),
 					'test123'
 				);
-				/* eslint-enable no-sync */
 			})
 			.stdout()
 			.stderr()
@@ -2121,12 +2136,12 @@ describe('Folders', () => {
 			])
 			.it(
 				'should not overwrite existing folder when --no-overwrite flag is passed',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(destination, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(destination);
 					assert.equal(actualContents['file 1.txt'], 'test123');
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -2141,7 +2156,6 @@ describe('Folders', () => {
 				api.get('/55555').reply(200, expectedContents['file 2.txt'])
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -2153,7 +2167,6 @@ describe('Folders', () => {
 					path.join(folderPath, 'file 1.txt'),
 					'test123'
 				);
-				/* eslint-enable no-sync */
 			})
 			.stdout()
 			.stderr()
@@ -2168,7 +2181,7 @@ describe('Folders', () => {
 			])
 			.it(
 				'should not overwrite existing file and folder in root folder when --no-overwrite and --depth=0 flag is passed',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(destination, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(destination);
@@ -2177,7 +2190,7 @@ describe('Folders', () => {
 						Object.keys(actualContents.subfolder).length,
 						0
 					);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 
@@ -2203,7 +2216,6 @@ describe('Folders', () => {
 					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -2215,7 +2227,6 @@ describe('Folders', () => {
 					path.join(folderPath, 'file 1.txt'),
 					'test123'
 				);
-				/* eslint-enable no-sync */
 			})
 			.stdout()
 			.stderr()
@@ -2230,7 +2241,7 @@ describe('Folders', () => {
 			])
 			.it(
 				'should not overwrite existing file and folder in folder recursively when --no-overwrite and --depth=10 flag is passed',
-				async (ctx) => {
+				async (context) => {
 					let folderPath = path.join(destination, folderName);
 					let actualContents = getDirectoryContents(folderPath);
 					await fs.remove(destination);
@@ -2239,12 +2250,12 @@ describe('Folders', () => {
 						Object.keys(actualContents.subfolder).length,
 						1
 					);
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 				}
 			);
 	});
 
-	describe('folders:locks', () => {
+	describe('folders:locks', function () {
 		let folderId = '0',
 			fixture = getFixture('folders/get_folder_locks'),
 			jsonOutput = getFixture('output/folders_locks_list_json.txt');
@@ -2257,12 +2268,15 @@ describe('Folders', () => {
 		)
 			.stdout()
 			.command(['folders:locks', folderId, '--json', '--token=test'])
-			.it('should list all locks on a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.it(
+				'should list all locks on a folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 	});
 
-	describe('folders:locks:create', () => {
+	describe('folders:locks:create', function () {
 		let folderId = '22222',
 			fixture = getFixture('folders/post_folder_locks');
 
@@ -2287,12 +2301,12 @@ describe('Folders', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a lock on a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a lock on a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('folders:locks:delete', () => {
+	describe('folders:locks:delete', function () {
 		let folderLockId = '0';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -2300,9 +2314,9 @@ describe('Folders', () => {
 		)
 			.stderr()
 			.command(['folders:locks:delete', folderLockId, '--token=test'])
-			.it('should delete a lock on folder', (ctx) => {
+			.it('should delete a lock on folder', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Delete folder lock with ID ${folderLockId}${os.EOL}`
 				);
 			});

@@ -4,10 +4,10 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Trash', () => {
-	describe('trash:delete', () => {
+describe('Trash', function () {
+	describe('trash:delete', function () {
 		let itemId = '1234';
 
 		leche.withData(
@@ -22,9 +22,9 @@ describe('Trash', () => {
 				)
 					.stderr()
 					.command(['trash:delete', itemType, itemId, '--token=test'])
-					.it('should permanently delete an item', (ctx) => {
+					.it('should permanently delete an item', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`Deleted item ${itemId}${os.EOL}`
 						);
 					});
@@ -33,7 +33,8 @@ describe('Trash', () => {
 	});
 
 	leche.withData(['trash', 'trash:list'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let fixture = getFixture('trash/get_trashed_items_page_1'),
 				fixture2 = getFixture('trash/get_trashed_items_page_2'),
 				jsonOutput = getFixture('output/trash_list_json.txt');
@@ -53,9 +54,12 @@ describe('Trash', () => {
 			)
 				.stdout()
 				.command([command, '--json', '--token=test'])
-				.it('should list all items in trash (JSON Output)', (ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.it(
+					'should list all items in trash (JSON Output)',
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
+					}
+				);
 
 			test.nock(TEST_API_ROOT, (api) =>
 				api
@@ -79,7 +83,7 @@ describe('Trash', () => {
 		});
 	});
 
-	describe('trash:get', () => {
+	describe('trash:get', function () {
 		let folderFixture = getFixture('trash/get_folders_id_trash'),
 			fileFixture = getFixture('trash/get_files_id_trash'),
 			webLinkFixture = getFixture('trash/get_folders_id_trash');
@@ -92,9 +96,9 @@ describe('Trash', () => {
 			.command(['trash:get', 'folder', itemId, '--json', '--token=test'])
 			.it(
 				'should get information on a folder in trash (JSON Output)',
-				(ctx) => {
+				(context) => {
 					let fixtureJSON = JSON.parse(folderFixture);
-					let outputJSON = JSON.parse(ctx.stdout);
+					let outputJSON = JSON.parse(context.stdout);
 					assert.deepEqual(outputJSON, fixtureJSON);
 				}
 			);
@@ -106,9 +110,9 @@ describe('Trash', () => {
 			.command(['trash:get', 'file', itemId, '--json', '--token=test'])
 			.it(
 				'should get information on a file in trash (JSON Output)',
-				(ctx) => {
+				(context) => {
 					let fixtureJSON = JSON.parse(fileFixture);
-					let outputJSON = JSON.parse(ctx.stdout);
+					let outputJSON = JSON.parse(context.stdout);
 					assert.deepEqual(outputJSON, fixtureJSON);
 				}
 			);
@@ -126,15 +130,15 @@ describe('Trash', () => {
 			])
 			.it(
 				'should get information on a web link in trash (JSON Output)',
-				(ctx) => {
+				(context) => {
 					let fixtureJSON = JSON.parse(webLinkFixture);
-					let outputJSON = JSON.parse(ctx.stdout);
+					let outputJSON = JSON.parse(context.stdout);
 					assert.deepEqual(outputJSON, fixtureJSON);
 				}
 			);
 	});
 
-	describe('trash:restore', () => {
+	describe('trash:restore', function () {
 		let folderFixture = getFixture('trash/post_folders_id'),
 			fileFixture = getFixture('trash/post_files_id'),
 			webLinkFixture = getFixture('trash/post_web_links_id');
@@ -162,11 +166,14 @@ describe('Trash', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should restore a folder from trash (JSON Output)', (ctx) => {
-				let fixtureJSON = JSON.parse(folderFixture);
-				let outputJSON = JSON.parse(ctx.stdout);
-				assert.deepEqual(outputJSON, fixtureJSON);
-			});
+			.it(
+				'should restore a folder from trash (JSON Output)',
+				(context) => {
+					let fixtureJSON = JSON.parse(folderFixture);
+					let outputJSON = JSON.parse(context.stdout);
+					assert.deepEqual(outputJSON, fixtureJSON);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -183,9 +190,9 @@ describe('Trash', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should restore a file from trash (JSON Output)', (ctx) => {
+			.it('should restore a file from trash (JSON Output)', (context) => {
 				let fixtureJSON = JSON.parse(fileFixture);
-				let outputJSON = JSON.parse(ctx.stdout);
+				let outputJSON = JSON.parse(context.stdout);
 				assert.deepEqual(outputJSON, fixtureJSON);
 			});
 
@@ -204,10 +211,13 @@ describe('Trash', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should restore a web link from trash (JSON Output)', (ctx) => {
-				let fixtureJSON = JSON.parse(webLinkFixture);
-				let outputJSON = JSON.parse(ctx.stdout);
-				assert.deepEqual(outputJSON, fixtureJSON);
-			});
+			.it(
+				'should restore a web link from trash (JSON Output)',
+				(context) => {
+					let fixtureJSON = JSON.parse(webLinkFixture);
+					let outputJSON = JSON.parse(context.stdout);
+					assert.deepEqual(outputJSON, fixtureJSON);
+				}
+			);
 	});
 });

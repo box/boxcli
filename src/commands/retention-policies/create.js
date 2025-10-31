@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class RetentionPoliciesCreateCommand extends BoxCommand {
 	async run() {
@@ -98,7 +98,7 @@ RetentionPoliciesCreateCommand.flags = {
 	description: Flags.string({
 		required: false,
 		description: 'The additional text description of the retention policy',
-		parse: utils.unescapeSlashes,
+		parse: utilities.unescapeSlashes,
 	}),
 	'custom-notification-recipient': Flags.string({
 		description:

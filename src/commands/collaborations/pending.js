@@ -1,13 +1,13 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class CollaborationsGetPendingCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(CollaborationsGetPendingCommand);
-		let options = PaginationUtils.handlePagination(flags);
-		let params = {
+		let options = PaginationUtilities.handlePagination(flags);
+		let parameters = {
 			qs: {
 				status: 'pending',
 				limit: options.limit,
@@ -15,13 +15,13 @@ class CollaborationsGetPendingCommand extends BoxCommand {
 		};
 
 		if (flags.fields) {
-			params.qs.fields = flags.fields;
+			parameters.qs.fields = flags.fields;
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
 		let collaborations = await this.client.wrapWithDefaultHandler(
 			this.client.get
-		)('/collaborations', params);
+		)('/collaborations', parameters);
 		await this.output(collaborations);
 	}
 }
@@ -35,7 +35,7 @@ CollaborationsGetPendingCommand._endpoint = 'get_collaborations pending';
 
 CollaborationsGetPendingCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 module.exports = CollaborationsGetPendingCommand;

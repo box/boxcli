@@ -4,13 +4,13 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const jwt = require('jsonwebtoken');
 const { TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Tokens', () => {
+describe('Tokens', function () {
 	const TEST_ACCESS_TOKEN = 'alksudiquwdajnsfisdfgsdfg';
 
 	// @TODO(2018-12-13): Un-skip when tests can have a config set up
-	describe.skip('tokens:get', () => {
+	describe.skip('tokens:get', function () {
 		const userID = '98764';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -42,8 +42,11 @@ describe('Tokens', () => {
 			.command(['tokens:get'])
 			.it(
 				'should output token for service account when called without flags',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${TEST_ACCESS_TOKEN}${os.EOL}`);
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${TEST_ACCESS_TOKEN}${os.EOL}`
+					);
 				}
 			);
 
@@ -77,14 +80,17 @@ describe('Tokens', () => {
 			.command(['tokens:get', `--user-id=${userID}`])
 			.it(
 				'should output token for user when called with --user-id flag',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${TEST_ACCESS_TOKEN}${os.EOL}`);
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${TEST_ACCESS_TOKEN}${os.EOL}`
+					);
 				}
 			);
 	});
 
 	// @TODO(2018-12-13): Un-skip when tests can have a config set up
-	describe.skip('tokens:revoke', () => {
+	describe.skip('tokens:revoke', function () {
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.post('/oauth2/revoke', (body) => {
@@ -96,8 +102,8 @@ describe('Tokens', () => {
 			.stdout()
 			.stderr()
 			.command(['tokens:revoke', TEST_ACCESS_TOKEN])
-			.it('should revoke token when called', (ctx) => {
-				assert.equal(ctx.stderr, `Token revoked.${os.EOL}`);
+			.it('should revoke token when called', (context) => {
+				assert.equal(context.stderr, `Token revoked.${os.EOL}`);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -116,9 +122,9 @@ describe('Tokens', () => {
 			.command(['tokens:revoke', TEST_ACCESS_TOKEN])
 			.it(
 				'should output error message when token revocation fails',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Error revoking token!  The supplied token is invalid${os.EOL}`
 					);
 				}
@@ -126,7 +132,7 @@ describe('Tokens', () => {
 	});
 
 	// @TODO(2018-12-13): Un-skip when tests can have a config set up
-	describe.skip('tokens:exchange', () => {
+	describe.skip('tokens:exchange', function () {
 		let scopes = ['item_preview', 'user_view'];
 
 		const itemID = '12345';
@@ -176,8 +182,8 @@ describe('Tokens', () => {
 			)
 			.stdout()
 			.command(['tokens:exchange', scopes.join(',')])
-			.it('should exchange token for one with lower scope', (ctx) => {
-				assert.equal(ctx.stdout, `${downscopedToken}${os.EOL}`);
+			.it('should exchange token for one with lower scope', (context) => {
+				assert.equal(context.stdout, `${downscopedToken}${os.EOL}`);
 			});
 
 		test.skip()
@@ -227,8 +233,8 @@ describe('Tokens', () => {
 			])
 			.it(
 				'should restrict downscoped token to file resource when passed file ID',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${downscopedToken}${os.EOL}`);
+				(context) => {
+					assert.equal(context.stdout, `${downscopedToken}${os.EOL}`);
 				}
 			);
 
@@ -279,8 +285,8 @@ describe('Tokens', () => {
 			])
 			.it(
 				'should restrict downscoped token to folder resource when passed folder ID',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${downscopedToken}${os.EOL}`);
+				(context) => {
+					assert.equal(context.stdout, `${downscopedToken}${os.EOL}`);
 				}
 			);
 
@@ -331,8 +337,8 @@ describe('Tokens', () => {
 			])
 			.it(
 				'should return token for user when passed --user-id flag',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${downscopedToken}${os.EOL}`);
+				(context) => {
+					assert.equal(context.stdout, `${downscopedToken}${os.EOL}`);
 				}
 			);
 
@@ -355,8 +361,8 @@ describe('Tokens', () => {
 			])
 			.it(
 				'should exchange specified token when --token flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, `${downscopedToken}\n`);
+				(context) => {
+					assert.equal(context.stdout, `${downscopedToken}\n`);
 				}
 			);
 	});

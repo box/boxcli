@@ -1,8 +1,8 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+const fs = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
 
 const TEST_API_ROOT = 'https://api.box.com';
 const TEST_UPLOAD_ROOT = 'https://upload.box.com/api';
@@ -20,24 +20,21 @@ function getFixture(fixture) {
 	if (!path.extname(fixture)) {
 		fixture += '.json';
 	}
-	/* eslint-disable no-sync */
+
 	const content = fs.readFileSync(
 		path.join(__dirname, '..', `fixtures/${fixture}`),
 		'utf8'
 	);
 
 	if (isWin()) {
-		/* eslint-disable require-unicode-regexp */
 		let transformedContent = fixture.endsWith('table.txt')
-			? content.replace(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '')
-			: content.replace(/\r/g, '');
-		/* eslint-disable require-unicode-regexp */
+			? content.replaceAll(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '')
+			: content.replaceAll('\r', '');
 
 		return transformedContent.trimEnd().concat(os.EOL);
 	}
 
 	return content;
-	/* eslint-enable no-sync */
 }
 
 function getProgressBar(message) {
@@ -62,7 +59,7 @@ function getDriveLetter() {
 
 function toUrlPath(filePath) {
 	return isWin()
-		? `/${filePath.replace(':', '').replace(/\\/g, '/')}`
+		? `/${filePath.replace(':', '').replaceAll('\\', '/')}`
 		: filePath;
 }
 

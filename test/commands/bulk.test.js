@@ -3,16 +3,16 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const fs = require('fs-extra');
-const path = require('path');
+const path = require('node:path');
 const {
 	getFixture,
 	TEST_API_ROOT,
 	getBulkProgressBar,
 } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const debug = require('debug');
 
-describe('Bulk', () => {
+describe('Bulk', function () {
 	let boxItemId = '33333',
 		login = 'steve.jobs@example.com',
 		addCollaborationFixture1 = getFixture(
@@ -26,7 +26,7 @@ describe('Bulk', () => {
 		),
 		jsonOutput = getFixture('output/bulk_output_json.txt');
 
-	describe('CSV Input', () => {
+	describe('CSV Input', function () {
 		let inputFilePath = path.join(
 				__dirname,
 				'..',
@@ -118,11 +118,11 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should create multiple collaborations for multiple Box items with can-view-path and login flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -150,11 +150,11 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should create multiple collaborations for multiple Box items with can-view-path and login flags passed (CSV Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, csvOutput);
+				(context) => {
+					assert.equal(context.stdout, csvOutput);
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -181,11 +181,11 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should create multiple collaborations for multiple Box items with can-view-path and login flags passed (Table Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, tableOutput);
+				(context) => {
+					assert.equal(context.stdout, tableOutput);
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -215,19 +215,18 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should create multiple collaborations for multiple Box items with can-view-path and login flags passed (Save JSON Output To File)',
-				(ctx) => {
-					/* eslint-disable no-sync */
+				(context) => {
 					let savedFileContents = fs.readFileSync(
 						saveFilePath,
 						'utf8'
 					);
-					/* eslint-enable no-sync */
+
 					assert.equal(savedFileContents, jsonOutput);
 
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -309,8 +308,8 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should process number-postfixed columns as multiple uses of same flag',
-				(ctx) => {
-					assert.equal(ctx.stdout, `[]${os.EOL}`);
+				(context) => {
+					assert.equal(context.stdout, `[]${os.EOL}`);
 				}
 			);
 
@@ -488,7 +487,7 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should catch and report errors in subcommands without stopping bulk execution',
-				(ctx) => {
+				(context) => {
 					let expectedOutput = JSON.stringify(
 						[fakeCollab1, fakeCollab2],
 						null,
@@ -509,8 +508,8 @@ describe('Bulk', () => {
 					expectedErrorOutput += `        ID: '871642494'${os.EOL}`;
 					expectedErrorOutput += os.EOL;
 
-					assert.equal(ctx.stdout, expectedOutput + os.EOL);
-					assert.equal(ctx.stderr, expectedErrorOutput);
+					assert.equal(context.stdout, expectedOutput + os.EOL);
+					assert.equal(context.stderr, expectedErrorOutput);
 				}
 			);
 
@@ -525,9 +524,9 @@ describe('Bulk', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should report errors on missing headers', (ctx) => {
+			.it('should report errors on missing headers', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`CSV input file should contain the headers row and at least on data row${os.EOL}`
 				);
 			});
@@ -545,7 +544,7 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should report errors on missing headers if specified multiple rows',
-				(ctx) => {
+				(context) => {
 					let expectedErrorOutput = getBulkProgressBar(2);
 					expectedErrorOutput += `2 entries failed!${os.EOL}`;
 					expectedErrorOutput += `----------${os.EOL}`;
@@ -561,7 +560,7 @@ describe('Bulk', () => {
 					expectedErrorOutput += `Missing required flag for collaboration role${os.EOL}`;
 					expectedErrorOutput += os.EOL;
 
-					assert.equal(ctx.stderr, expectedErrorOutput);
+					assert.equal(context.stderr, expectedErrorOutput);
 				}
 			);
 
@@ -631,11 +630,14 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should send terminate sessions request with user ids and logins',
-				(ctx) => {
+				(context) => {
 					let expectedOutput = [];
 					expectedOutput.push(JSON.parse(terminateSessionFixture));
 					expectedOutput.push(JSON.parse(terminateSessionFixture));
-					assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						expectedOutput
+					);
 				}
 			);
 
@@ -660,11 +662,14 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should send terminate sessions request with groups ids',
-				(ctx) => {
+				(context) => {
 					let expectedOutput = [];
 					expectedOutput.push(JSON.parse(terminateSessionFixture));
 					expectedOutput.push(JSON.parse(terminateSessionFixture));
-					assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						expectedOutput
+					);
 				}
 			);
 
@@ -681,15 +686,18 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should correctly process commands that do not contain argument parameters',
-				(ctx) => {
+				(context) => {
 					let expectedOutput = [];
 					expectedOutput.push(JSON.parse(createSignRequestFixture));
-					assert.deepEqual(JSON.parse(ctx.stdout), expectedOutput);
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						expectedOutput
+					);
 				}
 			);
 	});
 
-	describe('JSON Input', () => {
+	describe('JSON Input', function () {
 		let entriesInputFilePath = path.join(
 				__dirname,
 				'../fixtures/bulk/input_entries.json'
@@ -785,11 +793,11 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should process multiple inputs from JSON file with entries property (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 					let expectedErrorOutput = getBulkProgressBar(3);
 					expectedErrorOutput += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedErrorOutput);
+					assert.equal(context.stderr, expectedErrorOutput);
 				}
 			);
 
@@ -817,11 +825,11 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should process multiple inputs from JSON file with top-level array',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 					let expectedErrorOutput = getBulkProgressBar(3);
 					expectedErrorOutput += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedErrorOutput);
+					assert.equal(context.stderr, expectedErrorOutput);
 				}
 			);
 
@@ -838,10 +846,10 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output error when input file does not contain inputs array',
-				(ctx) => {
-					assert.equal(ctx.stdout, '');
+				(context) => {
+					assert.equal(context.stdout, '');
 					assert.include(
-						ctx.stderr,
+						context.stderr,
 						`Expected input file to contain an array of input objects, but none found${os.EOL}`
 					);
 				}
@@ -860,10 +868,10 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output error when input file does not have appropriate extension',
-				(ctx) => {
-					assert.equal(ctx.stdout, '');
+				(context) => {
+					assert.equal(context.stdout, '');
 					assert.include(
-						ctx.stderr,
+						context.stderr,
 						`Input file had extension ".txt", but only .json and .csv are supported${os.EOL}`
 					);
 				}
@@ -882,10 +890,10 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output CLI error message when input file is not valid JSON',
-				(ctx) => {
-					assert.equal(ctx.stdout, '');
+				(context) => {
+					assert.equal(context.stdout, '');
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Could not parse JSON input file ${invalidInputFilePath}${os.EOL}`
 					);
 				}
@@ -905,14 +913,14 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output wrapped error when input file is not valid JSON and verbose flag is passed',
-				(ctx) => {
+				(context) => {
 					debug.disable();
-					assert.equal(ctx.stdout, '');
+					assert.equal(context.stdout, '');
 					assert.include(
-						ctx.stderr,
+						context.stderr,
 						`BoxCLIError: Could not parse JSON input file ${invalidInputFilePath}${os.EOL}`
 					);
-					assert.include(ctx.stderr, 'Caused by: SyntaxError: ');
+					assert.include(context.stderr, 'Caused by: SyntaxError: ');
 				}
 			);
 
@@ -941,19 +949,18 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should process multiple inputs from JSON file with entries property (Save JSON Output To File)',
-				(ctx) => {
-					/* eslint-disable no-sync */
+				(context) => {
 					let savedFileContents = fs.readFileSync(
 						saveFilePath,
 						'utf8'
 					);
-					/* eslint-enable no-sync */
+
 					assert.equal(savedFileContents, jsonOutput);
 
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -967,9 +974,7 @@ describe('Bulk', () => {
 				.reply(200, addCollaborationFixture3)
 		)
 			.do(() => {
-				/* eslint-disable no-sync */
 				fs.writeFileSync(saveFilePath, 'foo', 'utf8');
-				/* eslint-enable no-sync */
 			})
 			.stdout()
 			.stderr()
@@ -986,17 +991,16 @@ describe('Bulk', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should prompt when overwriting existing file', (ctx) => {
-				/* eslint-disable no-sync */
+			.it('should prompt when overwriting existing file', (context) => {
 				let savedFileContents = fs.readFileSync(saveFilePath, 'utf8');
-				/* eslint-enable no-sync */
+
 				assert.equal(savedFileContents, jsonOutput);
-				assert.include(ctx.stdout, '(y/N) y');
+				assert.include(context.stdout, '(y/N) y');
 
 				let expectedMessage = getBulkProgressBar(3);
 				expectedMessage += `Output written to ${saveFilePath}${os.EOL}`;
 				expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-				assert.equal(ctx.stderr, expectedMessage);
+				assert.equal(context.stderr, expectedMessage);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -1024,8 +1028,8 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should write file with default name when save path is a directory',
-				(ctx) => {
-					let outputMessage = ctx.stderr;
+				(context) => {
+					let outputMessage = context.stderr;
 					let expectedFilenameRegex =
 						/collaborations-create-\d{4}-\d{2}-\d{2}_\d{2}_\d{2}_\d{2}_\d{3}\.json/u;
 					assert.match(outputMessage, expectedFilenameRegex);
@@ -1036,16 +1040,16 @@ describe('Bulk', () => {
 						path.dirname(saveFilePath),
 						outputFilename
 					);
-					/* eslint-disable no-sync */
+
 					let savedFileContents = fs.readFileSync(filePath, 'utf8');
 					fs.unlinkSync(filePath);
-					/* eslint-enable no-sync */
+
 					assert.equal(savedFileContents, jsonOutput);
 
 					let expectedMessage = getBulkProgressBar(3);
 					expectedMessage += `Output written to ${filePath}${os.EOL}`;
 					expectedMessage += `All bulk input entries processed successfully.${os.EOL}`;
-					assert.equal(ctx.stderr, expectedMessage);
+					assert.equal(context.stderr, expectedMessage);
 				}
 			);
 
@@ -1091,9 +1095,12 @@ describe('Bulk', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should process array as multiple uses of same flag', (ctx) => {
-				assert.equal(ctx.stdout, `[]${os.EOL}`);
-			});
+			.it(
+				'should process array as multiple uses of same flag',
+				(context) => {
+					assert.equal(context.stdout, `[]${os.EOL}`);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -1172,7 +1179,7 @@ describe('Bulk', () => {
 			);
 	});
 
-	describe('Output formatting', () => {
+	describe('Output formatting', function () {
 		let inputFilePath = path.join(
 				__dirname,
 				'../fixtures/bulk/bulk_files_tasks_list_input.json'
@@ -1225,8 +1232,8 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should flatten output objects array when each command run returns an array (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonCollectionOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonCollectionOutput);
 				}
 			);
 
@@ -1263,8 +1270,8 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output flattened table when each command run returns an array (Table Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, tableCollectionOutput);
+				(context) => {
+					assert.equal(context.stdout, tableCollectionOutput);
 				}
 			);
 
@@ -1302,8 +1309,8 @@ describe('Bulk', () => {
 			])
 			.it(
 				'should output flattened CSV when each command run returns an array (CSV Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, csvCollectionOutput);
+				(context) => {
+					assert.equal(context.stdout, csvCollectionOutput);
 				}
 			);
 
@@ -1318,8 +1325,8 @@ describe('Bulk', () => {
 			.command(['folders:items', '0', '--csv', '--token=test'])
 			.it(
 				'should output flattened CSV with union of all fields present in each item when each command run returns an array (CSV Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, csvItemsOutput);
+				(context) => {
+					assert.equal(context.stdout, csvItemsOutput);
 				}
 			);
 	});

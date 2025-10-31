@@ -8,14 +8,14 @@ const { test } = require('@oclif/test');
 const debug = require('debug');
 const { TEST_API_ROOT, isWin } = require('./helpers/test-helper');
 
-describe('BoxCommand', () => {
+describe('BoxCommand', function () {
 	const sandbox = sinon.createSandbox();
 
-	afterEach(() => {
+	afterEach(function () {
 		sandbox.verifyAndRestore();
 	});
 
-	describe('Command', () => {
+	describe('Command', function () {
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get('/2.0/users/me').reply(200, {})
 		)
@@ -24,14 +24,14 @@ describe('BoxCommand', () => {
 			.command(['users:get', 'me', '--token=test', '--verbose'])
 			.it(
 				'should enable framework debugging when verbose flag is passed',
-				(ctx) => {
+				(context) => {
 					debug.disable();
-					const debugLines = ctx.stderr.split('\n');
+					const debugLines = context.stderr.split('\n');
 					assert.include(debugLines[0], 'box:@box/cli:hooks:init');
 					assert.include(debugLines[1], 'box-cli:init');
 				}
 			)
-			.timeout(10000);
+			.timeout(10_000);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -60,16 +60,19 @@ describe('BoxCommand', () => {
 			])
 			.it(
 				'should save output to file named with valid characters',
-				(ctx) => {
-					assert.include(ctx.stderr, 'folders-collaborations-add');
+				(context) => {
+					assert.include(
+						context.stderr,
+						'folders-collaborations-add'
+					);
 					const stderr = isWin()
-						? ctx.stderr.replace(':', '')
-						: ctx.stderr;
+						? context.stderr.replace(':', '')
+						: context.stderr;
 					assert.notInclude(stderr, ':');
 				}
 			);
 
-		describe('As-User', () => {
+		describe('As-User', function () {
 			test.nock(TEST_API_ROOT, (api) =>
 				api
 					.get('/2.0/users/me')
@@ -83,10 +86,10 @@ describe('BoxCommand', () => {
 		});
 	});
 
-	describe('normalizeDateString()', () => {
-		beforeEach(() => {
+	describe('normalizeDateString()', function () {
+		beforeEach(function () {
 			// Start clocks at 2018-07-13T12:00:00 UTC for all tests
-			sandbox.useFakeTimers(1531508400000);
+			sandbox.useFakeTimers(1_531_508_400_000);
 		});
 
 		leche.withData(
@@ -152,6 +155,7 @@ describe('BoxCommand', () => {
 				// ]
 			},
 			function (input, expectedOutput) {
+
 				it('should return the full RFC3339 timestamp for the given time', function () {
 					let dateTime = BoxCommand.normalizeDateString(input);
 					assert.equal(dateTime, expectedOutput);

@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Sign requests', () => {
-	describe('sign-requests', () => {
+describe('Sign requests', function () {
+	describe('sign-requests', function () {
 		const fixture = getFixture('sign-requests/get_sign_requests');
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -14,12 +14,12 @@ describe('Sign requests', () => {
 		)
 			.stdout()
 			.command(['sign-requests', '--json', '--token=test'])
-			.it('should list sign requests', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should list sign requests', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('sign-requests:get', () => {
+	describe('sign-requests:get', function () {
 		let signRequestId = '6742981',
 			fixture = getFixture('sign-requests/get_sign_request_by_id');
 
@@ -33,12 +33,12 @@ describe('Sign requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should get a sign request by id', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should get a sign request by id', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('sign-requests:create', () => {
+	describe('sign-requests:create', function () {
 		let signerEmail = 'bob@example.com',
 			signerRedirectUrl = 'https://box.com/redirect_url_signer_1',
 			signerDeclinedRedirectUrl =
@@ -112,8 +112,8 @@ describe('Sign requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a sign request with snake case', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a sign request with snake case', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -173,12 +173,12 @@ describe('Sign requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a sign request with kebab case', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a sign request with kebab case', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('sign-requests:cancel', () => {
+	describe('sign-requests:cancel', function () {
 		let signRequestId = '6742981',
 			fixture = getFixture('sign-requests/post_sign_requests_id_cancel');
 
@@ -194,12 +194,12 @@ describe('Sign requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should cancel a sign request by id', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should cancel a sign request by id', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('sign-requests:resend', () => {
+	describe('sign-requests:resend', function () {
 		let signRequestId = '6742981';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -212,9 +212,9 @@ describe('Sign requests', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should resend a sign request by id', (ctx) => {
+			.it('should resend a sign request by id', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Resent sign request ${signRequestId}${os.EOL}`
 				);
 			});

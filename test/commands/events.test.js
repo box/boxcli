@@ -31,7 +31,7 @@ function minusDays(date, daysToSubtract) {
 	return date;
 }
 
-describe('Events', () => {
+describe('Events', function () {
 	const createdBefore = '2014-05-17T13:35:01+00:00';
 	const createdAfter = '2015-05-15T13:35:01+00:00';
 	const eventType = 'NEW_USER,DELETE_USER,EDIT_USER';
@@ -40,7 +40,8 @@ describe('Events', () => {
 	const fixture2 = getFixture('events/get_events_second_page');
 	const endFixture = getFixture('events/get_events_end');
 	const jsonOutput = getFixture('output/events_get_json.txt');
-	describe('For admin_logs stream type', () => {
+
+	describe('For admin_logs stream type', function () {
 		leche.withData(['events', 'events:get'], function (command) {
 			test.nock(TEST_API_ROOT, (api) =>
 				api
@@ -85,8 +86,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should get events with enterprise, created-before, created-after and event-types flags passed (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -133,8 +134,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should get events with enterprise, streamType, created-before, created-after and event-types flags passed (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -156,8 +157,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should get user events from given stream position when --stream-position flag is passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, fixture);
+					(context) => {
+						assert.equal(context.stdout, fixture);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -172,8 +173,8 @@ describe('Events', () => {
 				.command([command, '--limit=10', '--json', '--token=test'])
 				.it(
 					'should get user events when neither --stream-position nor --enterprise flags are passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, fixture);
+					(context) => {
+						assert.equal(context.stdout, fixture);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -216,8 +217,8 @@ describe('Events', () => {
 				.command([command, '--enterprise', '--json', '--token=test'])
 				.it(
 					'should use default time window when no time bound flags are passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -258,8 +259,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should set start time to five days before end time when only end time is passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -307,8 +308,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should set end time to now when only start time is passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 		});
@@ -334,7 +335,8 @@ describe('Events', () => {
 		//			});
 		//	});
 	});
-	describe('For admin_logs_streaming stream type', () => {
+
+	describe('For admin_logs_streaming stream type', function () {
 		leche.withData(['events', 'events:get'], function (command) {
 			test.nock(TEST_API_ROOT, (api) =>
 				api
@@ -374,8 +376,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should get events with enterprise, event-types flags passed (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -418,8 +420,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should should ignore created-xxx flags (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 			test.nock(TEST_API_ROOT, (api) =>
@@ -444,8 +446,8 @@ describe('Events', () => {
 				])
 				.it(
 					'should get user events from given stream position when --stream-position flag is passed',
-					(ctx) => {
-						assert.equal(ctx.stdout, fixture);
+					(context) => {
+						assert.equal(context.stdout, fixture);
 					}
 				);
 		});

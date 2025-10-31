@@ -6,7 +6,7 @@ const { Flags, Args } = require('@oclif/core');
 class CommentsReplyCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(CommentsReplyCommand);
-		let params = {
+		let parameters = {
 			body: {
 				item: {
 					type: 'comment',
@@ -16,15 +16,15 @@ class CommentsReplyCommand extends BoxCommand {
 		};
 
 		if (flags.message) {
-			params.body.message = flags.message;
+			parameters.body.message = flags.message;
 		} else if (flags['tagged-message']) {
-			params.body.tagged_message = flags['tagged-message'];
+			parameters.body.tagged_message = flags['tagged-message'];
 		}
 
 		// @TODO (2018-07-28): Should implement this using the Node SDK
 		let comment = await this.client.wrapWithDefaultHandler(
 			this.client.post
-		)('/comments', params);
+		)('/comments', parameters);
 		await this.output(comment);
 	}
 }

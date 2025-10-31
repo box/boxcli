@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Tasks', () => {
-	describe('tasks:create', () => {
+describe('Tasks', function () {
+	describe('tasks:create', function () {
 		let type = 'file',
 			id = '22222',
 			message = 'Please review',
@@ -35,8 +35,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should create a task on a file with the message flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -52,8 +52,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should create a task on a file with the message flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -70,9 +70,9 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should create a task on a file with the message flag passed (ID Output)',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(fixture).id}${os.EOL}`
 					);
 				}
@@ -97,8 +97,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should create task with a due date when the --due-at flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -121,13 +121,13 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should create task with a completion rule when --completion-rule flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('tasks:update', () => {
+	describe('tasks:update', function () {
 		let taskId = '11111',
 			message = 'Could you please review this?',
 			dueDate = '2019-01-01T09:00:00+00:00',
@@ -148,8 +148,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should update a task on a file with the message flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -165,8 +165,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should update a task on a file with the message flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -185,8 +185,8 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should update task due date when the --due-at flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -207,13 +207,13 @@ describe('Tasks', () => {
 			])
 			.it(
 				'should update task with a completion rule when --completion-rule flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('tasks:get', () => {
+	describe('tasks:get', function () {
 		let taskId = '11111',
 			fixture = getFixture('tasks/put_tasks_id'),
 			yamlOutput = getFixture('output/tasks_get_yaml.txt');
@@ -223,18 +223,24 @@ describe('Tasks', () => {
 		)
 			.stdout()
 			.command(['tasks:get', taskId, '--json', '--token=test'])
-			.it('should get information about a task (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should get information about a task (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get(`/2.0/tasks/${taskId}`).reply(200, fixture)
 		)
 			.stdout()
 			.command(['tasks:get', taskId, '--token=test'])
-			.it('should get information about a task (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should get information about a task (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -249,7 +255,7 @@ describe('Tasks', () => {
 			);
 	});
 
-	describe('tasks:delete', () => {
+	describe('tasks:delete', function () {
 		let taskId = '11111';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -257,9 +263,9 @@ describe('Tasks', () => {
 		)
 			.stderr()
 			.command(['tasks:delete', taskId, '--token=test'])
-			.it('should delete a task', (ctx) => {
+			.it('should delete a task', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Successfully deleted task ${taskId}${os.EOL}`
 				);
 			});
@@ -268,7 +274,8 @@ describe('Tasks', () => {
 	leche.withData(
 		['tasks:assign', 'task-assignments:create'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let taskId = '11111',
 					userId = '33333',
 					userLogin = 'foo@example.com',
@@ -304,8 +311,8 @@ describe('Tasks', () => {
 					])
 					.it(
 						'should create a task assignment with the assign-to-user-id passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -323,8 +330,8 @@ describe('Tasks', () => {
 					])
 					.it(
 						'should create a task assignment with the assign-to-user-id passed (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -348,8 +355,8 @@ describe('Tasks', () => {
 					])
 					.it(
 						'should create a task assignment with the assign-to-user-login flag',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 			});
@@ -359,7 +366,8 @@ describe('Tasks', () => {
 	leche.withData(
 		['tasks:assignments:delete', 'task-assignments:delete'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let assignmentId = '12345';
 
 				test.nock(TEST_API_ROOT, (api) =>
@@ -369,9 +377,9 @@ describe('Tasks', () => {
 				)
 					.stderr()
 					.command([command, assignmentId, '--token=test'])
-					.it('should delete a task assignment', (ctx) => {
+					.it('should delete a task assignment', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`Successfully deleted task assignment ${assignmentId}${os.EOL}`
 						);
 					});
@@ -382,7 +390,8 @@ describe('Tasks', () => {
 	leche.withData(
 		['tasks:assignments:get', 'task-assignments:get'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let assignmentId = '12345',
 					fixture = getFixture(
 						'task-assignments/post_task_assignments'
@@ -400,8 +409,8 @@ describe('Tasks', () => {
 					.command([command, assignmentId, '--json', '--token=test'])
 					.it(
 						'should get information about a task assignment (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -414,8 +423,8 @@ describe('Tasks', () => {
 					.command([command, assignmentId, '--token=test'])
 					.it(
 						'should get information about a task assignment (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -442,7 +451,8 @@ describe('Tasks', () => {
 	leche.withData(
 		['tasks:assignments', 'task-assignments:list'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let taskId = '11111',
 					fixture = getFixture(
 						'task-assignments/get_tasks_id_assignments'
@@ -458,9 +468,12 @@ describe('Tasks', () => {
 				)
 					.stdout()
 					.command([command, taskId, '--json', '--token=test'])
-					.it('should list all task assignments on a task', (ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
-					});
+					.it(
+						'should list all task assignments on a task',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
 
 				test.nock(TEST_API_ROOT, (api) =>
 					api
@@ -486,7 +499,8 @@ describe('Tasks', () => {
 	leche.withData(
 		['tasks:assignments:update', 'task-assignments:update'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let assignmentId = '12345',
 					message = 'Looks good to me!',
 					fixture = getFixture(
@@ -513,8 +527,8 @@ describe('Tasks', () => {
 					])
 					.it(
 						'should update a task assignment with message flag passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -534,8 +548,8 @@ describe('Tasks', () => {
 					])
 					.it(
 						'should update a task assignment with message flag passed (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -580,8 +594,8 @@ describe('Tasks', () => {
 							])
 							.it(
 								'should update a task assignment with resolution state flag passed',
-								(ctx) => {
-									assert.equal(ctx.stdout, fixture);
+								(context) => {
+									assert.equal(context.stdout, fixture);
 								}
 							);
 					}

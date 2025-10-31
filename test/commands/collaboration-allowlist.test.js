@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Collaboration-Allowlist', () => {
-	describe('collaboration-allowlist:get', () => {
+describe('Collaboration-Allowlist', function () {
+	describe('collaboration-allowlist:get', function () {
 		let allowlistEntryId = '11111',
 			fixture = getFixture(
 				'collaboration-allowlist/get_collaboration_whitelist_entries_id'
@@ -27,8 +27,8 @@ describe('Collaboration-Allowlist', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should output JSON when --json flag is passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should output JSON when --json flag is passed', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -44,8 +44,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should get a collaboration allowlist entry (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -67,7 +67,7 @@ describe('Collaboration-Allowlist', () => {
 			);
 	});
 
-	describe('collaboration-allowlist:add', () => {
+	describe('collaboration-allowlist:add', function () {
 		let domain = 'test.com',
 			direction = 'both',
 			fixture = getFixture(
@@ -97,8 +97,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should add a collaboration allowlist entry (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -116,13 +116,13 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should add a collaboration allowlist entry (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('collaboration-allowlist:delete', () => {
+	describe('collaboration-allowlist:delete', function () {
 		let allowlistEntryId = '11111';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -138,15 +138,15 @@ describe('Collaboration-Allowlist', () => {
 				allowlistEntryId,
 				'--token=test',
 			])
-			.it('should delete a collaboration allowlist entry', (ctx) => {
+			.it('should delete a collaboration allowlist entry', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted collaboration allowlist entry ${allowlistEntryId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('collaboration-allowlist', () => {
+	describe('collaboration-allowlist', function () {
 		let fixture = getFixture(
 				'collaboration-allowlist/get_collaboration_whitelist_entries_page_1'
 			),
@@ -173,8 +173,8 @@ describe('Collaboration-Allowlist', () => {
 			.command(['collaboration-allowlist', '--json', '--token=test'])
 			.it(
 				'should list collaboration allowlist entries (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -203,7 +203,7 @@ describe('Collaboration-Allowlist', () => {
 			);
 	});
 
-	describe('collaboration-allowlist:exemptions:get', () => {
+	describe('collaboration-allowlist:exemptions:get', function () {
 		let exemptionId = '11111',
 			fixture = getFixture(
 				'collaboration-allowlist/get_collaboration_whitelist_exempt_targets_id'
@@ -228,8 +228,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should get a collaboration allowlist exemption (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -248,8 +248,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should get a collaboration allowlist exemption (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -273,7 +273,7 @@ describe('Collaboration-Allowlist', () => {
 			);
 	});
 
-	describe('collaboration-allowlist:exemptions:create', () => {
+	describe('collaboration-allowlist:exemptions:create', function () {
 		let userId = '5678',
 			fixture = getFixture(
 				'collaboration-allowlist/post_collaboration_exempt_targets'
@@ -306,8 +306,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should create a collaboration allowlist exemption (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -327,13 +327,13 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should create a collaboration allowlist exemption (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('collaboration-allowlist:exemptions', () => {
+	describe('collaboration-allowlist:exemptions', function () {
 		let fixture = getFixture(
 				'collaboration-allowlist/get_collaboration_whitelist_exempt_targets_page_1'
 			),
@@ -364,8 +364,8 @@ describe('Collaboration-Allowlist', () => {
 			])
 			.it(
 				'should list collaboration allowlist exemptions (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -394,7 +394,7 @@ describe('Collaboration-Allowlist', () => {
 			);
 	});
 
-	describe('collaboration-allowlist:exemptions:delete', () => {
+	describe('collaboration-allowlist:exemptions:delete', function () {
 		let exemptionId = '11111';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -410,11 +410,14 @@ describe('Collaboration-Allowlist', () => {
 				exemptionId,
 				'--token=test',
 			])
-			.it('should delete collaboration allowlist exemption', (ctx) => {
-				assert.equal(
-					ctx.stderr,
-					`Deleted collaboration allowlist exemption ${exemptionId}${os.EOL}`
-				);
-			});
+			.it(
+				'should delete collaboration allowlist exemption',
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted collaboration allowlist exemption ${exemptionId}${os.EOL}`
+					);
+				}
+			);
 	});
 });

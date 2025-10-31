@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Terms of Service', () => {
-	describe('terms-of-service:get', () => {
+describe('Terms of Service', function () {
+	describe('terms-of-service:get', function () {
 		let tosId = '12345',
 			fixture = getFixture('terms-of-service/get_terms_of_service_id'),
 			yamlOutput = getFixture('output/terms_of_service_get_yaml.txt');
@@ -18,8 +18,8 @@ describe('Terms of Service', () => {
 			.command(['terms-of-service:get', tosId, '--json', '--token=test'])
 			.it(
 				'should get information on a terms of service (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -30,13 +30,13 @@ describe('Terms of Service', () => {
 			.command(['terms-of-service:get', tosId, '--token=test'])
 			.it(
 				'should get information on a terms of service (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('terms-of-service', () => {
+	describe('terms-of-service', function () {
 		let tosType = 'managed',
 			fixture = getFixture('terms-of-service/get_terms_of_services'),
 			jsonOutput = getFixture('output/terms_of_service_list_json.txt');
@@ -58,13 +58,13 @@ describe('Terms of Service', () => {
 			])
 			.it(
 				'should list terms of services for your enterprise with the type flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 	});
 
-	describe('terms-of-service:create', () => {
+	describe('terms-of-service:create', function () {
 		let tosType = 'managed',
 			status = 'enabled',
 			text = 'test',
@@ -89,8 +89,8 @@ describe('Terms of Service', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a terms of service (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a terms of service (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -104,12 +104,12 @@ describe('Terms of Service', () => {
 				`--text=${text}`,
 				'--token=test',
 			])
-			.it('should create a terms of service (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create a terms of service (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('terms-of-service:update', () => {
+	describe('terms-of-service:update', function () {
 		let tosId = '12345',
 			status = 'enabled',
 			text = 'test',
@@ -135,8 +135,8 @@ describe('Terms of Service', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update a terms of service (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should update a terms of service (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -152,12 +152,12 @@ describe('Terms of Service', () => {
 				`--text=${text}`,
 				'--token=test',
 			])
-			.it('should update a terms of service (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should update a terms of service (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('terms-of-service:get-user-status', () => {
+	describe('terms-of-service:get-user-status', function () {
 		let tosId = '1234',
 			userId = '7777',
 			fixture = getFixture(
@@ -186,10 +186,10 @@ describe('Terms of Service', () => {
 			])
 			.it(
 				"should get a user's status on a terms of service (JSON Output)",
-				(ctx) => {
+				(context) => {
 					let expectedObject = JSON.parse(fixture).entries[0];
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -213,13 +213,13 @@ describe('Terms of Service', () => {
 			])
 			.it(
 				"should get a user's status on a terms of service (YAML Output)",
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('terms-of-service:set-user-status', () => {
+	describe('terms-of-service:set-user-status', function () {
 		let tosId = '1234',
 			userId = '7777',
 			postResponse = getFixture(
@@ -282,8 +282,8 @@ describe('Terms of Service', () => {
 			])
 			.it(
 				"should set a user's status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)",
-				(ctx) => {
-					assert.equal(ctx.stdout, putResponse);
+				(context) => {
+					assert.equal(context.stdout, putResponse);
 				}
 			);
 
@@ -314,8 +314,8 @@ describe('Terms of Service', () => {
 			])
 			.it(
 				"should set a user's status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)",
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});

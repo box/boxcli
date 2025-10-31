@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class GroupsCreateCommand extends BoxCommand {
 	async run() {
@@ -39,7 +39,7 @@ GroupsCreateCommand.flags = {
 	...BoxCommand.flags,
 	description: Flags.string({
 		description: 'Description of the group',
-		parse: utils.unescapeSlashes,
+		parse: utilities.unescapeSlashes,
 	}),
 	'external-sync-identifier': Flags.string({
 		description:

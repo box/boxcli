@@ -2,14 +2,14 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class GroupsListCollaborationsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(
 			GroupsListCollaborationsCommand
 		);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -34,7 +34,7 @@ GroupsListCollaborationsCommand._endpoint = 'get_groups_id_collaborations';
 
 GroupsListCollaborationsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flag,
+	...PaginationUtilities.flag,
 };
 
 GroupsListCollaborationsCommand.args = {

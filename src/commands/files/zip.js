@@ -2,9 +2,9 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
-const path = require('path');
-const utils = require('../../util');
+const fs = require('node:fs');
+const path = require('node:path');
+const utilities = require('../../util');
 
 class FilesZipCommand extends BoxCommand {
 	async run() {
@@ -18,7 +18,7 @@ class FilesZipCommand extends BoxCommand {
 		let filePath;
 
 		if (flags.destination) {
-			await utils.checkDir(flags.destination, flags['create-path']);
+			await utilities.checkDir(flags.destination, flags['create-path']);
 			filePath = path.join(flags.destination, fileName);
 		} else {
 			filePath = path.join(
@@ -27,10 +27,7 @@ class FilesZipCommand extends BoxCommand {
 			);
 		}
 
-		/* eslint-disable no-sync */
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-			/* eslint-enable no-sync */
-
 			if (flags.overwrite === false) {
 				this.info(
 					`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`
@@ -51,7 +48,7 @@ class FilesZipCommand extends BoxCommand {
 
 		let downloadStatus;
 		let outputFinished = false;
-		/* eslint-disable promise/avoid-new */
+
 		await new Promise((resolve, reject) => {
 			/* eslint-disable promise/always-return */
 			this.client.files
@@ -87,16 +84,16 @@ FilesZipCommand.flags = {
 	...BoxCommand.flags,
 	destination: Flags.string({
 		description: 'The destination folder to write the zip file to',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	item: Flags.string({
 		description:
 			'Files or folders to be part of zip in the form type:ID (i.e. file:1374652)',
 		multiple: true,
 		required: true,
-		parse(val) {
-			let splitVal = val.split(':');
-			return { type: splitVal[0], id: splitVal[1] };
+		parse(value) {
+			let splitValue = value.split(':');
+			return { type: splitValue[0], id: splitValue[1] };
 		},
 	}),
 	'create-path': Flags.boolean({

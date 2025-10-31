@@ -4,7 +4,7 @@ const BoxCommand = require('../box-command');
 const { Flags, Args } = require('@oclif/core');
 const _ = require('lodash');
 const BoxCLIError = require('../cli-error');
-const PaginationUtils = require('../pagination-utils');
+const PaginationUtilities = require('../pagination-utils');
 
 const RESULTS_LIMIT = 100;
 
@@ -17,7 +17,7 @@ const RESULTS_LIMIT = 100;
 function parseMetadataValue(value) {
 	if (value.endsWith('f')) {
 		// Attempt to parse as a numeric type
-		return parseFloat(value) || value;
+		return Number.parseFloat(value) || value;
 	}
 
 	return value;
@@ -48,7 +48,7 @@ class SearchCommand extends BoxCommand {
 			this.flags['max-items'] = flags['max-items'];
 		}
 
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.scope) {
 			options.scope = flags.scope;
@@ -71,16 +71,23 @@ class SearchCommand extends BoxCommand {
 					flags['md-filter-json'].length
 			) {
 				options.mdfilters = [];
-				for (let i = 0; i < flags['md-filter-scope'].length; i++) {
-					let filter = {};
-					filter.scope = flags['md-filter-scope'][i];
-					filter.templateKey = flags['md-filter-template-key'][i];
+				for (
+					let index = 0;
+					index < flags['md-filter-scope'].length;
+					index++
+				) {
+					let filter = {
+						scope: flags['md-filter-scope'][index],
+						templateKey: flags['md-filter-template-key'][index],
+					};
 					try {
-						filter.filters = JSON.parse(flags['md-filter-json'][i]);
-					} catch (ex) {
+						filter.filters = JSON.parse(
+							flags['md-filter-json'][index]
+						);
+					} catch (error) {
 						throw new BoxCLIError(
 							'Could not parse metadata filter JSON',
-							ex
+							error
 						);
 					}
 					options.mdfilters.push(filter);
@@ -102,31 +109,41 @@ class SearchCommand extends BoxCommand {
 				let [scope, templateKey] = key.split('.');
 
 				let filters = groupedFilters[key],
-					filtersObj = {};
+					filtersObject = {};
 
 				// Build the filters object, e.g {"field1": value1, "field2": {"lt": value2}}
-				filters.forEach(({ field, cmp, value }) => {
-					if (cmp === '=') {
-						if (typeof value === 'number') {
-							filtersObj[field] = { lt: value, gt: value };
-						} else {
-							filtersObj[field] = value;
+				for (const { field, cmp, value } of filters) {
+					switch (cmp) {
+						case '=': {
+							filtersObject[field] =
+								typeof value === 'number'
+									? { lt: value, gt: value }
+									: value;
+
+							break;
 						}
-					} else if (cmp === '<') {
-						filtersObj[field] = { lt: value };
-					} else if (cmp === '>') {
-						filtersObj[field] = { gt: value };
-					} else {
-						throw new BoxCLIError(
-							'Invalid comparator specified in metadata filter'
-						);
+						case '<': {
+							filtersObject[field] = { lt: value };
+
+							break;
+						}
+						case '>': {
+							filtersObject[field] = { gt: value };
+
+							break;
+						}
+						default: {
+							throw new BoxCLIError(
+								'Invalid comparator specified in metadata filter'
+							);
+						}
 					}
-				});
+				}
 
 				return {
 					scope,
 					templateKey,
-					filters: filtersObj,
+					filters: filtersObject,
 				};
 			});
 		}
@@ -245,11 +262,11 @@ SearchCommand.flags = {
 			'md-filter-json',
 		],
 		multiple: true,
-		parse(val) {
-			let match = val.match(/^(\w+)\.([\w-]+)\.([\w-]+)([=<>])(.+)$/u);
+		parse(value_) {
+			let match = value_.match(/^(\w+)\.([\w-]+)\.([\w-]+)([=<>])(.+)$/u);
 			if (!match) {
 				throw new BoxCLIError(
-					`--mdfilter flag must be in scope.templateKey.field=value format; got ${val} instead`
+					`--mdfilter flag must be in scope.templateKey.field=value format; got ${value_} instead`
 				);
 			}
 			let [, scope, templateKey, field, cmp, value] = match;

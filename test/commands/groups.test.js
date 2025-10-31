@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Groups', () => {
-	describe('groups:get', () => {
+describe('Groups', function () {
+	describe('groups:get', function () {
 		let groupId = '11111',
 			fixture = getFixture('groups/get_groups_id'),
 			yamlOutput = getFixture('output/groups_get_yaml.txt');
@@ -17,18 +17,24 @@ describe('Groups', () => {
 		)
 			.stdout()
 			.command(['groups:get', groupId, '--json', '--token=test'])
-			.it('should get information about a group (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should get information about a group (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get(`/2.0/groups/${groupId}`).reply(200, fixture)
 		)
 			.stdout()
 			.command(['groups:get', groupId, '--token=test'])
-			.it('should get information about a group (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should get information about a group (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -49,7 +55,8 @@ describe('Groups', () => {
 	});
 
 	leche.withData(['groups', 'groups:list'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let fixture = getFixture('groups/get_groups_page_1'),
 				fixture2 = getFixture('groups/get_groups_page_2'),
 				jsonOutput = getFixture('output/groups_list_json.txt');
@@ -68,8 +75,8 @@ describe('Groups', () => {
 			)
 				.stdout()
 				.command([command, '--json', '--token=test'])
-				.it('should list all groups (JSON Output)', (ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				.it('should list all groups (JSON Output)', (context) => {
+					assert.equal(context.stdout, jsonOutput);
 				});
 
 			test.nock(TEST_API_ROOT, (api) =>
@@ -129,7 +136,8 @@ describe('Groups', () => {
 			'collaborations:list-for-group',
 		],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let groupId = '119720',
 					fixture = getFixture(
 						'groups/get_groups_id_collaborations_page_1'
@@ -157,8 +165,8 @@ describe('Groups', () => {
 					.command([command, groupId, '--json', '--token=test'])
 					.it(
 						'should list collaborations for a group (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 
@@ -190,7 +198,7 @@ describe('Groups', () => {
 		}
 	);
 
-	describe('groups:delete', () => {
+	describe('groups:delete', function () {
 		let groupId = '11111';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -198,12 +206,15 @@ describe('Groups', () => {
 		)
 			.stderr()
 			.command(['groups:delete', groupId, '--token=test'])
-			.it('should delete a group', (ctx) => {
-				assert.equal(ctx.stderr, `Deleted group ${groupId}${os.EOL}`);
+			.it('should delete a group', (context) => {
+				assert.equal(
+					context.stderr,
+					`Deleted group ${groupId}${os.EOL}`
+				);
 			});
 	});
 
-	describe('groups:update', () => {
+	describe('groups:update', function () {
 		let groupId = '11111',
 			name = 'Remote Employees',
 			members = 'all_managed_users',
@@ -226,8 +237,8 @@ describe('Groups', () => {
 			])
 			.it(
 				'should update a group with name, invite and view-member flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -243,8 +254,8 @@ describe('Groups', () => {
 			])
 			.it(
 				'should update a group with name, invite and view-member flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -271,12 +282,15 @@ describe('Groups', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send optional params when flags are passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 
-	describe('groups:create', () => {
+	describe('groups:create', function () {
 		let name = 'Employees',
 			members = 'all_managed_users',
 			provenance = 'Elsewhere',
@@ -290,8 +304,8 @@ describe('Groups', () => {
 		)
 			.stdout()
 			.command(['groups:create', name, '--json', '--token=test'])
-			.it('should create a group (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a group (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -299,8 +313,8 @@ describe('Groups', () => {
 		)
 			.stdout()
 			.command(['groups:create', name, '--token=test'])
-			.it('should create a group (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create a group (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -310,9 +324,9 @@ describe('Groups', () => {
 			.command(['groups:create', name, '--id-only', '--token=test'])
 			.it(
 				'should output only the ID of the new group when --id-only flag is passed',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(fixture).id}${os.EOL}`
 					);
 				}
@@ -342,15 +356,19 @@ describe('Groups', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send optional params when flags are passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 
 	leche.withData(
 		['groups:memberships:get', 'groups:membership:get'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let membershipId = '12345',
 					fixture = getFixture('groups/get_group_memberships_id'),
 					yamlOutput = getFixture(
@@ -366,8 +384,8 @@ describe('Groups', () => {
 					.command([command, membershipId, '--json', '--token=test'])
 					.it(
 						'should get information about a group membership (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -380,8 +398,8 @@ describe('Groups', () => {
 					.command([command, membershipId, '--token=test'])
 					.it(
 						'should get information about a group membership (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -408,7 +426,8 @@ describe('Groups', () => {
 	leche.withData(
 		['groups:memberships', 'groups:membership:list'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let groupId = '11111',
 					fixture = getFixture(
 						'groups/get_groups_id_memberships_page_1'
@@ -436,8 +455,8 @@ describe('Groups', () => {
 					.command([command, groupId, '--json', '--token=test'])
 					.it(
 						'should list members of a group (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 
@@ -472,7 +491,8 @@ describe('Groups', () => {
 	leche.withData(
 		['groups:memberships:add', 'groups:membership:add'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let groupId = '11111',
 					userId = '44444',
 					fixture = getFixture('groups/post_group_memberships'),
@@ -507,8 +527,8 @@ describe('Groups', () => {
 					])
 					.it(
 						'should add a user to a group with the set-member flag passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -527,8 +547,8 @@ describe('Groups', () => {
 					])
 					.it(
 						'should add a user to a group with the set-member flag passed (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -561,8 +581,8 @@ describe('Groups', () => {
 					])
 					.it(
 						'should send optional permissions params when the permission flags are passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -578,12 +598,12 @@ describe('Groups', () => {
 							{ role: 'member' },
 						],
 					},
-					function (flag, params) {
+					function (flag, parameters) {
 						test.nock(TEST_API_ROOT, (api) =>
 							api
 								.post('/2.0/group_memberships', {
 									...expectedBody,
-									...params,
+									...parameters,
 								})
 								.reply(201, fixture)
 						)
@@ -598,8 +618,8 @@ describe('Groups', () => {
 							])
 							.it(
 								'should send correct role value when flag is passed',
-								(ctx) => {
-									assert.equal(ctx.stdout, fixture);
+								(context) => {
+									assert.equal(context.stdout, fixture);
 								}
 							);
 					}
@@ -611,7 +631,8 @@ describe('Groups', () => {
 	leche.withData(
 		['groups:memberships:update', 'groups:membership:update'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let membershipId = '12345',
 					fixture = getFixture('groups/get_group_memberships_id'),
 					yamlOutput = getFixture(
@@ -641,8 +662,8 @@ describe('Groups', () => {
 					])
 					.it(
 						"should update a user's membership to a group with the set-member flag passed (JSON Output)",
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -663,8 +684,8 @@ describe('Groups', () => {
 					])
 					.it(
 						"should update a user's membership to a group with the set-member flag passed (YAML Output)",
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -696,8 +717,8 @@ describe('Groups', () => {
 					])
 					.it(
 						'should send optional permissions params when the permission flags are passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -713,12 +734,12 @@ describe('Groups', () => {
 							{ role: 'member' },
 						],
 					},
-					function (flag, params) {
+					function (flag, parameters) {
 						test.nock(TEST_API_ROOT, (api) =>
 							api
 								.put(`/2.0/group_memberships/${membershipId}`, {
 									...expectedBody,
-									...params,
+									...parameters,
 								})
 								.reply(200, fixture)
 						)
@@ -732,8 +753,8 @@ describe('Groups', () => {
 							])
 							.it(
 								"should update a user's membership with correct role value when flag is passed",
-								(ctx) => {
-									assert.equal(ctx.stdout, fixture);
+								(context) => {
+									assert.equal(context.stdout, fixture);
 								}
 							);
 					}
@@ -745,7 +766,8 @@ describe('Groups', () => {
 	leche.withData(
 		['groups:memberships:remove', 'groups:membership:remove'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let membershipId = '12345';
 
 				test.nock(TEST_API_ROOT, (api) =>
@@ -755,9 +777,9 @@ describe('Groups', () => {
 				)
 					.stderr()
 					.command([command, membershipId, '--token=test'])
-					.it('should remove a user from a group', (ctx) => {
+					.it('should remove a user from a group', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`Removed membership ${membershipId}${os.EOL}`
 						);
 					});
@@ -765,7 +787,7 @@ describe('Groups', () => {
 		}
 	);
 
-	describe('groups:terminate-session', () => {
+	describe('groups:terminate-session', function () {
 		let groupsIDs = ['12345', '67890'];
 		let fixture = getFixture('groups/post_groups_terminate_sessions');
 
@@ -785,8 +807,11 @@ describe('Groups', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should terminate sessions for the specified groups', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should terminate sessions for the specified groups',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 });

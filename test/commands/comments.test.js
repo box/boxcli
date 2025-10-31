@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Comments', () => {
-	describe('comments:get', () => {
+describe('Comments', function () {
+	describe('comments:get', function () {
 		let commentId = '123456789',
 			fixture = getFixture('comments/get_comments_id'),
 			yamlOutput = getFixture('output/comments_get_yaml.txt');
@@ -18,8 +18,8 @@ describe('Comments', () => {
 			.command(['comments:get', commentId, '--json', '--token=test'])
 			.it(
 				'should get information about a comment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -30,8 +30,8 @@ describe('Comments', () => {
 			.command(['comments:get', commentId, '--token=test'])
 			.it(
 				'should get information about a comment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -53,7 +53,7 @@ describe('Comments', () => {
 			);
 	});
 
-	describe('comments:update', () => {
+	describe('comments:update', function () {
 		let commentId = '123456789',
 			message = 'Looks great!',
 			taggedMessage = '@[1357908642:Other User] Looks good!',
@@ -75,8 +75,8 @@ describe('Comments', () => {
 			])
 			.it(
 				'should update a comment with the message flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -97,8 +97,8 @@ describe('Comments', () => {
 			])
 			.it(
 				'should update a comment with the tagged-message flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -116,13 +116,13 @@ describe('Comments', () => {
 			])
 			.it(
 				'should update a comment with the message flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('comments:delete', () => {
+	describe('comments:delete', function () {
 		let commentId = '123456789';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -130,15 +130,15 @@ describe('Comments', () => {
 		)
 			.stderr()
 			.command(['comments:delete', commentId, '--token=test'])
-			.it('should delete a comment', (ctx) => {
+			.it('should delete a comment', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Successfully deleted comment ${commentId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('comments:create', () => {
+	describe('comments:create', function () {
 		let fileId = '987654321',
 			taggedMessage = '@[1357908642:Other User] Looks good!',
 			message = 'Hello there!',
@@ -174,8 +174,8 @@ describe('Comments', () => {
 			])
 			.it(
 				'should create a tagged comment on a file (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -192,8 +192,8 @@ describe('Comments', () => {
 			])
 			.it(
 				'should create a comment on a file when message flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -209,13 +209,13 @@ describe('Comments', () => {
 			])
 			.it(
 				'should create a tagged comment on a file (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('comments:reply', () => {
+	describe('comments:reply', function () {
 		let commentId = '5000948880',
 			message = 'These tigers are cool!',
 			taggedMessage = '@[1357908642:Other User] Looks good!',
@@ -249,8 +249,8 @@ describe('Comments', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should reply to a comment (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should reply to a comment (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -266,8 +266,8 @@ describe('Comments', () => {
 			])
 			.it(
 				'should reply to a comment when tagged message flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -281,8 +281,8 @@ describe('Comments', () => {
 				`--message=${message}`,
 				'--token=test',
 			])
-			.it('should reply to a comment (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should reply to a comment (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 });

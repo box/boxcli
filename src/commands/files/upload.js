@@ -1,10 +1,9 @@
-/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
 
@@ -18,17 +17,13 @@ class FilesUploadCommand extends BoxCommand {
 		let stream;
 		try {
 			stream = fs.createReadStream(args.path);
-		} catch (ex) {
-			throw new BoxCLIError(`Could not open file ${args.path}`, ex);
+		} catch (error) {
+			throw new BoxCLIError(`Could not open file ${args.path}`, error);
 		}
 		let fileAttributes = {};
 		let name;
 
-		if (flags.name) {
-			name = flags.name;
-		} else {
-			name = path.basename(args.path);
-		}
+		name = flags.name || path.basename(args.path);
 		if (flags['content-created-at']) {
 			fileAttributes.content_created_at = flags['content-created-at'];
 		}

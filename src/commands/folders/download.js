@@ -2,14 +2,14 @@
 
 const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const fs = require('fs');
+const fs = require('node:fs');
 const { mkdirp } = require('mkdirp');
-const path = require('path');
+const path = require('node:path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
 const archiver = require('archiver');
 const dateTime = require('date-fns');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 /**
  * Saves a file to disk
@@ -26,20 +26,18 @@ function saveFileToDisk(folderPath, file, stream) {
 	try {
 		output = fs.createWriteStream(path.join(folderPath, file.path));
 		stream.pipe(output);
-	} catch (ex) {
+	} catch (error) {
 		throw new BoxCLIError(
 			`Error downloading file ${file.id} to ${file.path}`,
-			ex
+			error
 		);
 	}
 
-	/* eslint-disable promise/avoid-new */
 	// We need to await the end of the stream to avoid a race condition here
 	return new Promise((resolve, reject) => {
 		output.on('close', resolve);
 		stream.on('error', reject);
 	});
-	/* eslint-enable promise/avoid-new */
 }
 
 class FoldersDownloadCommand extends BoxCommand {
@@ -59,13 +57,12 @@ class FoldersDownloadCommand extends BoxCommand {
 
 		let destinationPath;
 		if (flags.destination) {
-			await utils.checkDir(flags.destination, flags['create-path']);
+			await utilities.checkDir(flags.destination, flags['create-path']);
 			destinationPath = flags.destination;
 		} else {
 			destinationPath = this.settings.boxDownloadsFolderPath;
 		}
 
-		/* eslint-disable no-sync */
 		if (!fs.existsSync(destinationPath)) {
 			throw new BoxCLIError('Destination path must exist');
 		}
@@ -74,7 +71,6 @@ class FoldersDownloadCommand extends BoxCommand {
 		if (!fsStat.isDirectory()) {
 			throw new BoxCLIError('Destination path must be a directory');
 		}
-		/* eslint-enable no-sync */
 
 		this.spinner = ora('Starting download').start();
 
@@ -102,10 +98,10 @@ class FoldersDownloadCommand extends BoxCommand {
 					);
 					try {
 						await mkdirp(path.join(destinationPath, item.path));
-					} catch (ex) {
+					} catch (error) {
 						throw new BoxCLIError(
 							`Folder ${item.path} could not be created`,
-							ex
+							error
 						);
 					}
 				} else if (item.type === 'file') {
@@ -122,9 +118,9 @@ class FoldersDownloadCommand extends BoxCommand {
 					}
 				}
 			}
-		} catch (err) {
+		} catch (error) {
 			this.spinner.stop();
-			throw err;
+			throw error;
 		}
 
 		if (this.zip) {
@@ -179,9 +175,8 @@ class FoldersDownloadCommand extends BoxCommand {
 				// 1. The overwrite flag is true. We will download all files and folders within the provided depth (overwite).
 				// 2. The folder does not exist. We will download all files and folders within the provided depth.
 				// 3. The folder exists and overwrite is false, we only download files and folders not existing, within the provided depth.
-				/* eslint-disable no-sync */
+
 				if (folderPath.split(path.sep).length <= this.maxDepth) {
-					/* eslint-enable no-sync */
 					yield* this._getItems(item.id, folderPath);
 				} else {
 					// If the folder exists and overwrite is false, we skip the folder.
@@ -193,14 +188,13 @@ class FoldersDownloadCommand extends BoxCommand {
 			} else if (item.type === 'file') {
 				// We only download file if overwrite is true or the file does not exist.
 				// Skip downloading if overwrite is false and the file exists.
-				/* eslint-disable no-sync */
+
 				if (
 					this.overwrite ||
 					!fs.existsSync(
 						path.join(this.outputPath, folderPath, item.name)
 					)
 				) {
-					/* eslint-enable no-sync */
 					yield {
 						type: 'file',
 						id: item.id,
@@ -234,26 +228,24 @@ class FoldersDownloadCommand extends BoxCommand {
 		let output;
 		try {
 			output = fs.createWriteStream(destinationPath);
-		} catch (ex) {
+		} catch (error) {
 			throw new BoxCLIError(
 				`Could not write to destination path ${destinationPath}`,
-				ex
+				error
 			);
 		}
 
-		this.zip.on('error', (err) => {
-			throw new BoxCLIError('Error writing to zip file', err);
+		this.zip.on('error', (error) => {
+			throw new BoxCLIError('Error writing to zip file', error);
 		});
 
 		this.zip.pipe(output);
 
-		/* eslint-disable promise/avoid-new */
 		// We need to await the end of the stream to avoid a race condition here
 		return new Promise((resolve, reject) => {
 			output.on('close', resolve);
 			output.on('error', reject);
 		});
-		/* eslint-enable promise/avoid-new */
 	}
 }
 
@@ -264,7 +256,7 @@ FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,
 	destination: Flags.string({
 		description: 'The destination folder to download the Box folder into',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	zip: Flags.boolean({
 		description: 'Download the folder into a single .zip archive',

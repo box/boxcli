@@ -9,21 +9,32 @@ class CollectionsAddCommand extends BoxCommand {
 		const { args } = await this.parse(CollectionsAddCommand);
 		let item;
 
-		if (args.itemType === 'file') {
-			item = await this.client.files.addToCollection(
-				args.itemID,
-				args.collectionID
-			);
-		} else if (args.itemType === 'folder') {
-			item = await this.client.folders.addToCollection(
-				args.itemID,
-				args.collectionID
-			);
-		} else if (args.itemType === 'web_link') {
-			item = await this.client.weblinks.addToCollection(
-				args.itemID,
-				args.collectionID
-			);
+		switch (args.itemType) {
+			case 'file': {
+				item = await this.client.files.addToCollection(
+					args.itemID,
+					args.collectionID
+				);
+
+				break;
+			}
+			case 'folder': {
+				item = await this.client.folders.addToCollection(
+					args.itemID,
+					args.collectionID
+				);
+
+				break;
+			}
+			case 'web_link': {
+				item = await this.client.weblinks.addToCollection(
+					args.itemID,
+					args.collectionID
+				);
+
+				break;
+			}
+			// No default
 		}
 
 		this.info(

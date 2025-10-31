@@ -61,11 +61,12 @@ SignRequestsCreateCommand.flags = {
 				const [key, value] = part.split('=');
 
 				switch (key) {
-					case 'email':
+					case 'email': {
 						signer.email = value;
 						break;
+					}
 
-					case 'role':
+					case 'role': {
 						if (!ALLOWED_SIGNER_ROLES.includes(value)) {
 							throw new BoxCLIError(
 								`Invalid value for role property of signer: ${value}. Expecting one of: ${ALLOWED_SIGNER_ROLES.join(
@@ -75,9 +76,10 @@ SignRequestsCreateCommand.flags = {
 						}
 						signer.role = value;
 						break;
+					}
 
 					case 'is-in-person':
-					case 'is_in_person':
+					case 'is_in_person': {
 						if (value !== '0' && value !== '1') {
 							throw new BoxCLIError(
 								`Invalid value for is_in_person property of signer: ${value}. Expecting either 0 or 1.`
@@ -85,36 +87,43 @@ SignRequestsCreateCommand.flags = {
 						}
 						signer.is_in_person = value === '1';
 						break;
+					}
 
-					case 'order':
+					case 'order': {
 						signer.order = value;
 						break;
+					}
 
 					case 'embed-url-external-user-id':
-					case 'embed_url_external_user_id':
+					case 'embed_url_external_user_id': {
 						signer.embed_url_external_user_id = value;
 						break;
+					}
 
 					case 'redirect_url':
-					case 'redirect-url':
+					case 'redirect-url': {
 						signer.redirect_url = value;
 						break;
+					}
 
 					case 'declined-redirect-url':
-					case 'declined_redirect_url':
+					case 'declined_redirect_url': {
 						signer.declined_redirect_url = value;
 						break;
+					}
 
 					case 'signer-group-id':
 					case 'signer_group_id':
 					case 'group-id':
-					case 'group_id':
+					case 'group_id': {
 						signer.signer_group_id = value;
 						break;
-					default:
+					}
+					default: {
 						throw new BoxCLIError(
 							`Unknown property for signer: ${key}`
 						);
+					}
 				}
 			}
 
@@ -172,15 +181,17 @@ SignRequestsCreateCommand.flags = {
 				const [key, value] = part.split('=');
 
 				switch (key) {
-					case 'id':
+					case 'id': {
 						prefillTag.document_tag_id = value;
 						break;
+					}
 
-					case 'text':
+					case 'text': {
 						prefillTag.text_value = value;
 						break;
+					}
 
-					case 'checkbox':
+					case 'checkbox': {
 						if (value !== '0' && value !== '1') {
 							throw new BoxCLIError(
 								`Invalid value for checkbox property of prefill-tag: ${value}. Expecting either 0 or 1.`
@@ -188,15 +199,18 @@ SignRequestsCreateCommand.flags = {
 						}
 						prefillTag.checkbox_value = value === '1';
 						break;
+					}
 
-					case 'date':
+					case 'date': {
 						prefillTag.date_value = value;
 						break;
+					}
 
-					default:
+					default: {
 						throw new BoxCLIError(
 							`Unknown property for prefill-tag: ${key}`
 						);
+					}
 				}
 			}
 

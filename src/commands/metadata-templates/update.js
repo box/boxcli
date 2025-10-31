@@ -99,7 +99,7 @@ const FLAG_HANDLERS = Object.freeze({
 
 		let fieldType;
 		switch (currentOp.op) {
-			case 'addEnumOption':
+			case 'addEnumOption': {
 				if (currentOp.data.key) {
 					ops.push({ ...currentOp });
 					currentOp.data = {};
@@ -107,14 +107,17 @@ const FLAG_HANDLERS = Object.freeze({
 
 				currentOp.data.key = value.input;
 				break;
+			}
 			case 'editEnumOption':
-			case 'addMultiSelectOption':
+			case 'addMultiSelectOption': {
 				currentOp.data.key = value.input;
 				break;
-			case 'reorderEnumOptions':
+			}
+			case 'reorderEnumOptions': {
 				currentOp.enumOptionKeys.push(value.input);
 				break;
-			case 'addField':
+			}
+			case 'addField': {
 				fieldType = currentOp.data.type;
 				if (fieldType !== 'enum' && fieldType !== 'multiSelect') {
 					throw new BoxCLIError(
@@ -123,10 +126,12 @@ const FLAG_HANDLERS = Object.freeze({
 				}
 				currentOp.data.options.push({ key: value.input });
 				break;
-			default:
+			}
+			default: {
 				throw new BoxCLIError(
 					'Unexpected --option flag outside of option-related operation'
 				);
+			}
 		}
 
 		return currentOp;
@@ -140,13 +145,15 @@ const FLAG_HANDLERS = Object.freeze({
 
 		switch (currentOp.op) {
 			case 'editField':
-			case 'addField':
+			case 'addField': {
 				currentOp.data.key = value.input;
 				break;
-			default:
+			}
+			default: {
 				throw new BoxCLIError(
 					'Unexpected --field-key flag outside of field add or edit operation'
 				);
+			}
 		}
 
 		return currentOp;
@@ -175,13 +182,15 @@ const FLAG_HANDLERS = Object.freeze({
 		switch (currentOp.op) {
 			case 'editTemplate':
 			case 'editField':
-			case 'addField':
+			case 'addField': {
 				currentOp.data.hidden = !value.input.startsWith('--no-');
 				break;
-			default:
+			}
+			default: {
 				throw new BoxCLIError(
 					'Unexpected --hidden flag outside of template or field edit operation'
 				);
+			}
 		}
 
 		return currentOp;
@@ -213,13 +222,15 @@ const FLAG_HANDLERS = Object.freeze({
 
 		switch (currentOp.op) {
 			case 'editTemplate':
-			case 'editField':
+			case 'editField': {
 				currentOp.data.displayName = value.input;
 				break;
-			default:
+			}
+			default: {
 				throw new BoxCLIError(
 					'Unexpected --display-name flag outside of template or field edit operation'
 				);
+			}
 		}
 
 		return currentOp;
@@ -304,12 +315,11 @@ function _parseOperations(preparsedArgv) {
 	let ops = [],
 		currentOp = null;
 
-	preparsedArgv
-		.filter((v) => v.type === 'flag')
-		.forEach((value) => {
-			let handler = FLAG_HANDLERS[value.flag] || ((val, curOp) => curOp);
-			currentOp = handler(value, currentOp, ops);
-		});
+	for (const value of preparsedArgv.filter((v) => v.type === 'flag')) {
+		let handler =
+			FLAG_HANDLERS[value.flag] || ((value_, currentOp_) => currentOp_);
+		currentOp = handler(value, currentOp, ops);
+	}
 
 	// Add the last field if necessary and return
 	return ops.concat(currentOp).filter((op) => op !== null);

@@ -4,54 +4,54 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
-describe('AI', () => {
-	const getAgentInRequestBody = (type) => {
-		const agent = {
-			type,
-			basic_text: {
-				llm_endpoint_params: {
-					type: 'openai_params',
-					frequency_penalty: 1.5,
-					presence_penalty: 1.5,
-					stop: '<|im_end|>',
-					temperature: 0,
-					top_p: 1,
-				},
-				model: 'azure__openai__gpt_4o_mini',
-				num_tokens_for_completion: 8400,
-				prompt_template:
-					'It is, consider these travel options and answer the.',
-				system_message:
-					'You are a helpful travel assistant specialized in budget travel',
+function getAgentInRequestBody(type) {
+	const agent = {
+		type,
+		basic_text: {
+			llm_endpoint_params: {
+				type: 'openai_params',
+				frequency_penalty: 1.5,
+				presence_penalty: 1.5,
+				stop: '<|im_end|>',
+				temperature: 0,
+				top_p: 1,
 			},
-			long_text: {
-				embeddings: {
-					model: 'azure__openai__text_embedding_ada_002',
-					strategy: {
-						id: 'basic',
-						num_tokens_per_chunk: 64,
-					},
+			model: 'azure__openai__gpt_4o_mini',
+			num_tokens_for_completion: 8400,
+			prompt_template:
+				'It is, consider these travel options and answer the.',
+			system_message:
+				'You are a helpful travel assistant specialized in budget travel',
+		},
+		long_text: {
+			embeddings: {
+				model: 'azure__openai__text_embedding_ada_002',
+				strategy: {
+					id: 'basic',
+					num_tokens_per_chunk: 64,
 				},
-				llm_endpoint_params: {
-					type: 'openai_params',
-					frequency_penalty: 1.5,
-					presence_penalty: 1.5,
-					stop: '<|im_end|>',
-					temperature: 0,
-					top_p: 1,
-				},
-				model: 'azure__openai__gpt_4o_mini',
-				num_tokens_for_completion: 8400,
-				prompt_template:
-					'It is , consider these travel options and answer the.',
-				system_message:
-					'You are a helpful travel assistant specialized in budget travel',
 			},
-		};
-		return agent;
+			llm_endpoint_params: {
+				type: 'openai_params',
+				frequency_penalty: 1.5,
+				presence_penalty: 1.5,
+				stop: '<|im_end|>',
+				temperature: 0,
+				top_p: 1,
+			},
+			model: 'azure__openai__gpt_4o_mini',
+			num_tokens_for_completion: 8400,
+			prompt_template:
+				'It is , consider these travel options and answer the.',
+			system_message:
+				'You are a helpful travel assistant specialized in budget travel',
+		},
 	};
+	return agent;
+}
 
-	describe('ai:ask', () => {
+describe('AI', function () {
+	describe('ai:ask', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -98,8 +98,8 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -118,13 +118,13 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:ask with ai_agent', () => {
+	describe('ai:ask with ai_agent', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -176,8 +176,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -200,13 +200,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:text-gen', () => {
+	describe('ai:text-gen', function () {
 		const expectedRequestBody = {
 			prompt: 'What is the status of this document?',
 			items: [{ id: '12345', type: 'file', content: 'one,two,three' }],
@@ -244,8 +244,8 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -266,13 +266,13 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:extract', () => {
+	describe('ai:extract', function () {
 		const expectedRequestBody = {
 			prompt: 'firstName, lastName, location, yearOfBirth, company',
 			items: [
@@ -319,8 +319,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -341,13 +341,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:extract-structured', () => {
+	describe('ai:extract-structured', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -407,8 +407,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -428,13 +428,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:extract-structured with ai_agent', () => {
+	describe('ai:extract-structured with ai_agent', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -497,8 +497,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -520,12 +520,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
-	describe('ai:extract with ai agent', () => {
+
+	describe('ai:extract with ai agent', function () {
 		const expectedRequestBody = {
 			prompt: 'firstName, lastName, location, yearOfBirth, company',
 			items: [
@@ -575,8 +576,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -599,13 +600,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});
 
-	describe('ai:extract-structured with metadata template', () => {
+	describe('ai:extract-structured with metadata template', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -660,8 +661,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -681,8 +682,8 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
 				}
 			);
 	});

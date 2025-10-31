@@ -5,25 +5,27 @@ const assert = require('chai').assert;
 const mockery = require('mockery');
 const leche = require('leche');
 const sinon = require('sinon');
-const process = require('process');
-const fs = require('fs');
+const process = require('node:process');
+const path = require('node:path');
+const fs = require('node:fs');
+const os = require('node:os');
 const chaiAsPromised = require('chai-as-promised');
 const { getDriveLetter, isWin } = require('./helpers/test-helper');
 
 chai.use(chaiAsPromised);
 
-describe('Utilities', () => {
+describe('Utilities', function () {
 	const MODULE_UNDER_TEST = '../src/util';
 
 	let sandbox = sinon.createSandbox();
 
-	let mockOS, cliUtils;
+	let mockOS, cliUtilities;
 
 	const isWindows = isWin();
 
 	const driveLetter = isWindows ? getDriveLetter() : '';
 
-	beforeEach(() => {
+	beforeEach(function () {
 		mockery.enable({
 			useCleanCache: true,
 			warnOnUnregistered: false,
@@ -36,52 +38,52 @@ describe('Utilities', () => {
 		mockery.registerMock('os', mockOS);
 
 		mockery.registerAllowable(MODULE_UNDER_TEST, true);
-		cliUtils = require(MODULE_UNDER_TEST);
+		cliUtilities = require(MODULE_UNDER_TEST);
 	});
 
-	afterEach(() => {
+	afterEach(function () {
 		sandbox.verifyAndRestore();
 		mockery.deregisterAll();
 		mockery.disable();
 	});
 
-	describe('parsePath()', () => {
+	describe('parsePath()', function () {
 		leche.withData(
 			{
 				'bare tilde': [
 					'~',
 					...(isWindows
-						? [`${driveLetter}\\home\\user`]
-						: ['/home/user']),
+						? [String.raw`${driveLetter}\home\user`]
+						: [os.homedir()]),
 				],
 				'subdirectory of tilde': [
 					'~/foo/bar',
 					...(isWindows
-						? [`${driveLetter}\\home\\user\\foo\\bar`]
-						: ['/home/user/foo/bar']),
+						? [String.raw`${driveLetter}\home\user\foo\bar`]
+						: [path.join(os.homedir(), 'foo', 'bar')]),
 				],
 				'absolute path with interior tilde': [
 					'/var/~/bar',
 					...(isWindows
-						? [`${driveLetter}\\var\\~\\bar`]
+						? [String.raw`${driveLetter}\var\~\bar`]
 						: ['/var/~/bar']),
 				],
 				'relative path with interior tilde': [
 					'./~/bar',
 					...(isWindows
-						? [`${process.cwd()}\\~\\bar`]
+						? [String.raw`${process.cwd()}\~\bar`]
 						: [`${process.cwd()}/~/bar`]),
 				],
 				'absolute path': [
 					'/var/box/files',
 					...(isWindows
-						? [`${driveLetter}\\var\\box\\files`]
+						? [String.raw`${driveLetter}\var\box\files`]
 						: ['/var/box/files']),
 				],
 				'relative path': [
 					'./foo',
 					...(isWindows
-						? [`${process.cwd()}\\foo`]
+						? [String.raw`${process.cwd()}\foo`]
 						: [`${process.cwd()}/foo`]),
 				],
 				'root directory': [
@@ -95,42 +97,48 @@ describe('Utilities', () => {
 				'absolute file path': [
 					'/foo/bar/doc.pdf',
 					...(isWindows
-						? [`${driveLetter}\\foo\\bar\\doc.pdf`]
+						? [String.raw`${driveLetter}\foo\bar\doc.pdf`]
 						: ['/foo/bar/doc.pdf']),
 				],
 				'relative file path': [
 					'./pic.jpg',
 					...(isWindows
-						? [`${process.cwd()}\\pic.jpg`]
+						? [String.raw`${process.cwd()}\pic.jpg`]
 						: [`${process.cwd()}/pic.jpg`]),
 				],
 				'file in current directory': [
 					'essay.docx',
 					...(isWindows
-						? [`${process.cwd()}\\essay.docx`]
+						? [String.raw`${process.cwd()}\essay.docx`]
 						: [`${process.cwd()}/essay.docx`]),
 				],
 				'relative file path that REALLY should be in the root directory':
 					[
 						'../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../a.txt',
-						...(isWindows ? [`${driveLetter}\\a.txt`] : ['/a.txt']),
+						...(isWindows
+							? [String.raw`${driveLetter}\a.txt`]
+							: ['/a.txt']),
 					],
 				'folder name with spaces in it': [
 					'/A/Folder/With/Spaces In It',
 					...(isWindows
-						? [`${driveLetter}\\A\\Folder\\With\\Spaces In It`]
+						? [
+								String.raw`${driveLetter}\A\Folder\With\Spaces In It`,
+							]
 						: ['/A/Folder/With/Spaces In It']),
 				],
 				'file name with spaces in it': [
 					'/home/otheruser/Secret Stuff.pdf',
 					...(isWindows
-						? [`${driveLetter}\\home\\otheruser\\Secret Stuff.pdf`]
+						? [
+								String.raw`${driveLetter}\home\otheruser\Secret Stuff.pdf`,
+							]
 						: ['/home/otheruser/Secret Stuff.pdf']),
 				],
 				'absolute path to folder with trailing slash': [
 					'/foo/bar/baz/',
 					...(isWindows
-						? [`${driveLetter}\\foo\\bar\\baz`]
+						? [String.raw`${driveLetter}\foo\bar\baz`]
 						: ['/foo/bar/baz']),
 				],
 				'dot for current directory': ['.', process.cwd()],
@@ -141,14 +149,14 @@ describe('Utilities', () => {
 			},
 			function (path, expectedOutput) {
 				it('should correctly parse to absolute path', function () {
-					let parsedPath = cliUtils.parsePath(path);
+					let parsedPath = cliUtilities.parsePath(path);
 					assert.strictEqual(parsedPath, expectedOutput);
 				});
 			}
 		);
 	});
 
-	describe('parseMetadata()', () => {
+	describe('parseMetadata()', function () {
 		leche.withData(
 			{
 				'string value': ['foo=bar', { foo: 'bar' }],
@@ -177,13 +185,13 @@ describe('Utilities', () => {
 					},
 				],
 				'string array values with escaped comma': [
-					'quux=[comma (\\,),period (.)]',
+					String.raw`quux=[comma (\,),period (.)]`,
 					{
 						quux: ['comma (,)', 'period (.)'],
 					},
 				],
 				'key with escaped equal sign': [
-					'x\\=y?=yes',
+					String.raw`x\=y?=yes`,
 					{ 'x=y?': 'yes' },
 				],
 				'string value with leading octothrope': [
@@ -191,11 +199,11 @@ describe('Utilities', () => {
 					{ hexColor: '#ffffff' },
 				],
 				'string value with escaped leading octothorpe': [
-					'hexColor=\\#123456',
+					String.raw`hexColor=\#123456`,
 					{ hexColor: '#123456' },
 				],
 				'string value with escaped leading bracket': [
-					'quux=\\[sic]',
+					String.raw`quux=\[sic]`,
 					{ quux: '[sic]' },
 				],
 				'array value with special characters in elements': [
@@ -205,15 +213,15 @@ describe('Utilities', () => {
 					},
 				],
 				'string value with leading literal backslash and octothorpe': [
-					'grawlix=\\\\#*(^',
-					{ grawlix: '\\#*(^' },
+					String.raw`grawlix=\\#*(^`,
+					{ grawlix: String.raw`\#*(^` },
 				],
 				'string value with leading literal backslash and bracket': [
-					'grawlix=\\\\[^%$#!]',
-					{ grawlix: '\\[^%$#!]' },
+					String.raw`grawlix=\\[^%$#!]`,
+					{ grawlix: String.raw`\[^%$#!]` },
 				],
 				'key with trailing backslash': [
-					'ugh\\\\=escapes',
+					String.raw`ugh\\=escapes`,
 					{ 'ugh\\': 'escapes' },
 				],
 				'string value of octothorpe': ['pound=#', { pound: '#' }],
@@ -222,13 +230,13 @@ describe('Utilities', () => {
 					{ bracket: '[' },
 				],
 				'combination of many edge cases': [
-					'x\\=y=[#fff,#333]',
+					String.raw`x\=y=[#fff,#333]`,
 					{
 						'x=y': ['#fff', '#333'],
 					},
 				],
 				'numeric value with unnecessary escape': [
-					'foo=#3\\33',
+					String.raw`foo=#3\33`,
 					{ foo: 333 },
 				],
 				'string value that looks like number': [
@@ -248,15 +256,15 @@ describe('Utilities', () => {
 					['emoticon=#-.', { emoticon: '#-.' }],
 			},
 			function (value, expectedOutput) {
-				it('should correctly parse metadata key-value pair', () => {
-					let parsedPair = cliUtils.parseMetadata(value);
+				it('should correctly parse metadata key-value pair', function () {
+					let parsedPair = cliUtilities.parseMetadata(value);
 					assert.deepEqual(parsedPair, expectedOutput);
 				});
 			}
 		);
 	});
 
-	describe('parseMetadataOp()', () => {
+	describe('parseMetadataOp()', function () {
 		leche.withData(
 			{
 				'path with string value': [
@@ -323,14 +331,14 @@ describe('Utilities', () => {
 					},
 				],
 				'path with string array values with escaped comma': [
-					'/quux=[comma (\\,),period (.)]',
+					String.raw`/quux=[comma (\,),period (.)]`,
 					{
 						path: '/quux',
 						value: ['comma (,)', 'period (.)'],
 					},
 				],
 				'path with escaped equal sign': [
-					'/x\\=y?=yes',
+					String.raw`/x\=y?=yes`,
 					{
 						path: '/x=y?',
 						value: 'yes',
@@ -344,14 +352,14 @@ describe('Utilities', () => {
 					},
 				],
 				'path with string value with escaped leading octothorpe': [
-					'/hexColor=\\#123456',
+					String.raw`/hexColor=\#123456`,
 					{
 						path: '/hexColor',
 						value: '#123456',
 					},
 				],
 				'path with string value with escaped leading bracket': [
-					'/quux=\\[sic]',
+					String.raw`/quux=\[sic]`,
 					{
 						path: '/quux',
 						value: '[sic]',
@@ -366,22 +374,22 @@ describe('Utilities', () => {
 				],
 				'path with string value with leading literal backslash and octothorpe':
 					[
-						'/grawlix=\\\\#*(^',
+						String.raw`/grawlix=\\#*(^`,
 						{
 							path: '/grawlix',
-							value: '\\#*(^',
+							value: String.raw`\#*(^`,
 						},
 					],
 				'path with string value with leading literal backslash and bracket':
 					[
-						'/grawlix=\\\\[^%$#!]',
+						String.raw`/grawlix=\\[^%$#!]`,
 						{
 							path: '/grawlix',
-							value: '\\[^%$#!]',
+							value: String.raw`\[^%$#!]`,
 						},
 					],
 				'path with trailing backslash': [
-					'/ugh\\\\=escapes',
+					String.raw`/ugh\\=escapes`,
 					{
 						path: '/ugh\\',
 						value: 'escapes',
@@ -403,14 +411,14 @@ describe('Utilities', () => {
 				],
 				'path with value, both having a combination of many edge cases':
 					[
-						'/x\\=y=[#fff,#333]',
+						String.raw`/x\=y=[#fff,#333]`,
 						{
 							path: '/x=y',
 							value: ['#fff', '#333'],
 						},
 					],
 				'path with numeric value with unnecessary escape': [
-					'/foo=#3\\33',
+					String.raw`/foo=#3\33`,
 					{
 						path: '/foo',
 						value: 333,
@@ -460,14 +468,14 @@ describe('Utilities', () => {
 					},
 				],
 				'path from and to with escaped equal sign': [
-					'/x\\=y?>/y\\=x?',
+					String.raw`/x\=y?>/y\=x?`,
 					{
 						from: '/x=y?',
 						path: '/y=x?',
 					},
 				],
 				'paths with escaped angle bracket': [
-					'/x\\>y?>/y<\\=x?',
+					String.raw`/x\>y?>/y<\=x?`,
 					{
 						from: '/x>y?',
 						path: '/y<=x?',
@@ -480,7 +488,7 @@ describe('Utilities', () => {
 					},
 				],
 				'single path with escaped characters': [
-					'/x\\>\\=y?',
+					String.raw`/x\>\=y?`,
 					{
 						path: '/x>=y?',
 					},
@@ -541,7 +549,7 @@ describe('Utilities', () => {
 					},
 				],
 				'path with escaped slash': [
-					'/foo\\/bar=baz',
+					String.raw`/foo\/bar=baz`,
 					{
 						path: '/foo~1bar',
 						value: 'baz',
@@ -562,7 +570,7 @@ describe('Utilities', () => {
 					},
 				],
 				'path with escaped tilde in segment': [
-					'/foo\\~bar=ugh',
+					String.raw`/foo\~bar=ugh`,
 					{
 						path: '/foo~0bar',
 						value: 'ugh',
@@ -570,36 +578,35 @@ describe('Utilities', () => {
 				],
 			},
 			function (value, expectedOutput) {
-				it('should correctly parse op input', () => {
-					let parsedOp = cliUtils.parseMetadataOp(value);
+				it('should correctly parse op input', function () {
+					let parsedOp = cliUtilities.parseMetadataOp(value);
 					assert.deepEqual(parsedOp, expectedOutput);
 				});
 			}
 		);
 	});
 
-	/* eslint-disable no-sync */
-	describe('checkDir()', () => {
-		it('should create directory if create flag is true', async () => {
+	describe('checkDir()', function () {
+		it('should create directory if create flag is true', async function () {
 			const destination = `${process.cwd()}/temp`;
-			await cliUtils.checkDir(destination, true);
+			await cliUtilities.checkDir(destination, true);
 			assert.isTrue(fs.existsSync(destination));
 			fs.rmdirSync(destination);
 		});
 
-		it('should create nested directory if create flag is true', async () => {
+		it('should create nested directory if create flag is true', async function () {
 			const destination = `${process.cwd()}/nestedTemp`;
 			const nestedDestination = `${destination}/temp`;
-			await cliUtils.checkDir(nestedDestination, true);
+			await cliUtilities.checkDir(nestedDestination, true);
 			assert.isTrue(fs.existsSync(nestedDestination));
 			fs.rmdirSync(nestedDestination);
 			fs.rmdirSync(destination);
 		});
 
-		it('should throw expection if directory does not exist and create flag is false', () => {
+		it('should throw expection if directory does not exist and create flag is false', function () {
 			const destination = `${process.cwd()}/nonExistingPath`;
 			const retrieveException = async () => {
-				await cliUtils.checkDir(destination, false);
+				await cliUtilities.checkDir(destination, false);
 			};
 			return assert.isRejected(retrieveException(), Error);
 		});

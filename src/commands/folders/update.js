@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class FoldersUpdateCommand extends BoxCommand {
 	async run() {
@@ -71,7 +71,7 @@ FoldersUpdateCommand.flags = {
 	}),
 	description: Flags.string({
 		description: 'New description for folder',
-		parse: utils.unescapeSlashes,
+		parse: utilities.unescapeSlashes,
 	}),
 	'upload-email-access': Flags.string({
 		description: 'Upload email access level',

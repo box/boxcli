@@ -20,7 +20,10 @@ class RetentionPoliciesUpdateCommand extends BoxCommand {
 			updates.policy_type = flags['policy-type'];
 		}
 		if (flags['retention-length']) {
-			updates.retention_length = parseInt(flags['retention-length'], 10);
+			updates.retention_length = Number.parseInt(
+				flags['retention-length'],
+				10
+			);
 		}
 		if (flags['non-modifiable']) {
 			updates.retention_type =

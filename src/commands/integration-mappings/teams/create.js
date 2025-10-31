@@ -8,16 +8,17 @@ class IntegrationMappingsTeamsCreateCommand extends BoxCommand {
 		const { args } = await this.parse(
 			IntegrationMappingsTeamsCreateCommand
 		);
-		let body = {};
-		body.boxItem = {
-			type: 'folder',
-			id: args.boxItemID,
-		};
-		body.partnerItem = {
-			type: args.partnerItemType,
-			id: args.partnerItemID,
-			teamId: args.partnerItemTeamID,
-			tenantId: args.partnerItemTenantID,
+		let body = {
+			boxItem: {
+				type: 'folder',
+				id: args.boxItemID,
+			},
+			partnerItem: {
+				type: args.partnerItemType,
+				id: args.partnerItemID,
+				teamId: args.partnerItemTeamID,
+				tenantId: args.partnerItemTenantID,
+			},
 		};
 
 		let integrationMapping =

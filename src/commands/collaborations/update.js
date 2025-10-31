@@ -7,48 +7,51 @@ const chalk = require('chalk');
 class CollaborationsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(CollaborationsUpdateCommand);
-		let params = { body: {}, qs: {} };
+		let parameters = { body: {}, qs: {} };
 
 		if (flags.fields) {
-			params.qs.fields = flags.fields;
+			parameters.qs.fields = flags.fields;
 		}
 		if (flags.status) {
-			params.body.status = flags.status;
+			parameters.body.status = flags.status;
 		}
 		if (flags.hasOwnProperty('can-view-path')) {
-			params.body.can_view_path = flags['can-view-path'];
+			parameters.body.can_view_path = flags['can-view-path'];
 		}
 		if (flags.role) {
-			params.body.role = flags.role.replace('_', ' ');
+			parameters.body.role = flags.role.replace('_', ' ');
 		} else if (flags.editor) {
-			params.body.role = this.client.collaborationRoles.EDITOR;
+			parameters.body.role = this.client.collaborationRoles.EDITOR;
 		} else if (flags.viewer) {
-			params.body.role = this.client.collaborationRoles.VIEWER;
+			parameters.body.role = this.client.collaborationRoles.VIEWER;
 		} else if (flags.previewer) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER;
+			parameters.body.role = this.client.collaborationRoles.PREVIEWER;
 		} else if (flags.uploader) {
-			params.body.role = this.client.collaborationRoles.UPLOADER;
+			parameters.body.role = this.client.collaborationRoles.UPLOADER;
 		} else if (flags['previewer-uploader']) {
-			params.body.role =
+			parameters.body.role =
 				this.client.collaborationRoles.PREVIEWER_UPLOADER;
 		} else if (flags['viewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.VIEWER_UPLOADER;
+			parameters.body.role =
+				this.client.collaborationRoles.VIEWER_UPLOADER;
 		} else if (flags['co-owner']) {
-			params.body.role = this.client.collaborationRoles.CO_OWNER;
+			parameters.body.role = this.client.collaborationRoles.CO_OWNER;
 		} else if (flags.owner) {
-			params.body.role = this.client.collaborationRoles.OWNER;
+			parameters.body.role = this.client.collaborationRoles.OWNER;
 		}
 		if (flags['expires-at']) {
-			params.body.expires_at = flags['expires-at'];
+			parameters.body.expires_at = flags['expires-at'];
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
 		let collaboration = await this.client.wrapWithDefaultHandler(
 			this.client.put
-		)(`/collaborations/${args.id}`, params);
+		)(`/collaborations/${args.id}`, parameters);
 		if (collaboration) {
 			await this.output(collaboration);
-		} else if (params.body.role === this.client.collaborationRoles.OWNER) {
+		} else if (
+			parameters.body.role === this.client.collaborationRoles.OWNER
+		) {
 			// Upgrading a collaborator to owner produces a 204 response with empty body
 			// Output a success message instead of trying to print the updated collaboration
 			this.info(

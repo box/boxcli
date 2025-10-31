@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../box-command');
-const PaginationUtils = require('../pagination-utils');
+const PaginationUtilities = require('../pagination-utils');
 
 class RecentItems extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(RecentItems);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -24,7 +24,7 @@ RecentItems._endpoint = 'get_recent_items';
 
 RecentItems.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 module.exports = RecentItems;

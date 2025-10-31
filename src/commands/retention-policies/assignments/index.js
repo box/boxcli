@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(RetentionPoliciesListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.type) {
 			options.type = flags.type;
@@ -35,7 +35,7 @@ RetentionPoliciesListCommand._endpoint =
 
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	type: Flags.string({
 		description: 'The type of the retention policy assignment to retrieve',
 		options: ['folder', 'enterprise', 'metadata_template'],

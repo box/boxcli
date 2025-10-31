@@ -2,14 +2,14 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(
 			LegalHoldPoliciesListAssignmentsCommand
 		);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags['assign-to-type']) {
 			options.assign_to_type = flags['assign-to-type'];
@@ -39,7 +39,7 @@ LegalHoldPoliciesListAssignmentsCommand._endpoint =
 
 LegalHoldPoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	'assign-to-type': Flags.string({
 		description: 'Filter by assignment type',
 		options: ['file_version', 'file', 'folder', 'user'],

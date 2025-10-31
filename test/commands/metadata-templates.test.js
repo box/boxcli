@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Metadata Templates', () => {
-	describe('metadata-templates:cascade', () => {
+describe('Metadata Templates', function () {
+	describe('metadata-templates:cascade', function () {
 		let folderID = '22222',
 			scope = 'enterprise',
 			templateKey = 'testTemplate',
@@ -35,8 +35,8 @@ describe('Metadata Templates', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create cascade policy (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create cascade policy (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -55,8 +55,8 @@ describe('Metadata Templates', () => {
 				`--folder=${folderID}`,
 				'--token=test',
 			])
-			.it('should create cascade policy (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create cascade policy (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -75,12 +75,12 @@ describe('Metadata Templates', () => {
 				`--folder=${folderID}`,
 				'--token=test',
 			])
-			.it('should create cascade policy (command alias)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create cascade policy (command alias)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('metadata-templates:get', () => {
+	describe('metadata-templates:get', function () {
 		let scope = 'enterprise',
 			templateKey = 'testTemplate',
 			fixture = getFixture(
@@ -102,8 +102,8 @@ describe('Metadata Templates', () => {
 			])
 			.it(
 				'should get information about a metadata template (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -116,13 +116,13 @@ describe('Metadata Templates', () => {
 			.command(['metadata-templates:get', templateKey, '--token=test'])
 			.it(
 				'should get information about a metadata template (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('metadata-templates:delete', () => {
+	describe('metadata-templates:delete', function () {
 		let scope = 'enterprise',
 			templateKey = 'testTemplate';
 
@@ -135,9 +135,9 @@ describe('Metadata Templates', () => {
 		)
 			.stderr()
 			.command(['metadata-templates:delete', templateKey, '--token=test'])
-			.it('should delete a metadata template', (ctx) => {
+			.it('should delete a metadata template', (context) => {
 				assert.include(
-					ctx.stderr,
+					context.stderr,
 					`Delete metadata template with scope ${scope} and identifier ${templateKey}`
 				);
 			});
@@ -146,7 +146,8 @@ describe('Metadata Templates', () => {
 	leche.withData(
 		['metadata-templates', 'metadata-templates:list'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let scope = 'enterprise',
 					fixture = getFixture(
 						'metadata-templates/get_metadata_templates_scope_page_1'
@@ -172,15 +173,15 @@ describe('Metadata Templates', () => {
 					.command([command, '--json', '--token=test'])
 					.it(
 						'should get all metadata templates in your Enterprise (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			});
 		}
 	);
 
-	describe('metadata-templates:create', () => {
+	describe('metadata-templates:create', function () {
 		let displayName = 'New Metadata Template',
 			templateKey = 'newMetadata',
 			fixture = getFixture(
@@ -214,8 +215,8 @@ describe('Metadata Templates', () => {
 			])
 			.it(
 				'should create a new metadata template (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -236,8 +237,8 @@ describe('Metadata Templates', () => {
 			])
 			.it(
 				'should create a new metadata template (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -257,9 +258,15 @@ describe('Metadata Templates', () => {
 				'--id-only',
 				'--token=test',
 			])
-			.it('should create a new metadata template (ID Output)', (ctx) => {
-				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
-			});
+			.it(
+				'should create a new metadata template (ID Output)',
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${JSON.parse(fixture).id}${os.EOL}`
+					);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -279,8 +286,8 @@ describe('Metadata Templates', () => {
 			])
 			.it(
 				'should send hidden param when --hidden flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -385,9 +392,9 @@ describe('Metadata Templates', () => {
 						...flags,
 						'--token=test',
 					])
-					.it('should output correct error message', (ctx) => {
+					.it('should output correct error message', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`${expectedErrorMessage}${os.EOL}`
 						);
 					});
@@ -395,7 +402,7 @@ describe('Metadata Templates', () => {
 		);
 	});
 
-	describe('metadata-templates:update', () => {
+	describe('metadata-templates:update', function () {
 		let scope = 'enterprise',
 			templateKey = 'employeeRecord',
 			fixture = getFixture(
@@ -545,9 +552,12 @@ describe('Metadata Templates', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update the metadata template (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should update the metadata template (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		leche.withData(
 			{
@@ -607,9 +617,9 @@ describe('Metadata Templates', () => {
 						...flags,
 						'--token=test',
 					])
-					.it('should output correct error message', (ctx) => {
+					.it('should output correct error message', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`${expectedErrorMessage}${os.EOL}`
 						);
 					});

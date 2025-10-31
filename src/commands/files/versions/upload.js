@@ -1,9 +1,8 @@
-/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../../cli-error');
 
@@ -18,8 +17,8 @@ class FilesUploadVersionsCommand extends BoxCommand {
 		let stream;
 		try {
 			stream = fs.createReadStream(args.path);
-		} catch (ex) {
-			throw new BoxCLIError(`Could not open file ${args.path}`, ex);
+		} catch (error) {
+			throw new BoxCLIError(`Could not open file ${args.path}`, error);
 		}
 
 		if (flags['content-modified-at']) {

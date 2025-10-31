@@ -8,8 +8,9 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(EnvironmentsSwitchUserCommand);
 
-		let environmentsObj = await this.getEnvironments();
-		let environment = environmentsObj.environments[environmentsObj.default];
+		let environmentsObject = await this.getEnvironments();
+		let environment =
+			environmentsObject.environments[environmentsObject.default];
 
 		if (flags.default && !args.userID) {
 			environment.useDefaultAsUser = false;
@@ -22,7 +23,7 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 			);
 		}
 
-		await this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObject);
 		this.info(chalk`{green User set to ${args.userID || 'default'}}`);
 	}
 }

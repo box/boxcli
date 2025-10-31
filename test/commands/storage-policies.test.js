@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Storage-policies', () => {
-	describe('storage-policies:get', () => {
+describe('Storage-policies', function () {
+	describe('storage-policies:get', function () {
 		let storagePolicyId = '123',
 			fixture = getFixture('storage-policies/get_storage_policies_id'),
 			yamlOutput = getFixture('output/storage_policies_get_yaml.txt');
@@ -26,8 +26,8 @@ describe('Storage-policies', () => {
 			])
 			.it(
 				'should get information on a storage policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -40,8 +40,8 @@ describe('Storage-policies', () => {
 			.command(['storage-policies:get', storagePolicyId, '--token=test'])
 			.it(
 				'should get information on a storage policy (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
@@ -49,7 +49,8 @@ describe('Storage-policies', () => {
 	leche.withData(
 		['storage-policies', 'storage-policies:list'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let fixture = getFixture(
 						'storage-policies/get_storage_policies_page_1'
 					),
@@ -74,14 +75,17 @@ describe('Storage-policies', () => {
 				)
 					.stdout()
 					.command([command, '--json', '--token=test'])
-					.it('should list storage policies (JSON Output)', (ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
-					});
+					.it(
+						'should list storage policies (JSON Output)',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
 			});
 		}
 	);
 
-	describe('storage-policies:assignments:get', () => {
+	describe('storage-policies:assignments:get', function () {
 		let assignmentId = 'user_987654321',
 			fixture = getFixture(
 				'storage-policies/get_storage_policy_assignments_id'
@@ -104,8 +108,8 @@ describe('Storage-policies', () => {
 			])
 			.it(
 				'should get information on a storage policy assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -122,13 +126,13 @@ describe('Storage-policies', () => {
 			])
 			.it(
 				'should get information on a storage policy assignment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('storage-policies:assignments:lookup', () => {
+	describe('storage-policies:assignments:lookup', function () {
 		let enterpriseId = '77777',
 			type = 'enterprise',
 			fixture = getFixture(
@@ -157,10 +161,10 @@ describe('Storage-policies', () => {
 			])
 			.it(
 				'should look up which storage policy an object is assigned to (JSON Output)',
-				(ctx) => {
+				(context) => {
 					let expectedObject = JSON.parse(fixture).entries[0];
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -184,13 +188,13 @@ describe('Storage-policies', () => {
 			])
 			.it(
 				'should look up which storage policy an object is assigned to (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('storage-policies:assign', () => {
+	describe('storage-policies:assign', function () {
 		let policyId = '223',
 			userId = '987654321',
 			fixture = getFixture(
@@ -231,8 +235,8 @@ describe('Storage-policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should assign a storage policy (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should assign a storage policy (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -253,12 +257,12 @@ describe('Storage-policies', () => {
 				userId,
 				'--token=test',
 			])
-			.it('should assign a storage policy (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should assign a storage policy (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('storage-policies:assignments:remove', () => {
+	describe('storage-policies:assignments:remove', function () {
 		let assignmentId = 'user_987654321';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -272,9 +276,9 @@ describe('Storage-policies', () => {
 				assignmentId,
 				'--token=test',
 			])
-			.it('should delete storage policy assignment', (ctx) => {
+			.it('should delete storage policy assignment', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted storage policy assignment ${assignmentId}${os.EOL}`
 				);
 			});

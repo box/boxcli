@@ -1,6 +1,6 @@
 'use strict';
 
-const os = require('os');
+const os = require('node:os');
 
 /**
  * Wrapper for lower-level errors, so we can give reasonable error messages without losing the original message/stack

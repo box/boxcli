@@ -28,11 +28,9 @@ class EventsPollCommand extends BoxCommand {
 		}
 
 		await this.output('Polling started...');
-		if (flags.enterprise) {
-			stream = await this.client.events.getEnterpriseEventStream(options);
-		} else {
-			stream = await this.client.events.getEventStream(options);
-		}
+		stream = await (flags.enterprise
+			? this.client.events.getEnterpriseEventStream(options)
+			: this.client.events.getEventStream(options));
 
 		let events = pEvent.iterator(stream, 'data');
 
@@ -68,7 +66,7 @@ EventsPollCommand.flags = {
 	'polling-interval': Flags.string({
 		description:
 			'Number of seconds to wait before polling for new events. Default is 60 seconds.',
-		parse: (input) => parseInt(input, 10),
+		parse: (input) => Number.parseInt(input, 10),
 	}),
 };
 

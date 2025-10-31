@@ -2,12 +2,12 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class UsersListGroupsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(UsersListGroupsCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -29,7 +29,7 @@ UsersListGroupsCommand._endpoint = 'get_users_id_memberships';
 
 UsersListGroupsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 UsersListGroupsCommand.args = {

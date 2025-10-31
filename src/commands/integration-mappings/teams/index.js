@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags } = require('@oclif/core');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class IntegrationMappingsTeamsListCommand extends BoxCommand {
 	async run() {
@@ -46,7 +46,7 @@ IntegrationMappingsTeamsListCommand._endpoint =
 
 IntegrationMappingsTeamsListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	'partner-item-id': Flags.string({
 		hidden: false,
 		description:

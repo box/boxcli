@@ -4,10 +4,10 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Collaborations', () => {
-	describe('collaborations:get', () => {
+describe('Collaborations', function () {
+	describe('collaborations:get', function () {
 		let collaborationId = '1234567890',
 			fixture = getFixture('collaborations/get_collaborations_id'),
 			yamlOutput = getFixture('output/collaborations_get_yaml.txt');
@@ -26,8 +26,8 @@ describe('Collaborations', () => {
 			])
 			.it(
 				'should get an individual collaboration (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -40,8 +40,8 @@ describe('Collaborations', () => {
 			.command(['collaborations:get', collaborationId, '--token=test'])
 			.it(
 				'should get an individual collaboration (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -60,10 +60,10 @@ describe('Collaborations', () => {
 			])
 			.it(
 				'should send fields param and filter output when --fields flag is passed',
-				(ctx) => {
+				(context) => {
 					let lb = '\n';
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: editor${os.EOL}`
 					);
 				}
@@ -77,7 +77,8 @@ describe('Collaborations', () => {
 			'folders:collaborations:update',
 		],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let collaborationId = '1234567890',
 					fixture = getFixture(
 						'collaborations/put_collaborations_id'
@@ -110,8 +111,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should update a collaboration with viewer and status flags passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -133,8 +134,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should update a collaboration with viewer and status flags passed (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -155,9 +156,9 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should print a success message after updating collab role to owner',
-						(ctx) => {
+						(context) => {
 							assert.equal(
-								ctx.stderr,
+								context.stderr,
 								`Collaborator successfully upgraded to owner.${os.EOL}`
 							);
 						}
@@ -207,8 +208,8 @@ describe('Collaborations', () => {
 							])
 							.it(
 								'should create a collaboration with the correct role when passed flag for role',
-								(ctx) => {
-									assert.equal(ctx.stdout, yamlOutput);
+								(context) => {
+									assert.equal(context.stdout, yamlOutput);
 								}
 							);
 					}
@@ -234,10 +235,10 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should send fields param and filter output when --fields flag is passed',
-						(ctx) => {
+						(context) => {
 							let lb = '\n';
 							assert.equal(
-								ctx.stdout,
+								context.stdout,
 								`Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: viewer${os.EOL}`
 							);
 						}
@@ -268,8 +269,8 @@ describe('Collaborations', () => {
 							])
 							.it(
 								'should send can_view_path value when --can-view-path flag is passed',
-								(ctx) => {
-									assert.equal(ctx.stdout, yamlOutput);
+								(context) => {
+									assert.equal(context.stdout, yamlOutput);
 								}
 							);
 					}
@@ -296,8 +297,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should send expires_at value when --expires-at flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 			});
@@ -311,7 +312,8 @@ describe('Collaborations', () => {
 			'folders:collaborations:delete',
 		],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let collaborationId = '1234567890';
 
 				test.nock(TEST_API_ROOT, (api) =>
@@ -321,9 +323,9 @@ describe('Collaborations', () => {
 				)
 					.stderr()
 					.command([command, collaborationId, '--token=test'])
-					.it('should remove a collaboration', (ctx) => {
+					.it('should remove a collaboration', (context) => {
 						assert.equal(
-							ctx.stderr,
+							context.stderr,
 							`Collaboration ${collaborationId} successfully removed${os.EOL}`
 						);
 					});
@@ -334,7 +336,8 @@ describe('Collaborations', () => {
 	leche.withData(
 		['collaborations:create', 'collaborations:add'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let itemId = '1234567890',
 					boxItemType = 'folder',
 					collaborationId = '1234567890',
@@ -376,8 +379,11 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should output JSON when the --json flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, addCollaborationFixture);
+						(context) => {
+							assert.equal(
+								context.stdout,
+								addCollaborationFixture
+							);
 						}
 					);
 
@@ -397,8 +403,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should create a collaboration for a Box item with the viewer and login flags passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -419,9 +425,9 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should output only the ID of the created collaboration when the --id-only flag is passed',
-						(ctx) => {
+						(context) => {
 							assert.equal(
-								ctx.stdout,
+								context.stdout,
 								`${collaborationId}${os.EOL}`
 							);
 						}
@@ -471,8 +477,8 @@ describe('Collaborations', () => {
 							])
 							.it(
 								'should create a collaboration with the correct role when passed flag for role',
-								(ctx) => {
-									assert.equal(ctx.stdout, yamlOutput);
+								(context) => {
+									assert.equal(context.stdout, yamlOutput);
 								}
 							);
 					}
@@ -505,8 +511,8 @@ describe('Collaborations', () => {
 							])
 							.it(
 								'should send notify query param when --notify flag is passed',
-								(ctx) => {
-									assert.equal(ctx.stdout, yamlOutput);
+								(context) => {
+									assert.equal(context.stdout, yamlOutput);
 								}
 							);
 					}
@@ -530,10 +536,10 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should send fields param and filter output when --fields flag is passed',
-						(ctx) => {
+						(context) => {
 							let lb = '\n';
 							assert.equal(
-								ctx.stdout,
+								context.stdout,
 								`Type: collaboration${lb}ID: '1234567890'${lb}Status: accepted${lb}Role: previewer${os.EOL}`
 							);
 						}
@@ -565,8 +571,8 @@ describe('Collaborations', () => {
 							])
 							.it(
 								'should send notify query param when --notify flag is passed',
-								(ctx) => {
-									assert.equal(ctx.stdout, yamlOutput);
+								(context) => {
+									assert.equal(context.stdout, yamlOutput);
 								}
 							);
 					}
@@ -594,8 +600,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should create collaboration for user by ID when --user-id flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -621,8 +627,8 @@ describe('Collaborations', () => {
 					])
 					.it(
 						'should create collaboration for user by ID when --user-id flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 			});
@@ -632,7 +638,8 @@ describe('Collaborations', () => {
 	leche.withData(
 		['collaborations:get-pending', 'collaborations:pending'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let fixture = getFixture(
 						'collaborations/get_collaborations_pending_page_1'
 					),
@@ -663,8 +670,8 @@ describe('Collaborations', () => {
 					.command([command, '--json', '--token=test'])
 					.it(
 						'should list all pending collaborations for a user (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			});

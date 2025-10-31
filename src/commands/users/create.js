@@ -47,7 +47,7 @@ class UsersCreateCommand extends BoxCommand {
 			options.address = flags.address;
 		}
 		if (flags['disk-space']) {
-			options.space_amount = parseInt(flags['disk-space'], 10);
+			options.space_amount = Number.parseInt(flags['disk-space'], 10);
 		}
 		if (flags.status) {
 			options.status = flags.status;

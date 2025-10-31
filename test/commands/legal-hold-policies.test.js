@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Legal Hold Policies', () => {
-	describe('legal-hold-policies:get', () => {
+describe('Legal Hold Policies', function () {
+	describe('legal-hold-policies:get', function () {
 		let policyId = '11111',
 			fixture = getFixture(
 				'legal-hold-policies/get_legal_hold_policies_id'
@@ -25,8 +25,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should get information about a legal hold policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -37,8 +37,8 @@ describe('Legal Hold Policies', () => {
 			.command(['legal-hold-policies:get', policyId, '--token=test'])
 			.it(
 				'should get information about a legal hold policy (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -60,7 +60,7 @@ describe('Legal Hold Policies', () => {
 			);
 	});
 
-	describe('legal-hold-policies:create', () => {
+	describe('legal-hold-policies:create', function () {
 		let name = 'Trial Documents',
 			description = 'Documents for the litigation proceedings',
 			startDate = '2011-08-14T05:11:00+00:00',
@@ -90,8 +90,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should create a new legal hold policy with the is-ongoing flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -112,8 +112,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should create a new legal hold policy with the is-ongoing flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -135,8 +135,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should send the description param when the --description flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -160,13 +160,13 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should send the filter start and end dates when the --filter-*-at flags are passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('legal-hold-polices:update', () => {
+	describe('legal-hold-polices:update', function () {
 		let policyId = '11111',
 			description = 'Documents related to our ongoing litigation',
 			name = '[DONE] Trial documents',
@@ -193,8 +193,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should update a legal hold policy with the description flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -212,8 +212,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should update a legal hold policy with the description flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -236,13 +236,13 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should update a legal hold policy with the --policy-name and --release-notes flags passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('legal-hold-policies:delete', () => {
+	describe('legal-hold-policies:delete', function () {
 		let policyId = '11111';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -250,15 +250,15 @@ describe('Legal Hold Policies', () => {
 		)
 			.stderr()
 			.command(['legal-hold-policies:delete', policyId, '--token=test'])
-			.it('should delete a legal hold policy', (ctx) => {
+			.it('should delete a legal hold policy', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted legal hold policy ${policyId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('legal-hold-policies', () => {
+	describe('legal-hold-policies', function () {
 		let fixture = getFixture('legal-hold-policies/get_legal_hold_policies'),
 			policyNameFilter = 'Trial',
 			jsonOutput = getFixture('output/legal_hold_policies_list_json.txt'),
@@ -274,8 +274,8 @@ describe('Legal Hold Policies', () => {
 		)
 			.stdout()
 			.command(['legal-hold-policies', '--json', '--token=test'])
-			.it('should list legal hold policies (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should list legal hold policies (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -286,8 +286,8 @@ describe('Legal Hold Policies', () => {
 		)
 			.stdout()
 			.command(['legal-hold-policies', '--token=test'])
-			.it('should list legal hold policies (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, tableOutput);
+			.it('should list legal hold policies (YAML Output)', (context) => {
+				assert.equal(context.stdout, tableOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -305,8 +305,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should send policy name filter when --policy-name flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -328,7 +328,7 @@ describe('Legal Hold Policies', () => {
 			);
 	});
 
-	describe('legal-hold-policies:assignments', () => {
+	describe('legal-hold-policies:assignments', function () {
 		let policyId = '11111',
 			assignToType = 'file',
 			assignToID = '99',
@@ -365,8 +365,8 @@ describe('Legal Hold Policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should list policy assignments (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should list policy assignments (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -400,8 +400,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should send assignment filter params when --assign-to-* flags are passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -436,7 +436,7 @@ describe('Legal Hold Policies', () => {
 			);
 	});
 
-	describe('legal-hold-policies:assignments:get', () => {
+	describe('legal-hold-policies:assignments:get', function () {
 		let assignmentId = '12345',
 			fixture = getFixture(
 				'legal-hold-policies/get_legal_hold_policy_assignments_id'
@@ -459,8 +459,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should get information about a policy assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -477,8 +477,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should get information about a policy assignment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -500,7 +500,7 @@ describe('Legal Hold Policies', () => {
 			);
 	});
 
-	describe('legal-hold-policies:assign', () => {
+	describe('legal-hold-policies:assign', function () {
 		let policyId = '11111',
 			type = 'folder',
 			folderId = '55555',
@@ -535,8 +535,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should create a new policy assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -555,13 +555,13 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should create a new policy assignment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('legal-hold-policies:assignments:delete', () => {
+	describe('legal-hold-policies:assignments:delete', function () {
 		let assignmentId = '12345';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -575,15 +575,15 @@ describe('Legal Hold Policies', () => {
 				assignmentId,
 				'--token=test',
 			])
-			.it('should delete a policy assignment', (ctx) => {
+			.it('should delete a policy assignment', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Delete policy assignment ${assignmentId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('legal-hold-policies:file-version-holds:get', () => {
+	describe('legal-hold-policies:file-version-holds:get', function () {
 		let holdId = '99999',
 			fixture = getFixture(
 				'legal-hold-policies/get_file_version_legal_holds_id'
@@ -606,8 +606,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should get information about a file version legal hold (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -624,8 +624,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should get information about a file version legal hold (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -647,7 +647,7 @@ describe('Legal Hold Policies', () => {
 			);
 	});
 
-	describe('legal-hold-policies:file-version-holds', () => {
+	describe('legal-hold-policies:file-version-holds', function () {
 		let policyId = '11111',
 			fixture = getFixture(
 				'legal-hold-policies/get_file_version_legal_holds_page_1'
@@ -684,8 +684,8 @@ describe('Legal Hold Policies', () => {
 			])
 			.it(
 				'should list file version legal holds for a legal hold policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 

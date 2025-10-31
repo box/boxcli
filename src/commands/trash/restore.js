@@ -17,15 +17,31 @@ class TrashRestoreCommand extends BoxCommand {
 			};
 		}
 		let item;
-		if (args.type === 'file') {
-			item = await this.client.files.restoreFromTrash(args.id, options);
-		} else if (args.type === 'folder') {
-			item = await this.client.folders.restoreFromTrash(args.id, options);
-		} else if (args.type === 'web_link') {
-			item = await this.client.wrapWithDefaultHandler(this.client.post)(
-				`/web_links/${args.id}`,
-				{ body: options }
-			);
+		switch (args.type) {
+			case 'file': {
+				item = await this.client.files.restoreFromTrash(
+					args.id,
+					options
+				);
+
+				break;
+			}
+			case 'folder': {
+				item = await this.client.folders.restoreFromTrash(
+					args.id,
+					options
+				);
+
+				break;
+			}
+			case 'web_link': {
+				item = await this.client.wrapWithDefaultHandler(
+					this.client.post
+				)(`/web_links/${args.id}`, { body: options });
+
+				break;
+			}
+			// No default
 		}
 		await this.output(item);
 	}

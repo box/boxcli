@@ -3,19 +3,17 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
-const crypto = require('crypto');
+const os = require('node:os');
+const crypto = require('node:crypto');
 
-describe('Manual Request', () => {
-	describe('request', () => {
+describe('Manual Request', function () {
+	describe('request', function () {
 		let fixture = `{}${os.EOL}`,
 			jsonBody = {
 				foo: 'bar',
 				baz: 123.456,
 			},
-			/* eslint-disable no-sync */
 			bufferBody = crypto.randomFillSync(Buffer.alloc(10));
-		/* eslint-enable no-sync */
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get('/2.0/widgets').reply(200, fixture)
@@ -24,7 +22,7 @@ describe('Manual Request', () => {
 			.command(['request', '/widgets', '--json', '--token=test'])
 			.it(
 				'should make simple GET request when resource given as path (JSON Output)',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -32,7 +30,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -45,11 +43,11 @@ describe('Manual Request', () => {
 			.command(['request', '/widgets', '--token=test'])
 			.it(
 				'should make simple GET request when resource given as path (YAML Output)',
-				(ctx) => {
+				(context) => {
 					let lb = '\n';
 					let expectedOutput = `Status Code: 200${lb}Headers: {}${lb}Body: {}${os.EOL}`;
 
-					assert.equal(ctx.stdout, expectedOutput);
+					assert.equal(context.stdout, expectedOutput);
 				}
 			);
 
@@ -65,7 +63,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should make simple GET request when resource given as URL',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -73,7 +71,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -97,7 +95,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should send request headers when header flags are passed',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -105,7 +103,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -130,7 +128,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should send query params when --query flag is passed in key=value format',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -138,7 +136,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -163,7 +161,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should send query params when --query flag is passed in JSON format',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -171,7 +169,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -194,7 +192,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should send request body when --body flag is passed in JSON format',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 201,
 						headers: {},
@@ -202,7 +200,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -228,7 +226,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should send request body when --body flag is passed in non-JSON format',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 201,
 						headers: {},
@@ -236,7 +234,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -263,7 +261,7 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should allow overriding Content-Type header when both --body and --header flags are passed',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 200,
 						headers: {},
@@ -271,7 +269,7 @@ describe('Manual Request', () => {
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -290,14 +288,14 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should allow DELETE request when method is set to DELETE',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 204,
 						headers: {},
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}
@@ -316,14 +314,14 @@ describe('Manual Request', () => {
 			])
 			.it(
 				'should allow OPTIONS request when method is set to OPTIONS',
-				(ctx) => {
+				(context) => {
 					let expectedObject = {
 						statusCode: 204,
 						headers: {},
 					};
 
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
 					);
 				}

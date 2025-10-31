@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class LegalHoldPoliciesUpdateCommand extends BoxCommand {
 	async run() {
@@ -39,7 +39,7 @@ LegalHoldPoliciesUpdateCommand.flags = {
 	...BoxCommand.flags,
 	description: Flags.string({
 		description: 'Description of legal hold policy. Max characters 500',
-		parse: utils.unescapeSlashes,
+		parse: utilities.unescapeSlashes,
 	}),
 	'policy-name': Flags.string({
 		description: 'Name of legal hold policy. Max characters 254',

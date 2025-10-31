@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 const OP_FLAGS = Object.freeze({
 	add: true,
@@ -60,39 +60,39 @@ FilesUpdateMetadataCommand.flags = {
 		description:
 			'Add a key to the metadata document; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	copy: Flags.string({
 		char: 'c',
 		description:
 			'Copy a metadata value to another key; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	move: Flags.string({
 		char: 'm',
 		description:
 			'Move a metadata value from one key to another; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	remove: Flags.string({
 		description: 'Remove a key from the metadata document',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	replace: Flags.string({
 		description:
 			'Replace the value of an existing metadata key; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	test: Flags.string({
 		char: 't',
 		description:
 			'Test that a metadata key contains a specific value; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 };
 

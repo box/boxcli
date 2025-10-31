@@ -6,7 +6,7 @@ const { Flags, Args } = require('@oclif/core');
 class UsersMoveRootContentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(UsersMoveRootContentCommand);
-		let params = {
+		let parameters = {
 			body: {
 				owned_by: {
 					id: args.newUserID,
@@ -16,13 +16,13 @@ class UsersMoveRootContentCommand extends BoxCommand {
 		};
 
 		if (flags.hasOwnProperty('notify')) {
-			params.qs.notify = flags.notify;
+			parameters.qs.notify = flags.notify;
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK. Existing this.client.enterprise.transferUserContent() does not allow the notify option to be passed
 		let movedFolder = await this.client.wrapWithDefaultHandler(
 			this.client.put
-		)(`/users/${args.userID}/folders/0`, params);
+		)(`/users/${args.userID}/folders/0`, parameters);
 		await this.output(movedFolder);
 	}
 }

@@ -1,9 +1,8 @@
-/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../box-command');
-const path = require('path');
-const utils = require('../util');
+const path = require('node:path');
+const utilities = require('../util');
 
 class OSSLicensesCommand extends BoxCommand {
 	async run() {
@@ -12,7 +11,10 @@ class OSSLicensesCommand extends BoxCommand {
 			'../../LICENSE-THIRD-PARTY.txt'
 		);
 
-		let licenseText = await utils.readFileAsync(licensesFilePath, 'utf8');
+		let licenseText = await utilities.readFileAsync(
+			licensesFilePath,
+			'utf8'
+		);
 
 		await this.output(licenseText);
 	}

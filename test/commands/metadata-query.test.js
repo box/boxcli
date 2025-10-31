@@ -4,8 +4,8 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 
-describe('Metadata Query', () => {
-	describe('metadata-query', () => {
+describe('Metadata Query', function () {
+	describe('metadata-query', function () {
 		const request = {
 				from: 'enterprise_123456.contractTemplate',
 				query: 'amount >= :value',
@@ -67,7 +67,7 @@ describe('Metadata Query', () => {
 				],
 				limit: 100,
 			},
-			requestWithMultipleArrayQueryParams = {
+			requestWithMultipleArrayQueryParameters = {
 				from: 'enterprise_123456.contractTemplate',
 				query: 'name = :customerName',
 				query_params: {
@@ -110,8 +110,8 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should query metadata', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -136,9 +136,12 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata with multiple query-param', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should query metadata with multiple query-param',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -161,36 +164,36 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata with query-param', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should query metadata with query-param', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.post(
 					'/2.0/metadata_queries/execute_read',
-					requestWithMultipleArrayQueryParams
+					requestWithMultipleArrayQueryParameters
 				)
 				.reply(200, fixture)
 		)
 			.stdout()
 			.command([
 				'metadata-query',
-				requestWithMultipleArrayQueryParams.from,
-				requestWithMultipleArrayQueryParams.ancestor_folder_id,
-				`--query=${requestWithMultipleArrayQueryParams.query}`,
-				`--query-param-array=customerName=${requestWithMultipleArrayQueryParams.query_params.customerName.join(',')}`,
-				`--query-param-array=customerName2=${requestWithMultipleArrayQueryParams.query_params.customerName2.join(',')}`,
-				`--extra-fields=${requestWithMultipleArrayQueryParams.fields.join(',')}`,
-				`--order-by=${requestWithMultipleArrayQueryParams.order_by[0].field_key}=${requestWithMultipleArrayQueryParams.order_by[0].direction}`,
-				`--limit=${requestWithMultipleArrayQueryParams.limit}`,
+				requestWithMultipleArrayQueryParameters.from,
+				requestWithMultipleArrayQueryParameters.ancestor_folder_id,
+				`--query=${requestWithMultipleArrayQueryParameters.query}`,
+				`--query-param-array=customerName=${requestWithMultipleArrayQueryParameters.query_params.customerName.join(',')}`,
+				`--query-param-array=customerName2=${requestWithMultipleArrayQueryParameters.query_params.customerName2.join(',')}`,
+				`--extra-fields=${requestWithMultipleArrayQueryParameters.fields.join(',')}`,
+				`--order-by=${requestWithMultipleArrayQueryParameters.order_by[0].field_key}=${requestWithMultipleArrayQueryParameters.order_by[0].direction}`,
+				`--limit=${requestWithMultipleArrayQueryParameters.limit}`,
 				'--json',
 				'--token=test',
 			])
 			.it(
 				'should query metadata with multiple query-params-array',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});

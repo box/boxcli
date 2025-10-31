@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Collections', () => {
-	describe('collections', () => {
+describe('Collections', function () {
+	describe('collections', function () {
 		let fixture = getFixture('collections/get_collections'),
 			jsonOutput = getFixture('output/collections_get_json.txt'),
 			tableOutput = getFixture('output/collections_get_table.txt');
@@ -17,8 +17,8 @@ describe('Collections', () => {
 		)
 			.stdout()
 			.command(['collections', '--json', '--token=test'])
-			.it('should get your collections (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should get your collections (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -26,12 +26,12 @@ describe('Collections', () => {
 		)
 			.stdout()
 			.command(['collections', '--token=test'])
-			.it('should get your collections (Table Output)', (ctx) => {
-				assert.equal(ctx.stdout, tableOutput);
+			.it('should get your collections (Table Output)', (context) => {
+				assert.equal(context.stdout, tableOutput);
 			});
 	});
 
-	describe('collections:items', () => {
+	describe('collections:items', function () {
 		let collectionId = '1234567890',
 			fixture = getFixture('collections/get_collections_id_items_page_1'),
 			fixture2 = getFixture(
@@ -58,8 +58,8 @@ describe('Collections', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should get items in a collection (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should get items in a collection (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -88,7 +88,7 @@ describe('Collections', () => {
 			);
 	});
 
-	describe('collections:remove', () => {
+	describe('collections:remove', function () {
 		let itemType = 'file',
 			fileId = '1234567890',
 			collectionId = '1234567890',
@@ -120,16 +120,16 @@ describe('Collections', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should remove an item from a collection', (ctx) => {
-				assert.equal(ctx.stdout, '');
+			.it('should remove an item from a collection', (context) => {
+				assert.equal(context.stdout, '');
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Removed file "test_file_download.txt" from collection ${collectionId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('collections:add', () => {
+	describe('collections:add', function () {
 		let itemID = '1234567890',
 			collectionId = '1234567890',
 			getFileFixture = getFixture('collections/get_files_id'),
@@ -168,10 +168,10 @@ describe('Collections', () => {
 					])
 					.it(
 						'should add an item to a collection (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, '');
+						(context) => {
+							assert.equal(context.stdout, '');
 							assert.equal(
-								ctx.stderr,
+								context.stderr,
 								`Added ${itemType} "test_file_download.txt" to collection ${collectionId}${os.EOL}`
 							);
 						}

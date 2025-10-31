@@ -114,13 +114,12 @@ function _parseFlags(preparsedArgv) {
 
 	let currentField = null;
 
-	preparsedArgv
-		.filter((v) => v.type === 'flag')
-		.forEach((value) => {
-			let handler =
-				FLAG_HANDLERS[value.flag] || ((val, curField) => curField);
-			currentField = handler(value, currentField, template);
-		});
+	for (const value of preparsedArgv.filter((v) => v.type === 'flag')) {
+		let handler =
+			FLAG_HANDLERS[value.flag] ||
+			((value_, currentField_) => currentField_);
+		currentField = handler(value, currentField, template);
+	}
 
 	// Add the last field if necessary and return
 	template.fields = template.fields

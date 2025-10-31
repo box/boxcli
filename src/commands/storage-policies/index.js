@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class StoragePoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(StoragePoliciesListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		let storagePolicies = await this.client.storagePolicies.getAll(options);
 		await this.output(storagePolicies);
@@ -21,7 +21,7 @@ StoragePoliciesListCommand._endpoint = 'get_storage_policies';
 
 StoragePoliciesListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 module.exports = StoragePoliciesListCommand;

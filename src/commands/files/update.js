@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class FileUpdateCommand extends BoxCommand {
 	async run() {
@@ -43,7 +43,7 @@ FileUpdateCommand.flags = {
 	name: Flags.string({ description: 'New name for the file' }),
 	description: Flags.string({
 		description: 'New description for the file',
-		parse: utils.unescapeSlashes,
+		parse: utilities.unescapeSlashes,
 	}),
 	tags: Flags.string({
 		description: 'Set tags on the file, specified as comma-separated tags',

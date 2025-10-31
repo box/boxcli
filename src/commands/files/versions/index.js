@@ -2,12 +2,12 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class FilesListVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FilesListVersionsCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -29,7 +29,7 @@ FilesListVersionsCommand._endpoint = 'get_files_id_versions';
 
 FilesListVersionsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 FilesListVersionsCommand.args = {

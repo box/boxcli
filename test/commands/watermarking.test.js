@@ -4,10 +4,10 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Watermarking', () => {
-	describe('watermarking:apply', () => {
+describe('Watermarking', function () {
+	describe('watermarking:apply', function () {
 		let itemID = '11111',
 			fixture = getFixture('watermarking/put_files_id_watermark'),
 			yamlOutput = getFixture('output/watermarking_apply_yaml.txt');
@@ -31,9 +31,12 @@ describe('Watermarking', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should apply a watermark on a file (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should apply a watermark on a file (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -42,9 +45,12 @@ describe('Watermarking', () => {
 		)
 			.stdout()
 			.command(['watermarking:apply', 'file', itemID, '--token=test'])
-			.it('should apply a watermark on a file (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should apply a watermark on a file (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -59,12 +65,15 @@ describe('Watermarking', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should apply a watermark on a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should apply a watermark on a folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 
-	describe('watermarking:get', () => {
+	describe('watermarking:get', function () {
 		let itemID = '11111',
 			fixture = getFixture('watermarking/get_files_id_watermark'),
 			yamlOutput = getFixture('output/watermarking_get_yaml.txt');
@@ -80,18 +89,24 @@ describe('Watermarking', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should get the watermark on a file (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should get the watermark on a file (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get(`/2.0/files/${itemID}/watermark`).reply(200, fixture)
 		)
 			.stdout()
 			.command(['watermarking:get', 'file', itemID, '--token=test'])
-			.it('should get the watermark on a file (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should get the watermark on a file (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.get(`/2.0/folders/${itemID}/watermark`).reply(200, fixture)
@@ -104,12 +119,15 @@ describe('Watermarking', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should get the watermark on a folder (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should get the watermark on a folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 
-	describe('watermarking:remove', () => {
+	describe('watermarking:remove', function () {
 		let itemID = '11111';
 
 		leche.withData(
@@ -131,12 +149,15 @@ describe('Watermarking', () => {
 						itemID,
 						'--token=test',
 					])
-					.it('should remove a watermark from the item', (ctx) => {
-						assert.equal(
-							ctx.stderr,
-							`Removed watermark for ${itemType} ${itemID}${os.EOL}`
-						);
-					});
+					.it(
+						'should remove a watermark from the item',
+						(context) => {
+							assert.equal(
+								context.stderr,
+								`Removed watermark for ${itemType} ${itemID}${os.EOL}`
+							);
+						}
+					);
 			}
 		);
 	});

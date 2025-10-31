@@ -4,13 +4,13 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Users', () => {
+describe('Users', function () {
 	leche.withData(
 		['users:email-aliases:add', 'users:add-email-alias'],
 		function (command) {
-			describe(command, () => {
+			describe(command, function () {
 				let userId = '1234',
 					email = 'testuser@example.com',
 					fixture = getFixture('users/post_users_id_email_aliases'),
@@ -35,8 +35,8 @@ describe('Users', () => {
 					.command([command, userId, email, '--json', '--token=test'])
 					.it(
 						'should add a new email alias to a user (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -52,8 +52,8 @@ describe('Users', () => {
 					.command([command, userId, email, '--token=test'])
 					.it(
 						'should add a new email alias to a user (YAML Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -76,8 +76,8 @@ describe('Users', () => {
 					])
 					.it(
 						'should auto-confirm email alias when --confirm flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 			});
@@ -87,7 +87,8 @@ describe('Users', () => {
 	leche.withData(
 		['users:email-aliases', 'users:get-email-aliases'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let userId = '1234',
 					fixture = getFixture('users/get_users_id_email_aliases'),
 					jsonOutput = getFixture(
@@ -106,8 +107,8 @@ describe('Users', () => {
 					.command([command, userId, '--json', '--token=test'])
 					.it(
 						'should get all Email Aliases for a User (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 
@@ -120,8 +121,8 @@ describe('Users', () => {
 					.command([command, userId, '--token=test'])
 					.it(
 						'should get all Email Aliases for a User (Table Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, tableOutput);
+						(context) => {
+							assert.equal(context.stdout, tableOutput);
 						}
 					);
 			});
@@ -131,7 +132,8 @@ describe('Users', () => {
 	leche.withData(
 		['users:email-aliases:remove', 'users:delete-email-alias'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let userId = '1234',
 					aliasId = '7777';
 
@@ -142,17 +144,20 @@ describe('Users', () => {
 				)
 					.stderr()
 					.command([command, userId, aliasId, '--token=test'])
-					.it('should delete an email alias from a user', (ctx) => {
-						assert.equal(
-							ctx.stderr,
-							`Removed alias ${aliasId} from user ${userId}${os.EOL}`
-						);
-					});
+					.it(
+						'should delete an email alias from a user',
+						(context) => {
+							assert.equal(
+								context.stderr,
+								`Removed alias ${aliasId} from user ${userId}${os.EOL}`
+							);
+						}
+					);
 			});
 		}
 	);
 
-	describe('users:get', () => {
+	describe('users:get', function () {
 		let userId = '33333',
 			fixture = getFixture('users/get_users_id'),
 			yamlOutput = getFixture('output/users_get_yaml.txt');
@@ -164,8 +169,8 @@ describe('Users', () => {
 			.command(['users:get', userId, '--json', '--token=test'])
 			.it(
 				'should get information about a Box user (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -176,8 +181,8 @@ describe('Users', () => {
 			.command(['users:get', userId, '--token=test'])
 			.it(
 				'should get information about a Box user (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -200,7 +205,8 @@ describe('Users', () => {
 	});
 
 	leche.withData(['users', 'users:list'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let fixture = getFixture('users/get_users_page_1'),
 				fixture2 = getFixture('users/get_users_page_2'),
 				jsonOutput = getFixture('output/users_list_json.txt');
@@ -222,8 +228,8 @@ describe('Users', () => {
 				.command([command, '--app-users', '--json', '--token=test'])
 				.it(
 					'should list all Box users with the app-users flag passed (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 
@@ -254,7 +260,8 @@ describe('Users', () => {
 	});
 
 	leche.withData(['users:groups', 'users:list-groups'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let userId = '13130406',
 				fixture = getFixture('users/get_users_id_memberships_page_1'),
 				fixture2 = getFixture('users/get_users_id_memberships_page_2'),
@@ -276,8 +283,8 @@ describe('Users', () => {
 				.command([command, userId, '--json', '--token=test'])
 				.it(
 					'should list groups a user belongs to (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
 					}
 				);
 
@@ -308,7 +315,7 @@ describe('Users', () => {
 		});
 	});
 
-	describe('users:search', () => {
+	describe('users:search', function () {
 		let userName = 'roger federer',
 			fixture = getFixture('users/get_users_page_1'),
 			fixture2 = getFixture('users/get_users_page_2'),
@@ -333,8 +340,8 @@ describe('Users', () => {
 		)
 			.stdout()
 			.command(['users:search', userName, '--json', '--token=test'])
-			.it('should search for Box users (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should search for Box users (JSON Output)', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -391,8 +398,8 @@ describe('Users', () => {
 			])
 			.it(
 				'should request specific fields from API when fields flag is passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonFieldsOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonFieldsOutput);
 				}
 			);
 
@@ -408,19 +415,19 @@ describe('Users', () => {
 				],
 				'all users flag': ['--all-users', { user_type: 'all' }],
 			},
-			function (flag, queryParams) {
+			function (flag, queryParameters) {
 				test.nock(TEST_API_ROOT, (api) =>
 					api
 						.get('/2.0/users')
 						.query({
 							filter_term: userName,
-							...queryParams,
+							...queryParameters,
 						})
 						.reply(200, fixture)
 						.get('/2.0/users')
 						.query({
 							filter_term: userName,
-							...queryParams,
+							...queryParameters,
 							offset: 3,
 						})
 						.reply(200, fixture2)
@@ -435,8 +442,8 @@ describe('Users', () => {
 					])
 					.it(
 						'should search for correct type of users when filtering flag is passed (JSON Output)',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			}
@@ -444,7 +451,8 @@ describe('Users', () => {
 	});
 
 	leche.withData(['users:invite', 'users:invite-user'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let userEmail = 'testuser@example.com',
 				enterpriseId = '1234',
 				fixture = getFixture('users/get_users_id'),
@@ -468,8 +476,8 @@ describe('Users', () => {
 				])
 				.it(
 					'should invite an Existing Box User to Your Enterprise (JSON Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, fixture);
+					(context) => {
+						assert.equal(context.stdout, fixture);
 					}
 				);
 
@@ -480,8 +488,8 @@ describe('Users', () => {
 				.command([command, userEmail, enterpriseId, '--token=test'])
 				.it(
 					'should invite an Existing Box User to Your Enterprise (YAML Output)',
-					(ctx) => {
-						assert.equal(ctx.stdout, yamlOutput);
+					(context) => {
+						assert.equal(context.stdout, yamlOutput);
 					}
 				);
 		});
@@ -490,7 +498,8 @@ describe('Users', () => {
 	leche.withData(
 		['users:transfer-content', 'users:move-root-content'],
 		function (command) {
-			describe(command, () => {
+
+			describe(command, function () {
 				let userId = '1234',
 					newUserId = '4321',
 					fixture = getFixture('users/put_users_id_folder'),
@@ -513,8 +522,8 @@ describe('Users', () => {
 					])
 					.it(
 						"should move a user's root content to another user (JSON Output)",
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 
@@ -527,8 +536,8 @@ describe('Users', () => {
 					.command([command, userId, newUserId, '--token=test'])
 					.it(
 						"should move a user's root content to another user (YAML Output)",
-						(ctx) => {
-							assert.equal(ctx.stdout, yamlOutput);
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
 						}
 					);
 
@@ -541,15 +550,15 @@ describe('Users', () => {
 					.command([command, userId, newUserId, '--token=test', '-q'])
 					.it(
 						"should move a user's root content to another user (No Output)",
-						(ctx) => {
-							assert.isEmpty(ctx.stdout);
+						(context) => {
+							assert.isEmpty(context.stdout);
 						}
 					);
 			});
 		}
 	);
 
-	describe('users:create', () => {
+	describe('users:create', function () {
 		let name = 'Another Test User',
 			login = 'anothertestuser@example.com',
 			role = 'user',
@@ -581,8 +590,8 @@ describe('Users', () => {
 			])
 			.it(
 				'should create a new Box user with role, phone-number and sync-enable flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -601,8 +610,8 @@ describe('Users', () => {
 			])
 			.it(
 				'should create a new Box user with role, phone-number and sync-enable flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -622,9 +631,9 @@ describe('Users', () => {
 			])
 			.it(
 				'should create a new Box user with role, phone-number and sync-enable flags passed (ID Output)',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(fixture).id}${os.EOL}`
 					);
 				}
@@ -673,7 +682,7 @@ describe('Users', () => {
 				'address flag': ['--address=Nowhere', { address: 'Nowhere' }],
 				'space amount flag': [
 					'--disk-space=12345',
-					{ space_amount: 12345 },
+					{ space_amount: 12_345 },
 				],
 				'status flag': ['--status=inactive', { status: 'inactive' }],
 				'timezone flag': [
@@ -715,9 +724,9 @@ describe('Users', () => {
 					])
 					.it(
 						'should create a new Box user with specified attributes when flag is passed',
-						(ctx) => {
+						(context) => {
 							assert.equal(
-								ctx.stdout,
+								context.stdout,
 								`${JSON.parse(fixture).id}${os.EOL}`
 							);
 						}
@@ -745,9 +754,9 @@ describe('Users', () => {
 			])
 			.it(
 				'should create a new app user with external ID when App User flags are passed',
-				(ctx) => {
+				(context) => {
 					assert.equal(
-						ctx.stdout,
+						context.stdout,
 						`${JSON.parse(fixture).id}${os.EOL}`
 					);
 				}
@@ -758,17 +767,17 @@ describe('Users', () => {
 			.command(['users:create', name, '--no-color', '--token=test'])
 			.it(
 				'should output an error message when neither the --app-user flag or login is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, '');
+				(context) => {
+					assert.equal(context.stdout, '');
 					assert.equal(
-						ctx.stderr,
+						context.stderr,
 						`Either the login argument or the --app-user flag is required${os.EOL}`
 					);
 				}
 			);
 	});
 
-	describe('users:update', () => {
+	describe('users:update', function () {
 		let userId = '33333',
 			phone = '(555) 555-5555',
 			jobTitle = 'CEO',
@@ -794,8 +803,8 @@ describe('Users', () => {
 			])
 			.it(
 				'should update a new Box user with phone-number and job-title flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -812,8 +821,8 @@ describe('Users', () => {
 			])
 			.it(
 				'should update a new Box user with phone-number and job-title flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -860,7 +869,7 @@ describe('Users', () => {
 				'address flag': ['--address=Nowhere', { address: 'Nowhere' }],
 				'space amount flag': [
 					'--disk-space=12345',
-					{ space_amount: 12345 },
+					{ space_amount: 12_345 },
 				],
 				'status flag': ['--status=inactive', { status: 'inactive' }],
 				'timezone flag': [
@@ -918,15 +927,15 @@ describe('Users', () => {
 					])
 					.it(
 						'should update user with specified attributes when flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, fixture);
+						(context) => {
+							assert.equal(context.stdout, fixture);
 						}
 					);
 			}
 		);
 	});
 
-	describe('users:delete', () => {
+	describe('users:delete', function () {
 		let userId = '44444';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -936,8 +945,11 @@ describe('Users', () => {
 			.command(['users:delete', userId, '--force', '--token=test'])
 			.it(
 				'should delete a Box User with the force flag passed',
-				(ctx) => {
-					assert.equal(ctx.stderr, `Deleted user ${userId}${os.EOL}`);
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted user ${userId}${os.EOL}`
+					);
 				}
 			);
 
@@ -951,13 +963,16 @@ describe('Users', () => {
 			.command(['users:delete', userId, '--no-notify', '--token=test'])
 			.it(
 				'should pass notify param when --no-notify flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stderr, `Deleted user ${userId}${os.EOL}`);
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted user ${userId}${os.EOL}`
+					);
 				}
 			);
 	});
 
-	describe('users:terminate-session', () => {
+	describe('users:terminate-session', function () {
 		let userIDs = ['12345', '67890'];
 		let userLogins = ['user1@example.com', 'user2@example.com'];
 		let fixture = getFixture('users/post_users_terminate_sessions');
@@ -982,8 +997,11 @@ describe('Users', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should terminate sessions for the specified users', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should terminate sessions for the specified users',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 });

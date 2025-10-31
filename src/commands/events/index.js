@@ -28,7 +28,7 @@ class EventsGetCommand extends BoxCommand {
 			const events = joinedEvents.split(',');
 			const mappedEvents = events.map((event) => {
 				const replacement = eventReplacements[event];
-				return replacement ? replacement : event;
+				return replacement ?? event;
 			});
 			options.event_type = mappedEvents.join(',');
 		}
@@ -64,16 +64,16 @@ class EventsGetCommand extends BoxCommand {
 		if (options.stream_position || isNotAdminTypeStream) {
 			await this.output(events);
 		} else {
-			let allEvents = [].concat(events.entries); // Copy the first page of events
+			let allEvents = [events.entries].flat(); // Copy the first page of events
 
 			// @NOTE: The Events API doesn't return any of the usual indications that the end of paging has been
 			// reached, but does appear to return a "next stream position" that's the same as the one passed in
 			while (options.stream_position !== events.next_stream_position) {
 				options.stream_position = events.next_stream_position;
-				/* eslint-disable no-await-in-loop */
+
 				events = await this.client.events.get(options);
-				/* eslint-enable no-await-in-loop */
-				events.entries.forEach((event) => allEvents.push(event));
+
+				for (const event of events.entries) allEvents.push(event);
 			}
 
 			await this.output(allEvents);

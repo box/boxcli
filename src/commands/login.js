@@ -1,20 +1,18 @@
-/* eslint-disable promise/avoid-new, no-sync */
-
 'use strict';
 
 const BoxCommand = require('../box-command');
 const { Flags } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const BoxSDK = require('box-node-sdk').default;
 const BoxCLIError = require('../cli-error');
 const CLITokenCache = require('../token-cache');
-const pkg = require('../../package.json');
+const package_ = require('../../package.json');
 const chalk = require('chalk');
 const express = require('express');
 const inquirer = require('inquirer');
-const path = require('path');
+const path = require('node:path');
 const ora = require('ora');
-const http = require('http');
+const http = require('node:http');
 const { nanoid } = require('nanoid');
 
 class OAuthLoginCommand extends BoxCommand {
@@ -24,17 +22,19 @@ class OAuthLoginCommand extends BoxCommand {
 		const apps = openModule.apps;
 
 		const { flags } = await this.parse(OAuthLoginCommand);
-		const environmentsObj = await this.getEnvironments();
+		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
 		const redirectUri = `http://localhost:${port}/callback`;
 		let environment;
 
 		if (this.flags.reauthorize) {
-			if (!environmentsObj.environments.hasOwnProperty(this.flags.name)) {
+			if (
+				!environmentsObject.environments.hasOwnProperty(this.flags.name)
+			) {
 				this.error(`The ${this.flags.name} environment does not exist`);
 			}
 
-			environment = environmentsObj.environments[this.flags.name];
+			environment = environmentsObject.environments[this.flags.name];
 			if (environment.authMethod !== 'oauth20') {
 				this.error('The selected environment is not of type oauth20');
 			}
@@ -76,7 +76,7 @@ class OAuthLoginCommand extends BoxCommand {
 		const environmentName = environment.name;
 		const sdkConfig = Object.freeze({
 			analyticsClient: {
-				version: pkg.version,
+				version: package_.version,
 			},
 		});
 		const sdk = new BoxSDK({
@@ -92,15 +92,15 @@ class OAuthLoginCommand extends BoxCommand {
 
 		const state = nanoid(32);
 
-		app.get('/callback', async (req, res) => {
+		app.get('/callback', async (request, res) => {
 			try {
-				if (req.query.state !== state) {
+				if (request.query.state !== state) {
 					throw new BoxCLIError(
-						`Invalid OAuth state received in callback. Got "${req.query.state}" while expecting "${state}"`
+						`Invalid OAuth state received in callback. Got "${request.query.state}" while expecting "${state}"`
 					);
 				}
 				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
-					req.query.code,
+					request.query.code,
 					null
 				);
 				const tokenCache = new CLITokenCache(environmentName);
@@ -117,9 +117,9 @@ class OAuthLoginCommand extends BoxCommand {
 
 				const user = await client.users.get('me');
 
-				environmentsObj.environments[environmentName] = environment;
-				environmentsObj.default = environmentName;
-				await this.updateEnvironments(environmentsObj);
+				environmentsObject.environments[environmentName] = environment;
+				environmentsObject.default = environmentName;
+				await this.updateEnvironments(environmentsObject);
 
 				const callbackHtmlPath = path.resolve(
 					__dirname,
@@ -145,8 +145,8 @@ class OAuthLoginCommand extends BoxCommand {
 						chalk`{green You are set up to make your first API call. Refer to the CLI commands library (https://github.com/box/boxcli#command-topics) for examples.}`
 					);
 				}
-			} catch (err) {
-				throw new BoxCLIError(err);
+			} catch (error) {
+				throw new BoxCLIError(error);
 			} finally {
 				server.close();
 			}

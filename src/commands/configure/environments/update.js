@@ -2,16 +2,18 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const BoxCLIError = require('../../../cli-error');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(EnvironmentsUpdateCommand);
-		let environmentsObj = await this.getEnvironments();
+		let environmentsObject = await this.getEnvironments();
 		let environment =
-			environmentsObj.environments[args.name || environmentsObj.default];
+			environmentsObject.environments[
+				args.name || environmentsObject.default
+			];
 
 		if (!environment) {
 			this.error('There is no environment with this name');
@@ -19,24 +21,22 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 		}
 
 		if (flags['config-file-path']) {
-			let configObj;
+			let configObject;
 			try {
-				/* eslint-disable no-sync */
-				configObj = JSON.parse(
+				configObject = JSON.parse(
 					fs.readFileSync(flags['config-file-path'], 'utf8')
 				);
-				/* eslint-enable no-sync */
-			} catch (ex) {
+			} catch (error) {
 				throw new BoxCLIError(
 					`Could not read environment config file ${flags['config-file-path']}`,
-					ex
+					error
 				);
 			}
 
-			utils.validateConfigObject(configObj);
+			utilities.validateConfigObject(configObject);
 
 			if (
-				!configObj.boxAppSettings.appAuth.privateKey &&
+				!configObject.boxAppSettings.appAuth.privateKey &&
 				!flags['private-key-path'] &&
 				environment.hasInLinePrivateKey
 			) {
@@ -44,7 +44,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 					'Environment must specify private key in config file or via --private-key-path'
 				);
 			}
-			if (configObj.boxAppSettings.appAuth.privateKey) {
+			if (configObject.boxAppSettings.appAuth.privateKey) {
 				environment.privateKeyPath = '';
 				environment.hasInLinePrivateKey = true;
 			}
@@ -66,7 +66,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			environment.cacheTokens = flags['cache-tokens'];
 		}
 
-		await this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObject);
 		await this.output(environment);
 	}
 }
@@ -80,12 +80,12 @@ EnvironmentsUpdateCommand.flags = {
 	...BoxCommand.minFlags,
 	'config-file-path': Flags.string({
 		description: 'Provide a file path to configuration file',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	name: Flags.string({ description: 'New name of the environment' }),
 	'private-key-path': Flags.string({
 		description: 'Provide a file path to application private key',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	'user-id': Flags.string({
 		description:

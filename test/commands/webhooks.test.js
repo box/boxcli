@@ -3,11 +3,11 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 const leche = require('leche');
 
-describe('Webhooks', () => {
-	describe('webhooks:get', () => {
+describe('Webhooks', function () {
+	describe('webhooks:get', function () {
 		let webhookId = '1234',
 			fixture = getFixture('webhooks/get_webhooks_id'),
 			yamlOutput = getFixture('output/webhooks_get_yaml.txt');
@@ -19,8 +19,8 @@ describe('Webhooks', () => {
 			.command(['webhooks:get', webhookId, '--json', '--token=test'])
 			.it(
 				'should get information about a webhook (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -31,14 +31,15 @@ describe('Webhooks', () => {
 			.command(['webhooks:get', webhookId, '--token=test'])
 			.it(
 				'should get information about a webhook (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
 	leche.withData(['webhooks', 'webhooks:list'], function (command) {
-		describe(command, () => {
+
+		describe(command, function () {
 			let fixture = getFixture('webhooks/get_webhooks_page_1'),
 				fixture2 = getFixture('webhooks/get_webhooks_page_2'),
 				jsonOutput = getFixture('output/webhooks_list_json.txt');
@@ -57,13 +58,13 @@ describe('Webhooks', () => {
 			)
 				.stdout()
 				.command([command, '--json', '--token=test'])
-				.it('should list all webhooks (JSON Output)', (ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				.it('should list all webhooks (JSON Output)', (context) => {
+					assert.equal(context.stdout, jsonOutput);
 				});
 		});
 	});
 
-	describe('webhooks:delete', () => {
+	describe('webhooks:delete', function () {
 		let webhookId = '1234';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -71,15 +72,15 @@ describe('Webhooks', () => {
 		)
 			.stderr()
 			.command(['webhooks:delete', webhookId, '--token=test'])
-			.it('should delete a webhook', (ctx) => {
+			.it('should delete a webhook', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted webhook ${webhookId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('webhooks:create', () => {
+	describe('webhooks:create', function () {
 		let id = '1234',
 			type = 'file',
 			triggers = 'FILE.DOWNLOADED,FILE.UPLOADED',
@@ -109,8 +110,8 @@ describe('Webhooks', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a new webhook (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a new webhook (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -125,8 +126,8 @@ describe('Webhooks', () => {
 				`-a=${address}`,
 				'--token=test',
 			])
-			.it('should create a new webhook (YAML Output)', (ctx) => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create a new webhook (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -142,12 +143,15 @@ describe('Webhooks', () => {
 				'--id-only',
 				'--token=test',
 			])
-			.it('should create a new webhook (ID Output)', (ctx) => {
-				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
+			.it('should create a new webhook (ID Output)', (context) => {
+				assert.equal(
+					context.stdout,
+					`${JSON.parse(fixture).id}${os.EOL}`
+				);
 			});
 	});
 
-	describe('webhooks:update', () => {
+	describe('webhooks:update', function () {
 		let webhookId = '1234',
 			triggers = 'FILE.DOWNLOADED,FILE.UPLOADED',
 			address = 'https://dev.name/actions/file_changed',
@@ -171,8 +175,8 @@ describe('Webhooks', () => {
 			])
 			.it(
 				'should update a webhook with triggers flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -192,8 +196,8 @@ describe('Webhooks', () => {
 			])
 			.it(
 				'should update a webhook with triggers flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -210,8 +214,11 @@ describe('Webhooks', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update a webhook with address flag passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should update a webhook with address flag passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 });

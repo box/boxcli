@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 class FilesCreateMetadataCommand extends BoxCommand {
 	async run() {
@@ -36,7 +36,7 @@ FilesCreateMetadataCommand.flags = {
 			'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		multiple: true,
 		required: true,
-		parse: utils.parseMetadata,
+		parse: utilities.parseMetadata,
 	}),
 	scope: Flags.string({
 		description: 'The scope of the metadata template to use',

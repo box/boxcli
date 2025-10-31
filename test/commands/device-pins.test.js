@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Device Pins', () => {
-	describe('device-pins:get', () => {
+describe('Device Pins', function () {
+	describe('device-pins:get', function () {
 		let devicePinId = '123456789',
 			fixture = getFixture('device-pins/get_device_pinners_id'),
 			yamlOutput = getFixture('output/device_pins_get_yaml.txt');
@@ -18,8 +18,8 @@ describe('Device Pins', () => {
 			.command(['device-pins:get', devicePinId, '--json', '--token=test'])
 			.it(
 				'should get information about an individual device pin (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -30,13 +30,13 @@ describe('Device Pins', () => {
 			.command(['device-pins:get', devicePinId, '--token=test'])
 			.it(
 				'should get information about an individual device pin (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 	});
 
-	describe('device-pins:delete', () => {
+	describe('device-pins:delete', function () {
 		let devicePinId = '123456789';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -44,15 +44,15 @@ describe('Device Pins', () => {
 		)
 			.stderr()
 			.command(['device-pins:delete', devicePinId, '--token=test'])
-			.it('should delete individual device pin', (ctx) => {
+			.it('should delete individual device pin', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted device pin ${devicePinId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('device-pins', () => {
+	describe('device-pins', function () {
 		let enterpriseId = '123456',
 			direction = 'ASC',
 			userMeFixture = getFixture('device-pins/get_users_me'),
@@ -87,8 +87,8 @@ describe('Device Pins', () => {
 			])
 			.it(
 				'should list all the device pins within a given enterprise with the direction flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 	});

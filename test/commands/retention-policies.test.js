@@ -4,10 +4,10 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const leche = require('leche');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Retention Policies', () => {
-	describe('retention-policies:create', () => {
+describe('Retention Policies', function () {
+	describe('retention-policies:create', function () {
 		let policyName = 'Financial Records',
 			retentionLength = 365,
 			dispositionAction = 'remove_retention',
@@ -42,8 +42,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should create a new retention policy with the retention-length flag passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -66,8 +66,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should create a new retention policy with the retention-length flag passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -89,8 +89,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should create an indefinite retention policy when indefinite arg is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -118,9 +118,12 @@ describe('Retention Policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send optional params when flags are passed', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -158,13 +161,13 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should create a new retention policy with custom description and custom notification recipients',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('retention-policies:update', () => {
+	describe('retention-policies:update', function () {
 		let policyId = '11111',
 			name = 'Retained Financial Records',
 			dispositionAction = 'permanently_delete',
@@ -197,8 +200,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should update a retention policy with policy-name and retire flags passed (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -220,8 +223,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should update a retention policy with policy-name and retire flags passed (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -246,8 +249,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should update policy type, disposition, and length when appropriate flags are passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -268,13 +271,13 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should update retention type when appropriate flag is passed',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 	});
 
-	describe('retention-policies:get', () => {
+	describe('retention-policies:get', function () {
 		let policyId = '11111',
 			fixture = getFixture(
 				'retention-policies/get_retention_policies_id'
@@ -293,8 +296,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should get information about a retention policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -305,8 +308,8 @@ describe('Retention Policies', () => {
 			.command(['retention-policies:get', policyId, '--token=test'])
 			.it(
 				'should get information about a retention policy (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -328,7 +331,7 @@ describe('Retention Policies', () => {
 			);
 	});
 
-	describe('retention-policies', () => {
+	describe('retention-policies', function () {
 		let policyName = 'test',
 			policyType = 'indefinite',
 			creatorID = '12345',
@@ -354,9 +357,12 @@ describe('Retention Policies', () => {
 		)
 			.stdout()
 			.command(['retention-policies', '--json', '--token=test'])
-			.it('should list all retention policies (JSON Output)', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.it(
+				'should list all retention policies (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -390,12 +396,15 @@ describe('Retention Policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send optional params when flags are passed', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 	});
 
-	describe('retention-policies:assignments:get', () => {
+	describe('retention-policies:assignments:get', function () {
 		let assignmentId = '12345',
 			fixture = getFixture(
 				'retention-policies/get_retention_policy_assignments_id'
@@ -418,8 +427,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should get information about a retention policy assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -436,8 +445,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should get information about a retention policy assignment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -459,7 +468,7 @@ describe('Retention Policies', () => {
 			);
 	});
 
-	describe('retention-policies:assignments:remove', () => {
+	describe('retention-policies:assignments:remove', function () {
 		let assignmentId = '123456';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -473,15 +482,15 @@ describe('Retention Policies', () => {
 				assignmentId,
 				'--token=test',
 			])
-			.it('should remove a retention policy assignment', (ctx) => {
+			.it('should remove a retention policy assignment', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Removed retention policy assignment ${assignmentId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('retention-policies:assign', () => {
+	describe('retention-policies:assign', function () {
 		let policyId = '11111',
 			type = 'folder',
 			folderId = '22222',
@@ -516,8 +525,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should assign a retention policy assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -536,8 +545,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should assign a retention policy assignment (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -562,8 +571,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should assign policy to the enterprise without taking an ID argument',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -597,15 +606,15 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should assign policy to the enterprise with custom filter fields and start date field',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
 		// @TODO(2018-08-21): Add test for missing ID error scenario
 	});
 
-	describe('retention-policies:assignments', () => {
+	describe('retention-policies:assignments', function () {
 		let policyId = '11111',
 			type = 'metadata_template',
 			fixture = getFixture(
@@ -639,8 +648,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should list all assignments for retention policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -665,9 +674,12 @@ describe('Retention Policies', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should send type param when --type flag is passed', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.it(
+				'should send type param when --type flag is passed',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -695,7 +707,7 @@ describe('Retention Policies', () => {
 			);
 	});
 
-	describe('retention-policies:file-version-retentions:get', () => {
+	describe('retention-policies:file-version-retentions:get', function () {
 		let retentionId = '444444',
 			fixture = getFixture(
 				'retention-policies/get_file_version_retentions_id'
@@ -718,8 +730,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should get information about a file version retention policy (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -736,8 +748,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should get information about a file version retention policy (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -759,7 +771,7 @@ describe('Retention Policies', () => {
 			);
 	});
 
-	describe('retention-policies:file-version-retentions', () => {
+	describe('retention-policies:file-version-retentions', function () {
 		let fixture = getFixture(
 				'retention-policies/get_file_version_retentions_page_1'
 			),
@@ -790,8 +802,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should list all file version retentions (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 
@@ -817,15 +829,15 @@ describe('Retention Policies', () => {
 				],
 				'fields flag': ['--fields=id', { fields: 'id' }],
 			},
-			function (flag, queryParams) {
+			function (flag, queryParameters) {
 				test.nock(TEST_API_ROOT, (api) =>
 					api
 						.get('/2.0/file_version_retentions')
-						.query({ ...queryParams, limit: 1000 })
+						.query({ ...queryParameters, limit: 1000 })
 						.reply(200, fixture)
 						.get('/2.0/file_version_retentions')
 						.query({
-							...queryParams,
+							...queryParameters,
 							marker: 'ZAD345',
 							limit: 1000,
 						})
@@ -840,15 +852,15 @@ describe('Retention Policies', () => {
 					])
 					.it(
 						'should pass optional parameter when flag is passed',
-						(ctx) => {
-							assert.equal(ctx.stdout, jsonOutput);
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
 						}
 					);
 			}
 		);
 	});
 
-	describe('retention-policies:files-under-retention:get', () => {
+	describe('retention-policies:files-under-retention:get', function () {
 		let policyAssignmentId = '11111',
 			fixture = getFixture(
 				'retention-policies/get_files_under_retention_page_1'
@@ -885,13 +897,13 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should list all files under retention for assignment  (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 	});
 
-	describe('retention-policies:file-versions-under-retention:get', () => {
+	describe('retention-policies:file-versions-under-retention:get', function () {
 		let policyAssignmentId = '11111',
 			fixture = getFixture(
 				'retention-policies/get_file_versions_under_retention_page_1'
@@ -928,8 +940,8 @@ describe('Retention Policies', () => {
 			])
 			.it(
 				'should list all file versions under retention for assignment (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 	});

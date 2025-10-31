@@ -3,10 +3,10 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Integration Mappings', () => {
-	describe('integration-mappings:slack:list', () => {
+describe('Integration Mappings', function () {
+	describe('integration-mappings:slack:list', function () {
 		let partnerItemId = '1234',
 			fixture = getFixture(
 				'integration-mappings/get_integration_mappings_slack_page_1'
@@ -44,12 +44,12 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should list Slack integration mappings', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutput);
+			.it('should list Slack integration mappings', (context) => {
+				assert.equal(context.stdout, jsonOutput);
 			});
 	});
 
-	describe('integration-mappings:slack:create', () => {
+	describe('integration-mappings:slack:create', function () {
 		let boxItemId = '23456',
 			channelId = 'C12378991223',
 			slackOrgId = 'E1234567',
@@ -85,12 +85,12 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a Slack integration mapping', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a Slack integration mapping', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('integration-mappings:slack:update', () => {
+	describe('integration-mappings:slack:update', function () {
 		let integrationMappingId = '12345',
 			boxItemId = '7890',
 			fixture = getFixture(
@@ -122,12 +122,12 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update a Slack integration mapping', (ctx) => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should update a Slack integration mapping', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('integration-mappings:slack:delete', () => {
+	describe('integration-mappings:slack:delete', function () {
 		let integrationMappingId = '12345';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -143,15 +143,15 @@ describe('Integration Mappings', () => {
 				integrationMappingId,
 				'--token=test',
 			])
-			.it('should delete a Slack integration mapping', (ctx) => {
+			.it('should delete a Slack integration mapping', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted Slack integration mapping ${integrationMappingId}${os.EOL}`
 				);
 			});
 	});
 
-	describe('integration-mappings:teams:list', () => {
+	describe('integration-mappings:teams:list', function () {
 		let partnerItemId = '1234',
 			partnerItemType = 'channel',
 			boxItemId = '1234',
@@ -209,13 +209,13 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should list Teams integration mappings', (ctx) => {
-				assert.equal(ctx.stderr, '');
-				assert.deepEqual(JSON.parse(ctx.stdout), expectedResult);
+			.it('should list Teams integration mappings', (context) => {
+				assert.equal(context.stderr, '');
+				assert.deepEqual(JSON.parse(context.stdout), expectedResult);
 			});
 	});
 
-	describe('integration-mappings:teams:create', () => {
+	describe('integration-mappings:teams:create', function () {
 		let partnerItemId = '1234',
 			partnerItemType = 'channel',
 			boxItemId = '1234',
@@ -276,13 +276,13 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should create a Teams integration mapping', (ctx) => {
-				assert.equal(ctx.stderr, '');
-				assert.deepEqual(JSON.parse(ctx.stdout), expectedResult);
+			.it('should create a Teams integration mapping', (context) => {
+				assert.equal(context.stderr, '');
+				assert.deepEqual(JSON.parse(context.stdout), expectedResult);
 			});
 	});
 
-	describe('integration-mappings:teams:update', () => {
+	describe('integration-mappings:teams:update', function () {
 		let integrationMappingId = '12345',
 			boxItemId = '7890',
 			fixture = getFixture(
@@ -334,13 +334,13 @@ describe('Integration Mappings', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should update a Teams integration mapping', (ctx) => {
-				assert.equal(ctx.stderr, '');
-				assert.deepEqual(JSON.parse(ctx.stdout), expectedResult);
+			.it('should update a Teams integration mapping', (context) => {
+				assert.equal(context.stderr, '');
+				assert.deepEqual(JSON.parse(context.stdout), expectedResult);
 			});
 	});
 
-	describe('integration-mappings:teams:delete', () => {
+	describe('integration-mappings:teams:delete', function () {
 		let integrationMappingId = '12345';
 
 		test.nock(TEST_API_ROOT, (api) =>
@@ -356,9 +356,9 @@ describe('Integration Mappings', () => {
 				integrationMappingId,
 				'--token=test',
 			])
-			.it('should delete a Teams integration mapping', (ctx) => {
+			.it('should delete a Teams integration mapping', (context) => {
 				assert.equal(
-					ctx.stderr,
+					context.stderr,
 					`Deleted Teams integration mapping ${integrationMappingId}${os.EOL}`
 				);
 			});

@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags } = require('@oclif/core');
-const PaginationUtils = require('../../../pagination-utils');
+const PaginationUtilities = require('../../../pagination-utils');
 
 class IntegrationMappingsSlackListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(IntegrationMappingsSlackListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags['partner-item-id']) {
 			options.partner_item_id = flags['partner-item-id'];
@@ -42,7 +42,7 @@ IntegrationMappingsSlackListCommand._endpoint =
 
 IntegrationMappingsSlackListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	'partner-item-id': Flags.string({
 		hidden: false,
 		description:

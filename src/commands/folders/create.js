@@ -6,7 +6,7 @@ const { Flags, Args } = require('@oclif/core');
 class FoldersCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersCreateCommand);
-		let params = {
+		let parameters = {
 			body: {
 				name: args.name,
 				parent: {
@@ -16,13 +16,13 @@ class FoldersCreateCommand extends BoxCommand {
 		};
 
 		if (flags.description) {
-			params.body.description = flags.description;
+			parameters.body.description = flags.description;
 		}
 
 		// @TODO (2018-07-10): Should implement this using the Node SDK
 		let createdFolder = await this.client.wrapWithDefaultHandler(
 			this.client.post
-		)('/folders', params);
+		)('/folders', parameters);
 		await this.output(createdFolder);
 	}
 }

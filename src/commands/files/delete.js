@@ -14,11 +14,11 @@ class FilesDeleteCommand extends BoxCommand {
 		if (flags.force) {
 			try {
 				await this.client.files.deletePermanently(args.id);
-			} catch (err) {
+			} catch (error) {
 				// If the item can't be found in the trash, assume that it was already deleted or
 				// that the enterprise didn't have trash enabled.  This should be regarded as a success case.
-				if (err.statusCode !== 404) {
-					throw err;
+				if (error.statusCode !== 404) {
+					throw error;
 				}
 			}
 		}

@@ -1,12 +1,11 @@
-/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const BoxCLIError = require('../../cli-error');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
 
@@ -28,9 +27,12 @@ class FoldersUploadCommand extends BoxCommand {
 
 		let folderItems;
 		try {
-			folderItems = await utils.readdirAsync(folderPath);
-		} catch (ex) {
-			throw new BoxCLIError(`Could not read directory ${folderPath}`, ex);
+			folderItems = await utilities.readdirAsync(folderPath);
+		} catch (error) {
+			throw new BoxCLIError(
+				`Could not read directory ${folderPath}`,
+				error
+			);
 		}
 		// Filters out files or folders that have a "." as the first character in their name. These won't be uploaded.
 		folderItems = folderItems.filter((item) => item[0] !== '.');
@@ -45,7 +47,7 @@ class FoldersUploadCommand extends BoxCommand {
 
 		for (let item of folderItems) {
 			// @TODO(2018-08-15): Improve performance by queueing async work and performing it in parallel
-			/* eslint-disable no-await-in-loop */
+
 			let itemPath = path.join(folderPath, item);
 			let itemStat = fs.statSync(itemPath);
 			if (itemStat.isDirectory()) {
@@ -71,14 +73,13 @@ class FoldersUploadCommand extends BoxCommand {
 							);
 						await uploader.start();
 					}
-				} catch (ex) {
+				} catch (error) {
 					throw new BoxCLIError(
 						`Could not upload file ${itemPath}`,
-						ex
+						error
 					);
 				}
 			}
-			/* eslint-enable no-await-in-loop */
 		}
 		return folderId;
 	}

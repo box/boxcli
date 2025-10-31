@@ -4,8 +4,8 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 
-describe('Recent Items', () => {
-	describe('recent-items', () => {
+describe('Recent Items', function () {
+	describe('recent-items', function () {
 		let fixture = getFixture('recent-items/get_recent_items_page_1'),
 			fixture2 = getFixture('recent-items/get_recent_items_page_2'),
 			jsonOutput = getFixture('output/recent_items_json.txt');
@@ -26,8 +26,8 @@ describe('Recent Items', () => {
 			.command(['recent-items', '--json', '--token=test'])
 			.it(
 				'should list information about files accessed in the past 90 days up to a 1000 items (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
 				}
 			);
 

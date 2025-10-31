@@ -4,8 +4,8 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 
-describe('Shared-Links', () => {
-	describe('shared-links:get', () => {
+describe('Shared-Links', function () {
+	describe('shared-links:get', function () {
 		let url = 'https://app.box.com/s/qwertyuiopasdfghjklzxcvbnm123456',
 			fixture = getFixture('shared-links/get_shared_items'),
 			yamlOutput = getFixture('output/shared_links_get_yaml.txt');
@@ -17,8 +17,8 @@ describe('Shared-Links', () => {
 			.command(['shared-links:get', url, '--json', '--token=test'])
 			.it(
 				'should get information from a shared item URL (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
+				(context) => {
+					assert.equal(context.stdout, fixture);
 				}
 			);
 
@@ -29,8 +29,8 @@ describe('Shared-Links', () => {
 			.command(['shared-links:get', url, '--token=test'])
 			.it(
 				'should get information from a shared item URL (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlOutput);
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
 				}
 			);
 
@@ -47,7 +47,7 @@ describe('Shared-Links', () => {
 			);
 	});
 
-	describe('shared-links:create', () => {
+	describe('shared-links:create', function () {
 		let fileId = '1234567890',
 			vanityName = 'my-custom-name-123',
 			createFileSharedLinkFixture = getFixture(
@@ -83,8 +83,8 @@ describe('Shared-Links', () => {
 			])
 			.it(
 				'should create a shared link for a Box file (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fileYamlOutput);
+				(context) => {
+					assert.equal(context.stdout, fileYamlOutput);
 				}
 			);
 
@@ -109,8 +109,8 @@ describe('Shared-Links', () => {
 			])
 			.it(
 				'should create a shared link for a Box file (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fileJsonOutput);
+				(context) => {
+					assert.equal(context.stdout, fileJsonOutput);
 				}
 			);
 
@@ -145,8 +145,8 @@ describe('Shared-Links', () => {
 			])
 			.it(
 				'should create a shared link for a Box folder (Yaml Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, folderYamlOutput);
+				(context) => {
+					assert.equal(context.stdout, folderYamlOutput);
 				}
 			);
 
@@ -169,8 +169,8 @@ describe('Shared-Links', () => {
 			])
 			.it(
 				'should create a shared link for a Box folder (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, folderJsonOutput);
+				(context) => {
+					assert.equal(context.stdout, folderJsonOutput);
 				}
 			);
 	});

@@ -2,8 +2,8 @@
 
 const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
 const utils = require('../../util');
@@ -13,7 +13,7 @@ class FilesDownloadCommand extends BoxCommand {
 		const { flags, args } = await this.parse(FilesDownloadCommand);
 
 		let file = await this.client.files.get(args.id);
-		let fileName = flags['save-as'] ? flags['save-as'] : file.name;
+		let fileName = flags['save-as'] || file.name;
 
 		let filePath;
 
@@ -27,9 +27,9 @@ class FilesDownloadCommand extends BoxCommand {
 			);
 		}
 
-		/* eslint-disable no-sync */
+		 
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-			/* eslint-enable no-sync */
+			 
 
 			if (flags.overwrite === false) {
 				this.info(
@@ -58,10 +58,10 @@ class FilesDownloadCommand extends BoxCommand {
 		try {
 			output = fs.createWriteStream(filePath);
 			stream.pipe(output);
-		} catch (ex) {
+		} catch (error) {
 			throw new BoxCLIError(
 				`Could not download to destination file ${filePath}`,
-				ex
+				error
 			);
 		}
 
@@ -84,7 +84,7 @@ class FilesDownloadCommand extends BoxCommand {
 			});
 		}, 1000);
 
-		/* eslint-disable promise/avoid-new */
+		 
 		// We need to await the end of the stream to avoid a race condition here
 		await new Promise((resolve, reject) => {
 			output.on('close', resolve);

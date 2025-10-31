@@ -5,8 +5,8 @@ const { Flags, Args } = require('@oclif/core');
 const { omit, mapKeys, snakeCase } = require('lodash');
 
 const parseQueryValue = (value) => {
-	if (value.endsWith('f') && !isNaN(parseFloat(value))) {
-		return parseFloat(value);
+	if (value.endsWith('f') && !Number.isNaN(Number.parseFloat(value))) {
+		return Number.parseFloat(value);
 	}
 	return value;
 };
@@ -17,26 +17,29 @@ class MetadataQueryCommand extends BoxCommand {
 
 		const {
 			extra_fields: extraFields,
-			query_params: queryParams,
-			query_param: queryParam,
-			query_param_array: queryParamArray,
+			query_params: queryParameters,
+			query_param: queryParameter,
+			query_param_array: queryParameterArray,
 			...rest
 		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) =>
 			snakeCase(key)
 		);
 
-		let combinedQueryParams = queryParams || {};
-		if (queryParam) {
-			combinedQueryParams = {
-				...combinedQueryParams,
-				...queryParam.reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+		let combinedQueryParameters = queryParameters || {};
+		if (queryParameter) {
+			combinedQueryParameters = {
+				...combinedQueryParameters,
+				...queryParameter.reduce(
+					(accumulator, current) => ({ ...accumulator, ...current }),
+					{}
+				),
 			};
 		}
-		if (queryParamArray) {
-			combinedQueryParams = {
-				...combinedQueryParams,
-				...queryParamArray.reduce(
-					(acc, curr) => ({ ...acc, ...curr }),
+		if (queryParameterArray) {
+			combinedQueryParameters = {
+				...combinedQueryParameters,
+				...queryParameterArray.reduce(
+					(accumulator, current) => ({ ...accumulator, ...current }),
 					{}
 				),
 			};
@@ -47,8 +50,8 @@ class MetadataQueryCommand extends BoxCommand {
 			args.ancestorFolderId,
 			{
 				...(extraFields && { fields: extraFields }),
-				...(combinedQueryParams && {
-					query_params: combinedQueryParams,
+				...(combinedQueryParameters && {
+					query_params: combinedQueryParameters,
 				}),
 				...rest,
 			}
@@ -76,13 +79,12 @@ MetadataQueryCommand.flags = {
 		parse(input) {
 			return Object.assign(
 				{},
-				...input.split(',').map((param) => {
-					const [key, value] = param.split('=');
-					/* eslint-disable multiline-ternary */
+				...input.split(',').map((parameter) => {
+					const [key, value] = parameter.split('=');
+
 					return {
 						[key]: parseQueryValue(value),
 					};
-					/* eslint-enable multiline-ternary */
 				})
 			);
 		},
@@ -94,7 +96,7 @@ MetadataQueryCommand.flags = {
 		multiple: true,
 		parse(input) {
 			const key = input.split('=')[0];
-			const value = input.substring(key.length + 1);
+			const value = input.slice(Math.max(0, key.length + 1));
 			return {
 				[key]: parseQueryValue(value),
 			};
@@ -107,7 +109,7 @@ MetadataQueryCommand.flags = {
 		multiple: true,
 		parse(input) {
 			const key = input.split('=')[0];
-			const value = input.substring(key.length + 1).split(',');
+			const value = input.slice(Math.max(0, key.length + 1)).split(',');
 			return {
 				[key]: value.map((x) => parseQueryValue(x)),
 			};
@@ -120,8 +122,8 @@ MetadataQueryCommand.flags = {
 		description:
 			'A list of template fields and directions to sort the metadata query results by.',
 		parse(input) {
-			return input.split(',').map((param) => {
-				const [fieldKey, direction] = param.split('=');
+			return input.split(',').map((parameter) => {
+				const [fieldKey, direction] = parameter.split('=');
 				return { field_key: fieldKey, direction };
 			});
 		},

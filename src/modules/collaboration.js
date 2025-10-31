@@ -19,12 +19,12 @@ class CollaborationModule {
 	 * @param {Object} flags The parsed oclif command-line flags
 	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
 	 */
-	createCollaboration(args, flags) {
-		let params = {
+	createCollaboration(arguments_, flags) {
+		let parameters = {
 			body: {
 				item: {
-					type: args.itemType,
-					id: args.itemID,
+					type: arguments_.itemType,
+					id: arguments_.itemID,
 				},
 				accessible_by: {},
 			},
@@ -32,51 +32,52 @@ class CollaborationModule {
 		};
 
 		if (flags.fields) {
-			params.qs.fields = flags.fields;
+			parameters.qs.fields = flags.fields;
 		}
 		if (flags.hasOwnProperty('notify')) {
-			params.qs.notify = flags.notify;
+			parameters.qs.notify = flags.notify;
 		}
 		if (flags.hasOwnProperty('can-view-path')) {
-			params.body.can_view_path = flags['can-view-path'];
+			parameters.body.can_view_path = flags['can-view-path'];
 		}
 		if (flags.role) {
-			params.body.role = flags.role.replace('_', ' ');
+			parameters.body.role = flags.role.replace('_', ' ');
 		} else if (flags.editor) {
-			params.body.role = this.client.collaborationRoles.EDITOR;
+			parameters.body.role = this.client.collaborationRoles.EDITOR;
 		} else if (flags.viewer) {
-			params.body.role = this.client.collaborationRoles.VIEWER;
+			parameters.body.role = this.client.collaborationRoles.VIEWER;
 		} else if (flags.previewer) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER;
+			parameters.body.role = this.client.collaborationRoles.PREVIEWER;
 		} else if (flags.uploader) {
-			params.body.role = this.client.collaborationRoles.UPLOADER;
+			parameters.body.role = this.client.collaborationRoles.UPLOADER;
 		} else if (flags['previewer-uploader']) {
-			params.body.role =
+			parameters.body.role =
 				this.client.collaborationRoles.PREVIEWER_UPLOADER;
 		} else if (flags['viewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.VIEWER_UPLOADER;
+			parameters.body.role =
+				this.client.collaborationRoles.VIEWER_UPLOADER;
 		} else if (flags['co-owner']) {
-			params.body.role = this.client.collaborationRoles.CO_OWNER;
+			parameters.body.role = this.client.collaborationRoles.CO_OWNER;
 		}
-		if (!params.body.role) {
+		if (!parameters.body.role) {
 			throw new Error('Missing required flag for collaboration role');
 		}
 
 		if (flags['user-id']) {
-			params.body.accessible_by.type = 'user';
-			params.body.accessible_by.id = flags['user-id'];
+			parameters.body.accessible_by.type = 'user';
+			parameters.body.accessible_by.id = flags['user-id'];
 		} else if (flags['group-id']) {
-			params.body.accessible_by.type = 'group';
-			params.body.accessible_by.id = flags['group-id'];
+			parameters.body.accessible_by.type = 'group';
+			parameters.body.accessible_by.id = flags['group-id'];
 		} else if (flags.login) {
-			params.body.accessible_by.type = 'user';
-			params.body.accessible_by.login = flags.login;
+			parameters.body.accessible_by.type = 'user';
+			parameters.body.accessible_by.login = flags.login;
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			'/collaborations',
-			params
+			parameters
 		);
 	}
 }
