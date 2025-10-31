@@ -9,7 +9,7 @@
 		"upload",
 		"download"
 	],
-	"version": "4.4.1",
+	"version": "4.4.0",
 	"author": "Box <oss@box.com>",
 	"license": "Apache-2.0",
 	"main": "src/index.js",
@@ -27,7 +27,10 @@
 		"@oclif/plugin-autocomplete": "^3.2.11",
 		"@oclif/plugin-help": "^6.2.18",
 		"@oclif/plugin-not-found": "^3.2.71",
+		"@oclif/plugin-update": "3.2.4",
 		"@oclif/plugin-version": "^2.2.16",
+		"@oclif/table": "^0.4.14",
+		"@octokit/rest": "^22.0.0",
 		"archiver": "^3.0.0",
 		"box-node-sdk": "^3.7.0",
 		"box-typescript-sdk-gen": "^1.17.1",
@@ -38,6 +41,7 @@
 		"debug": "^4.4.0",
 		"express": "^4.21.1",
 		"fs-extra": "^10.1.0",
+		"got": "^14.6.1",
 		"inquirer": "^8.2.7",
 		"js-yaml": "^3.13.1",
 		"keychain": "^1.4.0",
@@ -47,7 +51,8 @@
 		"nanoid": "^3.3.8",
 		"open": "^10.1.0",
 		"ora": "^5.4.1",
-		"p-event": "^2.3.1"
+		"p-event": "^2.3.1",
+		"semver": "^7.7.3"
 	},
 	"devDependencies": {
 		"@oclif/test": "^3.2.15",
@@ -138,6 +143,12 @@
 			"web-links": {
 				"description": "Manage web links"
 			}
+		},
+		"update": {
+			"github": {
+				"owner": "box",
+				"repo": "boxcli"
+			}
 		}
 	},
 	"scripts": {
@@ -150,6 +161,7 @@
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif readme --multi && npm run updatemd && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
+		"build:tarballs": "oclif pack:tarballs --no-xz --parallel",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
 		"license": "generate-license-file --overwrite"
 	},
