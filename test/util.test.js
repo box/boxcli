@@ -6,9 +6,7 @@ const mockery = require('mockery');
 const leche = require('leche');
 const sinon = require('sinon');
 const process = require('node:process');
-const path = require('node:path');
 const fs = require('node:fs');
-const os = require('node:os');
 const chaiAsPromised = require('chai-as-promised');
 const { getDriveLetter, isWin } = require('./helpers/test-helper');
 
@@ -35,7 +33,7 @@ describe('Utilities', function () {
 			homedir: sandbox.stub().returns('/home/user'),
 		};
 
-		mockery.registerMock('os', mockOS);
+		mockery.registerMock('node:os', mockOS);
 
 		mockery.registerAllowable(MODULE_UNDER_TEST, true);
 		cliUtilities = require(MODULE_UNDER_TEST);
@@ -52,11 +50,15 @@ describe('Utilities', function () {
 			{
 				'bare tilde': [
 					'~',
-					path.join(os.homedir()),
+					...(isWindows
+						? [String.raw`${driveLetter}\home\user`]
+						: ['/home/user']),
 				],
 				'subdirectory of tilde': [
 					'~/foo/bar',
-					path.join(os.homedir(), 'foo', 'bar'),
+					...(isWindows
+						? [String.raw`${driveLetter}\home\user\foo\bar`]
+						: ['/home/user/foo/bar']),
 				],
 				'absolute path with interior tilde': [
 					'/var/~/bar',
