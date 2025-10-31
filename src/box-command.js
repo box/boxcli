@@ -1,6 +1,17 @@
 /* eslint-disable promise/prefer-await-to-callbacks,promise/avoid-new,class-methods-use-this  */
 'use strict';
 
+const originalEmitWarning = process.emitWarning;
+process.emitWarning = (warning, ...args) => {
+  const message = typeof warning === 'string' ? warning : warning?.message || '';
+
+  if (message.includes('DEPRECATION WARNING')) {
+	return;
+}
+  // If not the BoxClient deprecation warning, call the original emitWarning function
+  originalEmitWarning.call(process, warning, ...args);
+};
+
 const { Command, Flags } = require('@oclif/core');
 const chalk = require('chalk');
 const util = require('util');
@@ -14,9 +25,9 @@ const csv = require('csv');
 const csvParse = util.promisify(csv.parse);
 const csvStringify = util.promisify(csv.stringify);
 const dateTime = require('date-fns');
-const BoxSDK = require('box-node-sdk');
-const BoxTSSDK = require('box-typescript-sdk-gen');
-const BoxTsErrors = require('box-typescript-sdk-gen/lib/box/errors');
+const BoxSDK = require('box-node-sdk').default;
+const BoxTSSDK = require('box-node-sdk/sdk-gen');
+const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
 const utils = require('./util');

@@ -5,7 +5,7 @@
 const BoxCommand = require('../box-command');
 const { Flags } = require('@oclif/core');
 const fs = require('fs');
-const BoxSDK = require('box-node-sdk');
+const BoxSDK = require('box-node-sdk').default;
 const BoxCLIError = require('../cli-error');
 const CLITokenCache = require('../token-cache');
 const pkg = require('../../package.json');
