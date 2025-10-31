@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags } = require('@oclif/core');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class RetentionPoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(RetentionPoliciesListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags['policy-name']) {
 			options.policy_name = flags['policy-name'];
@@ -28,28 +28,26 @@ class RetentionPoliciesListCommand extends BoxCommand {
 	}
 }
 
-RetentionPoliciesListCommand.description = 'List all retention policies for your enterprise';
+RetentionPoliciesListCommand.description =
+	'List all retention policies for your enterprise';
 RetentionPoliciesListCommand.examples = ['box retention-policies'];
 RetentionPoliciesListCommand._endpoint = 'get_retention_policies';
 
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	'policy-name': Flags.string({
 		char: 'n',
-		description: 'A name to filter the retention policies by'
+		description: 'A name to filter the retention policies by',
 	}),
 	'policy-type': Flags.string({
 		description: 'A policy type to filter the retention policies by',
-		options: [
-			'finite',
-			'indefinite'
-		]
+		options: ['finite', 'indefinite'],
 	}),
 	'created-by-user-id': Flags.string({
 		char: 'u',
-		description: 'A user id to filter the retention policies by'
-	})
+		description: 'A user id to filter the retention policies by',
+	}),
 };
 
 module.exports = RetentionPoliciesListCommand;

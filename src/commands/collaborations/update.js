@@ -7,59 +7,69 @@ const chalk = require('chalk');
 class CollaborationsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(CollaborationsUpdateCommand);
-		let params = { body: {}, qs: {} };
+		let parameters = { body: {}, qs: {} };
 
 		if (flags.fields) {
-			params.qs.fields = flags.fields;
+			parameters.qs.fields = flags.fields;
 		}
 		if (flags.status) {
-			params.body.status = flags.status;
+			parameters.body.status = flags.status;
 		}
 		if (flags.hasOwnProperty('can-view-path')) {
-			params.body.can_view_path = flags['can-view-path'];
+			parameters.body.can_view_path = flags['can-view-path'];
 		}
 		if (flags.role) {
-			params.body.role = flags.role.replace('_', ' ');
+			parameters.body.role = flags.role.replace('_', ' ');
 		} else if (flags.editor) {
-			params.body.role = this.client.collaborationRoles.EDITOR;
+			parameters.body.role = this.client.collaborationRoles.EDITOR;
 		} else if (flags.viewer) {
-			params.body.role = this.client.collaborationRoles.VIEWER;
+			parameters.body.role = this.client.collaborationRoles.VIEWER;
 		} else if (flags.previewer) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER;
+			parameters.body.role = this.client.collaborationRoles.PREVIEWER;
 		} else if (flags.uploader) {
-			params.body.role = this.client.collaborationRoles.UPLOADER;
+			parameters.body.role = this.client.collaborationRoles.UPLOADER;
 		} else if (flags['previewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER_UPLOADER;
+			parameters.body.role =
+				this.client.collaborationRoles.PREVIEWER_UPLOADER;
 		} else if (flags['viewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.VIEWER_UPLOADER;
+			parameters.body.role =
+				this.client.collaborationRoles.VIEWER_UPLOADER;
 		} else if (flags['co-owner']) {
-			params.body.role = this.client.collaborationRoles.CO_OWNER;
+			parameters.body.role = this.client.collaborationRoles.CO_OWNER;
 		} else if (flags.owner) {
-			params.body.role = this.client.collaborationRoles.OWNER;
+			parameters.body.role = this.client.collaborationRoles.OWNER;
 		}
 		if (flags['expires-at']) {
-			params.body.expires_at = flags['expires-at'];
+			parameters.body.expires_at = flags['expires-at'];
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
-		let collaboration = await this.client.wrapWithDefaultHandler(this.client.put)(`/collaborations/${args.id}`, params);
+		let collaboration = await this.client.wrapWithDefaultHandler(
+			this.client.put
+		)(`/collaborations/${args.id}`, parameters);
 		if (collaboration) {
 			await this.output(collaboration);
-		} else if (params.body.role === this.client.collaborationRoles.OWNER) {
+		} else if (
+			parameters.body.role === this.client.collaborationRoles.OWNER
+		) {
 			// Upgrading a collaborator to owner produces a 204 response with empty body
 			// Output a success message instead of trying to print the updated collaboration
-			this.info(chalk`{green Collaborator successfully upgraded to owner.}`);
+			this.info(
+				chalk`{green Collaborator successfully upgraded to owner.}`
+			);
 		}
 	}
 }
 
 CollaborationsUpdateCommand.aliases = [
 	'files:collaborations:update',
-	'folders:collaborations:update'
+	'folders:collaborations:update',
 ];
 
 CollaborationsUpdateCommand.description = 'Update a collaboration';
-CollaborationsUpdateCommand.examples = ['box collaborations:update 12345 --role viewer'];
+CollaborationsUpdateCommand.examples = [
+	'box collaborations:update 12345 --role viewer',
+];
 CollaborationsUpdateCommand._endpoint = 'put_collaborations_id';
 
 CollaborationsUpdateCommand.flags = {
@@ -75,7 +85,7 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
+			'owner',
 		],
 		options: [
 			'editor',
@@ -85,16 +95,12 @@ CollaborationsUpdateCommand.flags = {
 			'previewer_uploader',
 			'viewer_uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	status: Flags.string({
 		description: 'Update the collaboration status',
-		options: [
-			'accepted',
-			'pending',
-			'rejected'
-		]
+		options: ['accepted', 'pending', 'rejected'],
 	}),
 	editor: Flags.boolean({
 		description: 'Set the role to editor',
@@ -107,8 +113,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	viewer: Flags.boolean({
 		description: 'Set the role to viewer',
@@ -121,8 +127,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	previewer: Flags.boolean({
 		description: 'Set the role to previewer',
@@ -135,8 +141,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	uploader: Flags.boolean({
 		description: 'Set the role to uploader',
@@ -149,8 +155,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	'previewer-uploader': Flags.boolean({
 		description: 'Set the role to previewer-uploader',
@@ -163,8 +169,8 @@ CollaborationsUpdateCommand.flags = {
 			'editor',
 			'viewer-uploader',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	'viewer-uploader': Flags.boolean({
 		description: 'Set the role to viewer-uploader',
@@ -177,8 +183,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'editor',
 			'co-owner',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	'co-owner': Flags.boolean({
 		description: 'Set the role to co-owner',
@@ -191,8 +197,8 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'editor',
-			'owner'
-		]
+			'owner',
+		],
 	}),
 	owner: Flags.boolean({
 		description: 'Set the role to owner',
@@ -205,17 +211,18 @@ CollaborationsUpdateCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'editor',
-			'co-owner'
-		]
+			'co-owner',
+		],
 	}),
 	'can-view-path': Flags.boolean({
-		description: 'Whether view path collaboration feature is enabled or not',
-		allowNo: true
+		description:
+			'Whether view path collaboration feature is enabled or not',
+		allowNo: true,
 	}),
 	'expires-at': Flags.string({
 		description: 'When the collaboration should expire',
-		parse: input => BoxCommand.normalizeDateString(input),
-	})
+		parse: (input) => BoxCommand.normalizeDateString(input),
+	}),
 };
 
 CollaborationsUpdateCommand.args = {
@@ -223,7 +230,7 @@ CollaborationsUpdateCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'The ID of the collaboration to update'
+		description: 'The ID of the collaboration to update',
 	}),
 };
 

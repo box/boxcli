@@ -48,7 +48,7 @@ const FLAG_HANDLERS = Object.freeze({
 		};
 	},
 	hidden(value, currentField, template) {
-		let isHidden = (!value.input.startsWith('--no-'));
+		let isHidden = !value.input.startsWith('--no-');
 
 		if (!currentField) {
 			template.hidden = isHidden;
@@ -58,34 +58,45 @@ const FLAG_HANDLERS = Object.freeze({
 		currentField.hidden = isHidden;
 		return currentField;
 	},
-	'field-key': (value, currentField/* , template*/) => {
+	'field-key': (value, currentField /* , template*/) => {
 		if (!currentField) {
-			throw new BoxCLIError('Unexpected --field-key flag outside of field definition');
+			throw new BoxCLIError(
+				'Unexpected --field-key flag outside of field definition'
+			);
 		}
 
 		currentField.key = value.input;
 		return currentField;
 	},
-	description(value, currentField/* , template*/) {
+	description(value, currentField /* , template*/) {
 		if (!currentField) {
-			throw new BoxCLIError('Unexpected --description flag outside of field definition');
+			throw new BoxCLIError(
+				'Unexpected --description flag outside of field definition'
+			);
 		}
 
 		currentField.description = value.input;
 		return currentField;
 	},
-	option(value, currentField/* , template*/) {
+	option(value, currentField /* , template*/) {
 		if (!currentField) {
-			throw new BoxCLIError('Unexpected --option flag outside of field definition');
+			throw new BoxCLIError(
+				'Unexpected --option flag outside of field definition'
+			);
 		}
 
-		if (currentField.type !== 'enum' && currentField.type !== 'multiSelect') {
-			throw new BoxCLIError('--option flag can only be specified for enum and multi-select fields');
+		if (
+			currentField.type !== 'enum' &&
+			currentField.type !== 'multiSelect'
+		) {
+			throw new BoxCLIError(
+				'--option flag can only be specified for enum and multi-select fields'
+			);
 		}
 
-		currentField.options.push({key: value.input});
+		currentField.options.push({ key: value.input });
 		return currentField;
-	}
+	},
 });
 
 /**
@@ -97,20 +108,23 @@ const FLAG_HANDLERS = Object.freeze({
  * @private
  */
 function _parseFlags(preparsedArgv) {
-
 	let template = {
 		fields: [],
 	};
 
 	let currentField = null;
 
-	preparsedArgv.filter(v => v.type === 'flag').forEach(value => {
-		let handler = FLAG_HANDLERS[value.flag] || ((val, curField) => curField);
+	for (const value of preparsedArgv.filter((v) => v.type === 'flag')) {
+		let handler =
+			FLAG_HANDLERS[value.flag] ||
+			((value_, currentField_) => currentField_);
 		currentField = handler(value, currentField, template);
-	});
+	}
 
 	// Add the last field if necessary and return
-	template.fields = template.fields.concat(currentField).filter(op => op !== null);
+	template.fields = template.fields
+		.concat(currentField)
+		.filter((op) => op !== null);
 	return template;
 }
 
@@ -130,16 +144,23 @@ class MetadataTemplatesCreateCommand extends BoxCommand {
 		}
 
 		if (flags['copy-instance-on-item-copy']) {
-			options.copyInstanceOnItemCopy = flags['copy-instance-on-item-copy'];
+			options.copyInstanceOnItemCopy =
+				flags['copy-instance-on-item-copy'];
 		}
 
-		let template = await this.client.metadata.createTemplate(flags['display-name'], fields, options);
+		let template = await this.client.metadata.createTemplate(
+			flags['display-name'],
+			fields,
+			options
+		);
 		await this.output(template);
 	}
 }
 
 MetadataTemplatesCreateCommand.description = 'Create a new metadata template';
-MetadataTemplatesCreateCommand.examples = ['box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales'];
+MetadataTemplatesCreateCommand.examples = [
+	'box metadata-templates:create --display-name "Employee Record" --string Name --enum Department --option Sales',
+];
 MetadataTemplatesCreateCommand._endpoint = 'post_metadata_templates_schema';
 
 MetadataTemplatesCreateCommand.flags = {
@@ -153,7 +174,8 @@ MetadataTemplatesCreateCommand.flags = {
 		default: 'enterprise',
 	}),
 	'template-key': Flags.string({
-		description: 'A unique identifier for the template.  If not specified, will be derived from the display name',
+		description:
+			'A unique identifier for the template.  If not specified, will be derived from the display name',
 	}),
 	hidden: Flags.boolean({
 		description: 'Whether this template or field is hidden in the UI',
@@ -195,8 +217,9 @@ MetadataTemplatesCreateCommand.flags = {
 		description: 'Return only an ID to output from this command',
 	}),
 	'copy-instance-on-item-copy': Flags.boolean({
-		description: 'Whether to include the metadata when a file or folder is copied',
-	})
+		description:
+			'Whether to include the metadata when a file or folder is copied',
+	}),
 };
 
 module.exports = MetadataTemplatesCreateCommand;

@@ -22,7 +22,7 @@ CommentsGetCommand.examples = ['box comments:get 12345'];
 CommentsGetCommand._endpoint = 'get_comments_id';
 
 CommentsGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 CommentsGetCommand.args = {
@@ -30,7 +30,7 @@ CommentsGetCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the comment to get'
+		description: 'ID of the comment to get',
 	}),
 };
 

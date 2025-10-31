@@ -1,12 +1,12 @@
 'use strict';
 
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class TrashListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(TrashListCommand);
-		let options = PaginationUtils.forceMarkerPagination(flags);
+		let options = PaginationUtilities.forceMarkerPagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -17,7 +17,7 @@ class TrashListCommand extends BoxCommand {
 	}
 }
 
-TrashListCommand.aliases = [ 'trash:list' ];
+TrashListCommand.aliases = ['trash:list'];
 
 TrashListCommand.description = 'List all items in trash';
 TrashListCommand.examples = ['box trash'];
@@ -25,7 +25,7 @@ TrashListCommand._endpoint = 'get_folders_trash_items';
 
 TrashListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 };
 
 module.exports = TrashListCommand;

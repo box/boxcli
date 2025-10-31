@@ -20,7 +20,7 @@ USAGE
     [--limit <value>] [--all] [--include-recent-shared-links]
 
 ARGUMENTS
-  QUERY  The search term
+  [QUERY]  The search term
 
 FLAGS
   -h, --help                         Show CLI help

@@ -17,7 +17,7 @@ TermsOfServiceGetCommand.examples = ['box terms-of-service:get 55555'];
 TermsOfServiceGetCommand._endpoint = 'get_terms_of_services_id';
 
 TermsOfServiceGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TermsOfServiceGetCommand.args = {

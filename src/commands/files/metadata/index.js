@@ -12,14 +12,14 @@ class FilesGetAllMetadataCommand extends BoxCommand {
 	}
 }
 
-FilesGetAllMetadataCommand.aliases = [ 'files:metadata:get-all' ];
+FilesGetAllMetadataCommand.aliases = ['files:metadata:get-all'];
 
 FilesGetAllMetadataCommand.description = 'Get all metadata on a file';
 FilesGetAllMetadataCommand.examples = ['box files:metadata 11111'];
 FilesGetAllMetadataCommand._endpoint = 'get_files_id_metadata';
 
 FilesGetAllMetadataCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 FilesGetAllMetadataCommand.args = {
@@ -27,8 +27,8 @@ FilesGetAllMetadataCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'Id of the file'
-	})
+		description: 'Id of the file',
+	}),
 };
 
 module.exports = FilesGetAllMetadataCommand;

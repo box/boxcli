@@ -8,11 +8,11 @@ const inquirer = require('inquirer');
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(EnvironmentsDeleteCommand);
-		let environmentsObj = await this.getEnvironments();
+		let environmentsObject = await this.getEnvironments();
 		let name = args.name;
 
 		if (!name) {
-			const choices = Object.keys(environmentsObj.environments);
+			const choices = Object.keys(environmentsObject.environments);
 			if (choices.length === 0) {
 				throw new BoxCLIError('No environments to delete');
 			}
@@ -21,18 +21,18 @@ class EnvironmentsDeleteCommand extends BoxCommand {
 					type: 'list',
 					name: 'environment',
 					message: 'Which environment?',
-					choices: Object.keys(environmentsObj.environments),
-				}
+					choices: Object.keys(environmentsObject.environments),
+				},
 			]);
 			name = answers.environment;
 		}
 
-		if (environmentsObj.environments.hasOwnProperty(name)) {
-			delete environmentsObj.environments[name];
-			if (environmentsObj.default === name) {
-				environmentsObj.default = '';
+		if (environmentsObject.environments.hasOwnProperty(name)) {
+			delete environmentsObject.environments[name];
+			if (environmentsObject.default === name) {
+				environmentsObject.default = '';
 			}
-			await this.updateEnvironments(environmentsObj);
+			await this.updateEnvironments(environmentsObject);
 			this.info(`The ${name} environment was deleted`);
 		} else {
 			this.error(`The ${name} environment does not exist`);
@@ -54,8 +54,8 @@ EnvironmentsDeleteCommand.args = {
 		name: 'name',
 		required: false,
 		hidden: false,
-		description: 'Name of the environment'
-	})
+		description: 'Name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsDeleteCommand;

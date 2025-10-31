@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 const OP_FLAGS = Object.freeze({
 	add: true,
@@ -15,22 +15,34 @@ const OP_FLAGS = Object.freeze({
 
 class FilesUpdateMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = await this.parse(FilesUpdateMetadataCommand);
+		const { flags, args, raw } = await this.parse(
+			FilesUpdateMetadataCommand
+		);
 
-		let updates = raw.filter(v => v.type === 'flag' && OP_FLAGS[v.flag]).map(op => {
-			let opName = op.flag;
-			let opData = flags[op.flag].shift();
+		let updates = raw
+			.filter((v) => v.type === 'flag' && OP_FLAGS[v.flag])
+			.map((op) => {
+				let opName = op.flag;
+				let opData = flags[op.flag].shift();
 
-			return { op: opName, ...opData };
-		});
+				return { op: opName, ...opData };
+			});
 
-		let metadata = await this.client.files.updateMetadata(args.id, flags.scope, flags['template-key'], updates);
+		let metadata = await this.client.files.updateMetadata(
+			args.id,
+			flags.scope,
+			flags['template-key'],
+			updates
+		);
 		await this.output(metadata);
 	}
 }
 
-FilesUpdateMetadataCommand.description = 'Update the metadata attached to a file';
-FilesUpdateMetadataCommand.examples = ['box files:metadata:update 11111 --template-key employeeRecord --replace department=Finance'];
+FilesUpdateMetadataCommand.description =
+	'Update the metadata attached to a file';
+FilesUpdateMetadataCommand.examples = [
+	'box files:metadata:update 11111 --template-key employeeRecord --replace department=Finance',
+];
 FilesUpdateMetadataCommand._endpoint = 'put_files_id_metadata_id_id';
 
 FilesUpdateMetadataCommand.flags = {
@@ -45,37 +57,42 @@ FilesUpdateMetadataCommand.flags = {
 	}),
 	add: Flags.string({
 		char: 'a',
-		description: 'Add a key to the metadata document; must be in the form key=value',
+		description:
+			'Add a key to the metadata document; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	copy: Flags.string({
 		char: 'c',
-		description: 'Copy a metadata value to another key; must be in the form sourceKey>destinationKey',
+		description:
+			'Copy a metadata value to another key; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	move: Flags.string({
 		char: 'm',
-		description: 'Move a metadata value from one key to another; must be in the form sourceKey>destinationKey',
+		description:
+			'Move a metadata value from one key to another; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	remove: Flags.string({
 		description: 'Remove a key from the metadata document',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	replace: Flags.string({
-		description: 'Replace the value of an existing metadata key; must be in the form key=value',
+		description:
+			'Replace the value of an existing metadata key; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	test: Flags.string({
 		char: 't',
-		description: 'Test that a metadata key contains a specific value; must be in the form key=value',
+		description:
+			'Test that a metadata key contains a specific value; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 };
 

@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags } = require('@oclif/core');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class LegalHoldPoliciesListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(LegalHoldPoliciesListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags['policy-name']) {
 			options.policy_name = flags['policy-name'];
@@ -28,8 +28,8 @@ LegalHoldPoliciesListCommand._endpoint = 'get_legal_hold_policies';
 
 LegalHoldPoliciesListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
-	'policy-name': Flags.string({ description: 'Filter by policy name' })
+	...PaginationUtilities.flags,
+	'policy-name': Flags.string({ description: 'Filter by policy name' }),
 };
 
 module.exports = LegalHoldPoliciesListCommand;

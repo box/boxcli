@@ -7,13 +7,20 @@ class FoldersGetMetadataCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersGetMetadataCommand);
 
-		let metadata = await this.client.folders.getMetadata(args.id, flags.scope, flags['template-key']);
+		let metadata = await this.client.folders.getMetadata(
+			args.id,
+			flags.scope,
+			flags['template-key']
+		);
 		await this.output(metadata);
 	}
 }
 
-FoldersGetMetadataCommand.description = 'Get information about a metadata object';
-FoldersGetMetadataCommand.examples = ['box folders:metadata:get 22222 --template-key employeeRecord'];
+FoldersGetMetadataCommand.description =
+	'Get information about a metadata object';
+FoldersGetMetadataCommand.examples = [
+	'box folders:metadata:get 22222 --template-key employeeRecord',
+];
 FoldersGetMetadataCommand._endpoint = 'get_folders_id_metadata_id_id';
 
 FoldersGetMetadataCommand.flags = {

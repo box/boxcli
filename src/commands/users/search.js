@@ -26,7 +26,7 @@ UsersSearchCommand.flags = {
 	..._.pick(UsersListCommand.flags, [
 		'managed-users',
 		'external-users',
-		'all-users'
+		'all-users',
 	]),
 };
 
@@ -35,7 +35,7 @@ UsersSearchCommand.args = {
 		name: 'name',
 		required: true,
 		hidden: false,
-		description: 'Name of user to search for'
+		description: 'Name of user to search for',
 	}),
 };
 

@@ -1,20 +1,19 @@
 'use strict';
 
-const os = require('os');
+const os = require('node:os');
 
 /**
  * Wrapper for lower-level errors, so we can give reasonable error messages without losing the original message/stack
  * This error deliberately elides its own stack trace; it is intended to be directly displayed to users
  */
 class BoxCLIError extends Error {
-
 	/**
-     * Create the wrapped error
-     *
-     * @param {string} message Error message
-     * @param {Error} [cause] The lower-level error that caused this error
-     * @constructor
-     */
+	 * Create the wrapped error
+	 *
+	 * @param {string} message Error message
+	 * @param {Error} [cause] The lower-level error that caused this error
+	 * @constructor
+	 */
 	constructor(message, cause) {
 		super(message);
 		this.name = 'BoxCLIError';

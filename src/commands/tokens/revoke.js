@@ -13,19 +13,22 @@ class TokensRevokeCommand extends BoxCommand {
 		if (response.statusCode === 200) {
 			this.info(chalk`{green Token revoked.}`);
 		} else {
-			this.info(chalk`{redBright Error revoking token!  ${response.body.error_description}}`);
+			this.info(
+				chalk`{redBright Error revoking token!  ${response.body.error_description}}`
+			);
 		}
 	}
 }
 
-TokensRevokeCommand.description = 'Revoke a token.  The token will no longer be valid for making API calls.';
+TokensRevokeCommand.description =
+	'Revoke a token.  The token will no longer be valid for making API calls.';
 
 TokensRevokeCommand.args = {
 	token: Args.string({
 		name: 'token',
 		required: true,
 		hidden: false,
-		description: 'The token to revoke'
+		description: 'The token to revoke',
 	}),
 };
 

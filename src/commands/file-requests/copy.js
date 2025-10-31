@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class FileRequestsCopyCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FileRequestsCopyCommand);
-		let options = { folder: { type: 'folder' }};
+		let options = { folder: { type: 'folder' } };
 
 		if (args.folderID) {
 			options.folder.id = args.folderID;
@@ -51,7 +51,7 @@ FileRequestsCopyCommand.flags = {
 	...BoxCommand.flags,
 	description: Flags.string({
 		description: 'New description of file request',
-		parse: utils.unescapeSlashes
+		parse: utilities.unescapeSlashes,
 	}),
 	'expires-at': Flags.string({
 		description: 'New date when file request expires',

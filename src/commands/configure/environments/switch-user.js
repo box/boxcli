@@ -8,8 +8,9 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(EnvironmentsSwitchUserCommand);
 
-		let environmentsObj = await this.getEnvironments();
-		let environment = environmentsObj.environments[environmentsObj.default];
+		let environmentsObject = await this.getEnvironments();
+		let environment =
+			environmentsObject.environments[environmentsObject.default];
 
 		if (flags.default && !args.userID) {
 			environment.useDefaultAsUser = false;
@@ -17,10 +18,12 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 			environment.useDefaultAsUser = true;
 			environment.defaultAsUserId = args.userID;
 		} else {
-			throw new Error('Either a userID argument or --default flag must be passed, but not both');
+			throw new Error(
+				'Either a userID argument or --default flag must be passed, but not both'
+			);
 		}
 
-		await this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObject);
 		this.info(chalk`{green User set to ${args.userID || 'default'}}`);
 	}
 }
@@ -28,7 +31,8 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 // @NOTE: This command does not require a client to be set up
 EnvironmentsSwitchUserCommand.noClient = true;
 
-EnvironmentsSwitchUserCommand.description = 'Switch the default Box user to run commands as';
+EnvironmentsSwitchUserCommand.description =
+	'Switch the default Box user to run commands as';
 
 EnvironmentsSwitchUserCommand.flags = {
 	...BoxCommand.minFlags,
@@ -39,14 +43,14 @@ EnvironmentsSwitchUserCommand.args = {
 		name: 'userID',
 		hidden: false,
 		required: false,
-		description: 'The user ID to switch to'
-	})
+		description: 'The user ID to switch to',
+	}),
 };
 
 EnvironmentsSwitchUserCommand.flags = {
 	...BoxCommand.flags,
 	default: Flags.boolean({
-		description: 'Switch to the default user, i.e. the Service Account'
+		description: 'Switch to the default user, i.e. the Service Account',
 	}),
 };
 

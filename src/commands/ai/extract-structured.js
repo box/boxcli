@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class AiExtractStructuredCommand extends BoxCommand {
 	async run() {
@@ -15,7 +15,7 @@ class AiExtractStructuredCommand extends BoxCommand {
 
 		if (flags.fields && flags['metadata-template']) {
 			throw new Error(
-				'Only one of fields or metadata_template can be provided',
+				'Only one of fields or metadata_template can be provided'
 			);
 		}
 
@@ -25,7 +25,9 @@ class AiExtractStructuredCommand extends BoxCommand {
 		} else if (flags['metadata-template']) {
 			options.metadataTemplate = flags['metadata-template'];
 		} else {
-			throw new Error('Either fields or metadata_template must be provided');
+			throw new Error(
+				'Either fields or metadata_template must be provided'
+			);
 		}
 
 		if (flags['ai-agent']) {
@@ -57,16 +59,28 @@ AiExtractStructuredCommand.flags = {
 				id: '',
 				type: 'file',
 			};
-			const obj = utils.parseStringToObject(input, ['id', 'type', 'content']);
-			for (const key in obj) {
-				if (key === 'id') {
-					item.id = obj[key];
-				} else if (key === 'type') {
-					item.type = obj[key];
-				} else if (key === 'content') {
-					item.content = obj[key];
-				} else {
-					throw new Error(`Invalid item key ${key}`);
+			const object = utilities.parseStringToObject(input, [
+				'id',
+				'type',
+				'content',
+			]);
+			for (const key in object) {
+				switch (key) {
+					case 'id': {
+						item.id = object[key];
+						break;
+					}
+					case 'type': {
+						item.type = object[key];
+						break;
+					}
+					case 'content': {
+						item.content = object[key];
+						break;
+					}
+					default: {
+						throw new Error(`Invalid item key ${key}`);
+					}
 				}
 			}
 			if (!item.id) {
@@ -83,20 +97,31 @@ AiExtractStructuredCommand.flags = {
 				scope: '',
 				templateKey: '',
 			};
-			const obj = utils.parseStringToObject(input, [
+			const object = utilities.parseStringToObject(input, [
 				'type',
 				'scope',
 				'template_key',
 			]);
-			for (const key in obj) {
-				if (key === 'type') {
-					metadataTemplate.type = obj[key];
-				} else if (key === 'scope') {
-					metadataTemplate.scope = obj[key];
-				} else if (key === 'template_key') {
-					metadataTemplate.templateKey = obj[key];
-				} else {
-					throw new Error(`Invalid item key ${key}`);
+			for (const key in object) {
+				switch (key) {
+					case 'type': {
+						metadataTemplate.type = object[key];
+
+						break;
+					}
+					case 'scope': {
+						metadataTemplate.scope = object[key];
+
+						break;
+					}
+					case 'template_key': {
+						metadataTemplate.templateKey = object[key];
+
+						break;
+					}
+					default: {
+						throw new Error(`Invalid item key ${key}`);
+					}
 				}
 			}
 			return metadataTemplate;
@@ -107,7 +132,7 @@ AiExtractStructuredCommand.flags = {
 		description: 'The fields to be extracted from the provided items.',
 		parse(input) {
 			const fields = {};
-			const obj = utils.parseStringToObject(input, [
+			const object = utilities.parseStringToObject(input, [
 				'key',
 				'type',
 				'description',
@@ -115,32 +140,56 @@ AiExtractStructuredCommand.flags = {
 				'displayName',
 				'options',
 			]);
-			for (const key in obj) {
-				if (key === 'key') {
-					fields.key = obj[key];
-				} else if (key === 'type') {
-					fields.type = obj[key];
-				} else if (key === 'description') {
-					fields.description = obj[key];
-				} else if (key === 'prompt') {
-					fields.prompt = obj[key];
-				} else if (key === 'displayName') {
-					fields.displayName = obj[key];
-				} else if (key === 'options') {
-					try {
-						const parsedOptions = obj[key]
-							.split(';')
-							.filter((item) => item)
-							.map((item) => ({ key: item.trim() }));
-						if (parsedOptions.length === 0) {
-							throw new Error('Options field must contain at least one value');
-						}
-						fields.options = parsedOptions;
-					} catch (error) {
-						throw new Error(`Error parsing options: ${error.message}`);
+			for (const key in object) {
+				switch (key) {
+					case 'key': {
+						fields.key = object[key];
+
+						break;
 					}
-				} else {
-					throw new Error(`Invalid item key ${key}`);
+					case 'type': {
+						fields.type = object[key];
+
+						break;
+					}
+					case 'description': {
+						fields.description = object[key];
+
+						break;
+					}
+					case 'prompt': {
+						fields.prompt = object[key];
+
+						break;
+					}
+					case 'displayName': {
+						fields.displayName = object[key];
+
+						break;
+					}
+					case 'options': {
+						try {
+							const parsedOptions = object[key]
+								.split(';')
+								.filter(Boolean)
+								.map((item) => ({ key: item.trim() }));
+							if (parsedOptions.length === 0) {
+								throw new Error(
+									'Options field must contain at least one value'
+								);
+							}
+							fields.options = parsedOptions;
+						} catch (error) {
+							throw new Error(
+								`Error parsing options: ${error.message}`
+							);
+						}
+
+						break;
+					}
+					default: {
+						throw new Error(`Invalid item key ${key}`);
+					}
 				}
 			}
 

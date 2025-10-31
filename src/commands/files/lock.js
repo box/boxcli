@@ -29,13 +29,14 @@ FilesLockCommand._endpoint = 'put_files_id lock';
 FilesLockCommand.flags = {
 	...BoxCommand.flags,
 	expires: Flags.string({
-		description: 'Make the lock expire from a timespan set from now. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'Make the lock expire from a timespan set from now. Use s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months. For example, 30 seconds is 30s',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'prevent-download': Flags.boolean({
 		description: 'Prevent download of locked file',
-		allowNo: true
-	})
+		allowNo: true,
+	}),
 };
 
 FilesLockCommand.args = {
@@ -43,7 +44,7 @@ FilesLockCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of file to lock'
+		description: 'ID of file to lock',
 	}),
 };
 

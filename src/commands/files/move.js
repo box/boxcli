@@ -8,8 +8,8 @@ class FilesMoveCommand extends BoxCommand {
 		const { flags, args } = await this.parse(FilesMoveCommand);
 		let updates = {
 			parent: {
-				id: args.parentID
-			}
+				id: args.parentID,
+			},
 		};
 
 		if (flags.etag) {
@@ -27,7 +27,7 @@ FilesMoveCommand._endpoint = 'put_files_id move';
 
 FilesMoveCommand.flags = {
 	...BoxCommand.flags,
-	etag: Flags.string({ description: 'Only move if etag value matches' })
+	etag: Flags.string({ description: 'Only move if etag value matches' }),
 };
 
 FilesMoveCommand.args = {

@@ -3,74 +3,68 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
-const os = require('os');
+const os = require('node:os');
 
-describe('Terms of Service', () => {
-
-	describe('terms-of-service:get', () => {
+describe('Terms of Service', function () {
+	describe('terms-of-service:get', function () {
 		let tosId = '12345',
 			fixture = getFixture('terms-of-service/get_terms_of_service_id'),
 			yamlOutput = getFixture('output/terms_of_service_get_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/terms_of_services/${tosId}`)
-				.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/terms_of_services/${tosId}`).reply(200, fixture)
+		)
 			.stdout()
-			.command([
-				'terms-of-service:get',
-				tosId,
-				'--json',
-				'--token=test'
-			])
-			.it('should get information on a terms of service (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.command(['terms-of-service:get', tosId, '--json', '--token=test'])
+			.it(
+				'should get information on a terms of service (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/terms_of_services/${tosId}`)
-				.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/terms_of_services/${tosId}`).reply(200, fixture)
+		)
 			.stdout()
-			.command([
-				'terms-of-service:get',
-				tosId,
-				'--token=test'
-			])
-			.it('should get information on a terms of service (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.command(['terms-of-service:get', tosId, '--token=test'])
+			.it(
+				'should get information on a terms of service (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 	});
 
-	describe('terms-of-service', () => {
+	describe('terms-of-service', function () {
 		let tosType = 'managed',
 			fixture = getFixture('terms-of-service/get_terms_of_services'),
 			jsonOutput = getFixture('output/terms_of_service_list_json.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/terms_of_services')
 				.query({
-					tos_type: tosType
+					tos_type: tosType,
 				})
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service',
 				`--type=${tosType}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should list terms of services for your enterprise with the type flag passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
-
+			.it(
+				'should list terms of services for your enterprise with the type flag passed (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 	});
 
-	describe('terms-of-service:create', () => {
+	describe('terms-of-service:create', function () {
 		let tosType = 'managed',
 			status = 'enabled',
 			text = 'test',
@@ -80,14 +74,12 @@ describe('Terms of Service', () => {
 		let expectedBody = {
 			tos_type: tosType,
 			status,
-			text
+			text,
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/terms_of_services', expectedBody)
-				.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/terms_of_services', expectedBody).reply(200, fixture)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:create',
@@ -95,31 +87,29 @@ describe('Terms of Service', () => {
 				`--status=${status}`,
 				`--text=${text}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a terms of service (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a terms of service (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/terms_of_services')
-				.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/terms_of_services').reply(200, fixture)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:create',
 				`--type=${tosType}`,
 				`--status=${status}`,
 				`--text=${text}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a terms of service (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should create a terms of service (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('terms-of-service:update', () => {
+	describe('terms-of-service:update', function () {
 		let tosId = '12345',
 			status = 'enabled',
 			text = 'test',
@@ -128,14 +118,14 @@ describe('Terms of Service', () => {
 
 		let expectedBody = {
 			status,
-			text
+			text,
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/terms_of_services/${tosId}`, expectedBody)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:update',
@@ -143,120 +133,144 @@ describe('Terms of Service', () => {
 				`--status=${status}`,
 				`--text=${text}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update a terms of service (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should update a terms of service (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/terms_of_services/${tosId}`, expectedBody)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:update',
 				tosId,
 				`--status=${status}`,
 				`--text=${text}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update a terms of service (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should update a terms of service (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 	});
 
-	describe('terms-of-service:get-user-status', () => {
+	describe('terms-of-service:get-user-status', function () {
 		let tosId = '1234',
 			userId = '7777',
-			fixture = getFixture('terms-of-service/get_terms_of_service_user_statuses'),
-			yamlOutput = getFixture('output/terms_of_service_get_user_status_yaml.txt');
+			fixture = getFixture(
+				'terms-of-service/get_terms_of_service_user_statuses'
+			),
+			yamlOutput = getFixture(
+				'output/terms_of_service_get_user_status_yaml.txt'
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/terms_of_service_user_statuses')
 				.query({
 					tos_id: tosId,
-					user_id: userId
+					user_id: userId,
 				})
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:get-user-status',
 				tosId,
 				`--user-id=${userId}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should get a user\'s status on a terms of service (JSON Output)', ctx => {
-				let expectedObject = JSON.parse(fixture).entries[0];
-				assert.equal(ctx.stdout, `${JSON.stringify(expectedObject, null, 4)}${os.EOL}`);
-			});
+			.it(
+				"should get a user's status on a terms of service (JSON Output)",
+				(context) => {
+					let expectedObject = JSON.parse(fixture).entries[0];
+					assert.equal(
+						context.stdout,
+						`${JSON.stringify(expectedObject, null, 4)}${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/terms_of_service_user_statuses')
 				.query({
 					tos_id: tosId,
-					user_id: userId
+					user_id: userId,
 				})
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:get-user-status',
 				tosId,
 				`--user-id=${userId}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should get a user\'s status on a terms of service (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				"should get a user's status on a terms of service (YAML Output)",
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 	});
 
-	describe('terms-of-service:set-user-status', () => {
+	describe('terms-of-service:set-user-status', function () {
 		let tosId = '1234',
 			userId = '7777',
-			postResponse = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
-			getResponse = getFixture('terms-of-service/get_terms_of_service_user_statuses'),
-			putResponse = getFixture('terms-of-service/put_terms_of_service_user_statuses'),
-			yamlOutput = getFixture('output/terms_of_service_set_user_status_yaml.txt'),
+			postResponse = getFixture(
+				'terms-of-service/post_terms_of_service_user_statuses_409'
+			),
+			getResponse = getFixture(
+				'terms-of-service/get_terms_of_service_user_statuses'
+			),
+			putResponse = getFixture(
+				'terms-of-service/put_terms_of_service_user_statuses'
+			),
+			yamlOutput = getFixture(
+				'output/terms_of_service_set_user_status_yaml.txt'
+			),
 			tosUserStatusId = JSON.parse(getResponse).entries[0].id;
 
 		let user = {
 			id: userId,
-			type: 'user'
+			type: 'user',
 		};
 
 		let expectedPostBody = {
 			tos: {
 				id: tosId,
-				type: 'terms_of_service'
+				type: 'terms_of_service',
 			},
 			user,
-			is_accepted: true
+			is_accepted: true,
 		};
 
 		let expectedPutBody = {
-			is_accepted: true
+			is_accepted: true,
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/terms_of_service_user_statuses', expectedPostBody)
 				.reply(409, postResponse)
 				.get('/2.0/terms_of_service_user_statuses')
 				.query({
 					tos_id: tosId,
 					user_id: userId,
-					fields: 'id'
+					fields: 'id',
 				})
 				.reply(200, getResponse)
-				.put(`/2.0/terms_of_service_user_statuses/${tosUserStatusId}`, expectedPutBody)
+				.put(
+					`/2.0/terms_of_service_user_statuses/${tosUserStatusId}`,
+					expectedPutBody
+				)
 				.reply(200, putResponse)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:set-user-status',
@@ -264,36 +278,45 @@ describe('Terms of Service', () => {
 				`--user-id=${userId}`,
 				'--accept',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should set a user\'s status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, putResponse);
-			});
+			.it(
+				"should set a user's status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)",
+				(context) => {
+					assert.equal(context.stdout, putResponse);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/terms_of_service_user_statuses', expectedPostBody)
 				.reply(409, postResponse)
 				.get('/2.0/terms_of_service_user_statuses')
 				.query({
 					tos_id: tosId,
 					user_id: userId,
-					fields: 'id'
+					fields: 'id',
 				})
 				.reply(200, getResponse)
-				.put(`/2.0/terms_of_service_user_statuses/${tosUserStatusId}`, expectedPutBody)
+				.put(
+					`/2.0/terms_of_service_user_statuses/${tosUserStatusId}`,
+					expectedPutBody
+				)
 				.reply(200, putResponse)
-			)
+		)
 			.stdout()
 			.command([
 				'terms-of-service:set-user-status',
 				tosId,
 				`--user-id=${userId}`,
 				'--accept',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should set a user\'s status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				"should set a user's status on a terms of service with a terms of service Id with the accept flag passed (JSON Output)",
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 	});
 });

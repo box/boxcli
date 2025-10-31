@@ -21,15 +21,17 @@ class FoldersDeleteCommand extends BoxCommand {
 		if (flags.force) {
 			try {
 				await this.client.folders.deletePermanently(args.id);
-			} catch (err) {
+			} catch (error) {
 				// If the item can't be found in the trash, assume that it was already deleted or
 				// that the enterprise didn't have trash enabled.  This should be regarded as a success case.
-				if (err.statusCode !== 404) {
-					throw err;
+				if (error.statusCode !== 404) {
+					throw error;
 				}
 			}
 		}
-		this.info(`Deleted folder ${args.id}${flags.force ? ' permanently' : ''}`);
+		this.info(
+			`Deleted folder ${args.id}${flags.force ? ' permanently' : ''}`
+		);
 	}
 }
 
@@ -47,7 +49,7 @@ FoldersDeleteCommand.flags = {
 	force: Flags.boolean({
 		char: 'f',
 		description: 'Permanently delete the folder, bypassing the trash',
-	})
+	}),
 };
 
 FoldersDeleteCommand.args = {
@@ -56,7 +58,7 @@ FoldersDeleteCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to delete',
-	})
+	}),
 };
 
 module.exports = FoldersDeleteCommand;

@@ -28,7 +28,7 @@ UsersDeleteCommand.flags = {
 	...BoxCommand.flags,
 	notify: Flags.boolean({
 		description: 'The user should be notified',
-		allowNo: true
+		allowNo: true,
 	}),
 	force: Flags.boolean({
 		char: 'f',

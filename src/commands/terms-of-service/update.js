@@ -15,25 +15,27 @@ class TermsOfServiceUpdateCommand extends BoxCommand {
 			options.text = flags.text;
 		}
 
-		let termsOfService = await this.client.termsOfService.update(args.id, options);
+		let termsOfService = await this.client.termsOfService.update(
+			args.id,
+			options
+		);
 		await this.output(termsOfService);
 	}
 }
 
 TermsOfServiceUpdateCommand.description = 'Update a terms of service';
-TermsOfServiceUpdateCommand.examples = ['box terms-of-service:update 55555 --status disabled'];
+TermsOfServiceUpdateCommand.examples = [
+	'box terms-of-service:update 55555 --status disabled',
+];
 TermsOfServiceUpdateCommand._endpoint = 'put_terms_of_services_id';
 
 TermsOfServiceUpdateCommand.flags = {
 	...BoxCommand.flags,
 	status: Flags.string({
 		description: 'Status of the terms of service',
-		options: [
-			'enabled',
-			'disabled'
-		]
+		options: ['enabled', 'disabled'],
 	}),
-	text: Flags.string({ description: 'Text for the terms of service' })
+	text: Flags.string({ description: 'Text for the terms of service' }),
 };
 
 TermsOfServiceUpdateCommand.args = {

@@ -17,7 +17,9 @@ class FilesUnshareCommand extends BoxCommand {
 
 		let sharedLinksModule = new SharedLinksModule(this.client);
 		let item = await sharedLinksModule.removeSharedLink(args);
-		this.info(chalk`{green Removed shared link from ${args.itemType} "${item.name}"}`);
+		this.info(
+			chalk`{green Removed shared link from ${args.itemType} "${item.name}"}`
+		);
 	}
 }
 
@@ -36,8 +38,8 @@ FilesUnshareCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to unshare'
-	})
+		description: 'ID of the file to unshare',
+	}),
 };
 
 module.exports = FilesUnshareCommand;

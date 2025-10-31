@@ -17,12 +17,13 @@ class LegalHoldPoliciesGetCommand extends BoxCommand {
 	}
 }
 
-LegalHoldPoliciesGetCommand.description = 'Get information about a legal hold policy';
+LegalHoldPoliciesGetCommand.description =
+	'Get information about a legal hold policy';
 LegalHoldPoliciesGetCommand.examples = ['box legal-hold-policies:get 99999'];
 LegalHoldPoliciesGetCommand._endpoint = 'get_legal_hold_policies_id';
 
 LegalHoldPoliciesGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 LegalHoldPoliciesGetCommand.args = {

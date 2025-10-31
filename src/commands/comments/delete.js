@@ -17,7 +17,7 @@ CommentsDeleteCommand.examples = ['box comments:delete 12345'];
 CommentsDeleteCommand._endpoint = 'delete_comments_id';
 
 CommentsDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 CommentsDeleteCommand.args = {
@@ -25,7 +25,7 @@ CommentsDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the comment to delete'
+		description: 'ID of the comment to delete',
 	}),
 };
 

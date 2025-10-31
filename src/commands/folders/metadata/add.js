@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 class FoldersCreateMetadataCommand extends BoxCommand {
 	async run() {
@@ -11,13 +11,17 @@ class FoldersCreateMetadataCommand extends BoxCommand {
 		let metadataValues = Object.assign({}, ...flags.data);
 		let templateKey = flags['template-key'];
 
-		let metadata = await this.client.folders.addMetadata(args.id, flags.scope, templateKey, metadataValues);
+		let metadata = await this.client.folders.addMetadata(
+			args.id,
+			flags.scope,
+			templateKey,
+			metadataValues
+		);
 		await this.output(metadata);
 	}
-
 }
 
-FoldersCreateMetadataCommand.aliases = [ 'folders:metadata:create' ];
+FoldersCreateMetadataCommand.aliases = ['folders:metadata:create'];
 
 FoldersCreateMetadataCommand.description = 'Add metadata to a folder';
 FoldersCreateMetadataCommand.examples = [
@@ -29,10 +33,11 @@ FoldersCreateMetadataCommand._endpoint = 'post_folders_id_metadata_id_id';
 FoldersCreateMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: Flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
+		description:
+			'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		required: true,
 		multiple: true,
-		parse: utils.parseMetadata,
+		parse: utilities.parseMetadata,
 	}),
 	scope: Flags.string({
 		description: 'The scope of the metadata template to use',

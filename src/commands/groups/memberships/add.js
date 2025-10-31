@@ -9,16 +9,20 @@ class GroupsAddMembershipCommand extends BoxCommand {
 		let options = { configurable_permissions: {} };
 
 		if (flags.hasOwnProperty('can-run-reports')) {
-			options.configurable_permissions.can_run_reports = flags['can-run-reports'];
+			options.configurable_permissions.can_run_reports =
+				flags['can-run-reports'];
 		}
 		if (flags.hasOwnProperty('can-instant-login')) {
-			options.configurable_permissions.can_instant_login = flags['can-instant-login'];
+			options.configurable_permissions.can_instant_login =
+				flags['can-instant-login'];
 		}
 		if (flags.hasOwnProperty('can-create-accounts')) {
-			options.configurable_permissions.can_create_accounts = flags['can-create-accounts'];
+			options.configurable_permissions.can_create_accounts =
+				flags['can-create-accounts'];
 		}
 		if (flags.hasOwnProperty('can-edit-accounts')) {
-			options.configurable_permissions.can_edit_accounts = flags['can-edit-accounts'];
+			options.configurable_permissions.can_edit_accounts =
+				flags['can-edit-accounts'];
 		}
 
 		// Set role from the "role" flag first, since it has a default value
@@ -30,35 +34,38 @@ class GroupsAddMembershipCommand extends BoxCommand {
 			options.role = this.client.groups.userRoles.MEMBER;
 		}
 
-		let membership = await this.client.groups.addUser(args.groupID, args.userID, options);
+		let membership = await this.client.groups.addUser(
+			args.groupID,
+			args.userID,
+			options
+		);
 		await this.output(membership);
 	}
 }
 
-GroupsAddMembershipCommand.aliases = [ 'groups:membership:add' ];
+GroupsAddMembershipCommand.aliases = ['groups:membership:add'];
 
 GroupsAddMembershipCommand.description = 'Add a user to a group';
-GroupsAddMembershipCommand.examples = ['box groups:memberships:add 33333 12345'];
+GroupsAddMembershipCommand.examples = [
+	'box groups:memberships:add 33333 12345',
+];
 GroupsAddMembershipCommand._endpoint = 'post_group_memberships';
 
 GroupsAddMembershipCommand.flags = {
 	...BoxCommand.flags,
 	role: Flags.string({
 		char: 'r',
-		description: 'Set the user\'s role in the group',
+		description: "Set the user's role in the group",
 		default: 'member',
-		options: [
-			'member',
-			'admin'
-		]
+		options: ['member', 'admin'],
 	}),
 	'set-admin': Flags.boolean({
-		description: 'Set the user\'s role to Group Admin',
+		description: "Set the user's role to Group Admin",
 		exclusive: ['set-member'],
 		hidden: true,
 	}),
 	'set-member': Flags.boolean({
-		description: 'Set the user\'s role to Group Member',
+		description: "Set the user's role to Group Member",
 		exclusive: ['set-admin'],
 		hidden: true,
 	}),
@@ -67,15 +74,18 @@ GroupsAddMembershipCommand.flags = {
 		allowNo: true,
 	}),
 	'can-instant-login': Flags.boolean({
-		description: 'If the user is a group admin, allow them to instant login',
+		description:
+			'If the user is a group admin, allow them to instant login',
 		allowNo: true,
 	}),
 	'can-create-accounts': Flags.boolean({
-		description: 'If the user is a group admin, allow them to create new users',
+		description:
+			'If the user is a group admin, allow them to create new users',
 		allowNo: true,
 	}),
 	'can-edit-accounts': Flags.boolean({
-		description: 'If the user is a group admin, allow them to edit user accounts',
+		description:
+			'If the user is a group admin, allow them to edit user accounts',
 		allowNo: true,
 	}),
 };

@@ -34,7 +34,9 @@ FoldersMoveCommand._endpoint = 'put_folders_id move';
 FoldersMoveCommand.flags = {
 	...BoxCommand.flags,
 	etag: Flags.string({ description: 'Only move if etag value matches' }),
-	'owned-by': Flags.string({ description: 'ID of the user to own the folder' }),
+	'owned-by': Flags.string({
+		description: 'ID of the user to own the folder',
+	}),
 };
 
 FoldersMoveCommand.args = {
@@ -49,7 +51,7 @@ FoldersMoveCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the new parent folder to move the folder into',
-	})
+	}),
 };
 
 module.exports = FoldersMoveCommand;

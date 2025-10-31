@@ -12,19 +12,23 @@ class TaskAssignmentsGetCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let assignment = await this.client.tasks.getAssignment(args.id, options);
+		let assignment = await this.client.tasks.getAssignment(
+			args.id,
+			options
+		);
 		await this.output(assignment);
 	}
 }
 
-TaskAssignmentsGetCommand.aliases = [ 'task-assignments:get' ];
+TaskAssignmentsGetCommand.aliases = ['task-assignments:get'];
 
-TaskAssignmentsGetCommand.description = 'Get information about a task assignment';
+TaskAssignmentsGetCommand.description =
+	'Get information about a task assignment';
 TaskAssignmentsGetCommand.examples = ['box tasks:assignments:get 12345'];
 TaskAssignmentsGetCommand._endpoint = 'get_task_assignments_id';
 
 TaskAssignmentsGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TaskAssignmentsGetCommand.args = {

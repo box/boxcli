@@ -7,7 +7,9 @@ const CollaborationModule = require('../../../modules/collaboration');
 
 class FoldersCollaborationsAddCommand extends BoxCommand {
 	async run() {
-		const { args, flags } = await this.parse(FoldersCollaborationsAddCommand);
+		const { args, flags } = await this.parse(
+			FoldersCollaborationsAddCommand
+		);
 
 		// Transform arguments for generic module
 		args.itemType = 'folder';
@@ -20,8 +22,11 @@ class FoldersCollaborationsAddCommand extends BoxCommand {
 	}
 }
 
-FoldersCollaborationsAddCommand.description = 'Create a collaboration for a folder';
-FoldersCollaborationsAddCommand.examples = ['box folders:collaborations:add 22222 --role editor --user-id 33333'];
+FoldersCollaborationsAddCommand.description =
+	'Create a collaboration for a folder';
+FoldersCollaborationsAddCommand.examples = [
+	'box folders:collaborations:add 22222 --role editor --user-id 33333',
+];
 
 FoldersCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,
