@@ -631,9 +631,7 @@ describe('Bulk', function () {
 			.it(
 				'should send terminate sessions request with user ids and logins',
 				(context) => {
-					let expectedOutput = [];
-					expectedOutput.push(JSON.parse(terminateSessionFixture));
-					expectedOutput.push(JSON.parse(terminateSessionFixture));
+					let expectedOutput = [JSON.parse(terminateSessionFixture), JSON.parse(terminateSessionFixture)];
 					assert.deepEqual(
 						JSON.parse(context.stdout),
 						expectedOutput
@@ -663,9 +661,10 @@ describe('Bulk', function () {
 			.it(
 				'should send terminate sessions request with groups ids',
 				(context) => {
-					let expectedOutput = [];
-					expectedOutput.push(JSON.parse(terminateSessionFixture));
-					expectedOutput.push(JSON.parse(terminateSessionFixture));
+					let expectedOutput = [
+						JSON.parse(terminateSessionFixture),
+						JSON.parse(terminateSessionFixture)
+					];
 					assert.deepEqual(
 						JSON.parse(context.stdout),
 						expectedOutput

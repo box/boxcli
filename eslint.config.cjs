@@ -1,10 +1,10 @@
 // eslint.config.js
 const js = require('@eslint/js');
 const pluginPromise = require('eslint-plugin-promise');
-const pluginUnicorn = require('eslint-plugin-unicorn').default;
+const pluginUnicorn = require('eslint-plugin-unicorn');
 const pluginN = require('eslint-plugin-n');
 const prettier = require('eslint-config-prettier');
-const pluginMocha = require('eslint-plugin-mocha').default;
+const pluginMocha = require('eslint-plugin-mocha');
 const globals = require('globals');
 
 module.exports = [
@@ -39,8 +39,6 @@ module.exports = [
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/no-null': 'off',
 			'unicorn/prefer-spread': 'warn',
-			'unicorn/no-immediate-mutation': 'warn',
-			'unicorn/prefer-single-call': 'warn',
 			'unicorn/no-array-reduce': 'warn',
 			'unicorn/no-await-expression-member': 'warn',
 			'unicorn/prefer-structured-clone': 'warn',
