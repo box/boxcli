@@ -17,12 +17,13 @@ class RetentionPoliciesGetCommand extends BoxCommand {
 	}
 }
 
-RetentionPoliciesGetCommand.description = 'Get information about a retention policy';
+RetentionPoliciesGetCommand.description =
+	'Get information about a retention policy';
 RetentionPoliciesGetCommand.examples = ['box retention-policies:get 12345'];
 RetentionPoliciesGetCommand._endpoint = 'get_retention_policies_id';
 
 RetentionPoliciesGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 RetentionPoliciesGetCommand.args = {

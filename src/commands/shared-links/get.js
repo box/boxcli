@@ -12,21 +12,27 @@ class SharedLinksGetCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let sharedItem = await this.client.sharedItems.get(args.url, args.password, options);
+		let sharedItem = await this.client.sharedItems.get(
+			args.url,
+			args.password,
+			options
+		);
 		await this.output(sharedItem);
 	}
 }
 
 SharedLinksGetCommand.description = 'Get information from a shared item URL';
-SharedLinksGetCommand.examples = ['box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3'];
+SharedLinksGetCommand.examples = [
+	'box shared-links:get https://app.box.com/s/13ynxiqe3y4tup3j0yn4qairs5ebfxo3',
+];
 SharedLinksGetCommand._endpoint = 'get_shared_items';
 
 SharedLinksGetCommand.flags = {
 	...BoxCommand.flags,
 	password: Flags.string({
 		description: 'Shared item password',
-		default: null
-	})
+		default: null,
+	}),
 };
 
 SharedLinksGetCommand.args = {

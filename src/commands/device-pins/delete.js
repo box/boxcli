@@ -17,7 +17,7 @@ DevicePinsDeleteCommand.examples = ['box device-pins:delete 12345'];
 DevicePinsDeleteCommand._endpoint = 'delete_device_pinners_id';
 
 DevicePinsDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 DevicePinsDeleteCommand.args = {
@@ -25,7 +25,7 @@ DevicePinsDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the device pin to delete'
+		description: 'ID of the device pin to delete',
 	}),
 };
 

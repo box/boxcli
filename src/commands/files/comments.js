@@ -2,12 +2,12 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class CommentsListCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(CommentsListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
@@ -18,7 +18,7 @@ class CommentsListCommand extends BoxCommand {
 	}
 }
 
-CommentsListCommand.aliases = [ 'comments:list' ];
+CommentsListCommand.aliases = ['comments:list'];
 
 CommentsListCommand.description = 'List all comments on a file';
 CommentsListCommand.examples = ['box files:comments 11111'];
@@ -26,7 +26,7 @@ CommentsListCommand._endpoint = 'get_files_id_comments';
 
 CommentsListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.pagingFlag,
+	...PaginationUtilities.pagingFlag,
 };
 
 CommentsListCommand.args = {
@@ -34,7 +34,7 @@ CommentsListCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to get comments for'
+		description: 'ID of the file to get comments for',
 	}),
 };
 

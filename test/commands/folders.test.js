@@ -3,52 +3,52 @@
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const fs = require('fs-extra');
-const path = require('path');
-const { getFixture, TEST_API_ROOT, TEST_UPLOAD_ROOT, TEST_DOWNLOAD_ROOT, DEFAULT_DOWNLOAD_PATH, getDriveLetter, isWin } = require('../helpers/test-helper');
-const os = require('os');
+const path = require('node:path');
+const {
+	getFixture,
+	TEST_API_ROOT,
+	TEST_UPLOAD_ROOT,
+	TEST_DOWNLOAD_ROOT,
+	DEFAULT_DOWNLOAD_PATH,
+	getDriveLetter,
+	isWin,
+} = require('../helpers/test-helper');
+const os = require('node:os');
 const leche = require('leche');
 const _ = require('lodash');
 
-describe('Folders', () => {
-
-	describe('folders:get', () => {
+describe('Folders', function () {
+	describe('folders:get', function () {
 		let folderId = '0',
 			getFolderFixture = getFixture('folders/get_folders_id'),
 			yamlOutput = getFixture('output/folders_get_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}`)
-				.reply(200, getFolderFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/folders/${folderId}`).reply(200, getFolderFixture)
+		)
 			.stdout()
-			.command([
-				'folders:get',
-				folderId,
-				'--json',
-				'--token=test'
-			])
-			.it('should get information about a folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, getFolderFixture);
-			});
+			.command(['folders:get', folderId, '--json', '--token=test'])
+			.it(
+				'should get information about a folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, getFolderFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}`)
-				.reply(200, getFolderFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/folders/${folderId}`).reply(200, getFolderFixture)
+		)
 			.stdout()
-			.command([
-				'folders:get',
-				folderId,
-				'--token=test'
-			])
-			.it('should get information about a folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.command(['folders:get', folderId, '--token=test'])
+			.it(
+				'should get information about a folder (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 	});
 
-	describe('folders:copy', () => {
+	describe('folders:copy', function () {
 		let folderId = '0',
 			parentFolderId = '987654321',
 			name = 'Rename on copy.txt',
@@ -57,68 +57,75 @@ describe('Folders', () => {
 
 		let copyBody = {
 			parent: {
-				id: parentFolderId
-			}
+				id: parentFolderId,
+			},
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post(`/2.0/folders/${folderId}/copy`, copyBody)
 				.reply(201, copyFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:copy',
 				folderId,
 				parentFolderId,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should copy a folder to a different folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, copyFixture);
-			});
+			.it(
+				'should copy a folder to a different folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post(`/2.0/folders/${folderId}/copy`, copyBody)
 				.reply(201, copyFixture)
-			)
+		)
 			.stdout()
-			.command([
-				'folders:copy',
-				folderId,
-				parentFolderId,
-				'--token=test'
-			])
-			.it('should copy a folder to a different folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.command(['folders:copy', folderId, parentFolderId, '--token=test'])
+			.it(
+				'should copy a folder to a different folder (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post(`/2.0/folders/${folderId}/copy`, copyBody)
 				.reply(201, copyFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:copy',
 				folderId,
 				parentFolderId,
 				'--id-only',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should copy a folder to a different folder (ID Output)', ctx => {
-				assert.equal(ctx.stdout, `${JSON.parse(copyFixture).id}${os.EOL}`);
-			});
+			.it(
+				'should copy a folder to a different folder (ID Output)',
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${JSON.parse(copyFixture).id}${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post(`/2.0/folders/${folderId}/copy`, {
 					...copyBody,
 					name,
 				})
 				.reply(201, copyFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:copy',
@@ -126,14 +133,17 @@ describe('Folders', () => {
 				parentFolderId,
 				`--name=${name}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should set optional name param when --name flag is passed', ctx => {
-				assert.equal(ctx.stdout, copyFixture);
-			});
+			.it(
+				'should set optional name param when --name flag is passed',
+				(context) => {
+					assert.equal(context.stdout, copyFixture);
+				}
+			);
 	});
 
-	describe('folders:move', () => {
+	describe('folders:move', function () {
 		let folderId = '0',
 			parentFolderId = '987654321',
 			ownedById = '1234567890',
@@ -141,54 +151,55 @@ describe('Folders', () => {
 			yamlOutput = getFixture('output/folders_move_yaml.txt');
 
 		let moveBody = {
-			parent: {
-				id: parentFolderId
-			}
-		},
-		moveBodyWithOwnedBy = {
-			parent: {
-				id: parentFolderId
+				parent: {
+					id: parentFolderId,
+				},
 			},
-			owned_by: {
-				id: ownedById
-			}
-		};
+			moveBodyWithOwnedBy = {
+				parent: {
+					id: parentFolderId,
+				},
+				owned_by: {
+					id: ownedById,
+				},
+			};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, moveBody)
 				.reply(200, moveFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:move',
 				folderId,
 				parentFolderId,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should move a folder to a different folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, moveFixture);
-			});
+			.it(
+				'should move a folder to a different folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, moveFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, moveBody)
 				.reply(200, moveFixture)
-			)
+		)
 			.stdout()
-			.command([
-				'folders:move',
-				folderId,
-				parentFolderId,
-				'--token=test'
-			])
-			.it('should move a folder to a different folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.command(['folders:move', folderId, parentFolderId, '--token=test'])
+			.it(
+				'should move a folder to a different folder (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, moveBody)
 				.matchHeader('If-Match', '5')
 				.reply(412, {
@@ -196,10 +207,11 @@ describe('Folders', () => {
 					status: 412,
 					code: 'precondition_failed',
 					help_url: 'http://developers.box.com/docs/#errors',
-					message: 'The resource has been modified. Please retrieve the resource again and retry',
-					request_id: '1wne91fxf8871ide'
+					message:
+						'The resource has been modified. Please retrieve the resource again and retry',
+					request_id: '1wne91fxf8871ide',
 				})
-			)
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -210,16 +222,20 @@ describe('Folders', () => {
 				'--etag=5',
 				'--token=test',
 			])
-			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
-				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
-			});
+			.it(
+				'should send If-Match header and throw error when etag flag is passed but does not match',
+				(context) => {
+					let message =
+						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
+					assert.equal(context.stderr, `${message}${os.EOL}`);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, moveBodyWithOwnedBy)
 				.reply(200, moveFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:move',
@@ -227,68 +243,75 @@ describe('Folders', () => {
 				parentFolderId,
 				`--owned-by=${ownedById}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should move a folder to a different folder and set the owner', ctx => {
-				assert.equal(ctx.stdout, moveFixture);
-			});
+			.it(
+				'should move a folder to a different folder and set the owner',
+				(context) => {
+					assert.equal(context.stdout, moveFixture);
+				}
+			);
 	});
 
-	describe('folders:delete', () => {
+	describe('folders:delete', function () {
 		let folderId = '0';
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.delete(`/2.0/folders/${folderId}`)
-				.reply(204)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.delete(`/2.0/folders/${folderId}`).reply(204)
+		)
 			.stderr()
-			.command([
-				'folders:delete',
-				folderId,
-				'--token=test'
-			])
-			.it('should delete a folder', ctx => {
-				assert.equal(ctx.stderr, `Deleted folder ${folderId}${os.EOL}`);
+			.command(['folders:delete', folderId, '--token=test'])
+			.it('should delete a folder', (context) => {
+				assert.equal(
+					context.stderr,
+					`Deleted folder ${folderId}${os.EOL}`
+				);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.delete(`/2.0/folders/${folderId}`)
 				.query({ recursive: true })
 				.reply(204)
-			)
+		)
 			.stderr()
 			.command([
 				'folders:delete',
 				folderId,
 				'--recursive',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should send recursive param when --recursive flag is passed', ctx => {
-				assert.equal(ctx.stderr, `Deleted folder ${folderId}${os.EOL}`);
-			});
+			.it(
+				'should send recursive param when --recursive flag is passed',
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted folder ${folderId}${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.delete(`/2.0/folders/${folderId}`)
 				.reply(204)
 				.delete(`/2.0/folders/${folderId}/trash`)
 				.reply(204)
-			)
+		)
 			.stderr()
-			.command([
-				'folders:delete',
-				folderId,
-				'-f',
-				'--token=test'
-			])
-			.it('should delete a folder permanently when -f flag is passed', ctx => {
-				assert.equal(ctx.stderr, `Deleted folder ${folderId} permanently${os.EOL}`);
-			});
+			.command(['folders:delete', folderId, '-f', '--token=test'])
+			.it(
+				'should delete a folder permanently when -f flag is passed',
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted folder ${folderId} permanently${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.delete(`/2.0/folders/${folderId}`)
 				.matchHeader('If-Match', '5')
 				.reply(412, {
@@ -296,10 +319,11 @@ describe('Folders', () => {
 					status: 412,
 					code: 'precondition_failed',
 					help_url: 'http://developers.box.com/docs/#errors',
-					message: 'The resource has been modified. Please retrieve the resource again and retry',
-					request_id: '1wne91fxf8871ide'
+					message:
+						'The resource has been modified. Please retrieve the resource again and retry',
+					request_id: '1wne91fxf8871ide',
 				})
-			)
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -309,80 +333,91 @@ describe('Folders', () => {
 				'--etag=5',
 				'--token=test',
 			])
-			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
-				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
-			});
+			.it(
+				'should send If-Match header and throw error when etag flag is passed but does not match',
+				(context) => {
+					let message =
+						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
+					assert.equal(context.stderr, `${message}${os.EOL}`);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.delete(`/2.0/folders/${folderId}`)
 				.reply(204)
 				.delete(`/2.0/folders/${folderId}/trash`)
 				.reply(404)
-			)
+		)
 			.stderr()
-			.command([
-				'folders:delete',
-				folderId,
-				'-f',
-				'--token=test'
-			])
-			.it('should force delete successfully when user does not have trash enabled', ctx => {
-				assert.equal(ctx.stderr, `Deleted folder ${folderId} permanently${os.EOL}`);
-			});
+			.command(['folders:delete', folderId, '-f', '--token=test'])
+			.it(
+				'should force delete successfully when user does not have trash enabled',
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Deleted folder ${folderId} permanently${os.EOL}`
+					);
+				}
+			);
 	});
 
-	leche.withData([
-		'folders:collaborations',
-		'folders:collaborations:list'
-	], function(command) {
+	leche.withData(
+		['folders:collaborations', 'folders:collaborations:list'],
+		function (command) {
 
-		describe(command, () => {
-			let folderId = '0',
-				getCollaborationFixture = getFixture('folders/get_folders_id_collaborations'),
-				jsonOutput = getFixture('output/folders_collaborations_list_json.txt');
+			describe(command, function () {
+				let folderId = '0',
+					getCollaborationFixture = getFixture(
+						'folders/get_folders_id_collaborations'
+					),
+					jsonOutput = getFixture(
+						'output/folders_collaborations_list_json.txt'
+					);
 
-			test
-				.nock(TEST_API_ROOT, api => api
-					.get(`/2.0/folders/${folderId}/collaborations`)
-					.reply(200, getCollaborationFixture)
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.get(`/2.0/folders/${folderId}/collaborations`)
+						.reply(200, getCollaborationFixture)
 				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					'--json',
-					'--token=test'
-				])
-				.it('should list all collaborations on a Box item (JSON Output)', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
-		});
-	});
+					.stdout()
+					.command([command, folderId, '--json', '--token=test'])
+					.it(
+						'should list all collaborations on a Box item (JSON Output)',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
+			});
+		}
+	);
 
-	describe('folders:collaborations:add', () => {
+	describe('folders:collaborations:add', function () {
 		let folderId = '0',
-			addCollaborationFixture = getFixture('folders/post_collaborations_user'),
-			yamlOutput = getFixture('output/folders_collaborations_add_yaml.txt');
+			addCollaborationFixture = getFixture(
+				'folders/post_collaborations_user'
+			),
+			yamlOutput = getFixture(
+				'output/folders_collaborations_add_yaml.txt'
+			);
 
 		let addCollaborationBody = {
 			item: {
 				type: 'folder',
-				id: folderId
+				id: folderId,
 			},
 			accessible_by: {
 				type: 'user',
-				login: 'newfriend@example.com'
+				login: 'newfriend@example.com',
 			},
-			role: 'previewer'
+			role: 'previewer',
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/collaborations', addCollaborationBody)
 				.reply(200, addCollaborationFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:collaborations:add',
@@ -390,34 +425,40 @@ describe('Folders', () => {
 				'--previewer',
 				'--login=newfriend@example.com',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a collaboration for a Box item with the previewer and login flags passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, addCollaborationFixture);
-			});
+			.it(
+				'should create a collaboration for a Box item with the previewer and login flags passed (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, addCollaborationFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/collaborations', addCollaborationBody)
 				.reply(200, addCollaborationFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:collaborations:add',
 				folderId,
 				'--previewer',
 				'--login=newfriend@example.com',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a collaboration for a Box item with the previewer and login flags passed (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should create a collaboration for a Box item with the previewer and login flags passed (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/collaborations', addCollaborationBody)
 				.reply(200, addCollaborationFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:collaborations:add',
@@ -425,17 +466,23 @@ describe('Folders', () => {
 				'--previewer',
 				'--login=newfriend@example.com',
 				'--id-only',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should output only the ID of the created collaboration when the --id-only flag is passed', ctx => {
-				assert.equal(ctx.stdout, `${JSON.parse(addCollaborationFixture).id}${os.EOL}`);
-			});
+			.it(
+				'should output only the ID of the created collaboration when the --id-only flag is passed',
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${JSON.parse(addCollaborationFixture).id}${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/collaborations', addCollaborationBody)
 				.reply(200, addCollaborationFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:collaborations:add',
@@ -443,14 +490,14 @@ describe('Folders', () => {
 				'--login=newfriend@example.com',
 				folderId,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should work with args in non-standard order', ctx => {
-				assert.equal(ctx.stdout, addCollaborationFixture);
+			.it('should work with args in non-standard order', (context) => {
+				assert.equal(context.stdout, addCollaborationFixture);
 			});
 	});
 
-	describe('folders:rename', () => {
+	describe('folders:rename', function () {
 		let folderId = '0',
 			description = 'test description',
 			renameFixture = getFixture('folders/put_folders_id'),
@@ -460,47 +507,42 @@ describe('Folders', () => {
 			name: 'test',
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, renameBody)
 				.reply(200, renameFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:rename',
 				folderId,
 				'test',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should rename a folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, renameFixture);
+			.it('should rename a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, renameFixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, renameBody)
 				.reply(200, renameFixture)
-			)
+		)
 			.stdout()
-			.command([
-				'folders:rename',
-				folderId,
-				'test',
-				'--token=test'
-			])
-			.it('should rename a folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.command(['folders:rename', folderId, 'test', '--token=test'])
+			.it('should rename a folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, {
 					...renameBody,
 					description,
 				})
 				.reply(200, renameFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:rename',
@@ -508,14 +550,17 @@ describe('Folders', () => {
 				'test',
 				`--description=${description}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should send the description param when the --description flag is passed', ctx => {
-				assert.equal(ctx.stdout, renameFixture);
-			});
+			.it(
+				'should send the description param when the --description flag is passed',
+				(context) => {
+					assert.equal(context.stdout, renameFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, {
 					...renameBody,
 					description,
@@ -526,10 +571,11 @@ describe('Folders', () => {
 					status: 412,
 					code: 'precondition_failed',
 					help_url: 'http://developers.box.com/docs/#errors',
-					message: 'The resource has been modified. Please retrieve the resource again and retry',
-					request_id: '1wne91fxf8871ide'
+					message:
+						'The resource has been modified. Please retrieve the resource again and retry',
+					request_id: '1wne91fxf8871ide',
 				})
-			)
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -541,122 +587,146 @@ describe('Folders', () => {
 				'--etag=5',
 				'--token=test',
 			])
-			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
-				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
-			});
+			.it(
+				'should send If-Match header and throw error when etag flag is passed but does not match',
+				(context) => {
+					let message =
+						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
+					assert.equal(context.stderr, `${message}${os.EOL}`);
+				}
+			);
 	});
 
-	describe('folders:metadata:get', () => {
+	describe('folders:metadata:get', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
-			getMetadataFixture = getFixture('folders/get_folders_id_metadata_scope_template'),
+			getMetadataFixture = getFixture(
+				'folders/get_folders_id_metadata_scope_template'
+			),
 			yamlOutput = getFixture('output/folders_metadata_get_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`
+				)
 				.reply(200, getMetadataFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:metadata:get',
 				folderId,
 				`--template-key=${metadataTemplate}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should get information about a metadata object (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, getMetadataFixture);
-			});
+			.it(
+				'should get information about a metadata object (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, getMetadataFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`
+				)
 				.reply(200, getMetadataFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:metadata:get',
 				folderId,
 				`--template-key=${metadataTemplate}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should get information about a metadata object (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it(
+				'should get information about a metadata object (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
+	});
+
+	leche.withData(
+		['folders:metadata', 'folders:metadata:get-all'],
+		function (command) {
+
+			describe(command, function () {
+				let folderId = '0',
+					getAllMetadataFixture = getFixture(
+						'folders/get_folders_id_metadata'
+					),
+					jsonOutput = getFixture(
+						'output/folders_metadata_get_all_json.txt'
+					);
+
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.get(`/2.0/folders/${folderId}/metadata`)
+						.reply(200, getAllMetadataFixture)
+				)
+					.stdout()
+					.command([command, folderId, '--json', '--token=test'])
+					.it(
+						'should get all metadata on a Box item (JSON Output)',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
 			});
-	});
+		}
+	);
 
-	leche.withData([
-		'folders:metadata',
-		'folders:metadata:get-all'
-	], function(command) {
+	leche.withData(
+		['folders:metadata:remove', 'folders:metadata:delete'],
+		function (command) {
 
-		describe(command, () => {
-			let folderId = '0',
-				getAllMetadataFixture = getFixture('folders/get_folders_id_metadata'),
-				jsonOutput = getFixture('output/folders_metadata_get_all_json.txt');
+			describe(command, function () {
+				let folderId = '0',
+					metadataScope = 'enterprise',
+					metadataTemplate = 'testTemplate';
 
-			test
-				.nock(TEST_API_ROOT, api => api
-					.get(`/2.0/folders/${folderId}/metadata`)
-					.reply(200, getAllMetadataFixture)
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.delete(
+							`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`
+						)
+						.reply(204)
 				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					'--json',
-					'--token=test'
-				])
-				.it('should get all metadata on a Box item (JSON Output)', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+					.stderr()
+					.command([
+						command,
+						folderId,
+						`--template-key=${metadataTemplate}`,
+						'--token=test',
+					])
+					.it('should delete metadata from an item', (context) => {
+						assert.equal(
+							context.stderr,
+							`Successfully deleted metadata ${metadataTemplate}${os.EOL}`
+						);
+					});
+			});
+		}
+	);
 
-		});
-	});
-
-	leche.withData([
-		'folders:metadata:remove',
-		'folders:metadata:delete'
-	], function(command) {
-
-		describe(command, () => {
-			let folderId = '0',
-				metadataScope = 'enterprise',
-				metadataTemplate = 'testTemplate';
-
-			test
-				.nock(TEST_API_ROOT, api => api
-					.delete(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`)
-					.reply(204)
-				)
-				.stderr()
-				.command([
-					command,
-					folderId,
-					`--template-key=${metadataTemplate}`,
-					'--token=test'
-				])
-				.it('should delete metadata from an item', ctx => {
-					assert.equal(ctx.stderr, `Successfully deleted metadata ${metadataTemplate}${os.EOL}`);
-				});
-		});
-	});
-
-	describe('folders:metadata:update', () => {
+	describe('folders:metadata:update', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
-			getMetadataFixture = getFixture('folders/get_folders_id_metadata_scope_template'),
+			getMetadataFixture = getFixture(
+				'folders/get_folders_id_metadata_scope_template'
+			),
 			yamlOutput = getFixture('output/folders_metadata_update_yaml.txt');
 
 		let updateMetadataBody = [
 			{
 				op: 'test',
 				path: '/numReviewsLeft',
-				value: 1
+				value: 1,
 			},
 			{
 				op: 'replace',
@@ -696,14 +766,17 @@ describe('Folders', () => {
 			{
 				op: 'remove',
 				path: '/embargoed',
-			}
+			},
 		];
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, updateMetadataBody)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					updateMetadataBody
+				)
 				.reply(200, getMetadataFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:metadata:update',
@@ -719,17 +792,23 @@ describe('Folders', () => {
 				'--replace=/stepsRequiredForRelease=[]',
 				'--remove=/embargoed',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update metadata object with all op flags passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, getMetadataFixture);
-			});
+			.it(
+				'should update metadata object with all op flags passed (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, getMetadataFixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.put(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, updateMetadataBody)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					updateMetadataBody
+				)
 				.reply(200, getMetadataFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:metadata:update',
@@ -744,96 +823,114 @@ describe('Folders', () => {
 				'--add=/dateApproved=2018-12-02T11:28:55-08:00',
 				'--replace=/stepsRequiredForRelease=[]',
 				'--remove=/embargoed',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update metadata object with all flags passed (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it(
+				'should update metadata object with all flags passed (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
+	});
+
+	leche.withData(
+		['folders:metadata:add', 'folders:metadata:create'],
+		function (command) {
+
+			describe(command, function () {
+				let folderId = '0',
+					metadataScope = 'enterprise',
+					metadataTemplate = 'testTemplate',
+					addMetadataFixture = getFixture(
+						'folders/post_folders_id_metadata_scope_template'
+					),
+					yamlOutput = getFixture(
+						'output/folders_metadata_create_yaml.txt'
+					);
+
+				let createMetadataBody = {
+					test: 'test123',
+					number: 1.9,
+					arr: ['foo', 'bar'],
+				};
+
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.post(
+							`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+							createMetadataBody
+						)
+						.reply(201, addMetadataFixture)
+				)
+					.stdout()
+					.command([
+						command,
+						folderId,
+						`--template-key=${metadataTemplate}`,
+						'--data=test=test123',
+						'--data=number=#1.9',
+						'--data=arr=[foo,bar]',
+						'--json',
+						'--token=test',
+					])
+					.it(
+						'should add metadata object with key/value pairs passed as a flag (JSON Output)',
+						(context) => {
+							assert.equal(context.stdout, addMetadataFixture);
+						}
+					);
+
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.post(
+							`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+							createMetadataBody
+						)
+						.reply(201, addMetadataFixture)
+				)
+					.stdout()
+					.command([
+						command,
+						folderId,
+						`--template-key=${metadataTemplate}`,
+						'--data=test=test123',
+						'--data=number=#1.9',
+						'--data=arr=[foo,bar]',
+						'--token=test',
+					])
+					.it(
+						'should add metadata object with key/value pairs passed as a flag (YAML Output)',
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
+						}
+					);
 			});
-	});
+		}
+	);
 
-	leche.withData([
-		'folders:metadata:add',
-		'folders:metadata:create'
-	], function(command) {
-
-		describe(command, () => {
-			let folderId = '0',
-				metadataScope = 'enterprise',
-				metadataTemplate = 'testTemplate',
-				addMetadataFixture = getFixture('folders/post_folders_id_metadata_scope_template'),
-				yamlOutput = getFixture('output/folders_metadata_create_yaml.txt');
-
-			let createMetadataBody = {
-				test: 'test123',
-				number: 1.9,
-				arr: [
-					'foo',
-					'bar'
-				]
-			};
-
-			test
-				.nock(TEST_API_ROOT, api => api
-					.post(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
-					.reply(201, addMetadataFixture)
-				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					`--template-key=${metadataTemplate}`,
-					'--data=test=test123',
-					'--data=number=#1.9',
-					'--data=arr=[foo,bar]',
-					'--json',
-					'--token=test'
-				])
-				.it('should add metadata object with key/value pairs passed as a flag (JSON Output)', ctx => {
-					assert.equal(ctx.stdout, addMetadataFixture);
-				});
-
-			test
-				.nock(TEST_API_ROOT, api => api
-					.post(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
-					.reply(201, addMetadataFixture)
-				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					`--template-key=${metadataTemplate}`,
-					'--data=test=test123',
-					'--data=number=#1.9',
-					'--data=arr=[foo,bar]',
-					'--token=test'
-				])
-				.it('should add metadata object with key/value pairs passed as a flag (YAML Output)', ctx => {
-					assert.equal(ctx.stdout, yamlOutput);
-				});
-		});
-	});
-
-	describe('folders:metadata:set', () => {
+	describe('folders:metadata:set', function () {
 		let folderId = '0',
 			metadataScope = 'enterprise',
 			metadataTemplate = 'testTemplate',
-			addMetadataFixture = getFixture('folders/post_folders_id_metadata_scope_template'),
+			addMetadataFixture = getFixture(
+				'folders/post_folders_id_metadata_scope_template'
+			),
 			yamlOutput = getFixture('output/folders_metadata_create_yaml.txt');
 
 		let createMetadataBody = {
 			test: 'test123',
 			number: 1.9,
-			arr: [
-				'foo',
-				'bar'
-			]
+			arr: ['foo', 'bar'],
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					createMetadataBody
+				)
 				.reply(201, addMetadataFixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:metadata:set',
@@ -843,201 +940,237 @@ describe('Folders', () => {
 				'--data=number=#1.9',
 				'--data=arr=[foo,bar]',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should add metadata object with key/value pairs passed as a flag (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, addMetadataFixture);
-			});
-
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
-				.reply(201, addMetadataFixture)
-			)
-			.stdout()
-			.command([
-				'folders:metadata:set',
-				folderId,
-				`--template-key=${metadataTemplate}`,
-				'--data=test=test123',
-				'--data=number=#1.9',
-				'--data=arr=[foo,bar]',
-				'--token=test'
-			])
-			.it('should add metadata object with key/value pairs passed as a flag (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
-
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, createMetadataBody)
-				.reply(409)
-				.put(`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`, [
-					{
-						op: 'add',
-						path: '/test',
-						value: 'test123',
-					},
-					{
-						op: 'add',
-						path: '/number',
-						value: 1.9,
-					},
-					{
-						op: 'add',
-						path: '/arr',
-						value: [
-							'foo',
-							'bar'
-						],
-					}
-				])
-				.reply(200, addMetadataFixture)
-			)
-			.stdout()
-			.command([
-				'folders:metadata:set',
-				folderId,
-				`--template-key=${metadataTemplate}`,
-				'--data=test=test123',
-				'--data=number=#1.9',
-				'--data=arr=[foo,bar]',
-				'--json',
-				'--token=test'
-			])
-			.it('should update metadata object with key/value pairs passed as a flag when creation conflicts', ctx => {
-				assert.equal(ctx.stdout, addMetadataFixture);
-			});
-
-
-	});
-
-	leche.withData([
-		'folders:share',
-		'folders:shared-links:create',
-		'folders:shared-links:update'
-	], function(command) {
-
-		describe(command, () => {
-			let folderId = '0',
-				vanityName = 'my-custom-name-123',
-				createSharedLinkFixture = getFixture('folders/put_folders_id_shared_link'),
-				unshareDate = '2030-03-04T12:34:56+00:00',
-				jsonOutput = getFixture('output/folders_share_json.txt'),
-				yamlOutput = getFixture('output/folders_share_yaml.txt');
-
-			let sharedLinkBody = {
-				shared_link: {
-					permissions: { can_download: true },
-					access: 'test',
-					password: 'test',
-					vanity_name: vanityName
+			.it(
+				'should add metadata object with key/value pairs passed as a flag (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, addMetadataFixture);
 				}
-			};
+			);
 
-			test
-				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}?fields=shared_link`, sharedLinkBody)
-					.reply(200, createSharedLinkFixture)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					createMetadataBody
 				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					'--access=test',
-					'--password=test',
-					'--can-download',
-					`--vanity-name=${vanityName}`,
-					'--json',
-					'--token=test'
-				])
-				.it('should create a shared link for a Box item with access, password and can-download flags passed (JSON Output)', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.reply(201, addMetadataFixture)
+		)
+			.stdout()
+			.command([
+				'folders:metadata:set',
+				folderId,
+				`--template-key=${metadataTemplate}`,
+				'--data=test=test123',
+				'--data=number=#1.9',
+				'--data=arr=[foo,bar]',
+				'--token=test',
+			])
+			.it(
+				'should add metadata object with key/value pairs passed as a flag (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
-			test
-				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}?fields=shared_link`, sharedLinkBody)
-					.reply(200, createSharedLinkFixture)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					createMetadataBody
 				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					'--access=test',
-					'--password=test',
-					'--can-download',
-					`--vanity-name=${vanityName}`,
-					'--token=test'
-				])
-				.it('should create a shared link for a Box item with access, password and can-download flags passed (YAML Output)', ctx => {
-					assert.equal(ctx.stdout, yamlOutput);
-				});
-
-			test
-				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}?fields=shared_link`, {
-						shared_link: {
-							permissions: {},
-							unshared_at: unshareDate,
+				.reply(409)
+				.put(
+					`/2.0/folders/${folderId}/metadata/${metadataScope}/${metadataTemplate}`,
+					[
+						{
+							op: 'add',
+							path: '/test',
+							value: 'test123',
 						},
-					})
-					.reply(200, createSharedLinkFixture)
+						{
+							op: 'add',
+							path: '/number',
+							value: 1.9,
+						},
+						{
+							op: 'add',
+							path: '/arr',
+							value: ['foo', 'bar'],
+						},
+					]
 				)
-				.stdout()
-				.command([
-					command,
-					folderId,
-					`--unshared-at=${unshareDate}`,
-					'--json',
-					'--token=test'
-				])
-				.it('should send unshared_at param when --unshared-at flag is passed', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
-		});
+				.reply(200, addMetadataFixture)
+		)
+			.stdout()
+			.command([
+				'folders:metadata:set',
+				folderId,
+				`--template-key=${metadataTemplate}`,
+				'--data=test=test123',
+				'--data=number=#1.9',
+				'--data=arr=[foo,bar]',
+				'--json',
+				'--token=test',
+			])
+			.it(
+				'should update metadata object with key/value pairs passed as a flag when creation conflicts',
+				(context) => {
+					assert.equal(context.stdout, addMetadataFixture);
+				}
+			);
 	});
 
-	leche.withData([
-		'folders:unshare',
-		'folders:shared-links:delete'
-	], function(command) {
+	leche.withData(
+		[
+			'folders:share',
+			'folders:shared-links:create',
+			'folders:shared-links:update',
+		],
+		function (command) {
 
-		describe(command, () => {
-			let folderId = '0',
-				getFolderFixture = getFixture('folders/get_folders_id');
+			describe(command, function () {
+				let folderId = '0',
+					vanityName = 'my-custom-name-123',
+					createSharedLinkFixture = getFixture(
+						'folders/put_folders_id_shared_link'
+					),
+					unshareDate = '2030-03-04T12:34:56+00:00',
+					jsonOutput = getFixture('output/folders_share_json.txt'),
+					yamlOutput = getFixture('output/folders_share_yaml.txt');
 
-			let deleteSharedLinkBody = {
-				shared_link: null
-			};
+				let sharedLinkBody = {
+					shared_link: {
+						permissions: { can_download: true },
+						access: 'test',
+						password: 'test',
+						vanity_name: vanityName,
+					},
+				};
 
-			test
-				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}`, deleteSharedLinkBody)
-					.reply(200, getFolderFixture)
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.put(
+							`/2.0/folders/${folderId}?fields=shared_link`,
+							sharedLinkBody
+						)
+						.reply(200, createSharedLinkFixture)
 				)
-				.stdout()
-				.stderr()
-				.command([
-					command,
-					folderId,
-					'--json',
-					'--no-color',
-					'--token=test'
-				])
-				.it('should delete a shared link for a folder', ctx => {
-					assert.equal(ctx.stdout, '');
-					assert.equal(ctx.stderr, `Removed shared link from folder "All Files"${os.EOL}`);
-				});
-		});
-	});
+					.stdout()
+					.command([
+						command,
+						folderId,
+						'--access=test',
+						'--password=test',
+						'--can-download',
+						`--vanity-name=${vanityName}`,
+						'--json',
+						'--token=test',
+					])
+					.it(
+						'should create a shared link for a Box item with access, password and can-download flags passed (JSON Output)',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
 
-	leche.withData([
-		'folders:items',
-		'folders:list-items'
-	], function(command) {
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.put(
+							`/2.0/folders/${folderId}?fields=shared_link`,
+							sharedLinkBody
+						)
+						.reply(200, createSharedLinkFixture)
+				)
+					.stdout()
+					.command([
+						command,
+						folderId,
+						'--access=test',
+						'--password=test',
+						'--can-download',
+						`--vanity-name=${vanityName}`,
+						'--token=test',
+					])
+					.it(
+						'should create a shared link for a Box item with access, password and can-download flags passed (YAML Output)',
+						(context) => {
+							assert.equal(context.stdout, yamlOutput);
+						}
+					);
 
-		describe(command, () => {
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.put(`/2.0/folders/${folderId}?fields=shared_link`, {
+							shared_link: {
+								permissions: {},
+								unshared_at: unshareDate,
+							},
+						})
+						.reply(200, createSharedLinkFixture)
+				)
+					.stdout()
+					.command([
+						command,
+						folderId,
+						`--unshared-at=${unshareDate}`,
+						'--json',
+						'--token=test',
+					])
+					.it(
+						'should send unshared_at param when --unshared-at flag is passed',
+						(context) => {
+							assert.equal(context.stdout, jsonOutput);
+						}
+					);
+			});
+		}
+	);
+
+	leche.withData(
+		['folders:unshare', 'folders:shared-links:delete'],
+		function (command) {
+
+			describe(command, function () {
+				let folderId = '0',
+					getFolderFixture = getFixture('folders/get_folders_id');
+
+				let deleteSharedLinkBody = {
+					shared_link: null,
+				};
+
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.put(`/2.0/folders/${folderId}`, deleteSharedLinkBody)
+						.reply(200, getFolderFixture)
+				)
+					.stdout()
+					.stderr()
+					.command([
+						command,
+						folderId,
+						'--json',
+						'--no-color',
+						'--token=test',
+					])
+					.it(
+						'should delete a shared link for a folder',
+						(context) => {
+							assert.equal(context.stdout, '');
+							assert.equal(
+								context.stderr,
+								`Removed shared link from folder "All Files"${os.EOL}`
+							);
+						}
+					);
+			});
+		}
+	);
+
+	leche.withData(['folders:items', 'folders:list-items'], function (command) {
+
+		describe(command, function () {
 			let folderId = '0',
 				sort = 'date',
 				direction = 'DESC',
@@ -1045,8 +1178,8 @@ describe('Folders', () => {
 				fixture2 = getFixture('folders/get_folders_id_items_page_2'),
 				jsonOutput = getFixture('output/folders_list_items_json.txt');
 
-			test
-				.nock(TEST_API_ROOT, api => api
+			test.nock(TEST_API_ROOT, (api) =>
+				api
 					.get(`/2.0/folders/${folderId}/items`)
 					.query({ usemarker: true, limit: 1000 })
 					.reply(200, fixture)
@@ -1057,26 +1190,24 @@ describe('Folders', () => {
 						limit: 1000,
 					})
 					.reply(200, fixture2)
-				)
+			)
 				.stdout()
-				.command([
-					command,
-					folderId,
-					'--json',
-					'--token=test'
-				])
-				.it('should list items in a folder (JSON Output)', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.command([command, folderId, '--json', '--token=test'])
+				.it(
+					'should list items in a folder (JSON Output)',
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
+					}
+				);
 
-			test
-				.nock(TEST_API_ROOT, api => api
+			test.nock(TEST_API_ROOT, (api) =>
+				api
 					.get(`/2.0/folders/${folderId}/items`)
 					.query({
 						sort,
 						direction,
 						usemarker: true,
-						limit: 1000
+						limit: 1000,
 					})
 					.reply(200, fixture)
 					.get(`/2.0/folders/${folderId}/items`)
@@ -1085,10 +1216,10 @@ describe('Folders', () => {
 						direction,
 						usemarker: true,
 						marker: 'page_1_marker',
-						limit: 1000
+						limit: 1000,
 					})
 					.reply(200, fixture2)
-				)
+			)
 				.stdout()
 				.command([
 					command,
@@ -1096,19 +1227,22 @@ describe('Folders', () => {
 					`--sort=${sort}`,
 					`--direction=${direction}`,
 					'--json',
-					'--token=test'
+					'--token=test',
 				])
-				.it('should send sorting params when --sort and --direction flags are passed', ctx => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.it(
+					'should send sorting params when --sort and --direction flags are passed',
+					(context) => {
+						assert.equal(context.stdout, jsonOutput);
+					}
+				);
 
-			test
-				.nock(TEST_API_ROOT, api => api
+			test.nock(TEST_API_ROOT, (api) =>
+				api
 					.get(`/2.0/folders/${folderId}/items`)
 					.query({
 						fields: 'created_at',
 						usemarker: true,
-						limit: 1000
+						limit: 1000,
 					})
 					.reply(200, fixture)
 					.get(`/2.0/folders/${folderId}/items`)
@@ -1116,23 +1250,25 @@ describe('Folders', () => {
 						fields: 'created_at',
 						usemarker: true,
 						marker: 'page_1_marker',
-						limit: 1000
+						limit: 1000,
 					})
 					.reply(200, fixture2)
-				)
+			)
 				.stdout()
 				.command([
 					command,
 					folderId,
 					'--fields=created_at',
 					'--json',
-					'--token=test'
+					'--token=test',
 				])
-				.it('should send fields param to the API when --fields flag is passed');
+				.it(
+					'should send fields param to the API when --fields flag is passed'
+				);
 		});
 	});
 
-	describe('folders:create', () => {
+	describe('folders:create', function () {
 		let parentFolderId = '0',
 			name = 'New Folder',
 			fixture = getFixture('folders/post_folders'),
@@ -1140,63 +1276,58 @@ describe('Folders', () => {
 
 		let expectedBody = {
 			parent: {
-				id: parentFolderId
+				id: parentFolderId,
 			},
-			name
+			name,
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/folders', expectedBody)
-				.reply(201, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/folders', expectedBody).reply(201, fixture)
+		)
 			.stdout()
 			.command([
 				'folders:create',
 				parentFolderId,
 				name,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a new folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a new folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/folders', expectedBody)
-				.reply(201, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/folders', expectedBody).reply(201, fixture)
+		)
 			.stdout()
-			.command([
-				'folders:create',
-				parentFolderId,
-				name,
-				'--token=test'
-			])
-			.it('should create a new folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.command(['folders:create', parentFolderId, name, '--token=test'])
+			.it('should create a new folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/folders', expectedBody)
-				.reply(201, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/folders', expectedBody).reply(201, fixture)
+		)
 			.stdout()
 			.command([
 				'folders:create',
 				parentFolderId,
 				name,
 				'--id-only',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a new folder with the id-only flagged passed (ID Output)', ctx => {
-				assert.equal(ctx.stdout, `${JSON.parse(fixture).id}${os.EOL}`);
-			});
+			.it(
+				'should create a new folder with the id-only flagged passed (ID Output)',
+				(context) => {
+					assert.equal(
+						context.stdout,
+						`${JSON.parse(fixture).id}${os.EOL}`
+					);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/folders', {
 					...expectedBody,
 				})
@@ -1209,15 +1340,15 @@ describe('Folders', () => {
 							{
 								type: 'folder',
 								id: '12345',
-								name: 'New Folder'
-							}
-						]
+								name: 'New Folder',
+							},
+						],
 					},
 					help_url: 'http://developers.box.com/docs/#errors',
 					message: 'Item with the same name already exists',
-					request_id: '1wne91fxf8871ide'
+					request_id: '1wne91fxf8871ide',
 				})
-			)
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -1225,22 +1356,25 @@ describe('Folders', () => {
 				parentFolderId,
 				name,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should catch and report errors with detailed context info', ctx => {
-				let expectedErrorOutput = `Unexpected API Response [409 Conflict | 1wne91fxf8871ide] item_name_in_use - Item with the same name already exists${os.EOL}`;
-				expectedErrorOutput += `Conflicts:${os.EOL}`;
-				expectedErrorOutput += `    -${os.EOL}`;
-				expectedErrorOutput += `        Type: folder${os.EOL}`;
-				expectedErrorOutput += `        ID: '12345'${os.EOL}`;
-				expectedErrorOutput += `        Name: New Folder${os.EOL}`;
+			.it(
+				'should catch and report errors with detailed context info',
+				(context) => {
+					let expectedErrorOutput = `Unexpected API Response [409 Conflict | 1wne91fxf8871ide] item_name_in_use - Item with the same name already exists${os.EOL}`;
+					expectedErrorOutput += `Conflicts:${os.EOL}`;
+					expectedErrorOutput += `    -${os.EOL}`;
+					expectedErrorOutput += `        Type: folder${os.EOL}`;
+					expectedErrorOutput += `        ID: '12345'${os.EOL}`;
+					expectedErrorOutput += `        Name: New Folder${os.EOL}`;
 
-				assert.equal(ctx.stdout, '');
-				assert.equal(ctx.stderr, expectedErrorOutput);
-			});
+					assert.equal(context.stdout, '');
+					assert.equal(context.stderr, expectedErrorOutput);
+				}
+			);
 	});
 
-	describe('folders:update', () => {
+	describe('folders:update', function () {
 		let folderId = '0',
 			name = 'New Folder',
 			description = 'New \ndescription',
@@ -1253,11 +1387,11 @@ describe('Folders', () => {
 			sync_state: 'synced',
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, expectedBody)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:update',
@@ -1265,38 +1399,44 @@ describe('Folders', () => {
 				`--name=${name}`,
 				'--sync',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update a folder with name and synced flags passed (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should update a folder with name and synced flags passed (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, expectedBody)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:update',
 				folderId,
 				`--name=${name}`,
 				'--sync',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should update a folder with name and synced flags passed (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
-			});
+			.it(
+				'should update a folder with name and synced flags passed (YAML Output)',
+				(context) => {
+					assert.equal(context.stdout, yamlOutput);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, {
 					...expectedBody,
 					description,
 					tags: tags.split(','),
 				})
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'folders:update',
@@ -1306,14 +1446,17 @@ describe('Folders', () => {
 				`--tags=${tags}`,
 				'--sync',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should send optional params when flags are passed', ctx => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should send optional params when flags are passed',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.put(`/2.0/folders/${folderId}`, expectedBody)
 				.matchHeader('If-Match', '5')
 				.reply(412, {
@@ -1321,10 +1464,11 @@ describe('Folders', () => {
 					status: 412,
 					code: 'precondition_failed',
 					help_url: 'http://developers.box.com/docs/#errors',
-					message: 'The resource has been modified. Please retrieve the resource again and retry',
-					request_id: '1wne91fxf8871ide'
+					message:
+						'The resource has been modified. Please retrieve the resource again and retry',
+					request_id: '1wne91fxf8871ide',
 				})
-			)
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -1336,81 +1480,80 @@ describe('Folders', () => {
 				'--etag=5',
 				'--token=test',
 			])
-			.it('should send If-Match header and throw error when etag flag is passed but does not match', ctx => {
-				let msg = 'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
-				assert.equal(ctx.stderr, `${msg}${os.EOL}`);
-			});
+			.it(
+				'should send If-Match header and throw error when etag flag is passed but does not match',
+				(context) => {
+					let message =
+						'Unexpected API Response [412 Precondition Failed | 1wne91fxf8871ide] precondition_failed - The resource has been modified. Please retrieve the resource again and retry';
+					assert.equal(context.stderr, `${message}${os.EOL}`);
+				}
+			);
 
-		leche.withData({
-			'restrict collaboration flag': [
-				'--restrict-collaboration',
-				{can_non_owners_invite: false}
-			],
-			'no restrict collaboration flag': [
-				'--no-restrict-collaboration',
-				{can_non_owners_invite: true}
-			],
-			'restrict to enterprise flag': [
-				'--restrict-to-enterprise',
-				{is_collaboration_restricted_to_enterprise: true}
-			],
-			'no restrict to enterprise flag': [
-				'--no-restrict-to-enterprise',
-				{is_collaboration_restricted_to_enterprise: false}
-			],
-			'can non owners invite flag': [
-				'--can-non-owners-invite',
-				{can_non_owners_invite: true}
-			],
-			'no can non owners invite flag': [
-				'--no-can-non-owners-invite',
-				{can_non_owners_invite: false}
-			],
-			'can non owners view collaborations flag': [
-				'--can-non-owners-view-collaborators',
-				{can_non_owners_view_collaborators: true}
-			],
-			'no can non owners view collaborations flag': [
-				'--no-can-non-owners-view-collaborators',
-				{can_non_owners_view_collaborators: false}
-			],
-			'upload email access flag': [
-				'--upload-email-access=open',
-				{folder_upload_email: {access: 'open'}}
-			],
-			'sync flag': [
-				'--sync',
-				{sync_state: 'synced'}
-			],
-			'no sync flag': [
-				'--no-sync',
-				{sync_state: 'not_synced'}
-			],
-		}, function(flag, expectedData) {
-
-			test
-				.nock(TEST_API_ROOT, api => api
-					.put(`/2.0/folders/${folderId}`, expectedData)
-					.reply(200, fixture)
+		leche.withData(
+			{
+				'restrict collaboration flag': [
+					'--restrict-collaboration',
+					{ can_non_owners_invite: false },
+				],
+				'no restrict collaboration flag': [
+					'--no-restrict-collaboration',
+					{ can_non_owners_invite: true },
+				],
+				'restrict to enterprise flag': [
+					'--restrict-to-enterprise',
+					{ is_collaboration_restricted_to_enterprise: true },
+				],
+				'no restrict to enterprise flag': [
+					'--no-restrict-to-enterprise',
+					{ is_collaboration_restricted_to_enterprise: false },
+				],
+				'can non owners invite flag': [
+					'--can-non-owners-invite',
+					{ can_non_owners_invite: true },
+				],
+				'no can non owners invite flag': [
+					'--no-can-non-owners-invite',
+					{ can_non_owners_invite: false },
+				],
+				'can non owners view collaborations flag': [
+					'--can-non-owners-view-collaborators',
+					{ can_non_owners_view_collaborators: true },
+				],
+				'no can non owners view collaborations flag': [
+					'--no-can-non-owners-view-collaborators',
+					{ can_non_owners_view_collaborators: false },
+				],
+				'upload email access flag': [
+					'--upload-email-access=open',
+					{ folder_upload_email: { access: 'open' } },
+				],
+				'sync flag': ['--sync', { sync_state: 'synced' }],
+				'no sync flag': ['--no-sync', { sync_state: 'not_synced' }],
+			},
+			function (flag, expectedData) {
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.put(`/2.0/folders/${folderId}`, expectedData)
+						.reply(200, fixture)
 				)
-				.stdout()
-				.stderr()
-				.command([
-					'folders:update',
-					folderId,
-					flag,
-					'--token=test',
-				])
-				.it('should send correct updates when flag is passed');
-		});
+					.stdout()
+					.stderr()
+					.command(['folders:update', folderId, flag, '--token=test'])
+					.it('should send correct updates when flag is passed');
+			}
+		);
 	});
 
-	describe('folders:upload', () => {
+	describe('folders:upload', function () {
 		let parentFolderId = '1234',
 			name1 = 'test_folder',
 			name2 = 'nested_folder',
 			folderId = '22222',
-			folderPath = path.join(__dirname, '..', 'fixtures/folders/test_folder'),
+			folderPath = path.join(
+				__dirname,
+				'..',
+				'fixtures/folders/test_folder'
+			),
 			testFileName = 'test_file.txt',
 			createFolderFixture = getFixture('folders/post_folders'),
 			uploadFileFixture = getFixture('folders/post_files_content'),
@@ -1419,51 +1562,59 @@ describe('Folders', () => {
 
 		let expectedBody1 = {
 			parent: {
-				id: parentFolderId
+				id: parentFolderId,
 			},
-			name: name1
+			name: name1,
 		};
 		let expectedBody2 = {
 			parent: {
-				id: folderId
+				id: folderId,
 			},
-			name: name2
+			name: name2,
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/folders', expectedBody1)
 				.reply(201, createFolderFixture)
 				.post('/2.0/folders', expectedBody2)
 				.reply(201, createFolderFixture)
+		)
+			.nock(TEST_UPLOAD_ROOT, (api) =>
+				api
+					.post('/2.0/files/content', (body) => {
+						try {
+							let lines = body.split(/\r?\n/u);
+							let attributes = JSON.parse(lines[3]);
+							assert.propertyVal(
+								attributes,
+								'name',
+								testFileName
+							);
+						} catch {
+							return false;
+						}
+						return true;
+					})
+					.reply(201, uploadFileFixture)
+					.post('/2.0/files/content', (body) => {
+						try {
+							let lines = body.split(/\r?\n/u);
+							let attributes = JSON.parse(lines[3]);
+							assert.propertyVal(
+								attributes,
+								'name',
+								testFileName
+							);
+						} catch {
+							return false;
+						}
+						return true;
+					})
+					.reply(201, uploadFileFixture)
 			)
-			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', body => {
-					try {
-						let lines = body.split(/\r?\n/u);
-						let attributes = JSON.parse(lines[3]);
-						assert.propertyVal(attributes, 'name', testFileName);
-					} catch (error) {
-						return false;
-					}
-					return true;
-				})
-				.reply(201, uploadFileFixture)
-				.post('/2.0/files/content', body => {
-					try {
-						let lines = body.split(/\r?\n/u);
-						let attributes = JSON.parse(lines[3]);
-						assert.propertyVal(attributes, 'name', testFileName);
-					} catch (error) {
-						return false;
-					}
-					return true;
-				})
-				.reply(201, uploadFileFixture)
-			)
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}`)
-				.reply(200, getFolderFixture)
+			.nock(TEST_API_ROOT, (api) =>
+				api.get(`/2.0/folders/${folderId}`).reply(200, getFolderFixture)
 			)
 			.stdout()
 			.command([
@@ -1471,98 +1622,114 @@ describe('Folders', () => {
 				folderPath,
 				`--parent-folder=${parentFolderId}`,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should upload a folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, getFolderFixture);
+			.it('should upload a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, getFolderFixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/folders', expectedBody1)
 				.reply(201, createFolderFixture)
 				.post('/2.0/folders', expectedBody2)
 				.reply(201, createFolderFixture)
+		)
+			.nock(TEST_UPLOAD_ROOT, (api) =>
+				api
+					.post('/2.0/files/content', (body) => {
+						try {
+							let lines = body.split(/\r?\n/u);
+							let attributes = JSON.parse(lines[3]);
+							assert.propertyVal(
+								attributes,
+								'name',
+								testFileName
+							);
+						} catch {
+							return false;
+						}
+						return true;
+					})
+					.reply(201, uploadFileFixture)
+					.post('/2.0/files/content', (body) => {
+						try {
+							let lines = body.split(/\r?\n/u);
+							let attributes = JSON.parse(lines[3]);
+							assert.propertyVal(
+								attributes,
+								'name',
+								testFileName
+							);
+						} catch {
+							return false;
+						}
+						return true;
+					})
+					.reply(201, uploadFileFixture)
 			)
-			.nock(TEST_UPLOAD_ROOT, api => api
-				.post('/2.0/files/content', body => {
-					try {
-						let lines = body.split(/\r?\n/u);
-						let attributes = JSON.parse(lines[3]);
-						assert.propertyVal(attributes, 'name', testFileName);
-					} catch (error) {
-						return false;
-					}
-					return true;
-				})
-				.reply(201, uploadFileFixture)
-				.post('/2.0/files/content', body => {
-					try {
-						let lines = body.split(/\r?\n/u);
-						let attributes = JSON.parse(lines[3]);
-						assert.propertyVal(attributes, 'name', testFileName);
-					} catch (error) {
-						return false;
-					}
-					return true;
-				})
-				.reply(201, uploadFileFixture)
-			)
-			.nock(TEST_API_ROOT, api => api
-				.get(`/2.0/folders/${folderId}`)
-				.reply(200, getFolderFixture)
+			.nock(TEST_API_ROOT, (api) =>
+				api.get(`/2.0/folders/${folderId}`).reply(200, getFolderFixture)
 			)
 			.stdout()
 			.command([
 				'folders:upload',
 				folderPath,
 				`--parent-folder=${parentFolderId}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should upload a folder (YAML Output)', ctx => {
-				assert.equal(ctx.stdout, yamlOutput);
+			.it('should upload a folder (YAML Output)', (context) => {
+				assert.equal(context.stdout, yamlOutput);
 			});
-
 	});
 
-	describe('folders:download', () => {
-
-		let downloadPath = path.join(__dirname, '../fixtures/folders/test_folder_download'),
+	describe('folders:download', function () {
+		let downloadPath = path.join(
+				__dirname,
+				'../fixtures/folders/test_folder_download'
+			),
 			folderID = '11111',
 			folderName = 'DownloadFolderTest',
-			getFolderFixture = getFixture('folders/get_folders_id_folder_download'),
-			getSubfolderFixture = getFixture('folders/get_folders_id_subfolder_download'),
-			getLargeFolderFixture = getFixture('folders/get_folders_id_large_folder'),
-			largeFolderPage1Fixture = getFixture('folders/get_folders_id_items_page_1_folder_download'),
-			largeFolderPage2Fixture = getFixture('folders/get_folders_id_items_page_2_folder_download');
+			getFolderFixture = getFixture(
+				'folders/get_folders_id_folder_download'
+			),
+			getSubfolderFixture = getFixture(
+				'folders/get_folders_id_subfolder_download'
+			),
+			getLargeFolderFixture = getFixture(
+				'folders/get_folders_id_large_folder'
+			),
+			largeFolderPage1Fixture = getFixture(
+				'folders/get_folders_id_items_page_1_folder_download'
+			),
+			largeFolderPage2Fixture = getFixture(
+				'folders/get_folders_id_items_page_2_folder_download'
+			);
 
 		let expectedContents = {
 			'file 1.txt': 'File 1 contents',
 			'file 2.txt': 'File 2 contents',
 			subfolder: {
-				'subfolder file 1.txt': 'File 3 contents'
-			}
+				'subfolder file 1.txt': 'File 3 contents',
+			},
 		};
 
 		function getDirectoryContents(folderPath) {
-			/* eslint-disable no-sync */
-			let obj = {};
+			let object = {};
 			let folderContents = fs.readdirSync(folderPath);
-			folderContents.forEach(item => {
+			for (const item of folderContents) {
 				let itemPath = path.join(folderPath, item);
 				let stat = fs.statSync(itemPath);
-				if (stat.isDirectory()) {
-					obj[item] = getDirectoryContents(itemPath);
-				} else {
-					obj[item] = fs.readFileSync(itemPath, 'utf8');
-				}
-			});
-			/* eslint-enable no-sync */
-			return obj;
+				object[item] = stat.isDirectory()
+					? getDirectoryContents(itemPath)
+					: fs.readFileSync(itemPath, 'utf8');
+			}
+
+			return object;
 		}
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1573,63 +1740,65 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
-			)
-			.stdout()
-			.stderr()
-			.command([
-				'folders:download',
-				folderID,
-				`--destination=${downloadPath}`,
-				'--token=test'
-			])
-			.it('should download folder to specified path on disk when called with destination flag', async ctx => {
-				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
-
-				assert.deepEqual(actualContents, expectedContents);
-				assert.equal(ctx.stdout, '');
-			});
-
-		test
-			.nock(TEST_API_ROOT, api => {
-
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
 				api
-					.get(`/2.0/folders/${folderID}`)
-					.reply(200, getLargeFolderFixture)
-					.get(`/2.0/folders/${folderID}/items`)
-					.query({
-						usemarker: true,
-						fields: 'type,id,name',
-					})
-					.reply(200, largeFolderPage1Fixture)
-					.get(`/2.0/folders/${folderID}/items`)
-					.query({
-						usemarker: true,
-						fields: 'type,id,name',
-						marker: 'page_1_marker',
-					})
-					.reply(200, largeFolderPage2Fixture);
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'folders:download',
+				folderID,
+				`--destination=${downloadPath}`,
+				'--token=test',
+			])
+			.it(
+				'should download folder to specified path on disk when called with destination flag',
+				async (context) => {
+					let folderPath = path.join(downloadPath, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(downloadPath);
 
-
-				for (let i = 1; i <= 200; i++) {
-					api.get(`/2.0/files/${i}/content`)
-						.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/${i}` });
+					assert.deepEqual(actualContents, expectedContents);
+					assert.equal(context.stdout, '');
 				}
-			})
-			.nock(TEST_DOWNLOAD_ROOT, api => {
+			);
 
-				for (let i = 1; i <= 200; i++) {
-					api.get(`/${i}`)
-						.reply(200, `File ${i} contents`);
+		test.nock(TEST_API_ROOT, (api) => {
+			api.get(`/2.0/folders/${folderID}`)
+				.reply(200, getLargeFolderFixture)
+				.get(`/2.0/folders/${folderID}/items`)
+				.query({
+					usemarker: true,
+					fields: 'type,id,name',
+				})
+				.reply(200, largeFolderPage1Fixture)
+				.get(`/2.0/folders/${folderID}/items`)
+				.query({
+					usemarker: true,
+					fields: 'type,id,name',
+					marker: 'page_1_marker',
+				})
+				.reply(200, largeFolderPage2Fixture);
+
+			for (let index = 1; index <= 200; index++) {
+				api.get(`/2.0/files/${index}/content`).reply(302, '', {
+					Location: `${TEST_DOWNLOAD_ROOT}/${index}`,
+				});
+			}
+		})
+			.nock(TEST_DOWNLOAD_ROOT, (api) => {
+				for (let index = 1; index <= 200; index++) {
+					api.get(`/${index}`).reply(200, `File ${index} contents`);
 				}
 			})
 			.stdout()
@@ -1638,36 +1807,41 @@ describe('Folders', () => {
 				'folders:download',
 				folderID,
 				`--destination=${downloadPath}`,
-				'--token=test'
+				'--token=test',
 			])
-			.it('should correctly download contents when Box folder has many items', async ctx => {
-				let manyFilesExpectedContents = {};
-				for (let i = 1; i <= 200; i++) {
-					manyFilesExpectedContents[`file ${i}.txt`] = `File ${i} contents`;
+			.it(
+				'should correctly download contents when Box folder has many items',
+				async (context) => {
+					let manyFilesExpectedContents = {};
+					for (let index = 1; index <= 200; index++) {
+						manyFilesExpectedContents[`file ${index}.txt`] =
+							`File ${index} contents`;
+					}
+					let folderPath = path.join(downloadPath, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(downloadPath);
+
+					assert.deepEqual(actualContents, manyFilesExpectedContents);
+					assert.equal(context.stdout, '');
 				}
-				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
+			)
+			.timeout(60_000);
 
-				assert.deepEqual(actualContents, manyFilesExpectedContents);
-				assert.equal(ctx.stdout, '');
-			})
-.timeout(60000);
-
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/files/44444/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
 			)
 			.stdout()
 			.stderr()
@@ -1676,19 +1850,25 @@ describe('Folders', () => {
 				folderID,
 				`--destination=${downloadPath}`,
 				'--depth=0',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should only download files in top-level folder when --depth=0 flag is passed', async ctx => {
-				let folderPath = path.join(downloadPath, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(downloadPath);
+			.it(
+				'should only download files in top-level folder when --depth=0 flag is passed',
+				async (context) => {
+					let folderPath = path.join(downloadPath, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(downloadPath);
 
-				assert.deepEqual(actualContents, _.omit(expectedContents, 'subfolder'));
-				assert.equal(ctx.stdout, '');
-			});
+					assert.deepEqual(
+						actualContents,
+						_.omit(expectedContents, 'subfolder')
+					);
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1699,14 +1879,18 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.stdout()
 			.stderr()
@@ -1715,22 +1899,27 @@ describe('Folders', () => {
 				folderID,
 				`--destination=${downloadPath}`,
 				'--zip',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should download folder to zip file when --zip flag is passed', async ctx => {
-				// Find zip file in directory
-				let filename = (await fs.readdir(downloadPath))
-					.find(f => f.startsWith(`folders-download-${folderID}`) && f.endsWith('.zip'));
-				await fs.remove(downloadPath);
+			.it(
+				'should download folder to zip file when --zip flag is passed',
+				async (context) => {
+					// Find zip file in directory
+					let filename = (await fs.readdir(downloadPath)).find(
+						(f) =>
+							f.startsWith(`folders-download-${folderID}`) &&
+							f.endsWith('.zip')
+					);
+					await fs.remove(downloadPath);
 
-				// @TODO(2018-10-30): Verify contents of zip file
+					// @TODO(2018-10-30): Verify contents of zip file
 
-				assert.ok(filename, 'File shoudl have been found');
-				assert.equal(ctx.stdout, '');
-			});
+					assert.ok(filename, 'File shoudl have been found');
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.stdout()
+		test.stdout()
 			.stderr()
 			.command([
 				'folders:download',
@@ -1738,23 +1927,26 @@ describe('Folders', () => {
 				'--destination=/path/really/should/not/exist',
 				'--no-color',
 				'--token=test',
-				'--no-create-path'
+				'--no-create-path',
 			])
-			.it('should output error when destination directory does not exist', ctx => {
-				const filePath = isWin()
-					? `${getDriveLetter()}\\path\\really\\should\\not\\exist`
-					: '/path/really/should/not/exist';
+			.it(
+				'should output error when destination directory does not exist',
+				(context) => {
+					const filePath = isWin()
+						? String.raw`${getDriveLetter()}\path\really\should\not\exist`
+						: '/path/really/should/not/exist';
 
-				assert.equal(
-					ctx.stderr,
-					`The ${filePath} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
-				);
-			});
+					assert.equal(
+						context.stderr,
+						`The ${filePath} path does not exist. Either create it, or pass the --create-path flag set to true${os.EOL}`
+					);
+				}
+			);
 
 		const destination = `${downloadPath}/temp`;
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1765,14 +1957,18 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.stdout()
 			.stderr()
@@ -1782,17 +1978,20 @@ describe('Folders', () => {
 				`--destination=${destination}`,
 				'--token=test',
 			])
-			.it('should download a folder a non-existent path', async(ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
+			.it(
+				'should download a folder a non-existent path',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
 
-				assert.deepEqual(actualContents, expectedContents);
-				assert.equal(ctx.stdout, '');
-			});
+					assert.deepEqual(actualContents, expectedContents);
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1803,33 +2002,39 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.stdout()
 			.stderr()
-			.command([
-				'folders:download',
-				folderID,
-				'--token=test',
-			])
-			.it('should download a folder to a default destination', async(ctx) => {
-				let folderPath = path.join(DEFAULT_DOWNLOAD_PATH, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(folderPath);
+			.command(['folders:download', folderID, '--token=test'])
+			.it(
+				'should download a folder to a default destination',
+				async (context) => {
+					let folderPath = path.join(
+						DEFAULT_DOWNLOAD_PATH,
+						folderName
+					);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(folderPath);
 
-				assert.deepEqual(actualContents, expectedContents);
-				assert.equal(ctx.stdout, '');
-			});
+					assert.deepEqual(actualContents, expectedContents);
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1840,25 +2045,30 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/44444')
-				.reply(200, expectedContents['file 1.txt'])
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
 				}
 				fs.mkdirSync(destination);
 				fs.mkdirSync(folderPath);
-				fs.writeFileSync(path.join(folderPath, 'file 1.txt'), 'test123');
-				/* eslint-enable no-sync */
+				fs.writeFileSync(
+					path.join(folderPath, 'file 1.txt'),
+					'test123'
+				);
 			})
 			.stdout()
 			.stderr()
@@ -1869,17 +2079,20 @@ describe('Folders', () => {
 				'--no-color',
 				'--token=test',
 			])
-			.it('should download and overwrite existing folder', async(ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
+			.it(
+				'should download and overwrite existing folder',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
 
-				assert.deepEqual(actualContents, expectedContents);
-				assert.equal(ctx.stdout, '');
-			});
+					assert.deepEqual(actualContents, expectedContents);
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1888,23 +2101,28 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/77777` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
 				}
 				fs.mkdirSync(destination);
 				fs.mkdirSync(folderPath);
-				fs.writeFileSync(path.join(folderPath, 'file 1.txt'), 'test123');
-				/* eslint-enable no-sync */
+				fs.writeFileSync(
+					path.join(folderPath, 'file 1.txt'),
+					'test123'
+				);
 			})
 			.stdout()
 			.stderr()
@@ -1916,27 +2134,28 @@ describe('Folders', () => {
 				'--no-overwrite',
 				'--token=test',
 			])
-			.it('should not overwrite existing folder when --no-overwrite flag is passed', async(ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
-				assert.equal(actualContents['file 1.txt'], 'test123');
-				assert.equal(ctx.stdout, '');
-			});
+			.it(
+				'should not overwrite existing folder when --no-overwrite flag is passed',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
+					assert.equal(actualContents['file 1.txt'], 'test123');
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api.get('/55555').reply(200, expectedContents['file 2.txt'])
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -1944,8 +2163,10 @@ describe('Folders', () => {
 				fs.mkdirSync(destination);
 				fs.mkdirSync(folderPath);
 				fs.mkdirSync(path.join(folderPath, 'subfolder'));
-				fs.writeFileSync(path.join(folderPath, 'file 1.txt'), 'test123');
-				/* eslint-enable no-sync */
+				fs.writeFileSync(
+					path.join(folderPath, 'file 1.txt'),
+					'test123'
+				);
 			})
 			.stdout()
 			.stderr()
@@ -1958,17 +2179,23 @@ describe('Folders', () => {
 				'--depth=0',
 				'--token=test',
 			])
-			.it('should not overwrite existing file and folder in root folder when --no-overwrite and --depth=0 flag is passed', async(ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
-				assert.equal(actualContents['file 1.txt'], 'test123');
-				assert.equal(Object.keys(actualContents.subfolder).length, 0);
-				assert.equal(ctx.stdout, '');
-			});
+			.it(
+				'should not overwrite existing file and folder in root folder when --no-overwrite and --depth=0 flag is passed',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
+					assert.equal(actualContents['file 1.txt'], 'test123');
+					assert.equal(
+						Object.keys(actualContents.subfolder).length,
+						0
+					);
+					assert.equal(context.stdout, '');
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get(`/2.0/folders/${folderID}`)
 				.reply(200, getFolderFixture)
 				.get('/2.0/folders/22222')
@@ -1977,15 +2204,18 @@ describe('Folders', () => {
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/77777` })
 				.get('/2.0/files/55555/content')
 				.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
-			)
-			.nock(TEST_DOWNLOAD_ROOT, api => api
-				.get('/55555')
-				.reply(200, expectedContents['file 2.txt'])
-				.get('/77777')
-				.reply(200, expectedContents.subfolder['subfolder file 1.txt'])
+		)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
 			)
 			.do(() => {
-				/* eslint-disable no-sync */
 				const folderPath = path.join(destination, folderName);
 				if (fs.existsSync(destination)) {
 					fs.removeSync(destination);
@@ -1993,8 +2223,10 @@ describe('Folders', () => {
 				fs.mkdirSync(destination);
 				fs.mkdirSync(folderPath);
 				fs.mkdirSync(path.join(folderPath, 'subfolder'));
-				fs.writeFileSync(path.join(folderPath, 'file 1.txt'), 'test123');
-				/* eslint-enable no-sync */
+				fs.writeFileSync(
+					path.join(folderPath, 'file 1.txt'),
+					'test123'
+				);
 			})
 			.stdout()
 			.stderr()
@@ -2007,88 +2239,86 @@ describe('Folders', () => {
 				'--depth=10',
 				'--token=test',
 			])
-			.it('should not overwrite existing file and folder in folder recursively when --no-overwrite and --depth=10 flag is passed', async(ctx) => {
-				let folderPath = path.join(destination, folderName);
-				let actualContents = getDirectoryContents(folderPath);
-				await fs.remove(destination);
-				assert.equal(actualContents['file 1.txt'], 'test123');
-				assert.equal(Object.keys(actualContents.subfolder).length, 1);
-				assert.equal(ctx.stdout, '');
-			});
-
+			.it(
+				'should not overwrite existing file and folder in folder recursively when --no-overwrite and --depth=10 flag is passed',
+				async (context) => {
+					let folderPath = path.join(destination, folderName);
+					let actualContents = getDirectoryContents(folderPath);
+					await fs.remove(destination);
+					assert.equal(actualContents['file 1.txt'], 'test123');
+					assert.equal(
+						Object.keys(actualContents.subfolder).length,
+						1
+					);
+					assert.equal(context.stdout, '');
+				}
+			);
 	});
 
-	describe('folders:locks', () => {
+	describe('folders:locks', function () {
 		let folderId = '0',
 			fixture = getFixture('folders/get_folder_locks'),
 			jsonOutput = getFixture('output/folders_locks_list_json.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/folder_locks')
 				.query({ folder_id: folderId })
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
-			.command([
-				'folders:locks',
-				folderId,
-				'--json',
-				'--token=test'
-			])
-			.it('should list all locks on a folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.command(['folders:locks', folderId, '--json', '--token=test'])
+			.it(
+				'should list all locks on a folder (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 	});
 
-	describe('folders:locks:create', () => {
+	describe('folders:locks:create', function () {
 		let folderId = '22222',
 			fixture = getFixture('folders/post_folder_locks');
 
 		let expectedBody = {
 			folder: {
 				type: 'folder',
-				id: folderId
+				id: folderId,
 			},
 			locked_operations: {
 				move: true,
-				delete: true
-			}
+				delete: true,
+			},
 		};
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/folder_locks', expectedBody)
-				.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.post('/2.0/folder_locks', expectedBody).reply(200, fixture)
+		)
 			.stdout()
 			.command([
 				'folders:locks:create',
 				folderId,
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should create a lock on a folder (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, fixture);
+			.it('should create a lock on a folder (JSON Output)', (context) => {
+				assert.equal(context.stdout, fixture);
 			});
 	});
 
-	describe('folders:locks:delete', () => {
+	describe('folders:locks:delete', function () {
 		let folderLockId = '0';
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.delete(`/2.0/folder_locks/${folderLockId}`)
-				.reply(204)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.delete(`/2.0/folder_locks/${folderLockId}`).reply(204)
+		)
 			.stderr()
-			.command([
-				'folders:locks:delete',
-				folderLockId,
-				'--token=test'
-			])
-			.it('should delete a lock on folder', ctx => {
-				assert.equal(ctx.stderr, `Delete folder lock with ID ${folderLockId}${os.EOL}`);
+			.command(['folders:locks:delete', folderLockId, '--token=test'])
+			.it('should delete a lock on folder', (context) => {
+				assert.equal(
+					context.stderr,
+					`Delete folder lock with ID ${folderLockId}${os.EOL}`
+				);
 			});
 	});
 });

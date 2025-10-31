@@ -12,7 +12,10 @@ class CollaborationsGetCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let collaboration = await this.client.collaborations.get(args.id, options);
+		let collaboration = await this.client.collaborations.get(
+			args.id,
+			options
+		);
 		await this.output(collaboration);
 	}
 }
@@ -30,7 +33,7 @@ CollaborationsGetCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the collaboration to get'
+		description: 'ID of the collaboration to get',
 	}),
 };
 

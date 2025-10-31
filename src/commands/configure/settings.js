@@ -2,12 +2,10 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const { mkdirp } = require('mkdirp');
 const BoxCLIError = require('../../cli-error');
-const utils = require('../../util');
-
-/* eslint-disable no-sync */
+const utilities = require('../../util');
 
 class ConfigureSettingsCommand extends BoxCommand {
 	async run() {
@@ -29,8 +27,11 @@ class ConfigureSettingsCommand extends BoxCommand {
 
 				try {
 					await mkdirp(downloadsPath);
-				} catch (ex) {
-					throw new BoxCLIError('Could not create downloads directory', ex);
+				} catch (error) {
+					throw new BoxCLIError(
+						'Could not create downloads directory',
+						error
+					);
 				}
 			} else if (!fs.statSync(downloadsPath).isDirectory()) {
 				throw new BoxCLIError(`${downloadsPath} is not a directory!`);
@@ -56,8 +57,11 @@ class ConfigureSettingsCommand extends BoxCommand {
 
 				try {
 					await mkdirp(reportsPath);
-				} catch (ex) {
-					throw new BoxCLIError('Could not create downloads directory', ex);
+				} catch (error) {
+					throw new BoxCLIError(
+						'Could not create downloads directory',
+						error
+					);
 				}
 			} else if (!fs.statSync(reportsPath).isDirectory()) {
 				throw new BoxCLIError(`${reportsPath} is not a directory!`);
@@ -100,7 +104,7 @@ ConfigureSettingsCommand.description =
 ConfigureSettingsCommand.flags = {
 	...BoxCommand.minFlags,
 	json: Flags.boolean({
-		description: 'Output CLI configuration settings in JSON format'
+		description: 'Output CLI configuration settings in JSON format',
 	}),
 	'enable-proxy': Flags.boolean({
 		description: 'Enable or disable proxy',
@@ -120,7 +124,7 @@ ConfigureSettingsCommand.flags = {
 	}),
 	'downloads-folder-path': Flags.string({
 		description: 'Set folder path for the downloads folder',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	'file-format': Flags.string({
 		description: 'Set the file format for generated reports',
@@ -132,7 +136,7 @@ ConfigureSettingsCommand.flags = {
 	}),
 	'reports-folder-path': Flags.string({
 		description: 'Set folder path for the reports folder',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	'enable-analytics-client': Flags.boolean({
 		description: 'Enable or disable custom analytics client',

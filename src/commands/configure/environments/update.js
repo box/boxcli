@@ -2,15 +2,18 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const BoxCLIError = require('../../../cli-error');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(EnvironmentsUpdateCommand);
-		let environmentsObj = await this.getEnvironments();
-		let environment = environmentsObj.environments[args.name || environmentsObj.default];
+		let environmentsObject = await this.getEnvironments();
+		let environment =
+			environmentsObject.environments[
+				args.name || environmentsObject.default
+			];
 
 		if (!environment) {
 			this.error('There is no environment with this name');
@@ -18,21 +21,30 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 		}
 
 		if (flags['config-file-path']) {
-			let configObj;
+			let configObject;
 			try {
-				/* eslint-disable no-sync */
-				configObj = JSON.parse(fs.readFileSync(flags['config-file-path'], 'utf8'));
-				/* eslint-enable no-sync */
-			} catch (ex) {
-				throw new BoxCLIError(`Could not read environment config file ${flags['config-file-path']}`, ex);
+				configObject = JSON.parse(
+					fs.readFileSync(flags['config-file-path'], 'utf8')
+				);
+			} catch (error) {
+				throw new BoxCLIError(
+					`Could not read environment config file ${flags['config-file-path']}`,
+					error
+				);
 			}
 
-			utils.validateConfigObject(configObj);
+			utilities.validateConfigObject(configObject);
 
-			if (!configObj.boxAppSettings.appAuth.privateKey && !flags['private-key-path'] && environment.hasInLinePrivateKey) {
-				throw new BoxCLIError('Environment must specify private key in config file or via --private-key-path');
+			if (
+				!configObject.boxAppSettings.appAuth.privateKey &&
+				!flags['private-key-path'] &&
+				environment.hasInLinePrivateKey
+			) {
+				throw new BoxCLIError(
+					'Environment must specify private key in config file or via --private-key-path'
+				);
 			}
-			if (configObj.boxAppSettings.appAuth.privateKey) {
+			if (configObject.boxAppSettings.appAuth.privateKey) {
 				environment.privateKeyPath = '';
 				environment.hasInLinePrivateKey = true;
 			}
@@ -54,7 +66,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			environment.cacheTokens = flags['cache-tokens'];
 		}
 
-		await this.updateEnvironments(environmentsObj);
+		await this.updateEnvironments(environmentsObject);
 		await this.output(environment);
 	}
 }
@@ -68,16 +80,20 @@ EnvironmentsUpdateCommand.flags = {
 	...BoxCommand.minFlags,
 	'config-file-path': Flags.string({
 		description: 'Provide a file path to configuration file',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
 	name: Flags.string({ description: 'New name of the environment' }),
 	'private-key-path': Flags.string({
 		description: 'Provide a file path to application private key',
-		parse: utils.parsePath,
+		parse: utilities.parsePath,
 	}),
-	'user-id': Flags.string({ description: 'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment' }),
+	'user-id': Flags.string({
+		description:
+			'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment',
+	}),
 	'cache-tokens': Flags.boolean({
-		description: 'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
+		description:
+			'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
 		allowNo: true,
 	}),
 };
@@ -87,8 +103,8 @@ EnvironmentsUpdateCommand.args = {
 		name: 'name',
 		required: false,
 		hidden: false,
-		description: 'The name of the environment'
-	})
+		description: 'The name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsUpdateCommand;

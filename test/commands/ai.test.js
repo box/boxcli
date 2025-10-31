@@ -4,54 +4,54 @@ const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
-describe('AI', () => {
-	const getAgentInRequestBody = (type) => {
-		const agent = {
-				type,
-				basic_text: {
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is, consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
+function getAgentInRequestBody(type) {
+	const agent = {
+		type,
+		basic_text: {
+			llm_endpoint_params: {
+				type: 'openai_params',
+				frequency_penalty: 1.5,
+				presence_penalty: 1.5,
+				stop: '<|im_end|>',
+				temperature: 0,
+				top_p: 1,
+			},
+			model: 'azure__openai__gpt_4o_mini',
+			num_tokens_for_completion: 8400,
+			prompt_template:
+				'It is, consider these travel options and answer the.',
+			system_message:
+				'You are a helpful travel assistant specialized in budget travel',
+		},
+		long_text: {
+			embeddings: {
+				model: 'azure__openai__text_embedding_ada_002',
+				strategy: {
+					id: 'basic',
+					num_tokens_per_chunk: 64,
 				},
-				long_text: {
-					embeddings: {
-						model: 'azure__openai__text_embedding_ada_002',
-						strategy: {
-							id: 'basic',
-							num_tokens_per_chunk: 64,
-						},
-					},
-					llm_endpoint_params: {
-						type: 'openai_params',
-						frequency_penalty: 1.5,
-						presence_penalty: 1.5,
-						stop: '<|im_end|>',
-						temperature: 0,
-						top_p: 1,
-					},
-					model: 'azure__openai__gpt_4o_mini',
-					num_tokens_for_completion: 8400,
-					prompt_template:
-						'It is , consider these travel options and answer the.',
-					system_message:
-						'You are a helpful travel assistant specialized in budget travel',
-				}
-			};
-		return agent;
+			},
+			llm_endpoint_params: {
+				type: 'openai_params',
+				frequency_penalty: 1.5,
+				presence_penalty: 1.5,
+				stop: '<|im_end|>',
+				temperature: 0,
+				top_p: 1,
+			},
+			model: 'azure__openai__gpt_4o_mini',
+			num_tokens_for_completion: 8400,
+			prompt_template:
+				'It is , consider these travel options and answer the.',
+			system_message:
+				'You are a helpful travel assistant specialized in budget travel',
+		},
 	};
+	return agent;
+}
 
-	describe('ai:ask', () => {
+describe('AI', function () {
+	describe('ai:ask', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -82,12 +82,11 @@ describe('AI', () => {
 		const fixture = getFixture('ai/post_ai_ask_response');
 		const yamlFixture = getFixture('ai/post_ai_ask_response_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/ai/ask', expectedRequestBody)
-					.reply(200, expectedResponseBody),
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/ai/ask', expectedRequestBody)
+				.reply(200, expectedResponseBody)
+		)
 			.stdout()
 			.command([
 				'ai:ask',
@@ -99,17 +98,16 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/ai/ask', expectedRequestBody)
-					.reply(200, expectedResponseBody),
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/ai/ask', expectedRequestBody)
+				.reply(200, expectedResponseBody)
+		)
 			.stdout()
 			.command([
 				'ai:ask',
@@ -120,13 +118,13 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:ask with ai_agent', () => {
+	describe('ai:ask with ai_agent', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -137,7 +135,7 @@ describe('AI', () => {
 			],
 			mode: 'single_item_qa',
 			prompt: 'What is the status of this document?',
-			ai_agent: getAgentInRequestBody('ai_agent_ask')
+			ai_agent: getAgentInRequestBody('ai_agent_ask'),
 		};
 
 		const expectedResponseBody = {
@@ -158,12 +156,12 @@ describe('AI', () => {
 		const fixture = getFixture('ai/post_ai_ask_response');
 		const yamlFixture = getFixture('ai/post_ai_ask_response_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/ask', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/ask', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:ask',
@@ -178,17 +176,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/ask', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/ask', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:ask',
@@ -202,13 +200,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:text-gen', () => {
+	describe('ai:text-gen', function () {
 		const expectedRequestBody = {
 			prompt: 'What is the status of this document?',
 			items: [{ id: '12345', type: 'file', content: 'one,two,three' }],
@@ -228,12 +226,11 @@ describe('AI', () => {
 		const fixture = getFixture('ai/post_ai_text_gen_response');
 		const yamlFixture = getFixture('ai/post_ai_text_gen_response_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/ai/text_gen', expectedRequestBody)
-					.reply(200, expectedResponseBody),
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/ai/text_gen', expectedRequestBody)
+				.reply(200, expectedResponseBody)
+		)
 			.stdout()
 			.command([
 				'ai:text-gen',
@@ -247,17 +244,16 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/ai/text_gen', expectedRequestBody)
-					.reply(200, expectedResponseBody),
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/ai/text_gen', expectedRequestBody)
+				.reply(200, expectedResponseBody)
+		)
 			.stdout()
 			.command([
 				'ai:text-gen',
@@ -270,13 +266,13 @@ describe('AI', () => {
 			])
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:extract', () => {
+	describe('ai:extract', function () {
 		const expectedRequestBody = {
 			prompt: 'firstName, lastName, location, yearOfBirth, company',
 			items: [
@@ -288,8 +284,7 @@ describe('AI', () => {
 			],
 		};
 		const expectedResponseBody = {
-			answer:
-				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
+			answer: '{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
 			created_at: '2025-05-02T14:51:30.567Z',
 			completion_reason: 'done',
 			ai_agent_info: {
@@ -306,12 +301,12 @@ describe('AI', () => {
 		const fixture = getFixture('ai/post_ai_extract_response');
 		const yamlFixture = getFixture('ai/post_ai_extract_response_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract',
@@ -324,17 +319,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract',
@@ -346,13 +341,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:extract-structured', () => {
+	describe('ai:extract-structured', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -392,15 +387,15 @@ describe('AI', () => {
 
 		const fixture = getFixture('ai/post_ai_extract_structured_response');
 		const yamlFixture = getFixture(
-			'ai/post_ai_extract_structured_response_yaml.txt',
+			'ai/post_ai_extract_structured_response_yaml.txt'
 		);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -412,17 +407,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -433,13 +428,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:extract-structured with ai_agent', () => {
+	describe('ai:extract-structured with ai_agent', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -458,7 +453,7 @@ describe('AI', () => {
 					options: [{ key: 'First Name' }],
 				},
 			],
-			ai_agent: getAgentInRequestBody('ai_agent_extract_structured')
+			ai_agent: getAgentInRequestBody('ai_agent_extract_structured'),
 		};
 		const expectedResponseBody = {
 			answer: {
@@ -480,15 +475,15 @@ describe('AI', () => {
 
 		const fixture = getFixture('ai/post_ai_extract_structured_response');
 		const yamlFixture = getFixture(
-			'ai/post_ai_extract_structured_response_yaml.txt',
+			'ai/post_ai_extract_structured_response_yaml.txt'
 		);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -502,17 +497,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -525,12 +520,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
-	describe('ai:extract with ai agent', () => {
+
+	describe('ai:extract with ai agent', function () {
 		const expectedRequestBody = {
 			prompt: 'firstName, lastName, location, yearOfBirth, company',
 			items: [
@@ -540,11 +536,10 @@ describe('AI', () => {
 					content: 'one,two,three',
 				},
 			],
-			ai_agent: getAgentInRequestBody('ai_agent_extract')
+			ai_agent: getAgentInRequestBody('ai_agent_extract'),
 		};
 		const expectedResponseBody = {
-			answer:
-				'{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
+			answer: '{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}',
 			created_at: '2025-05-02T14:51:30.567Z',
 			completion_reason: 'done',
 			ai_agent_info: {
@@ -561,12 +556,12 @@ describe('AI', () => {
 		const fixture = getFixture('ai/post_ai_extract_response');
 		const yamlFixture = getFixture('ai/post_ai_extract_response_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract',
@@ -581,17 +576,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract',
@@ -605,13 +600,13 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 
-	describe('ai:extract-structured with metadata template', () => {
+	describe('ai:extract-structured with metadata template', function () {
 		const expectedRequestBody = {
 			items: [
 				{
@@ -646,15 +641,15 @@ describe('AI', () => {
 
 		const fixture = getFixture('ai/post_ai_extract_structured_response');
 		const yamlFixture = getFixture(
-			'ai/post_ai_extract_structured_response_yaml.txt',
+			'ai/post_ai_extract_structured_response_yaml.txt'
 		);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -666,17 +661,17 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (JSON Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, fixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) => {
-				api
-					.post('/2.0/ai/extract_structured', expectedRequestBody)
-					.reply(200, expectedResponseBody);
-			})
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract_structured', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
 			.stdout()
 			.command([
 				'ai:extract-structured',
@@ -687,9 +682,9 @@ describe('AI', () => {
 
 			.it(
 				'should send the correct request and output the response (YAML Output)',
-				(ctx) => {
-					assert.equal(ctx.stdout, yamlFixture);
-				},
+				(context) => {
+					assert.equal(context.stdout, yamlFixture);
+				}
 			);
 	});
 });

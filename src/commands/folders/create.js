@@ -6,21 +6,23 @@ const { Flags, Args } = require('@oclif/core');
 class FoldersCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersCreateCommand);
-		let params = {
+		let parameters = {
 			body: {
 				name: args.name,
 				parent: {
-					id: args.parentID
-				}
-			}
+					id: args.parentID,
+				},
+			},
 		};
 
 		if (flags.description) {
-			params.body.description = flags.description;
+			parameters.body.description = flags.description;
 		}
 
 		// @TODO (2018-07-10): Should implement this using the Node SDK
-		let createdFolder = await this.client.wrapWithDefaultHandler(this.client.post)('/folders', params);
+		let createdFolder = await this.client.wrapWithDefaultHandler(
+			this.client.post
+		)('/folders', parameters);
 		await this.output(createdFolder);
 	}
 }
@@ -32,8 +34,8 @@ FoldersCreateCommand._endpoint = 'post_folders';
 FoldersCreateCommand.flags = {
 	...BoxCommand.flags,
 	'id-only': Flags.boolean({
-		description: 'Return only an ID to output from this command'
-	})
+		description: 'Return only an ID to output from this command',
+	}),
 };
 
 FoldersCreateCommand.args = {
@@ -41,14 +43,15 @@ FoldersCreateCommand.args = {
 		name: 'parentID',
 		required: true,
 		hidden: false,
-		description: 'ID of parent folder to add new folder to, use \'0\' for the root folder'
+		description:
+			"ID of parent folder to add new folder to, use '0' for the root folder",
 	}),
 	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
-		description: 'Name of new folder'
-	})
+		description: 'Name of new folder',
+	}),
 };
 
 module.exports = FoldersCreateCommand;

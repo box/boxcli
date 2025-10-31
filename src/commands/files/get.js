@@ -22,7 +22,7 @@ FilesGetCommand.examples = ['box files:get 11111'];
 FilesGetCommand._endpoint = 'get_files_id';
 
 FilesGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 FilesGetCommand.args = {
@@ -30,8 +30,8 @@ FilesGetCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to get'
-	})
+		description: 'ID of the file to get',
+	}),
 };
 
 module.exports = FilesGetCommand;

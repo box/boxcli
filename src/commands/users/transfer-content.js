@@ -6,37 +6,42 @@ const { Flags, Args } = require('@oclif/core');
 class UsersMoveRootContentCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(UsersMoveRootContentCommand);
-		let params = {
+		let parameters = {
 			body: {
 				owned_by: {
-					id: args.newUserID
-				}
+					id: args.newUserID,
+				},
 			},
-			qs: {}
+			qs: {},
 		};
 
 		if (flags.hasOwnProperty('notify')) {
-			params.qs.notify = flags.notify;
+			parameters.qs.notify = flags.notify;
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK. Existing this.client.enterprise.transferUserContent() does not allow the notify option to be passed
-		let movedFolder = await this.client.wrapWithDefaultHandler(this.client.put)(`/users/${args.userID}/folders/0`, params);
+		let movedFolder = await this.client.wrapWithDefaultHandler(
+			this.client.put
+		)(`/users/${args.userID}/folders/0`, parameters);
 		await this.output(movedFolder);
 	}
 }
 
-UsersMoveRootContentCommand.aliases = [ 'users:move-root-content' ];
+UsersMoveRootContentCommand.aliases = ['users:move-root-content'];
 
-UsersMoveRootContentCommand.description = 'Move a user\'s root content to another user';
-UsersMoveRootContentCommand.examples = ['box users:transfer-content 33333 44444'];
+UsersMoveRootContentCommand.description =
+	"Move a user's root content to another user";
+UsersMoveRootContentCommand.examples = [
+	'box users:transfer-content 33333 44444',
+];
 UsersMoveRootContentCommand._endpoint = 'put_users_id_folders_id';
 
 UsersMoveRootContentCommand.flags = {
 	...BoxCommand.flags,
 	notify: Flags.boolean({
 		description: 'Notify the user that their content has been moved',
-		allowNo: true
-	})
+		allowNo: true,
+	}),
 };
 
 UsersMoveRootContentCommand.args = {
@@ -44,13 +49,13 @@ UsersMoveRootContentCommand.args = {
 		name: 'userID',
 		required: true,
 		hidden: false,
-		description: 'User whose content should be moved'
+		description: 'User whose content should be moved',
 	}),
 	newUserID: Args.string({
 		name: 'newUserID',
 		required: true,
 		hidden: false,
-		description: 'User to whom the content should be moved'
+		description: 'User to whom the content should be moved',
 	}),
 };
 

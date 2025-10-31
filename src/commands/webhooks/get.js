@@ -17,7 +17,7 @@ WebhooksGetCommand.examples = ['box webhooks:get 12345'];
 WebhooksGetCommand._endpoint = 'get_webhooks_id';
 
 WebhooksGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WebhooksGetCommand.args = {

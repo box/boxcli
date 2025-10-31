@@ -71,7 +71,7 @@ USAGE
   $ box configure:environments:delete [NAME] [--no-color] [-h] [-v] [-q]
 
 ARGUMENTS
-  NAME  Name of the environment
+  [NAME]  Name of the environment
 
 FLAGS
   -h, --help      Show CLI help
@@ -116,7 +116,7 @@ USAGE
   $ box configure:environments:select [ID] [--no-color] [-h] [-v] [-q]
 
 ARGUMENTS
-  ID  Name of the environment
+  [ID]  Name of the environment
 
 FLAGS
   -h, --help      Show CLI help
@@ -140,7 +140,7 @@ USAGE
   $ box configure:environments:set-current [ID] [--no-color] [-h] [-v] [-q]
 
 ARGUMENTS
-  ID  Name of the environment
+  [ID]  Name of the environment
 
 FLAGS
   -h, --help      Show CLI help
@@ -167,7 +167,7 @@ USAGE
     --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--default]
 
 ARGUMENTS
-  USERID  The user ID to switch to
+  [USERID]  The user ID to switch to
 
 FLAGS
   -h, --help                       Show CLI help
@@ -201,7 +201,7 @@ USAGE
     [--private-key-path <value>] [--user-id <value>] [--cache-tokens]
 
 ARGUMENTS
-  NAME  The name of the environment
+  [NAME]  The name of the environment
 
 FLAGS
   -h, --help                      Show CLI help

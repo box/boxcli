@@ -24,25 +24,26 @@ class TasksCreateCommand extends BoxCommand {
 }
 
 TasksCreateCommand.description = 'Create a task on a file';
-TasksCreateCommand.examples = ['box tasks:create 11111 --message "Please proofread this document"'];
+TasksCreateCommand.examples = [
+	'box tasks:create 11111 --message "Please proofread this document"',
+];
 TasksCreateCommand._endpoint = 'post_tasks';
 
 TasksCreateCommand.flags = {
 	...BoxCommand.flags,
 	message: Flags.string({ description: 'Message for task' }),
 	'due-at': Flags.string({
-		description: 'When this task is due, use format 05h for 5 hours for example',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'When this task is due, use format 05h for 5 hours for example',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'id-only': Flags.boolean({
-		description: 'Return only an ID to output from this command'
+		description: 'Return only an ID to output from this command',
 	}),
 	'completion-rule': Flags.string({
-		description: 'Rule for how many assignees must complete the task to consider it completed',
-		options: [
-			'all_assignees',
-			'any_assignee'
-		]
+		description:
+			'Rule for how many assignees must complete the task to consider it completed',
+		options: ['all_assignees', 'any_assignee'],
 	}),
 };
 

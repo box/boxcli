@@ -2,9 +2,9 @@
 
 const _ = require('lodash');
 const BoxCLIError = require('./cli-error');
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
+const os = require('node:os');
+const path = require('node:path');
+const fs = require('node:fs');
 const { mkdirp } = require('mkdirp');
 
 const REQUIRED_CONFIG_VALUES = Object.freeze([
@@ -80,7 +80,7 @@ function parseKey(value) {
 	}
 	// Treat as key
 	let parts = value.split(UNESCAPED_SUBSCRIPT_REGEX);
-	if (parts[parts.length - 1] === '') {
+	if (parts.at(-1) === '') {
 		parts = parts.slice(0, -1);
 	}
 	return `/${parts
@@ -104,9 +104,9 @@ function parseKey(value) {
 function parseValue(value) {
 	if (value.startsWith('#')) {
 		// Try parsing as number
-		let valueStr = unescapeString(value.substr(1));
-		if (valueStr.match(NUMBER_REGEX)) {
-			let parsedValue = parseFloat(valueStr);
+		let valueStr = unescapeString(value.slice(1));
+		if (NUMBER_REGEX.test(valueStr)) {
+			let parsedValue = Number.parseFloat(valueStr);
 			if (!Number.isNaN(parsedValue)) {
 				return parsedValue;
 			}
@@ -115,7 +115,7 @@ function parseValue(value) {
 		// Parsing failed, fall back to string value
 	} else if (value.startsWith('[') && value.endsWith(']')) {
 		// Handle as array
-		let interiorStr = value.substring(1, value.length - 1);
+		let interiorStr = value.slice(1, - 1);
 
 		if (interiorStr.length === 0) {
 			return [];
@@ -197,7 +197,7 @@ function parseStringToObject(inputString, keys) {
 	while (inputString.length > 0) {
 		inputString = inputString.trim();
 		let parsedKey = inputString.split('=')[0];
-		inputString = inputString.substring(inputString.indexOf('=') + 1);
+		inputString = inputString.slice(Math.max(0, inputString.indexOf('=') + 1));
 
 		// Find the next key or the end of the string
 		let nextKeyIndex = inputString.length;
@@ -208,12 +208,12 @@ function parseStringToObject(inputString, keys) {
 			}
 		}
 
-		let parsedValue = inputString.substring(0, nextKeyIndex).trim();
+		let parsedValue = inputString.slice(0, Math.max(0, nextKeyIndex)).trim();
 		if (parsedValue.endsWith(',') && nextKeyIndex !== inputString.length) {
-			parsedValue = parsedValue.substring(0, parsedValue.length - 1);
+			parsedValue = parsedValue.slice(0, Math.max(0, parsedValue.length - 1));
 		}
 		if (parsedValue.startsWith('"') && parsedValue.endsWith('"')) {
-			parsedValue = parsedValue.substring(1, parsedValue.length - 1);
+			parsedValue = parsedValue.slice(1, - 1);
 		}
 
 		if (!keys.includes(parsedKey)) {
@@ -223,7 +223,7 @@ function parseStringToObject(inputString, keys) {
 		}
 
 		result[parsedKey] = parsedValue;
-		inputString = inputString.substring(nextKeyIndex);
+		inputString = inputString.slice(Math.max(0, nextKeyIndex));
 	}
 	return result;
 }
@@ -237,7 +237,7 @@ function parseStringToObject(inputString, keys) {
  * @throws BoxCLIError
  */
 async function checkDir(dirPath, shouldCreate) {
-	/* eslint-disable no-sync */
+	 
 	if (!fs.existsSync(dirPath)) {
 		if (shouldCreate) {
 			await mkdirp(dirPath);
@@ -248,8 +248,6 @@ async function checkDir(dirPath, shouldCreate) {
 		}
 	}
 }
-
-/* eslint-disable require-jsdoc, require-await, no-shadow, promise/avoid-new, promise/prefer-await-to-callbacks */
 
 async function readFileAsync(path, options) {
 	return new Promise((resolve, reject) => {
@@ -294,8 +292,6 @@ async function unlinkAsync(path) {
 		});
 	});
 }
-
-/* eslint-enable require-jsdoc, require-await, no-shadow, promise/avoid-new, promise/prefer-await-to-callbacks */
 
 module.exports = {
 	/**
@@ -343,7 +339,7 @@ module.exports = {
 	unescapeSlashes(value) {
 		try {
 			return JSON.parse(`"${value}"`);
-		} catch (e) {
+		} catch {
 			return value;
 		}
 	},

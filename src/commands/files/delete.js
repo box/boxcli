@@ -14,15 +14,17 @@ class FilesDeleteCommand extends BoxCommand {
 		if (flags.force) {
 			try {
 				await this.client.files.deletePermanently(args.id);
-			} catch (err) {
+			} catch (error) {
 				// If the item can't be found in the trash, assume that it was already deleted or
 				// that the enterprise didn't have trash enabled.  This should be regarded as a success case.
-				if (err.statusCode !== 404) {
-					throw err;
+				if (error.statusCode !== 404) {
+					throw error;
 				}
 			}
 		}
-		this.info(`Deleted file ${args.id}${flags.force ? ' permanently' : ''}`);
+		this.info(
+			`Deleted file ${args.id}${flags.force ? ' permanently' : ''}`
+		);
 	}
 }
 
@@ -36,7 +38,7 @@ FilesDeleteCommand.flags = {
 		char: 'f',
 		description: 'Permanently delete the item, bypassing the trash',
 	}),
-	etag: Flags.string({ description: 'Only delete if etag value matches' })
+	etag: Flags.string({ description: 'Only delete if etag value matches' }),
 };
 
 FilesDeleteCommand.args = {
@@ -44,7 +46,7 @@ FilesDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to delete'
+		description: 'ID of the file to delete',
 	}),
 };
 

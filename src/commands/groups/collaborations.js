@@ -2,25 +2,30 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class GroupsListCollaborationsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(GroupsListCollaborationsCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		const { flags, args } = await this.parse(
+			GroupsListCollaborationsCommand
+		);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.fields) {
 			options.fields = flags.fields;
 		}
 
-		let collaborations = await this.client.groups.getCollaborations(args.id, options);
+		let collaborations = await this.client.groups.getCollaborations(
+			args.id,
+			options
+		);
 		await this.output(collaborations);
 	}
 }
 
 GroupsListCollaborationsCommand.aliases = [
 	'groups:list-collaborations',
-	'collaborations:list-for-group'
+	'collaborations:list-for-group',
 ];
 
 GroupsListCollaborationsCommand.description = 'List collaborations for a group';
@@ -29,7 +34,7 @@ GroupsListCollaborationsCommand._endpoint = 'get_groups_id_collaborations';
 
 GroupsListCollaborationsCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flag,
+	...PaginationUtilities.flag,
 };
 
 GroupsListCollaborationsCommand.args = {

@@ -17,7 +17,7 @@ WebLinksDeleteCommand.examples = ['box web-links:delete 12345'];
 WebLinksDeleteCommand._endpoint = 'delete_web_links_id';
 
 WebLinksDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WebLinksDeleteCommand.args = {

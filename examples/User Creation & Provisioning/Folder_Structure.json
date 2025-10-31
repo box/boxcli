@@ -1,25 +1,25 @@
 [
-  {
-    "name": "Market Research",
-    "children": [
-      {
-        "name": "Statistics",
+    {
+        "name": "Market Research",
         "children": [
-          {
-            "name": "Computed",
-            "children": []
-          }
+            {
+                "name": "Statistics",
+                "children": [
+                    {
+                        "name": "Computed",
+                        "children": []
+                    }
+                ]
+            }
         ]
-      }
-    ]
-  },
-  {
-    "name": "Sales Plays",
-    "children": [
-      {
-        "name": "Big Pharma",
-        "children": []
-      }
-    ]
-  }
+    },
+    {
+        "name": "Sales Plays",
+        "children": [
+            {
+                "name": "Big Pharma",
+                "children": []
+            }
+        ]
+    }
 ]

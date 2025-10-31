@@ -17,7 +17,7 @@ WebhooksDeleteCommand.examples = ['box webhooks:delete 12345'];
 WebhooksDeleteCommand._endpoint = 'delete_webhooks_id';
 
 WebhooksDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WebhooksDeleteCommand.args = {

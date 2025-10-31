@@ -2,12 +2,12 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags } = require('@oclif/core');
-const PaginationUtils = require('../../pagination-utils');
+const PaginationUtilities = require('../../pagination-utils');
 
 class DevicePinsListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(DevicePinsListCommand);
-		let options = PaginationUtils.handlePagination(flags);
+		let options = PaginationUtilities.handlePagination(flags);
 
 		if (flags.direction) {
 			options.direction = flags.direction;
@@ -18,20 +18,18 @@ class DevicePinsListCommand extends BoxCommand {
 	}
 }
 
-DevicePinsListCommand.description = 'List all the device pins for your enterprise';
+DevicePinsListCommand.description =
+	'List all the device pins for your enterprise';
 DevicePinsListCommand.examples = ['box device-pins'];
 DevicePinsListCommand._endpoint = 'get_enterprises_id_device_pinners';
 
 DevicePinsListCommand.flags = {
 	...BoxCommand.flags,
-	...PaginationUtils.flags,
+	...PaginationUtilities.flags,
 	direction: Flags.string({
 		description: 'Set sorting (by id) direction. Default is ASC',
-		options: [
-			'ASC',
-			'DESC'
-		]
-	})
+		options: ['ASC', 'DESC'],
+	}),
 };
 
 module.exports = DevicePinsListCommand;

@@ -21,19 +21,22 @@ class WebhooksUpdateCommand extends BoxCommand {
 }
 
 WebhooksUpdateCommand.description = 'Update a webhook';
-WebhooksUpdateCommand.examples = ['box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED'];
+WebhooksUpdateCommand.examples = [
+	'box webhooks:update 12345 --triggers FILE.DELETED,FOLDER.DELETED',
+];
 WebhooksUpdateCommand._endpoint = 'put_webhooks_id';
 
 WebhooksUpdateCommand.flags = {
 	...BoxCommand.flags,
 	triggers: Flags.string({
 		char: 'T',
-		description: 'Triggers for webhook, enter as comma separated list. For example: FILE.DELETED,FILE.PREVIEWED'
+		description:
+			'Triggers for webhook, enter as comma separated list. For example: FILE.DELETED,FILE.PREVIEWED',
 	}),
 	address: Flags.string({
 		char: 'a',
-		description: 'URL for your webhook handler'
-	})
+		description: 'URL for your webhook handler',
+	}),
 };
 
 WebhooksUpdateCommand.args = {

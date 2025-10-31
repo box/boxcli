@@ -22,7 +22,7 @@ TasksGetCommand.examples = ['box tasks:get 88888'];
 TasksGetCommand._endpoint = 'get_tasks_id';
 
 TasksGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TasksGetCommand.args = {

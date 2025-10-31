@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../util');
+const utilities = require('../../util');
 
 class WebLinksCreateCommand extends BoxCommand {
 	async run() {
@@ -16,13 +16,19 @@ class WebLinksCreateCommand extends BoxCommand {
 			options.name = flags.name;
 		}
 
-		let weblink = await this.client.weblinks.create(args.url, flags['parent-id'], options);
+		let weblink = await this.client.weblinks.create(
+			args.url,
+			flags['parent-id'],
+			options
+		);
 		await this.output(weblink);
 	}
 }
 
 WebLinksCreateCommand.description = 'Create a new web link';
-WebLinksCreateCommand.examples = ['box web-links:create http://example.com --parent-id 0'];
+WebLinksCreateCommand.examples = [
+	'box web-links:create http://example.com --parent-id 0',
+];
 WebLinksCreateCommand._endpoint = 'post_web_links';
 
 WebLinksCreateCommand.flags = {
@@ -30,11 +36,11 @@ WebLinksCreateCommand.flags = {
 	description: Flags.string({
 		char: 'd',
 		description: 'Description of the web link',
-		parse: utils.unescapeSlashes
+		parse: utilities.unescapeSlashes,
 	}),
 	name: Flags.string({
 		char: 'n',
-		description: 'Name of the web link. Defaults to the URL if not set'
+		description: 'Name of the web link. Defaults to the URL if not set',
 	}),
 	'parent-id': Flags.string({
 		required: true,
@@ -47,7 +53,8 @@ WebLinksCreateCommand.args = {
 		name: 'url',
 		required: true,
 		hidden: false,
-		description: 'The URL the web link points to. Must start with "http://" or "https://"',
+		description:
+			'The URL the web link points to. Must start with "http://" or "https://"',
 	}),
 };
 

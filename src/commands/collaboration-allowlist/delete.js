@@ -12,12 +12,16 @@ class CollaborationAllowlistDeleteCommand extends BoxCommand {
 	}
 }
 
-CollaborationAllowlistDeleteCommand.description = 'Delete a collaboration allowlist entry';
-CollaborationAllowlistDeleteCommand.examples = ['box collaboration-allowlist:delete 12345'];
-CollaborationAllowlistDeleteCommand._endpoint = 'delete_collaboration_whitelist_entries_id';
+CollaborationAllowlistDeleteCommand.description =
+	'Delete a collaboration allowlist entry';
+CollaborationAllowlistDeleteCommand.examples = [
+	'box collaboration-allowlist:delete 12345',
+];
+CollaborationAllowlistDeleteCommand._endpoint =
+	'delete_collaboration_whitelist_entries_id';
 
 CollaborationAllowlistDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 CollaborationAllowlistDeleteCommand.args = {
@@ -25,7 +29,7 @@ CollaborationAllowlistDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the collaboration allowlist entry record to delete'
+		description: 'ID of the collaboration allowlist entry record to delete',
 	}),
 };
 

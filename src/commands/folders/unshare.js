@@ -17,11 +17,13 @@ class FoldersUnshareCommand extends BoxCommand {
 
 		let sharedLinksModule = new SharedLinksModule(this.client);
 		let item = await sharedLinksModule.removeSharedLink(args);
-		this.info(chalk`{green Removed shared link from ${args.itemType} "${item.name}"}`);
+		this.info(
+			chalk`{green Removed shared link from ${args.itemType} "${item.name}"}`
+		);
 	}
 }
 
-FoldersUnshareCommand.aliases = [ 'folders:shared-links:delete' ];
+FoldersUnshareCommand.aliases = ['folders:shared-links:delete'];
 
 FoldersUnshareCommand.description = 'Delete a shared link for a folder';
 FoldersUnshareCommand.examples = ['box folders:unshare 22222'];
@@ -37,7 +39,7 @@ FoldersUnshareCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to unshare',
-	})
+	}),
 };
 
 module.exports = FoldersUnshareCommand;

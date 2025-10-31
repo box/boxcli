@@ -13,12 +13,16 @@ class MetadataCascadePoliciesDeleteCommand extends BoxCommand {
 	}
 }
 
-MetadataCascadePoliciesDeleteCommand.description = 'Delete a metadata cascade policy';
-MetadataCascadePoliciesDeleteCommand.examples = ['box metadata-cascade-policies:delete 12345'];
-MetadataCascadePoliciesDeleteCommand._endpoint = 'delete_metadata_cascade_policies_id';
+MetadataCascadePoliciesDeleteCommand.description =
+	'Delete a metadata cascade policy';
+MetadataCascadePoliciesDeleteCommand.examples = [
+	'box metadata-cascade-policies:delete 12345',
+];
+MetadataCascadePoliciesDeleteCommand._endpoint =
+	'delete_metadata_cascade_policies_id';
 
 MetadataCascadePoliciesDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 MetadataCascadePoliciesDeleteCommand.args = {

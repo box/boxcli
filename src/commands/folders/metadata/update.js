@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const utils = require('../../../util');
+const utilities = require('../../../util');
 
 const OP_FLAGS = Object.freeze({
 	add: true,
@@ -15,24 +15,36 @@ const OP_FLAGS = Object.freeze({
 
 class FoldersUpdateMetadataCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = await this.parse(FoldersUpdateMetadataCommand);
+		const { flags, args, raw } = await this.parse(
+			FoldersUpdateMetadataCommand
+		);
 
-		let updates = raw.filter(v => v.type === 'flag' && OP_FLAGS[v.flag]).map(op => {
-			let opName = op.flag;
-			let opData = flags[op.flag].shift();
+		let updates = raw
+			.filter((v) => v.type === 'flag' && OP_FLAGS[v.flag])
+			.map((op) => {
+				let opName = op.flag;
+				let opData = flags[op.flag].shift();
 
-			return { op: opName, ...opData };
-		});
+				return { op: opName, ...opData };
+			});
 
 		let templateKey = flags['template-key'];
 
-		let metadata = await this.client.folders.updateMetadata(args.id, flags.scope, templateKey, updates);
+		let metadata = await this.client.folders.updateMetadata(
+			args.id,
+			flags.scope,
+			templateKey,
+			updates
+		);
 		await this.output(metadata);
 	}
 }
 
-FoldersUpdateMetadataCommand.description = 'Update the metadata attached to a folder';
-FoldersUpdateMetadataCommand.examples = ['box folders:metadata:update 22222 --template-key employeeRecord --replace department=Finance'];
+FoldersUpdateMetadataCommand.description =
+	'Update the metadata attached to a folder';
+FoldersUpdateMetadataCommand.examples = [
+	'box folders:metadata:update 22222 --template-key employeeRecord --replace department=Finance',
+];
 FoldersUpdateMetadataCommand._endpoint = 'put_folders_id_metadata_id_id';
 
 FoldersUpdateMetadataCommand.flags = {
@@ -47,37 +59,42 @@ FoldersUpdateMetadataCommand.flags = {
 	}),
 	add: Flags.string({
 		char: 'a',
-		description: 'Add a key to the metadata document; must be in the form key=value',
+		description:
+			'Add a key to the metadata document; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	copy: Flags.string({
 		char: 'c',
-		description: 'Copy a metadata value to another key; must be in the form sourceKey>destinationKey',
+		description:
+			'Copy a metadata value to another key; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	move: Flags.string({
 		char: 'm',
-		description: 'Move a metadata value from one key to another; must be in the form sourceKey>destinationKey',
+		description:
+			'Move a metadata value from one key to another; must be in the form sourceKey>destinationKey',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	remove: Flags.string({
 		description: 'Remove a key from the metadata document',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	replace: Flags.string({
-		description: 'Replace the value of an existing metadata key; must be in the form key=value',
+		description:
+			'Replace the value of an existing metadata key; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 	test: Flags.string({
 		char: 't',
-		description: 'Test that a metadata key contains a specific value; must be in the form key=value',
+		description:
+			'Test that a metadata key contains a specific value; must be in the form key=value',
 		multiple: true,
-		parse: utils.parseMetadataOp,
+		parse: utilities.parseMetadataOp,
 	}),
 };
 

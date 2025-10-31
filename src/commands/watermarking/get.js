@@ -24,7 +24,7 @@ WatermarkingGetCommand.description = 'Get the watermark on an item';
 WatermarkingGetCommand.examples = ['box watermarking:get folder 22222'];
 
 WatermarkingGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WatermarkingGetCommand.args = {
@@ -33,10 +33,7 @@ WatermarkingGetCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'Type of item to get watermark for',
-		options: [
-			'file',
-			'folder'
-		]
+		options: ['file', 'folder'],
 	}),
 	itemID: Args.string({
 		name: 'itemID',

@@ -5,7 +5,6 @@ const { Flags, Args } = require('@oclif/core');
 const CollaborationModule = require('../../modules/collaboration');
 
 class CollaborationsAddCommand extends BoxCommand {
-
 	async run() {
 		const { flags, args } = await this.parse(CollaborationsAddCommand);
 
@@ -15,10 +14,12 @@ class CollaborationsAddCommand extends BoxCommand {
 	}
 }
 
-CollaborationsAddCommand.aliases = [ 'collaborations:add' ];
+CollaborationsAddCommand.aliases = ['collaborations:add'];
 
 CollaborationsAddCommand.description = 'Create a collaboration for a Box item';
-CollaborationsAddCommand.examples = ['box collaborations:create 22222 folder --role editor --user-id 33333'];
+CollaborationsAddCommand.examples = [
+	'box collaborations:create 22222 folder --role editor --user-id 33333',
+];
 CollaborationsAddCommand._endpoint = 'post_collaborations';
 
 CollaborationsAddCommand.flags = {
@@ -33,7 +34,7 @@ CollaborationsAddCommand.flags = {
 			'uploader',
 			'previewer-uploader',
 			'viewer-uploader',
-			'co-owner'
+			'co-owner',
 		],
 		options: [
 			'editor',
@@ -42,29 +43,20 @@ CollaborationsAddCommand.flags = {
 			'uploader',
 			'previewer_uploader',
 			'viewer_uploader',
-			'co-owner'
-		]
+			'co-owner',
+		],
 	}),
 	'user-id': Flags.string({
 		description: 'Id for user to collaborate',
-		exclusive: [
-			'group-id',
-			'login'
-		]
+		exclusive: ['group-id', 'login'],
 	}),
 	'group-id': Flags.string({
 		description: 'Id for group to collaborate',
-		exclusive: [
-			'user-id',
-			'login'
-		]
+		exclusive: ['user-id', 'login'],
 	}),
 	login: Flags.string({
 		description: 'Login for user to collaborate',
-		exclusive: [
-			'group-id',
-			'user-id'
-		]
+		exclusive: ['group-id', 'user-id'],
 	}),
 	editor: Flags.boolean({
 		description: 'Set the role to editor',
@@ -77,7 +69,7 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-		]
+		],
 	}),
 	viewer: Flags.boolean({
 		description: 'Set the role to viewer',
@@ -90,7 +82,7 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-		]
+		],
 	}),
 	previewer: Flags.boolean({
 		description: 'Set the role to previewer',
@@ -103,7 +95,7 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-		]
+		],
 	}),
 	uploader: Flags.boolean({
 		description: 'Set the role to uploader',
@@ -116,7 +108,7 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'co-owner',
-		]
+		],
 	}),
 	'previewer-uploader': Flags.boolean({
 		description: 'Set the role to previewer-uploader',
@@ -129,7 +121,7 @@ CollaborationsAddCommand.flags = {
 			'editor',
 			'viewer-uploader',
 			'co-owner',
-		]
+		],
 	}),
 	'viewer-uploader': Flags.boolean({
 		description: 'Set the role to viewer-uploader',
@@ -142,7 +134,7 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'editor',
 			'co-owner',
-		]
+		],
 	}),
 	'co-owner': Flags.boolean({
 		description: 'Set the role to co-owner',
@@ -155,17 +147,21 @@ CollaborationsAddCommand.flags = {
 			'previewer-uploader',
 			'viewer-uploader',
 			'editor',
-		]
+		],
 	}),
 	'can-view-path': Flags.boolean({
-		description: 'Whether view path collaboration feature is enabled or not',
-		allowNo: true
-	}),
-	'id-only': Flags.boolean({ description: 'Return only an ID to output from this command' }),
-	notify: Flags.boolean({
-		description: 'All users will receive email notification of the collaboration',
+		description:
+			'Whether view path collaboration feature is enabled or not',
 		allowNo: true,
-	})
+	}),
+	'id-only': Flags.boolean({
+		description: 'Return only an ID to output from this command',
+	}),
+	notify: Flags.boolean({
+		description:
+			'All users will receive email notification of the collaboration',
+		allowNo: true,
+	}),
 };
 
 CollaborationsAddCommand.args = {
@@ -180,10 +176,7 @@ CollaborationsAddCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'The type of the Box item to add the collaboration to',
-		options: [
-			'file',
-			'folder'
-		]
+		options: ['file', 'folder'],
 	}),
 };
 

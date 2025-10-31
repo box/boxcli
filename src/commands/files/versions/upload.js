@@ -1,9 +1,8 @@
-/* eslint-disable no-sync  */
 'use strict';
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const fs = require('fs');
+const fs = require('node:fs');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../../cli-error');
 
@@ -18,8 +17,8 @@ class FilesUploadVersionsCommand extends BoxCommand {
 		let stream;
 		try {
 			stream = fs.createReadStream(args.path);
-		} catch (ex) {
-			throw new BoxCLIError(`Could not open file ${args.path}`, ex);
+		} catch (error) {
+			throw new BoxCLIError(`Could not open file ${args.path}`, error);
 		}
 
 		if (flags['content-modified-at']) {
@@ -32,20 +31,31 @@ class FilesUploadVersionsCommand extends BoxCommand {
 
 		let file;
 		if (size < CHUNKED_UPLOAD_FILE_SIZE) {
-			file = await this.client.files.uploadNewFileVersion(args.fileID, stream, fileAttributes);
+			file = await this.client.files.uploadNewFileVersion(
+				args.fileID,
+				stream,
+				fileAttributes
+			);
 		} else {
 			let progressBar = new progress.Bar({
 				format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
 				stopOnComplete: true,
 			});
-			let uploader = await this.client.files.getNewVersionChunkedUploader(args.fileID, size, stream, { fileAttributes });
+			let uploader = await this.client.files.getNewVersionChunkedUploader(
+				args.fileID,
+				size,
+				stream,
+				{ fileAttributes }
+			);
 			let bytesUploaded = 0;
 			let startTime = Date.now();
 			progressBar.start(size, 0, { speed: 'N/A' });
-			uploader.on('chunkUploaded', chunk => {
+			uploader.on('chunkUploaded', (chunk) => {
 				bytesUploaded += chunk.part.size;
 				progressBar.update(bytesUploaded, {
-					speed: Math.floor(bytesUploaded / (Date.now() - startTime) / 1000),
+					speed: Math.floor(
+						bytesUploaded / (Date.now() - startTime) / 1000
+					),
 				});
 			});
 			file = await uploader.start();
@@ -55,16 +65,21 @@ class FilesUploadVersionsCommand extends BoxCommand {
 }
 
 FilesUploadVersionsCommand.description = 'Upload a new version of a file';
-FilesUploadVersionsCommand.examples = ['box files:versions:upload 11111 /path/to/file.pdf'];
+FilesUploadVersionsCommand.examples = [
+	'box files:versions:upload 11111 /path/to/file.pdf',
+];
 FilesUploadVersionsCommand._endpoint = 'post_files_id_content';
 
 FilesUploadVersionsCommand.flags = {
 	...BoxCommand.flags,
-	'content-modified-at': Flags.string({ description: 'The last modification date of the file version. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks' }),
+	'content-modified-at': Flags.string({
+		description:
+			'The last modification date of the file version. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+	}),
 	name: Flags.string({
 		char: 'n',
-		description: 'Provide different name for uploaded file'
-	})
+		description: 'Provide different name for uploaded file',
+	}),
 };
 
 FilesUploadVersionsCommand.args = {
@@ -72,13 +87,13 @@ FilesUploadVersionsCommand.args = {
 		name: 'fileID',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to upload a new version of'
+		description: 'ID of the file to upload a new version of',
 	}),
 	path: Args.string({
 		name: 'path',
 		required: true,
 		hidden: false,
-		description: 'Local path to the file to upload'
+		description: 'Local path to the file to upload',
 	}),
 };
 

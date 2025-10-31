@@ -4,55 +4,55 @@ const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const { getFixture, TEST_API_ROOT } = require('../helpers/test-helper');
 
-describe('Recent Items', () => {
-
-	describe('recent-items', () => {
+describe('Recent Items', function () {
+	describe('recent-items', function () {
 		let fixture = getFixture('recent-items/get_recent_items_page_1'),
 			fixture2 = getFixture('recent-items/get_recent_items_page_2'),
 			jsonOutput = getFixture('output/recent_items_json.txt');
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/recent_items')
-				.query({limit: 1000})
+				.query({ limit: 1000 })
 				.reply(200, fixture)
 				.get('/2.0/recent_items')
 				.query({
 					marker: 'ZDF123',
-					limit: 1000
+					limit: 1000,
 				})
 				.reply(200, fixture2)
-			)
+		)
 			.stdout()
-			.command([
-				'recent-items',
-				'--json',
-				'--token=test'
-			])
-			.it('should list information about files accessed in the past 90 days up to a 1000 items (JSON Output)', ctx => {
-				assert.equal(ctx.stdout, jsonOutput);
-			});
+			.command(['recent-items', '--json', '--token=test'])
+			.it(
+				'should list information about files accessed in the past 90 days up to a 1000 items (JSON Output)',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.get('/2.0/recent_items')
-				.query({fields: 'name', limit: 1000})
+				.query({ fields: 'name', limit: 1000 })
 				.reply(200, fixture)
 				.get('/2.0/recent_items')
 				.query({
 					fields: 'name',
 					marker: 'ZDF123',
-					limit: 1000
+					limit: 1000,
 				})
 				.reply(200, fixture2)
-			)
+		)
 			.stdout()
 			.command([
 				'recent-items',
 				'--fields=name',
 				'--json',
-				'--token=test'
+				'--token=test',
 			])
-			.it('should send fields param to the API when --fields flag is passed');
+			.it(
+				'should send fields param to the API when --fields flag is passed'
+			);
 	});
 });

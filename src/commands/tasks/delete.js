@@ -17,7 +17,7 @@ TasksDeleteCommand.examples = ['box tasks:delete 88888'];
 TasksDeleteCommand._endpoint = 'delete_tasks_id';
 
 TasksDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TasksDeleteCommand.args = {

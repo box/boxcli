@@ -2,8 +2,8 @@
 
 const { Flags, Args } = require('@oclif/core');
 const BoxCommand = require('../../box-command');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
 const utils = require('../../util');
@@ -13,7 +13,7 @@ class FilesDownloadCommand extends BoxCommand {
 		const { flags, args } = await this.parse(FilesDownloadCommand);
 
 		let file = await this.client.files.get(args.id);
-		let fileName = flags['save-as'] ? flags['save-as'] : file.name;
+		let fileName = flags['save-as'] || file.name;
 
 		let filePath;
 
@@ -21,19 +21,26 @@ class FilesDownloadCommand extends BoxCommand {
 			await utils.checkDir(flags.destination, flags['create-path']);
 			filePath = path.join(flags.destination, fileName);
 		} else {
-			filePath = path.join(this.settings.boxDownloadsFolderPath, fileName);
+			filePath = path.join(
+				this.settings.boxDownloadsFolderPath,
+				fileName
+			);
 		}
 
-		/* eslint-disable no-sync */
+		 
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-		/* eslint-enable no-sync */
+			 
 
 			if (flags.overwrite === false) {
-				this.info(`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`);
+				this.info(
+					`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`
+				);
 				return;
 			}
 
-			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
+			let shouldOverwrite = await this.confirm(
+				`File ${filePath} already exists — overwrite?`
+			);
 
 			if (!shouldOverwrite) {
 				return;
@@ -51,8 +58,11 @@ class FilesDownloadCommand extends BoxCommand {
 		try {
 			output = fs.createWriteStream(filePath);
 			stream.pipe(output);
-		} catch (ex) {
-			throw new BoxCLIError(`Could not download to destination file ${filePath}`, ex);
+		} catch (error) {
+			throw new BoxCLIError(
+				`Could not download to destination file ${filePath}`,
+				error
+			);
 		}
 
 		let progressBar = new progress.Bar({
@@ -68,11 +78,13 @@ class FilesDownloadCommand extends BoxCommand {
 		});
 		let intervalUpdate = setInterval(() => {
 			progressBar.update(downloadedByte, {
-				speed: Math.floor(downloadedByte / (Date.now() - startTime) / 1000),
+				speed: Math.floor(
+					downloadedByte / (Date.now() - startTime) / 1000
+				),
 			});
 		}, 1000);
 
-		/* eslint-disable promise/avoid-new */
+		 
 		// We need to await the end of the stream to avoid a race condition here
 		await new Promise((resolve, reject) => {
 			output.on('close', resolve);
@@ -85,7 +97,9 @@ class FilesDownloadCommand extends BoxCommand {
 }
 
 FilesDownloadCommand.description = 'Download a file';
-FilesDownloadCommand.examples = ['box files:download 11111 --destination /path/to/destinationFolder'];
+FilesDownloadCommand.examples = [
+	'box files:download 11111 --destination /path/to/destinationFolder',
+];
 FilesDownloadCommand._endpoint = 'get_files_id_content';
 
 FilesDownloadCommand.flags = {
@@ -98,17 +112,18 @@ FilesDownloadCommand.flags = {
 		parse: utils.parsePath,
 	}),
 	'create-path': Flags.boolean({
-		description: 'Recursively creates a path to a directory if it does not exist',
+		description:
+			'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
-		default: true
+		default: true,
 	}),
 	overwrite: Flags.boolean({
 		description: 'Overwrite a file if it already exists',
-		allowNo: true
+		allowNo: true,
 	}),
 	'save-as': Flags.string({
-		description: 'The filename used when saving the file'
-	})
+		description: 'The filename used when saving the file',
+	}),
 };
 
 FilesDownloadCommand.args = {
@@ -116,7 +131,7 @@ FilesDownloadCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to download'
+		description: 'ID of the file to download',
 	}),
 };
 

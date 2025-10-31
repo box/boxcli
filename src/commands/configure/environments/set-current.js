@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(EnvironmentsSetCurrentCommand);
-		let environmentsObj = await this.getEnvironments();
+		let environmentsObject = await this.getEnvironments();
 		let name = args.id;
 
 		if (!name) {
@@ -16,15 +16,15 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 					type: 'list',
 					name: 'environment',
 					message: 'Which environment?',
-					choices: Object.keys(environmentsObj.environments),
-				}
+					choices: Object.keys(environmentsObject.environments),
+				},
 			]);
 			name = answers.environment;
 		}
 
-		if (environmentsObj.environments.hasOwnProperty(name)) {
-			environmentsObj.default = name;
-			await this.updateEnvironments(environmentsObj);
+		if (environmentsObject.environments.hasOwnProperty(name)) {
+			environmentsObject.default = name;
+			await this.updateEnvironments(environmentsObject);
 			this.info(`The ${name} environment has been set as the default`);
 		} else {
 			this.error(`The ${name} environment does not exist`);
@@ -35,8 +35,9 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 // @NOTE: This command does not require a client to be set up
 EnvironmentsSetCurrentCommand.noClient = true;
 
-EnvironmentsSetCurrentCommand.aliases = [ 'configure:environments:select' ];
-EnvironmentsSetCurrentCommand.description = 'Set your current Box environment to use';
+EnvironmentsSetCurrentCommand.aliases = ['configure:environments:select'];
+EnvironmentsSetCurrentCommand.description =
+	'Set your current Box environment to use';
 
 EnvironmentsSetCurrentCommand.flags = {
 	...BoxCommand.minFlags,
@@ -47,8 +48,8 @@ EnvironmentsSetCurrentCommand.args = {
 		name: 'id',
 		required: false,
 		hidden: false,
-		description: 'Name of the environment'
-	})
+		description: 'Name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsSetCurrentCommand;

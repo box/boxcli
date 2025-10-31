@@ -21,7 +21,7 @@ WatermarkingApplyCommand.description = 'Apply a watermark on an item';
 WatermarkingApplyCommand.examples = ['box watermarking:apply folder 22222'];
 
 WatermarkingApplyCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WatermarkingApplyCommand.args = {
@@ -30,16 +30,13 @@ WatermarkingApplyCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'Type of item to apply a watermark to',
-		options: [
-			'file',
-			'folder'
-		],
+		options: ['file', 'folder'],
 	}),
 	itemID: Args.string({
 		name: 'itemID',
 		required: true,
 		hidden: false,
-		description: 'ID of the item to apply a watermark to'
+		description: 'ID of the item to apply a watermark to',
 	}),
 };
 

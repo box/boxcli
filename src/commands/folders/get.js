@@ -22,7 +22,7 @@ FoldersGetCommand.examples = ['box folders:get 22222'];
 FoldersGetCommand._endpoint = 'get_folders_id';
 
 FoldersGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 FoldersGetCommand.args = {
@@ -30,8 +30,8 @@ FoldersGetCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of folder to get; use 0 for the root folder'
-	})
+		description: 'ID of folder to get; use 0 for the root folder',
+	}),
 };
 
 module.exports = FoldersGetCommand;

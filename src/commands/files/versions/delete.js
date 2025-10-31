@@ -9,8 +9,14 @@ class FilesDeleteVersionsCommand extends BoxCommand {
 
 		let options = flags.etag ? { etag: flags.etag } : null;
 
-		await this.client.files.deleteVersion(args.fileID, args.fileVersionID, options);
-		this.info(`Deleted file version ${args.fileVersionID} from file ${args.fileID}`);
+		await this.client.files.deleteVersion(
+			args.fileID,
+			args.fileVersionID,
+			options
+		);
+		this.info(
+			`Deleted file version ${args.fileVersionID} from file ${args.fileID}`
+		);
 	}
 }
 
@@ -20,7 +26,7 @@ FilesDeleteVersionsCommand._endpoint = 'delete_files_id_versions_id';
 
 FilesDeleteVersionsCommand.flags = {
 	...BoxCommand.flags,
-	etag: Flags.string({ description: 'Only delete if etag value matches' })
+	etag: Flags.string({ description: 'Only delete if etag value matches' }),
 };
 
 FilesDeleteVersionsCommand.args = {
@@ -28,13 +34,13 @@ FilesDeleteVersionsCommand.args = {
 		name: 'fileID',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to get versions for'
+		description: 'ID of the file to get versions for',
 	}),
 	fileVersionID: Args.string({
 		name: 'fileVersionID',
 		required: true,
 		hidden: false,
-		description: 'ID of the file version to delete'
+		description: 'ID of the file version to delete',
 	}),
 };
 

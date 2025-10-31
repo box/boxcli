@@ -7,16 +7,16 @@ const _ = require('lodash');
 class EnvironmentsGetCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(EnvironmentsGetCommand);
-		let environmentsObj = await this.getEnvironments();
+		let environmentsObject = await this.getEnvironments();
 		let environment;
 
 		if (flags.current) {
-			let currentEnv = environmentsObj.default;
-			environment = environmentsObj.environments[currentEnv];
+			let currentEnvironment = environmentsObject.default;
+			environment = environmentsObject.environments[currentEnvironment];
 		} else if (flags.name) {
-			environment = environmentsObj.environments[flags.name];
+			environment = environmentsObject.environments[flags.name];
 		} else {
-			environment = environmentsObj.environments;
+			environment = environmentsObject.environments;
 		}
 
 		if (_.isEmpty(environment)) {
@@ -37,13 +37,13 @@ EnvironmentsGetCommand.flags = {
 	current: Flags.boolean({
 		char: 'c',
 		description: 'Get the current default Box environment',
-		exclusive: ['name']
+		exclusive: ['name'],
 	}),
 	name: Flags.string({
 		char: 'n',
 		description: 'Get a Box environment with this name',
-		exclusive: ['current']
-	})
+		exclusive: ['current'],
+	}),
 };
 
 module.exports = EnvironmentsGetCommand;
