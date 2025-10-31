@@ -1,13 +1,13 @@
 'use strict';
 const { sort } = require('semver');
-const path = require('path');
+const path = require('node:path');
 const GitHubUpdater = require('../github-updater');
 const UpdateCommand =
 	require('@oclif/plugin-update/lib/commands/update').default;
-// const { printTable } = require('@oclif/table');
 
 class GithubUpdatecommand extends UpdateCommand {
 	async run() {
+		const { printTable } = await import('@oclif/table');
 		const { args, flags } = await this.parse(UpdateCommand);
 		const updater = new GitHubUpdater(this.config);
 		if (flags.available) {
@@ -22,14 +22,13 @@ class GithubUpdatecommand extends UpdateCommand {
 				return { version, location };
 			});
 
-			// printTable({
-			// 	columns: [
-			// 		{ key: 'version' },
-			// 		{ key: 'location' },
-			// 	],
-			// 	data: table,
-			// });
-			console.log(table);
+			printTable({
+				columns: [
+					{ key: 'version' },
+					{ key: 'location' },
+				],
+				data: table,
+			});
 			return;
 		}
 
