@@ -52,15 +52,11 @@ describe('Utilities', function () {
 			{
 				'bare tilde': [
 					'~',
-					...(isWindows
-						? [String.raw`${driveLetter}\home\user`]
-						: [os.homedir()]),
+					path.join(os.homedir()),
 				],
 				'subdirectory of tilde': [
 					'~/foo/bar',
-					...(isWindows
-						? [String.raw`${driveLetter}\home\user\foo\bar`]
-						: [path.join(os.homedir(), 'foo', 'bar')]),
+					path.join(os.homedir(), 'foo', 'bar'),
 				],
 				'absolute path with interior tilde': [
 					'/var/~/bar',
