@@ -28,7 +28,7 @@ class EventsGetCommand extends BoxCommand {
 			const events = joinedEvents.split(',');
 			const mappedEvents = events.map((event) => {
 				const replacement = eventReplacements[event];
-				return replacement ?? event;
+				return replacement || event;
 			});
 			options.event_type = mappedEvents.join(',');
 		}
