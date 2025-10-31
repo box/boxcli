@@ -1,27 +1,39 @@
 'use strict';
 
-/* eslint-disable require-jsdoc */
-
 const { ux } = require('@oclif/core');
-const { Octokit } = require('@octokit/rest');
 const makeDebug = require('debug');
-// eslint-disable-next-line n/no-extraneous-require
-const got = require('got');
 const { Updater } = require('@oclif/plugin-update/lib/update');
 
 const debug = makeDebug('oclif:update:github');
 
 let octokitInstance = null;
+let octokitClass = null;
+let gotModule = null;
 
-function getOctokit() {
-	if (!octokitInstance) {
-		const auth = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
-		octokitInstance = new Octokit({
-			auth,
-		});
+async function loadOctokit() {
+	if (!octokitClass) {
+		const { Octokit } = await import('@octokit/rest');
+		octokitClass = Octokit;
+	}
+	return octokitClass;
+}
+
+async function loadGot() {
+	if (!gotModule) {
+		const module = await import('got');
+		gotModule = module.default || module;
 	}
 
-	return octokitInstance;
+	return gotModule;
+}
+
+async function getOctokit() {
+	if (!octokitInstance) {
+		octokitClass = await loadOctokit();
+		return new octokitClass({
+			auth: process.env.GITHUB_TOKEN || process.env.GH_TOKEN,
+		});
+	}
 }
 
 function checkGitHubConfig(config) {
@@ -62,7 +74,13 @@ class GitHubUpdater extends Updater {
 	constructor(config) {
 		super(config);
 		this.githubConfig = this.getGitHubConfig();
-		this.octokit = getOctokit();
+		this.octokit = null;
+	}
+
+	async ensureOctokit() {
+		if (!this.octokit) {
+			this.octokit = await getOctokit();
+		}
 	}
 
 	// Override runUpdate to use GitHub-specific methods
@@ -155,18 +173,18 @@ class GitHubUpdater extends Updater {
 
 	// GitHub-specific implementation
 	async fetchGitHubVersionIndex() {
+		await this.ensureOctokit();
 		ux.action.status = 'fetching version index from GitHub';
 
 		const { owner, repo } = this.githubConfig;
 
 		try {
-			debug(`Fetching releases for ${owner}/${repo}`);
-			const { data: releases } = await this.octokit.repos.listReleases({
-				owner,
-				/* eslint-disable-next-line camelcase */
-				per_page: 100,
-				repo,
-			});
+		debug(`Fetching releases for ${owner}/${repo}`);
+		const { data: releases } = await this.octokit.repos.listReleases({
+			owner,
+			per_page: 100,
+			repo,
+		});
 
 			const versionIndex = {};
 
@@ -195,6 +213,7 @@ class GitHubUpdater extends Updater {
 
 	// GitHub-specific channel manifest fetching
 	async fetchGitHubChannelManifest(channel) {
+		await this.ensureOctokit();
 		ux.action.status = 'fetching manifest from GitHub';
 
 		const { owner, repo } = this.githubConfig;
@@ -223,12 +242,13 @@ class GitHubUpdater extends Updater {
 			const manifestName = this.determineManifestName();
 			const manifestAsset = release.assets.find((a) => a.name === manifestName);
 
-			if (manifestAsset) {
-				// Fetch the manifest file using got (since it's a direct download URL)
-				debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
-				const { body } = await got.get(manifestAsset.browser_download_url);
-				return typeof body === 'string' ? JSON.parse(body) : body;
-			}
+		if (manifestAsset) {
+			// Fetch the manifest file using got (since it's a direct download URL)
+			debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
+			const got = await loadGot();
+			const { body } = await got.get(manifestAsset.browser_download_url);
+			return typeof body === 'string' ? JSON.parse(body) : body;
+		}
 
 			// If no manifest found, construct a basic one
 			const assetName = this.determineAssetName(version);
@@ -259,6 +279,7 @@ class GitHubUpdater extends Updater {
 
 	// GitHub-specific version manifest fetching
 	async fetchGitHubVersionManifest(version, url) {
+		await this.ensureOctokit();
 		ux.action.status = 'fetching version manifest from GitHub';
 
 		const { owner, repo } = this.githubConfig;
@@ -271,14 +292,15 @@ class GitHubUpdater extends Updater {
 				tag: `v${version}`,
 			});
 
-			const manifestName = this.determineManifestName();
-			const manifestAsset = release.assets.find((a) => a.name === manifestName);
+		const manifestName = this.determineManifestName();
+		const manifestAsset = release.assets.find((a) => a.name === manifestName);
 
-			if (manifestAsset) {
-				debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
-				const { body } = await got.get(manifestAsset.browser_download_url);
-				return typeof body === 'string' ? JSON.parse(body) : body;
-			}
+		if (manifestAsset) {
+			debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
+			const got = await loadGot();
+			const { body } = await got.get(manifestAsset.browser_download_url);
+			return typeof body === 'string' ? JSON.parse(body) : body;
+		}
 
 			// If no manifest found, construct a basic one
 			return {
