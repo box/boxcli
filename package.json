@@ -67,6 +67,7 @@
 		"nock": "^13.5.6",
 		"nyc": "^17.1.0",
 		"oclif": "^4.22.38",
+		"prettier": "^3.6.2",
 		"sinon": "^19.0.2",
 		"standard-version": "^9.5.0",
 		"typescript": "^5.7.2"
@@ -145,12 +146,13 @@
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
-		"prepack": "npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"prepack": "npm run prettier && npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "oclif readme --multi && npm run updatemd && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
-		"license": "generate-license-file --overwrite"
+		"license": "generate-license-file --overwrite",
+		"prettier": "prettier --write \"**/*.{js,json}\""
 	},
 	"overrides": {
 		"leche": {

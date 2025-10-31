@@ -124,8 +124,8 @@ USAGE
     [--timezone <value>] [--tracking-codes <value>]
 
 ARGUMENTS
-  NAME   The user's name
-  LOGIN  The user's email address, not required when creating app users
+  NAME     The user's name
+  [LOGIN]  The user's email address, not required when creating app users
 
 FLAGS
   -S, --status=<option>                 User status
@@ -380,7 +380,7 @@ USAGE
     <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
 
 ARGUMENTS
-  ID  [default: me] ID of the user to get; defaults to the current user
+  [ID]  [default: me] ID of the user to get; defaults to the current user
 
 FLAGS
   -h, --help                       Show CLI help
