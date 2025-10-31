@@ -13,7 +13,8 @@ class GroupsCreateCommand extends BoxCommand {
 			options.description = flags.description;
 		}
 		if (flags['external-sync-identifier']) {
-			options.external_sync_identifier = flags['external-sync-identifier'];
+			options.external_sync_identifier =
+				flags['external-sync-identifier'];
 		}
 		if (flags.provenance) {
 			options.provenance = flags.provenance;
@@ -36,32 +37,30 @@ GroupsCreateCommand._endpoint = 'post_groups';
 
 GroupsCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: Flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
-	'external-sync-identifier': Flags.string({
-		description: 'Group identifier for groups coming from an external source',
+	description: Flags.string({
+		description: 'Description of the group',
+		parse: utils.unescapeSlashes,
 	}),
-	provenance: Flags.string({ description: 'Track the external source where the group is coming from' }),
+	'external-sync-identifier': Flags.string({
+		description:
+			'Group identifier for groups coming from an external source',
+	}),
+	provenance: Flags.string({
+		description: 'Track the external source where the group is coming from',
+	}),
 	invite: Flags.string({
 		char: 'i',
 		description: 'Specifies who can invite the group to collaborate',
-		options: [
-			'admins_only',
-			'admins_and_members',
-			'all_managed_users'
-		]
+		options: ['admins_only', 'admins_and_members', 'all_managed_users'],
 	}),
 	'view-members': Flags.string({
 		char: 'm',
 		description: 'Specifies who can view the members of the group',
-		options: [
-			'admins_only',
-			'admins_and_members',
-			'all_managed_users'
-		]
+		options: ['admins_only', 'admins_and_members', 'all_managed_users'],
 	}),
 	'id-only': Flags.boolean({
-		description: 'Return only an ID to output from this command'
-	})
+		description: 'Return only an ID to output from this command',
+	}),
 };
 
 GroupsCreateCommand.args = {
@@ -69,7 +68,7 @@ GroupsCreateCommand.args = {
 		name: 'name',
 		required: true,
 		hidden: false,
-		description: 'Group name'
+		description: 'Group name',
 	}),
 };
 

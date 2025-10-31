@@ -18,7 +18,7 @@ class GroupsListMembershipCommand extends BoxCommand {
 	}
 }
 
-GroupsListMembershipCommand.aliases = [ 'groups:membership:list' ];
+GroupsListMembershipCommand.aliases = ['groups:membership:list'];
 
 GroupsListMembershipCommand.description = 'List members of a group';
 GroupsListMembershipCommand.examples = ['box groups:memberships 12345'];

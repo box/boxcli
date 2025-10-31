@@ -3,13 +3,14 @@
 
 const originalEmitWarning = process.emitWarning;
 process.emitWarning = (warning, ...args) => {
-  const message = typeof warning === 'string' ? warning : warning?.message || '';
+	const message =
+		typeof warning === 'string' ? warning : warning?.message || '';
 
-  if (message.includes('DEPRECATION WARNING')) {
-	return;
-}
-  // If not the BoxClient deprecation warning, call the original emitWarning function
-  originalEmitWarning.call(process, warning, ...args);
+	if (message.includes('DEPRECATION WARNING')) {
+		return;
+	}
+	// If not the BoxClient deprecation warning, call the original emitWarning function
+	originalEmitWarning.call(process, warning, ...args);
 };
 
 const { Command, Flags } = require('@oclif/core');
@@ -367,7 +368,10 @@ class BoxCommand extends Command {
 			} catch (err) {
 				// In bulk mode, we don't want to write directly to console and kill the command
 				// Instead, we should buffer the error output so subsequent commands might be able to succeed
-				DEBUG.execute('Caught error from bulk input entry %d', bulkEntryIndex);
+				DEBUG.execute(
+					'Caught error from bulk input entry %d',
+					bulkEntryIndex
+				);
 				this.bulkErrors.push({
 					index: bulkEntryIndex,
 					data: bulkData,
@@ -391,7 +395,9 @@ class BoxCommand extends Command {
 	_handleBulkErrors() {
 		const numErrors = this.bulkErrors.length;
 		if (numErrors === 0) {
-			this.info(chalk`{green All bulk input entries processed successfully.}`);
+			this.info(
+				chalk`{green All bulk input entries processed successfully.}`
+			);
 			return;
 		}
 		this.info(
@@ -409,7 +415,11 @@ class BoxCommand extends Command {
 			);
 			let err = errorInfo.error;
 			let contextInfo;
-			if (err.response && err.response.body && err.response.body.context_info) {
+			if (
+				err.response &&
+				err.response.body &&
+				err.response.body.context_info
+			) {
 				contextInfo = formatObject(err.response.body.context_info);
 				// Remove color codes from context info
 				// eslint-disable-next-line no-control-regex
@@ -536,7 +546,9 @@ class BoxCommand extends Command {
 			);
 		}
 		// Filter out any undefined values, which can arise when the input file contains extraneous keys
-		bulkCalls = bulkCalls.map((args) => args.filter((o) => o !== undefined));
+		bulkCalls = bulkCalls.map((args) =>
+			args.filter((o) => o !== undefined)
+		);
 		DEBUG.execute(
 			'Read %d entries from bulk file %s',
 			bulkCalls.length,
@@ -622,7 +634,8 @@ class BoxCommand extends Command {
 					// @NOTE: For now, we only support nesting keys this way one level deep
 					return Object.keys(value).map((nestedKey) => {
 						let nestedMatchKey =
-							matchKey + nestedKey.toLowerCase().replace(/[-_]/gu, '');
+							matchKey +
+							nestedKey.toLowerCase().replace(/[-_]/gu, '');
 						let nestedField = fieldMapping[nestedMatchKey];
 						return nestedField
 							? { ...nestedField, value: value[nestedKey] }
@@ -632,7 +645,10 @@ class BoxCommand extends Command {
 					// Arrays can be one of two things: an array of values for a single key,
 					// or an array of grouped flags/args as objects
 					// First, check if everything in the array is either all object or all non-object
-					let types = value.reduce((acc, t) => acc.concat(typeof t), []);
+					let types = value.reduce(
+						(acc, t) => acc.concat(typeof t),
+						[]
+					);
 					if (
 						types.some((t) => t !== 'object') &&
 						types.some((t) => t === 'object')
@@ -647,7 +663,9 @@ class BoxCommand extends Command {
 						return value.map((o) => flattenObjectToArgs(o));
 					}
 					// If the array is of values for this field, just return those
-					return field ? value.map((v) => ({ ...field, value: v })) : [];
+					return field
+						? value.map((v) => ({ ...field, value: v }))
+						: [];
 				}
 				return field ? { ...field, value } : undefined;
 			});
@@ -752,9 +770,14 @@ class BoxCommand extends Command {
 
 			let configObj;
 			try {
-				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+				configObj = JSON.parse(
+					fs.readFileSync(environment.boxConfigFilePath)
+				);
 			} catch (ex) {
-				throw new BoxCLIError('Could not read environments config file', ex);
+				throw new BoxCLIError(
+					'Could not read environments config file',
+					ex
+				);
 			}
 
 			const { enterpriseID } = configObj;
@@ -817,17 +840,20 @@ class BoxCommand extends Command {
 					: new CLITokenCache(environmentsObj.default);
 			let configObj;
 			try {
-				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+				configObj = JSON.parse(
+					fs.readFileSync(environment.boxConfigFilePath)
+				);
 			} catch (ex) {
-				throw new BoxCLIError('Could not read environments config file', ex);
+				throw new BoxCLIError(
+					'Could not read environments config file',
+					ex
+				);
 			}
 
 			if (!environment.hasInLinePrivateKey) {
 				try {
-					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(
-						environment.privateKeyPath,
-						'utf8'
-					);
+					configObj.boxAppSettings.appAuth.privateKey =
+						fs.readFileSync(environment.privateKeyPath, 'utf8');
 					DEBUG.init(
 						'Loaded JWT private key from %s',
 						environment.privateKeyPath
@@ -915,9 +941,14 @@ class BoxCommand extends Command {
 
 			let configObj;
 			try {
-				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+				configObj = JSON.parse(
+					fs.readFileSync(environment.boxConfigFilePath)
+				);
 			} catch (ex) {
-				throw new BoxCLIError('Could not read environments config file', ex);
+				throw new BoxCLIError(
+					'Could not read environments config file',
+					ex
+				);
 			}
 
 			const { enterpriseID } = configObj;
@@ -932,13 +963,13 @@ class BoxCommand extends Command {
 							clientSecret,
 							userId: ccgUser,
 							tokenStorage: tokenCache,
-					  }
+						}
 					: {
 							clientId,
 							clientSecret,
 							enterpriseId: enterpriseID,
 							tokenStorage: tokenCache,
-					  }
+						}
 			);
 			let ccgAuth = new BoxTSSDK.BoxCcgAuth({ config: ccgConfig });
 			client = new BoxTSSDK.BoxClient({
@@ -984,17 +1015,20 @@ class BoxCommand extends Command {
 					: new CLITokenCache(environmentsObj.default);
 			let configObj;
 			try {
-				configObj = JSON.parse(fs.readFileSync(environment.boxConfigFilePath));
+				configObj = JSON.parse(
+					fs.readFileSync(environment.boxConfigFilePath)
+				);
 			} catch (ex) {
-				throw new BoxCLIError('Could not read environments config file', ex);
+				throw new BoxCLIError(
+					'Could not read environments config file',
+					ex
+				);
 			}
 
 			if (!environment.hasInLinePrivateKey) {
 				try {
-					configObj.boxAppSettings.appAuth.privateKey = fs.readFileSync(
-						environment.privateKeyPath,
-						'utf8'
-					);
+					configObj.boxAppSettings.appAuth.privateKey =
+						fs.readFileSync(environment.privateKeyPath, 'utf8');
 					DEBUG.init(
 						'Loaded JWT private key from %s',
 						environment.privateKeyPath
@@ -1012,7 +1046,8 @@ class BoxCommand extends Command {
 				clientSecret: configObj.boxAppSettings.clientSecret,
 				jwtKeyId: configObj.boxAppSettings.appAuth.publicKeyID,
 				privateKey: configObj.boxAppSettings.appAuth.privateKey,
-				privateKeyPassphrase: configObj.boxAppSettings.appAuth.passphrase,
+				privateKeyPassphrase:
+					configObj.boxAppSettings.appAuth.passphrase,
 				enterpriseId: environment.enterpriseId,
 				tokenStorage: tokenCache,
 			});
@@ -1130,9 +1165,8 @@ class BoxCommand extends Command {
 			this.settings.enableAnalyticsClient &&
 			this.settings.analyticsClient.name
 		) {
-			additionalHeaders[
-				'X-Box-UA'
-			] = `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
+			additionalHeaders['X-Box-UA'] =
+				`${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`;
 		} else {
 			additionalHeaders['X-Box-UA'] = DEFAULT_ANALYTICS_CLIENT_NAME;
 		}
@@ -1162,9 +1196,14 @@ class BoxCommand extends Command {
 			// Format each object individually and then flatten in case this an array of arrays,
 			// which happens when a command that outputs a collection gets run in bulk
 			formattedOutputData = _.flatten(
-				await Promise.all(content.map((o) => this._formatOutputObject(o)))
+				await Promise.all(
+					content.map((o) => this._formatOutputObject(o))
+				)
 			);
-			DEBUG.output('Formatted %d output entries for display', content.length);
+			DEBUG.output(
+				'Formatted %d output entries for display',
+				content.length
+			);
 		} else {
 			formattedOutputData = await this._formatOutputObject(content);
 			DEBUG.output('Formatted output content for display');
@@ -1205,12 +1244,17 @@ class BoxCommand extends Command {
 				await this.logStream(stringifiedOutput);
 			};
 		} else {
-			stringifiedOutput = await this._stringifyOutput(formattedOutputData);
+			stringifiedOutput =
+				await this._stringifyOutput(formattedOutputData);
 
 			writeFunc = async (savePath) => {
-				await utils.writeFileAsync(savePath, stringifiedOutput + os.EOL, {
-					encoding: 'utf8',
-				});
+				await utils.writeFileAsync(
+					savePath,
+					stringifiedOutput + os.EOL,
+					{
+						encoding: 'utf8',
+					}
+				);
 			};
 
 			logFunc = () => this.log(stringifiedOutput);
@@ -1254,7 +1298,9 @@ class BoxCommand extends Command {
 			while (!entry.done) {
 				output.push(entry.value);
 
-				if (this.maxItemsReached(this.flags['max-items'], output.length)) {
+				if (
+					this.maxItemsReached(this.flags['max-items'], output.length)
+				) {
 					break;
 				}
 
@@ -1326,7 +1372,9 @@ class BoxCommand extends Command {
 			return csvString.replace(/\r?\n$/u, '');
 		} else if (Array.isArray(outputData)) {
 			let str = outputData
-				.map((o) => `${formatObjectHeader(o)}${os.EOL}${formatObject(o)}`)
+				.map(
+					(o) => `${formatObjectHeader(o)}${os.EOL}${formatObject(o)}`
+				)
 				.join(os.EOL.repeat(2));
 			DEBUG.output('Processed collection into human-readable output');
 			return str;
@@ -1558,7 +1606,11 @@ class BoxCommand extends Command {
 				return;
 			}
 			let contextInfo;
-			if (err.response && err.response.body && err.response.body.context_info) {
+			if (
+				err.response &&
+				err.response.body &&
+				err.response.body.context_info
+			) {
 				contextInfo = formatObject(err.response.body.context_info);
 				// Remove color codes from context info
 				// eslint-disable-next-line no-control-regex
@@ -1668,7 +1720,10 @@ class BoxCommand extends Command {
 		let keys = [];
 		if (typeof object === 'object') {
 			for (let key in object) {
-				if (typeof object[key] === 'object' && !Array.isArray(object[key])) {
+				if (
+					typeof object[key] === 'object' &&
+					!Array.isArray(object[key])
+				) {
 					let subKeys = this.getNestedKeys(object[key]);
 					subKeys = subKeys.map((x) => `${key}.${x}`);
 					keys = keys.concat(subKeys);
@@ -1859,11 +1914,21 @@ class BoxCommand extends Command {
 				DEBUG.init('Created config folder at %s', CONFIG_FOLDER_PATH);
 			}
 			if (!fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
-				await this.updateEnvironments({}, this._getDefaultEnvironments());
-				DEBUG.init('Created environments config at %s', ENVIRONMENTS_FILE_PATH);
+				await this.updateEnvironments(
+					{},
+					this._getDefaultEnvironments()
+				);
+				DEBUG.init(
+					'Created environments config at %s',
+					ENVIRONMENTS_FILE_PATH
+				);
 			}
 			if (!fs.existsSync(SETTINGS_FILE_PATH)) {
-				let settingsJSON = JSON.stringify(this._getDefaultSettings(), null, 4);
+				let settingsJSON = JSON.stringify(
+					this._getDefaultSettings(),
+					null,
+					4
+				);
 				fs.writeFileSync(SETTINGS_FILE_PATH, settingsJSON, 'utf8');
 				DEBUG.init(
 					'Created settings file at %s %O',
@@ -1872,7 +1937,10 @@ class BoxCommand extends Command {
 				);
 			}
 		} catch (ex) {
-			throw new BoxCLIError('Could not initialize CLI home directory', ex);
+			throw new BoxCLIError(
+				'Could not initialize CLI home directory',
+				ex
+			);
 		}
 
 		let settings;
@@ -1917,7 +1985,10 @@ class BoxCommand extends Command {
 	 */
 	_getDefaultSettings() {
 		return {
-			boxReportsFolderPath: path.join(os.homedir(), 'Documents/Box-Reports'),
+			boxReportsFolderPath: path.join(
+				os.homedir(),
+				'Documents/Box-Reports'
+			),
 			boxReportsFileFormat: 'txt',
 			boxDownloadsFolderPath: path.join(
 				os.homedir(),

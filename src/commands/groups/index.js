@@ -22,7 +22,7 @@ class GroupsListCommand extends BoxCommand {
 	}
 }
 
-GroupsListCommand.aliases = [ 'groups:list' ];
+GroupsListCommand.aliases = ['groups:list'];
 
 GroupsListCommand.description = 'List all groups';
 GroupsListCommand.examples = ['box groups'];
@@ -32,8 +32,9 @@ GroupsListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
 	filter: Flags.string({
-		description: 'Search term to filter groups on; matches prefixes of group name',
-	})
+		description:
+			'Search term to filter groups on; matches prefixes of group name',
+	}),
 };
 
 module.exports = GroupsListCommand;

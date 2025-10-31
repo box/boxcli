@@ -54,19 +54,20 @@ describe('Pagination', () => {
 
 	describe('Endpoints query parameterers', () => {
 		describe('Pagination', () => {
-			let fixture = getFixture('pagination/get_files_id_versions_marker.json'),
+			let fixture = getFixture(
+					'pagination/get_files_id_versions_marker.json'
+				),
 				jsonOutput = getFixture(
 					'output/files_versions_list_pagination_json.txt'
 				),
 				fileId = '1234567890';
 
-			test
-				.nock(TEST_API_ROOT, (api) =>
-					api
-						.get(`/2.0/files/${fileId}/versions`)
-						.query({ limit: 2 })
-						.reply(200, fixture)
-				)
+			test.nock(TEST_API_ROOT, (api) =>
+				api
+					.get(`/2.0/files/${fileId}/versions`)
+					.query({ limit: 2 })
+					.reply(200, fixture)
+			)
 				.stdout()
 				.command([
 					'files:versions',
@@ -75,9 +76,12 @@ describe('Pagination', () => {
 					'--json',
 					'--max-items=2',
 				])
-				.it('should include max-items as limit and return response', (ctx) => {
-					assert.equal(ctx.stdout, jsonOutput);
-				});
+				.it(
+					'should include max-items as limit and return response',
+					(ctx) => {
+						assert.equal(ctx.stdout, jsonOutput);
+					}
+				);
 		});
 
 		describe('Forced marker pagination', () => {
@@ -87,13 +91,12 @@ describe('Pagination', () => {
 				),
 				folderId = '0';
 
-			test
-				.nock(TEST_API_ROOT, (api) =>
-					api
-						.get(`/2.0/folders/${folderId}/items`)
-						.query({ usemarker: true, limit: 2 })
-						.reply(200, fixture)
-				)
+			test.nock(TEST_API_ROOT, (api) =>
+				api
+					.get(`/2.0/folders/${folderId}/items`)
+					.query({ usemarker: true, limit: 2 })
+					.reply(200, fixture)
+			)
 				.stdout()
 				.command([
 					'folders:items',
@@ -111,7 +114,9 @@ describe('Pagination', () => {
 		});
 
 		describe('Max items', () => {
-			let fixture = getFixture('pagination/get_folders_id_items_marker.json'),
+			let fixture = getFixture(
+					'pagination/get_folders_id_items_marker.json'
+				),
 				oneItemJsonOutput = getFixture(
 					'output/folders_list_items_pagination_one_item_json.txt'
 				),
@@ -120,13 +125,12 @@ describe('Pagination', () => {
 				),
 				folderId = '0';
 
-			test
-				.nock(TEST_API_ROOT, (api) =>
-					api
-						.get(`/2.0/folders/${folderId}/items`)
-						.query({ usemarker: true, limit: 1 })
-						.reply(200, fixture)
-				)
+			test.nock(TEST_API_ROOT, (api) =>
+				api
+					.get(`/2.0/folders/${folderId}/items`)
+					.query({ usemarker: true, limit: 1 })
+					.reply(200, fixture)
+			)
 				.stdout()
 				.command([
 					'folders:items',
@@ -142,13 +146,12 @@ describe('Pagination', () => {
 					}
 				);
 
-			test
-				.nock(TEST_API_ROOT, (api) =>
-					api
-						.get(`/2.0/folders/${folderId}/items`)
-						.query({ usemarker: true, limit: 3 })
-						.reply(200, fixture)
-				)
+			test.nock(TEST_API_ROOT, (api) =>
+				api
+					.get(`/2.0/folders/${folderId}/items`)
+					.query({ usemarker: true, limit: 3 })
+					.reply(200, fixture)
+			)
 				.stdout()
 				.command([
 					'folders:items',

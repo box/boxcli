@@ -30,7 +30,10 @@ class ConfigureSettingsCommand extends BoxCommand {
 				try {
 					await mkdirp(downloadsPath);
 				} catch (ex) {
-					throw new BoxCLIError('Could not create downloads directory', ex);
+					throw new BoxCLIError(
+						'Could not create downloads directory',
+						ex
+					);
 				}
 			} else if (!fs.statSync(downloadsPath).isDirectory()) {
 				throw new BoxCLIError(`${downloadsPath} is not a directory!`);
@@ -57,7 +60,10 @@ class ConfigureSettingsCommand extends BoxCommand {
 				try {
 					await mkdirp(reportsPath);
 				} catch (ex) {
-					throw new BoxCLIError('Could not create downloads directory', ex);
+					throw new BoxCLIError(
+						'Could not create downloads directory',
+						ex
+					);
 				}
 			} else if (!fs.statSync(reportsPath).isDirectory()) {
 				throw new BoxCLIError(`${reportsPath} is not a directory!`);
@@ -100,7 +106,7 @@ ConfigureSettingsCommand.description =
 ConfigureSettingsCommand.flags = {
 	...BoxCommand.minFlags,
 	json: Flags.boolean({
-		description: 'Output CLI configuration settings in JSON format'
+		description: 'Output CLI configuration settings in JSON format',
 	}),
 	'enable-proxy': Flags.boolean({
 		description: 'Enable or disable proxy',

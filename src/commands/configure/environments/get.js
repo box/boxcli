@@ -37,13 +37,13 @@ EnvironmentsGetCommand.flags = {
 	current: Flags.boolean({
 		char: 'c',
 		description: 'Get the current default Box environment',
-		exclusive: ['name']
+		exclusive: ['name'],
 	}),
 	name: Flags.string({
 		char: 'n',
 		description: 'Get a Box environment with this name',
-		exclusive: ['current']
-	})
+		exclusive: ['current'],
+	}),
 };
 
 module.exports = EnvironmentsGetCommand;

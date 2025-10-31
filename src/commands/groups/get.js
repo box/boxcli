@@ -22,7 +22,7 @@ GroupsGetCommand.examples = ['box groups:get 12345'];
 GroupsGetCommand._endpoint = 'get_groups_id';
 
 GroupsGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 GroupsGetCommand.args = {

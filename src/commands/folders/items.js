@@ -25,7 +25,7 @@ class FoldersListItemsCommand extends BoxCommand {
 	}
 }
 
-FoldersListItemsCommand.aliases = [ 'folders:list-items' ];
+FoldersListItemsCommand.aliases = ['folders:list-items'];
 
 FoldersListItemsCommand.description = 'List items in a folder';
 FoldersListItemsCommand.examples = ['box folders:items 22222'];
@@ -36,18 +36,11 @@ FoldersListItemsCommand.flags = {
 	...PaginationUtils.flags,
 	direction: Flags.string({
 		description: 'The direction to order returned items',
-		options: [
-			'ASC',
-			'DESC'
-		]
+		options: ['ASC', 'DESC'],
 	}),
 	sort: Flags.string({
 		description: 'The parameter to sort returned items',
-		options: [
-			'id',
-			'name',
-			'date'
-		]
+		options: ['id', 'name', 'date'],
 	}),
 };
 
@@ -56,8 +49,9 @@ FoldersListItemsCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the folder to get the items in, use 0 for the root folder',
-	})
+		description:
+			'ID of the folder to get the items in, use 0 for the root folder',
+	}),
 };
 
 module.exports = FoldersListItemsCommand;

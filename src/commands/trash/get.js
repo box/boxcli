@@ -17,7 +17,10 @@ class TrashGetCommand extends BoxCommand {
 		} else if (args.type === 'folder') {
 			item = await this.client.folders.getTrashedFolder(args.id, options);
 		} else if (args.type === 'web_link') {
-			item = await this.client.wrapWithDefaultHandler(this.client.get)(`/web_links/${args.id}/trash`, {qs: options});
+			item = await this.client.wrapWithDefaultHandler(this.client.get)(
+				`/web_links/${args.id}/trash`,
+				{ qs: options }
+			);
 		}
 		await this.output(item);
 	}
@@ -27,7 +30,7 @@ TrashGetCommand.description = 'Get information about an item in trash';
 TrashGetCommand.examples = ['box trash:get folder 22222'];
 
 TrashGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TrashGetCommand.args = {
@@ -36,11 +39,7 @@ TrashGetCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'Type of the item to get',
-		options: [
-			'file',
-			'folder',
-			'web_link'
-		],
+		options: ['file', 'folder', 'web_link'],
 	}),
 	id: Args.string({
 		name: 'id',

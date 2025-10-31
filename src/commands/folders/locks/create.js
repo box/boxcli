@@ -26,7 +26,7 @@ FoldersLocksCreateCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to create a lock on',
-	})
+	}),
 };
 
 module.exports = FoldersLocksCreateCommand;

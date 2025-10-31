@@ -22,7 +22,7 @@ class MetadataQueryCommand extends BoxCommand {
 			query_param_array: queryParamArray,
 			...rest
 		} = mapKeys(omit(flags, Object.keys(BoxCommand.flags)), (value, key) =>
-			snakeCase(key),
+			snakeCase(key)
 		);
 
 		let combinedQueryParams = queryParams || {};
@@ -35,7 +35,10 @@ class MetadataQueryCommand extends BoxCommand {
 		if (queryParamArray) {
 			combinedQueryParams = {
 				...combinedQueryParams,
-				...queryParamArray.reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+				...queryParamArray.reduce(
+					(acc, curr) => ({ ...acc, ...curr }),
+					{}
+				),
 			};
 		}
 
@@ -44,9 +47,11 @@ class MetadataQueryCommand extends BoxCommand {
 			args.ancestorFolderId,
 			{
 				...(extraFields && { fields: extraFields }),
-				...(combinedQueryParams && { query_params: combinedQueryParams }),
+				...(combinedQueryParams && {
+					query_params: combinedQueryParams,
+				}),
 				...rest,
-			},
+			}
 		);
 		await this.output(items);
 	}
@@ -75,16 +80,16 @@ MetadataQueryCommand.flags = {
 					const [key, value] = param.split('=');
 					/* eslint-disable multiline-ternary */
 					return {
-						[key]:
-							parseQueryValue(value),
+						[key]: parseQueryValue(value),
 					};
 					/* eslint-enable multiline-ternary */
-				}),
+				})
 			);
 		},
 	}),
 	'query-param': Flags.string({
-		description: 'One query param key-value pair, i.e. key=value. If this key duplicates with query-params, this flag will take precedence.',
+		description:
+			'One query param key-value pair, i.e. key=value. If this key duplicates with query-params, this flag will take precedence.',
 		dependsOn: ['query'],
 		multiple: true,
 		parse(input) {
@@ -104,7 +109,7 @@ MetadataQueryCommand.flags = {
 			const key = input.split('=')[0];
 			const value = input.substring(key.length + 1).split(',');
 			return {
-				[key]: value.map(x => parseQueryValue(x)),
+				[key]: value.map((x) => parseQueryValue(x)),
 			};
 		},
 	}),

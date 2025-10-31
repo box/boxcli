@@ -13,7 +13,7 @@ class StoragePoliciesListCommand extends BoxCommand {
 	}
 }
 
-StoragePoliciesListCommand.aliases = [ 'storage-policies:list' ];
+StoragePoliciesListCommand.aliases = ['storage-policies:list'];
 
 StoragePoliciesListCommand.description = 'List storage policies';
 StoragePoliciesListCommand.examples = ['box storage-policies'];

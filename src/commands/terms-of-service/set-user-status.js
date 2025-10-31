@@ -6,7 +6,9 @@ const BoxCLIError = require('../../cli-error');
 
 class TermsOfServiceSetUserStatusCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(TermsOfServiceSetUserStatusCommand);
+		const { flags, args } = await this.parse(
+			TermsOfServiceSetUserStatusCommand
+		);
 		let options = {};
 
 		if (flags['user-id']) {
@@ -19,29 +21,39 @@ class TermsOfServiceSetUserStatusCommand extends BoxCommand {
 		} else if (flags.reject) {
 			status = false;
 		} else {
-			throw new BoxCLIError('Either the --accept or --reject flag must be passed');
+			throw new BoxCLIError(
+				'Either the --accept or --reject flag must be passed'
+			);
 		}
 
-		let tosStatus = await this.client.termsOfService.setUserStatus(args.id, status, options);
+		let tosStatus = await this.client.termsOfService.setUserStatus(
+			args.id,
+			status,
+			options
+		);
 		await this.output(tosStatus);
 	}
 }
 
-TermsOfServiceSetUserStatusCommand.description = 'Set a user\'s status on a terms of service with a terms of service Id';
-TermsOfServiceSetUserStatusCommand.examples = ['box terms-of-service:set-user-status 55555 --accept'];
+TermsOfServiceSetUserStatusCommand.description =
+	"Set a user's status on a terms of service with a terms of service Id";
+TermsOfServiceSetUserStatusCommand.examples = [
+	'box terms-of-service:set-user-status 55555 --accept',
+];
 
 TermsOfServiceSetUserStatusCommand.flags = {
 	...BoxCommand.flags,
 	accept: Flags.boolean({
-		description: 'Set the user\'s status as accepted',
-		exclusive: [ 'reject' ],
+		description: "Set the user's status as accepted",
+		exclusive: ['reject'],
 	}),
 	reject: Flags.boolean({
-		description: 'Set the user\'s status as rejected',
-		exclusive: [ 'accept' ],
+		description: "Set the user's status as rejected",
+		exclusive: ['accept'],
 	}),
 	'user-id': Flags.string({
-		description: 'ID of the user to set status for; defaults to the current user',
+		description:
+			'ID of the user to set status for; defaults to the current user',
 	}),
 };
 

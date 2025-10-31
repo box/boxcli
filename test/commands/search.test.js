@@ -23,73 +23,78 @@ describe('Search', () => {
 		jsonOutputLimitedTo5 = getFixture('output/search_json_limit_5.txt');
 
 	describe('search', () => {
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 100,
-					})
-					.reply(200, fixture)
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 100,
-						offset: 5,
-					})
-					.reply(200, fixture2)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 100,
+				})
+				.reply(200, fixture)
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 100,
+					offset: 5,
+				})
+				.reply(200, fixture2)
+		)
 			.stdout()
 			.command(['search', query, '--json', '--token=test'])
 			.it('should search with query (JSON Output)', (ctx) => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						query,
-						fields: 'name',
-						limit: 100,
-					})
-					.reply(200, fixture)
-					.get('/2.0/search')
-					.query({
-						query,
-						fields: 'name',
-						limit: 100,
-						offset: 5,
-					})
-					.reply(200, fixture2)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					query,
+					fields: 'name',
+					limit: 100,
+				})
+				.reply(200, fixture)
+				.get('/2.0/search')
+				.query({
+					query,
+					fields: 'name',
+					limit: 100,
+					offset: 5,
+				})
+				.reply(200, fixture2)
+		)
 			.stdout()
-			.command(['search', query, '--fields=name', '--json', '--token=test'])
-			.it('should send fields param to the API when --fields flag is passed');
+			.command([
+				'search',
+				query,
+				'--fields=name',
+				'--json',
+				'--token=test',
+			])
+			.it(
+				'should send fields param to the API when --fields flag is passed'
+			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						limit: 100,
-						query: '',
-						mdfilters:
-							'[{"scope":"enterprise","templateKey":"marketingCollateral","filters":{"key":"value"}}]',
-					})
-					.reply(200, fixture)
-					.get('/2.0/search')
-					.query({
-						mdfilters:
-							'[{"scope":"enterprise","templateKey":"marketingCollateral","filters":{"key":"value"}}]',
-						limit: 100,
-						query: '',
-						offset: 5,
-					})
-					.reply(200, fixture2)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					limit: 100,
+					query: '',
+					mdfilters:
+						'[{"scope":"enterprise","templateKey":"marketingCollateral","filters":{"key":"value"}}]',
+				})
+				.reply(200, fixture)
+				.get('/2.0/search')
+				.query({
+					mdfilters:
+						'[{"scope":"enterprise","templateKey":"marketingCollateral","filters":{"key":"value"}}]',
+					limit: 100,
+					query: '',
+					offset: 5,
+				})
+				.reply(200, fixture2)
+		)
 			.stdout()
 			.command([
 				'search',
@@ -117,7 +122,10 @@ describe('Search', () => {
 					{ scope: 'enterprise_content' },
 				],
 				'type flag set to file': [['--type=file'], { type: 'file' }],
-				'type flag set to folder': [['--type=folder'], { type: 'folder' }],
+				'type flag set to folder': [
+					['--type=folder'],
+					{ type: 'folder' },
+				],
 				'file extensions flag with one extension': [
 					['--file-extensions=pdf'],
 					{ file_extensions: 'pdf' },
@@ -227,9 +235,11 @@ describe('Search', () => {
 						mdfilters: JSON.stringify([
 							{
 								scope: 'enterprise',
-								templateKey: 'securityClassification-6VMVochwUWo',
+								templateKey:
+									'securityClassification-6VMVochwUWo',
 								filters: {
-									Box__Security__Classification__Key: 'Public',
+									Box__Security__Classification__Key:
+										'Public',
 								},
 							},
 						]),
@@ -277,85 +287,99 @@ describe('Search', () => {
 					{ include_recent_shared_links: true },
 				],
 			},
-			function(flags, params) {
-				test
-					.nock(TEST_API_ROOT, (api) =>
-						api
-							.get('/2.0/search')
-							.query({
-								query,
-								limit: 100,
-								...params,
-							})
-							.reply(200, fixture)
-							.get('/2.0/search')
-							.query({
-								query,
-								...params,
-								limit: 100,
-								offset: 5,
-							})
-							.reply(200, fixture2)
-					)
+			function (flags, params) {
+				test.nock(TEST_API_ROOT, (api) =>
+					api
+						.get('/2.0/search')
+						.query({
+							query,
+							limit: 100,
+							...params,
+						})
+						.reply(200, fixture)
+						.get('/2.0/search')
+						.query({
+							query,
+							...params,
+							limit: 100,
+							offset: 5,
+						})
+						.reply(200, fixture2)
+				)
 					.stdout()
-					.command(['search', query, ...flags, '--json', '--token=test'])
-					.it('should send search params when flag is passed', (ctx) => {
-						assert.equal(ctx.stdout, jsonOutput);
-					});
+					.command([
+						'search',
+						query,
+						...flags,
+						'--json',
+						'--token=test',
+					])
+					.it(
+						'should send search params when flag is passed',
+						(ctx) => {
+							assert.equal(ctx.stdout, jsonOutput);
+						}
+					);
 			}
 		);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 1000,
-					})
-					.reply(200, fixture)
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 1000,
-						offset: 5,
-					})
-					.reply(200, fixture2)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 1000,
+				})
+				.reply(200, fixture)
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 1000,
+					offset: 5,
+				})
+				.reply(200, fixture2)
+		)
 			.stdout()
 			.command(['search', query, '--json', '--all', '--token=test'])
 			.it('should return all results when --all flag provided', (ctx) => {
 				assert.equal(ctx.stdout, jsonOutput);
 			});
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 5,
-					})
-					.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 5,
+				})
+				.reply(200, fixture)
+		)
 			.stdout()
 			.command(['search', query, '--json', '--limit=5', '--token=test'])
-			.it('should return limited results when --limit flag provided', (ctx) => {
-				assert.equal(ctx.stdout, jsonOutputLimitedTo5);
-			});
+			.it(
+				'should return limited results when --limit flag provided',
+				(ctx) => {
+					assert.equal(ctx.stdout, jsonOutputLimitedTo5);
+				}
+			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						query,
-						limit: 5,
-					})
-					.reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					query,
+					limit: 5,
+				})
+				.reply(200, fixture)
+		)
 			.stdout()
-			.command(['search', query, '--json', '--max-items=5', '--token=test'])
+			.command([
+				'search',
+				query,
+				'--json',
+				'--max-items=5',
+				'--token=test',
+			])
 			.it(
 				'should return same limited results when --max-items flag provided instead of --limit',
 				(ctx) => {
@@ -364,26 +388,25 @@ describe('Search', () => {
 			);
 	});
 	describe('bulk', () => {
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/search')
-					.query({
-						limit: 100,
-						query: '',
-						scope: 'enterprise_content',
-						type: 'file',
-					})
-					.reply(200, { entries: [] })
-					.get('/2.0/search')
-					.query({
-						limit: 100,
-						query: '',
-						scope: 'enterprise_content',
-						type: 'folder',
-					})
-					.reply(200, { entries: [] })
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/search')
+				.query({
+					limit: 100,
+					query: '',
+					scope: 'enterprise_content',
+					type: 'file',
+				})
+				.reply(200, { entries: [] })
+				.get('/2.0/search')
+				.query({
+					limit: 100,
+					query: '',
+					scope: 'enterprise_content',
+					type: 'folder',
+				})
+				.reply(200, { entries: [] })
+		)
 			.stdout()
 			.stderr()
 			.command([
@@ -402,8 +425,7 @@ describe('Search', () => {
 			);
 	});
 	describe('fails', () => {
-		test
-			.stderr()
+		test.stderr()
 			.command(['search', query, '--limit=80', '--all', '--token=test'])
 			.it('when both --all and --limit flag provided', (ctx) => {
 				assert.include(

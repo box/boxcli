@@ -88,13 +88,15 @@ describe('Metadata Query', () => {
 				],
 				limit: 100,
 			},
-			fixture = getFixture('metadata-query/post_metadata_queries_execute_read');
+			fixture = getFixture(
+				'metadata-query/post_metadata_queries_execute_read'
+			);
 
-		test
-			.nock(TEST_API_ROOT, api => api
+		test.nock(TEST_API_ROOT, (api) =>
+			api
 				.post('/2.0/metadata_queries/execute_read', request)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'metadata-query',
@@ -108,15 +110,18 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata', ctx => {
+			.it('should query metadata', (ctx) => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/metadata_queries/execute_read', requestWithMultipleValues)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					'/2.0/metadata_queries/execute_read',
+					requestWithMultipleValues
+				)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'metadata-query',
@@ -131,15 +136,18 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata with multiple query-param', ctx => {
+			.it('should query metadata with multiple query-param', (ctx) => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/metadata_queries/execute_read', requestWithMultipleArrayValues)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					'/2.0/metadata_queries/execute_read',
+					requestWithMultipleArrayValues
+				)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'metadata-query',
@@ -153,15 +161,18 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata with query-param', ctx => {
+			.it('should query metadata with query-param', (ctx) => {
 				assert.equal(ctx.stdout, fixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, api => api
-				.post('/2.0/metadata_queries/execute_read', requestWithMultipleArrayQueryParams)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(
+					'/2.0/metadata_queries/execute_read',
+					requestWithMultipleArrayQueryParams
+				)
 				.reply(200, fixture)
-			)
+		)
 			.stdout()
 			.command([
 				'metadata-query',
@@ -176,8 +187,11 @@ describe('Metadata Query', () => {
 				'--json',
 				'--token=test',
 			])
-			.it('should query metadata with multiple query-params-array', ctx => {
-				assert.equal(ctx.stdout, fixture);
-			});
+			.it(
+				'should query metadata with multiple query-params-array',
+				(ctx) => {
+					assert.equal(ctx.stdout, fixture);
+				}
+			);
 	});
 });

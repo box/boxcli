@@ -11,14 +11,14 @@ class CollectionsListCommand extends BoxCommand {
 	}
 }
 
-CollectionsListCommand.aliases = [ 'collections:list' ];
+CollectionsListCommand.aliases = ['collections:list'];
 
 CollectionsListCommand.description = 'List your collections';
 CollectionsListCommand.examples = ['box collections'];
 CollectionsListCommand._endpoint = 'get_collections';
 
 CollectionsListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 module.exports = CollectionsListCommand;

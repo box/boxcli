@@ -4,23 +4,21 @@
  * Module for shared code around user endpoints
  */
 class UserModule {
-
 	/**
-     * @param {BoxClient} client The client to use for API requests
-     * @constructor
-     */
+	 * @param {BoxClient} client The client to use for API requests
+	 * @constructor
+	 */
 	constructor(client) {
 		this.client = client;
 	}
 
 	/**
-     * List the users in an enterprise using optional filters
-     *
-     * @param {Object} flags The parsed oclif command-line flags
-     * @returns {Promise<Object>} A promise resolving to the collection of user objects
-     */
+	 * List the users in an enterprise using optional filters
+	 *
+	 * @param {Object} flags The parsed oclif command-line flags
+	 * @returns {Promise<Object>} A promise resolving to the collection of user objects
+	 */
 	listUsers(flags) {
-
 		let options = {};
 
 		if (flags.fields) {

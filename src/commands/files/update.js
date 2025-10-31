@@ -33,16 +33,28 @@ class FileUpdateCommand extends BoxCommand {
 }
 
 FileUpdateCommand.description = 'Update a file record';
-FileUpdateCommand.examples = ['box files:update 11111 --name "New File Name.pdf"'];
+FileUpdateCommand.examples = [
+	'box files:update 11111 --name "New File Name.pdf"',
+];
 FileUpdateCommand._endpoint = 'put_files_id';
 
 FileUpdateCommand.flags = {
 	...BoxCommand.flags,
 	name: Flags.string({ description: 'New name for the file' }),
-	description: Flags.string({ description: 'New description for the file', parse: utils.unescapeSlashes }),
-	tags: Flags.string({ description: 'Set tags on the file, specified as comma-separated tags' }),
-	etag: Flags.string({ description: 'Only apply updates if the ETag value matches' }),
-	'disposition-at': Flags.string({ description: 'The retention expiration timestamp for the given file. This date cannot be shortened once set on a file'})
+	description: Flags.string({
+		description: 'New description for the file',
+		parse: utils.unescapeSlashes,
+	}),
+	tags: Flags.string({
+		description: 'Set tags on the file, specified as comma-separated tags',
+	}),
+	etag: Flags.string({
+		description: 'Only apply updates if the ETag value matches',
+	}),
+	'disposition-at': Flags.string({
+		description:
+			'The retention expiration timestamp for the given file. This date cannot be shortened once set on a file',
+	}),
 };
 
 FileUpdateCommand.args = {
@@ -50,7 +62,7 @@ FileUpdateCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to update'
+		description: 'ID of the file to update',
 	}),
 };
 

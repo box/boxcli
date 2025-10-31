@@ -22,7 +22,10 @@ class SharedLinksModule {
 	 * @returns {Promise<Object>} A promise resolving to the updated item object
 	 */
 	createSharedLink(args, flags) {
-		let updates = { shared_link: { permissions: {} }, fields: 'shared_link' };
+		let updates = {
+			shared_link: { permissions: {} },
+			fields: 'shared_link',
+		};
 
 		if (flags.access) {
 			updates.shared_link.access = flags.access;
@@ -34,7 +37,8 @@ class SharedLinksModule {
 			updates.shared_link.unshared_at = flags['unshared-at'];
 		}
 		if (flags.hasOwnProperty('can-download')) {
-			updates.shared_link.permissions.can_download = flags['can-download'];
+			updates.shared_link.permissions.can_download =
+				flags['can-download'];
 		}
 		if (flags['vanity-name']) {
 			updates.shared_link.vanity_name = flags['vanity-name'];

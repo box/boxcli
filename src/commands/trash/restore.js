@@ -13,7 +13,7 @@ class TrashRestoreCommand extends BoxCommand {
 		}
 		if (flags['parent-id']) {
 			options.parent = {
-				id: flags['parent-id']
+				id: flags['parent-id'],
 			};
 		}
 		let item;
@@ -22,7 +22,10 @@ class TrashRestoreCommand extends BoxCommand {
 		} else if (args.type === 'folder') {
 			item = await this.client.folders.restoreFromTrash(args.id, options);
 		} else if (args.type === 'web_link') {
-			item = await this.client.wrapWithDefaultHandler(this.client.post)(`/web_links/${args.id}`, {body: options});
+			item = await this.client.wrapWithDefaultHandler(this.client.post)(
+				`/web_links/${args.id}`,
+				{ body: options }
+			);
 		}
 		await this.output(item);
 	}
@@ -34,11 +37,12 @@ TrashRestoreCommand.examples = ['box trash:restore folder 22222'];
 TrashRestoreCommand.flags = {
 	...BoxCommand.flags,
 	name: Flags.string({
-		description: 'The new name for the item'
+		description: 'The new name for the item',
 	}),
 	'parent-id': Flags.string({
-		description: 'ID of a folder to restore the item to only when the original folder no longer exists'
-	})
+		description:
+			'ID of a folder to restore the item to only when the original folder no longer exists',
+	}),
 };
 
 TrashRestoreCommand.args = {
@@ -47,11 +51,7 @@ TrashRestoreCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'Type of the item to restore',
-		options: [
-			'file',
-			'folder',
-			'web_link'
-		],
+		options: ['file', 'folder', 'web_link'],
 	}),
 	id: Args.string({
 		name: 'id',

@@ -17,7 +17,7 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 					name: 'environment',
 					message: 'Which environment?',
 					choices: Object.keys(environmentsObj.environments),
-				}
+				},
 			]);
 			name = answers.environment;
 		}
@@ -35,8 +35,9 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 // @NOTE: This command does not require a client to be set up
 EnvironmentsSetCurrentCommand.noClient = true;
 
-EnvironmentsSetCurrentCommand.aliases = [ 'configure:environments:select' ];
-EnvironmentsSetCurrentCommand.description = 'Set your current Box environment to use';
+EnvironmentsSetCurrentCommand.aliases = ['configure:environments:select'];
+EnvironmentsSetCurrentCommand.description =
+	'Set your current Box environment to use';
 
 EnvironmentsSetCurrentCommand.flags = {
 	...BoxCommand.minFlags,
@@ -47,8 +48,8 @@ EnvironmentsSetCurrentCommand.args = {
 		name: 'id',
 		required: false,
 		hidden: false,
-		description: 'Name of the environment'
-	})
+		description: 'Name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsSetCurrentCommand;

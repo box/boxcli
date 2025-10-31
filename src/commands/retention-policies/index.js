@@ -28,7 +28,8 @@ class RetentionPoliciesListCommand extends BoxCommand {
 	}
 }
 
-RetentionPoliciesListCommand.description = 'List all retention policies for your enterprise';
+RetentionPoliciesListCommand.description =
+	'List all retention policies for your enterprise';
 RetentionPoliciesListCommand.examples = ['box retention-policies'];
 RetentionPoliciesListCommand._endpoint = 'get_retention_policies';
 
@@ -37,19 +38,16 @@ RetentionPoliciesListCommand.flags = {
 	...PaginationUtils.flags,
 	'policy-name': Flags.string({
 		char: 'n',
-		description: 'A name to filter the retention policies by'
+		description: 'A name to filter the retention policies by',
 	}),
 	'policy-type': Flags.string({
 		description: 'A policy type to filter the retention policies by',
-		options: [
-			'finite',
-			'indefinite'
-		]
+		options: ['finite', 'indefinite'],
 	}),
 	'created-by-user-id': Flags.string({
 		char: 'u',
-		description: 'A user id to filter the retention policies by'
-	})
+		description: 'A user id to filter the retention policies by',
+	}),
 };
 
 module.exports = RetentionPoliciesListCommand;

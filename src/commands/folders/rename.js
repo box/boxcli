@@ -29,8 +29,11 @@ FoldersRenameCommand.examples = ['box folders:rename 22222 "New Folder Name"'];
 
 FoldersRenameCommand.flags = {
 	...BoxCommand.flags,
-	description: Flags.string({ description: 'Change the folder description', parse: utils.unescapeSlashes }),
-	etag: Flags.string({ description: 'Only rename if etag value matches' })
+	description: Flags.string({
+		description: 'Change the folder description',
+		parse: utils.unescapeSlashes,
+	}),
+	etag: Flags.string({ description: 'Only rename if etag value matches' }),
 };
 
 FoldersRenameCommand.args = {

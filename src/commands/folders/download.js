@@ -85,7 +85,9 @@ class FoldersDownloadCommand extends BoxCommand {
 				'YYYY-MM-DDTHH_mm_ss_SSS'
 			)}.zip`;
 			rootItemPath = fileName;
-			outputFinalized = this._setupZip(path.join(destinationPath, fileName));
+			outputFinalized = this._setupZip(
+				path.join(destinationPath, fileName)
+			);
 		}
 
 		try {
@@ -95,7 +97,9 @@ class FoldersDownloadCommand extends BoxCommand {
 					// Set output path to the top-level folder, which is the first item in the generator
 					rootItemPath = rootItemPath || item.path;
 
-					this.spinnerLog(`Creating folder ${item.id} at ${item.path}`);
+					this.spinnerLog(
+						`Creating folder ${item.id} at ${item.path}`
+					);
 					try {
 						await mkdirp(path.join(destinationPath, item.path));
 					} catch (ex) {
@@ -105,7 +109,9 @@ class FoldersDownloadCommand extends BoxCommand {
 						);
 					}
 				} else if (item.type === 'file') {
-					this.spinnerLog(`Downloading file ${item.id} to ${item.path}`);
+					this.spinnerLog(
+						`Downloading file ${item.id} to ${item.path}`
+					);
 					let stream = await this.client.files.getReadStream(item.id);
 
 					if (this.zip) {
@@ -148,7 +154,7 @@ class FoldersDownloadCommand extends BoxCommand {
 	 * @returns {void}
 	 * @private
 	 */
-	async* _getItems(folderId, folderPath) {
+	async *_getItems(folderId, folderPath) {
 		let folder = await this.client.folders.get(folderId);
 		folderPath = path.join(folderPath, folder.name);
 
@@ -174,9 +180,7 @@ class FoldersDownloadCommand extends BoxCommand {
 				// 2. The folder does not exist. We will download all files and folders within the provided depth.
 				// 3. The folder exists and overwrite is false, we only download files and folders not existing, within the provided depth.
 				/* eslint-disable no-sync */
-				if (
-					folderPath.split(path.sep).length <= this.maxDepth
-				) {
+				if (folderPath.split(path.sep).length <= this.maxDepth) {
 					/* eslint-enable no-sync */
 					yield* this._getItems(item.id, folderPath);
 				} else {
@@ -192,7 +196,9 @@ class FoldersDownloadCommand extends BoxCommand {
 				/* eslint-disable no-sync */
 				if (
 					this.overwrite ||
-					!fs.existsSync(path.join(this.outputPath, folderPath, item.name))
+					!fs.existsSync(
+						path.join(this.outputPath, folderPath, item.name)
+					)
 				) {
 					/* eslint-enable no-sync */
 					yield {
@@ -274,7 +280,8 @@ FoldersDownloadCommand.flags = {
 		default: true,
 	}),
 	overwrite: Flags.boolean({
-		description: '[default: true] Overwrite the folder if it already exists.',
+		description:
+			'[default: true] Overwrite the folder if it already exists.',
 		allowNo: true,
 		default: true,
 	}),

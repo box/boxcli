@@ -11,7 +11,6 @@ const utils = require('../../../util');
 
 class FilesVersionsDownloadCommand extends BoxCommand {
 	async run() {
-
 		const { flags, args } = await this.parse(FilesVersionsDownloadCommand);
 
 		let file = await this.client.files.get(args.fileID);
@@ -23,19 +22,26 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 			await utils.checkDir(flags.destination, flags['create-path']);
 			filePath = path.join(flags.destination, fileName);
 		} else {
-			filePath = path.join(this.settings.boxDownloadsFolderPath, fileName);
+			filePath = path.join(
+				this.settings.boxDownloadsFolderPath,
+				fileName
+			);
 		}
 
 		/* eslint-disable no-sync */
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-		/* eslint-enable no-sync */
+			/* eslint-enable no-sync */
 
 			if (flags.overwrite === false) {
-				this.info(`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`);
+				this.info(
+					`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`
+				);
 				return;
 			}
 
-			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
+			let shouldOverwrite = await this.confirm(
+				`File ${filePath} already exists — overwrite?`
+			);
 
 			if (!shouldOverwrite) {
 				return;
@@ -45,13 +51,19 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 		let options = {};
 		options.version = args.fileVersionID;
 
-		let stream = await this.client.files.getReadStream(args.fileID, options);
+		let stream = await this.client.files.getReadStream(
+			args.fileID,
+			options
+		);
 		let output;
 		try {
 			output = fs.createWriteStream(filePath);
 			stream.pipe(output);
 		} catch (ex) {
-			throw new BoxCLIError(`Could not download to destination file ${filePath}`, ex);
+			throw new BoxCLIError(
+				`Could not download to destination file ${filePath}`,
+				ex
+			);
 		}
 
 		// @TODO(2018-09-18): Add progress bar for large downloads
@@ -66,8 +78,11 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 	}
 }
 
-FilesVersionsDownloadCommand.description = 'Download a specific version of a file';
-FilesVersionsDownloadCommand.examples = ['box files:versions:download 11111 55555'];
+FilesVersionsDownloadCommand.description =
+	'Download a specific version of a file';
+FilesVersionsDownloadCommand.examples = [
+	'box files:versions:download 11111 55555',
+];
 
 FilesVersionsDownloadCommand.flags = {
 	..._.omit(FilesDownloadCommand.flags, 'version'),
@@ -78,13 +93,13 @@ FilesVersionsDownloadCommand.args = {
 		name: 'fileID',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to download'
+		description: 'ID of the file to download',
 	}),
 	fileVersionID: Args.string({
 		name: 'fileVersionID',
 		required: true,
 		hidden: false,
-		description: 'ID of file version to download'
+		description: 'ID of file version to download',
 	}),
 };
 

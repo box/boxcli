@@ -15,7 +15,7 @@ class AiExtractStructuredCommand extends BoxCommand {
 
 		if (flags.fields && flags['metadata-template']) {
 			throw new Error(
-				'Only one of fields or metadata_template can be provided',
+				'Only one of fields or metadata_template can be provided'
 			);
 		}
 
@@ -25,7 +25,9 @@ class AiExtractStructuredCommand extends BoxCommand {
 		} else if (flags['metadata-template']) {
 			options.metadataTemplate = flags['metadata-template'];
 		} else {
-			throw new Error('Either fields or metadata_template must be provided');
+			throw new Error(
+				'Either fields or metadata_template must be provided'
+			);
 		}
 
 		if (flags['ai-agent']) {
@@ -57,7 +59,11 @@ AiExtractStructuredCommand.flags = {
 				id: '',
 				type: 'file',
 			};
-			const obj = utils.parseStringToObject(input, ['id', 'type', 'content']);
+			const obj = utils.parseStringToObject(input, [
+				'id',
+				'type',
+				'content',
+			]);
 			for (const key in obj) {
 				if (key === 'id') {
 					item.id = obj[key];
@@ -133,11 +139,15 @@ AiExtractStructuredCommand.flags = {
 							.filter((item) => item)
 							.map((item) => ({ key: item.trim() }));
 						if (parsedOptions.length === 0) {
-							throw new Error('Options field must contain at least one value');
+							throw new Error(
+								'Options field must contain at least one value'
+							);
 						}
 						fields.options = parsedOptions;
 					} catch (error) {
-						throw new Error(`Error parsing options: ${error.message}`);
+						throw new Error(
+							`Error parsing options: ${error.message}`
+						);
 					}
 				} else {
 					throw new Error(`Invalid item key ${key}`);

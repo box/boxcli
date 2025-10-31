@@ -7,8 +7,10 @@ const utils = require('../util');
 
 class OSSLicensesCommand extends BoxCommand {
 	async run() {
-
-		let licensesFilePath = path.resolve(__dirname, '../../LICENSE-THIRD-PARTY.txt');
+		let licensesFilePath = path.resolve(
+			__dirname,
+			'../../LICENSE-THIRD-PARTY.txt'
+		);
 
 		let licenseText = await utils.readFileAsync(licensesFilePath, 'utf8');
 
@@ -16,7 +18,8 @@ class OSSLicensesCommand extends BoxCommand {
 	}
 }
 
-OSSLicensesCommand.description = 'Print a list of open-source licensed packages used in the Box CLI';
+OSSLicensesCommand.description =
+	'Print a list of open-source licensed packages used in the Box CLI';
 
 OSSLicensesCommand.flags = {
 	...BoxCommand.minFlags,

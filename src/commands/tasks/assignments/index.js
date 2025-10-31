@@ -12,19 +12,22 @@ class TaskAssignmentsListCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let assignments = await this.client.tasks.getAssignments(args.id, options);
+		let assignments = await this.client.tasks.getAssignments(
+			args.id,
+			options
+		);
 		await this.output(assignments);
 	}
 }
 
-TaskAssignmentsListCommand.aliases = [ 'task-assignments:list' ];
+TaskAssignmentsListCommand.aliases = ['task-assignments:list'];
 
 TaskAssignmentsListCommand.description = 'List all task assignments on a task';
 TaskAssignmentsListCommand.examples = ['box tasks:assignments 88888'];
 TaskAssignmentsListCommand._endpoint = 'get_tasks_id_assignments';
 
 TaskAssignmentsListCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 TaskAssignmentsListCommand.args = {

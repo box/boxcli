@@ -29,8 +29,11 @@ FilesRenameCommand.examples = ['box files:rename 11111 "New File Name.pdf"'];
 
 FilesRenameCommand.flags = {
 	...BoxCommand.flags,
-	description: Flags.string({ description: 'Change the file description', parse: utils.unescapeSlashes }),
-	etag: Flags.string({ description: 'Only rename if etag value matches' })
+	description: Flags.string({
+		description: 'Change the file description',
+		parse: utils.unescapeSlashes,
+	}),
+	etag: Flags.string({ description: 'Only rename if etag value matches' }),
 };
 
 FilesRenameCommand.args = {
@@ -38,13 +41,13 @@ FilesRenameCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of file to rename'
+		description: 'ID of file to rename',
 	}),
 	name: Args.string({
 		name: 'name',
 		required: true,
 		hidden: false,
-		description: 'New name of file'
+		description: 'New name of file',
 	}),
 };
 

@@ -20,7 +20,7 @@ WatermarkingRemoveCommand.description = 'Remove a watermark from an item';
 WatermarkingRemoveCommand.examples = ['box watermarking:remove folder 22222'];
 
 WatermarkingRemoveCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WatermarkingRemoveCommand.args = {
@@ -29,10 +29,7 @@ WatermarkingRemoveCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'Type of item to remove watermark from',
-		options: [
-			'file',
-			'folder'
-		]
+		options: ['file', 'folder'],
 	}),
 	itemID: Args.string({
 		name: 'itemID',

@@ -13,7 +13,7 @@ class WebhooksListCommand extends BoxCommand {
 	}
 }
 
-WebhooksListCommand.aliases = [ 'webhooks:list' ];
+WebhooksListCommand.aliases = ['webhooks:list'];
 
 WebhooksListCommand.description = 'List all webhooks';
 WebhooksListCommand.examples = ['box webhooks'];

@@ -6,7 +6,9 @@ const PaginationUtils = require('../../../pagination-utils');
 
 class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(LegalHoldPoliciesListAssignmentsCommand);
+		const { flags, args } = await this.parse(
+			LegalHoldPoliciesListAssignmentsCommand
+		);
 		let options = PaginationUtils.handlePagination(flags);
 
 		if (flags['assign-to-type']) {
@@ -20,28 +22,29 @@ class LegalHoldPoliciesListAssignmentsCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let assignments = await this.client.legalHoldPolicies.getAssignments(args.id, options);
+		let assignments = await this.client.legalHoldPolicies.getAssignments(
+			args.id,
+			options
+		);
 		await this.output(assignments);
 	}
 }
 
 LegalHoldPoliciesListAssignmentsCommand.description = 'List policy assignments';
-LegalHoldPoliciesListAssignmentsCommand.examples = ['box legal-hold-policies:assignments 99999'];
-LegalHoldPoliciesListAssignmentsCommand._endpoint = 'get_legal_hold_policy_assignments';
+LegalHoldPoliciesListAssignmentsCommand.examples = [
+	'box legal-hold-policies:assignments 99999',
+];
+LegalHoldPoliciesListAssignmentsCommand._endpoint =
+	'get_legal_hold_policy_assignments';
 
 LegalHoldPoliciesListAssignmentsCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
 	'assign-to-type': Flags.string({
 		description: 'Filter by assignment type',
-		options: [
-			'file_version',
-			'file',
-			'folder',
-			'user'
-		]
+		options: ['file_version', 'file', 'folder', 'user'],
 	}),
-	'assign-to-id': Flags.string({ description: 'Filter by assignment Id' })
+	'assign-to-id': Flags.string({ description: 'Filter by assignment Id' }),
 };
 
 LegalHoldPoliciesListAssignmentsCommand.args = {

@@ -11,12 +11,16 @@ describe('File Requests', () => {
 			fixture = getFixture('file-requests/get_file_requests_id'),
 			yamlOutput = getFixture('output/file_requests_get_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.get(`/2.0/file_requests/${fileRequestId}`).reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/file_requests/${fileRequestId}`).reply(200, fixture)
+		)
 			.stdout()
-			.command(['file-requests:get', fileRequestId, '--json', '--token=test'])
+			.command([
+				'file-requests:get',
+				fileRequestId,
+				'--json',
+				'--token=test',
+			])
 			.it(
 				'should get information about an individual file request (JSON Output)',
 				(ctx) => {
@@ -24,10 +28,9 @@ describe('File Requests', () => {
 				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.get(`/2.0/file_requests/${fileRequestId}`).reply(200, fixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/file_requests/${fileRequestId}`).reply(200, fixture)
+		)
 			.stdout()
 			.command(['file-requests:get', fileRequestId, '--token=test'])
 			.it(
@@ -41,10 +44,9 @@ describe('File Requests', () => {
 	describe('file-requests:delete', () => {
 		let fileRequestId = '123456789';
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.delete(`/2.0/file_requests/${fileRequestId}`).reply(204)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.delete(`/2.0/file_requests/${fileRequestId}`).reply(204)
+		)
 			.stderr()
 			.command(['file-requests:delete', fileRequestId, '--token=test'])
 			.it('should delete individual file request', (ctx) => {
@@ -92,14 +94,13 @@ describe('File Requests', () => {
 		let updateFixture = getFixture('file-requests/put_file_requests_id'),
 			yamlOutput = getFixture('output/file_requests_update_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.put(`/2.0/file_requests/${fileRequestId}`, {
-						...addParams,
-					})
-					.reply(200, updateFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put(`/2.0/file_requests/${fileRequestId}`, {
+					...addParams,
+				})
+				.reply(200, updateFixture)
+		)
 			.stdout()
 			.command([
 				'file-requests:update',
@@ -112,14 +113,13 @@ describe('File Requests', () => {
 				assert.equal(ctx.stdout, updateFixture);
 			});
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.put(`/2.0/file_requests/${fileRequestId}`, {
-						...addParams,
-					})
-					.reply(200, updateFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put(`/2.0/file_requests/${fileRequestId}`, {
+					...addParams,
+				})
+				.reply(200, updateFixture)
+		)
 			.stdout()
 			.command([
 				'file-requests:update',
@@ -133,15 +133,16 @@ describe('File Requests', () => {
 	});
 
 	describe('file-requests:copy', () => {
-		let copyFixture = getFixture('file-requests/post_file_requests_id_copy'),
+		let copyFixture = getFixture(
+				'file-requests/post_file_requests_id_copy'
+			),
 			yamlOutput = getFixture('output/file_requests_copy_yaml.txt');
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post(`/2.0/file_requests/${fileRequestId}/copy`, requestBody)
-					.reply(201, copyFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(`/2.0/file_requests/${fileRequestId}/copy`, requestBody)
+				.reply(201, copyFixture)
+		)
 			.stdout()
 			.command([
 				'file-requests:copy',
@@ -157,12 +158,11 @@ describe('File Requests', () => {
 				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post(`/2.0/file_requests/${fileRequestId}/copy`, requestBody)
-					.reply(201, copyFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(`/2.0/file_requests/${fileRequestId}/copy`, requestBody)
+				.reply(201, copyFixture)
+		)
 			.stdout()
 			.command([
 				'file-requests:copy',
@@ -177,15 +177,14 @@ describe('File Requests', () => {
 				}
 			);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post(`/2.0/file_requests/${fileRequestId}/copy`, {
-						...requestBody,
-						...addParams,
-					})
-					.reply(201, copyFixture)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post(`/2.0/file_requests/${fileRequestId}/copy`, {
+					...requestBody,
+					...addParams,
+				})
+				.reply(201, copyFixture)
+		)
 			.stdout()
 			.command([
 				'file-requests:copy',

@@ -12,7 +12,7 @@ class FoldersLocksListCommand extends BoxCommand {
 	}
 }
 
-FoldersLocksListCommand.aliases = [ 'folders:locks:list' ];
+FoldersLocksListCommand.aliases = ['folders:locks:list'];
 
 FoldersLocksListCommand.description = 'List all locks on a folder';
 FoldersLocksListCommand.examples = ['box folders:locks 22222'];
@@ -28,7 +28,7 @@ FoldersLocksListCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to get the locks on',
-	})
+	}),
 };
 
 module.exports = FoldersLocksListCommand;

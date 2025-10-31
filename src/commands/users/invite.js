@@ -7,19 +7,23 @@ class UsersInviteUserCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(UsersInviteUserCommand);
 
-		let user = await this.client.enterprise.inviteUser(args.enterpriseID, args.email);
+		let user = await this.client.enterprise.inviteUser(
+			args.enterpriseID,
+			args.email
+		);
 		await this.output(user);
 	}
 }
 
-UsersInviteUserCommand.aliases = [ 'users:invite-user' ];
+UsersInviteUserCommand.aliases = ['users:invite-user'];
 
-UsersInviteUserCommand.description = 'Invite an Existing Box User to Your Enterprise';
+UsersInviteUserCommand.description =
+	'Invite an Existing Box User to Your Enterprise';
 UsersInviteUserCommand.examples = ['box users:invite user@example.com 12345'];
 UsersInviteUserCommand._endpoint = 'post_invites';
 
 UsersInviteUserCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 UsersInviteUserCommand.args = {

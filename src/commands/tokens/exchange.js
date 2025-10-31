@@ -22,20 +22,25 @@ class TokensExchangeCommand extends BoxCommand {
 			resource = `https://api.box.com/2.0/folders/${flags['folder-id']}`;
 		}
 
-		let tokenInfo = await client.exchangeToken(args.scope.split(','), resource);
+		let tokenInfo = await client.exchangeToken(
+			args.scope.split(','),
+			resource
+		);
 
 		this.output(tokenInfo.accessToken);
 	}
 }
 
-TokensExchangeCommand.description = 'Get a token. Returns the service account token by default';
+TokensExchangeCommand.description =
+	'Get a token. Returns the service account token by default';
 
 TokensExchangeCommand.args = {
 	scope: Args.string({
 		name: 'scope',
 		required: true,
 		hidden: false,
-		description: 'The scope(s) for the new token, separated by a comma if multiple are present'
+		description:
+			'The scope(s) for the new token, separated by a comma if multiple are present',
 	}),
 };
 
@@ -58,7 +63,7 @@ TokensExchangeCommand.flags = {
 		char: 't',
 		description: 'Specify the token to exchange',
 		exclusive: ['user-id'],
-	})
+	}),
 };
 
 module.exports = TokensExchangeCommand;

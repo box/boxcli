@@ -21,19 +21,26 @@ class FilesZipCommand extends BoxCommand {
 			await utils.checkDir(flags.destination, flags['create-path']);
 			filePath = path.join(flags.destination, fileName);
 		} else {
-			filePath = path.join(this.settings.boxDownloadsFolderPath, fileName);
+			filePath = path.join(
+				this.settings.boxDownloadsFolderPath,
+				fileName
+			);
 		}
 
 		/* eslint-disable no-sync */
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-		/* eslint-enable no-sync */
+			/* eslint-enable no-sync */
 
 			if (flags.overwrite === false) {
-				this.info(`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`);
+				this.info(
+					`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`
+				);
 				return;
 			}
 
-			let shouldOverwrite = await this.confirm(`File ${filePath} already exists — overwrite?`);
+			let shouldOverwrite = await this.confirm(
+				`File ${filePath} already exists — overwrite?`
+			);
 
 			if (!shouldOverwrite) {
 				return;
@@ -47,13 +54,15 @@ class FilesZipCommand extends BoxCommand {
 		/* eslint-disable promise/avoid-new */
 		await new Promise((resolve, reject) => {
 			/* eslint-disable promise/always-return */
-			this.client.files.downloadZip(fileName, flags.item, output).then((status) => {
-				downloadStatus = status;
-				if (outputFinished) {
-					resolve();
-				}
-			})
-			.catch(reject);
+			this.client.files
+				.downloadZip(fileName, flags.item, output)
+				.then((status) => {
+					downloadStatus = status;
+					if (outputFinished) {
+						resolve();
+					}
+				})
+				.catch(reject);
 			output.on('close', () => {
 				output.close();
 				outputFinished = true;
@@ -67,8 +76,11 @@ class FilesZipCommand extends BoxCommand {
 	}
 }
 
-FilesZipCommand.description = 'Create a zip of multiple files and folders and download it';
-FilesZipCommand.examples = ['box files:zip sample_file.zip --item=file:12421 --item=folder:48291'];
+FilesZipCommand.description =
+	'Create a zip of multiple files and folders and download it';
+FilesZipCommand.examples = [
+	'box files:zip sample_file.zip --item=file:12421 --item=folder:48291',
+];
 FilesZipCommand._endpoint = 'zip_downloads';
 
 FilesZipCommand.flags = {
@@ -88,13 +100,14 @@ FilesZipCommand.flags = {
 		},
 	}),
 	'create-path': Flags.boolean({
-		description: 'Recursively creates a path to a directory if it does not exist',
+		description:
+			'Recursively creates a path to a directory if it does not exist',
 		allowNo: true,
 		default: true,
 	}),
 	overwrite: Flags.boolean({
 		description: 'Overwrite a zip file if it already exists',
-		allowNo: true
+		allowNo: true,
 	}),
 };
 

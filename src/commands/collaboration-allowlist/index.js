@@ -12,14 +12,19 @@ class CollaborationAllowlistListCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let allowlistEntries = await this.client.collaborationAllowlist.getAllAllowlistedDomains(options);
+		let allowlistEntries =
+			await this.client.collaborationAllowlist.getAllAllowlistedDomains(
+				options
+			);
 		await this.output(allowlistEntries);
 	}
 }
 
-CollaborationAllowlistListCommand.description = 'List collaboration allowlist entries';
+CollaborationAllowlistListCommand.description =
+	'List collaboration allowlist entries';
 CollaborationAllowlistListCommand.examples = ['box collaboration-allowlist'];
-CollaborationAllowlistListCommand._endpoint = 'get_collaboration_whitelist_entries';
+CollaborationAllowlistListCommand._endpoint =
+	'get_collaboration_whitelist_entries';
 
 CollaborationAllowlistListCommand.flags = {
 	...BoxCommand.flags,

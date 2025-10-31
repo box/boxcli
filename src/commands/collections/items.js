@@ -32,7 +32,7 @@ CollectionsListItemsCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the collection to retrieve the items of'
+		description: 'ID of the collection to retrieve the items of',
 	}),
 };
 

@@ -48,10 +48,14 @@ class EnvironmentsAddCommand extends BoxCommand {
 		};
 
 		if (environmentsObj.environments.hasOwnProperty(environmentName)) {
-			throw new BoxCLIError('There already is an environment with this name');
+			throw new BoxCLIError(
+				'There already is an environment with this name'
+			);
 		}
 		if (!configObj.boxAppSettings.clientID) {
-			throw new BoxCLIError('Your configuration file is missing the client ID');
+			throw new BoxCLIError(
+				'Your configuration file is missing the client ID'
+			);
 		}
 		if (!configObj.boxAppSettings.clientSecret) {
 			throw new BoxCLIError(
@@ -68,14 +72,20 @@ class EnvironmentsAddCommand extends BoxCommand {
 				!configObj.boxAppSettings.appAuth.privateKey &&
 				!flags['private-key-path']
 			) {
-				throw new BoxCLIError('Your environment does not have a private key');
+				throw new BoxCLIError(
+					'Your environment does not have a private key'
+				);
 			}
 			if (!configObj.boxAppSettings.appAuth.passphrase) {
-				throw new BoxCLIError('Your environment does not have a passphrase');
+				throw new BoxCLIError(
+					'Your environment does not have a passphrase'
+				);
 			}
 		}
 		if (!configObj.enterpriseID) {
-			throw new BoxCLIError('Your environment does not have an enterprise ID');
+			throw new BoxCLIError(
+				'Your environment does not have an enterprise ID'
+			);
 		}
 
 		if (flags['private-key-path']) {
@@ -135,10 +145,12 @@ EnvironmentsAddCommand.flags = {
 		default: 'default',
 	}),
 	'ccg-auth': Flags.boolean({
-		description: 'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
+		description:
+			'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
 	}),
 	'ccg-user': Flags.string({
-		description: 'Provide an ID for a user for CCG. Use it to obtain user token. ' +
+		description:
+			'Provide an ID for a user for CCG. Use it to obtain user token. ' +
 			'In order to enable generating user token you have to go to your application ' +
 			'configuration that can be found here https://app.box.com/developers/console.\n' +
 			'In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. \n' +

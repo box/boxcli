@@ -12,14 +12,14 @@ class UsersGetEmailAliasesCommand extends BoxCommand {
 	}
 }
 
-UsersGetEmailAliasesCommand.aliases = [ 'users:get-email-aliases' ];
+UsersGetEmailAliasesCommand.aliases = ['users:get-email-aliases'];
 
 UsersGetEmailAliasesCommand.description = 'Get all Email Aliases for a User';
 UsersGetEmailAliasesCommand.examples = ['box users:email-aliases 33333'];
 UsersGetEmailAliasesCommand._endpoint = 'get_users_id_email_aliases';
 
 UsersGetEmailAliasesCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 UsersGetEmailAliasesCommand.args = {

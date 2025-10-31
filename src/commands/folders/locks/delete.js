@@ -26,7 +26,7 @@ FoldersLocksDeleteCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder lock to delete',
-	})
+	}),
 };
 
 module.exports = FoldersLocksDeleteCommand;

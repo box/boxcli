@@ -29,7 +29,9 @@ class FoldersDeleteCommand extends BoxCommand {
 				}
 			}
 		}
-		this.info(`Deleted folder ${args.id}${flags.force ? ' permanently' : ''}`);
+		this.info(
+			`Deleted folder ${args.id}${flags.force ? ' permanently' : ''}`
+		);
 	}
 }
 
@@ -47,7 +49,7 @@ FoldersDeleteCommand.flags = {
 	force: Flags.boolean({
 		char: 'f',
 		description: 'Permanently delete the folder, bypassing the trash',
-	})
+	}),
 };
 
 FoldersDeleteCommand.args = {
@@ -56,7 +58,7 @@ FoldersDeleteCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the folder to delete',
-	})
+	}),
 };
 
 module.exports = FoldersDeleteCommand;

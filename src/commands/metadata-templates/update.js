@@ -31,7 +31,9 @@ const FLAG_HANDLERS = Object.freeze({
 
 		return {
 			op: 'reorderFields',
-			fieldKeys: value.input.split(UNESCAPED_COMMA_REGEX).filter(v => v.length > 0),
+			fieldKeys: value.input
+				.split(UNESCAPED_COMMA_REGEX)
+				.filter((v) => v.length > 0),
 		};
 	},
 	'edit-field': (value, currentOp, ops) => {
@@ -46,9 +48,13 @@ const FLAG_HANDLERS = Object.freeze({
 	'edit-enum-option': (value, currentOp, ops) => {
 		ops.push(currentOp);
 
-		let keyParts = value.input.split(UNESCAPED_DOT_REGEX).filter(v => v.length > 0);
+		let keyParts = value.input
+			.split(UNESCAPED_DOT_REGEX)
+			.filter((v) => v.length > 0);
 		if (!keyParts || keyParts.length !== 2) {
-			throw new BoxCLIError('Enum option key must be formatted as fieldKey.optionKey');
+			throw new BoxCLIError(
+				'Enum option key must be formatted as fieldKey.optionKey'
+			);
 		}
 
 		return {
@@ -61,9 +67,13 @@ const FLAG_HANDLERS = Object.freeze({
 	'remove-enum-option': (value, currentOp, ops) => {
 		ops.push(currentOp);
 
-		let keyParts = value.input.split(UNESCAPED_DOT_REGEX).filter(v => v.length > 0);
+		let keyParts = value.input
+			.split(UNESCAPED_DOT_REGEX)
+			.filter((v) => v.length > 0);
 		if (!keyParts || keyParts.length !== 2) {
-			throw new BoxCLIError('Enum option key must be formatted as fieldKey.optionKey');
+			throw new BoxCLIError(
+				'Enum option key must be formatted as fieldKey.optionKey'
+			);
 		}
 
 		return {
@@ -81,66 +91,80 @@ const FLAG_HANDLERS = Object.freeze({
 		};
 	},
 	option(value, currentOp, ops) {
-
 		if (!currentOp) {
-			throw new BoxCLIError('Unexpected --option flag outside of option-related operation');
+			throw new BoxCLIError(
+				'Unexpected --option flag outside of option-related operation'
+			);
 		}
 
 		let fieldType;
 		switch (currentOp.op) {
-		case 'addEnumOption':
-			if (currentOp.data.key) {
-				ops.push({...currentOp});
-				currentOp.data = {};
-			}
+			case 'addEnumOption':
+				if (currentOp.data.key) {
+					ops.push({ ...currentOp });
+					currentOp.data = {};
+				}
 
-			currentOp.data.key = value.input;
-			break;
-		case 'editEnumOption':
-		case 'addMultiSelectOption':
-			currentOp.data.key = value.input;
-			break;
-		case 'reorderEnumOptions':
-			currentOp.enumOptionKeys.push(value.input);
-			break;
-		case 'addField':
-			fieldType = currentOp.data.type;
-			if (fieldType !== 'enum' && fieldType !== 'multiSelect') {
-				throw new BoxCLIError(`Unexpected --option flag while specifying ${fieldType} field`);
-			}
-			currentOp.data.options.push({key: value.input});
-			break;
-		default:
-			throw new BoxCLIError('Unexpected --option flag outside of option-related operation');
+				currentOp.data.key = value.input;
+				break;
+			case 'editEnumOption':
+			case 'addMultiSelectOption':
+				currentOp.data.key = value.input;
+				break;
+			case 'reorderEnumOptions':
+				currentOp.enumOptionKeys.push(value.input);
+				break;
+			case 'addField':
+				fieldType = currentOp.data.type;
+				if (fieldType !== 'enum' && fieldType !== 'multiSelect') {
+					throw new BoxCLIError(
+						`Unexpected --option flag while specifying ${fieldType} field`
+					);
+				}
+				currentOp.data.options.push({ key: value.input });
+				break;
+			default:
+				throw new BoxCLIError(
+					'Unexpected --option flag outside of option-related operation'
+				);
 		}
 
 		return currentOp;
 	},
-	'field-key': (value, currentOp/* , ops*/) => {
+	'field-key': (value, currentOp /* , ops*/) => {
 		if (!currentOp) {
-			throw new BoxCLIError('Unexpected --field-key flag outside of field operation');
+			throw new BoxCLIError(
+				'Unexpected --field-key flag outside of field operation'
+			);
 		}
 
 		switch (currentOp.op) {
-		case 'editField':
-		case 'addField':
-			currentOp.data.key = value.input;
-			break;
-		default:
-			throw new BoxCLIError('Unexpected --field-key flag outside of field add or edit operation');
+			case 'editField':
+			case 'addField':
+				currentOp.data.key = value.input;
+				break;
+			default:
+				throw new BoxCLIError(
+					'Unexpected --field-key flag outside of field add or edit operation'
+				);
 		}
 
 		return currentOp;
 	},
-	description(value, currentOp/* , ops*/) {
-		if (!currentOp || (currentOp.op !== 'editField' && currentOp.op !== 'addField')) {
-			throw new BoxCLIError('Unexpected --description flag outside of field operation');
+	description(value, currentOp /* , ops*/) {
+		if (
+			!currentOp ||
+			(currentOp.op !== 'editField' && currentOp.op !== 'addField')
+		) {
+			throw new BoxCLIError(
+				'Unexpected --description flag outside of field operation'
+			);
 		}
 
 		currentOp.data.description = value.input;
 		return currentOp;
 	},
-	hidden(value, currentOp/* , ops*/) {
+	hidden(value, currentOp /* , ops*/) {
 		if (!currentOp) {
 			currentOp = {
 				op: 'editTemplate',
@@ -149,18 +173,20 @@ const FLAG_HANDLERS = Object.freeze({
 		}
 
 		switch (currentOp.op) {
-		case 'editTemplate':
-		case 'editField':
-		case 'addField':
-			currentOp.data.hidden = (!value.input.startsWith('--no-'));
-			break;
-		default:
-			throw new BoxCLIError('Unexpected --hidden flag outside of template or field edit operation');
+			case 'editTemplate':
+			case 'editField':
+			case 'addField':
+				currentOp.data.hidden = !value.input.startsWith('--no-');
+				break;
+			default:
+				throw new BoxCLIError(
+					'Unexpected --hidden flag outside of template or field edit operation'
+				);
 		}
 
 		return currentOp;
 	},
-	'copy-instance-on-item-copy': (value, currentOp/* , ops*/) => {
+	'copy-instance-on-item-copy': (value, currentOp /* , ops*/) => {
 		if (!currentOp) {
 			currentOp = {
 				op: 'editTemplate',
@@ -169,12 +195,15 @@ const FLAG_HANDLERS = Object.freeze({
 		}
 
 		if (currentOp.op !== 'editTemplate') {
-			throw new BoxCLIError('Unexpected --copy-instance-on-item-copy flag outside of template edit operation');
+			throw new BoxCLIError(
+				'Unexpected --copy-instance-on-item-copy flag outside of template edit operation'
+			);
 		}
-		currentOp.data.copyInstanceOnItemCopy = (!value.input.startsWith('--no-'));
+		currentOp.data.copyInstanceOnItemCopy =
+			!value.input.startsWith('--no-');
 		return currentOp;
 	},
-	'display-name': (value, currentOp/* , ops*/) => {
+	'display-name': (value, currentOp /* , ops*/) => {
 		if (!currentOp) {
 			currentOp = {
 				op: 'editTemplate',
@@ -183,12 +212,14 @@ const FLAG_HANDLERS = Object.freeze({
 		}
 
 		switch (currentOp.op) {
-		case 'editTemplate':
-		case 'editField':
-			currentOp.data.displayName = value.input;
-			break;
-		default:
-			throw new BoxCLIError('Unexpected --display-name flag outside of template or field edit operation');
+			case 'editTemplate':
+			case 'editField':
+				currentOp.data.displayName = value.input;
+				break;
+			default:
+				throw new BoxCLIError(
+					'Unexpected --display-name flag outside of template or field edit operation'
+				);
 		}
 
 		return currentOp;
@@ -270,33 +301,42 @@ const FLAG_HANDLERS = Object.freeze({
  * @private
  */
 function _parseOperations(preparsedArgv) {
-
 	let ops = [],
 		currentOp = null;
 
-	preparsedArgv.filter(v => v.type === 'flag').forEach(value => {
-
-		let handler = FLAG_HANDLERS[value.flag] || ((val, curOp) => curOp);
-		currentOp = handler(value, currentOp, ops);
-	});
+	preparsedArgv
+		.filter((v) => v.type === 'flag')
+		.forEach((value) => {
+			let handler = FLAG_HANDLERS[value.flag] || ((val, curOp) => curOp);
+			currentOp = handler(value, currentOp, ops);
+		});
 
 	// Add the last field if necessary and return
-	return ops.concat(currentOp).filter(op => op !== null);
+	return ops.concat(currentOp).filter((op) => op !== null);
 }
 
 class MetadataTemplatesUpdateCommand extends BoxCommand {
 	async run() {
-		const { flags, args, raw } = await this.parse(MetadataTemplatesUpdateCommand);
+		const { flags, args, raw } = await this.parse(
+			MetadataTemplatesUpdateCommand
+		);
 		let operations = _parseOperations(raw);
 
-		let template = await this.client.metadata.updateTemplate(flags.scope, args.templateKey, operations);
+		let template = await this.client.metadata.updateTemplate(
+			flags.scope,
+			args.templateKey,
+			operations
+		);
 		await this.output(template);
 	}
 }
 
 MetadataTemplatesUpdateCommand.description = 'Update a metadata template';
-MetadataTemplatesUpdateCommand.examples = ['box metadata-templates:update employeeRecord --hidden'];
-MetadataTemplatesUpdateCommand._endpoints = 'put_metadata_templates_id_id_schema';
+MetadataTemplatesUpdateCommand.examples = [
+	'box metadata-templates:update employeeRecord --hidden',
+];
+MetadataTemplatesUpdateCommand._endpoints =
+	'put_metadata_templates_id_id_schema';
 
 MetadataTemplatesUpdateCommand.flags = {
 	...BoxCommand.flags,
@@ -333,7 +373,8 @@ MetadataTemplatesUpdateCommand.flags = {
 		multiple: true,
 	}),
 	'add-multi-select-option': Flags.string({
-		description: 'Add an option to a specified multiselect field; must be followed by one or more --option flags',
+		description:
+			'Add an option to a specified multiselect field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
 	'field-key': Flags.string({
@@ -349,32 +390,39 @@ MetadataTemplatesUpdateCommand.flags = {
 		multiple: true,
 	}),
 	'add-enum-option': Flags.string({
-		description: 'Add an enum option to the specified field; must be followed by one or more --option flags',
+		description:
+			'Add an enum option to the specified field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
 	'reorder-enum-options': Flags.string({
-		description: 'Reorder the options for a given field; must be followed by one or more --option flags',
+		description:
+			'Reorder the options for a given field; must be followed by one or more --option flags',
 		multiple: true,
 	}),
 	'reorder-fields': Flags.string({
-		description: 'Reorder the template fields; must be in the form first_key,second_key,...',
+		description:
+			'Reorder the template fields; must be in the form first_key,second_key,...',
 	}),
 	'edit-field': Flags.string({
-		description: 'Edit the specified field; must be followed by flags to apply to the field',
+		description:
+			'Edit the specified field; must be followed by flags to apply to the field',
 	}),
 	'edit-enum-option': Flags.string({
-		description: 'Edit the specified enum option; must be followed by an --option flag',
+		description:
+			'Edit the specified enum option; must be followed by an --option flag',
 	}),
 	'remove-enum-option': Flags.string({
-		description: 'Removes the specified enum field option; must be in the form fieldKey.optionKey',
+		description:
+			'Removes the specified enum field option; must be in the form fieldKey.optionKey',
 	}),
 	'remove-field': Flags.string({
 		description: 'Remove the specified field',
 	}),
 	'copy-instance-on-item-copy': Flags.boolean({
-		description: 'Whether to include the metadata when a file or folder is copied',
+		description:
+			'Whether to include the metadata when a file or folder is copied',
 		allowNo: true,
-	})
+	}),
 };
 
 MetadataTemplatesUpdateCommand.args = {

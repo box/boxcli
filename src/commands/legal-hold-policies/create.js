@@ -6,7 +6,9 @@ const utils = require('../../util');
 
 class LegalHoldPoliciesCreateCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(LegalHoldPoliciesCreateCommand);
+		const { flags, args } = await this.parse(
+			LegalHoldPoliciesCreateCommand
+		);
 		let options = {};
 
 		if (flags.description) {
@@ -22,37 +24,45 @@ class LegalHoldPoliciesCreateCommand extends BoxCommand {
 			options.is_ongoing = true;
 		}
 
-		let policy = await this.client.legalHoldPolicies.create(args.policyName, options);
+		let policy = await this.client.legalHoldPolicies.create(
+			args.policyName,
+			options
+		);
 		await this.output(policy);
 	}
 }
 
 LegalHoldPoliciesCreateCommand.description = 'Create a new legal hold policy';
-LegalHoldPoliciesCreateCommand.examples = ['box legal-hold-policies:create "Class Action Suit" --ongoing'];
+LegalHoldPoliciesCreateCommand.examples = [
+	'box legal-hold-policies:create "Class Action Suit" --ongoing',
+];
 LegalHoldPoliciesCreateCommand._endpoint = 'post_legal_hold_policies';
 
 LegalHoldPoliciesCreateCommand.flags = {
 	...BoxCommand.flags,
-	description: Flags.string({ description: 'Description of legal hold policy', parse: utils.unescapeSlashes }),
+	description: Flags.string({
+		description: 'Description of legal hold policy',
+		parse: utils.unescapeSlashes,
+	}),
 	'filter-started-at': Flags.string({
-		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
+		description:
+			"Date filter applies to Custodian assignments only. Should be today's date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago",
 		dependsOn: ['filter-ended-at'],
 		exclusive: ['is-ongoing'],
-		parse: input => BoxCommand.normalizeDateString(input),
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'filter-ended-at': Flags.string({
-		description: 'Date filter applies to Custodian assignments only. Should be today\'s date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago',
+		description:
+			"Date filter applies to Custodian assignments only. Should be today's date or before. Use a RFC3339 timestamp or shorthand syntax 0t, like -5w for 5 weeks ago",
 		dependsOn: ['filter-started-at'],
 		exclusive: ['is-ongoing'],
-		parse: input => BoxCommand.normalizeDateString(input),
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	ongoing: Flags.boolean({
-		description: 'Assignments under this policy will continue applying to files based on events, indefinitely',
-		exclusive: [
-			'filter-started-at',
-			'filter-ended-at'
-		],
-	})
+		description:
+			'Assignments under this policy will continue applying to files based on events, indefinitely',
+		exclusive: ['filter-started-at', 'filter-ended-at'],
+	}),
 };
 
 LegalHoldPoliciesCreateCommand.args = {

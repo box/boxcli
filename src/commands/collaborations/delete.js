@@ -14,7 +14,7 @@ class CollaborationsDeleteCommand extends BoxCommand {
 
 CollaborationsDeleteCommand.aliases = [
 	'files:collaborations:delete',
-	'folders:collaborations:delete'
+	'folders:collaborations:delete',
 ];
 
 CollaborationsDeleteCommand.description = 'Remove a collaboration';
@@ -22,7 +22,7 @@ CollaborationsDeleteCommand.examples = ['box collaborations:delete 12345'];
 CollaborationsDeleteCommand._endpoint = 'delete_collaborations_id';
 
 CollaborationsDeleteCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 CollaborationsDeleteCommand.args = {
@@ -30,7 +30,7 @@ CollaborationsDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'The ID of the collaboration to delete'
+		description: 'The ID of the collaboration to delete',
 	}),
 };
 

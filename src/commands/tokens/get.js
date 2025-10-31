@@ -10,7 +10,6 @@ class TokensGetCommand extends BoxCommand {
 
 		if (flags['user-id']) {
 			token = await this.sdk.getAppUserTokens(flags['user-id']);
-
 		} else {
 			token = await this.sdk.getEnterpriseAppAuthTokens();
 		}
@@ -18,14 +17,15 @@ class TokensGetCommand extends BoxCommand {
 	}
 }
 
-TokensGetCommand.description = 'Get a token. Returns the service account token by default';
+TokensGetCommand.description =
+	'Get a token. Returns the service account token by default';
 
 TokensGetCommand.flags = {
 	...BoxCommand.minFlags,
 	'user-id': Flags.string({
 		char: 'u',
 		description: 'Get a user token from a user ID',
-	})
+	}),
 };
 
 module.exports = TokensGetCommand;

@@ -18,7 +18,7 @@ class CommentsListCommand extends BoxCommand {
 	}
 }
 
-CommentsListCommand.aliases = [ 'comments:list' ];
+CommentsListCommand.aliases = ['comments:list'];
 
 CommentsListCommand.description = 'List all comments on a file';
 CommentsListCommand.examples = ['box files:comments 11111'];
@@ -34,7 +34,7 @@ CommentsListCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to get comments for'
+		description: 'ID of the file to get comments for',
 	}),
 };
 

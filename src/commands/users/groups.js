@@ -13,12 +13,15 @@ class UsersListGroupsCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let groups = await this.client.users.getGroupMemberships(args.id, options);
+		let groups = await this.client.users.getGroupMemberships(
+			args.id,
+			options
+		);
 		await this.output(groups);
 	}
 }
 
-UsersListGroupsCommand.aliases = [ 'users:list-groups' ];
+UsersListGroupsCommand.aliases = ['users:list-groups'];
 
 UsersListGroupsCommand.description = 'List groups a user belongs to';
 UsersListGroupsCommand.examples = ['box users:groups 33333'];

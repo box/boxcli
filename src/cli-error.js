@@ -7,14 +7,13 @@ const os = require('os');
  * This error deliberately elides its own stack trace; it is intended to be directly displayed to users
  */
 class BoxCLIError extends Error {
-
 	/**
-     * Create the wrapped error
-     *
-     * @param {string} message Error message
-     * @param {Error} [cause] The lower-level error that caused this error
-     * @constructor
-     */
+	 * Create the wrapped error
+	 *
+	 * @param {string} message Error message
+	 * @param {Error} [cause] The lower-level error that caused this error
+	 * @constructor
+	 */
 	constructor(message, cause) {
 		super(message);
 		this.name = 'BoxCLIError';

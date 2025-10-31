@@ -10,7 +10,8 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(EnvironmentsUpdateCommand);
 		let environmentsObj = await this.getEnvironments();
-		let environment = environmentsObj.environments[args.name || environmentsObj.default];
+		let environment =
+			environmentsObj.environments[args.name || environmentsObj.default];
 
 		if (!environment) {
 			this.error('There is no environment with this name');
@@ -21,16 +22,27 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			let configObj;
 			try {
 				/* eslint-disable no-sync */
-				configObj = JSON.parse(fs.readFileSync(flags['config-file-path'], 'utf8'));
+				configObj = JSON.parse(
+					fs.readFileSync(flags['config-file-path'], 'utf8')
+				);
 				/* eslint-enable no-sync */
 			} catch (ex) {
-				throw new BoxCLIError(`Could not read environment config file ${flags['config-file-path']}`, ex);
+				throw new BoxCLIError(
+					`Could not read environment config file ${flags['config-file-path']}`,
+					ex
+				);
 			}
 
 			utils.validateConfigObject(configObj);
 
-			if (!configObj.boxAppSettings.appAuth.privateKey && !flags['private-key-path'] && environment.hasInLinePrivateKey) {
-				throw new BoxCLIError('Environment must specify private key in config file or via --private-key-path');
+			if (
+				!configObj.boxAppSettings.appAuth.privateKey &&
+				!flags['private-key-path'] &&
+				environment.hasInLinePrivateKey
+			) {
+				throw new BoxCLIError(
+					'Environment must specify private key in config file or via --private-key-path'
+				);
 			}
 			if (configObj.boxAppSettings.appAuth.privateKey) {
 				environment.privateKeyPath = '';
@@ -75,9 +87,13 @@ EnvironmentsUpdateCommand.flags = {
 		description: 'Provide a file path to application private key',
 		parse: utils.parsePath,
 	}),
-	'user-id': Flags.string({ description: 'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment' }),
+	'user-id': Flags.string({
+		description:
+			'Store a default user ID to use with the session commands. A default user ID can be stored for each Box environment',
+	}),
 	'cache-tokens': Flags.boolean({
-		description: 'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
+		description:
+			'Enable token caching, which significantly improves performance. Run with --no-cache-tokens and then --cache-tokens if your application config updates are not reflected in your requests.',
 		allowNo: true,
 	}),
 };
@@ -87,8 +103,8 @@ EnvironmentsUpdateCommand.args = {
 		name: 'name',
 		required: false,
 		hidden: false,
-		description: 'The name of the environment'
-	})
+		description: 'The name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsUpdateCommand;

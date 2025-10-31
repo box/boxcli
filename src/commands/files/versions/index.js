@@ -13,12 +13,15 @@ class FilesListVersionsCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let versions = await this.client.files.getVersions(args.fileID, options);
+		let versions = await this.client.files.getVersions(
+			args.fileID,
+			options
+		);
 		await this.output(versions);
 	}
 }
 
-FilesListVersionsCommand.aliases = [ 'files:versions:list' ];
+FilesListVersionsCommand.aliases = ['files:versions:list'];
 
 FilesListVersionsCommand.description = 'Get a list of file versions';
 FilesListVersionsCommand.examples = ['box files:versions 11111'];
@@ -34,7 +37,7 @@ FilesListVersionsCommand.args = {
 		name: 'fileID',
 		required: true,
 		hidden: false,
-		description: 'ID of file to get versions for'
+		description: 'ID of file to get versions for',
 	}),
 };
 

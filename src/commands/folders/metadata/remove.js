@@ -7,15 +7,21 @@ class FoldersDeleteMetadataCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersDeleteMetadataCommand);
 
-		await this.client.folders.deleteMetadata(args.id, flags.scope, flags['template-key']);
+		await this.client.folders.deleteMetadata(
+			args.id,
+			flags.scope,
+			flags['template-key']
+		);
 		this.info(`Successfully deleted metadata ${flags['template-key']}`);
 	}
 }
 
-FoldersDeleteMetadataCommand.aliases = [ 'folders:metadata:delete' ];
+FoldersDeleteMetadataCommand.aliases = ['folders:metadata:delete'];
 
 FoldersDeleteMetadataCommand.description = 'Delete metadata from a folder';
-FoldersDeleteMetadataCommand.examples = ['box folders:metadata:remove 22222 --scope global --template-key properties'];
+FoldersDeleteMetadataCommand.examples = [
+	'box folders:metadata:remove 22222 --scope global --template-key properties',
+];
 FoldersDeleteMetadataCommand._endpoint = 'delete_folders_id_metadata_id_id';
 
 FoldersDeleteMetadataCommand.flags = {
@@ -35,7 +41,7 @@ FoldersDeleteMetadataCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the folder to remove metadata from'
+		description: 'ID of the folder to remove metadata from',
 	}),
 };
 

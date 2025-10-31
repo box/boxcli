@@ -40,20 +40,33 @@ class FilesUploadCommand extends BoxCommand {
 
 		let file;
 		if (size < CHUNKED_UPLOAD_FILE_SIZE) {
-			file = await this.client.files.uploadFile(folderID, name, stream, fileAttributes);
+			file = await this.client.files.uploadFile(
+				folderID,
+				name,
+				stream,
+				fileAttributes
+			);
 		} else {
 			let progressBar = new progress.Bar({
 				format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
 				stopOnComplete: true,
 			});
-			let uploader = await this.client.files.getChunkedUploader(folderID, size, name, stream, { fileAttributes });
+			let uploader = await this.client.files.getChunkedUploader(
+				folderID,
+				size,
+				name,
+				stream,
+				{ fileAttributes }
+			);
 			let bytesUploaded = 0;
 			let startTime = Date.now();
 			progressBar.start(size, 0, { speed: 'N/A' });
-			uploader.on('chunkUploaded', chunk => {
+			uploader.on('chunkUploaded', (chunk) => {
 				bytesUploaded += chunk.part.size;
 				progressBar.update(bytesUploaded, {
-					speed: Math.floor(bytesUploaded / (Date.now() - startTime) / 1000),
+					speed: Math.floor(
+						bytesUploaded / (Date.now() - startTime) / 1000
+					),
 				});
 			});
 			file = await uploader.start();
@@ -64,27 +77,32 @@ class FilesUploadCommand extends BoxCommand {
 }
 
 FilesUploadCommand.description = 'Upload a file';
-FilesUploadCommand.examples = ['box files:upload /path/to/file.pdf --parent-id 22222'];
+FilesUploadCommand.examples = [
+	'box files:upload /path/to/file.pdf --parent-id 22222',
+];
 FilesUploadCommand._endpoint = 'post_files_content';
 
 FilesUploadCommand.flags = {
 	...BoxCommand.flags,
 	'parent-id': Flags.string({
 		char: 'p',
-		description: 'ID of the parent folder to upload the file to; defaults to the root folder',
-		default: '0'
+		description:
+			'ID of the parent folder to upload the file to; defaults to the root folder',
+		default: '0',
 	}),
 	name: Flags.string({
 		char: 'n',
-		description: 'Provide different name for uploaded file'
+		description: 'Provide different name for uploaded file',
 	}),
 	'content-created-at': Flags.string({
-		description: 'The creation date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'The creation date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'content-modified-at': Flags.string({
-		description: 'The modification date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'The modification date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',

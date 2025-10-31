@@ -18,7 +18,8 @@ class DevicePinsListCommand extends BoxCommand {
 	}
 }
 
-DevicePinsListCommand.description = 'List all the device pins for your enterprise';
+DevicePinsListCommand.description =
+	'List all the device pins for your enterprise';
 DevicePinsListCommand.examples = ['box device-pins'];
 DevicePinsListCommand._endpoint = 'get_enterprises_id_device_pinners';
 
@@ -27,11 +28,8 @@ DevicePinsListCommand.flags = {
 	...PaginationUtils.flags,
 	direction: Flags.string({
 		description: 'Set sorting (by id) direction. Default is ASC',
-		options: [
-			'ASC',
-			'DESC'
-		]
-	})
+		options: ['ASC', 'DESC'],
+	}),
 };
 
 module.exports = DevicePinsListCommand;

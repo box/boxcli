@@ -29,7 +29,7 @@ LegalHoldPoliciesListCommand._endpoint = 'get_legal_hold_policies';
 LegalHoldPoliciesListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
-	'policy-name': Flags.string({ description: 'Filter by policy name' })
+	'policy-name': Flags.string({ description: 'Filter by policy name' }),
 };
 
 module.exports = LegalHoldPoliciesListCommand;

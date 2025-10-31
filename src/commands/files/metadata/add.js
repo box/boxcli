@@ -10,13 +10,17 @@ class FilesCreateMetadataCommand extends BoxCommand {
 
 		let metadataValues = Object.assign({}, ...flags.data);
 
-		let metadata = await this.client.files.addMetadata(args.id, flags.scope, flags['template-key'], metadataValues);
+		let metadata = await this.client.files.addMetadata(
+			args.id,
+			flags.scope,
+			flags['template-key'],
+			metadataValues
+		);
 		await this.output(metadata);
 	}
-
 }
 
-FilesCreateMetadataCommand.aliases = [ 'files:metadata:create' ];
+FilesCreateMetadataCommand.aliases = ['files:metadata:create'];
 
 FilesCreateMetadataCommand.description = 'Add metadata to a file';
 FilesCreateMetadataCommand.examples = [
@@ -28,7 +32,8 @@ FilesCreateMetadataCommand._endpoint = 'post_files_id_metadata_id_id';
 FilesCreateMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: Flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
+		description:
+			'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		multiple: true,
 		required: true,
 		parse: utils.parseMetadata,
@@ -48,7 +53,7 @@ FilesCreateMetadataCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to add metadata to'
+		description: 'ID of the file to add metadata to',
 	}),
 };
 

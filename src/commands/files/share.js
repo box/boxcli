@@ -2,7 +2,10 @@
 
 const BoxCommand = require('../../box-command');
 const { Args } = require('@oclif/core');
-const { sharedLinkFlags, sharedLinkFileFlags } = require('../shared-links/create');
+const {
+	sharedLinkFlags,
+	sharedLinkFileFlags,
+} = require('../shared-links/create');
 const SharedLinksModule = require('../../modules/shared-links');
 
 class FilesShareCommand extends BoxCommand {
@@ -26,12 +29,14 @@ FilesShareCommand.aliases = [
 ];
 
 FilesShareCommand.description = 'Create a shared link for a file';
-FilesShareCommand.examples = ['box files:share 11111 --access company --vanity-name my-custom-name-123'];
+FilesShareCommand.examples = [
+	'box files:share 11111 --access company --vanity-name my-custom-name-123',
+];
 FilesShareCommand._endpoint = 'put_files_id create_shared_link';
 
 FilesShareCommand.flags = {
 	...sharedLinkFlags,
-	...sharedLinkFileFlags
+	...sharedLinkFileFlags,
 };
 
 FilesShareCommand.args = {

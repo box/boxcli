@@ -16,7 +16,8 @@ class GroupsUpdateCommand extends BoxCommand {
 			updates.description = flags.description;
 		}
 		if (flags['external-sync-identifier']) {
-			updates.external_sync_identifier = flags['external-sync-identifier'];
+			updates.external_sync_identifier =
+				flags['external-sync-identifier'];
 		}
 		if (flags.provenance) {
 			updates.provenance = flags.provenance;
@@ -34,7 +35,9 @@ class GroupsUpdateCommand extends BoxCommand {
 }
 
 GroupsUpdateCommand.description = 'Update a group';
-GroupsUpdateCommand.examples = ['box groups:update 12345 --name "U.S. Employees"'];
+GroupsUpdateCommand.examples = [
+	'box groups:update 12345 --name "U.S. Employees"',
+];
 GroupsUpdateCommand._endpoint = 'put_groups_id';
 
 GroupsUpdateCommand.flags = {
@@ -43,27 +46,27 @@ GroupsUpdateCommand.flags = {
 		char: 'n',
 		description: 'The name of the group',
 	}),
-	description: Flags.string({ description: 'Description of the group', parse: utils.unescapeSlashes }),
-	'external-sync-identifier': Flags.string({ description: 'group identifier for groups coming from an external source' }),
-	provenance: Flags.string({ description: 'Track the external source where the group is coming from' }),
+	description: Flags.string({
+		description: 'Description of the group',
+		parse: utils.unescapeSlashes,
+	}),
+	'external-sync-identifier': Flags.string({
+		description:
+			'group identifier for groups coming from an external source',
+	}),
+	provenance: Flags.string({
+		description: 'Track the external source where the group is coming from',
+	}),
 	invite: Flags.string({
 		char: 'i',
 		description: 'Specifies who can invite the group to collaborate',
-		options: [
-			'admins_only',
-			'admins_and_members',
-			'all_managed_users'
-		]
+		options: ['admins_only', 'admins_and_members', 'all_managed_users'],
 	}),
 	'view-members': Flags.string({
 		char: 'm',
 		description: 'Specifies who can view the members of the group',
-		options: [
-			'admins_only',
-			'admins_and_members',
-			'all_managed_users'
-		]
-	})
+		options: ['admins_only', 'admins_and_members', 'all_managed_users'],
+	}),
 };
 
 GroupsUpdateCommand.args = {

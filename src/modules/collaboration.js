@@ -4,33 +4,31 @@
  * Module for shared code around collaboration endpoints
  */
 class CollaborationModule {
-
 	/**
-     * @param {BoxClient} client The client to use for API requests
-     * @constructor
-     */
+	 * @param {BoxClient} client The client to use for API requests
+	 * @constructor
+	 */
 	constructor(client) {
 		this.client = client;
 	}
 
 	/**
-     * Create a collaboration on an item for a user
-     *
-     * @param {Object} args The parsed oclif command-line arguments
-     * @param {Object} flags The parsed oclif command-line flags
-     * @returns {Promise<Object>} A promise resolving to the created collaboration object
-     */
+	 * Create a collaboration on an item for a user
+	 *
+	 * @param {Object} args The parsed oclif command-line arguments
+	 * @param {Object} flags The parsed oclif command-line flags
+	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
+	 */
 	createCollaboration(args, flags) {
-
 		let params = {
 			body: {
 				item: {
 					type: args.itemType,
 					id: args.itemID,
 				},
-				accessible_by: {}
+				accessible_by: {},
 			},
-			qs: {}
+			qs: {},
 		};
 
 		if (flags.fields) {
@@ -53,7 +51,8 @@ class CollaborationModule {
 		} else if (flags.uploader) {
 			params.body.role = this.client.collaborationRoles.UPLOADER;
 		} else if (flags['previewer-uploader']) {
-			params.body.role = this.client.collaborationRoles.PREVIEWER_UPLOADER;
+			params.body.role =
+				this.client.collaborationRoles.PREVIEWER_UPLOADER;
 		} else if (flags['viewer-uploader']) {
 			params.body.role = this.client.collaborationRoles.VIEWER_UPLOADER;
 		} else if (flags['co-owner']) {
@@ -75,7 +74,10 @@ class CollaborationModule {
 		}
 
 		// @TODO (2018-07-07): Should implement this using the Node SDK
-		return this.client.wrapWithDefaultHandler(this.client.post)('/collaborations', params);
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			'/collaborations',
+			params
+		);
 	}
 }
 

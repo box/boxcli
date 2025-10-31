@@ -17,7 +17,7 @@ WebLinksGetCommand.examples = ['box web-links:get 12345'];
 WebLinksGetCommand._endpoint = 'get_web_links_id';
 
 WebLinksGetCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 WebLinksGetCommand.args = {

@@ -8,8 +8,8 @@ const TEST_API_ROOT = 'https://api.box.com';
 const TEST_UPLOAD_ROOT = 'https://upload.box.com/api';
 const TEST_DOWNLOAD_ROOT = 'https://dl.boxcloud.com';
 const DEFAULT_DOWNLOAD_PATH = path.join(
-				os.homedir(),
-				'Downloads/Box-Downloads'
+	os.homedir(),
+	'Downloads/Box-Downloads'
 );
 
 function isWin() {
@@ -76,5 +76,5 @@ module.exports = {
 	getDownloadProgressBar,
 	getDriveLetter,
 	isWin,
-	toUrlPath
+	toUrlPath,
 };

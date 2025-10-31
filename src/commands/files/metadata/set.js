@@ -11,10 +11,14 @@ class FilesSetMetadataCommand extends BoxCommand {
 		let metadataValues = Object.assign({}, ...flags.data);
 		let templateKey = flags['template-key'];
 
-		let metadata = await this.client.files.setMetadata(args.id, flags.scope, templateKey, metadataValues);
+		let metadata = await this.client.files.setMetadata(
+			args.id,
+			flags.scope,
+			templateKey,
+			metadataValues
+		);
 		await this.output(metadata);
 	}
-
 }
 
 FilesSetMetadataCommand.description = 'Set metadata on a file';
@@ -26,7 +30,8 @@ FilesSetMetadataCommand.examples = [
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,
 	data: Flags.string({
-		description: 'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
+		description:
+			'Metadata key and value, in the form "key=value".  Note: For float type, use "#" at the beginning of digits: key2=#1234.50',
 		required: true,
 		multiple: true,
 		parse: utils.parseMetadata,

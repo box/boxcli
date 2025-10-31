@@ -22,7 +22,7 @@ class EnvironmentsDeleteCommand extends BoxCommand {
 					name: 'environment',
 					message: 'Which environment?',
 					choices: Object.keys(environmentsObj.environments),
-				}
+				},
 			]);
 			name = answers.environment;
 		}
@@ -54,8 +54,8 @@ EnvironmentsDeleteCommand.args = {
 		name: 'name',
 		required: false,
 		hidden: false,
-		description: 'Name of the environment'
-	})
+		description: 'Name of the environment',
+	}),
 };
 
 module.exports = EnvironmentsDeleteCommand;

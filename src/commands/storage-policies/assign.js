@@ -7,16 +7,21 @@ class StoragePoliciesAssignCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(StoragePoliciesAssignCommand);
 
-		let assignment = await this.client.storagePolicies.assign(args.storagePolicyID, args.userID);
+		let assignment = await this.client.storagePolicies.assign(
+			args.storagePolicyID,
+			args.userID
+		);
 		await this.output(assignment);
 	}
 }
 
 StoragePoliciesAssignCommand.description = 'Assign a storage policy';
-StoragePoliciesAssignCommand.examples = ['box storage-policies:assign 12345 33333'];
+StoragePoliciesAssignCommand.examples = [
+	'box storage-policies:assign 12345 33333',
+];
 
 StoragePoliciesAssignCommand.flags = {
-	...BoxCommand.flags
+	...BoxCommand.flags,
 };
 
 StoragePoliciesAssignCommand.args = {
@@ -24,13 +29,13 @@ StoragePoliciesAssignCommand.args = {
 		name: 'storagePolicyID',
 		required: true,
 		hidden: false,
-		description: 'Id of the storage policy'
+		description: 'Id of the storage policy',
 	}),
 	userID: Args.string({
 		name: 'userID',
 		required: true,
 		hidden: false,
-		description: 'Id of the user to assign the storage policy to'
+		description: 'Id of the user to assign the storage policy to',
 	}),
 };
 

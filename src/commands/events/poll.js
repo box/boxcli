@@ -49,22 +49,27 @@ EventsPollCommand.flags = {
 	...BoxCommand.flags,
 	enterprise: Flags.boolean({
 		char: 'e',
-		description: 'Get enterprise events'
+		description: 'Get enterprise events',
 	}),
-	'event-types': Flags.string({ description: 'Return enterprise events filtered by event types. Format using a comma delimited list: NEW_USER,DELETE_USER,EDIT_USER' }),
+	'event-types': Flags.string({
+		description:
+			'Return enterprise events filtered by event types. Format using a comma delimited list: NEW_USER,DELETE_USER,EDIT_USER',
+	}),
 	'start-date': Flags.string({
-		description: 'Return enterprise events that occured after this time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'Return enterprise events that occured after this time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks. If not used, defaults to now',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'end-date': Flags.string({
-		description: 'Return enterprise events that occured before this time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks.',
-		parse: input => BoxCommand.normalizeDateString(input),
+		description:
+			'Return enterprise events that occured before this time. Use a timestamp or shorthand syntax 00t, like 05w for 5 weeks.',
+		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'polling-interval': Flags.string({
-		description: 'Number of seconds to wait before polling for new events. Default is 60 seconds.',
-		parse: input => parseInt(input, 10),
-	})
+		description:
+			'Number of seconds to wait before polling for new events. Default is 60 seconds.',
+		parse: (input) => parseInt(input, 10),
+	}),
 };
-
 
 module.exports = EventsPollCommand;

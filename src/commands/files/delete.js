@@ -22,7 +22,9 @@ class FilesDeleteCommand extends BoxCommand {
 				}
 			}
 		}
-		this.info(`Deleted file ${args.id}${flags.force ? ' permanently' : ''}`);
+		this.info(
+			`Deleted file ${args.id}${flags.force ? ' permanently' : ''}`
+		);
 	}
 }
 
@@ -36,7 +38,7 @@ FilesDeleteCommand.flags = {
 		char: 'f',
 		description: 'Permanently delete the item, bypassing the trash',
 	}),
-	etag: Flags.string({ description: 'Only delete if etag value matches' })
+	etag: Flags.string({ description: 'Only delete if etag value matches' }),
 };
 
 FilesDeleteCommand.args = {
@@ -44,7 +46,7 @@ FilesDeleteCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to delete'
+		description: 'ID of the file to delete',
 	}),
 };
 

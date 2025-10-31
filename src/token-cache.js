@@ -11,14 +11,16 @@ const utils = require('./util');
  * Cache interface used by the Node SDK to cache tokens to disk in the user's home directory
  */
 class CLITokenCache {
-
 	/**
 	 * @constructor
 	 * @param {string} environmentName The name of the active CLI environment
 	 */
 	constructor(environmentName) {
-
-		this.filePath = path.join(os.homedir(), '.box', `${environmentName}_token_cache.json`);
+		this.filePath = path.join(
+			os.homedir(),
+			'.box',
+			`${environmentName}_token_cache.json`
+		);
 	}
 
 	/**
@@ -27,12 +29,12 @@ class CLITokenCache {
 	 * @returns {void}
 	 */
 	read(callback) {
-
-		utils.readFileAsync(this.filePath, 'utf8')
-			.then(json => JSON.parse(json))
-		// If file is not present or not valid JSON, treat that as empty (but available) cache
+		utils
+			.readFileAsync(this.filePath, 'utf8')
+			.then((json) => JSON.parse(json))
+			// If file is not present or not valid JSON, treat that as empty (but available) cache
 			.catch(() => ({}))
-			.then(tokenInfo => callback(null, tokenInfo));
+			.then((tokenInfo) => callback(null, tokenInfo));
 	}
 
 	/**
@@ -42,12 +44,14 @@ class CLITokenCache {
 	 * @returns {void}
 	 */
 	write(tokenInfo, callback) {
-
 		let output = JSON.stringify(tokenInfo, null, 4);
-		utils.writeFileAsync(this.filePath, output, 'utf8')
-		// Pass success or error to the callback
+		utils
+			.writeFileAsync(this.filePath, output, 'utf8')
+			// Pass success or error to the callback
 			.then(callback)
-			.catch(err => callback(new BoxCLIError('Failed to write to token cache', err)));
+			.catch((err) =>
+				callback(new BoxCLIError('Failed to write to token cache', err))
+			);
 	}
 
 	/**
@@ -56,10 +60,13 @@ class CLITokenCache {
 	 * @returns {void}
 	 */
 	clear(callback) {
-		utils.unlinkAsync(this.filePath)
-		// Pass success or error to the callback
+		utils
+			.unlinkAsync(this.filePath)
+			// Pass success or error to the callback
 			.then(callback)
-			.catch(err => callback(new BoxCLIError('Failed to delete token cache', err)));
+			.catch((err) =>
+				callback(new BoxCLIError('Failed to delete token cache', err))
+			);
 	}
 
 	/**
@@ -70,14 +77,14 @@ class CLITokenCache {
 	store(token) {
 		// eslint-disable-next-line promise/avoid-new
 		return new Promise((resolve, reject) => {
-			const accquiredAtMS = (new Date()).getTime();
+			const accquiredAtMS = new Date().getTime();
 			const tokenInfo = {
 				accessToken: token.accessToken,
 				accessTokenTTLMS: token.expiresIn * 1000,
 				refreshToken: token.refreshToken,
-				acquiredAtMS: accquiredAtMS
+				acquiredAtMS: accquiredAtMS,
 			};
-			this.write(tokenInfo, err => {
+			this.write(tokenInfo, (err) => {
 				if (err) {
 					reject(err);
 				} else {

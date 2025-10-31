@@ -17,26 +17,29 @@ class RetentionPoliciesListCommand extends BoxCommand {
 			options.fields = flags.fields;
 		}
 
-		let assignments = await this.client.retentionPolicies.getAssignments(args.id, options);
+		let assignments = await this.client.retentionPolicies.getAssignments(
+			args.id,
+			options
+		);
 		await this.output(assignments);
 	}
 }
 
-RetentionPoliciesListCommand.description = 'List all retention policies for your enterprise';
-RetentionPoliciesListCommand.examples = ['box retention-policies:assignments 12345'];
-RetentionPoliciesListCommand._endpoint = 'get_retention_policies_id_assignments';
+RetentionPoliciesListCommand.description =
+	'List all retention policies for your enterprise';
+RetentionPoliciesListCommand.examples = [
+	'box retention-policies:assignments 12345',
+];
+RetentionPoliciesListCommand._endpoint =
+	'get_retention_policies_id_assignments';
 
 RetentionPoliciesListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtils.flags,
 	type: Flags.string({
 		description: 'The type of the retention policy assignment to retrieve',
-		options: [
-			'folder',
-			'enterprise',
-			'metadata_template'
-		],
-	})
+		options: ['folder', 'enterprise', 'metadata_template'],
+	}),
 };
 
 RetentionPoliciesListCommand.args = {

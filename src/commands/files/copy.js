@@ -15,7 +15,11 @@ class FilesCopyCommand extends BoxCommand {
 			options.version = flags.version;
 		}
 
-		let fileCopy = await this.client.files.copy(args.id, args.parentID, options);
+		let fileCopy = await this.client.files.copy(
+			args.id,
+			args.parentID,
+			options
+		);
 		await this.output(fileCopy);
 	}
 }
@@ -27,8 +31,13 @@ FilesCopyCommand._endpoint = 'post_files_id_copy';
 FilesCopyCommand.flags = {
 	...BoxCommand.flags,
 	name: Flags.string({ description: 'New name for the file' }),
-	version: Flags.string({ description: 'File version ID if you want to copy a specific file version' }),
-	'id-only': Flags.boolean({ description: 'Output only the ID of the file copy '}),
+	version: Flags.string({
+		description:
+			'File version ID if you want to copy a specific file version',
+	}),
+	'id-only': Flags.boolean({
+		description: 'Output only the ID of the file copy ',
+	}),
 };
 
 FilesCopyCommand.args = {
@@ -36,13 +45,13 @@ FilesCopyCommand.args = {
 		name: 'id',
 		required: true,
 		hidden: false,
-		description: 'ID of the file to copy'
+		description: 'ID of the file to copy',
 	}),
 	parentID: Args.string({
 		name: 'parentID',
 		required: true,
 		hidden: false,
-		description: 'ID of the new parent folder to copy the file into'
+		description: 'ID of the new parent folder to copy the file into',
 	}),
 };
 

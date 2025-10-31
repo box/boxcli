@@ -12,7 +12,11 @@ class FoldersCopyCommand extends BoxCommand {
 			options.name = flags.name;
 		}
 
-		let folderCopy = await this.client.folders.copy(args.id, args.parentID, options);
+		let folderCopy = await this.client.folders.copy(
+			args.id,
+			args.parentID,
+			options
+		);
 		await this.output(folderCopy);
 	}
 }
@@ -41,7 +45,7 @@ FoldersCopyCommand.args = {
 		required: true,
 		hidden: false,
 		description: 'ID of the new parent folder to copy the folder into',
-	})
+	}),
 };
 
 module.exports = FoldersCopyCommand;
