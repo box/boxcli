@@ -8,7 +8,6 @@ const debug = makeDebug('oclif:update:github');
 
 let octokitInstance = null;
 let octokitClass = null;
-let gotModule = null;
 
 async function loadOctokit() {
 	if (!octokitClass) {
@@ -16,15 +15,6 @@ async function loadOctokit() {
 		octokitClass = Octokit;
 	}
 	return octokitClass;
-}
-
-async function loadGot() {
-	if (!gotModule) {
-		const module = await import('got');
-		gotModule = module.default || module;
-	}
-
-	return gotModule;
 }
 
 async function getOctokit() {
@@ -100,17 +90,20 @@ class GitHubUpdater extends Updater {
 			return;
 		}
 
-		const channel = options.channel || (await this.determineChannel(version));
+		const channel =
+			options.channel || (await this.determineChannel(version));
 		const current = await this.determineCurrentVersion();
 
 		if (version) {
-			const localVersion = force ? null : await this.findLocalVersion(version);
+			const localVersion = force
+				? null
+				: await this.findLocalVersion(version);
 
 			if (this.alreadyOnVersion(current, localVersion || null)) {
 				ux.action.stop(
 					this.config.scopedEnvVar('HIDE_UPDATED_MESSAGE')
 						? 'done'
-						: `already on version ${current}`,
+						: `already on version ${current}`
 				);
 				return;
 			}
@@ -124,11 +117,14 @@ class GitHubUpdater extends Updater {
 				const url = index[version];
 				if (!url) {
 					throw new Error(
-						`${version} not found in index:\n${Object.keys(index).join(', ')}`,
+						`${version} not found in index:\n${Object.keys(index).join(', ')}`
 					);
 				}
 
-				const manifest = await this.fetchGitHubVersionManifest(version, url);
+				const manifest = await this.fetchGitHubVersionManifest(
+					version,
+					url
+				);
 				const updated = manifest.sha
 					? `${manifest.version}-${manifest.sha}`
 					: manifest.version;
@@ -137,9 +133,9 @@ class GitHubUpdater extends Updater {
 
 			await this.config.runHook('update', { channel, version });
 			ux.action.stop();
-			ux.log();
-			ux.log(
-				`Updating to a specific version will not update the channel. If autoupdate is enabled, the CLI will eventually be updated back to ${channel}.`,
+			ux.stdout();
+			ux.stdout(
+				`Updating to a specific version will not update the channel. If autoupdate is enabled, the CLI will eventually be updated back to ${channel}.`
 			);
 		} else {
 			const manifest = await this.fetchGitHubChannelManifest(channel);
@@ -151,10 +147,13 @@ class GitHubUpdater extends Updater {
 				ux.action.stop(
 					this.config.scopedEnvVar('HIDE_UPDATED_MESSAGE')
 						? 'done'
-						: `already on version ${current}`,
+						: `already on version ${current}`
 				);
 			} else {
-				await this.config.runHook('preupdate', { channel, version: updated });
+				await this.config.runHook('preupdate', {
+					channel,
+					version: updated,
+				});
 				await this.update(manifest, current, updated, force, channel);
 			}
 
@@ -179,12 +178,12 @@ class GitHubUpdater extends Updater {
 		const { owner, repo } = this.githubConfig;
 
 		try {
-		debug(`Fetching releases for ${owner}/${repo}`);
-		const { data: releases } = await this.octokit.repos.listReleases({
-			owner,
-			per_page: 100,
-			repo,
-		});
+			debug(`Fetching releases for ${owner}/${repo}`);
+			const { data: releases } = await this.octokit.repos.listReleases({
+				owner,
+				per_page: 100,
+				repo,
+			});
 
 			const versionIndex = {};
 
@@ -206,7 +205,7 @@ class GitHubUpdater extends Updater {
 		} catch (error) {
 			debug('Failed to fetch GitHub releases', error);
 			throw new Error(
-				`Failed to fetch releases from GitHub repository ${owner}/${repo}`,
+				`Failed to fetch releases from GitHub repository ${owner}/${repo}`
 			);
 		}
 	}
@@ -239,28 +238,17 @@ class GitHubUpdater extends Updater {
 			}
 
 			const version = release.tag_name.replace(/^v/u, '');
-			const manifestName = this.determineManifestName();
-			const manifestAsset = release.assets.find((a) => a.name === manifestName);
-
-		if (manifestAsset) {
-			// Fetch the manifest file using got (since it's a direct download URL)
-			debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
-			const got = await loadGot();
-			const { body } = await got.get(manifestAsset.browser_download_url);
-			return typeof body === 'string' ? JSON.parse(body) : body;
-		}
-
-			// If no manifest found, construct a basic one
 			const assetName = this.determineAssetName(version);
 			const asset = release.assets.find((a) => a.name === assetName);
 
 			if (!asset) {
 				const config = this.config;
 				throw new Error(
-					`No suitable asset found for ${config.platform}-${config.arch} in release ${release.tag_name}`,
+					`No suitable asset found for ${config.platform}-${config.arch} in release ${release.tag_name}`
 				);
 			}
 
+			// Return a basic manifest with the asset URL
 			return {
 				gz: asset.browser_download_url,
 				version,
@@ -269,7 +257,7 @@ class GitHubUpdater extends Updater {
 			const statusCode = error.status;
 			if (statusCode === 404) {
 				throw new Error(
-					`Release not found for channel "${channel}" in ${owner}/${repo}`,
+					`Release not found for channel "${channel}" in ${owner}/${repo}`
 				);
 			}
 
@@ -292,17 +280,18 @@ class GitHubUpdater extends Updater {
 				tag: `v${version}`,
 			});
 
-		const manifestName = this.determineManifestName();
-		const manifestAsset = release.assets.find((a) => a.name === manifestName);
+			const assetName = this.determineAssetName(version);
+			const asset = release.assets.find((a) => a.name === assetName);
 
-		if (manifestAsset) {
-			debug(`Fetching manifest from ${manifestAsset.browser_download_url}`);
-			const got = await loadGot();
-			const { body } = await got.get(manifestAsset.browser_download_url);
-			return typeof body === 'string' ? JSON.parse(body) : body;
-		}
+			if (asset) {
+				// Use the asset URL from the release
+				return {
+					gz: asset.browser_download_url,
+					version,
+				};
+			}
 
-			// If no manifest found, construct a basic one
+			// Fallback to the provided URL
 			return {
 				gz: url,
 				version,
@@ -324,18 +313,12 @@ class GitHubUpdater extends Updater {
 		return `${config.bin}-v${version}-${platform}-${config.arch}.${ext}`;
 	}
 
-	determineManifestName() {
-		const config = this.config;
-		const platform = config.platform === 'wsl' ? 'linux' : config.platform;
-		return `${config.bin}-${platform}-${config.arch}-buildmanifest`;
-	}
-
 	getGitHubConfig() {
 		const oclifConfig = this.config;
 		const config = checkGitHubConfig(oclifConfig);
 		if (!config) {
 			throw new Error(
-				'GitHub repository not configured. Add "oclif.update.github" with "owner" and "repo" fields to package.json',
+				'GitHub repository not configured. Add "oclif.update.github" with "owner" and "repo" fields to package.json'
 			);
 		}
 

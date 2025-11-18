@@ -17,16 +17,14 @@ class GithubUpdatecommand extends UpdateCommand {
 
 			const table = allVersions.map((version) => {
 				const location =
-					localVersions.find((l) => path.basename(l).startsWith(version)) ||
-					index[version];
+					localVersions.find((l) =>
+						path.basename(l).startsWith(version)
+					) || index[version];
 				return { version, location };
 			});
 
 			printTable({
-				columns: [
-					{ key: 'version' },
-					{ key: 'location' },
-				],
+				columns: [{ key: 'version' }, { key: 'location' }],
 				data: table,
 			});
 			return;
@@ -46,5 +44,7 @@ class GithubUpdatecommand extends UpdateCommand {
 		});
 	}
 }
+
+GithubUpdatecommand.description = 'Update the BoxCLI using GitHub';
 
 module.exports = GithubUpdatecommand;
