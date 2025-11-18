@@ -169,6 +169,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box terms-of-service`](docs/terms-of-service.md) - List terms of services for your enterprise
 * [`box tokens`](docs/tokens.md) - Get a token. Returns the service account token by default
 * [`box trash`](docs/trash.md) - List all items in trash
+* [`box update`](docs/update.md) - Update the BoxCLI using GitHub
 * [`box users`](docs/users.md) - List all Box users
 * [`box version`](docs/version.md)
 * [`box watermarking`](docs/watermarking.md) - Apply a watermark on an item

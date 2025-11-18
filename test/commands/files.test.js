@@ -335,7 +335,6 @@ describe('Files', function () {
 			});
 	});
 	leche.withData(['files:lock', 'files:update-lock'], function (command) {
-
 		describe(command, function () {
 			let fileId = '1234567890',
 				expireTime = '2030-01-01T08:00:00+00:00',
@@ -417,7 +416,6 @@ describe('Files', function () {
 		});
 	});
 	leche.withData(['files:comments', 'comments:list'], function (command) {
-
 		describe(command, function () {
 			let fileId = '1234567890',
 				fixture = getFixture('comments/get_files_id_comments_page_1'),
@@ -472,7 +470,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:collaborations', 'files:collaborations:list'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567890',
 					fixture = getFixture(
@@ -760,7 +757,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:metadata', 'files:metadata:get-all'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '123456789',
 					getAllMetadataFixture = getFixture(
@@ -785,7 +781,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:metadata:remove', 'files:metadata:delete'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567890',
 					metadataScope = 'enterprise',
@@ -927,7 +922,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:metadata:add', 'files:metadata:create'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567890',
 					metadataScope = 'enterprise',
@@ -1112,7 +1106,6 @@ describe('Files', function () {
 			'files:shared-links:update',
 		],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567890',
 					vanityName = 'my-custom-name-123',
@@ -1235,7 +1228,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:unshare', 'files:shared-links:delete'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567809',
 					getFileFixture = getFixture('files/get_files_id');
@@ -1291,7 +1283,6 @@ describe('Files', function () {
 		}
 	);
 	leche.withData(['files:tasks', 'files:tasks:list'], function (command) {
-
 		describe(command, function () {
 			let fileId = '1234567890',
 				fixture = getFixture('files/get_files_id_tasks_page_1'),
@@ -1343,7 +1334,6 @@ describe('Files', function () {
 	leche.withData(
 		['files:versions', 'files:versions:list'],
 		function (command) {
-
 			describe(command, function () {
 				let fileId = '1234567890',
 					fixture = getFixture('files/get_files_id_versions_page_1'),

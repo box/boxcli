@@ -146,7 +146,6 @@ describe('Metadata Templates', function () {
 	leche.withData(
 		['metadata-templates', 'metadata-templates:list'],
 		function (command) {
-
 			describe(command, function () {
 				let scope = 'enterprise',
 					fixture = getFixture(

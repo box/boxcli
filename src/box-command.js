@@ -1,4 +1,3 @@
- 
 'use strict';
 
 const originalEmitWarning = process.emitWarning;
@@ -45,7 +44,6 @@ const darwinKeychainGetPassword = promisify(
 );
 let keytar = null;
 try {
-	 
 	keytar = require('keytar');
 } catch {
 	// keytar cannot be imported because the library is not provided for this operating system / architecture
@@ -287,7 +285,6 @@ function formatObjectHeader(obj) {
  */
 class BoxCommand extends Command {
 	// @TODO(2018-08-15): Move all fs methods used here to be async
-	 
 
 	/**
 	 * Initialize before the command is run
@@ -308,9 +305,8 @@ class BoxCommand extends Command {
 			this.disableRequiredArgsAndFlags();
 		}
 
-		 
 		let { flags, args } = await this.parse(this.constructor);
-		 
+
 		this.flags = flags;
 		this.args = args;
 		this.settings = await this._loadSettings();
@@ -362,7 +358,6 @@ class BoxCommand extends Command {
 		progressBar.start(bulkCalls.length, 0);
 
 		for (let bulkData of bulkCalls) {
-			 
 			this.argv = [];
 			bulkEntryIndex += 1;
 			this._getArgsForBulkInput(allPossibleArgs, bulkData);
@@ -370,7 +365,7 @@ class BoxCommand extends Command {
 			await this._handleAsUserSettings(bulkData);
 			DEBUG.execute('Executing in bulk mode argv: %O', this.argv);
 			// @TODO(2018-08-29): Convert this to a promise queue to improve performance
-			 
+
 			try {
 				await this._singleRun();
 			} catch (error) {
@@ -386,7 +381,7 @@ class BoxCommand extends Command {
 					error: this.wrapError(error),
 				});
 			}
-			 
+
 			progressBar.update(bulkEntryIndex);
 		}
 		this.isBulk = false;
@@ -452,7 +447,7 @@ class BoxCommand extends Command {
 		let asUser = bulkData.find((o) => o.fieldKey === 'as-user') || {};
 		if (!_.isEmpty(asUser)) {
 			if (_.isNil(asUser.value)) {
-				let environmentsObj = await this.getEnvironments();  
+				let environmentsObj = await this.getEnvironments();
 				if (environmentsObj.default) {
 					let environment =
 						environmentsObj.environments[environmentsObj.default];
@@ -488,27 +483,32 @@ class BoxCommand extends Command {
 	 * @private
 	 */
 	_setFlagsForBulkInput(bulkData) {
-		const bulkDataFlags = new Set(bulkData
-			.filter((o) => o.type === 'flag' && !_.isNil(o.value))
-			.map((o) => o.fieldKey));
+		const bulkDataFlags = new Set(
+			bulkData
+				.filter((o) => o.type === 'flag' && !_.isNil(o.value))
+				.map((o) => o.fieldKey)
+		);
 		for (const flag of Object.keys(this.flags)
 			.filter((flag) => flag !== 'bulk-file-path') // Remove the bulk file path flag so we don't recurse!
 			.filter((flag) => !bulkDataFlags.has(flag))) {
-				// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
-				// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
-				if (Array.isArray(this.flags[flag])) {
-					for (const value of this.flags[flag]) {
-						this._addFlagToArgv(flag, value);
-					}
-				} else {
-					this._addFlagToArgv(flag, this.flags[flag]);
+			// Some flags can be specified multiple times in a single command. For these flags, their value is an array of user inputted values.
+			// For these flags, we iterate through their values and add each one as a separate flag to comply with oclif
+			if (Array.isArray(this.flags[flag])) {
+				for (const value of this.flags[flag]) {
+					this._addFlagToArgv(flag, value);
 				}
+			} else {
+				this._addFlagToArgv(flag, this.flags[flag]);
 			}
+		}
 		// Include all flag values from bulk input, which will override earlier ones
 		// from the command line
 		for (const o of bulkData
 			// Remove the bulk file path flag so we don't recurse!
-			.filter((o) => o.type === 'flag' && o.fieldKey !== 'bulk-file-path')) this._addFlagToArgv(o.fieldKey, o.value);
+			.filter(
+				(o) => o.type === 'flag' && o.fieldKey !== 'bulk-file-path'
+			))
+			this._addFlagToArgv(o.fieldKey, o.value);
 	}
 
 	/**
@@ -690,7 +690,10 @@ class BoxCommand extends Command {
 			DEBUG.execute('Read bulk input file at %s', filePath);
 			return fileContents;
 		} catch (error) {
-			throw new BoxCLIError(`Could not open input file ${filePath}`, error);
+			throw new BoxCLIError(
+				`Could not open input file ${filePath}`,
+				error
+			);
 		}
 	}
 
@@ -819,7 +822,6 @@ class BoxCommand extends Command {
 				this._configureSdk(sdk, { ...SDK_CONFIG });
 				this.sdk = sdk;
 				let tokenInfo = await new Promise((resolve, reject) => {
-					 
 					tokenCache.read((error, localTokenInfo) => {
 						if (error) {
 							reject(error);
@@ -1115,8 +1117,11 @@ class BoxCommand extends Command {
 			clientSettings.uploadRequestTimeoutMS =
 				this.settings.uploadRequestTimeoutMS;
 		}
-		clientSettings.analyticsClient.name = this.settings.enableAnalyticsClient &&
-			this.settings.analyticsClient.name ? `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}` : DEFAULT_ANALYTICS_CLIENT_NAME;
+		clientSettings.analyticsClient.name =
+			this.settings.enableAnalyticsClient &&
+			this.settings.analyticsClient.name
+				? `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`
+				: DEFAULT_ANALYTICS_CLIENT_NAME;
 
 		if (Object.keys(clientSettings).length > 0) {
 			DEBUG.init('SDK client settings %s', clientSettings);
@@ -1161,8 +1166,11 @@ class BoxCommand extends Command {
 		if (this.settings.uploadRequestTimeoutMS) {
 			// Not supported in TS SDK
 		}
-		additionalHeaders['X-Box-UA'] = this.settings.enableAnalyticsClient &&
-			this.settings.analyticsClient.name ? `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}` : DEFAULT_ANALYTICS_CLIENT_NAME;
+		additionalHeaders['X-Box-UA'] =
+			this.settings.enableAnalyticsClient &&
+			this.settings.analyticsClient.name
+				? `${DEFAULT_ANALYTICS_CLIENT_NAME} ${this.settings.analyticsClient.name}`
+				: DEFAULT_ANALYTICS_CLIENT_NAME;
 		client = client.withExtraHeaders(additionalHeaders);
 		DEBUG.init('TS SDK configured with settings from settings.json');
 
@@ -1188,9 +1196,11 @@ class BoxCommand extends Command {
 		if (Array.isArray(content)) {
 			// Format each object individually and then flatten in case this an array of arrays,
 			// which happens when a command that outputs a collection gets run in bulk
-			formattedOutputData = (await Promise.all(
+			formattedOutputData = (
+				await Promise.all(
 					content.map((o) => this._formatOutputObject(o))
-				)).flat();
+				)
+			).flat();
 			DEBUG.output(
 				'Formatted %d output entries for display',
 				content.length
@@ -1295,9 +1305,7 @@ class BoxCommand extends Command {
 					break;
 				}
 
-				 
 				entry = await obj.next();
-				 
 			}
 			DEBUG.output('Unrolled iterable into %d entries', output.length);
 		}
@@ -1586,7 +1594,6 @@ class BoxCommand extends Command {
 			/* eslint-disable promise/no-promise-in-callback */
 			DEBUG.execute('Running framework error handler');
 			await super.catch(this.wrapError(err));
-			 
 		} catch (error) {
 			// The oclif default catch handler rethrows most errors; handle those here
 			DEBUG.execute('Handling re-thrown error in base command handler');
@@ -1615,11 +1622,10 @@ class BoxCommand extends Command {
 
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!
-			 
+
 			process.stderr.write(errorMsg, () => {
 				process.exitCode = 2;
 			});
-			 
 		}
 	}
 
@@ -1962,7 +1968,10 @@ class BoxCommand extends Command {
 				);
 			}
 		} catch (error) {
-			throw new BoxCLIError('Failed creating CLI working directory', error);
+			throw new BoxCLIError(
+				'Failed creating CLI working directory',
+				error
+			);
 		}
 
 		return settings;

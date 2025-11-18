@@ -55,7 +55,6 @@ describe('Groups', function () {
 	});
 
 	leche.withData(['groups', 'groups:list'], function (command) {
-
 		describe(command, function () {
 			let fixture = getFixture('groups/get_groups_page_1'),
 				fixture2 = getFixture('groups/get_groups_page_2'),
@@ -136,7 +135,6 @@ describe('Groups', function () {
 			'collaborations:list-for-group',
 		],
 		function (command) {
-
 			describe(command, function () {
 				let groupId = '119720',
 					fixture = getFixture(
@@ -367,7 +365,6 @@ describe('Groups', function () {
 	leche.withData(
 		['groups:memberships:get', 'groups:membership:get'],
 		function (command) {
-
 			describe(command, function () {
 				let membershipId = '12345',
 					fixture = getFixture('groups/get_group_memberships_id'),
@@ -426,7 +423,6 @@ describe('Groups', function () {
 	leche.withData(
 		['groups:memberships', 'groups:membership:list'],
 		function (command) {
-
 			describe(command, function () {
 				let groupId = '11111',
 					fixture = getFixture(
@@ -491,7 +487,6 @@ describe('Groups', function () {
 	leche.withData(
 		['groups:memberships:add', 'groups:membership:add'],
 		function (command) {
-
 			describe(command, function () {
 				let groupId = '11111',
 					userId = '44444',
@@ -631,7 +626,6 @@ describe('Groups', function () {
 	leche.withData(
 		['groups:memberships:update', 'groups:membership:update'],
 		function (command) {
-
 			describe(command, function () {
 				let membershipId = '12345',
 					fixture = getFixture('groups/get_group_memberships_id'),
@@ -766,7 +760,6 @@ describe('Groups', function () {
 	leche.withData(
 		['groups:memberships:remove', 'groups:membership:remove'],
 		function (command) {
-
 			describe(command, function () {
 				let membershipId = '12345';
 

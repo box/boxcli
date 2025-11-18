@@ -77,7 +77,6 @@ describe('Collaborations', function () {
 			'folders:collaborations:update',
 		],
 		function (command) {
-
 			describe(command, function () {
 				let collaborationId = '1234567890',
 					fixture = getFixture(
@@ -312,7 +311,6 @@ describe('Collaborations', function () {
 			'folders:collaborations:delete',
 		],
 		function (command) {
-
 			describe(command, function () {
 				let collaborationId = '1234567890';
 
@@ -336,7 +334,6 @@ describe('Collaborations', function () {
 	leche.withData(
 		['collaborations:create', 'collaborations:add'],
 		function (command) {
-
 			describe(command, function () {
 				let itemId = '1234567890',
 					boxItemType = 'folder',
@@ -638,7 +635,6 @@ describe('Collaborations', function () {
 	leche.withData(
 		['collaborations:get-pending', 'collaborations:pending'],
 		function (command) {
-
 			describe(command, function () {
 				let fixture = getFixture(
 						'collaborations/get_collaborations_pending_page_1'

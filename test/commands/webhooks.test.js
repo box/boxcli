@@ -38,7 +38,6 @@ describe('Webhooks', function () {
 	});
 
 	leche.withData(['webhooks', 'webhooks:list'], function (command) {
-
 		describe(command, function () {
 			let fixture = getFixture('webhooks/get_webhooks_page_1'),
 				fixture2 = getFixture('webhooks/get_webhooks_page_2'),

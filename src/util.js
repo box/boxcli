@@ -115,7 +115,7 @@ function parseValue(value) {
 		// Parsing failed, fall back to string value
 	} else if (value.startsWith('[') && value.endsWith(']')) {
 		// Handle as array
-		let interiorStr = value.slice(1, - 1);
+		let interiorStr = value.slice(1, -1);
 
 		if (interiorStr.length === 0) {
 			return [];
@@ -197,7 +197,9 @@ function parseStringToObject(inputString, keys) {
 	while (inputString.length > 0) {
 		inputString = inputString.trim();
 		let parsedKey = inputString.split('=')[0];
-		inputString = inputString.slice(Math.max(0, inputString.indexOf('=') + 1));
+		inputString = inputString.slice(
+			Math.max(0, inputString.indexOf('=') + 1)
+		);
 
 		// Find the next key or the end of the string
 		let nextKeyIndex = inputString.length;
@@ -208,12 +210,17 @@ function parseStringToObject(inputString, keys) {
 			}
 		}
 
-		let parsedValue = inputString.slice(0, Math.max(0, nextKeyIndex)).trim();
+		let parsedValue = inputString
+			.slice(0, Math.max(0, nextKeyIndex))
+			.trim();
 		if (parsedValue.endsWith(',') && nextKeyIndex !== inputString.length) {
-			parsedValue = parsedValue.slice(0, Math.max(0, parsedValue.length - 1));
+			parsedValue = parsedValue.slice(
+				0,
+				Math.max(0, parsedValue.length - 1)
+			);
 		}
 		if (parsedValue.startsWith('"') && parsedValue.endsWith('"')) {
-			parsedValue = parsedValue.slice(1, - 1);
+			parsedValue = parsedValue.slice(1, -1);
 		}
 
 		if (!keys.includes(parsedKey)) {
@@ -237,7 +244,6 @@ function parseStringToObject(inputString, keys) {
  * @throws BoxCLIError
  */
 async function checkDir(dirPath, shouldCreate) {
-	 
 	if (!fs.existsSync(dirPath)) {
 		if (shouldCreate) {
 			await mkdirp(dirPath);

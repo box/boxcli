@@ -365,7 +365,6 @@ describe('Folders', function () {
 	leche.withData(
 		['folders:collaborations', 'folders:collaborations:list'],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					getCollaborationFixture = getFixture(
@@ -653,7 +652,6 @@ describe('Folders', function () {
 	leche.withData(
 		['folders:metadata', 'folders:metadata:get-all'],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					getAllMetadataFixture = getFixture(
@@ -683,7 +681,6 @@ describe('Folders', function () {
 	leche.withData(
 		['folders:metadata:remove', 'folders:metadata:delete'],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					metadataScope = 'enterprise',
@@ -836,7 +833,6 @@ describe('Folders', function () {
 	leche.withData(
 		['folders:metadata:add', 'folders:metadata:create'],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					metadataScope = 'enterprise',
@@ -1029,7 +1025,6 @@ describe('Folders', function () {
 			'folders:shared-links:update',
 		],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					vanityName = 'my-custom-name-123',
@@ -1131,7 +1126,6 @@ describe('Folders', function () {
 	leche.withData(
 		['folders:unshare', 'folders:shared-links:delete'],
 		function (command) {
-
 			describe(command, function () {
 				let folderId = '0',
 					getFolderFixture = getFixture('folders/get_folders_id');
@@ -1169,7 +1163,6 @@ describe('Folders', function () {
 	);
 
 	leche.withData(['folders:items', 'folders:list-items'], function (command) {
-
 		describe(command, function () {
 			let folderId = '0',
 				sort = 'date',
