@@ -112,10 +112,7 @@ class GitHubUpdater extends Updater {
 					);
 				}
 
-				const manifest = await this.fetchGitHubVersionManifest(
-					version,
-					url
-				);
+				const manifest = await this.fetchGitHubManifest(version, url);
 				const updated = manifest.sha
 					? `${manifest.version}-${manifest.sha}`
 					: manifest.version;
@@ -201,86 +198,92 @@ class GitHubUpdater extends Updater {
 		}
 	}
 
-	// GitHub-specific manifest fetching (always fetches latest stable release)
-	async fetchGitHubManifest() {
+	// GitHub-specific manifest fetching
+	// Fetches latest release if no version specified, or specific version if provided
+	async fetchGitHubManifest(version = null, fallbackUrl = null) {
 		await this.ensureOctokit();
 		ux.action.status = 'fetching manifest from GitHub';
 
 		const { owner, repo } = this.githubConfig;
 
 		try {
-			debug(`Fetching latest release for ${owner}/${repo}`);
-			const { data: release } = await this.octokit.repos.getLatestRelease({
-				owner,
-				repo,
-			});
+			let release;
 
-			const version = release.tag_name.replace(/^v/u, '');
-			const assetName = this.determineAssetName(version);
+			if (version) {
+				debug(`Fetching release v${version} for ${owner}/${repo}`);
+				const { data } = await this.octokit.repos.getReleaseByTag({
+					owner,
+					repo,
+					tag: `v${version}`,
+				});
+				release = data;
+			} else {
+				debug(`Fetching latest release for ${owner}/${repo}`);
+				const { data } = await this.octokit.repos.getLatestRelease({
+					owner,
+					repo,
+				});
+				release = data;
+			}
+
+			const releaseVersion = release.tag_name.replace(/^v/u, '');
+			const assetName = this.determineAssetName(releaseVersion);
 			const asset = release.assets.find((a) => a.name === assetName);
 
 			if (!asset) {
+				// If we have a fallback URL (for specific version), use it
+				if (fallbackUrl) {
+					return {
+						gz: fallbackUrl,
+						version: version || releaseVersion,
+					};
+				}
+
+				// Otherwise, throw an error
 				const config = this.config;
 				throw new Error(
 					`No suitable asset found for ${config.platform}-${config.arch} in release ${release.tag_name}`
 				);
 			}
 
-			// Return a basic manifest with the asset URL
-			return {
+			// Return manifest with the asset URL and SHA256 digest
+			const manifest = {
 				gz: asset.browser_download_url,
-				version,
+				version: releaseVersion,
 			};
-		} catch (error) {
-			const statusCode = error.status;
-			if (statusCode === 404) {
-				throw new Error(
-					`Release not found in ${owner}/${repo}`
-				);
+
+			// Add SHA256 digest if available (format: "sha256:hash")
+			if (asset.digest) {
+				const sha256Match = asset.digest.match(/^sha256:(.+)$/);
+				if (sha256Match) {
+					manifest.sha256gz = sha256Match[1];
+				}
 			}
 
-			throw error;
-		}
-	}
-
-	// GitHub-specific version manifest fetching
-	async fetchGitHubVersionManifest(version, url) {
-		await this.ensureOctokit();
-		ux.action.status = 'fetching version manifest from GitHub';
-
-		const { owner, repo } = this.githubConfig;
-
-		try {
-			debug(`Fetching release v${version} for ${owner}/${repo}`);
-			const { data: release } = await this.octokit.repos.getReleaseByTag({
-				owner,
-				repo,
-				tag: `v${version}`,
-			});
-
-			const assetName = this.determineAssetName(version);
-			const asset = release.assets.find((a) => a.name === assetName);
-
-			if (asset) {
-				// Use the asset URL from the release
+			return manifest;
+		} catch (error) {
+			// If we have a fallback URL, use it
+			if (fallbackUrl && version) {
+				debug(
+					'Failed to fetch version manifest, using fallback URL',
+					error
+				);
 				return {
-					gz: asset.browser_download_url,
+					gz: fallbackUrl,
 					version,
 				};
 			}
 
-			// Fallback to the provided URL
-			return {
-				gz: url,
-				version,
-			};
-		} catch (error) {
-			debug('Failed to fetch version manifest', error);
-			// Return a basic manifest using the URL we have
-			return {
-				gz: url,
-				version,
-			};
+			const statusCode = error.status;
+			if (statusCode === 404) {
+				throw new Error(
+					version
+						? `Release v${version} not found in ${owner}/${repo}`
+						: `Release not found in ${owner}/${repo}`
+				);
+			}
+
+			throw error;
 		}
 	}
 

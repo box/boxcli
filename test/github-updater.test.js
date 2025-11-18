@@ -563,7 +563,7 @@ describe('GitHubUpdater', function () {
 		});
 
 		describe('fetchGitHubManifest', function () {
-			it('should fetch latest release manifest', async function () {
+			it('should fetch latest release manifest when no version specified', async function () {
 				const mockConfig = createMockConfig({
 					pjson: {
 						oclif: {
@@ -598,6 +598,10 @@ describe('GitHubUpdater', function () {
 				assert.equal(
 					manifest.gz,
 					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-x64.tar.gz'
+				);
+				assert.equal(
+					manifest.sha256gz,
+					'8dac71613287363ffca3dcb7d84805142cb4d10878f03b4fcda3916d660138d2'
 				);
 			});
 
@@ -637,6 +641,10 @@ describe('GitHubUpdater', function () {
 					manifest.gz,
 					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-arm64.tar.gz'
 				);
+				assert.equal(
+					manifest.sha256gz,
+					'716923f5a7c32f5344662eb10e2f10f9d89fb008e1d418b99cbcbe4247c1bc6f'
+				);
 			});
 
 			it('should throw error when asset not found for platform', async function () {
@@ -675,10 +683,8 @@ describe('GitHubUpdater', function () {
 					assert.include(error.message, 'linux-x64');
 				}
 			});
-		});
 
-		describe('fetchGitHubVersionManifest', function () {
-			it('should fetch version manifest with correct asset', async function () {
+			it('should fetch specific version manifest when version provided', async function () {
 				const mockConfig = createMockConfig({
 					pjson: {
 						oclif: {
@@ -706,7 +712,7 @@ describe('GitHubUpdater', function () {
 				};
 				updater.octokit = mockOctokit;
 
-				const manifest = await updater.fetchGitHubVersionManifest(
+				const manifest = await updater.fetchGitHubManifest(
 					'4.4.1',
 					'https://fallback-url.com/asset.tar.gz'
 				);
@@ -716,6 +722,10 @@ describe('GitHubUpdater', function () {
 				assert.equal(
 					manifest.gz,
 					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-win32-arm64.tar.gz'
+				);
+				assert.equal(
+					manifest.sha256gz,
+					'52b3e75426d0de2b0c4343e36ae125f1124cc748899675681957f0770647f301'
 				);
 			});
 
@@ -749,7 +759,7 @@ describe('GitHubUpdater', function () {
 
 				const fallbackUrl =
 					'https://fallback-url.com/box-v4.4.1.tar.gz';
-				const manifest = await updater.fetchGitHubVersionManifest(
+				const manifest = await updater.fetchGitHubManifest(
 					'4.4.1',
 					fallbackUrl
 				);
@@ -789,7 +799,7 @@ describe('GitHubUpdater', function () {
 
 				const fallbackUrl =
 					'https://fallback-url.com/box-v4.4.1.tar.gz';
-				const manifest = await updater.fetchGitHubVersionManifest(
+				const manifest = await updater.fetchGitHubManifest(
 					'4.4.1',
 					fallbackUrl
 				);
