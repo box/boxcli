@@ -8,7 +8,7 @@ const UpdateCommand =
 class GithubUpdatecommand extends UpdateCommand {
 	async run() {
 		const { printTable } = await import('@oclif/table');
-		const { args, flags } = await this.parse(UpdateCommand);
+		const { flags } = await this.parse(UpdateCommand);
 		const updater = new GitHubUpdater(this.config);
 		if (flags.available) {
 			const index = await updater.fetchVersionIndex();
@@ -30,12 +30,7 @@ class GithubUpdatecommand extends UpdateCommand {
 			return;
 		}
 
-		if (args.channel && flags.version) {
-			this.error('You cannot specify both a version and a channel.');
-		}
-
 		updater.runUpdate({
-			channel: args.channel,
 			autoUpdate: flags.autoupdate,
 			force: flags.force,
 			version: flags.interactive

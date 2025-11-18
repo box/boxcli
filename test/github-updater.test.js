@@ -562,8 +562,8 @@ describe('GitHubUpdater', function () {
 			});
 		});
 
-		describe('fetchGitHubChannelManifest', function () {
-			it('should fetch latest release manifest for stable channel', async function () {
+		describe('fetchGitHubManifest', function () {
+			it('should fetch latest release manifest', async function () {
 				const mockConfig = createMockConfig({
 					pjson: {
 						oclif: {
@@ -591,8 +591,7 @@ describe('GitHubUpdater', function () {
 				};
 				updater.octokit = mockOctokit;
 
-				const manifest =
-					await updater.fetchGitHubChannelManifest('stable');
+				const manifest = await updater.fetchGitHubManifest();
 
 				assert.isObject(manifest);
 				assert.equal(manifest.version, '4.4.1');
@@ -602,7 +601,7 @@ describe('GitHubUpdater', function () {
 				);
 			});
 
-			it('should fetch specific tag release manifest', async function () {
+			it('should fetch correct asset for different architectures', async function () {
 				const mockConfig = createMockConfig({
 					pjson: {
 						oclif: {
@@ -623,15 +622,14 @@ describe('GitHubUpdater', function () {
 
 				const mockOctokit = {
 					repos: {
-						getReleaseByTag: sinon
+						getLatestRelease: sinon
 							.stub()
 							.resolves({ data: mockReleaseData[0] }),
 					},
 				};
 				updater.octokit = mockOctokit;
 
-				const manifest =
-					await updater.fetchGitHubChannelManifest('v4.4.1');
+				const manifest = await updater.fetchGitHubManifest();
 
 				assert.isObject(manifest);
 				assert.equal(manifest.version, '4.4.1');
@@ -670,7 +668,7 @@ describe('GitHubUpdater', function () {
 				updater.octokit = mockOctokit;
 
 				try {
-					await updater.fetchGitHubChannelManifest('stable');
+					await updater.fetchGitHubManifest();
 					assert.fail('Should have thrown an error');
 				} catch (error) {
 					assert.include(error.message, 'No suitable asset found');

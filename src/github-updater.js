@@ -7,23 +7,15 @@ const { Updater } = require('@oclif/plugin-update/lib/update');
 const debug = makeDebug('oclif:update:github');
 
 let octokitInstance = null;
-let octokitClass = null;
-
-async function loadOctokit() {
-	if (!octokitClass) {
-		const { Octokit } = await import('@octokit/rest');
-		octokitClass = Octokit;
-	}
-	return octokitClass;
-}
 
 async function getOctokit() {
 	if (!octokitInstance) {
-		octokitClass = await loadOctokit();
-		return new octokitClass({
+		const { Octokit } = await import('@octokit/rest');
+		octokitInstance = new Octokit({
 			auth: process.env.GITHUB_TOKEN || process.env.GH_TOKEN,
 		});
 	}
+	return octokitInstance;
 }
 
 function checkGitHubConfig(config) {
@@ -90,8 +82,7 @@ class GitHubUpdater extends Updater {
 			return;
 		}
 
-		const channel =
-			options.channel || (await this.determineChannel(version));
+		const channel = 'stable';
 		const current = await this.determineCurrentVersion();
 
 		if (version) {
@@ -138,7 +129,7 @@ class GitHubUpdater extends Updater {
 				`Updating to a specific version will not update the channel. If autoupdate is enabled, the CLI will eventually be updated back to ${channel}.`
 			);
 		} else {
-			const manifest = await this.fetchGitHubChannelManifest(channel);
+			const manifest = await this.fetchGitHubManifest();
 			const updated = manifest.sha
 				? `${manifest.version}-${manifest.sha}`
 				: manifest.version;
@@ -210,32 +201,19 @@ class GitHubUpdater extends Updater {
 		}
 	}
 
-	// GitHub-specific channel manifest fetching
-	async fetchGitHubChannelManifest(channel) {
+	// GitHub-specific manifest fetching (always fetches latest stable release)
+	async fetchGitHubManifest() {
 		await this.ensureOctokit();
 		ux.action.status = 'fetching manifest from GitHub';
 
 		const { owner, repo } = this.githubConfig;
 
 		try {
-			let release;
-
-			if (channel === 'stable') {
-				debug(`Fetching latest release for ${owner}/${repo}`);
-				const { data } = await this.octokit.repos.getLatestRelease({
-					owner,
-					repo,
-				});
-				release = data;
-			} else {
-				debug(`Fetching release ${channel} for ${owner}/${repo}`);
-				const { data } = await this.octokit.repos.getReleaseByTag({
-					owner,
-					repo,
-					tag: channel,
-				});
-				release = data;
-			}
+			debug(`Fetching latest release for ${owner}/${repo}`);
+			const { data: release } = await this.octokit.repos.getLatestRelease({
+				owner,
+				repo,
+			});
 
 			const version = release.tag_name.replace(/^v/u, '');
 			const assetName = this.determineAssetName(version);
@@ -257,7 +235,7 @@ class GitHubUpdater extends Updater {
 			const statusCode = error.status;
 			if (statusCode === 404) {
 				throw new Error(
-					`Release not found for channel "${channel}" in ${owner}/${repo}`
+					`Release not found in ${owner}/${repo}`
 				);
 			}
 
