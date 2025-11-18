@@ -3,6 +3,8 @@
 const assert = require('chai').assert;
 const sinon = require('sinon');
 const GitHubUpdater = require('../src/github-updater');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Helper function to create a mock config with required methods
 function createMockConfig(overrides = {}) {
@@ -431,6 +433,363 @@ describe('GitHubUpdater', function () {
 			assert.deepEqual(updater.githubConfig, {
 				owner: 'box',
 				repo: 'boxcli',
+			});
+		});
+	});
+
+	describe('GitHub API Integration Tests', function () {
+		let mockReleaseData;
+
+		beforeEach(function () {
+			// Load the real GitHub API response
+			const fixtureData = fs.readFileSync(
+				path.join(__dirname, 'fixtures/github/releases-v4.4.1.json'),
+				'utf8'
+			);
+			mockReleaseData = JSON.parse(fixtureData);
+		});
+
+		describe('fetchGitHubVersionIndex', function () {
+			it('should parse GitHub releases and create version index', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				// Mock the Octokit API
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const versionIndex = await updater.fetchGitHubVersionIndex();
+
+				assert.isObject(versionIndex);
+				assert.property(versionIndex, '4.4.1');
+				assert.equal(
+					versionIndex['4.4.1'],
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-x64.tar.gz'
+				);
+			});
+
+			it('should find correct asset for darwin arm64', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'arm64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const versionIndex = await updater.fetchGitHubVersionIndex();
+
+				assert.equal(
+					versionIndex['4.4.1'],
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-arm64.tar.gz'
+				);
+			});
+
+			it('should find correct asset for windows x64', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'win32',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const versionIndex = await updater.fetchGitHubVersionIndex();
+
+				assert.equal(
+					versionIndex['4.4.1'],
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-win32-x64.tar.gz'
+				);
+			});
+		});
+
+		describe('fetchGitHubChannelManifest', function () {
+			it('should fetch latest release manifest for stable channel', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getLatestRelease: sinon
+							.stub()
+							.resolves({ data: mockReleaseData[0] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const manifest = await updater.fetchGitHubChannelManifest('stable');
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.equal(
+					manifest.gz,
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-x64.tar.gz'
+				);
+			});
+
+			it('should fetch specific tag release manifest', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'arm64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getReleaseByTag: sinon
+							.stub()
+							.resolves({ data: mockReleaseData[0] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const manifest =
+					await updater.fetchGitHubChannelManifest('v4.4.1');
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.equal(
+					manifest.gz,
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-arm64.tar.gz'
+				);
+			});
+
+			it('should throw error when asset not found for platform', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'linux',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getLatestRelease: sinon
+							.stub()
+							.resolves({ data: mockReleaseData[0] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				try {
+					await updater.fetchGitHubChannelManifest('stable');
+					assert.fail('Should have thrown an error');
+				} catch (error) {
+					assert.include(error.message, 'No suitable asset found');
+					assert.include(error.message, 'linux-x64');
+				}
+			});
+		});
+
+		describe('fetchGitHubVersionManifest', function () {
+			it('should fetch version manifest with correct asset', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'win32',
+					arch: 'arm64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getReleaseByTag: sinon
+							.stub()
+							.resolves({ data: mockReleaseData[0] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const manifest = await updater.fetchGitHubVersionManifest(
+					'4.4.1',
+					'https://fallback-url.com/asset.tar.gz'
+				);
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.equal(
+					manifest.gz,
+					'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-win32-arm64.tar.gz'
+				);
+			});
+
+			it('should fallback to provided URL when asset not found', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'linux',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getReleaseByTag: sinon
+							.stub()
+							.resolves({ data: mockReleaseData[0] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const fallbackUrl = 'https://fallback-url.com/box-v4.4.1.tar.gz';
+				const manifest = await updater.fetchGitHubVersionManifest(
+					'4.4.1',
+					fallbackUrl
+				);
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.equal(manifest.gz, fallbackUrl);
+			});
+
+			it('should fallback to provided URL on API error', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						getReleaseByTag: sinon
+							.stub()
+							.rejects(new Error('API Error')),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const fallbackUrl = 'https://fallback-url.com/box-v4.4.1.tar.gz';
+				const manifest = await updater.fetchGitHubVersionManifest(
+					'4.4.1',
+					fallbackUrl
+				);
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.equal(manifest.gz, fallbackUrl);
 			});
 		});
 	});
