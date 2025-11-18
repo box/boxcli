@@ -45,6 +45,8 @@ class GithubUpdatecommand extends UpdateCommand {
 	}
 }
 
+GithubUpdatecommand.args = [];
+GithubUpdatecommand.examples = GithubUpdatecommand.examples.slice(1);
 GithubUpdatecommand.description = 'Update the BoxCLI using GitHub';
 
 module.exports = GithubUpdatecommand;

@@ -3,15 +3,15 @@
 
 Update the BoxCLI using GitHub
 
-* [`box update [CHANNEL]`](#box-update-channel)
+* [`box update`](#box-update)
 
-## `box update [CHANNEL]`
+## `box update`
 
 Update the BoxCLI using GitHub
 
 ```
 USAGE
-  $ box update [CHANNEL] [-a] [-v <value> | -i] [--force]
+  $ box update [-a] [-v <value> | -i] [--force]
 
 FLAGS
   -a, --available        Install a specific version.
@@ -23,10 +23,6 @@ DESCRIPTION
   Update the BoxCLI using GitHub
 
 EXAMPLES
-  Update to the stable channel:
-
-    $ box update stable
-
   Update to a specific version:
 
     $ box update --version 1.0.0

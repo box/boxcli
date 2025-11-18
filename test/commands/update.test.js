@@ -15,12 +15,12 @@ describe('Update', function () {
 
 	beforeEach(function () {
 		sandbox = sinon.createSandbox();
-		
+
 		// Stub GitHubUpdater methods
 		fetchVersionIndexStub = sandbox.stub();
 		findLocalVersionsStub = sandbox.stub();
 		runUpdateStub = sandbox.stub();
-		
+
 		githubUpdaterStub = sandbox.stub(GitHubUpdater.prototype);
 		githubUpdaterStub.fetchVersionIndex = fetchVersionIndexStub;
 		githubUpdaterStub.findLocalVersions = findLocalVersionsStub;
@@ -34,9 +34,12 @@ describe('Update', function () {
 	describe('update', function () {
 		it('should list available versions when --available flag is passed', async function () {
 			const mockVersionIndex = {
-				'3.0.0': 'https://github.com/box/boxcli/releases/download/v3.0.0',
-				'2.5.0': 'https://github.com/box/boxcli/releases/download/v2.5.0',
-				'2.0.0': 'https://github.com/box/boxcli/releases/download/v2.0.0',
+				'3.0.0':
+					'https://github.com/box/boxcli/releases/download/v3.0.0',
+				'2.5.0':
+					'https://github.com/box/boxcli/releases/download/v2.5.0',
+				'2.0.0':
+					'https://github.com/box/boxcli/releases/download/v2.0.0',
 			};
 			const mockLocalVersions = ['/path/to/3.0.0'];
 
@@ -45,8 +48,16 @@ describe('Update', function () {
 
 			await test
 				.stdout()
-				.stub(GitHubUpdater.prototype, 'fetchVersionIndex', fetchVersionIndexStub)
-				.stub(GitHubUpdater.prototype, 'findLocalVersions', findLocalVersionsStub)
+				.stub(
+					GitHubUpdater.prototype,
+					'fetchVersionIndex',
+					fetchVersionIndexStub
+				)
+				.stub(
+					GitHubUpdater.prototype,
+					'findLocalVersions',
+					findLocalVersionsStub
+				)
 				.command(['update', '--available'])
 				.it('displays available versions in table format', (ctx) => {
 					// Verify the stubs were called
@@ -125,7 +136,10 @@ describe('Update', function () {
 		});
 
 		it('should handle interactive version selection', async function () {
-			const promptStub = sandbox.stub(UpdateCommand.prototype, 'promptForVersion');
+			const promptStub = sandbox.stub(
+				UpdateCommand.prototype,
+				'promptForVersion'
+			);
 			promptStub.resolves('3.0.0');
 			runUpdateStub.resolves();
 
@@ -182,10 +196,17 @@ describe('Update', function () {
 			fetchVersionIndexStub.rejects(fetchError);
 
 			await test
-				.stub(GitHubUpdater.prototype, 'fetchVersionIndex', fetchVersionIndexStub)
+				.stub(
+					GitHubUpdater.prototype,
+					'fetchVersionIndex',
+					fetchVersionIndexStub
+				)
 				.command(['update', '--available'])
 				.catch((error) => {
-					assert.include(error.message, 'Failed to fetch version index');
+					assert.include(
+						error.message,
+						'Failed to fetch version index'
+					);
 				})
 				.it('handles version index fetch errors');
 		});
@@ -221,4 +242,3 @@ describe('Update', function () {
 		});
 	});
 });
-

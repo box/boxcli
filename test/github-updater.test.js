@@ -472,7 +472,9 @@ describe('GitHubUpdater', function () {
 				// Mock the Octokit API
 				const mockOctokit = {
 					repos: {
-						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+						listReleases: sinon
+							.stub()
+							.resolves({ data: mockReleaseData }),
 					},
 				};
 				updater.octokit = mockOctokit;
@@ -508,7 +510,9 @@ describe('GitHubUpdater', function () {
 
 				const mockOctokit = {
 					repos: {
-						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+						listReleases: sinon
+							.stub()
+							.resolves({ data: mockReleaseData }),
 					},
 				};
 				updater.octokit = mockOctokit;
@@ -542,7 +546,9 @@ describe('GitHubUpdater', function () {
 
 				const mockOctokit = {
 					repos: {
-						listReleases: sinon.stub().resolves({ data: mockReleaseData }),
+						listReleases: sinon
+							.stub()
+							.resolves({ data: mockReleaseData }),
 					},
 				};
 				updater.octokit = mockOctokit;
@@ -585,7 +591,8 @@ describe('GitHubUpdater', function () {
 				};
 				updater.octokit = mockOctokit;
 
-				const manifest = await updater.fetchGitHubChannelManifest('stable');
+				const manifest =
+					await updater.fetchGitHubChannelManifest('stable');
 
 				assert.isObject(manifest);
 				assert.equal(manifest.version, '4.4.1');
@@ -742,7 +749,8 @@ describe('GitHubUpdater', function () {
 				};
 				updater.octokit = mockOctokit;
 
-				const fallbackUrl = 'https://fallback-url.com/box-v4.4.1.tar.gz';
+				const fallbackUrl =
+					'https://fallback-url.com/box-v4.4.1.tar.gz';
 				const manifest = await updater.fetchGitHubVersionManifest(
 					'4.4.1',
 					fallbackUrl
@@ -781,7 +789,8 @@ describe('GitHubUpdater', function () {
 				};
 				updater.octokit = mockOctokit;
 
-				const fallbackUrl = 'https://fallback-url.com/box-v4.4.1.tar.gz';
+				const fallbackUrl =
+					'https://fallback-url.com/box-v4.4.1.tar.gz';
 				const manifest = await updater.fetchGitHubVersionManifest(
 					'4.4.1',
 					fallbackUrl
