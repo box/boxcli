@@ -60,7 +60,7 @@
 		"eslint-plugin-n": "^17.14.0",
 		"eslint-plugin-promise": "^7.2.1",
 		"eslint-plugin-unicorn": "^56.0.1",
-		"generate-license-file": "^3.6.0",
+		"generate-license-file": "^4.1.0",
 		"jsonwebtoken": "^9.0.2",
 		"leche": "^2.3.0",
 		"mocha": "^10.8.2",
