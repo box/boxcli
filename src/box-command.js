@@ -254,7 +254,7 @@ function formatObject(obj) {
 	let outputData = formatObjectKeys(obj);
 
 	// Other objects are formatted as YAML for human-readable output
-	let yamlString = yaml.safeDump(outputData, {
+	let yamlString = yaml.dump(outputData, {
 		indent: 4,
 		noRefs: true,
 	});

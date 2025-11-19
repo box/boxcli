@@ -9,6 +9,6 @@ Created By:
     Name: John Q. Developer
     Login: johnq@example.net
 Created At: '2016-05-04T18:51:45-07:00'
-Address: 'https://example.net/actions/file_changed'
+Address: https://example.net/actions/file_changed
 Triggers:
     - FILE.PREVIEWED

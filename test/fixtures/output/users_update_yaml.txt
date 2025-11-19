@@ -13,4 +13,4 @@ Status: active
 Job Title: CEO
 Phone: (555) 555-5555
 Address: ''
-Avatar URL: 'https://app.box.com/api/avatar/large/deprecated'
+Avatar URL: https://app.box.com/api/avatar/large/deprecated
