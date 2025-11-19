@@ -155,7 +155,6 @@ describe('BoxCommand', function () {
 				// ]
 			},
 			function (input, expectedOutput) {
-
 				it('should return the full RFC3339 timestamp for the given time', function () {
 					let dateTime = BoxCommand.normalizeDateString(input);
 					assert.equal(dateTime, expectedOutput);

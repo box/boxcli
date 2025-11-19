@@ -49,7 +49,6 @@ describe('Storage-policies', function () {
 	leche.withData(
 		['storage-policies', 'storage-policies:list'],
 		function (command) {
-
 			describe(command, function () {
 				let fixture = getFixture(
 						'storage-policies/get_storage_policies_page_1'

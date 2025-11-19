@@ -87,7 +87,6 @@ describe('Users', function () {
 	leche.withData(
 		['users:email-aliases', 'users:get-email-aliases'],
 		function (command) {
-
 			describe(command, function () {
 				let userId = '1234',
 					fixture = getFixture('users/get_users_id_email_aliases'),
@@ -132,7 +131,6 @@ describe('Users', function () {
 	leche.withData(
 		['users:email-aliases:remove', 'users:delete-email-alias'],
 		function (command) {
-
 			describe(command, function () {
 				let userId = '1234',
 					aliasId = '7777';
@@ -205,7 +203,6 @@ describe('Users', function () {
 	});
 
 	leche.withData(['users', 'users:list'], function (command) {
-
 		describe(command, function () {
 			let fixture = getFixture('users/get_users_page_1'),
 				fixture2 = getFixture('users/get_users_page_2'),
@@ -260,7 +257,6 @@ describe('Users', function () {
 	});
 
 	leche.withData(['users:groups', 'users:list-groups'], function (command) {
-
 		describe(command, function () {
 			let userId = '13130406',
 				fixture = getFixture('users/get_users_id_memberships_page_1'),
@@ -451,7 +447,6 @@ describe('Users', function () {
 	});
 
 	leche.withData(['users:invite', 'users:invite-user'], function (command) {
-
 		describe(command, function () {
 			let userEmail = 'testuser@example.com',
 				enterpriseId = '1234',
@@ -498,7 +493,6 @@ describe('Users', function () {
 	leche.withData(
 		['users:transfer-content', 'users:move-root-content'],
 		function (command) {
-
 			describe(command, function () {
 				let userId = '1234',
 					newUserId = '4321',

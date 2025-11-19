@@ -33,7 +33,6 @@ describe('Trash', function () {
 	});
 
 	leche.withData(['trash', 'trash:list'], function (command) {
-
 		describe(command, function () {
 			let fixture = getFixture('trash/get_trashed_items_page_1'),
 				fixture2 = getFixture('trash/get_trashed_items_page_2'),

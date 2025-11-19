@@ -27,10 +27,7 @@ class FilesDownloadCommand extends BoxCommand {
 			);
 		}
 
-		 
 		if (!flags.overwrite && fs.existsSync(filePath)) {
-			 
-
 			if (flags.overwrite === false) {
 				this.info(
 					`Downloading the file will not occur because the file ${filePath} already exists, and the --no-overwrite flag is set.`
@@ -84,7 +81,6 @@ class FilesDownloadCommand extends BoxCommand {
 			});
 		}, 1000);
 
-		 
 		// We need to await the end of the stream to avoid a race condition here
 		await new Promise((resolve, reject) => {
 			output.on('close', resolve);

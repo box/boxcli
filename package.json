@@ -23,13 +23,16 @@
 	"bugs": "https://github.com/box/boxcli/issues",
 	"dependencies": {
 		"@discoveryjs/json-ext": "^0.5.7",
-		"@oclif/core": "^4.7.2",
-		"@oclif/plugin-autocomplete": "^3.2.11",
-		"@oclif/plugin-help": "^6.2.18",
-		"@oclif/plugin-not-found": "^3.2.71",
-		"@oclif/plugin-version": "^2.2.16",
+		"@oclif/core": "^4.8.0",
+		"@oclif/plugin-autocomplete": "^3.2.39",
+		"@oclif/plugin-help": "^6.2.36",
+		"@oclif/plugin-not-found": "^3.2.73",
+		"@oclif/plugin-update": "3.2.4",
+		"@oclif/plugin-version": "^2.2.36",
+		"@oclif/table": "^0.4.14",
+		"@octokit/rest": "^22.0.0",
 		"archiver": "^3.0.0",
-		"box-node-sdk": "^4.0.0",
+		"box-node-sdk": "^4.1.1",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^6.3.3",
@@ -39,14 +42,15 @@
 		"fs-extra": "^10.1.0",
 		"inquirer": "^8.2.7",
 		"js-yaml": "^4.1.1",
-		"keychain": "^1.4.0",
+		"keychain": "^1.5.0",
 		"keytar": "^7.9.0",
 		"lodash": "^4.17.13",
 		"mkdirp": "^3.0.1",
 		"nanoid": "^3.3.8",
 		"open": "^10.1.0",
 		"ora": "^5.4.1",
-		"p-event": "^2.3.1"
+		"p-event": "^2.3.1",
+		"semver": "^7.7.3"
 	},
 	"devDependencies": {
 		"@oclif/test": "^3.2.15",
@@ -139,6 +143,12 @@
 			"web-links": {
 				"description": "Manage web links"
 			}
+		},
+		"update": {
+			"github": {
+				"owner": "box",
+				"repo": "boxcli"
+			}
 		}
 	},
 	"scripts": {
@@ -146,11 +156,12 @@
 		"posttest": "npm run lint",
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
-		"updatemd": "find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
-		"prepack": "npm run prettier && npm run license && oclif manifest && oclif readme --multi && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"updatemd": "oclif readme --multi && find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
+		"prepack": "npm run prettier && npm run license && oclif manifest && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
-		"version": "oclif readme --multi && npm run updatemd && git add README.md && git add docs",
+		"version": "npm run updatemd && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
+		"build:tarballs": "oclif pack:tarballs --no-xz --parallel",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
 		"license": "generate-license-file --overwrite",
 		"prettier": "prettier --write \"**/*.{js,json}\""

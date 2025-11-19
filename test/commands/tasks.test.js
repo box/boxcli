@@ -274,7 +274,6 @@ describe('Tasks', function () {
 	leche.withData(
 		['tasks:assign', 'task-assignments:create'],
 		function (command) {
-
 			describe(command, function () {
 				let taskId = '11111',
 					userId = '33333',
@@ -366,7 +365,6 @@ describe('Tasks', function () {
 	leche.withData(
 		['tasks:assignments:delete', 'task-assignments:delete'],
 		function (command) {
-
 			describe(command, function () {
 				let assignmentId = '12345';
 
@@ -390,7 +388,6 @@ describe('Tasks', function () {
 	leche.withData(
 		['tasks:assignments:get', 'task-assignments:get'],
 		function (command) {
-
 			describe(command, function () {
 				let assignmentId = '12345',
 					fixture = getFixture(
@@ -451,7 +448,6 @@ describe('Tasks', function () {
 	leche.withData(
 		['tasks:assignments', 'task-assignments:list'],
 		function (command) {
-
 			describe(command, function () {
 				let taskId = '11111',
 					fixture = getFixture(
@@ -499,7 +495,6 @@ describe('Tasks', function () {
 	leche.withData(
 		['tasks:assignments:update', 'task-assignments:update'],
 		function (command) {
-
 			describe(command, function () {
 				let assignmentId = '12345',
 					message = 'Looks good to me!',
