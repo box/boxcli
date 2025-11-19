@@ -3,7 +3,7 @@ ID: '6742981'
 Sequence ID: '0'
 ETag: '0'
 Name: Box Website
-URL: 'https://www.box.com'
+URL: https://www.box.com
 Created By:
     Type: user
     ID: '10523870'

@@ -2,7 +2,7 @@ Type: file
 ID: '1234567890'
 File Version:
     Type: file_version
-    ID: 098765432109
+    ID: '098765432109'
     SHA1: 0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33
 Sequence ID: '0'
 ETag: '0'

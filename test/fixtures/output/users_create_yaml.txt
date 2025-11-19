@@ -13,4 +13,4 @@ Status: active
 Job Title: ''
 Phone: '1234567890'
 Address: ''
-Avatar URL: 'https://app.box.com/api/avatar/large/deprecated'
+Avatar URL: https://app.box.com/api/avatar/large/deprecated

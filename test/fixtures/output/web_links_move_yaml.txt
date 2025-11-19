@@ -3,7 +3,7 @@ ID: '6742981'
 Sequence ID: '2'
 ETag: '2'
 Name: Box Marketing Web Page
-URL: 'https://www.box.com'
+URL: https://www.box.com
 Created By:
     Type: user
     ID: '10523870'
