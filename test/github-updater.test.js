@@ -808,6 +808,619 @@ describe('GitHubUpdater', function () {
 				assert.equal(manifest.version, '4.4.1');
 				assert.equal(manifest.gz, fallbackUrl);
 			});
+
+			it('should throw error with 404 status when release not found', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const notFoundError = new Error('Not Found');
+				notFoundError.status = 404;
+
+				const mockOctokit = {
+					repos: {
+						getReleaseByTag: sinon.stub().rejects(notFoundError),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				try {
+					await updater.fetchGitHubManifest('99.99.99');
+					assert.fail('Should have thrown an error');
+				} catch (error) {
+					assert.include(error.message, 'Release v99.99.99 not found');
+					assert.include(error.message, 'box/boxcli');
+				}
+			});
+
+			it('should throw error for 404 when fetching latest release', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const notFoundError = new Error('Not Found');
+				notFoundError.status = 404;
+
+				const mockOctokit = {
+					repos: {
+						getLatestRelease: sinon.stub().rejects(notFoundError),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				try {
+					await updater.fetchGitHubManifest();
+					assert.fail('Should have thrown an error');
+				} catch (error) {
+					assert.include(error.message, 'Release not found in box/boxcli');
+				}
+			});
+
+			it('should handle manifest without SHA256 digest', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const releaseWithoutDigest = {
+					...mockReleaseData[0],
+					assets: mockReleaseData[0].assets.map((asset) => ({
+						...asset,
+						digest: undefined,
+					})),
+				};
+
+				const mockOctokit = {
+					repos: {
+						getLatestRelease: sinon
+							.stub()
+							.resolves({ data: releaseWithoutDigest }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const manifest = await updater.fetchGitHubManifest();
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.isUndefined(manifest.sha256gz);
+			});
+
+			it('should handle manifest with invalid digest format', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const releaseWithInvalidDigest = {
+					...mockReleaseData[0],
+					assets: mockReleaseData[0].assets.map((asset) =>
+						asset.name === 'box-v4.4.1-darwin-x64.tar.gz'
+							? {
+									...asset,
+									digest: 'md5:somehash',
+							  }
+							: asset
+					),
+				};
+
+				const mockOctokit = {
+					repos: {
+						getLatestRelease: sinon
+							.stub()
+							.resolves({ data: releaseWithInvalidDigest }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const manifest = await updater.fetchGitHubManifest();
+
+				assert.isObject(manifest);
+				assert.equal(manifest.version, '4.4.1');
+				assert.isUndefined(manifest.sha256gz);
+			});
+		});
+
+		describe('fetchVersionIndex', function () {
+			it('should delegate to fetchGitHubVersionIndex', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon
+							.stub()
+							.resolves({ data: mockReleaseData }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const versionIndex = await updater.fetchVersionIndex();
+
+				assert.isObject(versionIndex);
+				assert.property(versionIndex, '4.4.1');
+			});
+		});
+
+		describe('GitHub API error handling', function () {
+			it('should throw error when GitHub API fails for version index', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon
+							.stub()
+							.rejects(new Error('API Error')),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				try {
+					await updater.fetchGitHubVersionIndex();
+					assert.fail('Should have thrown an error');
+				} catch (error) {
+					assert.include(
+						error.message,
+						'Failed to fetch releases from GitHub repository box/boxcli'
+					);
+				}
+			});
+
+			it('should handle empty releases list', async function () {
+				const mockConfig = createMockConfig({
+					pjson: {
+						oclif: {
+							update: {
+								github: {
+									owner: 'box',
+									repo: 'boxcli',
+								},
+							},
+						},
+					},
+					bin: 'box',
+					platform: 'darwin',
+					arch: 'x64',
+				});
+
+				const updater = new GitHubUpdater(mockConfig);
+
+				const mockOctokit = {
+					repos: {
+						listReleases: sinon.stub().resolves({ data: [] }),
+					},
+				};
+				updater.octokit = mockOctokit;
+
+				const versionIndex = await updater.fetchGitHubVersionIndex();
+
+				assert.isObject(versionIndex);
+				assert.isEmpty(versionIndex);
+			});
+		});
+	});
+
+	describe('ensureOctokit', function () {
+		it('should initialize octokit if not already initialized', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			assert.isNull(updater.octokit);
+
+			await updater.ensureOctokit();
+
+			assert.isNotNull(updater.octokit);
+		});
+
+		it('should not reinitialize octokit if already set', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			const mockOctokit = { repos: {} };
+			updater.octokit = mockOctokit;
+
+			await updater.ensureOctokit();
+
+			assert.strictEqual(updater.octokit, mockOctokit);
+		});
+	});
+
+	describe('runUpdate', function () {
+		let mockConfig;
+		let updater;
+		let mockOctokit;
+		let uxActionStartStub;
+		let uxActionStopStub;
+
+		beforeEach(function () {
+			mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				runHook: sinon.stub().resolves(),
+			});
+
+			updater = new GitHubUpdater(mockConfig);
+
+			mockOctokit = {
+				repos: {
+					getLatestRelease: sinon.stub().resolves({ data: {} }),
+					getReleaseByTag: sinon.stub().resolves({ data: {} }),
+				},
+			};
+			updater.octokit = mockOctokit;
+
+			// Stub ux methods
+			const { ux } = require('@oclif/core');
+			uxActionStartStub = sandbox.stub(ux.action, 'start');
+			uxActionStopStub = sandbox.stub(ux.action, 'stop');
+		});
+
+		it('should stop early if not updatable', async function () {
+			sandbox.stub(updater, 'notUpdatable').returns(true);
+
+			await updater.runUpdate({ autoUpdate: false, force: false });
+
+			assert.isTrue(uxActionStartStub.called);
+			assert.isTrue(uxActionStopStub.calledWith('not updatable'));
+		});
+
+		it('should debounce when autoUpdate is true', async function () {
+			const debounceStub = sandbox.stub(updater, 'debounce').resolves();
+			sandbox.stub(updater, 'notUpdatable').returns(true);
+
+			await updater.runUpdate({ autoUpdate: true, force: false });
+
+			assert.isTrue(debounceStub.called);
+		});
+
+		it('should skip update if already on version', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				version: '4.4.1',
+				runHook: sinon.stub().resolves(),
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			updater.octokit = mockOctokit;
+
+			sandbox.stub(updater, 'notUpdatable').returns(false);
+			sandbox.stub(updater, 'determineCurrentVersion').resolves('4.4.1');
+			sandbox.stub(updater, 'alreadyOnVersion').returns(true);
+
+			const fixtureData = fs.readFileSync(
+				path.join(__dirname, 'fixtures/github/releases-v4.4.1.json'),
+				'utf8'
+			);
+			const mockReleaseData = JSON.parse(fixtureData);
+
+			mockOctokit.repos.getLatestRelease = sinon
+				.stub()
+				.resolves({ data: mockReleaseData[0] });
+
+			await updater.runUpdate({ autoUpdate: false, force: false });
+
+			assert.isTrue(
+				uxActionStopStub.calledWith(sinon.match(/already on version/))
+			);
+		});
+
+		it('should update to specific version with force flag', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				version: '4.4.0',
+				runHook: sinon.stub().resolves(),
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			updater.octokit = mockOctokit;
+
+			sandbox.stub(updater, 'notUpdatable').returns(false);
+			sandbox.stub(updater, 'determineCurrentVersion').resolves('4.4.0');
+			sandbox.stub(updater, 'alreadyOnVersion').returns(false);
+			sandbox.stub(updater, 'findLocalVersion').resolves(null);
+			sandbox.stub(updater, 'update').resolves();
+			sandbox.stub(updater, 'touch').resolves();
+			sandbox.stub(updater, 'tidy').resolves();
+
+			const fixtureData = fs.readFileSync(
+				path.join(__dirname, 'fixtures/github/releases-v4.4.1.json'),
+				'utf8'
+			);
+			const mockReleaseData = JSON.parse(fixtureData);
+
+			const fetchVersionIndexStub = sandbox
+				.stub(updater, 'fetchVersionIndex')
+				.resolves({
+					'4.4.1':
+						'https://github.com/box/boxcli/releases/download/v4.4.1/box-v4.4.1-darwin-x64.tar.gz',
+				});
+
+			mockOctokit.repos.getReleaseByTag = sinon
+				.stub()
+				.resolves({ data: mockReleaseData[0] });
+
+			await updater.runUpdate({
+				autoUpdate: false,
+				force: true,
+				version: '4.4.1',
+			});
+
+			assert.isTrue(fetchVersionIndexStub.called);
+			assert.isTrue(mockConfig.runHook.calledWith('preupdate'));
+			assert.isTrue(mockConfig.runHook.calledWith('update'));
+		});
+
+		it('should update to existing local version', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				version: '4.4.0',
+				runHook: sinon.stub().resolves(),
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			updater.octokit = mockOctokit;
+
+			sandbox.stub(updater, 'notUpdatable').returns(false);
+			sandbox.stub(updater, 'determineCurrentVersion').resolves('4.4.0');
+			sandbox.stub(updater, 'alreadyOnVersion').returns(false);
+			sandbox
+				.stub(updater, 'findLocalVersion')
+				.resolves('/path/to/local/4.4.1');
+			sandbox.stub(updater, 'updateToExistingVersion').resolves();
+			sandbox.stub(updater, 'touch').resolves();
+			sandbox.stub(updater, 'tidy').resolves();
+
+			await updater.runUpdate({
+				autoUpdate: false,
+				force: false,
+				version: '4.4.1',
+			});
+
+			assert.isTrue(mockConfig.runHook.calledWith('preupdate'));
+			assert.isTrue(mockConfig.runHook.calledWith('update'));
+		});
+
+		it('should throw error when version not found in index', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				version: '4.4.0',
+				runHook: sinon.stub().resolves(),
+			});
+
+			const updater = new GitHubUpdater(mockConfig);
+			updater.octokit = mockOctokit;
+
+			sandbox.stub(updater, 'notUpdatable').returns(false);
+			sandbox.stub(updater, 'determineCurrentVersion').resolves('4.4.0');
+			sandbox.stub(updater, 'alreadyOnVersion').returns(false);
+			sandbox.stub(updater, 'findLocalVersion').resolves(null);
+			sandbox.stub(updater, 'fetchVersionIndex').resolves({
+				'4.4.1':
+					'https://github.com/box/boxcli/releases/download/v4.4.1',
+			});
+
+			try {
+				await updater.runUpdate({
+					autoUpdate: false,
+					force: false,
+					version: '99.99.99',
+				});
+				assert.fail('Should have thrown an error');
+			} catch (error) {
+				assert.include(error.message, '99.99.99 not found in index');
+			}
+		});
+
+		it('should use HIDE_UPDATED_MESSAGE env var when already on version', async function () {
+			const mockConfig = createMockConfig({
+				pjson: {
+					oclif: {
+						update: {
+							github: {
+								owner: 'box',
+								repo: 'boxcli',
+							},
+						},
+					},
+				},
+				bin: 'box',
+				platform: 'darwin',
+				arch: 'x64',
+				version: '4.4.1',
+				runHook: sinon.stub().resolves(),
+			});
+
+			mockConfig.scopedEnvVar = sinon
+				.stub()
+				.withArgs('HIDE_UPDATED_MESSAGE')
+				.returns('true');
+
+			const updater = new GitHubUpdater(mockConfig);
+			updater.octokit = mockOctokit;
+
+			sandbox.stub(updater, 'notUpdatable').returns(false);
+			sandbox.stub(updater, 'determineCurrentVersion').resolves('4.4.1');
+			sandbox.stub(updater, 'alreadyOnVersion').returns(true);
+
+			const fixtureData = fs.readFileSync(
+				path.join(__dirname, 'fixtures/github/releases-v4.4.1.json'),
+				'utf8'
+			);
+			const mockReleaseData = JSON.parse(fixtureData);
+
+			mockOctokit.repos.getLatestRelease = sinon
+				.stub()
+				.resolves({ data: mockReleaseData[0] });
+
+			await updater.runUpdate({ autoUpdate: false, force: false });
+
+			assert.isTrue(uxActionStopStub.calledWith('done'));
 		});
 	});
 });
