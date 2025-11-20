@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/box/boxcli/compare/v4.4.1...v4.5.0) (2025-11-20)
+
+
+### New Features and Enhancements
+
+* support auto update using Github releases ([#603](https://github.com/box/boxcli/issues/603)) ([2460e1b](https://github.com/box/boxcli/commit/2460e1b51002e94c3a16356099c4511faa96b87c))
+
+### Bug Fixes
+
+* update dependencies to fix `tmp` vulnerability ([#600](https://github.com/box/boxcli/issues/600)) ([7e270eb](https://github.com/box/boxcli/commit/7e270eb8daf254a64eb3ce373444e9ad96e5e5be))
+
 ### [4.4.1](https://github.com/box/boxcli/compare/v4.4.0...v4.4.1) (2025-10-21)
 
 

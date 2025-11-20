@@ -60,7 +60,7 @@ DESCRIPTION
   Add a new Box environment
 ```
 
-_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/add.js)_
+_See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/add.js)_
 
 ## `box configure:environments:delete [NAME]`
 
@@ -83,7 +83,7 @@ DESCRIPTION
   Delete a Box environment
 ```
 
-_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/delete.js)_
+_See code: [src/commands/configure/environments/delete.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/delete.js)_
 
 ## `box configure:environments:get`
 
@@ -105,7 +105,7 @@ DESCRIPTION
   Get a Box environment
 ```
 
-_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/get.js)_
+_See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/get.js)_
 
 ## `box configure:environments:select [ID]`
 
@@ -155,7 +155,7 @@ ALIASES
   $ box configure:environments:select
 ```
 
-_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/set-current.js)_
+_See code: [src/commands/configure/environments/set-current.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/set-current.js)_
 
 ## `box configure:environments:switch-user [USERID]`
 
@@ -189,7 +189,7 @@ DESCRIPTION
   Switch the default Box user to run commands as
 ```
 
-_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/switch-user.js)_
+_See code: [src/commands/configure/environments/switch-user.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/switch-user.js)_
 
 ## `box configure:environments:update [NAME]`
 
@@ -221,7 +221,7 @@ DESCRIPTION
   Update a Box environment
 ```
 
-_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/environments/update.js)_
+_See code: [src/commands/configure/environments/update.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/update.js)_
 
 ## `box configure:settings`
 
@@ -256,4 +256,4 @@ DESCRIPTION
   View and update CLI configuration settings
 ```
 
-_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/configure/settings.js)_
+_See code: [src/commands/configure/settings.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/settings.js)_
