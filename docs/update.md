@@ -36,4 +36,4 @@ EXAMPLES
     $ box update --available
 ```
 
-_See code: [src/commands/update.js](https://github.com/box/boxcli/blob/v4.4.1/src/commands/update.js)_
+_See code: [src/commands/update.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/update.js)_
