@@ -14,8 +14,6 @@ class GroupsTerminateSessionCommand extends BoxCommand {
 	}
 }
 
-GroupsTerminateSessionCommand.aliases = ['groups:terminate-session'];
-
 GroupsTerminateSessionCommand.description =
 	"Validates the roles and permissions of the group, and creates asynchronous jobs to terminate the group's sessions.";
 GroupsTerminateSessionCommand.examples = [

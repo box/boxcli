@@ -18,8 +18,6 @@ class UsersTerminateSessionCommand extends BoxCommand {
 	}
 }
 
-UsersTerminateSessionCommand.aliases = ['users:terminate-session'];
-
 UsersTerminateSessionCommand.description =
 	"Validates the roles and permissions of the user, and creates asynchronous jobs to terminate the user's sessions.";
 UsersTerminateSessionCommand.examples = [
