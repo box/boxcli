@@ -365,4 +365,6 @@ Function Start-Script {
     }
 }
 
+# Ensure console output is UTF-8 so non-ASCII characters from Box CLI render correctly
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Start-Script
