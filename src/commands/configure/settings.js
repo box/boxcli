@@ -68,10 +68,10 @@ class ConfigureSettingsCommand extends BoxCommand {
 			}
 			settings.boxReportsFolderPath = reportsPath;
 		}
-		if (flags.hasOwnProperty('output-json')) {
+		if (Object.hasOwn(flags, 'output-json')) {
 			settings.outputJson = flags['output-json'];
 		}
-		if (flags.hasOwnProperty('enable-proxy')) {
+		if (Object.hasOwn(flags, 'enable-proxy')) {
 			settings.enableProxy = flags['enable-proxy'];
 		}
 		if (flags['proxy-url']) {
@@ -83,7 +83,7 @@ class ConfigureSettingsCommand extends BoxCommand {
 		if (flags['proxy-password']) {
 			settings.proxy.password = flags['proxy-password'];
 		}
-		if (flags.hasOwnProperty(['enable-analytics-client'])) {
+		if (Object.hasOwn(flags, 'enable-analytics-client')) {
 			settings.enableAnalyticsClient = flags['enable-analytics-client'];
 		}
 		if (flags['analytics-client-name']) {

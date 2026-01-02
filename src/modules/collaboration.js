@@ -34,10 +34,10 @@ class CollaborationModule {
 		if (flags.fields) {
 			parameters.qs.fields = flags.fields;
 		}
-		if (flags.hasOwnProperty('notify')) {
+		if (Object.hasOwn(flags, 'notify')) {
 			parameters.qs.notify = flags.notify;
 		}
-		if (flags.hasOwnProperty('can-view-path')) {
+		if (Object.hasOwn(flags, 'can-view-path')) {
 			parameters.body.can_view_path = flags['can-view-path'];
 		}
 		if (flags.role) {

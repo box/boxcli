@@ -45,7 +45,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 			cacheTokens: true,
 		};
 
-		if (environmentsObject.environments.hasOwnProperty(environmentName)) {
+		if (Object.hasOwn(environmentsObject.environments, environmentName)) {
 			throw new BoxCLIError(
 				'There already is an environment with this name'
 			);

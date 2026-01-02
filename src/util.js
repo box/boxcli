@@ -358,7 +358,7 @@ module.exports = {
 	 */
 	parseMetadata(value) {
 		let op = parseMetadataString(value);
-		if (!op.hasOwnProperty('path') || !op.hasOwnProperty('value')) {
+		if (!Object.hasOwn(op, 'path') || !Object.hasOwn(op, 'value')) {
 			throw new BoxCLIError('Metadata must be in the form key=value');
 		}
 

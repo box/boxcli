@@ -20,7 +20,7 @@ class LegalHoldPoliciesCreateCommand extends BoxCommand {
 		if (flags['filter-ended-at']) {
 			options.filter_ended_at = flags['filter-ended-at'];
 		}
-		if (flags.hasOwnProperty('ongoing')) {
+		if (Object.hasOwn(flags, 'ongoing')) {
 			options.is_ongoing = true;
 		}
 

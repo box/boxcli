@@ -15,7 +15,7 @@ class CollaborationsUpdateCommand extends BoxCommand {
 		if (flags.status) {
 			parameters.body.status = flags.status;
 		}
-		if (flags.hasOwnProperty('can-view-path')) {
+		if (Object.hasOwn(flags, 'can-view-path')) {
 			parameters.body.can_view_path = flags['can-view-path'];
 		}
 		if (flags.role) {

@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable mocha/no-skipped-tests */
+
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const jwt = require('jsonwebtoken');

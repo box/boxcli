@@ -17,7 +17,7 @@ class IntegrationMappingsSlackUpdateCommand extends BoxCommand {
 				type: 'folder',
 			};
 		}
-		if (flags.hasOwnProperty('disable-access-management')) {
+		if (Object.hasOwn(flags, 'disable-access-management')) {
 			body.options = {
 				is_access_management_disabled:
 					flags['disable-access-management'],

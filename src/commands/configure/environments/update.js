@@ -62,7 +62,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			environment.useDefaultAsUser = true;
 		}
 
-		if (flags.hasOwnProperty('cache-tokens')) {
+		if (Object.hasOwn(flags, 'cache-tokens')) {
 			environment.cacheTokens = flags['cache-tokens'];
 		}
 

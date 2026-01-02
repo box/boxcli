@@ -122,9 +122,9 @@ function _parseFlags(preparsedArgv) {
 	}
 
 	// Add the last field if necessary and return
-	template.fields = template.fields
-		.concat(currentField)
-		.filter((op) => op !== null);
+	template.fields = [...template.fields, currentField].filter(
+		(op) => op !== null
+	);
 	return template;
 }
 

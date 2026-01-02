@@ -300,7 +300,9 @@ class BoxCommand extends Command {
 			// Set up the command for bulk run
 			DEBUG.init('Preparing for bulk input');
 			this.isBulk = true;
+			// eslint-disable-next-line unicorn/prefer-structured-clone
 			originalArgs = _.cloneDeep(this.constructor.args);
+			// eslint-disable-next-line unicorn/prefer-structured-clone
 			originalFlags = _.cloneDeep(this.constructor.flags);
 			this.disableRequiredArgsAndFlags();
 		}
@@ -615,7 +617,7 @@ class BoxCommand extends Command {
 		let parsedData;
 		try {
 			let jsonFile = JSON.parse(fileContents);
-			parsedData = jsonFile.hasOwnProperty('entries')
+			parsedData = Object.hasOwn(jsonFile, 'entries')
 				? jsonFile.entries
 				: jsonFile;
 		} catch (error) {
@@ -651,10 +653,7 @@ class BoxCommand extends Command {
 					// Arrays can be one of two things: an array of values for a single key,
 					// or an array of grouped flags/args as objects
 					// First, check if everything in the array is either all object or all non-object
-					let types = value.reduce(
-						(acc, t) => acc.concat(typeof t),
-						[]
-					);
+					let types = value.map((t) => typeof t);
 					if (
 						types.some((t) => t !== 'object') &&
 						types.includes('object')
@@ -1196,11 +1195,10 @@ class BoxCommand extends Command {
 		if (Array.isArray(content)) {
 			// Format each object individually and then flatten in case this an array of arrays,
 			// which happens when a command that outputs a collection gets run in bulk
-			formattedOutputData = (
-				await Promise.all(
-					content.map((o) => this._formatOutputObject(o))
-				)
-			).flat();
+			const formattedOutputResults = await Promise.all(
+				content.map((o) => this._formatOutputObject(o))
+			);
+			formattedOutputData = formattedOutputResults.flat();
 			DEBUG.output(
 				'Formatted %d output entries for display',
 				content.length
@@ -1649,9 +1647,10 @@ class BoxCommand extends Command {
 		if (!fields) {
 			return output;
 		}
-		fields = REQUIRED_FIELDS.concat(
-			fields.split(',').filter((f) => !REQUIRED_FIELDS.includes(f))
-		);
+		fields = [
+			...REQUIRED_FIELDS,
+			...fields.split(',').filter((f) => !REQUIRED_FIELDS.includes(f)),
+		];
 		DEBUG.output('Filtering output with fields: %O', fields);
 		if (Array.isArray(output)) {
 			output = output.map((o) =>
@@ -1723,7 +1722,7 @@ class BoxCommand extends Command {
 				) {
 					let subKeys = this.getNestedKeys(object[key]);
 					subKeys = subKeys.map((x) => `${key}.${x}`);
-					keys = keys.concat(subKeys);
+					keys = [...keys, ...subKeys];
 				} else {
 					keys.push(key);
 				}
@@ -1757,10 +1756,10 @@ class BoxCommand extends Command {
 				);
 
 				// Successively apply the offsets to the current time
-				newDate = argPairs.reduce(
-					(d, args) => offsetDate(d, ...args),
-					new Date()
-				);
+				newDate = new Date();
+				for (const args of argPairs) {
+					newDate = offsetDate(newDate, ...args);
+				}
 			} else if (time === 'now') {
 				newDate = new Date();
 			} else {

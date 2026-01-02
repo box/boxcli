@@ -22,7 +22,7 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 			name = answers.environment;
 		}
 
-		if (environmentsObject.environments.hasOwnProperty(name)) {
+		if (Object.hasOwn(environmentsObject.environments, name)) {
 			environmentsObject.default = name;
 			await this.updateEnvironments(environmentsObject);
 			this.info(`The ${name} environment has been set as the default`);

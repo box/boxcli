@@ -33,10 +33,10 @@ class RetentionPoliciesUpdateCommand extends BoxCommand {
 			updates.status = 'retired';
 		}
 
-		if (flags.hasOwnProperty('notify-owners')) {
+		if (Object.hasOwn(flags, 'notify-owners')) {
 			updates.are_owners_notified = flags['notify-owners'];
 		}
-		if (flags.hasOwnProperty('allow-extension')) {
+		if (Object.hasOwn(flags, 'allow-extension')) {
 			updates.can_owner_extend_retention = flags['allow-extension'];
 		}
 

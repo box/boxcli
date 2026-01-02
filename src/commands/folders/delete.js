@@ -8,7 +8,7 @@ class FoldersDeleteCommand extends BoxCommand {
 		const { flags, args } = await this.parse(FoldersDeleteCommand);
 		let options = {};
 
-		if (flags.hasOwnProperty('recursive')) {
+		if (Object.hasOwn(flags, 'recursive')) {
 			options.recursive = flags.recursive;
 		}
 

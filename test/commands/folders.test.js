@@ -1898,7 +1898,8 @@ describe('Folders', function () {
 				'should download folder to zip file when --zip flag is passed',
 				async (context) => {
 					// Find zip file in directory
-					let filename = (await fs.readdir(downloadPath)).find(
+					const files = await fs.readdir(downloadPath);
+					let filename = files.find(
 						(f) =>
 							f.startsWith(`folders-download-${folderID}`) &&
 							f.endsWith('.zip')

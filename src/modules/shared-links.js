@@ -36,7 +36,7 @@ class SharedLinksModule {
 		if (flags['unshared-at']) {
 			updates.shared_link.unshared_at = flags['unshared-at'];
 		}
-		if (flags.hasOwnProperty('can-download')) {
+		if (Object.hasOwn(flags, 'can-download')) {
 			updates.shared_link.permissions.can_download =
 				flags['can-download'];
 		}
@@ -45,7 +45,7 @@ class SharedLinksModule {
 		}
 
 		if (arguments_.itemType === 'file') {
-			if (flags.hasOwnProperty('can-edit')) {
+			if (Object.hasOwn(flags, 'can-edit')) {
 				updates.shared_link.permissions.can_edit = flags['can-edit'];
 			}
 			return this.client.files.update(arguments_.itemID, updates);

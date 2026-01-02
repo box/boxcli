@@ -11,7 +11,7 @@ class FilesRenameCommand extends BoxCommand {
 			name: args.name,
 		};
 
-		if (flags.hasOwnProperty('description')) {
+		if (Object.hasOwn(flags, 'description')) {
 			options.description = flags.description;
 		}
 
