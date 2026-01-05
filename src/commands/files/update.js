@@ -12,7 +12,7 @@ class FileUpdateCommand extends BoxCommand {
 		if (flags.name) {
 			updates.name = flags.name;
 		}
-		if (flags.hasOwnProperty('description')) {
+		if (Object.hasOwn(flags, 'description')) {
 			updates.description = flags.description;
 		}
 		if (flags.tags) {

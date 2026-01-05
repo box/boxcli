@@ -9,7 +9,7 @@ class UsersAddEmailAliasCommand extends BoxCommand {
 
 		let options = {};
 
-		if (flags.hasOwnProperty('confirm')) {
+		if (Object.hasOwn(flags, 'confirm')) {
 			options.is_confirmed = flags.confirm;
 		}
 

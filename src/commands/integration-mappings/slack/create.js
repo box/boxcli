@@ -28,7 +28,7 @@ class IntegrationMappingsSlackCreateCommand extends BoxCommand {
 				'Either the --slack-workspace-id or --slack-org-id flag must be passed'
 			);
 		}
-		if (flags.hasOwnProperty('disable-access-management')) {
+		if (Object.hasOwn(flags, 'disable-access-management')) {
 			body.options = {
 				is_access_management_disabled:
 					flags['disable-access-management'],

@@ -15,7 +15,7 @@ class IntegrationMappingsSlackListCommand extends BoxCommand {
 		if (flags['box-item-id']) {
 			options.box_item_id = flags['box-item-id'];
 		}
-		if (flags.hasOwnProperty('manually-created')) {
+		if (Object.hasOwn(flags, 'manually-created')) {
 			options.is_manually_created = flags['manually-created'];
 		}
 

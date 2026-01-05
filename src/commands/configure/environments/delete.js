@@ -27,7 +27,7 @@ class EnvironmentsDeleteCommand extends BoxCommand {
 			name = answers.environment;
 		}
 
-		if (environmentsObject.environments.hasOwnProperty(name)) {
+		if (Object.hasOwn(environmentsObject.environments, name)) {
 			delete environmentsObject.environments[name];
 			if (environmentsObject.default === name) {
 				environmentsObject.default = '';

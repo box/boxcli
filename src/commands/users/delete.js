@@ -8,10 +8,10 @@ class UsersDeleteCommand extends BoxCommand {
 		const { flags, args } = await this.parse(UsersDeleteCommand);
 		let options = {};
 
-		if (flags.hasOwnProperty('notify')) {
+		if (Object.hasOwn(flags, 'notify')) {
 			options.notify = flags.notify;
 		}
-		if (flags.hasOwnProperty('force')) {
+		if (Object.hasOwn(flags, 'force')) {
 			options.force = flags.force;
 		}
 

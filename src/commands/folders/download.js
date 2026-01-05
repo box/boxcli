@@ -46,7 +46,7 @@ class FoldersDownloadCommand extends BoxCommand {
 
 		this.outputPath = null;
 		this.maxDepth =
-			flags.hasOwnProperty('depth') && flags.depth >= 0
+			Object.hasOwn(flags, 'depth') && flags.depth >= 0
 				? flags.depth
 				: Number.POSITIVE_INFINITY;
 		this.overwrite = flags.overwrite;
