@@ -12,14 +12,14 @@ class FoldersUpdateCommand extends BoxCommand {
 		if (flags.name) {
 			updates.name = flags.name;
 		}
-		if (flags.hasOwnProperty('can-non-owners-invite')) {
+		if (Object.hasOwn(flags, 'can-non-owners-invite')) {
 			updates.can_non_owners_invite = flags['can-non-owners-invite'];
 		}
-		if (flags.hasOwnProperty('can-non-owners-view-collaborators')) {
+		if (Object.hasOwn(flags, 'can-non-owners-view-collaborators')) {
 			updates.can_non_owners_view_collaborators =
 				flags['can-non-owners-view-collaborators'];
 		}
-		if (flags.hasOwnProperty('description')) {
+		if (Object.hasOwn(flags, 'description')) {
 			updates.description = flags.description;
 		}
 		if (flags['upload-email-access']) {
@@ -27,17 +27,17 @@ class FoldersUpdateCommand extends BoxCommand {
 				access: flags['upload-email-access'],
 			};
 		}
-		if (flags.hasOwnProperty('restrict-collaboration')) {
+		if (Object.hasOwn(flags, 'restrict-collaboration')) {
 			updates.can_non_owners_invite = !flags['restrict-collaboration'];
 		}
-		if (flags.hasOwnProperty('restrict-to-enterprise')) {
+		if (Object.hasOwn(flags, 'restrict-to-enterprise')) {
 			updates.is_collaboration_restricted_to_enterprise =
 				flags['restrict-to-enterprise'];
 		}
 		if (flags.tags) {
 			updates.tags = flags.tags.split(',');
 		}
-		if (flags.hasOwnProperty('sync')) {
+		if (Object.hasOwn(flags, 'sync')) {
 			updates.sync_state = flags.sync ? 'synced' : 'not_synced';
 		}
 

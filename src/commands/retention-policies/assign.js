@@ -15,10 +15,10 @@ class RetentionPoliciesAssignCommand extends BoxCommand {
 		let assignID = flags['assign-to-id'];
 		let options = {};
 
-		if (flags.hasOwnProperty('filter-field')) {
+		if (Object.hasOwn(flags, 'filter-field')) {
 			options.filter_fields = flags['filter-field'];
 		}
-		if (flags.hasOwnProperty('start-date-field')) {
+		if (Object.hasOwn(flags, 'start-date-field')) {
 			options.start_date_field = flags['start-date-field'];
 		}
 

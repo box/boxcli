@@ -180,8 +180,8 @@ class SearchCommand extends BoxCommand {
 			options.trash_content = flags['trash-content'];
 		}
 		if (
-			flags.hasOwnProperty('size-from') ||
-			flags.hasOwnProperty('size-to')
+			Object.hasOwn(flags, 'size-from') ||
+			Object.hasOwn(flags, 'size-to')
 		) {
 			options.size_range = `${_.get(flags, 'size-from', '')},${_.get(flags, 'size-to', '')}`;
 		}
@@ -198,7 +198,7 @@ class SearchCommand extends BoxCommand {
 			options.direction = flags.direction;
 		}
 
-		if (flags.hasOwnProperty('include-recent-shared-links')) {
+		if (Object.hasOwn(flags, 'include-recent-shared-links')) {
 			options.include_recent_shared_links =
 				flags['include-recent-shared-links'];
 		}

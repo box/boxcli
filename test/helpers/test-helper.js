@@ -31,7 +31,7 @@ function getFixture(fixture) {
 			? content.replaceAll(/(?<!-)(?<!\r\n)\r(?!\n\r)/g, '')
 			: content.replaceAll('\r', '');
 
-		return transformedContent.trimEnd().concat(os.EOL);
+		return `${transformedContent.trimEnd()}${os.EOL}`;
 	}
 
 	return content;

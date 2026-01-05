@@ -29,19 +29,13 @@ class MetadataQueryCommand extends BoxCommand {
 		if (queryParameter) {
 			combinedQueryParameters = {
 				...combinedQueryParameters,
-				...queryParameter.reduce(
-					(accumulator, current) => ({ ...accumulator, ...current }),
-					{}
-				),
+				...Object.assign({}, ...queryParameter),
 			};
 		}
 		if (queryParameterArray) {
 			combinedQueryParameters = {
 				...combinedQueryParameters,
-				...queryParameterArray.reduce(
-					(accumulator, current) => ({ ...accumulator, ...current }),
-					{}
-				),
+				...Object.assign({}, ...queryParameterArray),
 			};
 		}
 

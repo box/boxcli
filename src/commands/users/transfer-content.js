@@ -15,7 +15,7 @@ class UsersMoveRootContentCommand extends BoxCommand {
 			qs: {},
 		};
 
-		if (flags.hasOwnProperty('notify')) {
+		if (Object.hasOwn(flags, 'notify')) {
 			parameters.qs.notify = flags.notify;
 		}
 

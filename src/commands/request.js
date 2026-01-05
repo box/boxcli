@@ -17,7 +17,7 @@ class ManualRequestCommand extends BoxCommand {
 			parameters.qs = querystring.parse(flags.query);
 		}
 
-		if (flags.hasOwnProperty('body') && flags.body !== '') {
+		if (Object.hasOwn(flags, 'body') && flags.body !== '') {
 			try {
 				parameters.body = JSON.parse(flags.body);
 				parameters.json = true;

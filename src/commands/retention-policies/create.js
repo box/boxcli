@@ -14,10 +14,10 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 		let dispositionAction = flags['disposition-action'];
 		let options = {};
 
-		if (flags.hasOwnProperty('notify-owners')) {
+		if (Object.hasOwn(flags, 'notify-owners')) {
 			options.are_owners_notified = flags['notify-owners'];
 		}
-		if (flags.hasOwnProperty('allow-extension')) {
+		if (Object.hasOwn(flags, 'allow-extension')) {
 			options.can_owner_extend_retention = flags['allow-extension'];
 		}
 		if (flags['retention-length']) {
@@ -33,10 +33,10 @@ class RetentionPoliciesCreateCommand extends BoxCommand {
 			options.retention_type =
 				this.client.retentionPolicies.retentionTypes.NON_MODIFIABLE;
 		}
-		if (flags.hasOwnProperty('description')) {
+		if (Object.hasOwn(flags, 'description')) {
 			options.description = flags.description;
 		}
-		if (flags.hasOwnProperty('custom-notification-recipient')) {
+		if (Object.hasOwn(flags, 'custom-notification-recipient')) {
 			options.custom_notification_recipients =
 				flags['custom-notification-recipient'];
 		}

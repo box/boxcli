@@ -322,7 +322,7 @@ function _parseOperations(preparsedArgv) {
 	}
 
 	// Add the last field if necessary and return
-	return ops.concat(currentOp).filter((op) => op !== null);
+	return [...ops, currentOp].filter((op) => op !== null);
 }
 
 class MetadataTemplatesUpdateCommand extends BoxCommand {

@@ -29,7 +29,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		if (this.flags.reauthorize) {
 			if (
-				!environmentsObject.environments.hasOwnProperty(this.flags.name)
+				!Object.hasOwn(environmentsObject.environments, this.flags.name)
 			) {
 				this.error(`The ${this.flags.name} environment does not exist`);
 			}

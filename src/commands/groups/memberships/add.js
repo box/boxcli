@@ -8,19 +8,19 @@ class GroupsAddMembershipCommand extends BoxCommand {
 		const { flags, args } = await this.parse(GroupsAddMembershipCommand);
 		let options = { configurable_permissions: {} };
 
-		if (flags.hasOwnProperty('can-run-reports')) {
+		if (Object.hasOwn(flags, 'can-run-reports')) {
 			options.configurable_permissions.can_run_reports =
 				flags['can-run-reports'];
 		}
-		if (flags.hasOwnProperty('can-instant-login')) {
+		if (Object.hasOwn(flags, 'can-instant-login')) {
 			options.configurable_permissions.can_instant_login =
 				flags['can-instant-login'];
 		}
-		if (flags.hasOwnProperty('can-create-accounts')) {
+		if (Object.hasOwn(flags, 'can-create-accounts')) {
 			options.configurable_permissions.can_create_accounts =
 				flags['can-create-accounts'];
 		}
-		if (flags.hasOwnProperty('can-edit-accounts')) {
+		if (Object.hasOwn(flags, 'can-edit-accounts')) {
 			options.configurable_permissions.can_edit_accounts =
 				flags['can-edit-accounts'];
 		}

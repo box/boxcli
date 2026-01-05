@@ -11,7 +11,7 @@ class FilesLockCommand extends BoxCommand {
 		if (flags.expires) {
 			options.expires_at = flags.expires;
 		}
-		if (flags.hasOwnProperty('prevent-download')) {
+		if (Object.hasOwn(flags, 'prevent-download')) {
 			options.is_download_prevented = flags['prevent-download'];
 		}
 

@@ -10,25 +10,25 @@ class UsersCreateCommand extends BoxCommand {
 		let options = {};
 		let user;
 
-		if (flags.hasOwnProperty('sync-enable')) {
+		if (Object.hasOwn(flags, 'sync-enable')) {
 			options.is_sync_enabled = flags['sync-enable'];
 		}
 		if (flags['password-reset']) {
 			options.is_password_reset_required = true;
 		}
-		if (flags.hasOwnProperty('exempt-from-device-limits')) {
+		if (Object.hasOwn(flags, 'exempt-from-device-limits')) {
 			options.is_exempt_from_device_limits =
 				flags['exempt-from-device-limits'];
 		}
-		if (flags.hasOwnProperty('exempt-from-2fa')) {
+		if (Object.hasOwn(flags, 'exempt-from-2fa')) {
 			options.is_exempt_from_login_verification =
 				flags['exempt-from-2fa'];
 		}
-		if (flags.hasOwnProperty('restrict-external-collab')) {
+		if (Object.hasOwn(flags, 'restrict-external-collab')) {
 			options.is_external_collab_restricted =
 				flags['restrict-external-collab'];
 		}
-		if (flags.hasOwnProperty('can-see-managed-users')) {
+		if (Object.hasOwn(flags, 'can-see-managed-users')) {
 			options.can_see_managed_users = flags['can-see-managed-users'];
 		}
 		if (flags.role) {
