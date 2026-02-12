@@ -352,7 +352,7 @@ SearchCommand.args = {
 		name: 'query',
 		required: false,
 		hidden: false,
-		description: 'The search term',
+		description: `The search term. Some queries with special characters (e.g. double quotes for exact match) may require escaping (e.g. box search '\\"query_term\\"').`,
 		default: '',
 	}),
 };
