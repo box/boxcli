@@ -14,6 +14,49 @@ const path = require('node:path');
 const ora = require('ora');
 const http = require('node:http');
 const { nanoid } = require('nanoid');
+const DEBUG = require('../debug');
+const { generatePKCE } = require('../pkce-support');
+const {
+	assertValidOAuthCode,
+	getTokenInfoByAuthCode,
+} = require('../login-helper');
+
+const GENERIC_OAUTH_CLIENT_ID = 'udz8zp4yue87uk9dzq4xk425kkwvqvh1';
+const GENERIC_OAUTH_CLIENT_SECRET = 'iZ1MbvC3ZaF25nbJli7IsKdRHAxfu3fn';
+const SUPPORTED_DEFAULT_APP_PORTS = [3000, 3001, 4000, 5000, 8080];
+
+async function promptForClientCredentials(inquirerModule) {
+	const clientIdPrompt = {
+		type: 'input',
+		name: 'clientID',
+		message:
+			'Press Enter to log into the Official Box CLI app, or enter a Client ID for your custom app (customized scopes):',
+	};
+
+	const { clientID } = await inquirerModule.prompt([clientIdPrompt]);
+	const normalizedClientId = typeof clientID === 'string' ? clientID.trim() : '';
+	if (!normalizedClientId) {
+		return {
+			useDefaultBoxApp: true,
+			clientId: GENERIC_OAUTH_CLIENT_ID,
+			clientSecret: GENERIC_OAUTH_CLIENT_SECRET,
+		};
+	}
+
+	const { clientSecret } = await inquirerModule.prompt([
+		{
+			type: 'input',
+			name: 'clientSecret',
+			message: 'Enter the Client Secret of your OAuth application:',
+		},
+	]);
+
+	return {
+		useDefaultBoxApp: false,
+		clientId: normalizedClientId,
+		clientSecret,
+	};
+}
 
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
@@ -22,6 +65,8 @@ class OAuthLoginCommand extends BoxCommand {
 		const apps = openModule.apps;
 
 		const { flags } = await this.parse(OAuthLoginCommand);
+		const forceDefaultBoxApp = flags['default-box-app'];
+		let useDefaultBoxApp = false;
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
 		const redirectUri = `http://localhost:${port}/callback`;
@@ -31,41 +76,123 @@ class OAuthLoginCommand extends BoxCommand {
 			if (
 				!Object.hasOwn(environmentsObject.environments, this.flags.name)
 			) {
-				this.error(`The ${this.flags.name} environment does not exist`);
+				this.info(chalk`{red The "${this.flags.name}" environment does not exist}`);
+				return;
 			}
 
 			environment = environmentsObject.environments[this.flags.name];
 			if (environment.authMethod !== 'oauth20') {
-				this.error('The selected environment is not of type oauth20');
+				this.info(chalk`{red The selected environment is not of type oauth20}`);
+				return;
+			}
+			if (forceDefaultBoxApp) {
+				useDefaultBoxApp = true;
+				environment.clientId = GENERIC_OAUTH_CLIENT_ID;
+				environment.clientSecret = GENERIC_OAUTH_CLIENT_SECRET;
+			} else {
+				useDefaultBoxApp =
+					environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
+					environment.clientSecret === GENERIC_OAUTH_CLIENT_SECRET;
+			}
+			if (
+				useDefaultBoxApp &&
+				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
+			) {
+				this.info(
+					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+				);
+				return;
 			}
 		} else {
-			this.info(
-				chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
-			);
-			this.info(
-				chalk`{cyan 1. Select an application with OAuth user authentication method. Create a new Custom App if needed.}`
-			);
-			this.info(
-				chalk`{cyan 2. Click on the Configuration tab and set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
-			);
-			this.info(chalk`{cyan 3. Click on {bold Save Changes}.}`);
+			useDefaultBoxApp = forceDefaultBoxApp;
+			if (
+				useDefaultBoxApp &&
+				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
+			) {
+				this.info(
+					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+				);
+				return;
+			}
+		}
 
-			const answers = await inquirer.prompt([
-				{
-					type: 'input',
-					name: 'clientID',
-					message: 'What is the OAuth Client ID of your application?',
-				},
-				{
-					type: 'input',
-					name: 'clientSecret',
-					message:
-						'What is the OAuth Client Secret of your application?',
-				},
-			]);
+		if (this.flags.reauthorize) {
+			// Keep the selected existing environment config for reauthorization.
+		} else if (useDefaultBoxApp) {
+			this.info(chalk`{cyan ----------------------------------------}`);
+			this.info(
+				chalk`{cyan No app setup is required in Box Developer Console.}`
+			);
+			this.info(chalk`{cyan Callback URL: {italic ${redirectUri}}}`);
+			this.info(
+				chalk`{cyan Supported callback ports for this flow: {bold 3000}, {bold 3001}, {bold 4000}, {bold 5000}, {bold 8080}.}`
+			);
+			this.info(
+				chalk`{cyan You can change the port with {bold --port}, but only to one of the supported values above.}`
+			);
+			this.info(chalk`{cyan ----------------------------------------}`);
 
 			environment = {
-				clientId: answers.clientID,
+				clientId: GENERIC_OAUTH_CLIENT_ID,
+				clientSecret: GENERIC_OAUTH_CLIENT_SECRET,
+				name: this.flags.name,
+				cacheTokens: true,
+				authMethod: 'oauth20',
+			};
+		} else {
+			this.info(chalk`{cyan ----------------------------------------}`);
+			this.info(
+				chalk`{cyan You can log in with one of the following options:}`
+			);
+			this.info('');
+			this.info(
+				chalk`{cyan {bold [Option 1] Official Box CLI app}}`
+			);
+			this.info(
+				chalk`{cyan Press {bold Enter} at the next prompt to get started — no app setup required.}`
+			);
+			this.info(
+				chalk`{cyan Scopes are limited to content actions, allowing you to effectively operate with your files and folders.}`
+			);
+			this.info(
+				chalk`{cyan Supported callback ports: {bold ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}. Change with {bold --port}.}`
+			);
+			this.info('');
+			this.info(
+				chalk`{cyan {bold [Option 2] Your own custom app}}`
+			);
+			this.info(
+				chalk`{cyan Enter your Client ID at the next prompt. Set up the app in the Box Developer console ({underline https://cloud.app.box.com/developers/console}):}`
+			);
+			this.info(
+				chalk`{cyan  1. Select an application with OAuth user authentication (or create a new Custom App).}`
+			);
+			this.info(
+				chalk`{cyan  2. In the Configuration tab, set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
+			);
+			this.info(
+				chalk`{cyan  3. Click {bold Save Changes}.}`
+			);
+			this.info(
+				chalk`{cyan Quickstart guide: {underline https://developer.box.com/guides/tooling/cli/quick-start/}}`
+			);
+			this.info(chalk`{cyan ----------------------------------------}`);
+
+			const answers = await promptForClientCredentials(inquirer);
+			useDefaultBoxApp = answers.useDefaultBoxApp;
+
+			if (
+				useDefaultBoxApp &&
+				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
+			) {
+				this.info(
+					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+				);
+				return;
+			}
+
+			environment = {
+				clientId: answers.clientId,
 				clientSecret: answers.clientSecret,
 				name: this.flags.name,
 				cacheTokens: true,
@@ -91,6 +218,7 @@ class OAuthLoginCommand extends BoxCommand {
 		server = app.listen(port);
 
 		const state = nanoid(32);
+		const pkce = useDefaultBoxApp ? generatePKCE() : null;
 
 		app.get('/callback', async (request, res) => {
 			try {
@@ -99,9 +227,12 @@ class OAuthLoginCommand extends BoxCommand {
 						`Invalid OAuth state received in callback. Got "${request.query.state}" while expecting "${state}"`
 					);
 				}
-				const tokenInfo = await sdk.getTokensAuthorizationCodeGrant(
+				assertValidOAuthCode(request.query.code);
+				const tokenInfo = await getTokenInfoByAuthCode(
+					sdk,
 					request.query.code,
-					null
+					redirectUri,
+					pkce?.codeVerifier
 				);
 				const tokenCache = new CLITokenCache(environmentName);
 				await new Promise((resolve, reject) => {
@@ -146,13 +277,21 @@ class OAuthLoginCommand extends BoxCommand {
 					);
 				}
 			} catch (error) {
-				throw new BoxCLIError(error);
+				const statusCode = error?.response?.statusCode ?? error?.response?.status;
+				const errorMessage =
+					error?.response?.body?.error_description ||
+					(statusCode ? `Request failed with status ${statusCode}` : null) ||
+					error?.message ||
+					'Unknown error';
+				DEBUG.execute('Login error: %O', error);
+				this.info(chalk`{red Login failed: ${errorMessage}}`);
 			} finally {
 				server.close();
+				server.closeAllConnections();
 			}
 		});
 
-		let spinner = ora({
+		const spinner = ora({
 			text: chalk`{bgCyan Opening browser for OAuth authentication. Please click {bold Grant access to Box} to continue.}`,
 			spinner: 'bouncingBall',
 		}).start();
@@ -166,6 +305,11 @@ class OAuthLoginCommand extends BoxCommand {
 			response_type: 'code',
 			state,
 			redirect_uri: redirectUri,
+			...(useDefaultBoxApp
+				? {
+						code_challenge: pkce.codeChallenge,
+					}
+				: {}),
 		});
 		if (flags.code) {
 			this.info(
@@ -199,7 +343,9 @@ class OAuthLoginCommand extends BoxCommand {
 				open(authorizeUrl);
 			}
 			this.info(
-				chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
+				useDefaultBoxApp
+					? chalk`{yellow If authorization fails, verify that you are using one of the supported ports for the Official Box CLI app flow and restart the login command.}`
+					: chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
 			);
 		}
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -210,7 +356,17 @@ class OAuthLoginCommand extends BoxCommand {
 OAuthLoginCommand.noClient = true;
 
 OAuthLoginCommand.description =
-	'Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used';
+	'Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).\n' +
+	'\n' +
+	'Login options:\n' +
+	'\n' +
+	'  (1) Official Box CLI App\n' +
+	'      No app setup needed. Use --default-box-app (-d) to skip the prompt.\n' +
+	'\n' +
+	'  (2) Your own custom OAuth app\n' +
+	'      Enter your Client ID and Client Secret when prompted.\n' +
+	'\n' +
+	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
@@ -229,6 +385,15 @@ OAuthLoginCommand.flags = {
 		description: 'Set the port number for the local OAuth callback server',
 		default: 3000,
 	}),
+	'default-box-app': Flags.boolean({
+		char: 'd',
+		description:
+			'Use the Official Box CLI app flow and proceed directly to authorization.\n' +
+			'This is the fastest way to integrate with Box — no app creation in the Developer Console is needed.\n' +
+			'Scopes are limited to content actions, allowing you to effectively operate with your files and folders.\n' +
+			'This flow requires a local callback server on a supported port (3000, 3001, 4000, 5000, or 8080). The default port is 3000; use --port to change it.',
+		default: false,
+	}),
 	reauthorize: Flags.boolean({
 		char: 'r',
 		description: 'Reauthorize the existing environment with given `name`',
@@ -243,3 +408,6 @@ OAuthLoginCommand.flags = {
 };
 
 module.exports = OAuthLoginCommand;
+module.exports._test = {
+	promptForClientCredentials,
+};

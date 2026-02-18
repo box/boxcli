@@ -8,8 +8,12 @@ overview of how the Box API handles authentication.
   - [Developer Token](#developer-token)
   - [Server Auth with JWT](#server-auth-with-jwt)
   - [Server Auth with CCG](#server-auth-with-ccg)
-  - [Traditional 3-Legged OAuth2](#traditional-3-legged-oauth2)
-     - [Reauthorize OAuth2](#reauthorize-oauth2)
+  - [OAuth 2.0 Login (`box login`)](#oauth-20-login-box-login)
+    - [Option 1: Official Box CLI App (Recommended)](#option-1-official-box-cli-app-recommended)
+    - [Option 2: Your Own Custom App](#option-2-your-own-custom-app)
+    - [Supported Ports](#supported-ports)
+    - [Additional Flags](#additional-flags)
+    - [Reauthorize OAuth2](#reauthorize-oauth2)
 
 
 Ways to Authenticate
@@ -17,118 +21,198 @@ Ways to Authenticate
 
 ### Developer Token
 
-The fastest way to get started using the API is with developer tokens. A
-developer token is simply a short-lived access token that cannot be refreshed
-and can only be used with your own account. Therefore, they're only useful for
-testing an app and aren't suitable for production. You can obtain a developer
-token from your application's
-[developer console][dev-console] page.
-
-You can pass dev token to any cli command by using `--token` flag
-
-```bash
-box users:get --token myToken
-```
+A developer token is a short-lived access token that you can generate directly from the [Box Developer Console][dev-console]. It provides a quick way to test API calls without setting up a full authentication flow.
 
 [dev-console]: https://app.box.com/developers/console
 
-### Server Auth with JWT
+**Key characteristics:**
 
-Server auth allows your application to authenticate itself with the Box API
-for a given enterprise.  By default, your application has a
-[Service Account](https://developer.box.com/en/guides/authentication/user-types/)
-that represents it and can perform API calls.  The Service Account is separate
-from the Box accounts of the application developer and the enterprise admin of
-any enterprise that has authorized the app — files stored in that account are
-not accessible in any other account by default, and vice versa.
+- Valid for **60 minutes** and cannot be refreshed.
+- Scoped to your own account only.
+- Intended for **development and testing** — not suitable for production use.
 
-If you generated your public and private keys automatically through the
-[Box Developer Console][dev-console], you can use the JSON file created there
-to configure the SDK and create an environment to make calls as the
-Service Account:
+**Usage** — pass the token to any CLI command with the `--token` flag:
 
 ```bash
-box configure:environments:add /path/to/file/config.json 
+box users:get --token <DEVELOPER_TOKEN>
 ```
 
-Remember to set your current environment to the proper one
+> **Tip:** You can generate a new developer token at any time from the **Configuration** tab of your application in the [Developer Console][dev-console].
+
+### Server Auth with JWT
+
+JSON Web Token (JWT) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/en/guides/authentication/user-types/) without requiring user interaction. This is ideal for server-to-server integrations, automated workflows, and backend services.
+
+**Key characteristics:**
+
+- The application authenticates on behalf of a **Service Account**, which is separate from any individual user's account.
+- Files stored in the Service Account are not accessible from other accounts by default, and vice versa.
+- Requires a public/private key pair, which can be generated automatically in the [Developer Console][dev-console].
+
+**Setup:**
+
+1. In the [Developer Console][dev-console], create or open an application that uses **JWT** authentication.
+2. Generate a public/private key pair (or upload your own). This produces a JSON configuration file.
+3. Download the configuration file and add it as an environment:
+
+```bash
+box configure:environments:add /path/to/config.json
+```
+
+4. If you have multiple environments, set the active one:
 
 ```bash
 box configure:environments:set-current
 ```
 
+After setup, all CLI commands will authenticate using the JWT credentials from the selected environment.
+
 ### Server Auth with CCG
 
-Server auth allows your application to authenticate itself with the Box API
-for a given enterprise. 
-Client Credentials Grant (CCG) allows you to authenticate by providing `clientId` and `clientSecret` and `enterpriseId` of your app.
-By default, your application has a
-[Service Account](https://developer.box.com/en/guides/authentication/user-types/)
-that represents it and can perform API calls. The Service Account is separate
-from the Box accounts of the application developer and the enterprise admin of
-any enterprise that has authorized the app — files stored in that account are
-not accessible in any other account by default, and vice versa.
+Client Credentials Grant (CCG) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/en/guides/authentication/user-types/) using a **Client ID**, **Client Secret**, and **Enterprise ID**. Like JWT, this method is designed for server-to-server communication and does not require user interaction.
 
-Adding a CCG environment is a similar process to adding a JWT environment. However, you must manually create a configuration file. 
-This file should contain `clientID`, `clientSecret` and `enterpriseId`. You can find this information in the [Box Developer Console][dev-console].
+**Key characteristics:**
 
-Example configuration file:
+- The application authenticates on behalf of a **Service Account**, which is separate from any individual user's account.
+- Files stored in the Service Account are not accessible from other accounts by default, and vice versa.
+- No key pair generation is needed — authentication relies on the Client ID and Client Secret only.
+
+**Setup:**
+
+1. In the [Developer Console][dev-console], create or open an application that uses **Client Credentials Grant** authentication.
+2. Create a JSON configuration file with the following structure:
 
 ```json
 {
   "boxAppSettings": {
-    "clientID": "myClientId",
-    "clientSecret": "mySecret"
+    "clientID": "your_client_id",
+    "clientSecret": "your_client_secret"
   },
-  "enterpriseID": "myEnterpriseId"
+  "enterpriseID": "your_enterprise_id"
 }
 ```
 
-Then create a new environment with `--ccg-auth` flag and point it to the configuration file
+> **Tip:** You can find the `clientID`, `clientSecret`, and `enterpriseID` values in the **Configuration** tab of your application in the [Developer Console][dev-console].
+
+3. Add the environment with the `--ccg-auth` flag:
 
 ```bash
-box configure:environments:add /path/to/file/config.json --ccg-auth
+box configure:environments:add /path/to/config.json --ccg-auth
 ```
 
-Remember to set your current environment to the proper one
+4. If you have multiple environments, set the active one:
 
 ```bash
 box configure:environments:set-current
 ```
 
-An environment for making calls as an App User or Managed User can be created just like a Service Account environment. You need to pass an additional `--ccg-user` flag with `userId` as the value
+**Authenticating as a specific user:**
+
+By default, CCG authenticates as the Service Account. To make API calls as an App User or Managed User instead, pass the `--ccg-user` flag with the user's ID:
 
 ```bash
-box configure:environments:add /path/to/file/config.json --ccg-auth --ccg-user "USER_ID"
+box configure:environments:add /path/to/config.json --ccg-auth --ccg-user "USER_ID"
 ```
 
-### Traditional 3-Legged OAuth2
+### OAuth 2.0 Login (`box login`)
 
-Refer to the [OAuth Guide](https://developer.box.com/guides/cli/quick-start) if you want to use OAuth2.
+The `box login` command authenticates you with Box using OAuth 2.0. It starts a local callback server, opens your browser for authorization, and stores the resulting tokens in a named environment.
+
+When you run `box login`, the CLI presents two login options: the **Official Box CLI App** and a **custom app** you create yourself. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag.
+
+#### Option 1: Official Box CLI App (Recommended)
+
+This is the fastest way to get started with Box CLI. No app creation in the Box Developer Console is required — just run the command and authorize.
+
+**Interactive selection** — run `box login` and press **Enter** at the Client ID prompt to use the built-in app:
+
+```bash
+box login
+# When prompted for a Client ID, press Enter to use the Official Box CLI App.
+```
+
+**Skip the prompt** — use the `--default-box-app` (or `-d`) flag to go directly to authorization:
+
+```bash
+box login --default-box-app
+```
+
+```bash
+box login -d
+```
+
+> **Note:** The Official Box CLI App uses scopes limited to content actions, which allows you to effectively manage your files and folders. If you need broader scopes (e.g., managing users, groups, or enterprise settings), use your own custom app instead.
+
+#### Option 2: Your Own Custom App
+
+If you need customized scopes or a dedicated application, you can log in with your own OAuth app. When prompted, enter the **Client ID** and **Client Secret** from your application's configuration.
+
+Before running the command, set up the app in the [Box Developer Console](https://cloud.app.box.com/developers/console):
+
+1. Select an application with **OAuth 2.0 user authentication** (or create a new Custom App).
+2. In the **Configuration** tab, set the **Redirect URI** to `http://localhost:3000/callback` (adjust the port if you use a different `--port` value).
+3. Click **Save Changes**.
+
+Then log in:
+
+```bash
+box login
+# When prompted, enter your Client ID and Client Secret.
+```
+
+For a step-by-step walkthrough, see the [Quickstart Guide](https://developer.box.com/guides/tooling/cli/quick-start/).
+
+#### Supported Ports
+
+The `box login` command starts a local callback server to receive the OAuth redirect. You can control the port with the `--port` (`-p`) flag. The default port is **3000**.
+
+When using the **Official Box CLI App**, only the following ports are supported:
+
+| Port | Command |
+|------|---------|
+| 3000 | `box login -d` (default) |
+| 3001 | `box login -d --port 3001` |
+| 4000 | `box login -d --port 4000` |
+| 5000 | `box login -d --port 5000` |
+| 8080 | `box login -d --port 8080` |
+
+When using your own custom app, any port can be used — just make sure the **Redirect URI** in the Developer Console matches `http://localhost:<port>/callback`.
+
+#### Additional Flags
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--default-box-app` | `-d` | Use the Official Box CLI App and proceed directly to authorization. |
+| `--port <number>` | `-p` | Set the port for the local callback server. Default: `3000`. |
+| `--name <string>` | `-n` | Set a name for the environment. Default: `oauth`. |
+| `--reauthorize` | `-r` | Reauthorize an existing environment (requires `--name`). |
+| `--code` | `-c` | Manually visit the authorize URL and input the auth code. |
+| `--incognito-browser` | `-i` | Open the authorize URL in a private/incognito browser window. |
 
 #### Reauthorize OAuth2
 
-After each successful OAuth2 authorization, a pair of tokens is generated, the Access Token and Refresh Token. 
+After each successful OAuth 2.0 authorization, a pair of tokens is generated: an **Access Token** and a **Refresh Token**.
 
-The first one, the  [Access Token](https://developer.box.com/guides/authentication/tokens/access-tokens/), is used to represent the authenticated user to the Box servers and is valid for 60 minutes.
+- The [Access Token](https://developer.box.com/guides/authentication/tokens/access-tokens/) represents the authenticated user and is valid for **60 minutes**.
+- The [Refresh Token](https://developer.box.com/guides/authentication/tokens/refresh/) is used to obtain a new Access Token. It is valid for **1 use within 60 days**.
 
-The second one, the [Refresh Token](https://developer.box.com/guides/authentication/tokens/refresh/), is used to refresh the Access Token when it has expired or is close to expiring. A Refresh Token is valid for 1 use within 60 days.
+If both tokens expire, you will see the following error:
 
-However, it may happen that both mentioned tokens, `Access Token` and `Refresh Token`, have expired. You may then see following error:
-
-```bash
-Your refresh token has expired. 
+```
+Your refresh token has expired.
 Please run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.
 ```
 
-In this case, you need to log in again to obtain required tokens by using the following command:
+To reauthorize, run:
 
 ```bash
 box login --name "ENVIRONMENT_NAME" --reauthorize
 ```
 
-where `ENVIRONMENT_NAME` is the name of the environment to be reauthorized.
+The `--reauthorize` flag retrieves the existing `clientID` and `clientSecret` from the stored environment, so you do not need to enter them again. After a successful login, the environment is updated and set as the default.
 
-Thanks to the `--reauthorize` flag, the `clientID` and `clientSecret` parameters will be retrieved from the existing environment instead of asking the user for them.
+You can also combine `--reauthorize` with `--default-box-app` to switch an existing environment to the Official Box CLI App:
 
-After a successful login, the `ENVIRONMENT_NAME` environment will be updated and set as the default.
+```bash
+box login --name "ENVIRONMENT_NAME" --reauthorize --default-box-app
+```
