@@ -417,7 +417,9 @@ describe('Update', function () {
 				'1.0.0-beta':
 					'https://github.com/box/boxcli/releases/download/v1.0.0-beta',
 			};
-			const mockLocalVersions = ['/path/to/versions/1.0.0-beta-darwin-x64'];
+			const mockLocalVersions = [
+				'/path/to/versions/1.0.0-beta-darwin-x64',
+			];
 
 			fetchVersionIndexStub.resolves(mockVersionIndex);
 			findLocalVersionsStub.resolves(mockLocalVersions);
@@ -437,7 +439,10 @@ describe('Update', function () {
 				.command(['update', '--available'])
 				.it('matches version with special characters', (ctx) => {
 					assert.include(ctx.stdout, '1.0.0-beta');
-					assert.include(ctx.stdout, '/path/to/versions/1.0.0-beta-darwin-x64');
+					assert.include(
+						ctx.stdout,
+						'/path/to/versions/1.0.0-beta-darwin-x64'
+					);
 				});
 		});
 	});
