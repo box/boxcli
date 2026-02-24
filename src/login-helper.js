@@ -10,29 +10,30 @@ function assertValidOAuthCode(code) {
 	}
 }
 
-async function getTokenInfoWithPKCE(sdk, code, redirectUri, codeVerifier) {
+async function getTokenInfoByAuthCode(sdk, code, redirectUri, codeVerifier) {
 	if (!sdk?.tokenManager?.getTokens) {
 		throw new BoxCLIError(
-			'OAuth token manager is unavailable; unable to complete PKCE token exchange.'
+			'OAuth token manager is unavailable; unable to complete token exchange.'
 		);
 	}
 
 	try {
-		return await sdk.tokenManager.getTokens(
-			{
-				grant_type: 'authorization_code',
-				code,
-				redirect_uri: redirectUri,
-				code_verifier: codeVerifier,
-			},
-			null
-		);
+		const grantPayload = {
+			grant_type: 'authorization_code',
+			code,
+			redirect_uri: redirectUri,
+		};
+		if (codeVerifier) {
+			grantPayload.code_verifier = codeVerifier;
+		}
+
+		return await sdk.tokenManager.getTokens(grantPayload, null);
 	} catch (error) {
-		throw new BoxCLIError('Failed to exchange auth code with PKCE.', error);
+		throw new BoxCLIError('Failed to exchange auth code for tokens.', error);
 	}
 }
 
 module.exports = {
 	assertValidOAuthCode,
-	getTokenInfoWithPKCE,
+	getTokenInfoByAuthCode,
 };
