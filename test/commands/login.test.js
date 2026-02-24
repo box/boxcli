@@ -6,6 +6,7 @@ const {
 	assertValidOAuthCode,
 	getTokenInfoWithPKCE,
 } = require('../../src/login-helper');
+const OAuthLoginCommand = require('../../src/commands/login');
 
 describe('Login', function () {
 	let sandbox;
@@ -82,6 +83,22 @@ describe('Login', function () {
 			assert.doesNotThrow(() => {
 				assertValidOAuthCode('valid-code');
 			});
+		});
+	});
+
+	describe('login command flags', function () {
+		it('should expose --default-box-app and --custom-app flags', function () {
+			assert.property(OAuthLoginCommand.flags, 'default-box-app');
+			assert.property(OAuthLoginCommand.flags, 'custom-app');
+		});
+
+		it('should keep login type flags mutually exclusive', function () {
+			assert.deepEqual(OAuthLoginCommand.flags['default-box-app'].exclusive, [
+				'custom-app',
+			]);
+			assert.deepEqual(OAuthLoginCommand.flags['custom-app'].exclusive, [
+				'default-box-app',
+			]);
 		});
 	});
 });

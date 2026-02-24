@@ -20,8 +20,8 @@ const {
 	getTokenInfoWithPKCE,
 } = require('../login-helper');
 
-const GENERIC_OAUTH_CLIENT_ID = '<<PUT OAUTH CLIENT ID HERE>>';
-const GENERIC_OAUTH_CLIENT_SECRET = '<<PUT OAUTH CLIENT SECRET HERE>>';
+const GENERIC_OAUTH_CLIENT_ID = '<< OAUTH CLIENT ID HERE >>';
+const GENERIC_OAUTH_CLIENT_SECRET = '<< OAUTH CLIENT SECRET HERE >>';
 const SUPPORTED_DEFAULT_APP_PORTS = [3000, 3001, 4000, 5000, 8080];
 
 class OAuthLoginCommand extends BoxCommand {
@@ -31,6 +31,9 @@ class OAuthLoginCommand extends BoxCommand {
 		const apps = openModule.apps;
 
 		const { flags } = await this.parse(OAuthLoginCommand);
+		const forceDefaultBoxApp = flags['default-box-app'];
+		const forceCustomApp = flags['custom-app'];
+
 		let useDefaultBoxApp = false;
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
@@ -48,9 +51,17 @@ class OAuthLoginCommand extends BoxCommand {
 			if (environment.authMethod !== 'oauth20') {
 				this.error('The selected environment is not of type oauth20');
 			}
-			useDefaultBoxApp =
-				environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
-				environment.clientSecret === GENERIC_OAUTH_CLIENT_SECRET;
+			if (forceDefaultBoxApp) {
+				useDefaultBoxApp = true;
+				environment.clientId = GENERIC_OAUTH_CLIENT_ID;
+				environment.clientSecret = GENERIC_OAUTH_CLIENT_SECRET;
+			} else if (forceCustomApp) {
+				useDefaultBoxApp = false;
+			} else {
+				useDefaultBoxApp =
+					environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
+					environment.clientSecret === GENERIC_OAUTH_CLIENT_SECRET;
+			}
 			if (
 				useDefaultBoxApp &&
 				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
@@ -60,26 +71,32 @@ class OAuthLoginCommand extends BoxCommand {
 				);
 			}
 		} else {
-			const loginChoice = await inquirer.prompt([
-				{
-					type: 'list',
-					name: 'loginType',
-					message: 'Which login flow do you want to use?',
-					choices: [
-						{
-							name: 'Official Box CLI app (limited scopes to content actions) - the easiest way to get started with Box',
-							value: 'default-box-app',
-						},
-						{
-							name: 'Your custom app (create it in Box Developer Console) - lets you customize scopes for your needs and unlock more capabilities',
-							value: 'custom-app',
-						},
-					],
-					default: 'default-box-app',
-				},
-			]);
+			if (forceDefaultBoxApp) {
+				useDefaultBoxApp = true;
+			} else if (forceCustomApp) {
+				useDefaultBoxApp = false;
+			} else {
+				const loginChoice = await inquirer.prompt([
+					{
+						type: 'list',
+						name: 'loginType',
+						message: 'Which login flow do you want to use?',
+						choices: [
+							{
+								name: 'Official Box CLI app (limited scopes to content actions) - the easiest way to get started with Box',
+								value: 'default-box-app',
+							},
+							{
+								name: 'Your custom app (create it in Box Developer Console) - lets you customize scopes for your needs and unlock more capabilities',
+								value: 'custom-app',
+							},
+						],
+						default: 'default-box-app',
+					},
+				]);
 
-			useDefaultBoxApp = loginChoice.loginType === 'default-box-app';
+				useDefaultBoxApp = loginChoice.loginType === 'default-box-app';
+			}
 			if (
 				useDefaultBoxApp &&
 				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
@@ -90,11 +107,10 @@ class OAuthLoginCommand extends BoxCommand {
 			}
 		}
 
-		if (useDefaultBoxApp && !this.flags.reauthorize) {
+		if (this.flags.reauthorize) {
+			// Keep the selected existing environment config for reauthorization.
+		} else if (useDefaultBoxApp) {
 			this.info(chalk`{cyan ----------------------------------------}`);
-			this.info(
-				chalk`{cyan You selected the Official Box CLI app. It has limited scopes focused on content actions (files and folders).}`
-			);
 			this.info(
 				chalk`{cyan No app setup is required in Box Developer Console.}`
 			);
@@ -116,7 +132,6 @@ class OAuthLoginCommand extends BoxCommand {
 			};
 		} else {
 			this.info(chalk`{cyan ----------------------------------------}`);
-			this.info(chalk`{cyan You selected the custom app login flow.}`);
 			this.info(
 				chalk`{cyan If you are not using the quickstart guide to set up ({underline https://developer.box.com/guides/tooling/cli/quick-start/}) then go to the Box Developer console ({underline https://cloud.app.box.com/developers/console}) and:}`
 			);
@@ -323,6 +338,18 @@ OAuthLoginCommand.flags = {
 		char: 'p',
 		description: 'Set the port number for the local OAuth callback server',
 		default: 3000,
+	}),
+	'default-box-app': Flags.boolean({
+		description:
+			'Use the Official Box CLI app flow and skip login type selection. Supported --port values: 3000, 3001, 4000, 5000, 8080',
+		exclusive: ['custom-app'],
+		default: false,
+	}),
+	'custom-app': Flags.boolean({
+		description:
+			'Use your custom app flow and skip login type selection.',
+		exclusive: ['default-box-app'],
+		default: false,
 	}),
 	reauthorize: Flags.boolean({
 		char: 'r',
