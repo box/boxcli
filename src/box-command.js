@@ -33,15 +33,8 @@ const CLITokenCache = require('./token-cache');
 const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
-const darwinKeychain = require('keychain');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
-const darwinKeychainSetPassword = promisify(
-	darwinKeychain.setPassword.bind(darwinKeychain)
-);
-const darwinKeychainGetPassword = promisify(
-	darwinKeychain.getPassword.bind(darwinKeychain)
-);
 let keytar = null;
 try {
 	keytar = require('keytar');
@@ -1803,20 +1796,9 @@ class BoxCommand extends Command {
 	async getEnvironments() {
 		try {
 			switch (process.platform) {
-				case 'darwin': {
-					try {
-						const password = await darwinKeychainGetPassword({
-							account: 'Box',
-							service: 'boxcli',
-						});
-						return JSON.parse(password);
-					} catch {
-						// fallback to env file if not found
-					}
-					break;
-				}
-
-				case 'win32': {
+				case 'darwin':
+				case 'win32':
+				case 'linux': {
 					try {
 						if (!keytar) {
 							break;
@@ -1829,7 +1811,7 @@ class BoxCommand extends Command {
 							return JSON.parse(password);
 						}
 					} catch {
-						// fallback to env file if not found
+						// fallback to env file if keytar fails or secure storage not available
 					}
 					break;
 				}
@@ -1859,27 +1841,27 @@ class BoxCommand extends Command {
 		Object.assign(environments, updatedEnvironments);
 		try {
 			let fileContents = JSON.stringify(environments, null, 4);
+			
 			switch (process.platform) {
-				case 'darwin': {
-					await darwinKeychainSetPassword({
-						account: 'Box',
-						service: 'boxcli',
-						password: JSON.stringify(environments),
-					});
-					fileContents = '';
-					break;
-				}
-
-				case 'win32': {
-					if (!keytar) {
-						break;
+				case 'darwin':
+				case 'win32':
+				case 'linux': {
+					if (keytar) {
+						try {
+							await keytar.setPassword(
+								'boxcli' /* service */,
+								'Box' /* account */,
+								JSON.stringify(environments) /* password */
+							);
+							fileContents = '';
+						} catch (keytarError) {
+							// fallback to file storage if secure storage fails
+							DEBUG.init(
+								'Could not store credentials in secure storage, falling back to file: %s',
+								keytarError.message
+							);
+						}
 					}
-					await keytar.setPassword(
-						'boxcli' /* service */,
-						'Box' /* account */,
-						JSON.stringify(environments) /* password */
-					);
-					fileContents = '';
 					break;
 				}
 
