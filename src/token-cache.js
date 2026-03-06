@@ -2,6 +2,7 @@
 
 /* eslint-disable promise/catch-or-return,promise/no-callback-in-promise */
 
+const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const BoxCLIError = require('./cli-error');
@@ -125,9 +126,10 @@ class CLITokenCache {
 						this.environmentName
 					);
 					// Clear the file-based cache if it exists (migration scenario)
-					return utilities.unlinkAsync(this.filePath).catch(() => {
-						// File might not exist, that's okay
-					});
+					if (fs.existsSync(this.filePath)) {
+						fs.unlinkSync(this.filePath);
+					}
+					return;
 				})
 				.then(() => {
 					DEBUG.init(
@@ -138,9 +140,15 @@ class CLITokenCache {
 				})
 				.catch((error) => {
 					DEBUG.init(
-						'Failed to write to secure storage, falling back to file: %s',
+						'Failed to write to secure storage for environment %s, falling back to file: %s',
+						this.environmentName,
 						error.message
 					);
+					if (process.platform === 'linux') {
+						DEBUG.init(
+							'To enable secure storage on Linux, install libsecret-1-dev package'
+						);
+					}
 					// Fall back to file-based storage
 					this._writeToFile(output, callback);
 				});

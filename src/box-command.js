@@ -1853,7 +1853,17 @@ class BoxCommand extends Command {
 								'Box' /* account */,
 								JSON.stringify(environments) /* password */
 							);
-							fileContents = '';
+							DEBUG.init(
+								'Stored environment configuration in secure storage'
+							);
+							// Successfully stored in secure storage, remove the file
+							if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+								fs.unlinkSync(ENVIRONMENTS_FILE_PATH);
+								DEBUG.init(
+									'Removed environment configuration file after migrating to secure storage'
+								);
+							}
+							return;
 						} catch (keytarError) {
 							// fallback to file storage if secure storage fails
 							DEBUG.init(
@@ -1868,9 +1878,8 @@ class BoxCommand extends Command {
 				default:
 			}
 
-			if (fileContents) {
-				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
-			}
+			// Write to file if secure storage failed or not available
+			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
 		} catch (error) {
 			throw new BoxCLIError(
 				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,

@@ -64,9 +64,15 @@ describe('CLITokenCache', function() {
 		});
 
 		it('should detect secure storage support on supported platforms', function() {
+			let keytar = null;
+			try {
+				keytar = require('keytar');
+			} catch {
+				// keytar cannot be imported because the library is not provided for this operating system / architecture
+			}
 			const supportedPlatforms = ['darwin', 'win32', 'linux'];
-			const isSupported = supportedPlatforms.includes(process.platform);
-			expect(tokenCache.supportsSecureStorage).to.equal(isSupported);
+			const isSupportedOS = supportedPlatforms.includes(process.platform);
+			expect(tokenCache.supportsSecureStorage).to.equal(keytar && isSupportedOS);
 		});
 	});
 
