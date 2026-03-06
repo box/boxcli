@@ -1868,7 +1868,9 @@ class BoxCommand extends Command {
 				default:
 			}
 
-			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
+			if (fileContents) {
+				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
+			}
 		} catch (error) {
 			throw new BoxCLIError(
 				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
