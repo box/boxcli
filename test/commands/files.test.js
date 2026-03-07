@@ -1936,6 +1936,94 @@ describe('Files', function () {
 					assert.equal(context.stdout, jsonOutput);
 				}
 			);
+		let existingFileId = '55555',
+			conflictError = {
+				type: 'error',
+				status: 409,
+				code: 'item_name_in_use',
+				help_url: 'http://developers.box.com/docs/#errors',
+				message: 'Item with the same name already exists',
+				request_id: 'abc123',
+				context_info: {
+					conflicts: {
+							type: 'file',
+							id: existingFileId,
+							name: testFileName,
+					},
+				},
+			};
+		test.nock(TEST_UPLOAD_ROOT, (api) =>
+			api
+				.post('/2.0/files/content')
+				.reply(409, conflictError)
+				.post(`/2.0/files/${existingFileId}/content`)
+				.reply(201, uploadFileFixture)
+		)
+			.stdout()
+			.stderr()
+			.command([
+				'files:upload',
+				testFilePath,
+				`--parent-id=${parentFolderId}`,
+				'--overwrite',
+				'--json',
+				'--token=test',
+			])
+			.it(
+				'should upload a new version when --overwrite flag is passed and file already exists',
+				(context) => {
+					assert.equal(context.stdout, jsonOutput);
+				}
+			);
+		test.nock(TEST_UPLOAD_ROOT, (api) =>
+			api.post('/2.0/files/content').reply(409, conflictError)
+		)
+			.stdout()
+			.stderr()
+			.command([
+				'files:upload',
+				testFilePath,
+				`--parent-id=${parentFolderId}`,
+				'--json',
+				'--no-color',
+				'--token=test',
+			])
+			.it(
+				'should propagate 409 error when --overwrite flag is not passed',
+				(context) => {
+					assert.include(context.stderr, '409');
+					assert.include(
+						context.stderr,
+						'Item with the same name already exists'
+					);
+				}
+			);
+		test.nock(TEST_UPLOAD_ROOT, (api) =>
+			api.post('/2.0/files/content').reply(403, {
+				type: 'error',
+				status: 403,
+				code: 'unauthorized',
+				help_url: 'http://developers.box.com/docs/#errors',
+				message: 'Access denied',
+			})
+		)
+			.stdout()
+			.stderr()
+			.command([
+				'files:upload',
+				testFilePath,
+				`--parent-id=${parentFolderId}`,
+				'--overwrite',
+				'--json',
+				'--no-color',
+				'--token=test',
+			])
+			.it(
+				'should propagate non 409 errors even when --overwrite flag is passed',
+				(context) => {
+					assert.include(context.stderr, '403');
+				}
+			);
 	});
 
 	describe('files:download', function () {
