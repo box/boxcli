@@ -14,7 +14,7 @@ function createReadStream(filePath) {
 	}
 }
 
-async function runChunkedUpload(uploader, size) {
+function runChunkedUpload(uploader, size) {
 	const progressBar = new progress.Bar({
 		format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
 		stopOnComplete: true,
