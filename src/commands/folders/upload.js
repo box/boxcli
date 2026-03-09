@@ -6,8 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const BoxCLIError = require('../../cli-error');
 const utilities = require('../../util');
-
-const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
+const { CHUNKED_UPLOAD_FILE_SIZE } = require('../../modules/upload');
 
 class FoldersUploadCommand extends BoxCommand {
 	async run() {

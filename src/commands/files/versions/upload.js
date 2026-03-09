@@ -3,23 +3,15 @@
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
 const fs = require('node:fs');
-const progress = require('cli-progress');
-const BoxCLIError = require('../../../cli-error');
-
-const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
+const { createReadStream, uploadNewFileVersion } = require('../../../modules/upload');
 
 class FilesUploadVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(FilesUploadVersionsCommand);
 		const { args } = await this.parse(FilesUploadVersionsCommand);
-		let size = fs.statSync(args.path).size;
-		let fileAttributes = {};
-		let stream;
-		try {
-			stream = fs.createReadStream(args.path);
-		} catch (error) {
-			throw new BoxCLIError(`Could not open file ${args.path}`, error);
-		}
+		const size = fs.statSync(args.path).size;
+		const fileAttributes = {};
+		const stream = createReadStream(args.path);
 
 		if (flags['content-modified-at']) {
 			fileAttributes.content_modified_at = flags['content-modified-at'];
@@ -29,37 +21,12 @@ class FilesUploadVersionsCommand extends BoxCommand {
 			fileAttributes.name = flags.name;
 		}
 
-		let file;
-		if (size < CHUNKED_UPLOAD_FILE_SIZE) {
-			file = await this.client.files.uploadNewFileVersion(
-				args.fileID,
-				stream,
-				fileAttributes
-			);
-		} else {
-			let progressBar = new progress.Bar({
-				format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
-				stopOnComplete: true,
-			});
-			let uploader = await this.client.files.getNewVersionChunkedUploader(
-				args.fileID,
-				size,
-				stream,
-				{ fileAttributes }
-			);
-			let bytesUploaded = 0;
-			let startTime = Date.now();
-			progressBar.start(size, 0, { speed: 'N/A' });
-			uploader.on('chunkUploaded', (chunk) => {
-				bytesUploaded += chunk.part.size;
-				progressBar.update(bytesUploaded, {
-					speed: Math.floor(
-						bytesUploaded / (Date.now() - startTime) / 1000
-					),
-				});
-			});
-			file = await uploader.start();
-		}
+		const file = await uploadNewFileVersion(this.client, {
+			fileID: args.fileID,
+			stream,
+			size,
+			fileAttributes,
+		});
 		await this.output(file.entries[0]);
 	}
 }

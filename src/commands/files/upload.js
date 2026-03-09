@@ -4,22 +4,16 @@ const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
 const fs = require('node:fs');
 const path = require('node:path');
-const progress = require('cli-progress');
 const BoxCLIError = require('../../cli-error');
-
-const CHUNKED_UPLOAD_FILE_SIZE = 1024 * 1024 * 100; // 100 MiB
+const { createReadStream, uploadFile, uploadNewFileVersion } = require('../../modules/upload');
+const DEBUG = require('../../debug');
 
 class FilesUploadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FilesUploadCommand);
 		let size = fs.statSync(args.path).size;
 		let folderID = flags['parent-id'];
-		let stream;
-		try {
-			stream = fs.createReadStream(args.path);
-		} catch (error) {
-			throw new BoxCLIError(`Could not open file ${args.path}`, error);
-		}
+		let stream = createReadStream(args.path);
 		let fileAttributes = {};
 		let name;
 
@@ -31,49 +25,55 @@ class FilesUploadCommand extends BoxCommand {
 			fileAttributes.content_modified_at = flags['content-modified-at'];
 		}
 
-		// @TODO(2018-08-24): Consider adding --preserve-timestamps flag
-
 		let file;
-		if (size < CHUNKED_UPLOAD_FILE_SIZE) {
-			file = await this.client.files.uploadFile(
+		try {
+			file = await uploadFile(this.client, {
 				folderID,
 				name,
 				stream,
-				fileAttributes
-			);
-		} else {
-			let progressBar = new progress.Bar({
-				format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
-				stopOnComplete: true,
-			});
-			let uploader = await this.client.files.getChunkedUploader(
-				folderID,
 				size,
-				name,
-				stream,
-				{ fileAttributes }
-			);
-			let bytesUploaded = 0;
-			let startTime = Date.now();
-			progressBar.start(size, 0, { speed: 'N/A' });
-			uploader.on('chunkUploaded', (chunk) => {
-				bytesUploaded += chunk.part.size;
-				progressBar.update(bytesUploaded, {
-					speed: Math.floor(
-						bytesUploaded / (Date.now() - startTime) / 1000
-					),
-				});
+				fileAttributes,
 			});
-			file = await uploader.start();
+		} catch (error) {
+			const { statusCode, response } = error;
+			const body = response?.body;
+
+			if (!flags.overwrite || statusCode !== 409 || body?.code !== 'item_name_in_use') {
+				throw error;
+			}
+
+			const conflicts = body.context_info?.conflicts;
+			const existingFileID = Array.isArray(conflicts)
+				? conflicts?.[0]?.id
+				: conflicts?.id;
+
+			if (!existingFileID) {
+				throw new BoxCLIError(
+					'File already exists but could not determine the existing file ID from the conflict response. Try uploading a new version manually with files:versions:upload.'
+				);
+			}
+
+			DEBUG.output(`File already exists in folder; uploading as new version of file ${existingFileID}`);
+
+			// Re-create the stream since the first attempt consumed it
+			const versionStream = createReadStream(args.path);
+
+			file = await uploadNewFileVersion(this.client, {
+				fileID: existingFileID,
+				stream: versionStream,
+				size,
+				fileAttributes,
+			});
 		}
 
 		await this.output(file.entries[0]);
 	}
 }
 
-FilesUploadCommand.description = 'Upload a file';
+FilesUploadCommand.description = 'Upload a file to a folder. Use --overwrite to automatically replace an existing file with the same name by uploading a new version';
 FilesUploadCommand.examples = [
 	'box files:upload /path/to/file.pdf --parent-id 22222',
+	'box files:upload /path/to/file.pdf --parent-id 22222 --overwrite',
 ];
 FilesUploadCommand._endpoint = 'post_files_content';
 
@@ -91,7 +91,7 @@ FilesUploadCommand.flags = {
 	}),
 	'content-created-at': Flags.string({
 		description:
-			'The creation date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks',
+			'The creation date of the file content. Use a timestamp or shorthand syntax 0t, like 5w for 5 weeks. Not supported with --overwrite',
 		parse: (input) => BoxCommand.normalizeDateString(input),
 	}),
 	'content-modified-at': Flags.string({
@@ -101,6 +101,10 @@ FilesUploadCommand.flags = {
 	}),
 	'id-only': Flags.boolean({
 		description: 'Return only an ID to output from this command',
+	}),
+	overwrite: Flags.boolean({
+		description:
+			'Overwrite the file if it already exists in the destination folder, by uploading a new file version',
 	}),
 };
 
