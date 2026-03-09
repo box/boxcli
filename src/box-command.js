@@ -300,6 +300,9 @@ class BoxCommand extends Command {
 			this.disableRequiredArgsAndFlags();
 		}
 
+		this.supportsSecureStorage =
+			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
+
 		let { flags, args } = await this.parse(this.constructor);
 
 		this.flags = flags;
@@ -307,8 +310,6 @@ class BoxCommand extends Command {
 		this.settings = await this._loadSettings();
 		this.client = await this.getClient();
 		this.tsClient = await this.getTsClient();
-		this.supportsSecureStorage =
-			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
 
 		if (this.isBulk) {
 			this.constructor.args = originalArgs;
