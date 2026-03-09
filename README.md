@@ -15,60 +15,24 @@ Among other features, Box CLI includes the following functionality:
 * As-User header - Act on behalf of another user.
 * Search API - Search for files and folders in your Box Enterprise account.
 
-## Secure Storage
-
-The Box CLI uses secure storage to protect your sensitive data:
-
-### What is Stored Securely
-
-- **Environment Configuration**: Client IDs, client secrets, and enterprise IDs, private keys and public keys
-- **Authentication Tokens**: Access tokens and refresh tokens for all configured environments
-
-### Platform Support
-
-| Platform | Secure Storage | Installation Required |
-|----------|---------------|----------------------|
-| **macOS** | Keychain | Built-in |
-| **Windows** | Credential Manager | Built-in |
-| **Linux** | Secret Service (libsecret) | May require installation |
-
-### Linux Installation
-
-On Linux systems, you need to install `libsecret-1-dev` for secure storage.
-
-**Note**: If libsecret is not installed, the CLI will automatically fall back to storing credentials in plain text files in `~/.box/`. You can still use the CLI, but for security, we recommend installing libsecret.
-
-### Automatic Migration
-
-When you upgrade to a version with secure storage support:
-- Existing plaintext credentials are automatically read
-- On the next token refresh or configuration update, credentials are migrated to secure storage
-- Old plaintext files are automatically deleted after successful migration
-- No manual action required!
-
-### Data Location
-
-- **Secure Storage**: Credentials stored in your OS keychain/credential manager
-- **Fallback (if secure storage unavailable)**: `~/.box/box_environments.json` and `~/.box/{environment}_token_cache.json`
-
 ## Table of contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Box CLI](#box-cli)
-  - [Secure Storage](#secure-storage)
-    - [What is Stored Securely](#what-is-stored-securely)
-    - [Platform Support](#platform-support)
-    - [Linux Installation](#linux-installation)
-    - [Automatic Migration](#automatic-migration)
-    - [Data Location](#data-location)
   - [Table of contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [CLI Installation](#cli-installation)
       - [Windows \& macOS Installers](#windows--macos-installers)
       - [Linux \& Node install](#linux--node-install)
     - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
+  - [Secure Storage](#secure-storage)
+    - [What is Stored Securely](#what-is-stored-securely)
+    - [Platform Support](#platform-support)
+    - [Linux Installation](#linux-installation)
+    - [Automatic Migration](#automatic-migration)
+    - [Data Location](#data-location)
   - [Usage](#usage)
 - [Command Topics](#command-topics)
   - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
@@ -119,6 +83,43 @@ Successfully added CLI environment "ManualKey"
 [dev-console]: https://app.box.com/developers/console
 [oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 [jwt-guide]: https://developer.box.com/guides/cli/cli-docs/jwt-cli/
+
+
+## Secure Storage
+
+The Box CLI uses secure storage to protect your sensitive data:
+
+### What is Stored Securely
+
+- **Environment Configuration**: Client IDs, client secrets, and enterprise IDs, private keys and public keys
+- **Authentication Tokens**: Access tokens and refresh tokens for all configured environments
+
+### Platform Support
+
+| Platform | Secure Storage | Installation Required |
+|----------|---------------|----------------------|
+| **macOS** | Keychain | Built-in |
+| **Windows** | Credential Manager | Built-in |
+| **Linux** | Secret Service (libsecret) | May require installation |
+
+### Linux Installation
+
+On Linux systems, you need to install `libsecret-1-dev` for secure storage.
+
+**Note**: If libsecret is not installed, the CLI will automatically fall back to storing credentials in plain text files in `~/.box/`. You can still use the CLI, but for security, we recommend installing libsecret.
+
+### Automatic Migration
+
+When you upgrade to a version with secure storage support:
+- Existing plaintext credentials are automatically read
+- On the next token refresh or configuration update, credentials are migrated to secure storage
+- Old plaintext files are automatically deleted after successful migration
+- No manual action required!
+
+### Data Location
+
+- **Secure Storage**: Credentials stored in your OS keychain/credential manager
+- **Fallback (if secure storage unavailable)**: `~/.box/box_environments.json` and `~/.box/{environment}_token_cache.json`
 
 ## Usage
 
