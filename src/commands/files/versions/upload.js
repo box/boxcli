@@ -9,9 +9,9 @@ class FilesUploadVersionsCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(FilesUploadVersionsCommand);
 		const { args } = await this.parse(FilesUploadVersionsCommand);
-		let size = fs.statSync(args.path).size;
-		let fileAttributes = {};
-		let stream = createReadStream(args.path);
+		const size = fs.statSync(args.path).size;
+		const fileAttributes = {};
+		const stream = createReadStream(args.path);
 
 		if (flags['content-modified-at']) {
 			fileAttributes.content_modified_at = flags['content-modified-at'];
@@ -21,7 +21,7 @@ class FilesUploadVersionsCommand extends BoxCommand {
 			fileAttributes.name = flags.name;
 		}
 
-		let file = await uploadNewFileVersion(this.client, {
+		const file = await uploadNewFileVersion(this.client, {
 			fileID: args.fileID,
 			stream,
 			size,

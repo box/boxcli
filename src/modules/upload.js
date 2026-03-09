@@ -15,12 +15,12 @@ function createReadStream(filePath) {
 }
 
 async function runChunkedUpload(uploader, size) {
-	let progressBar = new progress.Bar({
+	const progressBar = new progress.Bar({
 		format: '[{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total} | Speed: {speed} MB/s',
 		stopOnComplete: true,
 	});
 	let bytesUploaded = 0;
-	let startTime = Date.now();
+	const startTime = Date.now();
 	progressBar.start(size, 0, { speed: 'N/A' });
 	uploader.on('chunkUploaded', (chunk) => {
 		bytesUploaded += chunk.part.size;
@@ -42,7 +42,7 @@ async function uploadFile(client, { folderID, name, stream, size, fileAttributes
 			fileAttributes
 		);
 	}
-	let uploader = await client.files.getChunkedUploader(
+	const uploader = await client.files.getChunkedUploader(
 		folderID,
 		size,
 		name,
@@ -60,7 +60,7 @@ async function uploadNewFileVersion(client, { fileID, stream, size, fileAttribut
 			fileAttributes
 		);
 	}
-	let uploader = await client.files.getNewVersionChunkedUploader(
+	const uploader = await client.files.getNewVersionChunkedUploader(
 		fileID,
 		size,
 		stream,

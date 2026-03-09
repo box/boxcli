@@ -56,7 +56,7 @@ class FilesUploadCommand extends BoxCommand {
 			DEBUG.output(`File already exists in folder; uploading as new version of file ${existingFileID}`);
 
 			// Re-create the stream since the first attempt consumed it
-			let versionStream = createReadStream(args.path);
+			const versionStream = createReadStream(args.path);
 
 			file = await uploadNewFileVersion(this.client, {
 				fileID: existingFileID,
