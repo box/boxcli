@@ -757,9 +757,6 @@ FLAGS
 DESCRIPTION
   Validates the roles and permissions of the user, and creates asynchronous jobs to terminate the user's sessions.
 
-ALIASES
-  $ box users:terminate-session
-
 EXAMPLES
   $ box users:terminate-session --user-ids 123 345 --user-logins abc@example.com def@example.com
 ```

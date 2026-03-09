@@ -123,9 +123,10 @@ describe('Login', function () {
 		});
 
 		it('should keep login type flags mutually exclusive', function () {
-			assert.deepEqual(OAuthLoginCommand.flags['default-box-app'].exclusive, [
-				'custom-app',
-			]);
+			assert.deepEqual(
+				OAuthLoginCommand.flags['default-box-app'].exclusive,
+				['custom-app']
+			);
 			assert.deepEqual(OAuthLoginCommand.flags['custom-app'].exclusive, [
 				'default-box-app',
 			]);

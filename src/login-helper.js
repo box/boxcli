@@ -29,7 +29,10 @@ async function getTokenInfoByAuthCode(sdk, code, redirectUri, codeVerifier) {
 
 		return await sdk.tokenManager.getTokens(grantPayload, null);
 	} catch (error) {
-		throw new BoxCLIError('Failed to exchange auth code for tokens.', error);
+		throw new BoxCLIError(
+			'Failed to exchange auth code for tokens.',
+			error
+		);
 	}
 }
 

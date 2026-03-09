@@ -342,8 +342,7 @@ OAuthLoginCommand.flags = {
 		default: false,
 	}),
 	'custom-app': Flags.boolean({
-		description:
-			'Use your custom app flow and skip login type selection.',
+		description: 'Use your custom app flow and skip login type selection.',
 		exclusive: ['default-box-app'],
 		default: false,
 	}),
