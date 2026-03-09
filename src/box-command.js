@@ -307,6 +307,8 @@ class BoxCommand extends Command {
 		this.settings = await this._loadSettings();
 		this.client = await this.getClient();
 		this.tsClient = await this.getTsClient();
+		this.supportsSecureStorage =
+			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
 
 		if (this.isBulk) {
 			this.constructor.args = originalArgs;
@@ -1795,16 +1797,14 @@ class BoxCommand extends Command {
 	 */
 	async getEnvironments() {
 		// Try secure storage first on supported platforms
-		if (['darwin', 'win32', 'linux'].includes(process.platform)) {
+		if (this.supportsSecureStorage) {
 			try {
-				if (keytar) {
-					const password = await keytar.getPassword(
-						'boxcli' /* service */,
-						'Box' /* account */
-					);
-					if (password) {
-						return JSON.parse(password);
-					}
+				const password = await keytar.getPassword(
+					'boxcli' /* service */,
+					'Box' /* account */
+				);
+				if (password) {
+					return JSON.parse(password);
 				}
 			} catch (error) {
 				DEBUG.init(
@@ -1845,14 +1845,11 @@ class BoxCommand extends Command {
 			environments = await this.getEnvironments();
 		}
 		Object.assign(environments, updatedEnvironments);
-		
+
 		let storedInSecureStorage = false;
 
 		// Try secure storage first on supported platforms
-		if (
-			['darwin', 'win32', 'linux'].includes(process.platform) &&
-			keytar
-		) {
+		if (this.supportsSecureStorage) {
 			try {
 				await keytar.setPassword(
 					'boxcli' /* service */,
@@ -1884,12 +1881,9 @@ class BoxCommand extends Command {
 			try {
 				let fileContents = JSON.stringify(environments, null, 4);
 				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
-				
+
 				// Show warning to user if secure storage was attempted but failed
-				if (
-					['darwin', 'win32', 'linux'].includes(process.platform) &&
-					keytar
-				) {
+				if (this.supportsSecureStorage) {
 					this.info(
 						`Could not store credentials in secure storage, falling back to file.` +
 							(process.platform === 'linux'
@@ -1921,13 +1915,17 @@ class BoxCommand extends Command {
 				mkdirp.sync(CONFIG_FOLDER_PATH);
 				DEBUG.init('Created config folder at %s', CONFIG_FOLDER_PATH);
 			}
-			
+
 			// Check if environments exist (in secure storage or file)
 			let environmentsExist = false;
 			try {
 				const environments = await this.getEnvironments();
 				// Check if there are any environments configured
-				if (environments && environments.environments && Object.keys(environments.environments).length > 0) {
+				if (
+					environments &&
+					environments.environments &&
+					Object.keys(environments.environments).length > 0
+				) {
 					environmentsExist = true;
 					DEBUG.init('Found existing environments in storage');
 				}
