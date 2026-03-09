@@ -1,17 +1,18 @@
 `box login`
 ===========
 
-Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used
+Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used.
 
 * [`box login`](#box-login)
 
 ## `box login`
 
-Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used
+Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used.
 
 ```
 USAGE
-  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [-r -n <value>] [-i]
+  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [--default-box-app | --custom-app] [-r -n
+    <value>] [-i]
 
 FLAGS
   -c, --code               Manually visit authorize URL and input code
@@ -22,10 +23,13 @@ FLAGS
   -q, --quiet              Suppress any non-error output to stderr
   -r, --reauthorize        Reauthorize the existing environment with given `name`
   -v, --verbose            Show verbose output, which can be helpful for debugging
+      --custom-app         Use your custom app flow and skip login type selection.
+      --default-box-app    Use the Official Box CLI app flow and skip login type selection. Supported --port values:
+                           3000, 3001, 4000, 5000, 8080
       --no-color           Turn off colors for logging
 
 DESCRIPTION
-  Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used
+  Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used.
 ```
 
 _See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/login.js)_

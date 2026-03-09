@@ -200,7 +200,9 @@ class CLITokenCache {
 						return deleted;
 					})
 					.catch((error) => {
-						const message = String(error?.message || '').toLowerCase();
+						const message = String(
+							error?.message || ''
+						).toLowerCase();
 						const isMissingSecretError =
 							error?.code === 'ENOENT' ||
 							message.includes('not found') ||

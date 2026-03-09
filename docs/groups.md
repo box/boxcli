@@ -745,9 +745,6 @@ FLAGS
 DESCRIPTION
   Validates the roles and permissions of the group, and creates asynchronous jobs to terminate the group's sessions.
 
-ALIASES
-  $ box groups:terminate-session
-
 EXAMPLES
   $ box groups:terminate-session --group-ids 123 345
 ```

@@ -9,7 +9,7 @@ const os = require('node:os');
 const CLITokenCache = require('../src/token-cache');
 const utilities = require('../src/util');
 
-describe('CLITokenCache', function() {
+describe('CLITokenCache', function () {
 	const testEnvName = 'test-environment';
 	const testTokenInfo = {
 		accessToken: 'test-access-token',
@@ -26,11 +26,11 @@ describe('CLITokenCache', function() {
 	let tokenCache;
 	let keytarStub;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		tokenCache = new CLITokenCache(testEnvName);
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		// Clean up any test files
 		if (fs.existsSync(testFilePath)) {
 			try {
@@ -46,24 +46,26 @@ describe('CLITokenCache', function() {
 		}
 	});
 
-	describe('constructor', function() {
-		it('should initialize with environment name', function() {
+	describe('constructor', function () {
+		it('should initialize with environment name', function () {
 			expect(tokenCache.environmentName).to.equal(testEnvName);
 		});
 
-		it('should set correct file path', function() {
+		it('should set correct file path', function () {
 			expect(tokenCache.filePath).to.equal(testFilePath);
 		});
 
-		it('should set correct keytar service name', function() {
-			expect(tokenCache.keytarService).to.equal(`boxcli-token-${testEnvName}`);
+		it('should set correct keytar service name', function () {
+			expect(tokenCache.keytarService).to.equal(
+				`boxcli-token-${testEnvName}`
+			);
 		});
 
-		it('should set keytar account name', function() {
+		it('should set keytar account name', function () {
 			expect(tokenCache.keytarAccount).to.equal('Box');
 		});
 
-		it('should detect secure storage support on supported platforms', function() {
+		it('should detect secure storage support on supported platforms', function () {
 			let keytar = null;
 			try {
 				keytar = require('keytar');
@@ -72,18 +74,24 @@ describe('CLITokenCache', function() {
 			}
 			const supportedPlatforms = ['darwin', 'win32', 'linux'];
 			const isSupportedOS = supportedPlatforms.includes(process.platform);
-			expect(tokenCache.supportsSecureStorage).to.equal(keytar && isSupportedOS);
+			expect(tokenCache.supportsSecureStorage).to.equal(
+				keytar && isSupportedOS
+			);
 		});
 	});
 
-	describe('read() - File-based storage', function() {
-		it('should read token from file when secure storage not available', function(done) {
+	describe('read() - File-based storage', function () {
+		it('should read token from file when secure storage not available', function (done) {
 			// Create a test token file
 			const boxDir = path.join(os.homedir(), '.box');
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
 			}
-			fs.writeFileSync(testFilePath, JSON.stringify(testTokenInfo), 'utf8');
+			fs.writeFileSync(
+				testFilePath,
+				JSON.stringify(testTokenInfo),
+				'utf8'
+			);
 
 			// Create cache instance with secure storage disabled
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
@@ -91,13 +99,17 @@ describe('CLITokenCache', function() {
 
 			cacheWithoutSecure.read((error, tokenInfo) => {
 				expect(error).to.be.null;
-				expect(tokenInfo.accessToken).to.equal(testTokenInfo.accessToken);
-				expect(tokenInfo.refreshToken).to.equal(testTokenInfo.refreshToken);
+				expect(tokenInfo.accessToken).to.equal(
+					testTokenInfo.accessToken
+				);
+				expect(tokenInfo.refreshToken).to.equal(
+					testTokenInfo.refreshToken
+				);
 				done();
 			});
 		});
 
-		it('should return empty object when file does not exist', function(done) {
+		it('should return empty object when file does not exist', function (done) {
 			const cacheWithoutSecure = new CLITokenCache('nonexistent-env');
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -109,7 +121,7 @@ describe('CLITokenCache', function() {
 			});
 		});
 
-		it('should handle invalid JSON in file gracefully', function(done) {
+		it('should handle invalid JSON in file gracefully', function (done) {
 			const boxDir = path.join(os.homedir(), '.box');
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
@@ -128,8 +140,8 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('write() - File-based storage', function() {
-		it('should write token to file when secure storage not available', function(done) {
+	describe('write() - File-based storage', function () {
+		it('should write token to file when secure storage not available', function (done) {
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -139,12 +151,14 @@ describe('CLITokenCache', function() {
 
 				const fileContent = fs.readFileSync(testFilePath, 'utf8');
 				const savedToken = JSON.parse(fileContent);
-				expect(savedToken.accessToken).to.equal(testTokenInfo.accessToken);
+				expect(savedToken.accessToken).to.equal(
+					testTokenInfo.accessToken
+				);
 				done();
 			});
 		});
 
-		it('should format JSON with proper indentation', function(done) {
+		it('should format JSON with proper indentation', function (done) {
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -158,8 +172,8 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('clear()', function() {
-		it('should delete token file', function(done) {
+	describe('clear()', function () {
+		it('should delete token file', function (done) {
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -176,7 +190,7 @@ describe('CLITokenCache', function() {
 			});
 		});
 
-		it('should not error when file does not exist', function(done) {
+		it('should not error when file does not exist', function (done) {
 			const cacheWithoutSecure = new CLITokenCache('nonexistent-env');
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -187,8 +201,8 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('store() - TS SDK compatible', function() {
-		it('should store token in promise-based interface', async function() {
+	describe('store() - TS SDK compatible', function () {
+		it('should store token in promise-based interface', async function () {
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -209,8 +223,8 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('get() - TS SDK compatible', function() {
-		it('should get token in promise-based interface', async function() {
+	describe('get() - TS SDK compatible', function () {
+		it('should get token in promise-based interface', async function () {
 			const cacheWithoutSecure = new CLITokenCache(testEnvName);
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -227,7 +241,7 @@ describe('CLITokenCache', function() {
 			expect(tokenInfo.accessToken).to.equal('ts-access-token');
 		});
 
-		it('should return undefined when no token exists', async function() {
+		it('should return undefined when no token exists', async function () {
 			const cacheWithoutSecure = new CLITokenCache('nonexistent-env');
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -236,7 +250,7 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('Secure Storage - Backward Compatibility', function() {
+	describe('Secure Storage - Backward Compatibility', function () {
 		it('should read existing file-based token when secure storage is empty', function (done) {
 			if (!tokenCache.supportsSecureStorage) {
 				this.skip();
@@ -247,11 +261,17 @@ describe('CLITokenCache', function() {
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
 			}
-			fs.writeFileSync(testFilePath, JSON.stringify(testTokenInfo), 'utf8');
+			fs.writeFileSync(
+				testFilePath,
+				JSON.stringify(testTokenInfo),
+				'utf8'
+			);
 
 			tokenCache.read((error, tokenInfo) => {
 				expect(error).to.be.null;
-				expect(tokenInfo.accessToken).to.equal(testTokenInfo.accessToken);
+				expect(tokenInfo.accessToken).to.equal(
+					testTokenInfo.accessToken
+				);
 				expect(fs.existsSync(testFilePath)).to.be.true; // File not deleted on read
 				done();
 			});
@@ -267,7 +287,11 @@ describe('CLITokenCache', function() {
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
 			}
-			fs.writeFileSync(testFilePath, JSON.stringify(testTokenInfo), 'utf8');
+			fs.writeFileSync(
+				testFilePath,
+				JSON.stringify(testTokenInfo),
+				'utf8'
+			);
 			expect(fs.existsSync(testFilePath)).to.be.true;
 
 			// Write a new token (should migrate)
@@ -284,8 +308,8 @@ describe('CLITokenCache', function() {
 		});
 	});
 
-	describe('Multiple Environments', function() {
-		it('should isolate tokens between different environments', function(done) {
+	describe('Multiple Environments', function () {
+		it('should isolate tokens between different environments', function (done) {
 			const env1Cache = new CLITokenCache('env-1');
 			const env2Cache = new CLITokenCache('env-2');
 
@@ -301,8 +325,12 @@ describe('CLITokenCache', function() {
 					// Read them back
 					env1Cache.read((error1, tokenInfo1) => {
 						env2Cache.read((error2, tokenInfo2) => {
-							expect(tokenInfo1.accessToken).to.equal('token-for-env-1');
-							expect(tokenInfo2.accessToken).to.equal('token-for-env-2');
+							expect(tokenInfo1.accessToken).to.equal(
+								'token-for-env-1'
+							);
+							expect(tokenInfo2.accessToken).to.equal(
+								'token-for-env-2'
+							);
 
 							// Clean up
 							env1Cache.clear(() => {
@@ -316,17 +344,19 @@ describe('CLITokenCache', function() {
 			});
 		});
 
-		it('should use different keytar service names for different environments', function() {
+		it('should use different keytar service names for different environments', function () {
 			const env1Cache = new CLITokenCache('production');
 			const env2Cache = new CLITokenCache('development');
 
 			expect(env1Cache.keytarService).to.equal('boxcli-token-production');
-			expect(env2Cache.keytarService).to.equal('boxcli-token-development');
+			expect(env2Cache.keytarService).to.equal(
+				'boxcli-token-development'
+			);
 		});
 	});
 
-	describe('Error Handling', function() {
-		it('should ignore missing token file when clearing', function(done) {
+	describe('Error Handling', function () {
+		it('should ignore missing token file when clearing', function (done) {
 			const cacheWithoutSecure = new CLITokenCache('missing-file-env');
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -343,7 +373,7 @@ describe('CLITokenCache', function() {
 			});
 		});
 
-		it('should report file deletion failures when clearing', function(done) {
+		it('should report file deletion failures when clearing', function (done) {
 			const cacheWithoutSecure = new CLITokenCache('delete-failure-env');
 			cacheWithoutSecure.supportsSecureStorage = false;
 
@@ -365,7 +395,7 @@ describe('CLITokenCache', function() {
 			});
 		});
 
-		it('should report secure storage deletion failures when clearing', function(done) {
+		it('should report secure storage deletion failures when clearing', function (done) {
 			if (!tokenCache.supportsSecureStorage) {
 				this.skip();
 			}
@@ -374,7 +404,11 @@ describe('CLITokenCache', function() {
 			const keytar = require('keytar');
 			const deletePasswordStub = sinon
 				.stub(keytar, 'deletePassword')
-				.rejects(Object.assign(new Error('Permission denied'), { code: 'EACCES' }));
+				.rejects(
+					Object.assign(new Error('Permission denied'), {
+						code: 'EACCES',
+					})
+				);
 
 			tokenCache.clear((error) => {
 				expect(error).to.exist;
@@ -420,7 +454,11 @@ describe('CLITokenCache', function() {
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
 			}
-			fs.writeFileSync(testFilePath, JSON.stringify(testTokenInfo), 'utf8');
+			fs.writeFileSync(
+				testFilePath,
+				JSON.stringify(testTokenInfo),
+				'utf8'
+			);
 
 			// Mock keytar to simulate failure
 			const keytar = require('keytar');
@@ -430,7 +468,9 @@ describe('CLITokenCache', function() {
 
 			tokenCache.read((error, tokenInfo) => {
 				expect(error).to.be.null;
-				expect(tokenInfo.accessToken).to.equal(testTokenInfo.accessToken);
+				expect(tokenInfo.accessToken).to.equal(
+					testTokenInfo.accessToken
+				);
 
 				getPasswordStub.restore();
 				done();
