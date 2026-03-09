@@ -1795,14 +1795,9 @@ class BoxCommand extends Command {
 	 */
 	async getEnvironments() {
 		try {
-			switch (process.platform) {
-				case 'darwin':
-				case 'win32':
-				case 'linux': {
-					try {
-						if (!keytar) {
-							break;
-						}
+			if (['darwin', 'win32', 'linux'].includes(process.platform)) {
+				try {
+					if (keytar) {
 						const password = await keytar.getPassword(
 							'boxcli' /* service */,
 							'Box' /* account */
@@ -1810,13 +1805,10 @@ class BoxCommand extends Command {
 						if (password) {
 							return JSON.parse(password);
 						}
-					} catch {
-						// fallback to env file if keytar fails or secure storage not available
 					}
-					break;
+				} catch {
+					// fallback to env file if keytar fails or secure storage not available
 				}
-
-				default:
 			}
 			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
 		} catch (error) {
@@ -1835,55 +1827,58 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async updateEnvironments(updatedEnvironments, environments) {
+		let keytarWriteSuccess = false;
 		if (environments === undefined) {
 			environments = await this.getEnvironments();
 		}
 		Object.assign(environments, updatedEnvironments);
 		try {
 			let fileContents = JSON.stringify(environments, null, 4);
-			
-			switch (process.platform) {
-				case 'darwin':
-				case 'win32':
-				case 'linux': {
-					if (keytar) {
-						try {
-							await keytar.setPassword(
-								'boxcli' /* service */,
-								'Box' /* account */,
-								JSON.stringify(environments) /* password */
-							);
-							DEBUG.init(
-								'Stored environment configuration in secure storage'
-							);
-							// Successfully stored in secure storage, remove the file
-							if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
-								fs.unlinkSync(ENVIRONMENTS_FILE_PATH);
-								DEBUG.init(
-									'Removed environment configuration file after migrating to secure storage'
-								);
-							}
-							return;
-						} catch (keytarError) {
-							// fallback to file storage if secure storage fails
-							DEBUG.init(
-								'Could not store credentials in secure storage, falling back to file: %s',
-								keytarError.message
-							);
-						}
+
+			if (
+				['darwin', 'win32', 'linux'].includes(process.platform) &&
+				keytar
+			) {
+				try {
+					await keytar.setPassword(
+						'boxcli' /* service */,
+						'Box' /* account */,
+						JSON.stringify(environments) /* password */
+					);
+					keytarWriteSuccess = true;
+					DEBUG.init(
+						'Stored environment configuration in secure storage'
+					);
+					// Successfully stored in secure storage, remove the file
+					if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+						fs.unlinkSync(ENVIRONMENTS_FILE_PATH);
+						DEBUG.init(
+							'Removed environment configuration file after migrating to secure storage'
+						);
 					}
-					break;
+					return;
+				} catch (keytarError) {
+					// fallback to file storage if secure storage fails
+					DEBUG.init(
+						'Could not store credentials in secure storage, falling back to file: %s',
+						keytarError.message
+					);
 				}
-
-				default:
 			}
-
 			// Write to file if secure storage failed or not available
 			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
 		} catch (error) {
 			throw new BoxCLIError(
 				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
 				error
+			);
+		}
+		if (!keytarWriteSuccess) {
+			this.info(
+				`Could not store credentials in secure storage, falling back to file.` +
+					(process.platform === 'linux'
+						? 'To enable secure storage on Linux, install libsecret-1-dev package'
+						: '')
 			);
 		}
 		return environments;
