@@ -33,15 +33,8 @@ const CLITokenCache = require('./token-cache');
 const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('inquirer');
-const darwinKeychain = require('keychain');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
-const darwinKeychainSetPassword = promisify(
-	darwinKeychain.setPassword.bind(darwinKeychain)
-);
-const darwinKeychainGetPassword = promisify(
-	darwinKeychain.getPassword.bind(darwinKeychain)
-);
 let keytar = null;
 try {
 	keytar = require('keytar');
@@ -306,6 +299,9 @@ class BoxCommand extends Command {
 			originalFlags = _.cloneDeep(this.constructor.flags);
 			this.disableRequiredArgsAndFlags();
 		}
+
+		this.supportsSecureStorage =
+			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
 
 		let { flags, args } = await this.parse(this.constructor);
 
@@ -1801,48 +1797,41 @@ class BoxCommand extends Command {
 	 * @returns {Object} The parsed environment information
 	 */
 	async getEnvironments() {
-		try {
-			switch (process.platform) {
-				case 'darwin': {
-					try {
-						const password = await darwinKeychainGetPassword({
-							account: 'Box',
-							service: 'boxcli',
-						});
-						return JSON.parse(password);
-					} catch {
-						// fallback to env file if not found
-					}
-					break;
+		// Try secure storage first on supported platforms
+		if (this.supportsSecureStorage) {
+			try {
+				const password = await keytar.getPassword(
+					'boxcli' /* service */,
+					'Box' /* account */
+				);
+				if (password) {
+					return JSON.parse(password);
 				}
-
-				case 'win32': {
-					try {
-						if (!keytar) {
-							break;
-						}
-						const password = await keytar.getPassword(
-							'boxcli' /* service */,
-							'Box' /* account */
-						);
-						if (password) {
-							return JSON.parse(password);
-						}
-					} catch {
-						// fallback to env file if not found
-					}
-					break;
-				}
-
-				default:
+			} catch (error) {
+				DEBUG.init(
+					'Failed to read from secure storage, falling back to file: %s',
+					error.message
+				);
+				// fallback to env file
 			}
-			return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
+		}
+
+		// Try to read from file (fallback or no secure storage)
+		try {
+			if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+				return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
+			}
 		} catch (error) {
-			throw new BoxCLIError(
-				`Could not read environments config file ${ENVIRONMENTS_FILE_PATH}`,
-				error
+			DEBUG.init(
+				'Failed to read environments from file: %s',
+				error.message
 			);
 		}
+
+		// No environments found in either location
+		throw new BoxCLIError(
+			`Could not read environments. No environments found in secure storage or file ${ENVIRONMENTS_FILE_PATH}`
+		);
 	}
 
 	/**
@@ -1857,42 +1846,60 @@ class BoxCommand extends Command {
 			environments = await this.getEnvironments();
 		}
 		Object.assign(environments, updatedEnvironments);
-		try {
-			let fileContents = JSON.stringify(environments, null, 4);
-			switch (process.platform) {
-				case 'darwin': {
-					await darwinKeychainSetPassword({
-						account: 'Box',
-						service: 'boxcli',
-						password: JSON.stringify(environments),
-					});
-					fileContents = '';
-					break;
-				}
 
-				case 'win32': {
-					if (!keytar) {
-						break;
-					}
-					await keytar.setPassword(
-						'boxcli' /* service */,
-						'Box' /* account */,
-						JSON.stringify(environments) /* password */
+		let storedInSecureStorage = false;
+
+		// Try secure storage first on supported platforms
+		if (this.supportsSecureStorage) {
+			try {
+				await keytar.setPassword(
+					'boxcli' /* service */,
+					'Box' /* account */,
+					JSON.stringify(environments) /* password */
+				);
+				storedInSecureStorage = true;
+				DEBUG.init(
+					'Stored environment configuration in secure storage'
+				);
+				// Successfully stored in secure storage, remove the file
+				if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+					fs.unlinkSync(ENVIRONMENTS_FILE_PATH);
+					DEBUG.init(
+						'Removed environment configuration file after migrating to secure storage'
 					);
-					fileContents = '';
-					break;
 				}
-
-				default:
+			} catch (keytarError) {
+				// fallback to file storage if secure storage fails
+				DEBUG.init(
+					'Could not store credentials in secure storage, falling back to file: %s',
+					keytarError.message
+				);
 			}
-
-			fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
-		} catch (error) {
-			throw new BoxCLIError(
-				`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
-				error
-			);
 		}
+
+		// Write to file if secure storage failed or not available
+		if (!storedInSecureStorage) {
+			try {
+				let fileContents = JSON.stringify(environments, null, 4);
+				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
+
+				// Show warning to user if secure storage was attempted but failed
+				if (this.supportsSecureStorage) {
+					this.info(
+						`Could not store credentials in secure storage, falling back to file.` +
+							(process.platform === 'linux'
+								? ' To enable secure storage on Linux, install libsecret-1-dev package.'
+								: '')
+					);
+				}
+			} catch (error) {
+				throw new BoxCLIError(
+					`Could not write environments config file ${ENVIRONMENTS_FILE_PATH}`,
+					error
+				);
+			}
+		}
+
 		return environments;
 	}
 
@@ -1909,16 +1916,34 @@ class BoxCommand extends Command {
 				mkdirp.sync(CONFIG_FOLDER_PATH);
 				DEBUG.init('Created config folder at %s', CONFIG_FOLDER_PATH);
 			}
-			if (!fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+
+			// Check if environments exist (in secure storage or file)
+			let environmentsExist = false;
+			try {
+				const environments = await this.getEnvironments();
+				// Check if there are any environments configured
+				if (
+					environments &&
+					environments.environments &&
+					Object.keys(environments.environments).length > 0
+				) {
+					environmentsExist = true;
+					DEBUG.init('Found existing environments in storage');
+				}
+			} catch (error) {
+				// No environments found, need to create defaults
+				DEBUG.init('No existing environments found: %s', error.message);
+			}
+
+			if (!environmentsExist) {
+				// Create default environments (will be stored in secure storage if available)
 				await this.updateEnvironments(
 					{},
 					this._getDefaultEnvironments()
 				);
-				DEBUG.init(
-					'Created environments config at %s',
-					ENVIRONMENTS_FILE_PATH
-				);
+				DEBUG.init('Created default environments configuration');
 			}
+
 			if (!fs.existsSync(SETTINGS_FILE_PATH)) {
 				let settingsJSON = JSON.stringify(
 					this._getDefaultSettings(),
