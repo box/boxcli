@@ -120,7 +120,7 @@ The `box login` command authenticates you with Box using OAuth 2.0. It starts a 
 
 When you run `box login`, the CLI presents two login options: the **Official Box CLI App** and a **custom app** you create yourself. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag.
 
-#### Option 1: Official Box CLI App (Recommended)
+#### Option 1: Official Box CLI App
 
 This is the fastest way to get started with Box CLI. No app creation in the Box Developer Console is required — just run the command and authorize.
 

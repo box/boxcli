@@ -1368,13 +1368,13 @@ EXAMPLES
 
 ## `box files:upload PATH`
 
-Upload a file
+Upload a file to a folder. Use --overwrite to automatically replace an existing file with the same name by uploading a new version
 
 ```
 USAGE
   $ box files:upload PATH [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
     <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [-p <value>] [-n <value>]
-    [--content-created-at <value>] [--content-modified-at <value>] [--id-only]
+    [--content-created-at <value>] [--content-modified-at <value>] [--id-only] [--overwrite]
 
 ARGUMENTS
   PATH  Path to the file to be uploaded
@@ -1392,7 +1392,7 @@ FLAGS
       --as-user=<value>              Provide an ID for a user
       --bulk-file-path=<value>       File path to bulk .csv or .json objects
       --content-created-at=<value>   The creation date of the file content. Use a timestamp or shorthand syntax 0t, like
-                                     5w for 5 weeks
+                                     5w for 5 weeks. Not supported with --overwrite
       --content-modified-at=<value>  The modification date of the file content. Use a timestamp or shorthand syntax 0t,
                                      like 5w for 5 weeks
       --csv                          Output formatted CSV
@@ -1400,13 +1400,18 @@ FLAGS
       --id-only                      Return only an ID to output from this command
       --json                         Output formatted JSON
       --no-color                     Turn off colors for logging
+      --overwrite                    Overwrite the file if it already exists in the destination folder, by uploading a
+                                     new file version
       --save-to-file-path=<value>    Override default file path to save report
 
 DESCRIPTION
-  Upload a file
+  Upload a file to a folder. Use --overwrite to automatically replace an existing file with the same name by uploading a
+  new version
 
 EXAMPLES
   $ box files:upload /path/to/file.pdf --parent-id 22222
+
+  $ box files:upload /path/to/file.pdf --parent-id 22222 --overwrite
 ```
 
 _See code: [src/commands/files/upload.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/files/upload.js)_

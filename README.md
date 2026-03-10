@@ -60,15 +60,27 @@ npm install --global @box/cli
 
 ### Quick Login with the Official Box CLI App
 
-The fastest way to get started after installation is to use the `box login` command with the Official Box CLI app — no app setup in the Developer Console is needed.
+After installation, run `box login` to sign in. You have two options:
+
+**Option 1: Official Box CLI App**
+
+No app setup required — just run:
 
 ```bash
 box login -d
 ```
 
-This opens a browser window for OAuth 2.0 authorization. Once you grant access, the CLI creates a new environment and you can start running commands right away.
+A browser window opens for authorization. Once you grant access, the CLI creates a new environment and you're ready to go. This option uses predefined scopes limited to content actions. See the [authentication docs](docs/authentication.md) for more details.
 
-You can also use your own custom OAuth app if you need different scopes or configuration. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for details.
+**Option 2: Your own custom OAuth app**
+
+If you need custom scopes or specific configuration, run:
+
+```bash
+box login
+```
+
+You will be prompted to enter the Client ID and Client Secret of your own OAuth app created in the [Box Developer Console][dev-console]. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for setup instructions.
 
 ### CLI and Server Authentication with JWT
 
@@ -196,7 +208,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box help`](docs/help.md) - Display help for the Box CLI
 * [`box integration-mappings`](docs/integration-mappings.md) - List Slack integration mappings
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
-* [`box login`](docs/login.md) - Sign in with OAuth and set a new environment or update an existing if reauthorize flag is used.
+* [`box login`](docs/login.md) - Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).
 * [`box metadata-cascade-policies`](docs/metadata-cascade-policies.md) - List the metadata cascade policies on a folder
 * [`box metadata-query`](docs/metadata-query.md) - Create a search using SQL-like syntax to return items that match specific metadata
 * [`box metadata-templates`](docs/metadata-templates.md) - Get all metadata templates in your Enterprise
