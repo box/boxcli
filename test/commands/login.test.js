@@ -2,6 +2,9 @@
 
 const { assert } = require('chai');
 const sinon = require('sinon');
+const inquirer = require('inquirer');
+const { test } = require('@oclif/test');
+const BoxCommand = require('../../src/box-command');
 const {
 	assertValidOAuthCode,
 	getTokenInfoByAuthCode,
@@ -163,6 +166,118 @@ describe('Login', function () {
 				clientId: 'custom-client-id',
 				clientSecret: 'custom-client-secret',
 			});
+		});
+	});
+
+	describe('reauthorize with non-existent environment', function () {
+		let getEnvironmentsStub;
+
+		beforeEach(function () {
+			getEnvironmentsStub = sandbox.stub(
+				BoxCommand.prototype,
+				'getEnvironments'
+			);
+		});
+
+		it('should show error when specified env does not exist and no current env', async function () {
+			getEnvironmentsStub.resolves({ default: '', environments: {} });
+
+			await test
+				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stdout()
+				.command(['login', '--reauthorize', '-n', 'nonexistent'])
+				.it('shows error when env does not exist and no current env', (ctx) => {
+					assert.include(
+						ctx.stdout,
+						'The "nonexistent" environment does not exist'
+					);
+				});
+		});
+
+		it('should show error when specified env does not exist and current env is not OAuth', async function () {
+			getEnvironmentsStub.resolves({
+				default: 'jwt-env',
+				environments: {
+					'jwt-env': { authMethod: 'jwt', clientId: 'cid' },
+				},
+			});
+
+			await test
+				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stdout()
+				.command(['login', '--reauthorize', '-n', 'nonexistent'])
+				.it(
+					'shows error when env does not exist and current is not oauth',
+					(ctx) => {
+						assert.include(
+							ctx.stdout,
+							'The "nonexistent" environment does not exist'
+						);
+					}
+				);
+		});
+
+		it('should show error when specified env does not exist and name is not oauth (even if current is OAuth)', async function () {
+			getEnvironmentsStub.resolves({
+				default: 'my-oauth',
+				environments: {
+					'my-oauth': {
+						authMethod: 'oauth20',
+						clientId: DEFAULT_CLIENT_ID,
+						clientSecret: DEFAULT_CLIENT_SECRET,
+					},
+				},
+			});
+
+			await test
+				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stdout()
+				.command(['login', '--reauthorize', '-n', 'nonexistent'])
+				.it('does not fallback when name is not oauth', (ctx) => {
+					assert.include(
+						ctx.stdout,
+						'The "nonexistent" environment does not exist'
+					);
+				});
+		});
+
+		it('should use current OAuth env when name is oauth and that env does not exist', async function () {
+			const promptStub = sandbox.stub(inquirer, 'prompt').resolves({
+				code: 'test-code',
+				state: 'test-state',
+			});
+			getEnvironmentsStub.resolves({
+				default: 'my-oauth',
+				environments: {
+					'my-oauth': {
+						authMethod: 'oauth20',
+						clientId: DEFAULT_CLIENT_ID,
+						clientSecret: DEFAULT_CLIENT_SECRET,
+					},
+				},
+			});
+
+			await test
+				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stdout()
+				.command([
+					'login',
+					'--reauthorize',
+					'-n',
+					'oauth',
+					'--default-box-app',
+					'--code',
+					'--port',
+					'16987',
+				])
+				.it('falls back to current oauth env when name is oauth and env does not exist', (ctx) => {
+					assert.notInclude(
+						ctx.stdout,
+						'The "oauth" environment does not exist'
+					);
+					assert.include(ctx.stdout, 'Please open');
+					assert.isTrue(promptStub.calledOnce);
+				});
 		});
 	});
 });

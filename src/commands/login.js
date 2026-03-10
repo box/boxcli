@@ -24,6 +24,7 @@ const {
 const GENERIC_OAUTH_CLIENT_ID = 'udz8zp4yue87uk9dzq4xk425kkwvqvh1';
 const GENERIC_OAUTH_CLIENT_SECRET = 'iZ1MbvC3ZaF25nbJli7IsKdRHAxfu3fn';
 const SUPPORTED_DEFAULT_APP_PORTS = [3000, 3001, 4000, 5000, 8080];
+const DEFAULT_ENVIRONMENT_NAME = 'oauth';
 
 async function promptForClientCredentials(inquirerModule) {
 	const clientIdPrompt = {
@@ -75,14 +76,24 @@ class OAuthLoginCommand extends BoxCommand {
 		let environment;
 
 		if (this.flags.reauthorize) {
+			let targetEnvName = this.flags.name;
 			if (
 				!Object.hasOwn(environmentsObject.environments, this.flags.name)
 			) {
-				this.info(chalk`{red The "${this.flags.name}" environment does not exist}`);
-				return;
+				const currentEnv = environmentsObject.environments[environmentsObject.default];
+				if (
+					this.flags.name === DEFAULT_ENVIRONMENT_NAME &&
+					environmentsObject.default &&
+					currentEnv?.authMethod === 'oauth20'
+				) {
+					targetEnvName = environmentsObject.default;
+				} else {
+					this.info(chalk`{red The "${this.flags.name}" environment does not exist}`);
+					return;
+				}
 			}
 
-			environment = environmentsObject.environments[this.flags.name];
+			environment = environmentsObject.environments[targetEnvName];
 			if (environment.authMethod !== 'oauth20') {
 				this.info(chalk`{red The selected environment is not of type oauth20}`);
 				return;
@@ -366,7 +377,7 @@ OAuthLoginCommand.flags = {
 	name: Flags.string({
 		char: 'n',
 		description: 'Set a name for the environment',
-		default: 'oauth',
+		default: DEFAULT_ENVIRONMENT_NAME,
 	}),
 	port: Flags.integer({
 		char: 'p',
