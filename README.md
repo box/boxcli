@@ -209,6 +209,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box integration-mappings`](docs/integration-mappings.md) - List Slack integration mappings
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
 * [`box login`](docs/login.md) - Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).
+* [`box logout`](docs/logout.md) - Revoke the access token and clear local token cache.
 * [`box metadata-cascade-policies`](docs/metadata-cascade-policies.md) - List the metadata cascade policies on a folder
 * [`box metadata-query`](docs/metadata-query.md) - Create a search using SQL-like syntax to return items that match specific metadata
 * [`box metadata-templates`](docs/metadata-templates.md) - Get all metadata templates in your Enterprise
