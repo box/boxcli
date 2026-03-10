@@ -20,12 +20,11 @@ Among other features, Box CLI includes the following functionality:
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Box CLI](#box-cli)
-  - [Table of contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [CLI Installation](#cli-installation)
-      - [Windows \& macOS Installers](#windows--macos-installers)
-      - [Linux \& Node install](#linux--node-install)
+      - [Windows & macOS Installers](#windows--macos-installers)
+      - [Linux & Node install](#linux--node-install)
+    - [Quick Login with the Official Box CLI App](#quick-login-with-the-official-box-cli-app)
     - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
   - [Secure Storage](#secure-storage)
     - [What is Stored Securely](#what-is-stored-securely)
@@ -46,8 +45,6 @@ Among other features, Box CLI includes the following functionality:
 
 ## Getting Started
 
-The most convenient way to get start with Box CLI is to follow [Box CLI with OAuth 2.0 guide][oauth-guide]. You will be guided how to configure Box application and install CLI on your machine.
-
 ### CLI Installation
 Installers are available for Windows and macOS. However, the raw source-code is available if you would like to build the CLI in other environments.
 
@@ -60,6 +57,18 @@ Additionally, the CLI can be installed as a Node package on any platform, includ
 ```bash
 npm install --global @box/cli
 ```
+
+### Quick Login with the Official Box CLI App
+
+The fastest way to get started after installation is to use the `box login` command with the Official Box CLI app — no app setup in the Developer Console is needed.
+
+```bash
+box login -d
+```
+
+This opens a browser window for OAuth 2.0 authorization. Once you grant access, the CLI creates a new environment and you can start running commands right away.
+
+You can also use your own custom OAuth app if you need different scopes or configuration. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for details.
 
 ### CLI and Server Authentication with JWT
 
