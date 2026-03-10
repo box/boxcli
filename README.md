@@ -26,6 +26,7 @@ Among other features, Box CLI includes the following functionality:
       - [Linux & Node install](#linux--node-install)
     - [Quick Login with the Official Box CLI App](#quick-login-with-the-official-box-cli-app)
     - [CLI and Server Authentication with JWT](#cli-and-server-authentication-with-jwt)
+    - [Logout](#logout)
   - [Secure Storage](#secure-storage)
     - [What is Stored Securely](#what-is-stored-securely)
     - [Platform Support](#platform-support)
@@ -105,6 +106,15 @@ Successfully added CLI environment "ManualKey"
 [oauth-guide]: https://developer.box.com/guides/cli/quick-start/
 [jwt-guide]: https://developer.box.com/guides/cli/cli-docs/jwt-cli/
 
+### Logout
+
+To sign out from the current environment, run:
+
+```bash
+box logout
+```
+
+This revokes the access token on Box and clears the local token cache. For OAuth, run `box login` to authorize again. For CCG and JWT, a new token is fetched automatically on the next command. Use `-f` to skip the confirmation prompt, or `--on-revoke-failure=clear` / `--on-revoke-failure=abort` to control behavior when token revocation fails. See [`box logout`](docs/logout.md) for full details.
 
 ## Secure Storage
 
