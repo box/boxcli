@@ -96,20 +96,15 @@ class OAuthLoginCommand extends BoxCommand {
 					environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
 					environment.clientSecret === GENERIC_OAUTH_CLIENT_SECRET;
 			}
-			if (isUnsupportedDefaultAppPort()) {
-				this.info(
-					chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
-				);
-				return;
-			}
 		} else {
 			useDefaultBoxApp = forceDefaultBoxApp;
-			if (isUnsupportedDefaultAppPort()) {
-				this.info(
-					chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
-				);
-				return;
-			}
+		}
+
+		if (isUnsupportedDefaultAppPort()) {
+			this.info(
+				chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+			);
+			return;
 		}
 
 		if (this.flags.reauthorize) {
