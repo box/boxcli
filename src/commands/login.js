@@ -70,6 +70,8 @@ class OAuthLoginCommand extends BoxCommand {
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
 		const redirectUri = `http://localhost:${port}/callback`;
+		const isUnsupportedDefaultAppPort = () =>
+			useDefaultBoxApp && !SUPPORTED_DEFAULT_APP_PORTS.includes(port);
 		let environment;
 
 		if (this.flags.reauthorize) {
@@ -94,23 +96,17 @@ class OAuthLoginCommand extends BoxCommand {
 					environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
 					environment.clientSecret === GENERIC_OAUTH_CLIENT_SECRET;
 			}
-			if (
-				useDefaultBoxApp &&
-				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
-			) {
+			if (isUnsupportedDefaultAppPort()) {
 				this.info(
-					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+					chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
 				);
 				return;
 			}
 		} else {
 			useDefaultBoxApp = forceDefaultBoxApp;
-			if (
-				useDefaultBoxApp &&
-				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
-			) {
+			if (isUnsupportedDefaultAppPort()) {
 				this.info(
-					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+					chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
 				);
 				return;
 			}
@@ -181,12 +177,9 @@ class OAuthLoginCommand extends BoxCommand {
 			const answers = await promptForClientCredentials(inquirer);
 			useDefaultBoxApp = answers.useDefaultBoxApp;
 
-			if (
-				useDefaultBoxApp &&
-				!SUPPORTED_DEFAULT_APP_PORTS.includes(flags.port)
-			) {
+			if (isUnsupportedDefaultAppPort()) {
 				this.info(
-					chalk`{red Unsupported port "${flags.port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+					chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
 				);
 				return;
 			}

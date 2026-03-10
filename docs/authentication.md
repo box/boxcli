@@ -21,13 +21,13 @@ Ways to Authenticate
 
 ### Developer Token
 
-A developer token is a short-lived access token that you can generate directly from the [Box Developer Console][dev-console]. It provides a quick way to test API calls without setting up a full authentication flow.
+A developer token is a token that you can generate directly from the [Box Developer Console][dev-console]. It provides a quick way to test API calls without setting up a full authentication flow.
 
 [dev-console]: https://app.box.com/developers/console
 
 **Key characteristics:**
 
-- Valid for **60 minutes** and cannot be refreshed.
+- Cannot be refreshed.
 - Scoped to your own account only.
 - Intended for **development and testing** — not suitable for production use.
 
@@ -41,7 +41,7 @@ box users:get --token <DEVELOPER_TOKEN>
 
 ### Server Auth with JWT
 
-JSON Web Token (JWT) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/en/guides/authentication/user-types/) without requiring user interaction. This is ideal for server-to-server integrations, automated workflows, and backend services.
+JSON Web Token (JWT) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/platform/user-types#service-account) without requiring user interaction. This is ideal for server-to-server integrations, automated workflows, and backend services.
 
 **Key characteristics:**
 
@@ -56,7 +56,7 @@ JSON Web Token (JWT) authentication allows your application to authenticate as a
 3. Download the configuration file and add it as an environment:
 
 ```bash
-box configure:environments:add /path/to/config.json
+box configure:environments:add /path/to/config.json --name 'YOUR_ENVIRONMENT_NAME'
 ```
 
 4. If you have multiple environments, set the active one:
@@ -69,7 +69,7 @@ After setup, all CLI commands will authenticate using the JWT credentials from t
 
 ### Server Auth with CCG
 
-Client Credentials Grant (CCG) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/en/guides/authentication/user-types/) using a **Client ID**, **Client Secret**, and **Enterprise ID**. Like JWT, this method is designed for server-to-server communication and does not require user interaction.
+Client Credentials Grant (CCG) authentication allows your application to authenticate as a [Service Account](https://developer.box.com/platform/user-types#service-account) using a **Client ID**, **Client Secret**, and **Enterprise ID**. Like JWT, this method is designed for server-to-server communication and does not require user interaction.
 
 **Key characteristics:**
 
@@ -92,12 +92,12 @@ Client Credentials Grant (CCG) authentication allows your application to authent
 }
 ```
 
-> **Tip:** You can find the `clientID`, `clientSecret`, and `enterpriseID` values in the **Configuration** tab of your application in the [Developer Console][dev-console].
+> **Tip:** You can find the `clientID` and `clientSecret` values in the **Configuration** tab, and the `enterpriseID` in the **General Settings** tab of your application in the [Developer Console][dev-console].
 
 3. Add the environment with the `--ccg-auth` flag:
 
 ```bash
-box configure:environments:add /path/to/config.json --ccg-auth
+box configure:environments:add /path/to/config.json --ccg-auth --name 'YOUR_ENVIRONMENT_NAME'
 ```
 
 4. If you have multiple environments, set the active one:
