@@ -842,7 +842,10 @@ describe('GitHubUpdater', function () {
 					await updater.fetchGitHubManifest('99.99.99');
 					assert.fail('Should have thrown an error');
 				} catch (error) {
-					assert.include(error.message, 'Release v99.99.99 not found');
+					assert.include(
+						error.message,
+						'Release v99.99.99 not found'
+					);
 					assert.include(error.message, 'box/boxcli');
 				}
 			});
@@ -880,7 +883,10 @@ describe('GitHubUpdater', function () {
 					await updater.fetchGitHubManifest();
 					assert.fail('Should have thrown an error');
 				} catch (error) {
-					assert.include(error.message, 'Release not found in box/boxcli');
+					assert.include(
+						error.message,
+						'Release not found in box/boxcli'
+					);
 				}
 			});
 
@@ -953,7 +959,7 @@ describe('GitHubUpdater', function () {
 							? {
 									...asset,
 									digest: 'md5:somehash',
-							  }
+								}
 							: asset
 					),
 				};

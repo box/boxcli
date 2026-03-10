@@ -20,7 +20,8 @@ USAGE
     [--limit <value>] [--all] [--include-recent-shared-links]
 
 ARGUMENTS
-  [QUERY]  The search term
+  [QUERY]  The search term. Some queries with special characters (e.g. double quotes for exact match) may require
+           escaping (e.g. box search '\"query_term\"').
 
 FLAGS
   -h, --help                         Show CLI help
