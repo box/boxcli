@@ -8,8 +8,8 @@ Login options:
   (1) Official Box CLI App
       No app setup needed. Use --default-box-app (-d) to skip the prompt.
 
-  (2) Your own custom OAuth app
-      Enter your Client ID and Client Secret when prompted.
+  (2) Your own Platform OAuth app
+      Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
 
 Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.
 
@@ -21,7 +21,7 @@ Sign in with OAuth 2.0 and create a new environment (or update an existing one w
 
 ```
 USAGE
-  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [-d] [-r -n <value>] [-i]
+  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [-d | --platform-app] [-r -n <value>] [-i]
 
 FLAGS
   -c, --code
@@ -58,6 +58,10 @@ FLAGS
   --no-color
       Turn off colors for logging
 
+  --platform-app
+      Skip the authentication method prompt and go directly to Platform App setup.
+      You will be prompted for Client ID and Client Secret.
+
 DESCRIPTION
   Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).
 
@@ -66,8 +70,8 @@ DESCRIPTION
   (1) Official Box CLI App
   No app setup needed. Use --default-box-app (-d) to skip the prompt.
 
-  (2) Your own custom OAuth app
-  Enter your Client ID and Client Secret when prompted.
+  (2) Your own Platform OAuth app
+  Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
 
   Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is
   granted, the environment is created and set as default — you can start running commands right away.
