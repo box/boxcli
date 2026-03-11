@@ -57,7 +57,6 @@ async function promptForAuthMethod(inquirerModule) {
 	const CLIENT_ID_MIN_LENGTH = 16;
 	const CLIENT_ID_MAX_LENGTH = 99;
 
-	 
 	while (true) {
 		const { choice } = await inquirerModule.prompt([
 			{
@@ -86,7 +85,10 @@ async function promptForAuthMethod(inquirerModule) {
 			return null;
 		}
 
-		if (trimmedChoice.length > CLIENT_ID_MIN_LENGTH && trimmedChoice.length < CLIENT_ID_MAX_LENGTH) {
+		if (
+			trimmedChoice.length > CLIENT_ID_MIN_LENGTH &&
+			trimmedChoice.length < CLIENT_ID_MAX_LENGTH
+		) {
 			return promptForCustomAppCredentials(inquirerModule, trimmedChoice);
 		}
 
@@ -102,7 +104,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		const { flags } = await this.parse(OAuthLoginCommand);
 		const forceDefaultBoxApp = flags['default-box-app'];
-		const forceCustomApp = flags['custom-app'];
+		const forcePlatformApp = flags['platform-app'];
 		let useDefaultBoxApp = false;
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
@@ -116,7 +118,8 @@ class OAuthLoginCommand extends BoxCommand {
 			if (
 				!Object.hasOwn(environmentsObject.environments, this.flags.name)
 			) {
-				const currentEnv = environmentsObject.environments[environmentsObject.default];
+				const currentEnv =
+					environmentsObject.environments[environmentsObject.default];
 				if (
 					this.flags.name === DEFAULT_ENVIRONMENT_NAME &&
 					environmentsObject.default &&
@@ -124,14 +127,18 @@ class OAuthLoginCommand extends BoxCommand {
 				) {
 					targetEnvName = environmentsObject.default;
 				} else {
-					this.info(chalk`{red The "${this.flags.name}" environment does not exist}`);
+					this.info(
+						chalk`{red The "${this.flags.name}" environment does not exist}`
+					);
 					return;
 				}
 			}
 
 			environment = environmentsObject.environments[targetEnvName];
 			if (environment.authMethod !== 'oauth20') {
-				this.info(chalk`{red The selected environment is not of type oauth20}`);
+				this.info(
+					chalk`{red The selected environment is not of type oauth20}`
+				);
 				return;
 			}
 			if (forceDefaultBoxApp) {
@@ -177,7 +184,7 @@ class OAuthLoginCommand extends BoxCommand {
 				cacheTokens: true,
 				authMethod: 'oauth20',
 			};
-		} else if (forceCustomApp) {
+		} else if (forcePlatformApp) {
 			const answers = await promptForCustomAppCredentials(inquirer);
 			useDefaultBoxApp = false;
 
@@ -288,10 +295,13 @@ class OAuthLoginCommand extends BoxCommand {
 					);
 				}
 			} catch (error) {
-				const statusCode = error?.response?.statusCode ?? error?.response?.status;
+				const statusCode =
+					error?.response?.statusCode ?? error?.response?.status;
 				const errorMessage =
 					error?.response?.body?.error_description ||
-					(statusCode ? `Request failed with status ${statusCode}` : null) ||
+					(statusCode
+						? `Request failed with status ${statusCode}`
+						: null) ||
 					error?.message ||
 					'Unknown error';
 				DEBUG.execute('Login error: %O', error);
@@ -374,8 +384,8 @@ OAuthLoginCommand.description =
 	'  (1) Official Box CLI App\n' +
 	'      No app setup needed. Use --default-box-app (-d) to skip the prompt.\n' +
 	'\n' +
-	'  (2) Your own custom OAuth app\n' +
-	'      Enter your Client ID and Client Secret when prompted. Use --custom-app to skip the prompt.\n' +
+	'  (2) Your own Platform OAuth app\n' +
+	'      Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.\n' +
 	'\n' +
 	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.';
 
@@ -403,12 +413,12 @@ OAuthLoginCommand.flags = {
 			'This is the fastest way to integrate with Box — no app creation in the Developer Console is needed.\n' +
 			'Scopes are limited to content actions, allowing you to effectively operate with your files and folders.\n' +
 			'This flow requires a local callback server on a supported port (3000, 3001, 4000, 5000, or 8080). The default port is 3000; use --port to change it.',
-		exclusive: ['custom-app'],
+		exclusive: ['platform-app'],
 		default: false,
 	}),
-	'custom-app': Flags.boolean({
+	'platform-app': Flags.boolean({
 		description:
-			'Skip the authentication method prompt and go directly to custom app setup.\n' +
+			'Skip the authentication method prompt and go directly to platform app setup.\n' +
 			'You will be prompted for Client ID and Client Secret.',
 		exclusive: ['default-box-app'],
 		default: false,
@@ -431,4 +441,3 @@ module.exports._test = {
 	promptForAuthMethod,
 	promptForCustomAppCredentials,
 };
-

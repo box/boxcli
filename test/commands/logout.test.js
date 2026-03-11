@@ -41,7 +41,10 @@ describe('Logout', function () {
 	beforeEach(function () {
 		sandbox = sinon.createSandbox();
 
-		getEnvironmentsStub = sandbox.stub(BoxCommand.prototype, 'getEnvironments');
+		getEnvironmentsStub = sandbox.stub(
+			BoxCommand.prototype,
+			'getEnvironments'
+		);
 		tokenCacheGetStub = sandbox.stub(CLITokenCache.prototype, 'get');
 		tokenCacheClearStub = sandbox.stub(CLITokenCache.prototype, 'clear');
 
@@ -95,10 +98,17 @@ describe('Logout', function () {
 			getEnvironmentsStub.resolves({ default: null, environments: {} });
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.command(['logout', '--force'])
 				.catch((error) => {
-					assert.include(error.message, 'No current environment found');
+					assert.include(
+						error.message,
+						'No current environment found'
+					);
 				})
 				.it('errors when no current environment');
 		});
@@ -107,12 +117,19 @@ describe('Logout', function () {
 			tokenCacheGetStub.resolves();
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stdout()
 				.command(['logout', '--force'])
 				.it('shows already logged out', (ctx) => {
-					assert.include(ctx.stdout, 'You are already logged out from "oauth" environment');
+					assert.include(
+						ctx.stdout,
+						'You are already logged out from "oauth" environment'
+					);
 				});
 		});
 
@@ -126,7 +143,11 @@ describe('Logout', function () {
 				.resolves(false);
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(BoxCommand.prototype, 'confirm', confirmStub)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stdout()
@@ -134,7 +155,9 @@ describe('Logout', function () {
 				.it('cancels when user declines', (ctx) => {
 					assert.include(ctx.stdout, 'Logout cancelled');
 					assert.isTrue(
-						confirmStub.calledWith(sinon.match(/logout from "oauth"/))
+						confirmStub.calledWith(
+							sinon.match(/logout from "oauth"/)
+						)
 					);
 				});
 		});
@@ -151,7 +174,11 @@ describe('Logout', function () {
 			revokeTokensStub.resolves({ statusCode: 200 });
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(BoxCommand.prototype, 'confirm', confirmStub)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
@@ -159,11 +186,16 @@ describe('Logout', function () {
 				.command(['logout'])
 				.it('logs out when user confirms', (ctx) => {
 					assert.isTrue(
-						confirmStub.calledWith(sinon.match(/logout from "oauth"/))
+						confirmStub.calledWith(
+							sinon.match(/logout from "oauth"/)
+						)
 					);
 					assert.isTrue(revokeTokensStub.calledWith('test-token'));
 					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Successfully logged out from "oauth"');
+					assert.include(
+						ctx.stdout,
+						'Successfully logged out from "oauth"'
+					);
 				});
 		});
 
@@ -180,17 +212,29 @@ describe('Logout', function () {
 			});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stdout()
 				.command(['logout', '--force'])
-				.it('skips revoke and clears cache for invalid_token', (ctx) => {
-					assert.isTrue(revokeTokensStub.calledWith('test-token'));
-					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Access token is already invalid');
-					assert.include(ctx.stdout, 'Successfully logged out');
-				});
+				.it(
+					'skips revoke and clears cache for invalid_token',
+					(ctx) => {
+						assert.isTrue(
+							revokeTokensStub.calledWith('test-token')
+						);
+						assert.isTrue(tokenCacheClearStub.called);
+						assert.include(
+							ctx.stdout,
+							'Access token is already invalid'
+						);
+						assert.include(ctx.stdout, 'Successfully logged out');
+					}
+				);
 		});
 
 		it('should clear cache when revoke returns other 400 and user selects clear', async function () {
@@ -205,12 +249,18 @@ describe('Logout', function () {
 				body: { error: 'invalid_request' },
 			});
 
-			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt').resolves({
-				action: 'clear',
-			});
+			const inquirerPromptStub = sandbox
+				.stub(inquirer, 'prompt')
+				.resolves({
+					action: 'clear',
+				});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
@@ -233,7 +283,11 @@ describe('Logout', function () {
 			revokeTokensStub.resolves({ statusCode: 200 });
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stdout()
@@ -241,7 +295,10 @@ describe('Logout', function () {
 				.it('successfully logs out when revoke succeeds', (ctx) => {
 					assert.isTrue(revokeTokensStub.calledWith('test-token'));
 					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Successfully logged out from "oauth"');
+					assert.include(
+						ctx.stdout,
+						'Successfully logged out from "oauth"'
+					);
 				});
 		});
 
@@ -254,21 +311,30 @@ describe('Logout', function () {
 
 			revokeTokensStub.rejects(new Error('ECONNREFUSED'));
 
-			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt').resolves({
-				action: 'clear',
-			});
+			const inquirerPromptStub = sandbox
+				.stub(inquirer, 'prompt')
+				.resolves({
+					action: 'clear',
+				});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
 				.stdout()
 				.command(['logout', '--force'])
-				.it('clears cache when revoke fails and user selects clear', (ctx) => {
-					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Successfully logged out');
-				});
+				.it(
+					'clears cache when revoke fails and user selects clear',
+					(ctx) => {
+						assert.isTrue(tokenCacheClearStub.called);
+						assert.include(ctx.stdout, 'Successfully logged out');
+					}
+				);
 		});
 
 		it('should show abort message when revoke fails and user selects abort', async function () {
@@ -279,12 +345,18 @@ describe('Logout', function () {
 
 			revokeTokensStub.rejects(new Error('ECONNREFUSED'));
 
-			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt').resolves({
-				action: 'abort',
-			});
+			const inquirerPromptStub = sandbox
+				.stub(inquirer, 'prompt')
+				.resolves({
+					action: 'abort',
+				});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
@@ -311,12 +383,18 @@ describe('Logout', function () {
 				.onSecondCall()
 				.resolves({ statusCode: 200 });
 
-			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt').resolves({
-				action: 'retry',
-			});
+			const inquirerPromptStub = sandbox
+				.stub(inquirer, 'prompt')
+				.resolves({
+					action: 'retry',
+				});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
@@ -325,7 +403,10 @@ describe('Logout', function () {
 				.it('retries revoke and succeeds', (ctx) => {
 					assert.strictEqual(revokeTokensStub.callCount, 2);
 					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Successfully logged out from "oauth"');
+					assert.include(
+						ctx.stdout,
+						'Successfully logged out from "oauth"'
+					);
 				});
 		});
 
@@ -341,7 +422,11 @@ describe('Logout', function () {
 			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt');
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
@@ -365,7 +450,11 @@ describe('Logout', function () {
 			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt');
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
@@ -387,22 +476,31 @@ describe('Logout', function () {
 			});
 			tokenCacheClearStub.callsFake((cb) => cb(null));
 
-			const inquirerPromptStub = sandbox.stub(inquirer, 'prompt').resolves({
-				action: 'clear',
-			});
+			const inquirerPromptStub = sandbox
+				.stub(inquirer, 'prompt')
+				.resolves({
+					action: 'clear',
+				});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.stub(inquirer, 'prompt', inquirerPromptStub)
 				.stdout()
 				.command(['logout', '--force'])
-				.it('clears cache when credentials invalid and user selects clear', (ctx) => {
-					assert.isFalse(revokeTokensStub.called);
-					assert.isTrue(tokenCacheClearStub.called);
-					assert.include(ctx.stdout, 'Successfully logged out');
-				});
+				.it(
+					'clears cache when credentials invalid and user selects clear',
+					(ctx) => {
+						assert.isFalse(revokeTokensStub.called);
+						assert.isTrue(tokenCacheClearStub.called);
+						assert.include(ctx.stdout, 'Successfully logged out');
+					}
+				);
 		});
 
 		it('should reject when tokenCache.clear fails', async function () {
@@ -410,12 +508,18 @@ describe('Logout', function () {
 				accessToken: 'test-token',
 				refreshToken: 'refresh',
 			});
-			tokenCacheClearStub.callsFake((cb) => cb(new Error('Clear failed')));
+			tokenCacheClearStub.callsFake((cb) =>
+				cb(new Error('Clear failed'))
+			);
 
 			revokeTokensStub.resolves({ statusCode: 200 });
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stub(CLITokenCache.prototype, 'get', tokenCacheGetStub)
 				.stub(CLITokenCache.prototype, 'clear', tokenCacheClearStub)
 				.command(['logout', '--force'])

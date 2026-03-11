@@ -64,7 +64,7 @@ npm install --global @box/cli
 After installation, run `box login` to sign in. You will be prompted with three options:
 
 - **[1] Official Box CLI App** — No app setup required. Uses predefined scopes limited to content actions.
-- **[2] Your own custom OAuth app** — Enter your Client ID and Client Secret for custom scopes or specific configuration.
+- **[2] Your own Platform OAuth app** — Enter your Client ID and Client Secret for custom scopes or specific configuration.
 - **[q] Quit** — Exit the login flow.
 
 You can also paste a Client ID directly at the prompt (any input between 16 and 99 characters is recognized as a Client ID).
@@ -77,7 +77,7 @@ box login -d
 
 A browser window opens for authorization. Once you grant access, the CLI creates a new environment and you're ready to go. See the [authentication docs](docs/authentication.md) for more details.
 
-**Custom app** — run `box login`, choose `[2]`, and enter your credentials from the [Box Developer Console][dev-console]. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for setup instructions.
+**Platform app** — run `box login`, choose `[2]`, and enter your credentials from the [Box Developer Console][dev-console]. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for setup instructions.
 
 ### CLI and Server Authentication with JWT
 

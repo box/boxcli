@@ -126,12 +126,12 @@ describe('Login', function () {
 			assert.property(OAuthLoginCommand.flags, 'default-box-app');
 		});
 
-		it('should expose --custom-app flag', function () {
-			assert.property(OAuthLoginCommand.flags, 'custom-app');
+		it('should expose --platform-app flag', function () {
+			assert.property(OAuthLoginCommand.flags, 'platform-app');
 		});
 
-		it('should mark --custom-app and --default-box-app as mutually exclusive', function () {
-			assert.deepInclude(OAuthLoginCommand.flags['custom-app'], {
+		it('should mark --platform-app and --default-box-app as mutually exclusive', function () {
+			assert.deepInclude(OAuthLoginCommand.flags['platform-app'], {
 				exclusive: ['default-box-app'],
 			});
 		});
@@ -144,10 +144,9 @@ describe('Login', function () {
 				.onFirstCall()
 				.resolves({ choice: '1' });
 
-			const result =
-				await OAuthLoginCommand._test.promptForAuthMethod(
-					{ prompt: promptStub }
-				);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.isTrue(promptStub.calledOnce);
 			assert.deepEqual(result, {
@@ -167,10 +166,9 @@ describe('Login', function () {
 				.onThirdCall()
 				.resolves({ clientSecret: 'custom-client-secret' });
 
-			const result =
-				await OAuthLoginCommand._test.promptForAuthMethod(
-					{ prompt: promptStub }
-				);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(promptStub.callCount, 3);
 			assert.deepEqual(result, {
@@ -189,10 +187,9 @@ describe('Login', function () {
 				.onSecondCall()
 				.resolves({ clientSecret: 'my-secret' });
 
-			const result =
-				await OAuthLoginCommand._test.promptForAuthMethod(
-					{ prompt: promptStub }
-				);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(promptStub.callCount, 2);
 			assert.deepEqual(result, {
@@ -211,10 +208,9 @@ describe('Login', function () {
 				.onSecondCall()
 				.resolves({ clientSecret: 'my-secret' });
 
-			const result =
-				await OAuthLoginCommand._test.promptForAuthMethod(
-					{ prompt: promptStub }
-				);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(promptStub.callCount, 2);
 			assert.deepEqual(result, {
@@ -234,10 +230,9 @@ describe('Login', function () {
 				.onCall(2)
 				.resolves({ choice: '1' });
 
-			const result =
-				await OAuthLoginCommand._test.promptForAuthMethod(
-					{ prompt: promptStub }
-				);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(promptStub.callCount, 3);
 			assert.deepEqual(result, {
@@ -253,13 +248,19 @@ describe('Login', function () {
 				.onFirstCall()
 				.resolves({ choice: '1' });
 
-			await OAuthLoginCommand._test.promptForAuthMethod(
-				{ prompt: promptStub }
-			);
+			await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			const promptConfig = promptStub.firstCall.args[0][0];
-			assert.include(promptConfig.message, 'How would you like to authenticate?');
-			assert.include(promptConfig.message, '[1] Log-in as a Box user (OAuth)');
+			assert.include(
+				promptConfig.message,
+				'How would you like to authenticate?'
+			);
+			assert.include(
+				promptConfig.message,
+				'[1] Log-in as a Box user (OAuth)'
+			);
 			assert.include(promptConfig.message, '[2] Use a Box Platform app');
 			assert.include(promptConfig.message, '[q] Quit');
 			assert.include(promptConfig.message, 'Enter 1, 2, or q:');
@@ -271,9 +272,9 @@ describe('Login', function () {
 				.onFirstCall()
 				.resolves({ choice: 'q' });
 
-			const result = await OAuthLoginCommand._test.promptForAuthMethod(
-				{ prompt: promptStub }
-			);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(result, null);
 		});
@@ -284,9 +285,9 @@ describe('Login', function () {
 				.onFirstCall()
 				.resolves({ choice: 'Q' });
 
-			const result = await OAuthLoginCommand._test.promptForAuthMethod(
-				{ prompt: promptStub }
-			);
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			assert.strictEqual(result, null);
 		});
@@ -301,15 +302,21 @@ describe('Login', function () {
 				.onThirdCall()
 				.resolves({ clientSecret: 'test-secret' });
 
-			await OAuthLoginCommand._test.promptForAuthMethod(
-				{ prompt: promptStub }
-			);
+			await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
 
 			const clientIdPromptConfig = promptStub.secondCall.args[0][0];
-			assert.strictEqual(clientIdPromptConfig.message, 'Enter the Client ID:');
+			assert.strictEqual(
+				clientIdPromptConfig.message,
+				'Enter the Client ID:'
+			);
 
 			const clientSecretPromptConfig = promptStub.thirdCall.args[0][0];
-			assert.strictEqual(clientSecretPromptConfig.message, 'Enter the Client Secret:');
+			assert.strictEqual(
+				clientSecretPromptConfig.message,
+				'Enter the Client Secret:'
+			);
 		});
 	});
 
@@ -323,9 +330,9 @@ describe('Login', function () {
 				.resolves({ clientSecret: 'my-secret' });
 
 			const result =
-				await OAuthLoginCommand._test.promptForCustomAppCredentials(
-					{ prompt: promptStub }
-				);
+				await OAuthLoginCommand._test.promptForCustomAppCredentials({
+					prompt: promptStub,
+				});
 
 			assert.strictEqual(promptStub.callCount, 2);
 			assert.deepEqual(result, {
@@ -363,12 +370,18 @@ describe('Login', function () {
 				.onSecondCall()
 				.resolves({ clientSecret: 'cs' });
 
-			await OAuthLoginCommand._test.promptForCustomAppCredentials(
-				{ prompt: promptStub }
-			);
+			await OAuthLoginCommand._test.promptForCustomAppCredentials({
+				prompt: promptStub,
+			});
 
-			assert.strictEqual(promptStub.firstCall.args[0][0].message, 'Enter the Client ID:');
-			assert.strictEqual(promptStub.secondCall.args[0][0].message, 'Enter the Client Secret:');
+			assert.strictEqual(
+				promptStub.firstCall.args[0][0].message,
+				'Enter the Client ID:'
+			);
+			assert.strictEqual(
+				promptStub.secondCall.args[0][0].message,
+				'Enter the Client Secret:'
+			);
 		});
 	});
 
@@ -386,15 +399,22 @@ describe('Login', function () {
 			getEnvironmentsStub.resolves({ default: '', environments: {} });
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stdout()
 				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it('shows error when env does not exist and no current env', (ctx) => {
-					assert.include(
-						ctx.stdout,
-						'The "nonexistent" environment does not exist'
-					);
-				});
+				.it(
+					'shows error when env does not exist and no current env',
+					(ctx) => {
+						assert.include(
+							ctx.stdout,
+							'The "nonexistent" environment does not exist'
+						);
+					}
+				);
 		});
 
 		it('should show error when specified env does not exist and current env is not OAuth', async function () {
@@ -406,7 +426,11 @@ describe('Login', function () {
 			});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stdout()
 				.command(['login', '--reauthorize', '-n', 'nonexistent'])
 				.it(
@@ -433,7 +457,11 @@ describe('Login', function () {
 			});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stdout()
 				.command(['login', '--reauthorize', '-n', 'nonexistent'])
 				.it('does not fallback when name is not oauth', (ctx) => {
@@ -461,7 +489,11 @@ describe('Login', function () {
 			});
 
 			await test
-				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
+				.stub(
+					BoxCommand.prototype,
+					'getEnvironments',
+					getEnvironmentsStub
+				)
 				.stdout()
 				.command([
 					'login',
@@ -473,14 +505,17 @@ describe('Login', function () {
 					'--port',
 					'16987',
 				])
-				.it('falls back to current oauth env when name is oauth and env does not exist', (ctx) => {
-					assert.notInclude(
-						ctx.stdout,
-						'The "oauth" environment does not exist'
-					);
-					assert.include(ctx.stdout, 'Please open');
-					assert.isTrue(promptStub.calledOnce);
-				});
+				.it(
+					'falls back to current oauth env when name is oauth and env does not exist',
+					(ctx) => {
+						assert.notInclude(
+							ctx.stdout,
+							'The "oauth" environment does not exist'
+						);
+						assert.include(ctx.stdout, 'Please open');
+						assert.isTrue(promptStub.calledOnce);
+					}
+				);
 		});
 	});
 });
