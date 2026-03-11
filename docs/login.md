@@ -59,7 +59,7 @@ FLAGS
       Turn off colors for logging
 
   --platform-app
-      Skip the authentication method prompt and go directly to platform app setup.
+      Skip the authentication method prompt and go directly to Platform App setup.
       You will be prompted for Client ID and Client Secret.
 
 DESCRIPTION

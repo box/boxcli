@@ -77,12 +77,12 @@ box login -d
 
 A browser window opens for authorization. Once you grant access, the CLI creates a new environment and you're ready to go. See the [authentication docs](docs/authentication.md) for more details.
 
-**Platform app** — run `box login`, choose `[2]`, and enter your credentials from the [Box Developer Console][dev-console]. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for setup instructions.
+**Platform App** — run `box login`, choose `[2]`, and enter your credentials from the [Box Developer Console][dev-console]. See the [Box CLI with OAuth 2.0 guide][oauth-guide] and the [authentication docs](docs/authentication.md) for setup instructions.
 
 ### CLI and Server Authentication with JWT
 
 Alternatively, to get started with the Box CLI, [download and install](#CLI-Installation) CLI, set up a Box application using Server Authentication with JWT and
-download the JSON configuration file from the Configuration page of your platform app in the
+download the JSON configuration file from the Configuration page of your Platform App in the
 [Box Developer Console][dev-console] following [JWT CLI Guide][jwt-guide].  Then, set up the CLI by pointing it to your configuration file:
 
 ```sh-session

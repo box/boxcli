@@ -26,7 +26,7 @@ const GENERIC_OAUTH_CLIENT_SECRET = 'iZ1MbvC3ZaF25nbJli7IsKdRHAxfu3fn';
 const SUPPORTED_DEFAULT_APP_PORTS = [3000, 3001, 4000, 5000, 8080];
 const DEFAULT_ENVIRONMENT_NAME = 'oauth';
 
-async function promptForCustomAppCredentials(inquirerModule, clientId) {
+async function promptForPlatformAppCredentials(inquirerModule, clientId) {
 	if (!clientId) {
 		const answer = await inquirerModule.prompt([
 			{
@@ -63,7 +63,7 @@ async function promptForAuthMethod(inquirerModule) {
 				type: 'input',
 				name: 'choice',
 				message:
-					'How would you like to authenticate?\n[1] Log-in as a Box user (OAuth)\n[2] Use a Box Platform app\n[q] Quit\n? Enter 1, 2, or q:',
+					'How would you like to authenticate?\n[1] Log-in as a Box user (OAuth)\n[2] Use a Box Platform App\n[q] Quit\n? Enter 1, 2, or q:',
 			},
 		]);
 
@@ -78,7 +78,7 @@ async function promptForAuthMethod(inquirerModule) {
 		}
 
 		if (trimmedChoice === '2') {
-			return promptForCustomAppCredentials(inquirerModule);
+			return promptForPlatformAppCredentials(inquirerModule);
 		}
 
 		if (trimmedChoice.toLowerCase() === 'q') {
@@ -89,7 +89,7 @@ async function promptForAuthMethod(inquirerModule) {
 			trimmedChoice.length > CLIENT_ID_MIN_LENGTH &&
 			trimmedChoice.length < CLIENT_ID_MAX_LENGTH
 		) {
-			return promptForCustomAppCredentials(inquirerModule, trimmedChoice);
+			return promptForPlatformAppCredentials(inquirerModule, trimmedChoice);
 		}
 
 		// Invalid input — repeat the prompt
@@ -185,7 +185,7 @@ class OAuthLoginCommand extends BoxCommand {
 				authMethod: 'oauth20',
 			};
 		} else if (forcePlatformApp) {
-			const answers = await promptForCustomAppCredentials(inquirer);
+			const answers = await promptForPlatformAppCredentials(inquirer);
 			useDefaultBoxApp = false;
 
 			environment = {
@@ -384,7 +384,7 @@ OAuthLoginCommand.description =
 	'  (1) Official Box CLI App\n' +
 	'      No app setup needed. Use --default-box-app (-d) to skip the prompt.\n' +
 	'\n' +
-	'  (2) Your own Platform OAuth app\n' +
+	'  (2) Your own Platform OAuth App\n' +
 	'      Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.\n' +
 	'\n' +
 	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.';
@@ -418,7 +418,7 @@ OAuthLoginCommand.flags = {
 	}),
 	'platform-app': Flags.boolean({
 		description:
-			'Skip the authentication method prompt and go directly to platform app setup.\n' +
+			'Skip the authentication method prompt and go directly to Platform App setup.\n' +
 			'You will be prompted for Client ID and Client Secret.',
 		exclusive: ['default-box-app'],
 		default: false,
@@ -439,5 +439,5 @@ OAuthLoginCommand.flags = {
 module.exports = OAuthLoginCommand;
 module.exports._test = {
 	promptForAuthMethod,
-	promptForCustomAppCredentials,
+	promptForPlatformAppCredentials,
 };

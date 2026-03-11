@@ -330,7 +330,7 @@ describe('Login', function () {
 				.resolves({ clientSecret: 'my-secret' });
 
 			const result =
-				await OAuthLoginCommand._test.promptForCustomAppCredentials({
+				await OAuthLoginCommand._test.promptForPlatformAppCredentials({
 					prompt: promptStub,
 				});
 
@@ -349,7 +349,7 @@ describe('Login', function () {
 				.resolves({ clientSecret: 'my-secret' });
 
 			const result =
-				await OAuthLoginCommand._test.promptForCustomAppCredentials(
+				await OAuthLoginCommand._test.promptForPlatformAppCredentials(
 					{ prompt: promptStub },
 					'pre-filled-client-id'
 				);
@@ -370,7 +370,7 @@ describe('Login', function () {
 				.onSecondCall()
 				.resolves({ clientSecret: 'cs' });
 
-			await OAuthLoginCommand._test.promptForCustomAppCredentials({
+			await OAuthLoginCommand._test.promptForPlatformAppCredentials({
 				prompt: promptStub,
 			});
 

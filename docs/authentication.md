@@ -9,7 +9,7 @@ overview of how the Box API handles authentication.
   - [Server Auth with JWT](#server-auth-with-jwt)
   - [Server Auth with CCG](#server-auth-with-ccg)
   - [OAuth 2.0 Login (`box login`)](#oauth-20-login-box-login)
-    - [Option 1: Official Box CLI App (Recommended)](#option-1-official-box-cli-app-recommended)
+    - [Option 1: Official Box CLI App](#option-1-official-box-cli-app)
     - [Option 2: Your Own Platform App](#option-2-your-own-platform-app)
     - [Supported Ports](#supported-ports)
     - [Additional Flags](#additional-flags)
@@ -118,17 +118,17 @@ box configure:environments:add /path/to/config.json --ccg-auth --ccg-user "USER_
 
 The `box login` command authenticates you with Box using OAuth 2.0. It starts a local callback server, opens your browser for authorization, and stores the resulting tokens in a named environment.
 
-When you run `box login`, the CLI presents three options: the **Official Box CLI App**, a **platform app** you create yourself, or **quit** (`q`) to exit. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag. You can also paste a Client ID directly at the prompt — any input between 16 and 99 characters is treated as a Client ID.
+When you run `box login`, the CLI presents three options: the **Official Box CLI App**, a **Platform App** you create yourself, or **quit** (`q`) to exit. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag. You can also paste a Client ID directly at the prompt — any input between 16 and 99 characters is treated as a Client ID.
 
 #### Option 1: Official Box CLI App
 
 This is the fastest way to get started with Box CLI. No app creation in the Box Developer Console is required — just run the command and authorize.
 
-**Interactive selection** — run `box login` and choose option `1` to use the built-in app, `2` for a platform app, or `q` to quit:
+**Interactive selection** — run `box login` and choose option `1` to use the built-in app, `2` for a Platform App, or `q` to quit:
 
 ```bash
 box login
-# Choose [1] for Official Box CLI App, [2] for platform app, or [q] to quit.
+# Choose [1] for Official Box CLI App, [2] for Platform App, or [q] to quit.
 ```
 
 **Skip the prompt** — use the `--default-box-app` (or `-d`) flag to go directly to authorization:
@@ -141,7 +141,7 @@ box login --default-box-app
 box login -d
 ```
 
-> **Note:** The Official Box CLI App uses scopes limited to content actions, which allows you to effectively manage your files and folders. If you need broader scopes (e.g., managing users, groups, or enterprise settings), use your own platform app instead.
+> **Note:** The Official Box CLI App uses scopes limited to content actions, which allows you to effectively manage your files and folders. If you need broader scopes (e.g., managing users, groups, or enterprise settings), use your own Platform App instead.
 
 #### Option 2: Your Own Platform App
 
@@ -177,19 +177,19 @@ When using the **Official Box CLI App**, only the following ports are supported:
 | 5000 | `box login -d --port 5000` |
 | 8080 | `box login -d --port 8080` |
 
-When using your own platform app, any port can be used — just make sure the **Redirect URI** in the Developer Console matches `http://localhost:<port>/callback`.
+When using your own Platform App, any port can be used — just make sure the **Redirect URI** in the Developer Console matches `http://localhost:<port>/callback`.
 
 #### Additional Flags
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--default-box-app` | `-d` | Use the Official Box CLI App and proceed directly to authorization. |
-| `--platform-app` | | Skip the prompt and go directly to platform app setup (Client ID and Client Secret). |
-| `--port <number>` | `-p` | Set the port for the local callback server. Default: `3000`. |
-| `--name <string>` | `-n` | Set a name for the environment. Default: `oauth`. |
-| `--reauthorize` | `-r` | Reauthorize an existing environment (requires `--name`). |
-| `--code` | `-c` | Manually visit the authorize URL and input the auth code. |
-| `--incognito-browser` | `-i` | Open the authorize URL in a private/incognito browser window. |
+| Flag | Short | Description                                                                          |
+|------|-------|--------------------------------------------------------------------------------------|
+| `--default-box-app` | `-d` | Use the Official Box CLI App and proceed directly to authorization.                  |
+| `--platform-app` | | Skip the prompt and go directly to Platform App setup (Client ID and Client Secret). |
+| `--port <number>` | `-p` | Set the port for the local callback server. Default: `3000`.                         |
+| `--name <string>` | `-n` | Set a name for the environment. Default: `oauth`.                                    |
+| `--reauthorize` | `-r` | Reauthorize an existing environment (requires `--name`).                             |
+| `--code` | `-c` | Manually visit the authorize URL and input the auth code.                            |
+| `--incognito-browser` | `-i` | Open the authorize URL in a private/incognito browser window.                        |
 
 #### Reauthorize OAuth2
 
