@@ -261,7 +261,7 @@ describe('Login', function () {
 				promptConfig.message,
 				'[1] Log-in as a Box user (OAuth)'
 			);
-			assert.include(promptConfig.message, '[2] Use a Box Platform app');
+			assert.include(promptConfig.message, '[2] Use a Box Platform App');
 			assert.include(promptConfig.message, '[q] Quit');
 			assert.include(promptConfig.message, 'Enter 1, 2, or q:');
 		});
