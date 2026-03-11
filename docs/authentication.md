@@ -118,17 +118,17 @@ box configure:environments:add /path/to/config.json --ccg-auth --ccg-user "USER_
 
 The `box login` command authenticates you with Box using OAuth 2.0. It starts a local callback server, opens your browser for authorization, and stores the resulting tokens in a named environment.
 
-When you run `box login`, the CLI presents two login options: the **Official Box CLI App** and a **custom app** you create yourself. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag.
+When you run `box login`, the CLI presents three options: the **Official Box CLI App**, a **custom app** you create yourself, or **quit** (`q`) to exit. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag. You can also paste a Client ID directly at the prompt — any input between 16 and 99 characters is treated as a Client ID.
 
 #### Option 1: Official Box CLI App
 
 This is the fastest way to get started with Box CLI. No app creation in the Box Developer Console is required — just run the command and authorize.
 
-**Interactive selection** — run `box login` and press **Enter** at the Client ID prompt to use the built-in app:
+**Interactive selection** — run `box login` and choose option `1` to use the built-in app, `2` for a custom app, or `q` to quit:
 
 ```bash
 box login
-# When prompted for a Client ID, press Enter to use the Official Box CLI App.
+# Choose [1] for Official Box CLI App, [2] for custom app, or [q] to quit.
 ```
 
 **Skip the prompt** — use the `--default-box-app` (or `-d`) flag to go directly to authorization:
@@ -157,7 +157,8 @@ Then log in:
 
 ```bash
 box login
-# When prompted, enter your Client ID and Client Secret.
+# Choose [2] when prompted, then enter your Client ID and Client Secret.
+# Alternatively, paste your Client ID directly at the prompt (any input between 16 and 99 characters is recognized as a Client ID).
 ```
 
 For a step-by-step walkthrough, see the [Quickstart Guide](https://developer.box.com/guides/tooling/cli/quick-start/).

@@ -104,7 +104,7 @@ describe('Logout', function () {
 		});
 
 		it('should show already logged out when no access token', async function () {
-			tokenCacheGetStub.resolves(undefined);
+			tokenCacheGetStub.resolves();
 
 			await test
 				.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)

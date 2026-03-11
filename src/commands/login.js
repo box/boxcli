@@ -26,37 +26,72 @@ const GENERIC_OAUTH_CLIENT_SECRET = 'iZ1MbvC3ZaF25nbJli7IsKdRHAxfu3fn';
 const SUPPORTED_DEFAULT_APP_PORTS = [3000, 3001, 4000, 5000, 8080];
 const DEFAULT_ENVIRONMENT_NAME = 'oauth';
 
-async function promptForClientCredentials(inquirerModule) {
-	const clientIdPrompt = {
-		type: 'input',
-		name: 'clientID',
-		message:
-			'Press Enter to log into the Official Box CLI app, or enter a Client ID for your custom app (customized scopes):',
-	};
-
-	const { clientID } = await inquirerModule.prompt([clientIdPrompt]);
-	const normalizedClientId = typeof clientID === 'string' ? clientID.trim() : '';
-	if (!normalizedClientId) {
-		return {
-			useDefaultBoxApp: true,
-			clientId: GENERIC_OAUTH_CLIENT_ID,
-			clientSecret: GENERIC_OAUTH_CLIENT_SECRET,
-		};
+async function promptForCustomAppCredentials(inquirerModule, clientId) {
+	if (!clientId) {
+		const answer = await inquirerModule.prompt([
+			{
+				type: 'input',
+				name: 'clientId',
+				message: 'Enter the Client ID:',
+			},
+		]);
+		clientId = answer.clientId.trim();
 	}
 
 	const { clientSecret } = await inquirerModule.prompt([
 		{
 			type: 'input',
 			name: 'clientSecret',
-			message: 'Enter the Client Secret of your OAuth application:',
+			message: 'Enter the Client Secret:',
 		},
 	]);
 
 	return {
 		useDefaultBoxApp: false,
-		clientId: normalizedClientId,
+		clientId,
 		clientSecret,
 	};
+}
+
+async function promptForAuthMethod(inquirerModule) {
+	const CLIENT_ID_MIN_LENGTH = 16;
+	const CLIENT_ID_MAX_LENGTH = 99;
+
+	 
+	while (true) {
+		const { choice } = await inquirerModule.prompt([
+			{
+				type: 'input',
+				name: 'choice',
+				message:
+					'How would you like to authenticate?\n[1] Log-in as a Box user (OAuth)\n[2] Use a Box Platform app\n[q] Quit\n? Enter 1, 2, or q:',
+			},
+		]);
+
+		const trimmedChoice = typeof choice === 'string' ? choice.trim() : '';
+
+		if (trimmedChoice === '1') {
+			return {
+				useDefaultBoxApp: true,
+				clientId: GENERIC_OAUTH_CLIENT_ID,
+				clientSecret: GENERIC_OAUTH_CLIENT_SECRET,
+			};
+		}
+
+		if (trimmedChoice === '2') {
+			return promptForCustomAppCredentials(inquirerModule);
+		}
+
+		if (trimmedChoice.toLowerCase() === 'q') {
+			return null;
+		}
+
+		if (trimmedChoice.length > CLIENT_ID_MIN_LENGTH && trimmedChoice.length < CLIENT_ID_MAX_LENGTH) {
+			return promptForCustomAppCredentials(inquirerModule, trimmedChoice);
+		}
+
+		// Invalid input — repeat the prompt
+	}
 }
 
 class OAuthLoginCommand extends BoxCommand {
@@ -67,6 +102,7 @@ class OAuthLoginCommand extends BoxCommand {
 
 		const { flags } = await this.parse(OAuthLoginCommand);
 		const forceDefaultBoxApp = flags['default-box-app'];
+		const forceCustomApp = flags['custom-app'];
 		let useDefaultBoxApp = false;
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
@@ -141,46 +177,22 @@ class OAuthLoginCommand extends BoxCommand {
 				cacheTokens: true,
 				authMethod: 'oauth20',
 			};
-		} else {
-			this.info(chalk`{cyan ----------------------------------------}`);
-			this.info(
-				chalk`{cyan You can log in with one of the following options:}`
-			);
-			this.info('');
-			this.info(
-				chalk`{cyan {bold [Option 1] Official Box CLI app}}`
-			);
-			this.info(
-				chalk`{cyan Press {bold Enter} at the next prompt to get started — no app setup required.}`
-			);
-			this.info(
-				chalk`{cyan Scopes are limited to content actions, allowing you to effectively operate with your files and folders.}`
-			);
-			this.info(
-				chalk`{cyan Supported callback ports: {bold ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}. Change with {bold --port}.}`
-			);
-			this.info('');
-			this.info(
-				chalk`{cyan {bold [Option 2] Your own custom app}}`
-			);
-			this.info(
-				chalk`{cyan Enter your Client ID at the next prompt. Set up the app in the Box Developer console ({underline https://cloud.app.box.com/developers/console}):}`
-			);
-			this.info(
-				chalk`{cyan  1. Select an application with OAuth user authentication (or create a new Custom App).}`
-			);
-			this.info(
-				chalk`{cyan  2. In the Configuration tab, set the Redirect URI to: {italic ${redirectUri}}. Click outside the input field.}`
-			);
-			this.info(
-				chalk`{cyan  3. Click {bold Save Changes}.}`
-			);
-			this.info(
-				chalk`{cyan Quickstart guide: {underline https://developer.box.com/guides/tooling/cli/quick-start/}}`
-			);
-			this.info(chalk`{cyan ----------------------------------------}`);
+		} else if (forceCustomApp) {
+			const answers = await promptForCustomAppCredentials(inquirer);
+			useDefaultBoxApp = false;
 
-			const answers = await promptForClientCredentials(inquirer);
+			environment = {
+				clientId: answers.clientId,
+				clientSecret: answers.clientSecret,
+				name: this.flags.name,
+				cacheTokens: true,
+				authMethod: 'oauth20',
+			};
+		} else {
+			const answers = await promptForAuthMethod(inquirer);
+			if (answers === null) {
+				return;
+			}
 			useDefaultBoxApp = answers.useDefaultBoxApp;
 
 			if (isUnsupportedDefaultAppPort()) {
@@ -363,7 +375,7 @@ OAuthLoginCommand.description =
 	'      No app setup needed. Use --default-box-app (-d) to skip the prompt.\n' +
 	'\n' +
 	'  (2) Your own custom OAuth app\n' +
-	'      Enter your Client ID and Client Secret when prompted.\n' +
+	'      Enter your Client ID and Client Secret when prompted. Use --custom-app to skip the prompt.\n' +
 	'\n' +
 	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.';
 
@@ -391,6 +403,14 @@ OAuthLoginCommand.flags = {
 			'This is the fastest way to integrate with Box — no app creation in the Developer Console is needed.\n' +
 			'Scopes are limited to content actions, allowing you to effectively operate with your files and folders.\n' +
 			'This flow requires a local callback server on a supported port (3000, 3001, 4000, 5000, or 8080). The default port is 3000; use --port to change it.',
+		exclusive: ['custom-app'],
+		default: false,
+	}),
+	'custom-app': Flags.boolean({
+		description:
+			'Skip the authentication method prompt and go directly to custom app setup.\n' +
+			'You will be prompted for Client ID and Client Secret.',
+		exclusive: ['default-box-app'],
 		default: false,
 	}),
 	reauthorize: Flags.boolean({
@@ -408,5 +428,7 @@ OAuthLoginCommand.flags = {
 
 module.exports = OAuthLoginCommand;
 module.exports._test = {
-	promptForClientCredentials,
+	promptForAuthMethod,
+	promptForCustomAppCredentials,
 };
+

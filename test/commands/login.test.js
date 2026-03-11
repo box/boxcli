@@ -125,17 +125,27 @@ describe('Login', function () {
 		it('should expose --default-box-app flag', function () {
 			assert.property(OAuthLoginCommand.flags, 'default-box-app');
 		});
+
+		it('should expose --custom-app flag', function () {
+			assert.property(OAuthLoginCommand.flags, 'custom-app');
+		});
+
+		it('should mark --custom-app and --default-box-app as mutually exclusive', function () {
+			assert.deepInclude(OAuthLoginCommand.flags['custom-app'], {
+				exclusive: ['default-box-app'],
+			});
+		});
 	});
 
-	describe('promptForClientCredentials', function () {
-		it('should fallback to default app when client ID is empty', async function () {
+	describe('promptForAuthMethod', function () {
+		it('should use default box app when user enters "1"', async function () {
 			const promptStub = sandbox
 				.stub()
 				.onFirstCall()
-				.resolves({ clientID: '   ' });
+				.resolves({ choice: '1' });
 
 			const result =
-				await OAuthLoginCommand._test.promptForClientCredentials(
+				await OAuthLoginCommand._test.promptForAuthMethod(
 					{ prompt: promptStub }
 				);
 
@@ -147,25 +157,218 @@ describe('Login', function () {
 			});
 		});
 
-		it('should prompt for client secret when custom client ID is provided', async function () {
+		it('should prompt for client ID and secret when user enters "2"', async function () {
 			const promptStub = sandbox
 				.stub()
 				.onFirstCall()
-				.resolves({ clientID: 'custom-client-id' })
+				.resolves({ choice: '2' })
 				.onSecondCall()
+				.resolves({ clientId: 'custom-client-id' })
+				.onThirdCall()
 				.resolves({ clientSecret: 'custom-client-secret' });
 
 			const result =
-				await OAuthLoginCommand._test.promptForClientCredentials(
+				await OAuthLoginCommand._test.promptForAuthMethod(
+					{ prompt: promptStub }
+				);
+
+			assert.strictEqual(promptStub.callCount, 3);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				clientId: 'custom-client-id',
+				clientSecret: 'custom-client-secret',
+			});
+		});
+
+		it('should treat input between 16 and 99 characters as client ID and prompt for secret', async function () {
+			const clientId32 = 'abcdefghijklmnopqrstuvwxyz123456';
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: clientId32 })
+				.onSecondCall()
+				.resolves({ clientSecret: 'my-secret' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForAuthMethod(
 					{ prompt: promptStub }
 				);
 
 			assert.strictEqual(promptStub.callCount, 2);
 			assert.deepEqual(result, {
 				useDefaultBoxApp: false,
-				clientId: 'custom-client-id',
-				clientSecret: 'custom-client-secret',
+				clientId: clientId32,
+				clientSecret: 'my-secret',
 			});
+		});
+
+		it('should treat input with surrounding whitespace as client ID when trimmed length is valid', async function () {
+			const clientId32 = 'abcdefghijklmnopqrstuvwxyz123456';
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: `  ${clientId32}  ` })
+				.onSecondCall()
+				.resolves({ clientSecret: 'my-secret' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForAuthMethod(
+					{ prompt: promptStub }
+				);
+
+			assert.strictEqual(promptStub.callCount, 2);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				clientId: clientId32,
+				clientSecret: 'my-secret',
+			});
+		});
+
+		it('should repeat prompt on invalid input then accept valid choice', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: 'invalid' })
+				.onSecondCall()
+				.resolves({ choice: '' })
+				.onCall(2)
+				.resolves({ choice: '1' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForAuthMethod(
+					{ prompt: promptStub }
+				);
+
+			assert.strictEqual(promptStub.callCount, 3);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: true,
+				clientId: DEFAULT_CLIENT_ID,
+				clientSecret: DEFAULT_CLIENT_SECRET,
+			});
+		});
+
+		it('should verify prompt message contains expected text', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: '1' });
+
+			await OAuthLoginCommand._test.promptForAuthMethod(
+				{ prompt: promptStub }
+			);
+
+			const promptConfig = promptStub.firstCall.args[0][0];
+			assert.include(promptConfig.message, 'How would you like to authenticate?');
+			assert.include(promptConfig.message, '[1] Log-in as a Box user (OAuth)');
+			assert.include(promptConfig.message, '[2] Use a Box Platform app');
+			assert.include(promptConfig.message, '[q] Quit');
+			assert.include(promptConfig.message, 'Enter 1, 2, or q:');
+		});
+
+		it('should return null when user enters q to quit', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: 'q' });
+
+			const result = await OAuthLoginCommand._test.promptForAuthMethod(
+				{ prompt: promptStub }
+			);
+
+			assert.strictEqual(result, null);
+		});
+
+		it('should return null when user enters Q to quit', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: 'Q' });
+
+			const result = await OAuthLoginCommand._test.promptForAuthMethod(
+				{ prompt: promptStub }
+			);
+
+			assert.strictEqual(result, null);
+		});
+
+		it('should use correct messages when prompting for Client ID and Secret', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: '2' })
+				.onSecondCall()
+				.resolves({ clientId: 'test-id' })
+				.onThirdCall()
+				.resolves({ clientSecret: 'test-secret' });
+
+			await OAuthLoginCommand._test.promptForAuthMethod(
+				{ prompt: promptStub }
+			);
+
+			const clientIdPromptConfig = promptStub.secondCall.args[0][0];
+			assert.strictEqual(clientIdPromptConfig.message, 'Enter the Client ID:');
+
+			const clientSecretPromptConfig = promptStub.thirdCall.args[0][0];
+			assert.strictEqual(clientSecretPromptConfig.message, 'Enter the Client Secret:');
+		});
+	});
+
+	describe('promptForCustomAppCredentials', function () {
+		it('should prompt for both client ID and secret when no client ID is given', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ clientId: ' my-client-id ' })
+				.onSecondCall()
+				.resolves({ clientSecret: 'my-secret' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForCustomAppCredentials(
+					{ prompt: promptStub }
+				);
+
+			assert.strictEqual(promptStub.callCount, 2);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				clientId: 'my-client-id',
+				clientSecret: 'my-secret',
+			});
+		});
+
+		it('should only prompt for secret when client ID is provided', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ clientSecret: 'my-secret' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForCustomAppCredentials(
+					{ prompt: promptStub },
+					'pre-filled-client-id'
+				);
+
+			assert.isTrue(promptStub.calledOnce);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				clientId: 'pre-filled-client-id',
+				clientSecret: 'my-secret',
+			});
+		});
+
+		it('should use correct prompt messages', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ clientId: 'cid' })
+				.onSecondCall()
+				.resolves({ clientSecret: 'cs' });
+
+			await OAuthLoginCommand._test.promptForCustomAppCredentials(
+				{ prompt: promptStub }
+			);
+
+			assert.strictEqual(promptStub.firstCall.args[0][0].message, 'Enter the Client ID:');
+			assert.strictEqual(promptStub.secondCall.args[0][0].message, 'Enter the Client Secret:');
 		});
 	});
 
