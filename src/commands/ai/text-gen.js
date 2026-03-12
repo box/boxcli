@@ -78,7 +78,7 @@ AiTextGenCommand.flags = {
 	items: Flags.string({
 		required: true,
 		description:
-			'The items to be processed by the LLM, often files. The array can include exactly one element.',
+			'Items for text generation. Format: id=FILE_ID,type=file (or content=TEXT,type=file). Supported keys: id, type, content. Exactly one item is supported.',
 		multiple: true,
 		parse(input) {
 			const item = {

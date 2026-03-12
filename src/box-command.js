@@ -1547,7 +1547,7 @@ class BoxCommand extends Command {
 			'invalid_grant - Refresh token has expired':
 				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.',
 			'Expired Auth: Auth code or refresh token has expired':
-				'Your auth code or refresh token has expired. Run "box login --reauthorize" to refresh your session, or "box login" to create a new environment.',
+				'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG: tokens are refreshed automatically, so this usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.',
 		};
 
 		for (const key in messageMap) {

@@ -3,6 +3,7 @@
 const BoxCommand = require('../box-command');
 const { Flags, Args } = require('@oclif/core');
 const _ = require('lodash');
+const os = require('node:os');
 const BoxCLIError = require('../cli-error');
 const PaginationUtilities = require('../pagination-utils');
 
@@ -36,11 +37,15 @@ class SearchCommand extends BoxCommand {
 		// Require at least a search query or metadata filters, unless running in bulk mode
 		// where parameters come from the bulk input file rather than command-line arguments.
 		if (!query && !hasMetadataFilters && !this.isBulk) {
+			const missingQueryMessage = [
+				'Missing required argument: [QUERY]',
+				'Usage: box search "your search terms"',
+				'Example: box search "quarterly report" --type file',
+				'Run: box search --help for all available filters.',
+			].join(os.EOL);
+
 			throw new BoxCLIError(
-				`Missing required argument: [QUERY]
-Usage: box search "your search terms"
-Example: box search "quarterly report" --type file
-Run: box search --help for all available filters.`
+				missingQueryMessage
 			);
 		}
 
