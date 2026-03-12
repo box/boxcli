@@ -8,7 +8,7 @@ Login options:
   (1) Official Box CLI App
       No app setup needed. Use --default-box-app (-d) to skip the prompt.
 
-  (2) Your own Platform OAuth app
+  (2) Your own Platform OAuth App
       Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
 
 Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.
@@ -70,7 +70,7 @@ DESCRIPTION
   (1) Official Box CLI App
   No app setup needed. Use --default-box-app (-d) to skip the prompt.
 
-  (2) Your own Platform OAuth app
+  (2) Your own Platform OAuth App
   Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
 
   Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is

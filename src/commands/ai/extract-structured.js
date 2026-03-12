@@ -52,7 +52,8 @@ AiExtractStructuredCommand.flags = {
 	...BoxCommand.flags,
 	items: Flags.string({
 		required: true,
-		description: 'The items that LLM will process.',
+		description:
+			'Items for structured extraction. Format: id=FILE_ID,type=file (or content=TEXT,type=file). Supported keys: id, type, content.',
 		multiple: true,
 		parse(input) {
 			const item = {
@@ -129,7 +130,8 @@ AiExtractStructuredCommand.flags = {
 	}),
 	fields: Flags.string({
 		multiple: true,
-		description: 'The fields to be extracted from the provided items.',
+		description:
+			'Fields to extract from the provided items. Use options=VALUE1;VALUE2 for multiSelect fields.',
 		parse(input) {
 			const fields = {};
 			const object = utilities.parseStringToObject(input, [
@@ -199,12 +201,12 @@ AiExtractStructuredCommand.flags = {
 	'ai-agent': Flags.string({
 		required: false,
 		description:
-			'The AI agent to be used for the structured extraction, provided as a JSON string. Example: {"type": "ai_agent_extract_structured", "basicText": {"model": "azure__openai__gpt_4o_mini", "promptTemplate": "Answer the question based on {content}"}}',
+			'AI agent configuration as JSON. Example: {"type":"ai_agent_extract_structured","basic_text":{"model":"azure__openai__gpt_4o_mini","prompt_template":"Answer the question based on {content}"}}',
 		parse(input) {
 			try {
 				return JSON.parse(input);
 			} catch (error) {
-				throw ('Error parsing AI agent ', error);
+				throw new Error(`Error parsing AI agent JSON: ${error.message}`);
 			}
 		},
 	}),

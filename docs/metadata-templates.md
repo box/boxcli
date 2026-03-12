@@ -42,7 +42,11 @@ ALIASES
   $ box metadata-templates:list
 
 EXAMPLES
-  $ box metadata-templates
+  $ box metadata-templates:list
+
+  $ box metadata-templates:list --json
+
+  $ box metadata-templates:list --fields templateKey,displayName,scope
 ```
 
 _See code: [src/commands/metadata-templates/index.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/metadata-templates/index.js)_
@@ -246,7 +250,11 @@ ALIASES
   $ box metadata-templates:list
 
 EXAMPLES
-  $ box metadata-templates
+  $ box metadata-templates:list
+
+  $ box metadata-templates:list --json
+
+  $ box metadata-templates:list --fields templateKey,displayName,scope
 ```
 
 ## `box metadata-templates:update TEMPLATEKEY`

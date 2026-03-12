@@ -126,7 +126,18 @@ class EnvironmentsAddCommand extends BoxCommand {
 // @NOTE: This command MUST skip client setup, since it is used to add the first environment
 EnvironmentsAddCommand.noClient = true;
 
-EnvironmentsAddCommand.description = 'Add a new Box environment';
+EnvironmentsAddCommand.description =
+	'Add a new Box environment from a Box app config file (JWT or CCG).\n' +
+	'Open your application in Box Developer Console to get/create config data:\n' +
+	'https://cloud.app.box.com/developers/console\n' +
+	'\n' +
+	'For OAuth (an alternative to server-side auth), add environment with: box login.\n' +
+	'Quick start: box login -d (logs the user in via the Box Official CLI App).';
+EnvironmentsAddCommand.examples = [
+	'box configure:environments:add ~/Downloads/my_app_config.json',
+	'box configure:environments:add ./config.json --name production --set-as-current',
+	'box configure:environments:add ./config.json --ccg-auth --name ci-bot',
+];
 
 EnvironmentsAddCommand.flags = {
 	...BoxCommand.minFlags,
@@ -144,7 +155,9 @@ EnvironmentsAddCommand.flags = {
 	}),
 	'ccg-auth': Flags.boolean({
 		description:
-			'Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and secret.',
+			'Add a CCG environment that will use a service account.\n' +
+			'Open your application in Box Developer Console and create this config JSON yourself.\n' +
+			'Required fields: boxAppSettings.clientID, boxAppSettings.clientSecret, enterpriseID.',
 	}),
 	'ccg-user': Flags.string({
 		description:
@@ -162,7 +175,13 @@ EnvironmentsAddCommand.args = {
 		name: 'path',
 		required: true,
 		hidden: false,
-		description: 'Provide a file path to configuration file',
+		description:
+			'Path to the Box app configuration JSON file.\n' +
+			'JWT: download this file from your application in Developer Console:\n' +
+			'https://cloud.app.box.com/developers/console\n' +
+			'CCG: create this JSON file yourself using values from your application\n' +
+			'in Developer Console (Client ID and Client Secret from Configuration tab,\n' +
+			'Enterprise ID from General Settings tab).',
 	}),
 };
 

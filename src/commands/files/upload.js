@@ -11,6 +11,9 @@ const DEBUG = require('../../debug');
 class FilesUploadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FilesUploadCommand);
+		if (!fs.existsSync(args.path)) {
+			throw new BoxCLIError(`File not found: ${args.path}. Please check the file path and try again.`);
+		}
 		let size = fs.statSync(args.path).size;
 		let folderID = flags['parent-id'];
 		let stream = createReadStream(args.path);
@@ -39,6 +42,12 @@ class FilesUploadCommand extends BoxCommand {
 			const body = response?.body;
 
 			if (!flags.overwrite || statusCode !== 409 || body?.code !== 'item_name_in_use') {
+				if (!flags.overwrite && statusCode === 409 && body?.code === 'item_name_in_use') {
+					throw new BoxCLIError(
+						'A file with the same name already exists in the destination folder. Use --overwrite to replace it with a new version.',
+						error
+					);
+				}
 				throw error;
 			}
 

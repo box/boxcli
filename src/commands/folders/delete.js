@@ -2,10 +2,16 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
+const BoxCLIError = require('../../cli-error');
 
 class FoldersDeleteCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersDeleteCommand);
+		if (args.id === '0') {
+			throw new BoxCLIError(
+				"Cannot delete folder '0': this is the root (All Files) folder and cannot be deleted."
+			);
+		}
 		let options = {};
 
 		if (Object.hasOwn(flags, 'recursive')) {

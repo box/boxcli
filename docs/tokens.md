@@ -37,7 +37,7 @@ _See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/
 
 ## `box tokens:get`
 
-Get a token. Returns the service account token by default
+Generate a new access token. Returns a service account token for the default environment unless --user-id is specified.
 
 ```
 USAGE
@@ -46,12 +46,18 @@ USAGE
 FLAGS
   -h, --help             Show CLI help
   -q, --quiet            Suppress any non-error output to stderr
-  -u, --user-id=<value>  Get a user token from a user ID
+  -u, --user-id=<value>  Generate a user token for the specified user ID
   -v, --verbose          Show verbose output, which can be helpful for debugging
       --no-color         Turn off colors for logging
 
 DESCRIPTION
-  Get a token. Returns the service account token by default
+  Generate a new access token. Returns a service account token for the default environment unless --user-id is
+  specified.
+
+EXAMPLES
+  $ box tokens:get
+
+  $ box tokens:get --user-id 12345
 ```
 
 _See code: [src/commands/tokens/get.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/tokens/get.js)_

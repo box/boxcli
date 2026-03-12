@@ -406,7 +406,7 @@ FLAGS
       --fields=<value>             Comma separated list of fields to show
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
-      --[no-]overwrite             Overwrite a file if it already exists
+      --[no-]overwrite             Overwrite a file if it already exists (prevents overwrite prompt)
       --save-as=<value>            The filename used when saving the file
       --save-to-file-path=<value>  Override default file path to save report
       --version=<value>            File version ID of the specific file version to download
@@ -1526,7 +1526,7 @@ FLAGS
       --fields=<value>             Comma separated list of fields to show
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
-      --[no-]overwrite             Overwrite a file if it already exists
+      --[no-]overwrite             Overwrite a file if it already exists (prevents overwrite prompt)
       --save-as=<value>            The filename used when saving the file
       --save-to-file-path=<value>  Override default file path to save report
 

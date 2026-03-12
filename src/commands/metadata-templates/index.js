@@ -15,7 +15,11 @@ MetadataTemplatesListCommand.aliases = ['metadata-templates:list'];
 
 MetadataTemplatesListCommand.description =
 	'Get all metadata templates in your Enterprise';
-MetadataTemplatesListCommand.examples = ['box metadata-templates'];
+MetadataTemplatesListCommand.examples = [
+	'box metadata-templates:list',
+	'box metadata-templates:list --json',
+	'box metadata-templates:list --fields templateKey,displayName,scope',
+];
 MetadataTemplatesListCommand._endpoint = 'get_metadata_templates_enterprise';
 
 MetadataTemplatesListCommand.flags = {

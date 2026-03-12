@@ -1546,6 +1546,8 @@ class BoxCommand extends Command {
 		let messageMap = {
 			'invalid_grant - Refresh token has expired':
 				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.',
+			'Expired Auth: Auth code or refresh token has expired':
+				'Your auth code or refresh token has expired. Run "box login --reauthorize" to refresh your session, or "box login" to create a new environment.',
 		};
 
 		for (const key in messageMap) {
@@ -1564,6 +1566,8 @@ class BoxCommand extends Command {
 	 * @returns {void}
 	 */
 	async catch(err) {
+		const AUTH_FAILED_HINT =
+			'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG: tokens are refreshed automatically, so a 401 usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.';
 		if (
 			err instanceof BoxTsErrors.BoxApiError &&
 			err.responseInfo &&
@@ -1571,6 +1575,9 @@ class BoxCommand extends Command {
 		) {
 			const responseInfo = err.responseInfo;
 			let errorMessage = `Unexpected API Response [${responseInfo.body.status} ${responseInfo.body.message} | ${responseInfo.body.request_id}] ${responseInfo.body.code} - ${responseInfo.body.message}`;
+			if (responseInfo.body.status === 401) {
+				errorMessage += `\n${AUTH_FAILED_HINT}`;
+			}
 			err = new BoxCLIError(errorMessage, err);
 		}
 		if (err instanceof BoxTsErrors.BoxSdkError) {
@@ -1610,9 +1617,14 @@ class BoxCommand extends Command {
 				// Remove \n with os.EOL
 				contextInfo = contextInfo.replaceAll('\n', os.EOL);
 			}
+			let statusHint = '';
+			const statusCode = error.statusCode || error.response?.statusCode;
+			if (statusCode === 401) {
+				statusHint = AUTH_FAILED_HINT;
+			}
 			let errorMsg = chalk`{redBright ${
 				this.flags && this.flags.verbose ? error.stack : error.message
-			}${os.EOL}${contextInfo ? contextInfo + os.EOL : ''}}`;
+			}${os.EOL}${contextInfo ? contextInfo + os.EOL : ''}${statusHint ? statusHint + os.EOL : ''}}`;
 
 			// Write the error message but let the process exit gracefully with error code so stderr gets written out
 			// @NOTE: Exiting the process in the callback enables tests to mock out stderr and run to completion!

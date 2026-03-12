@@ -29,6 +29,7 @@ class EnvironmentsGetCommand extends BoxCommand {
 
 // @NOTE: This command does not require a client to be set up
 EnvironmentsGetCommand.noClient = true;
+EnvironmentsGetCommand.aliases = ['configure:environments:list'];
 
 EnvironmentsGetCommand.description = 'Get a Box environment';
 

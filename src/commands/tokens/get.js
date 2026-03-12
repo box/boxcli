@@ -16,13 +16,17 @@ class TokensGetCommand extends BoxCommand {
 }
 
 TokensGetCommand.description =
-	'Get a token. Returns the service account token by default';
+	'Generate a new access token. Returns a service account token for the default environment unless --user-id is specified.';
+TokensGetCommand.examples = [
+	'box tokens:get',
+	'box tokens:get --user-id 12345',
+];
 
 TokensGetCommand.flags = {
 	...BoxCommand.minFlags,
 	'user-id': Flags.string({
 		char: 'u',
-		description: 'Get a user token from a user ID',
+		description: 'Generate a user token for the specified user ID',
 	}),
 };
 

@@ -254,7 +254,7 @@ describe('Folders', function () {
 	});
 
 	describe('folders:delete', function () {
-		let folderId = '0';
+		let folderId = '12345';
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api.delete(`/2.0/folders/${folderId}`).reply(204)
@@ -360,6 +360,17 @@ describe('Folders', function () {
 					);
 				}
 			);
+
+		test.stdout()
+			.stderr()
+			.command(['folders:delete', '0', '--no-color', '--token=test'])
+			.it('should fail for the root folder', (context) => {
+				assert.equal(
+					context.stderr,
+					`Cannot delete folder '0': this is the root (All Files) folder and cannot be deleted.${os.EOL}`
+				);
+				assert.equal(context.stdout, '');
+			});
 	});
 
 	leche.withData(

@@ -17,7 +17,8 @@ USAGE
     [--order-by <value>] [--limit <value>] [--marker <value>] [--extra-fields <value>]
 
 ARGUMENTS
-  FROM              The template used in the query. Must be in the form scope.templateKey
+  FROM              The template used in the query. Must be in the form scope.templateKey (for example
+                    enterprise_12345.contractTemplate)
   ANCESTORFOLDERID  The folder_id to which to restrain the query
 
 FLAGS
@@ -55,6 +56,8 @@ DESCRIPTION
 
 EXAMPLES
   $ box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts
+
+  $ box metadata-query enterprise_12345.contractTemplate 12345 --query "status = :status" --query-param status=active
 ```
 
 _See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/metadata-query.js)_

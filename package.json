@@ -1,6 +1,6 @@
 {
 	"name": "@box/cli",
-	"description": "Official command line interface for the Box API",
+	"description": "Official command line interface for the Box API\n  New here? Run: box login -d     Sign in with your Box account in seconds.\n  Already set up? Run: box help   Explore all commands.",
 	"keywords": [
 		"box",
 		"cli",
