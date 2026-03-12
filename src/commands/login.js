@@ -366,7 +366,7 @@ class OAuthLoginCommand extends BoxCommand {
 			this.info(
 				useDefaultBoxApp
 					? chalk`{yellow If authorization fails, verify that you are using one of the supported ports for the Official Box CLI app flow and restart the login command.}`
-					: chalk`{yellow If you are redirect to files view, please make sure that your Redirect URI is set up correctly and restart the login command.}`
+					: chalk`{yellow If you are redirected to the Files view, make sure your Redirect URI is configured correctly and restart the login command.}`
 			);
 		}
 		await new Promise((resolve) => setTimeout(resolve, 1000));
