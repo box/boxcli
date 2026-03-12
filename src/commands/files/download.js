@@ -36,7 +36,7 @@ class FilesDownloadCommand extends BoxCommand {
 			}
 
 			let shouldOverwrite = await this.confirm(
-				`File ${filePath} already exists — overwrite?`
+				`File ${filePath} already exists. Overwrite? (Use --overwrite or -y to skip this prompt.)`
 			);
 
 			if (!shouldOverwrite) {
@@ -114,7 +114,8 @@ FilesDownloadCommand.flags = {
 		default: true,
 	}),
 	overwrite: Flags.boolean({
-		description: 'Overwrite a file if it already exists',
+		description:
+			'Overwrite a file if it already exists (prevents overwrite prompt)',
 		allowNo: true,
 	}),
 	'save-as': Flags.string({

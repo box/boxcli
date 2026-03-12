@@ -6,6 +6,7 @@ Configure the Box CLI
 * [`box configure:environments:add PATH`](#box-configureenvironmentsadd-path)
 * [`box configure:environments:delete [NAME]`](#box-configureenvironmentsdelete-name)
 * [`box configure:environments:get`](#box-configureenvironmentsget)
+* [`box configure:environments:list`](#box-configureenvironmentslist)
 * [`box configure:environments:select [ID]`](#box-configureenvironmentsselect-id)
 * [`box configure:environments:set-current [ID]`](#box-configureenvironmentsset-current-id)
 * [`box configure:environments:switch-user [USERID]`](#box-configureenvironmentsswitch-user-userid)
@@ -14,7 +15,7 @@ Configure the Box CLI
 
 ## `box configure:environments:add PATH`
 
-Add a new Box environment
+Add a new Box environment from a Box app config file (JWT or CCG).
 
 ```
 USAGE
@@ -22,7 +23,13 @@ USAGE
     [--ccg-user <value> --ccg-auth]
 
 ARGUMENTS
-  PATH  Provide a file path to configuration file
+  PATH
+      Path to the Box app configuration JSON file.
+      JWT: download this file from your application in Developer Console:
+      https://cloud.app.box.com/developers/console
+      CCG: create this JSON file yourself using values from your application
+      in Developer Console (Client ID and Client Secret from Configuration tab,
+      Enterprise ID from General Settings tab).
 
 FLAGS
   -h, --help
@@ -38,8 +45,9 @@ FLAGS
       Show verbose output, which can be helpful for debugging
 
   --ccg-auth
-      Add a CCG environment that will use service account. You will have to provide enterprise ID with client id and
-      secret.
+      Add a CCG environment that will use a service account.
+      Open your application in Box Developer Console and create this config JSON yourself.
+      Required fields: boxAppSettings.clientID, boxAppSettings.clientSecret, enterpriseID.
 
   --ccg-user=<value>
       Provide an ID for a user for CCG. Use it to obtain user token. In order to enable generating user token you have to
@@ -57,7 +65,19 @@ FLAGS
       Set this new environment as your current environment
 
 DESCRIPTION
-  Add a new Box environment
+  Add a new Box environment from a Box app config file (JWT or CCG).
+  Open your application in Box Developer Console to get/create config data:
+  https://cloud.app.box.com/developers/console
+
+  For OAuth (an alternative to server-side auth), add environment with: box login.
+  Quick start: box login -d (logs the user in via the Box Official CLI App).
+
+EXAMPLES
+  $ box configure:environments:add ~/Downloads/my_app_config.json
+
+  $ box configure:environments:add ./config.json --name production --set-as-current
+
+  $ box configure:environments:add ./config.json --ccg-auth --name ci-bot
 ```
 
 _See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/add.js)_
@@ -103,9 +123,35 @@ FLAGS
 
 DESCRIPTION
   Get a Box environment
+
+ALIASES
+  $ box configure:environments:list
 ```
 
 _See code: [src/commands/configure/environments/get.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/configure/environments/get.js)_
+
+## `box configure:environments:list`
+
+Get a Box environment
+
+```
+USAGE
+  $ box configure:environments:list [--no-color] [-h] [-v] [-q] [-c | -n <value>]
+
+FLAGS
+  -c, --current       Get the current default Box environment
+  -h, --help          Show CLI help
+  -n, --name=<value>  Get a Box environment with this name
+  -q, --quiet         Suppress any non-error output to stderr
+  -v, --verbose       Show verbose output, which can be helpful for debugging
+      --no-color      Turn off colors for logging
+
+DESCRIPTION
+  Get a Box environment
+
+ALIASES
+  $ box configure:environments:list
+```
 
 ## `box configure:environments:select [ID]`
 

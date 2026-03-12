@@ -3,6 +3,7 @@
 const BoxCommand = require('../box-command');
 const { Flags, Args } = require('@oclif/core');
 const _ = require('lodash');
+const os = require('node:os');
 const BoxCLIError = require('../cli-error');
 const PaginationUtilities = require('../pagination-utils');
 
@@ -26,6 +27,27 @@ function parseMetadataValue(value) {
 class SearchCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(SearchCommand);
+		const hasVerboseMetadataFilters =
+			flags['md-filter-scope'] &&
+			flags['md-filter-template-key'] &&
+			flags['md-filter-json'];
+		const hasMetadataFilters = hasVerboseMetadataFilters || flags.mdfilter;
+		const query = args.query?.trim();
+
+		// Require at least a search query or metadata filters, unless running in bulk mode
+		// where parameters come from the bulk input file rather than command-line arguments.
+		if (!query && !hasMetadataFilters && !this.isBulk) {
+			const missingQueryMessage = [
+				'Missing required argument: [QUERY]',
+				'Usage: box search "your search terms"',
+				'Example: box search "quarterly report" --type file',
+				'Run: box search --help for all available filters.',
+			].join(os.EOL);
+
+			throw new BoxCLIError(
+				missingQueryMessage
+			);
+		}
 
 		if (flags.all && (flags.limit || flags['max-items'])) {
 			throw new BoxCLIError(
@@ -59,11 +81,7 @@ class SearchCommand extends BoxCommand {
 		if (flags['file-extensions']) {
 			options.file_extensions = flags['file-extensions'];
 		}
-		if (
-			flags['md-filter-scope'] &&
-			flags['md-filter-template-key'] &&
-			flags['md-filter-json']
-		) {
+		if (hasVerboseMetadataFilters) {
 			if (
 				flags['md-filter-scope'].length ===
 					flags['md-filter-template-key'].length &&
@@ -203,10 +221,7 @@ class SearchCommand extends BoxCommand {
 				flags['include-recent-shared-links'];
 		}
 
-		let results = await this.client.search.query(
-			args.query || null,
-			options
-		);
+		let results = await this.client.search.query(query || null, options);
 
 		await this.output(results);
 	}
@@ -255,7 +270,7 @@ SearchCommand.flags = {
 	}),
 	mdfilter: Flags.string({
 		description:
-			'Metadata value to filter on, in the format <scope>.<templateKey>.<field>=<value>',
+			'Metadata value to filter on, in the format <scope>.<templateKey>.<field>=<value>. For enterprise templates, scope is usually enterprise_<enterpriseID> (for example enterprise_123456).',
 		exclusive: [
 			'md-filter-scope',
 			'md-filter-template-key',

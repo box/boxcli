@@ -1991,10 +1991,9 @@ describe('Files', function () {
 			.it(
 				'should propagate 409 error when --overwrite flag is not passed',
 				(context) => {
-					assert.include(context.stderr, '409');
 					assert.include(
 						context.stderr,
-						'Item with the same name already exists'
+						'A file with the same name already exists in the destination folder. Use --overwrite to replace it with a new version.'
 					);
 				}
 			);

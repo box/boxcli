@@ -19,6 +19,15 @@ overview of how the Box API handles authentication.
 Ways to Authenticate
 --------------------
 
+Use this quick comparison to choose the right method:
+
+| Method | Best for | User interaction | Main setup command |
+|--------|----------|------------------|--------------------|
+| Developer Token | Quick local testing | Manual token copy/paste | Use `--token` on any command |
+| OAuth 2.0 (`box login`) | Interactive user workflows | Yes (browser auth) | `box login -d` (quick start) |
+| JWT | Server-to-server automation | No | `box configure:environments:add /path/to/config.json` |
+| CCG | Server-to-server automation (no keypair) | No | `box configure:environments:add /path/to/config.json --ccg-auth` |
+
 ### Developer Token
 
 A developer token is a token that you can generate directly from the [Box Developer Console][dev-console]. It provides a quick way to test API calls without setting up a full authentication flow.

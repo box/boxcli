@@ -43,7 +43,8 @@ AiAskCommand.flags = {
 	}),
 	items: Flags.string({
 		required: true,
-		description: 'The items for the AI request',
+		description:
+			'Items for the AI request. Format: id=FILE_ID,type=file (or content=TEXT,type=file). Supported keys: id, type, content.',
 		multiple: true,
 		parse(input) {
 			const item = {
@@ -84,12 +85,12 @@ AiAskCommand.flags = {
 	'ai-agent': Flags.string({
 		required: false,
 		description:
-			'The AI agent to be used for the ask, provided as a JSON string. Example: {"type": "ai_agent_ask", "basicText": {"model": "openai__gpt_3_5_turbo"}}',
+			'AI agent configuration as JSON. Example: {"type":"ai_agent_ask","basic_text":{"model":"azure__openai__gpt_4o_mini"}}',
 		parse(input) {
 			try {
 				return JSON.parse(input);
 			} catch (error) {
-				throw ('Error parsing AI agent ', error);
+				throw new Error(`Error parsing AI agent JSON: ${error.message}`);
 			}
 		},
 	}),

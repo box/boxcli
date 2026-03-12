@@ -49,7 +49,9 @@ FLAGS
       --include-recent-shared-links  Returns shared links that the user recently accessed
       --json                         Output formatted JSON
       --limit=<value>                Defines the maximum number of items to return. Default value is 100.
-      --mdfilter=<value>...          Metadata value to filter on, in the format <scope>.<templateKey>.<field>=<value>
+      --mdfilter=<value>...          Metadata value to filter on, in the format <scope>.<templateKey>.<field>=<value>.
+                                     For enterprise templates, scope is usually enterprise_<enterpriseID> (for example
+                                     enterprise_123456).
       --no-color                     Turn off colors for logging
       --owner-user-ids=<value>       Search for objects by owner. Requires a user ID or a set of comma-delimited user
                                      IDs

@@ -40,6 +40,13 @@ FLAGS
 
 DESCRIPTION
   Manually specify a Box API request
+
+EXAMPLES
+  $ box request /users/me
+
+  $ box request /folders/0/items --query "limit=5"
+
+  $ box request /folders -X POST --body '{"name":"New Folder","parent":{"id":"0"}}'
 ```
 
 _See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/request.js)_

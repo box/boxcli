@@ -75,6 +75,11 @@ class ManualRequestCommand extends BoxCommand {
 }
 
 ManualRequestCommand.description = 'Manually specify a Box API request';
+ManualRequestCommand.examples = [
+	'box request /users/me',
+	'box request /folders/0/items --query "limit=5"',
+	'box request /folders -X POST --body \'{"name":"New Folder","parent":{"id":"0"}}\'',
+];
 
 ManualRequestCommand.flags = {
 	...BoxCommand.flags,

@@ -58,6 +58,7 @@ MetadataQueryCommand.description =
 	'Create a search using SQL-like syntax to return items that match specific metadata';
 MetadataQueryCommand.examples = [
 	'box metadata-query enterprise_12345.someTemplate 5555 --query "amount >= :minAmount AND amount <= :maxAmount" --query-params minAmount=100f,maxAmount=200f --use-index amountAsc --order-by amount=ASC --extra-fields created_at,metadata.enterprise_1234.contracts',
+	'box metadata-query enterprise_12345.contractTemplate 12345 --query "status = :status" --query-param status=active',
 ];
 MetadataQueryCommand._endpoint = 'post_metadata_queries_execute_read';
 
@@ -143,7 +144,7 @@ MetadataQueryCommand.args = {
 		name: 'from',
 		required: true,
 		description:
-			'The template used in the query. Must be in the form scope.templateKey',
+			'The template used in the query. Must be in the form scope.templateKey (for example enterprise_12345.contractTemplate)',
 	}),
 	ancestorFolderId: Args.string({
 		name: 'ancestorFolderId',
