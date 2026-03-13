@@ -36,10 +36,12 @@ const inquirer = require('./inquirer');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
 let keytar = null;
+let keytarLoadError = null;
 try {
 	keytar = require('keytar');
-} catch {
+} catch (error) {
 	// keytar cannot be imported because the library is not provided for this operating system / architecture
+	keytarLoadError = error;
 }
 
 const DEBUG = require('./debug');
@@ -98,6 +100,24 @@ const ENVIRONMENTS_FILE_PATH = path.join(
 );
 
 const DEFAULT_ANALYTICS_CLIENT_NAME = 'box-cli';
+
+/**
+ * Convert error objects to a stable debug-safe shape.
+ *
+ * @param {unknown} error A caught error object
+ * @returns {Object} A reduced object for DEBUG logging
+ */
+function getDebugErrorDetails(error) {
+	if (!error || typeof error !== 'object') {
+		return { message: String(error) };
+	}
+	return {
+		name: error.name || 'Error',
+		code: error.code,
+		message: error.message || String(error),
+		stack: error.stack,
+	};
+}
 
 /**
  * Parse a string value from CSV into the correct boolean value
@@ -302,6 +322,27 @@ class BoxCommand extends Command {
 
 		this.supportsSecureStorage =
 			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
+		DEBUG.init('Secure storage diagnostic %O', {
+			platform: process.platform,
+			arch: process.arch,
+			node: process.version,
+			keytarLoaded: Boolean(keytar),
+			supportsSecureStorage: this.supportsSecureStorage,
+		});
+		if (!this.supportsSecureStorage) {
+			if (!['darwin', 'win32', 'linux'].includes(process.platform)) {
+				DEBUG.init(
+					'Secure storage disabled: unsupported platform "%s"',
+					process.platform
+				);
+			}
+			if (!keytar) {
+				DEBUG.init(
+					'Secure storage disabled: failed to load keytar %O',
+					getDebugErrorDetails(keytarLoadError)
+				);
+			}
+		}
 
 		let { flags, args } = await this.parse(this.constructor);
 
@@ -1811,32 +1852,58 @@ class BoxCommand extends Command {
 	async getEnvironments() {
 		// Try secure storage first on supported platforms
 		if (this.supportsSecureStorage) {
+			DEBUG.init(
+				'Attempting secure storage read from keytar service="%s" account="%s"',
+				'boxcli',
+				'Box'
+			);
 			try {
 				const password = await keytar.getPassword(
 					'boxcli' /* service */,
 					'Box' /* account */
 				);
 				if (password) {
+					DEBUG.init(
+						'Successfully loaded environments from secure storage'
+					);
 					return JSON.parse(password);
 				}
+				DEBUG.init(
+					'Secure storage lookup returned empty result for service="%s" account="%s"',
+					'boxcli',
+					'Box'
+				);
 			} catch (error) {
 				DEBUG.init(
-					'Failed to read from secure storage, falling back to file: %s',
-					error.message
+					'Failed to read from secure storage, falling back to file: %O',
+					getDebugErrorDetails(error)
 				);
 				// fallback to env file
 			}
+		} else {
+			DEBUG.init(
+				'Skipping secure storage read because supportsSecureStorage=%s',
+				this.supportsSecureStorage
+			);
 		}
 
 		// Try to read from file (fallback or no secure storage)
 		try {
 			if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
+				DEBUG.init(
+					'Attempting environments fallback file read at %s',
+					ENVIRONMENTS_FILE_PATH
+				);
 				return JSON.parse(fs.readFileSync(ENVIRONMENTS_FILE_PATH));
 			}
+			DEBUG.init(
+				'Environments fallback file does not exist at %s',
+				ENVIRONMENTS_FILE_PATH
+			);
 		} catch (error) {
 			DEBUG.init(
-				'Failed to read environments from file: %s',
-				error.message
+				'Failed to read environments from file: %O',
+				getDebugErrorDetails(error)
 			);
 		}
 
@@ -1863,6 +1930,11 @@ class BoxCommand extends Command {
 
 		// Try secure storage first on supported platforms
 		if (this.supportsSecureStorage) {
+			DEBUG.init(
+				'Attempting secure storage write to keytar service="%s" account="%s"',
+				'boxcli',
+				'Box'
+			);
 			try {
 				await keytar.setPassword(
 					'boxcli' /* service */,
@@ -1883,10 +1955,15 @@ class BoxCommand extends Command {
 			} catch (keytarError) {
 				// fallback to file storage if secure storage fails
 				DEBUG.init(
-					'Could not store credentials in secure storage, falling back to file: %s',
-					keytarError.message
+					'Could not store credentials in secure storage, falling back to file: %O',
+					getDebugErrorDetails(keytarError)
 				);
 			}
+		} else {
+			DEBUG.init(
+				'Skipping secure storage write because supportsSecureStorage=%s',
+				this.supportsSecureStorage
+			);
 		}
 
 		// Write to file if secure storage failed or not available

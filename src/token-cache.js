@@ -10,10 +10,30 @@ const utilities = require('./util');
 const DEBUG = require('./debug');
 
 let keytar = null;
+let keytarLoadError = null;
 try {
 	keytar = require('keytar');
-} catch {
+} catch (error) {
 	// keytar cannot be imported because the library is not provided for this operating system / architecture
+	keytarLoadError = error;
+}
+
+/**
+ * Convert error objects to a stable debug-safe shape.
+ *
+ * @param {unknown} error A caught error object
+ * @returns {Object} A reduced object for DEBUG logging
+ */
+function getDebugErrorDetails(error) {
+	if (!error || typeof error !== 'object') {
+		return { message: String(error) };
+	}
+	return {
+		name: error.name || 'Error',
+		code: error.code,
+		message: error.message || String(error),
+		stack: error.stack,
+	};
 }
 
 /**
@@ -37,6 +57,15 @@ class CLITokenCache {
 		this.keytarAccount = 'Box';
 		this.supportsSecureStorage =
 			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
+		if (!this.supportsSecureStorage) {
+			DEBUG.init('Token cache secure storage disabled %O', {
+				platform: process.platform,
+				arch: process.arch,
+				node: process.version,
+				keytarLoaded: Boolean(keytar),
+				keytarLoadError: getDebugErrorDetails(keytarLoadError),
+			});
+		}
 	}
 
 	/**
@@ -67,18 +96,26 @@ class CLITokenCache {
 						}
 					}
 					// Token not in secure storage, try file
+					DEBUG.init(
+						'No token found in secure storage for environment: %s; trying file cache',
+						this.environmentName
+					);
 					return this._readFromFile(callback);
 				})
 				.catch((error) => {
 					DEBUG.init(
-						'Failed to read from secure storage, falling back to file: %s',
-						error.message
+						'Failed to read from secure storage, falling back to file: %O',
+						getDebugErrorDetails(error)
 					);
 					// Fall back to file-based storage
 					this._readFromFile(callback);
 				});
 		} else {
 			// Secure storage not available, use file
+			DEBUG.init(
+				'Secure storage unavailable for token cache; reading token from file for environment: %s',
+				this.environmentName
+			);
 			this._readFromFile(callback);
 		}
 	}
@@ -140,9 +177,9 @@ class CLITokenCache {
 				})
 				.catch((error) => {
 					DEBUG.init(
-						'Failed to write to secure storage for environment %s, falling back to file: %s',
+						'Failed to write to secure storage for environment %s, falling back to file: %O',
 						this.environmentName,
-						error.message
+						getDebugErrorDetails(error)
 					);
 					if (process.platform === 'linux') {
 						DEBUG.init(
@@ -154,6 +191,10 @@ class CLITokenCache {
 				});
 		} else {
 			// Secure storage not available, use file
+			DEBUG.init(
+				'Secure storage unavailable for token cache; writing token to file for environment: %s',
+				this.environmentName
+			);
 			this._writeToFile(output, callback);
 		}
 	}
