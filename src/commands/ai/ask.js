@@ -90,7 +90,9 @@ AiAskCommand.flags = {
 			try {
 				return JSON.parse(input);
 			} catch (error) {
-				throw new Error(`Error parsing AI agent JSON: ${error.message}`);
+				throw new Error(
+					`Error parsing AI agent JSON: ${error.message}`
+				);
 			}
 		},
 	}),

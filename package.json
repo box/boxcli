@@ -73,6 +73,7 @@
 		"nyc": "^17.1.0",
 		"oclif": "^4.22.38",
 		"prettier": "^3.6.2",
+		"signal-exit": "^4.1.0",
 		"sinon": "^19.0.2",
 		"standard-version": "^9.5.0",
 		"typescript": "^5.7.2"

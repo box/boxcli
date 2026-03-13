@@ -3,7 +3,7 @@
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const BoxCLIError = require('../../../cli-error');
-const inquirer = require('inquirer');
+const inquirer = require('../../../inquirer');
 
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
