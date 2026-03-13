@@ -441,14 +441,17 @@ describe('Search', function () {
 
 		test.stderr()
 			.command(['search', '--no-color', '--token=test'])
-			.it('when query is missing and no metadata filters are provided', (context) => {
-				assert.equal(
-					context.stderr,
-					`Missing required argument: [QUERY]${os.EOL}` +
-						`Usage: box search "your search terms"${os.EOL}` +
-						`Example: box search "quarterly report" --type file${os.EOL}` +
-						`Run: box search --help for all available filters.${os.EOL}`
-				);
-			});
+			.it(
+				'when query is missing and no metadata filters are provided',
+				(context) => {
+					assert.equal(
+						context.stderr,
+						`Missing required argument: [QUERY]${os.EOL}` +
+							`Usage: box search "your search terms"${os.EOL}` +
+							`Example: box search "quarterly report" --type file${os.EOL}` +
+							`Run: box search --help for all available filters.${os.EOL}`
+					);
+				}
+			);
 	});
 });
