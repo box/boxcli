@@ -27,7 +27,7 @@ class AiExtractCommand extends BoxCommand {
 }
 
 AiExtractCommand.description =
-	'Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs';
+	'Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs. This is intended for direct use, not by AI agents.';
 AiExtractCommand.examples = [
 	'box ai:extract --items=id=12345,type=file --prompt "firstName, lastName, location, yearOfBirth, company"',
 	'box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai-agent \'{"type":"ai_agent_extract","basic_text":{"model":"azure__openai__gpt_4o_mini"}}\'',

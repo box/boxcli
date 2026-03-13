@@ -41,7 +41,7 @@ class AiExtractStructuredCommand extends BoxCommand {
 }
 
 AiExtractStructuredCommand.description =
-	'Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs. For this request, you either need a metadata template or a list of fields you want to extract. Input is either a metadata template or a list of fields to ensure the structure.';
+	'Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs. For this request, you either need a metadata template or a list of fields you want to extract. Input is either a metadata template or a list of fields to ensure the structure. This is intended for direct use, not by AI agents.';
 AiExtractStructuredCommand.examples = [
 	'box ai:extract-structured --items="id=12345,type=file" --fields "key=hobby,type=multiSelect,description=Person hobby,prompt=What is your hobby?,displayName=Hobby,options=Guitar;Books"',
 	'box ai:extract-structured --items="id=12345,type=file" --metadata-template="type=metadata_template,scope=enterprise,template_key=test" --ai-agent \'{"type":"ai_agent_extract_structured","basic_text":{"model":"azure__openai__gpt_4o_mini","prompt_template":"Answer using the provided content"}}\'',

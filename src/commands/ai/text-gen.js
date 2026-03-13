@@ -26,7 +26,7 @@ class AiTextGenCommand extends BoxCommand {
 }
 
 AiTextGenCommand.description =
-	'Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text.';
+	'Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text. This is intended for direct use, not by AI agents.';
 AiTextGenCommand.examples = [
 	'box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"',
 ];
