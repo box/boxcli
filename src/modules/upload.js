@@ -25,22 +25,18 @@ function runChunkedUpload(uploader, size) {
 	uploader.on('chunkUploaded', (chunk) => {
 		bytesUploaded += chunk.part.size;
 		progressBar.update(bytesUploaded, {
-			speed: Math.floor(
-				bytesUploaded / (Date.now() - startTime) / 1000
-			),
+			speed: Math.floor(bytesUploaded / (Date.now() - startTime) / 1000),
 		});
 	});
 	return uploader.start();
 }
 
-async function uploadFile(client, { folderID, name, stream, size, fileAttributes }) {
+async function uploadFile(
+	client,
+	{ folderID, name, stream, size, fileAttributes }
+) {
 	if (size < CHUNKED_UPLOAD_FILE_SIZE) {
-		return client.files.uploadFile(
-			folderID,
-			name,
-			stream,
-			fileAttributes
-		);
+		return client.files.uploadFile(folderID, name, stream, fileAttributes);
 	}
 	const uploader = await client.files.getChunkedUploader(
 		folderID,
@@ -52,7 +48,10 @@ async function uploadFile(client, { folderID, name, stream, size, fileAttributes
 	return runChunkedUpload(uploader, size);
 }
 
-async function uploadNewFileVersion(client, { fileID, stream, size, fileAttributes }) {
+async function uploadNewFileVersion(
+	client,
+	{ fileID, stream, size, fileAttributes }
+) {
 	if (size < CHUNKED_UPLOAD_FILE_SIZE) {
 		return client.files.uploadNewFileVersion(
 			fileID,

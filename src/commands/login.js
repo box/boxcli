@@ -9,7 +9,7 @@ const CLITokenCache = require('../token-cache');
 const package_ = require('../../package.json');
 const chalk = require('chalk');
 const express = require('express');
-const inquirer = require('inquirer');
+const inquirer = require('../inquirer');
 const path = require('node:path');
 const ora = require('ora');
 const http = require('node:http');
@@ -89,7 +89,10 @@ async function promptForAuthMethod(inquirerModule) {
 			trimmedChoice.length > CLIENT_ID_MIN_LENGTH &&
 			trimmedChoice.length < CLIENT_ID_MAX_LENGTH
 		) {
-			return promptForPlatformAppCredentials(inquirerModule, trimmedChoice);
+			return promptForPlatformAppCredentials(
+				inquirerModule,
+				trimmedChoice
+			);
 		}
 
 		// Invalid input — repeat the prompt

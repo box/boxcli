@@ -5,14 +5,20 @@ const { Flags, Args } = require('@oclif/core');
 const fs = require('node:fs');
 const path = require('node:path');
 const BoxCLIError = require('../../cli-error');
-const { createReadStream, uploadFile, uploadNewFileVersion } = require('../../modules/upload');
+const {
+	createReadStream,
+	uploadFile,
+	uploadNewFileVersion,
+} = require('../../modules/upload');
 const DEBUG = require('../../debug');
 
 class FilesUploadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FilesUploadCommand);
 		if (!fs.existsSync(args.path)) {
-			throw new BoxCLIError(`File not found: ${args.path}. Please check the file path and try again.`);
+			throw new BoxCLIError(
+				`File not found: ${args.path}. Please check the file path and try again.`
+			);
 		}
 		let size = fs.statSync(args.path).size;
 		let folderID = flags['parent-id'];
@@ -41,8 +47,16 @@ class FilesUploadCommand extends BoxCommand {
 			const { statusCode, response } = error;
 			const body = response?.body;
 
-			if (!flags.overwrite || statusCode !== 409 || body?.code !== 'item_name_in_use') {
-				if (!flags.overwrite && statusCode === 409 && body?.code === 'item_name_in_use') {
+			if (
+				!flags.overwrite ||
+				statusCode !== 409 ||
+				body?.code !== 'item_name_in_use'
+			) {
+				if (
+					!flags.overwrite &&
+					statusCode === 409 &&
+					body?.code === 'item_name_in_use'
+				) {
 					throw new BoxCLIError(
 						'A file with the same name already exists in the destination folder. Use --overwrite to replace it with a new version.',
 						error
@@ -62,7 +76,9 @@ class FilesUploadCommand extends BoxCommand {
 				);
 			}
 
-			DEBUG.output(`File already exists in folder; uploading as new version of file ${existingFileID}`);
+			DEBUG.output(
+				`File already exists in folder; uploading as new version of file ${existingFileID}`
+			);
 
 			// Re-create the stream since the first attempt consumed it
 			const versionStream = createReadStream(args.path);
@@ -79,7 +95,8 @@ class FilesUploadCommand extends BoxCommand {
 	}
 }
 
-FilesUploadCommand.description = 'Upload a file to a folder. Use --overwrite to automatically replace an existing file with the same name by uploading a new version';
+FilesUploadCommand.description =
+	'Upload a file to a folder. Use --overwrite to automatically replace an existing file with the same name by uploading a new version';
 FilesUploadCommand.examples = [
 	'box files:upload /path/to/file.pdf --parent-id 22222',
 	'box files:upload /path/to/file.pdf --parent-id 22222 --overwrite',

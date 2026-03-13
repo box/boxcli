@@ -1946,9 +1946,9 @@ describe('Files', function () {
 				request_id: 'abc123',
 				context_info: {
 					conflicts: {
-							type: 'file',
-							id: existingFileId,
-							name: testFileName,
+						type: 'file',
+						id: existingFileId,
+						name: testFileName,
 					},
 				},
 			};

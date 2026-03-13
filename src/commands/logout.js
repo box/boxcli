@@ -4,7 +4,7 @@ const BoxCommand = require('../box-command');
 const BoxSDK = require('box-node-sdk').default;
 const CLITokenCache = require('../token-cache');
 const chalk = require('chalk');
-const inquirer = require('inquirer');
+const inquirer = require('../inquirer');
 const pkg = require('../../package.json');
 const { Flags } = require('@oclif/core');
 
