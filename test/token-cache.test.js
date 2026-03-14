@@ -55,27 +55,20 @@ describe('CLITokenCache', function () {
 			expect(tokenCache.filePath).to.equal(testFilePath);
 		});
 
-		it('should set correct keytar service name', function () {
-			expect(tokenCache.keytarService).to.equal(
+		it('should set correct secure storage service name', function () {
+			expect(tokenCache.serviceName).to.equal(
 				`boxcli-token-${testEnvName}`
 			);
 		});
 
-		it('should set keytar account name', function () {
-			expect(tokenCache.keytarAccount).to.equal('Box');
+		it('should set secure storage account name', function () {
+			expect(tokenCache.accountName).to.equal('Box');
 		});
 
 		it('should detect secure storage support on supported platforms', function () {
-			let keytar = null;
-			try {
-				keytar = require('keytar');
-			} catch {
-				// keytar cannot be imported because the library is not provided for this operating system / architecture
-			}
-			const supportedPlatforms = ['darwin', 'win32', 'linux'];
-			const isSupportedOS = supportedPlatforms.includes(process.platform);
+			const secureStorage = require('../src/secure-storage');
 			expect(tokenCache.supportsSecureStorage).to.equal(
-				keytar && isSupportedOS
+				secureStorage.available
 			);
 		});
 	});
@@ -344,12 +337,12 @@ describe('CLITokenCache', function () {
 			});
 		});
 
-		it('should use different keytar service names for different environments', function () {
+		it('should use different service names for different environments', function () {
 			const env1Cache = new CLITokenCache('production');
 			const env2Cache = new CLITokenCache('development');
 
-			expect(env1Cache.keytarService).to.equal('boxcli-token-production');
-			expect(env2Cache.keytarService).to.equal(
+			expect(env1Cache.serviceName).to.equal('boxcli-token-production');
+			expect(env2Cache.serviceName).to.equal(
 				'boxcli-token-development'
 			);
 		});
@@ -401,9 +394,8 @@ describe('CLITokenCache', function () {
 			}
 
 			const unlinkStub = sinon.stub(utilities, 'unlinkAsync').resolves();
-			const keytar = require('keytar');
 			const deletePasswordStub = sinon
-				.stub(keytar, 'deletePassword')
+				.stub(tokenCache.secureStorage, 'deletePassword')
 				.rejects(
 					Object.assign(new Error('Permission denied'), {
 						code: 'EACCES',
@@ -428,15 +420,12 @@ describe('CLITokenCache', function () {
 				this.skip();
 			}
 
-			// Mock keytar to simulate failure
-			const keytar = require('keytar');
 			const setPasswordStub = sinon
-				.stub(keytar, 'setPassword')
+				.stub(tokenCache.secureStorage, 'setPassword')
 				.rejects(new Error('Secure storage unavailable'));
 
 			tokenCache.write(testTokenInfo, (error) => {
 				expect(error).to.be.undefined;
-				// Should fallback to file
 				expect(fs.existsSync(testFilePath)).to.be.true;
 
 				setPasswordStub.restore();
@@ -449,7 +438,6 @@ describe('CLITokenCache', function () {
 				this.skip();
 			}
 
-			// Create a file-based token
 			const boxDir = path.join(os.homedir(), '.box');
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
@@ -460,10 +448,8 @@ describe('CLITokenCache', function () {
 				'utf8'
 			);
 
-			// Mock keytar to simulate failure
-			const keytar = require('keytar');
 			const getPasswordStub = sinon
-				.stub(keytar, 'getPassword')
+				.stub(tokenCache.secureStorage, 'getPassword')
 				.rejects(new Error('Secure storage unavailable'));
 
 			tokenCache.read((error, tokenInfo) => {

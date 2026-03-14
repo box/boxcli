@@ -1,7 +1,7 @@
 `box ai`
 ========
 
-Sends an AI request to supported LLMs and returns an answer
+Sends a request to supported LLMs using Box AI. This is intended for direct use, not by AI agents.
 
 * [`box ai:ask`](#box-aiask)
 * [`box ai:extract`](#box-aiextract)
@@ -10,7 +10,7 @@ Sends an AI request to supported LLMs and returns an answer
 
 ## `box ai:ask`
 
-Sends an AI request to supported LLMs and returns an answer
+Sends a request to supported LLMs using Box AI. This is intended for direct use, not by AI agents.
 
 ```
 USAGE
@@ -39,7 +39,7 @@ FLAGS
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
-  Sends an AI request to supported LLMs and returns an answer
+  Sends a request to supported LLMs using Box AI. This is intended for direct use, not by AI agents.
 
 EXAMPLES
   $ box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
@@ -49,7 +49,7 @@ _See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v4.5.0/sr
 
 ## `box ai:extract`
 
-Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs
+Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs. This is intended for direct use, not by AI agents.
 
 ```
 USAGE
@@ -79,7 +79,8 @@ FLAGS
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
-  Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs
+  Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs. This
+  is intended for direct use, not by AI agents.
 
 EXAMPLES
   $ box ai:extract --items=id=12345,type=file --prompt "firstName, lastName, location, yearOfBirth, company"
@@ -91,7 +92,7 @@ _See code: [src/commands/ai/extract.js](https://github.com/box/boxcli/blob/v4.5.
 
 ## `box ai:extract-structured`
 
-Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs. For this request, you either need a metadata template or a list of fields you want to extract. Input is either a metadata template or a list of fields to ensure the structure.
+Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs. For this request, you either need a metadata template or a list of fields you want to extract. Input is either a metadata template or a list of fields to ensure the structure. This is intended for direct use, not by AI agents.
 
 ```
 USAGE
@@ -124,7 +125,7 @@ FLAGS
 DESCRIPTION
   Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value
   pairs. For this request, you either need a metadata template or a list of fields you want to extract. Input is either
-  a metadata template or a list of fields to ensure the structure.
+  a metadata template or a list of fields to ensure the structure. This is intended for direct use, not by AI agents.
 
 EXAMPLES
   $ box ai:extract-structured --items="id=12345,type=file" --fields "key=hobby,type=multiSelect,description=Person hobby,prompt=What is your hobby?,displayName=Hobby,options=Guitar;Books"
@@ -136,7 +137,7 @@ _See code: [src/commands/ai/extract-structured.js](https://github.com/box/boxcli
 
 ## `box ai:text-gen`
 
-Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text.
+Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text. This is intended for direct use, not by AI agents.
 
 ```
 USAGE
@@ -165,7 +166,8 @@ FLAGS
       --save-to-file-path=<value>    Override default file path to save report
 
 DESCRIPTION
-  Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text.
+  Sends an AI request to supported LLMs and returns an answer specifically focused on the creation of new text. This is
+  intended for direct use, not by AI agents.
 
 EXAMPLES
   $ box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"

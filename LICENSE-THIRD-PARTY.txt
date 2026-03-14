@@ -279,11 +279,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -----------
 
-The following npm package may be included in this product:
+The following npm packages may be included in this product:
 
  - statuses@2.0.1
+ - statuses@2.0.2
 
-This package contains the following license:
+These packages each contain the following license:
 
 The MIT License (MIT)
 
@@ -371,11 +372,12 @@ THE SOFTWARE.
 
 -----------
 
-The following npm package may be included in this product:
+The following npm packages may be included in this product:
 
  - http-errors@2.0.0
+ - http-errors@2.0.1
 
-This package contains the following license:
+These packages each contain the following license:
 
 The MIT License (MIT)
 
@@ -1931,7 +1933,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - body-parser@1.20.3
+ - body-parser@1.20.4
  - type-is@1.6.18
 
 These packages each contain the following license:
@@ -2813,7 +2815,7 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @cypress/request@3.0.9
+ - @cypress/request@3.0.10
  - aws-sign2@0.7.0
  - forever-agent@0.6.1
  - tunnel-agent@0.6.0
@@ -3136,12 +3138,11 @@ Apache-2.0
 
 -----------
 
-The following npm packages may be included in this product:
+The following npm package may be included in this product:
 
- - qs@6.13.0
- - qs@6.14.0
+ - qs@6.14.2
 
-These packages each contain the following license:
+This package contains the following license:
 
 BSD 3-Clause License
 
@@ -4147,7 +4148,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - basic-ftp@5.0.5
+ - basic-ftp@5.2.0
 
 This package contains the following license:
 
@@ -4858,7 +4859,7 @@ IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - lodash@4.17.21
+ - lodash@4.17.23
 
 This package contains the following license:
 
@@ -5234,6 +5235,7 @@ The following npm packages may be included in this product:
  - csv-stringify@6.6.0
  - degenerator@5.0.1
  - isarray@1.0.0
+ - keychain@1.5.0
  - netmask@2.0.2
  - tr46@0.0.3
  - undici-types@5.26.5
@@ -6719,7 +6721,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following npm package may be included in this product:
 
- - diff@4.0.2
+ - diff@4.0.4
 
 This package contains the following license:
 
@@ -6906,8 +6908,8 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - minimatch@5.1.6
- - minimatch@9.0.5
+ - minimatch@5.1.9
+ - minimatch@9.0.9
 
 These packages each contain the following license:
 
@@ -7057,7 +7059,7 @@ The following npm packages may be included in this product:
  - ini@1.3.8
  - isexe@2.0.0
  - json-stringify-safe@5.0.1
- - minimatch@3.1.2
+ - minimatch@3.1.5
  - mute-stream@0.0.8
  - mute-stream@2.0.0
  - once@1.4.0
@@ -7445,7 +7447,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - raw-body@2.5.2
+ - raw-body@2.5.3
 
 This package contains the following license:
 
@@ -8113,7 +8115,7 @@ THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - ajv@6.12.6
+ - ajv@6.14.0
 
 This package contains the following license:
 
