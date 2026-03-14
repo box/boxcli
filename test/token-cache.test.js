@@ -66,16 +66,9 @@ describe('CLITokenCache', function () {
 		});
 
 		it('should detect secure storage support on supported platforms', function () {
-			let keytar = null;
-			try {
-				keytar = require('keytar');
-			} catch {
-				// keytar cannot be imported because the library is not provided for this operating system / architecture
-			}
-			const supportedPlatforms = ['darwin', 'win32', 'linux'];
-			const isSupportedOS = supportedPlatforms.includes(process.platform);
+			const secureStorage = require('../src/secure-storage');
 			expect(tokenCache.supportsSecureStorage).to.equal(
-				keytar && isSupportedOS
+				secureStorage.available
 			);
 		});
 	});
@@ -401,9 +394,9 @@ describe('CLITokenCache', function () {
 			}
 
 			const unlinkStub = sinon.stub(utilities, 'unlinkAsync').resolves();
-			const keytar = require('keytar');
+			const secureStorage = require('../src/secure-storage');
 			const deletePasswordStub = sinon
-				.stub(keytar, 'deletePassword')
+				.stub(secureStorage, 'deletePassword')
 				.rejects(
 					Object.assign(new Error('Permission denied'), {
 						code: 'EACCES',
@@ -428,15 +421,13 @@ describe('CLITokenCache', function () {
 				this.skip();
 			}
 
-			// Mock keytar to simulate failure
-			const keytar = require('keytar');
+			const secureStorage = require('../src/secure-storage');
 			const setPasswordStub = sinon
-				.stub(keytar, 'setPassword')
+				.stub(secureStorage, 'setPassword')
 				.rejects(new Error('Secure storage unavailable'));
 
 			tokenCache.write(testTokenInfo, (error) => {
 				expect(error).to.be.undefined;
-				// Should fallback to file
 				expect(fs.existsSync(testFilePath)).to.be.true;
 
 				setPasswordStub.restore();
@@ -449,7 +440,6 @@ describe('CLITokenCache', function () {
 				this.skip();
 			}
 
-			// Create a file-based token
 			const boxDir = path.join(os.homedir(), '.box');
 			if (!fs.existsSync(boxDir)) {
 				fs.mkdirSync(boxDir, { recursive: true });
@@ -460,10 +450,9 @@ describe('CLITokenCache', function () {
 				'utf8'
 			);
 
-			// Mock keytar to simulate failure
-			const keytar = require('keytar');
+			const secureStorage = require('../src/secure-storage');
 			const getPasswordStub = sinon
-				.stub(keytar, 'getPassword')
+				.stub(secureStorage, 'getPassword')
 				.rejects(new Error('Secure storage unavailable'));
 
 			tokenCache.read((error, tokenInfo) => {

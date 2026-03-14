@@ -35,14 +35,7 @@ const pkg = require('../package.json');
 const inquirer = require('./inquirer');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
-let keytar = null;
-let keytarLoadError = null;
-try {
-	keytar = require('keytar');
-} catch (error) {
-	// keytar cannot be imported because the library is not provided for this operating system / architecture
-	keytarLoadError = error;
-}
+const secureStorage = require('./secure-storage');
 
 const DEBUG = require('./debug');
 const stream = require('node:stream');
@@ -98,6 +91,8 @@ const ENVIRONMENTS_FILE_PATH = path.join(
 	CONFIG_FOLDER_PATH,
 	'box_environments.json'
 );
+const ENVIRONMENTS_KEYCHAIN_SERVICE = 'boxcli';
+const ENVIRONMENTS_KEYCHAIN_ACCOUNT = 'Box';
 
 const DEFAULT_ANALYTICS_CLIENT_NAME = 'box-cli';
 
@@ -320,29 +315,7 @@ class BoxCommand extends Command {
 			this.disableRequiredArgsAndFlags();
 		}
 
-		this.supportsSecureStorage =
-			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
-		DEBUG.init('Secure storage diagnostic %O', {
-			platform: process.platform,
-			arch: process.arch,
-			node: process.version,
-			keytarLoaded: Boolean(keytar),
-			supportsSecureStorage: this.supportsSecureStorage,
-		});
-		if (!this.supportsSecureStorage) {
-			if (!['darwin', 'win32', 'linux'].includes(process.platform)) {
-				DEBUG.init(
-					'Secure storage disabled: unsupported platform "%s"',
-					process.platform
-				);
-			}
-			if (!keytar) {
-				DEBUG.init(
-					'Secure storage disabled: failed to load keytar %O',
-					getDebugErrorDetails(keytarLoadError)
-				);
-			}
-		}
+		this.supportsSecureStorage = secureStorage.available;
 
 		let { flags, args } = await this.parse(this.constructor);
 
@@ -1850,40 +1823,42 @@ class BoxCommand extends Command {
 	 * @returns {Object} The parsed environment information
 	 */
 	async getEnvironments() {
-		// Try secure storage first on supported platforms
 		if (this.supportsSecureStorage) {
 			DEBUG.init(
-				'Attempting secure storage read from keytar service="%s" account="%s"',
-				'boxcli',
-				'Box'
+				'Attempting secure storage read via %s service="%s" account="%s"',
+				secureStorage.backend,
+				ENVIRONMENTS_KEYCHAIN_SERVICE,
+				ENVIRONMENTS_KEYCHAIN_ACCOUNT
 			);
 			try {
-				const password = await keytar.getPassword(
-					'boxcli' /* service */,
-					'Box' /* account */
+				const password = await secureStorage.getPassword(
+					ENVIRONMENTS_KEYCHAIN_SERVICE,
+					ENVIRONMENTS_KEYCHAIN_ACCOUNT
 				);
 				if (password) {
 					DEBUG.init(
-						'Successfully loaded environments from secure storage'
+						'Successfully loaded environments from secure storage (%s)',
+						secureStorage.backend
 					);
 					return JSON.parse(password);
 				}
 				DEBUG.init(
-					'Secure storage lookup returned empty result for service="%s" account="%s"',
-					'boxcli',
-					'Box'
+					'Secure storage returned empty result for service="%s" account="%s"',
+					ENVIRONMENTS_KEYCHAIN_SERVICE,
+					ENVIRONMENTS_KEYCHAIN_ACCOUNT
 				);
 			} catch (error) {
 				DEBUG.init(
-					'Failed to read from secure storage, falling back to file: %O',
+					'Failed to read from secure storage (%s), falling back to file: %O',
+					secureStorage.backend,
 					getDebugErrorDetails(error)
 				);
-				// fallback to env file
 			}
 		} else {
 			DEBUG.init(
-				'Skipping secure storage read because supportsSecureStorage=%s',
-				this.supportsSecureStorage
+				'Skipping secure storage read: platform=%s available=%s',
+				process.platform,
+				secureStorage.available
 			);
 		}
 
@@ -1928,41 +1903,42 @@ class BoxCommand extends Command {
 
 		let storedInSecureStorage = false;
 
-		// Try secure storage first on supported platforms
 		if (this.supportsSecureStorage) {
 			DEBUG.init(
-				'Attempting secure storage write to keytar service="%s" account="%s"',
-				'boxcli',
-				'Box'
+				'Attempting secure storage write via %s service="%s" account="%s"',
+				secureStorage.backend,
+				ENVIRONMENTS_KEYCHAIN_SERVICE,
+				ENVIRONMENTS_KEYCHAIN_ACCOUNT
 			);
 			try {
-				await keytar.setPassword(
-					'boxcli' /* service */,
-					'Box' /* account */,
-					JSON.stringify(environments) /* password */
+				await secureStorage.setPassword(
+					ENVIRONMENTS_KEYCHAIN_SERVICE,
+					ENVIRONMENTS_KEYCHAIN_ACCOUNT,
+					JSON.stringify(environments)
 				);
 				storedInSecureStorage = true;
 				DEBUG.init(
-					'Stored environment configuration in secure storage'
+					'Stored environment configuration in secure storage (%s)',
+					secureStorage.backend
 				);
-				// Successfully stored in secure storage, remove the file
 				if (fs.existsSync(ENVIRONMENTS_FILE_PATH)) {
 					fs.unlinkSync(ENVIRONMENTS_FILE_PATH);
 					DEBUG.init(
 						'Removed environment configuration file after migrating to secure storage'
 					);
 				}
-			} catch (keytarError) {
-				// fallback to file storage if secure storage fails
+			} catch (error) {
 				DEBUG.init(
-					'Could not store credentials in secure storage, falling back to file: %O',
-					getDebugErrorDetails(keytarError)
+					'Could not store credentials in secure storage (%s), falling back to file: %O',
+					secureStorage.backend,
+					getDebugErrorDetails(error)
 				);
 			}
 		} else {
 			DEBUG.init(
-				'Skipping secure storage write because supportsSecureStorage=%s',
-				this.supportsSecureStorage
+				'Skipping secure storage write: platform=%s available=%s',
+				process.platform,
+				secureStorage.available
 			);
 		}
 
@@ -1972,13 +1948,10 @@ class BoxCommand extends Command {
 				let fileContents = JSON.stringify(environments, null, 4);
 				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
 
-				// Show warning to user if secure storage was attempted but failed
-				if (this.supportsSecureStorage) {
+				if (process.platform === 'linux') {
 					this.info(
-						`Could not store credentials in secure storage, falling back to file.` +
-							(process.platform === 'linux'
-								? ' To enable secure storage on Linux, install libsecret-1-dev package.'
-								: '')
+						'Could not store credentials in secure storage, falling back to file.' +
+							' To enable secure storage on Linux, install libsecret-1-dev package.'
 					);
 				}
 			} catch (error) {
