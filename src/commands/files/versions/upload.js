@@ -3,7 +3,10 @@
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
 const fs = require('node:fs');
-const { createReadStream, uploadNewFileVersion } = require('../../../modules/upload');
+const {
+	createReadStream,
+	uploadNewFileVersion,
+} = require('../../../modules/upload');
 
 class FilesUploadVersionsCommand extends BoxCommand {
 	async run() {

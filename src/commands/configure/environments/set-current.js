@@ -2,7 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
-const inquirer = require('inquirer');
+const inquirer = require('../../../inquirer');
 
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {

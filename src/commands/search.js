@@ -44,9 +44,7 @@ class SearchCommand extends BoxCommand {
 				'Run: box search --help for all available filters.',
 			].join(os.EOL);
 
-			throw new BoxCLIError(
-				missingQueryMessage
-			);
+			throw new BoxCLIError(missingQueryMessage);
 		}
 
 		if (flags.all && (flags.limit || flags['max-items'])) {
