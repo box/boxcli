@@ -29,7 +29,7 @@ class AiAskCommand extends BoxCommand {
 }
 
 AiAskCommand.description =
-	'Sends an AI request to supported LLMs and returns an answer';
+	'Sends a request to supported LLMs using Box AI. This is intended for direct use, not by AI agents.';
 AiAskCommand.examples = [
 	'box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"',
 ];
