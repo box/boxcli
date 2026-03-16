@@ -8,17 +8,11 @@ const path = require('node:path');
 const BoxCLIError = require('./cli-error');
 const utilities = require('./util');
 const DEBUG = require('./debug');
-
-let keytar = null;
-try {
-	keytar = require('keytar');
-} catch {
-	// keytar cannot be imported because the library is not provided for this operating system / architecture
-}
+const secureStorage = require('./secure-storage');
 
 /**
  * Cache interface used by the Node SDK to cache tokens to disk in the user's home directory
- * Supports secure storage via keytar with fallback to file system
+ * Supports secure storage with fallback to file system
  */
 class CLITokenCache {
 	/**
@@ -27,16 +21,15 @@ class CLITokenCache {
 	 */
 	constructor(environmentName) {
 		this.environmentName = environmentName;
+		this.secureStorage = secureStorage;
 		this.filePath = path.join(
 			os.homedir(),
 			'.box',
 			`${environmentName}_token_cache.json`
 		);
-		// Service and account for keytar - includes environment name for multiple environments
-		this.keytarService = `boxcli-token-${environmentName}`;
-		this.keytarAccount = 'Box';
-		this.supportsSecureStorage =
-			keytar && ['darwin', 'win32', 'linux'].includes(process.platform);
+		this.serviceName = `boxcli-token-${environmentName}`;
+		this.accountName = 'Box';
+		this.supportsSecureStorage = this.secureStorage.available;
 	}
 
 	/**
@@ -45,16 +38,16 @@ class CLITokenCache {
 	 * @returns {void}
 	 */
 	read(callback) {
-		// Try secure storage first if available
 		if (this.supportsSecureStorage) {
-			keytar
-				.getPassword(this.keytarService, this.keytarAccount)
+			this.secureStorage
+				.getPassword(this.serviceName, this.accountName)
 				.then((tokenJson) => {
 					if (tokenJson) {
 						try {
 							const tokenInfo = JSON.parse(tokenJson);
 							DEBUG.init(
-								'Loaded token from secure storage for environment: %s',
+								'Loaded token from secure storage (%s) for environment: %s',
+								this.secureStorage.backend,
 								this.environmentName
 							);
 							return callback(null, tokenInfo);
@@ -63,22 +56,27 @@ class CLITokenCache {
 								'Failed to parse token from secure storage, falling back to file: %s',
 								parseError.message
 							);
-							// Fall through to file-based storage
 						}
 					}
-					// Token not in secure storage, try file
+					DEBUG.init(
+						'No token found in secure storage for environment: %s; trying file cache',
+						this.environmentName
+					);
 					return this._readFromFile(callback);
 				})
 				.catch((error) => {
 					DEBUG.init(
-						'Failed to read from secure storage, falling back to file: %s',
-						error.message
+						'Failed to read from secure storage (%s), falling back to file: %s',
+						this.secureStorage.backend,
+						error?.message || error
 					);
-					// Fall back to file-based storage
 					this._readFromFile(callback);
 				});
 		} else {
-			// Secure storage not available, use file
+			DEBUG.init(
+				'Secure storage unavailable for token cache; reading token from file for environment: %s',
+				this.environmentName
+			);
 			this._readFromFile(callback);
 		}
 	}
@@ -116,44 +114,43 @@ class CLITokenCache {
 	write(tokenInfo, callback) {
 		const output = JSON.stringify(tokenInfo, null, 4);
 
-		// Try secure storage first if available
 		if (this.supportsSecureStorage) {
-			keytar
-				.setPassword(this.keytarService, this.keytarAccount, output)
+			this.secureStorage
+				.setPassword(this.serviceName, this.accountName, output)
 				.then(() => {
 					DEBUG.init(
-						'Stored token in secure storage for environment: %s',
+						'Stored token in secure storage (%s) for environment: %s',
+						this.secureStorage.backend,
 						this.environmentName
 					);
-					// Clear the file-based cache if it exists (migration scenario)
 					if (fs.existsSync(this.filePath)) {
 						fs.unlinkSync(this.filePath);
+						DEBUG.init(
+							'Migrated token from file to secure storage for environment: %s',
+							this.environmentName
+						);
 					}
-					return;
-				})
-				.then(() => {
-					DEBUG.init(
-						'Migrated token from file to secure storage for environment: %s',
-						this.environmentName
-					);
 					return callback();
 				})
 				.catch((error) => {
 					DEBUG.init(
-						'Failed to write to secure storage for environment %s, falling back to file: %s',
+						'Failed to write to secure storage (%s) for environment %s, falling back to file: %s',
+						this.secureStorage.backend,
 						this.environmentName,
-						error.message
+						error?.message || error
 					);
 					if (process.platform === 'linux') {
 						DEBUG.init(
 							'To enable secure storage on Linux, install libsecret-1-dev package'
 						);
 					}
-					// Fall back to file-based storage
 					this._writeToFile(output, callback);
 				});
 		} else {
-			// Secure storage not available, use file
+			DEBUG.init(
+				'Secure storage unavailable for token cache; writing token to file for environment: %s',
+				this.environmentName
+			);
 			this._writeToFile(output, callback);
 		}
 	}
@@ -185,11 +182,10 @@ class CLITokenCache {
 	clear(callback) {
 		const promises = [];
 
-		// Try to delete from secure storage
 		if (this.supportsSecureStorage) {
 			promises.push(
-				keytar
-					.deletePassword(this.keytarService, this.keytarAccount)
+				this.secureStorage
+					.deletePassword(this.serviceName, this.accountName)
 					.then((deleted) => {
 						if (!deleted) {
 							DEBUG.init(
@@ -226,10 +222,9 @@ class CLITokenCache {
 			);
 		}
 
-		// Try to delete from file
 		promises.push(
 			utilities.unlinkAsync(this.filePath).catch((error) => {
-				if (error && error.code === 'ENOENT') {
+				if (error?.code === 'ENOENT') {
 					DEBUG.init(
 						'No token file found on disk for environment: %s',
 						this.environmentName
@@ -254,12 +249,12 @@ class CLITokenCache {
 	 */
 	store(token) {
 		return new Promise((resolve, reject) => {
-			const accquiredAtMS = Date.now();
+			const acquiredAtMS = Date.now();
 			const tokenInfo = {
 				accessToken: token.accessToken,
 				accessTokenTTLMS: token.expiresIn * 1000,
 				refreshToken: token.refreshToken,
-				acquiredAtMS: accquiredAtMS,
+				acquiredAtMS,
 			};
 			this.write(tokenInfo, (error) => {
 				if (error) {

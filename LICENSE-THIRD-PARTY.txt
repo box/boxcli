@@ -5235,6 +5235,7 @@ The following npm packages may be included in this product:
  - csv-stringify@6.6.0
  - degenerator@5.0.1
  - isarray@1.0.0
+ - keychain@1.5.0
  - netmask@2.0.2
  - tr46@0.0.3
  - undici-types@5.26.5
