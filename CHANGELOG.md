@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](https://github.com/box/boxcli/compare/v4.5.0...v4.6.0) (2026-03-17)
+
+
+### New Features and Enhancements
+
+* Add `--overwrite` flag to `files:upload` command ([#637](https://github.com/box/boxcli/issues/637)) ([6231663](https://github.com/box/boxcli/commit/6231663c3e79eacfd52bcfe399527e12d589adb0))
+* Add support for Box Official App in login command ([#638](https://github.com/box/boxcli/issues/638)) ([bcd6835](https://github.com/box/boxcli/commit/bcd6835fb631ef7cd88ba8545b42b177ed2b3644))
+* Improve developer and agent experience in `boxcli` commands ([#643](https://github.com/box/boxcli/issues/643)) ([fbc817f](https://github.com/box/boxcli/commit/fbc817f6e25c6f0236777473e8a3e3ef5241df13))
+* Improve login prompt ([#642](https://github.com/box/boxcli/issues/642)) ([a58ff34](https://github.com/box/boxcli/commit/a58ff34dde121285233c174785071057e04c13a6))
+* Store access token encrypted in secure storage ([#639](https://github.com/box/boxcli/issues/639)) ([bed6db3](https://github.com/box/boxcli/commit/bed6db362aa501cfa1b47d9db74f26456adfa1be))
+* Support logout command ([#635](https://github.com/box/boxcli/issues/635)) ([842e308](https://github.com/box/boxcli/commit/842e308f38af8351ea469dfb1ecd705304611dc0))
+* Unify secure storage backend across platforms ([#647](https://github.com/box/boxcli/issues/647)) ([6b2ed36](https://github.com/box/boxcli/commit/6b2ed36655f7e896ee5a41308b60c28594fe693c))
+
+### Bug Fixes
+
+* Fix encoding for example scripts on Windows ([#613](https://github.com/box/boxcli/issues/613)) ([0265e2a](https://github.com/box/boxcli/commit/0265e2a65c4a985404b07ef2f83f56a903be329d))
+* fix help commands ([#611](https://github.com/box/boxcli/issues/611)) ([7aec97b](https://github.com/box/boxcli/commit/7aec97b0a63d2c1b3496cb296cf6dddaf539a9aa))
+* Normalize inquirer `signal-exit` compatibility on Windows ([#645](https://github.com/box/boxcli/issues/645)) ([310b2f6](https://github.com/box/boxcli/commit/310b2f6ea07a856709b6a46454d1852fa66b7a66))
+
 ## [4.5.0](https://github.com/box/boxcli/compare/v4.4.1...v4.5.0) (2025-11-20)
 
 

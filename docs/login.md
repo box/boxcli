@@ -77,4 +77,4 @@ DESCRIPTION
   granted, the environment is created and set as default — you can start running commands right away.
 ```
 
-_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/login.js)_
+_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.6.0/src/commands/login.js)_

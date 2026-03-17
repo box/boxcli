@@ -37,4 +37,4 @@ DESCRIPTION
   Use -f and --on-revoke-failure=clear or --on-revoke-failure=abort to skip the interactive prompt.
 ```
 
-_See code: [src/commands/logout.js](https://github.com/box/boxcli/blob/v4.5.0/src/commands/logout.js)_
+_See code: [src/commands/logout.js](https://github.com/box/boxcli/blob/v4.6.0/src/commands/logout.js)_
