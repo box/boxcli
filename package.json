@@ -84,6 +84,7 @@
 	},
 	"files": [
 		"/bin",
+		"/LICENSE-THIRD-PARTY.txt",
 		"/npm-shrinkwrap.json",
 		"/oclif.manifest.json",
 		"/src"
