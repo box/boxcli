@@ -3,6 +3,7 @@
 const { assert } = require('chai');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
+const nodeHttp = require('node:http');
 const { test } = require('@oclif/test');
 const BoxCommand = require('../../src/box-command');
 const {
@@ -10,6 +11,44 @@ const {
 	getTokenInfoByAuthCode,
 } = require('../../src/login-helper');
 const OAuthLoginCommand = require('../../src/commands/login');
+
+// Send a single callback request once the test decides flow timing.
+// Keeping this as a tiny helper makes callback assertions easier to read.
+function sendCallback(url) {
+	return new Promise((resolve, reject) => {
+		const request = nodeHttp.get(url, (response) => {
+			response.resume();
+			resolve(response.statusCode);
+		});
+		request.on('error', reject);
+	});
+}
+
+// Wait until loopback port accepts connections before sending callback.
+// HTTP status does not matter here; a non-ECONNREFUSED response means server is ready.
+async function waitForLoopbackPort(port, maxAttempts = 20, delayMs = 5) {
+	for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+		try {
+			await new Promise((resolve, reject) => {
+				const request = nodeHttp.get(
+					`http://localhost:${port}/`,
+					(response) => {
+						response.resume();
+						resolve();
+					}
+				);
+				request.on('error', reject);
+			});
+			return;
+		} catch {
+			await new Promise((resolve) => setTimeout(resolve, delayMs));
+		}
+	}
+
+	throw new Error(
+		`Local callback server on port ${port} did not become ready in time`
+	);
+}
 
 describe('Login', function () {
 	let sandbox;
@@ -21,6 +60,8 @@ describe('Login', function () {
 	});
 
 	afterEach(function () {
+		OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+		OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
 		sandbox.restore();
 	});
 
@@ -517,5 +558,119 @@ describe('Login', function () {
 					}
 				);
 		});
+	});
+
+	describe('oauth callback command behavior', function () {
+		let unsolicitedStatusPromise;
+		test.do(() => {
+			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
+			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
+			unsolicitedStatusPromise = (async () => {
+				await waitForLoopbackPort(Number.parseInt('19093', 10));
+				return sendCallback(
+					'http://localhost:19093/callback?state=wrong-state&code=unsolicited'
+				);
+			})();
+		})
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+				stub.resolves({ default: '', environments: {} })
+			)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub
+					.onFirstCall()
+					.resolves({ clientId: 'cid' })
+					.onSecondCall()
+					.resolves({ clientSecret: 'secret' })
+			)
+			.stderr()
+			.command(['login', '--platform-app', '--port', '19093'])
+			.it(
+				'should fail login when callback state is invalid',
+				async (ctx) => {
+					const statusCode = await unsolicitedStatusPromise;
+					assert.strictEqual(statusCode, 500);
+					assert.include(
+						ctx.stderr,
+						'Login failed: Invalid OAuth state received in callback'
+					);
+					assert.notInclude(
+						ctx.stderr,
+						'Login timed out waiting for OAuth callback'
+					);
+					OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+					OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+				}
+			);
+
+		test.do(() => {
+			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
+			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
+		})
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+				stub.resolves({ default: '', environments: {} })
+			)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub
+					.onFirstCall()
+					.resolves({ clientId: 'cid' })
+					.onSecondCall()
+					.resolves({ clientSecret: 'secret' })
+			)
+			.stderr()
+			.command(['login', '--platform-app', '--port', '19094'])
+			.it('should time out when no callback is received', (ctx) => {
+				assert.include(
+					ctx.stderr,
+					'Login timed out waiting for OAuth callback'
+				);
+				OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+				OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+			});
+
+		let busyServer;
+		// Use a high random port to reduce clashes with common local services.
+		const busyPort = 30000 + Math.floor(Math.random() * 10000);
+		test.do(async () => {
+			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
+			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
+			busyServer = nodeHttp.createServer();
+			await new Promise((resolve, reject) => {
+				busyServer.once('error', reject);
+				busyServer.listen(busyPort, 'localhost', resolve);
+			});
+		})
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+				stub.resolves({ default: '', environments: {} })
+			)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub
+					.onFirstCall()
+					.resolves({ clientId: 'cid' })
+					.onSecondCall()
+					.resolves({ clientSecret: 'secret' })
+			)
+			.stderr()
+			.command(['login', '--platform-app', '--port', String(busyPort)])
+			.it(
+				'should fail with a friendly message when callback port is in use',
+				async (ctx) => {
+					try {
+						assert.include(
+							ctx.stderr,
+							`Port ${busyPort} is already in use. Please close the application using this port or use --port to specify a different port.`
+						);
+					} finally {
+						OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+						OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+						if (busyServer) {
+							await new Promise((resolve) => busyServer.close(resolve));
+							busyServer = null;
+						}
+					}
+				}
+			);
 	});
 });
