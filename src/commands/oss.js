@@ -20,6 +20,7 @@ class OSSLicensesCommand extends BoxCommand {
 	}
 }
 
+OSSLicensesCommand.noClient = true;
 OSSLicensesCommand.description =
 	'Print a list of open-source licensed packages used in the Box CLI';
 
