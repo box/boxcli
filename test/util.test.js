@@ -584,6 +584,75 @@ describe('Utilities', function () {
 		);
 	});
 
+	describe('secret masking helpers', function () {
+		it('maskSecret() should preserve length and reveal only last 3 chars by default', function () {
+			const secret = 'abcdefghijklmnopqrstuvwxyz123456';
+			const masked = cliUtilities.maskSecret(secret);
+
+			assert.strictEqual(masked.length, secret.length);
+			assert.strictEqual(masked.slice(-3), '456');
+			assert.strictEqual(
+				masked,
+				`${'*'.repeat(secret.length - 3)}${secret.slice(-3)}`
+			);
+		});
+
+		it('maskSecret() should fallback to default visible chars for invalid values', function () {
+			const secret = 'abcdef';
+			const masked = cliUtilities.maskSecret(secret, -1);
+
+			assert.strictEqual(masked, '***def');
+		});
+
+		it('maskObjectValuesByKey() should mask clientSecret recursively by default', function () {
+			const input = {
+				name: 'dev',
+				clientSecret: '1234567890',
+				nested: {
+					clientSecret: 'abcdefghij',
+				},
+				items: [
+					{
+						clientSecret: 'qwertyuiop',
+					},
+					{
+						other: 'value',
+					},
+				],
+			};
+
+			const masked = cliUtilities.maskObjectValuesByKey(input);
+
+			assert.strictEqual(input.clientSecret, '1234567890');
+			assert.strictEqual(masked.clientSecret, '*******890');
+			assert.strictEqual(input.nested.clientSecret, 'abcdefghij');
+			assert.strictEqual(masked.nested.clientSecret, '*******hij');
+			assert.strictEqual(input.items[0].clientSecret, 'qwertyuiop');
+			assert.strictEqual(masked.items[0].clientSecret, '*******iop');
+			assert.strictEqual(masked.items[1].other, 'value');
+		
+		});
+
+		it('maskObjectValuesByKey() should support custom key and visible chars', function () {
+			const input = {
+				token: 'abcd1234',
+				nested: {
+					token: 'wxyz9876',
+				},
+				clientSecret: 'dont-mask-default-key-if-custom-is-used',
+			};
+
+			const masked = cliUtilities.maskObjectValuesByKey(input, 'token', 2);
+
+			assert.strictEqual(input.token, 'abcd1234');
+			assert.strictEqual(masked.token, '******34');
+			assert.strictEqual(input.nested.token, 'wxyz9876');
+			assert.strictEqual(masked.nested.token, '******76');
+			assert.strictEqual(input.clientSecret, 'dont-mask-default-key-if-custom-is-used');
+			assert.strictEqual(masked.clientSecret,'dont-mask-default-key-if-custom-is-used');
+		});
+	});
+
 	describe('checkDir()', function () {
 		it('should create directory if create flag is true', async function () {
 			const destination = `${process.cwd()}/temp`;
