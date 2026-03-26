@@ -67,7 +67,7 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 		}
 
 		await this.updateEnvironments(environmentsObject);
-		await this.output(environment);
+		await this.output(utilities.maskObjectValuesByKey(environment));
 	}
 }
 

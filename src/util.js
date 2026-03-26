@@ -30,6 +30,8 @@ const PATH_ESCAPES = Object.freeze({
 	'/': '~1',
 	'~': '~0',
 });
+const DEFAULT_SECRET_KEY = 'clientSecret';
+const DEFAULT_VISIBLE_SECRET_CHARS = 3;
 
 /**
  * Unescape a string that no longer needs to be escaped with slashes,
@@ -299,6 +301,43 @@ async function unlinkAsync(path) {
 	});
 }
 
+function maskSecret(secret, visibleChars = DEFAULT_VISIBLE_SECRET_CHARS) {
+	const normalizedVisibleChars =
+		_.isInteger(visibleChars) && visibleChars >= 0
+			? visibleChars
+			: DEFAULT_VISIBLE_SECRET_CHARS;
+			
+	if (!_.isString(secret) || secret.length <= normalizedVisibleChars) {
+		return '*'.repeat(normalizedVisibleChars);
+	}
+
+	return `${'*'.repeat(secret.length - normalizedVisibleChars)}${secret.slice(-normalizedVisibleChars)}`;
+}
+
+function maskObjectValuesByKey(
+	value,
+	keyToMask = DEFAULT_SECRET_KEY,
+	visibleChars = DEFAULT_VISIBLE_SECRET_CHARS
+) {
+	if (_.isArray(value)) {
+		return value.map((item) =>
+			maskObjectValuesByKey(item, keyToMask, visibleChars)
+		);
+	}
+
+	if (_.isPlainObject(value)) {
+		return _.mapValues(value, (objectValue, key) => {
+			if (key === keyToMask && !_.isNil(objectValue)) {
+				return maskSecret(objectValue, visibleChars);
+			}
+
+			return maskObjectValuesByKey(objectValue, keyToMask, visibleChars);
+		});
+	}
+
+	return value;
+}
+
 module.exports = {
 	/**
 	 * Validates the a configuration object has all required properties
@@ -388,6 +427,8 @@ module.exports = {
 	parseMetadataOp(value) {
 		return parseMetadataString(value);
 	},
+	maskSecret,
+	maskObjectValuesByKey,
 	parseStringToObject,
 	checkDir,
 	readFileAsync,
