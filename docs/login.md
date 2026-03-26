@@ -13,6 +13,8 @@ Login options:
 
 Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.
 
+Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in an external browser, authorize and grant access to the app, then provide the state and authorization code back to the CLI when prompted.
+
 * [`box login`](#box-login)
 
 ## `box login`
@@ -25,7 +27,8 @@ USAGE
 
 FLAGS
   -c, --code
-      Manually visit authorize URL and input code
+      Manually provide state and authorization code instead of using a local callback server. Use this in headless
+      environments where no browser is available — the CLI will display an authorize URL to visit externally.
 
   -d, --default-box-app
       Use the Official Box CLI app flow and proceed directly to authorization.
@@ -75,6 +78,10 @@ DESCRIPTION
 
   Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is
   granted, the environment is created and set as default — you can start running commands right away.
+
+  Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in
+  an external browser, authorize and grant access to the app, then provide the state and authorization code back to the
+  CLI when prompted.
 ```
 
 _See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.6.0/src/commands/login.js)_

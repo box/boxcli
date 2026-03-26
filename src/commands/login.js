@@ -476,13 +476,15 @@ OAuthLoginCommand.description =
 	'  (2) Your own Platform OAuth App\n' +
 	'      Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.\n' +
 	'\n' +
-	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.';
+	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.\n' +
+	'\n' +
+	'Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in an external browser, authorize and grant access to the app, then provide the state and authorization code back to the CLI when prompted.';
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
 	code: Flags.boolean({
 		char: 'c',
-		description: 'Manually visit authorize URL and input code',
+		description: 'Manually provide state and authorization code instead of using a local callback server. Use this in headless environments where no browser is available — the CLI will display an authorize URL to visit externally.',
 		default: false,
 	}),
 	name: Flags.string({
