@@ -1293,7 +1293,7 @@ class BoxCommand extends Command {
 	 * @returns {Promise<Object[]>} Aggregated marker-based response entries
 	 */
 	async markerPagination(fetchPage, queryParams, maxItemsOverride) {
-		queryParams = queryParams || {};
+		const normalizedQueryParams = queryParams || {};
 		const paginationFlags = {
 			'max-items':
 				maxItemsOverride === undefined
@@ -1308,13 +1308,13 @@ class BoxCommand extends Command {
 				: paginationFlags['max-items'];
 
 		let remaining = maxItems;
-		let entries = [];
+		const entries = [];
 		const pageLimit = paginationOptions.limit;
 		let marker;
 
 		while (remaining > 0) {
-			let pageQueryParams = {
-				...queryParams,
+			const pageQueryParams = {
+				...normalizedQueryParams,
 				limit: Math.min(pageLimit, remaining),
 			};
 

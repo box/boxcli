@@ -7,7 +7,7 @@ const utilities = require('../../util');
 class HubsCopyCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(HubsCopyCommand);
-		let requestBody = {};
+		const requestBody = {};
 
 		if (flags.title) {
 			requestBody.title = flags.title;
@@ -16,7 +16,7 @@ class HubsCopyCommand extends BoxCommand {
 			requestBody.description = flags.description;
 		}
 
-		let hub = await this.tsClient.hubs.copyHubV2025R0(args.id, requestBody);
+		const hub = await this.tsClient.hubs.copyHubV2025R0(args.id, requestBody);
 		delete hub.rawData;
 		await this.output(hub);
 	}

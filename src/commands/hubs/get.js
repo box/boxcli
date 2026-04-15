@@ -6,7 +6,7 @@ const BoxCommand = require('../../box-command');
 class HubsGetCommand extends BoxCommand {
 	async run() {
 		const { args } = await this.parse(HubsGetCommand);
-		let hub = await this.tsClient.hubs.getHubByIdV2025R0(args.id);
+		const hub = await this.tsClient.hubs.getHubByIdV2025R0(args.id);
 		delete hub.rawData;
 		await this.output(hub);
 	}

@@ -7,7 +7,7 @@ const utilities = require('../../util');
 class HubsCreateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(HubsCreateCommand);
-		let requestBody = {
+		const requestBody = {
 			title: args.title,
 		};
 
@@ -15,7 +15,7 @@ class HubsCreateCommand extends BoxCommand {
 			requestBody.description = flags.description;
 		}
 
-		let hub = await this.tsClient.hubs.createHubV2025R0(requestBody);
+		const hub = await this.tsClient.hubs.createHubV2025R0(requestBody);
 		delete hub.rawData;
 		await this.output(hub);
 	}

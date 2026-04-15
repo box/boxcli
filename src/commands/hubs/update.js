@@ -7,7 +7,7 @@ const utilities = require('../../util');
 class HubsUpdateCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(HubsUpdateCommand);
-		let requestBody = {};
+		const requestBody = {};
 
 		if (flags.title) {
 			requestBody.title = flags.title;
@@ -38,7 +38,7 @@ class HubsUpdateCommand extends BoxCommand {
 			this.error('Please provide at least one update flag.');
 		}
 
-		let hub = await this.tsClient.hubs.updateHubByIdV2025R0(
+		const hub = await this.tsClient.hubs.updateHubByIdV2025R0(
 			args.id,
 			requestBody
 		);

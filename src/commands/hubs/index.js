@@ -7,7 +7,7 @@ const PaginationUtilities = require('../../pagination-utils');
 class HubsListCommand extends BoxCommand {
 	async run() {
 		const { flags } = await this.parse(HubsListCommand);
-		let queryParams = {};
+		const queryParams = {};
 
 		if (flags.query) {
 			queryParams.query = flags.query;
@@ -22,7 +22,7 @@ class HubsListCommand extends BoxCommand {
 			queryParams.direction = flags.direction;
 		}
 
-		let hubs = await this.markerPagination(
+		const hubs = await this.markerPagination(
 			(pageQueryParams) => this.tsClient.hubs.getHubsV2025R0(pageQueryParams),
 			queryParams
 		);
