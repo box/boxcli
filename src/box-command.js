@@ -30,6 +30,7 @@ const BoxTSSDK = require('box-node-sdk/sdk-gen');
 const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
+const PaginationUtilities = require('./pagination-utils');
 const utils = require('./util');
 const pkg = require('../package.json');
 const inquirer = require('./inquirer');
@@ -1281,6 +1282,58 @@ class BoxCommand extends Command {
 	 */
 	maxItemsReached(maxItems, itemsCount) {
 		return maxItems && itemsCount >= maxItems;
+	}
+
+	/**
+	 * Fetch all marker-based pages from a TypeScript SDK endpoint.
+	 *
+	 * @param {Function} fetchPage Callback that receives query params and returns a paged response
+	 * @param {Object} queryParams Base query params for each request
+	 * @param {number} [maxItemsOverride] Optional max items override for advanced use
+	 * @returns {Promise<Object[]>} Aggregated marker-based response entries
+	 */
+	async markerPagination(fetchPage, queryParams, maxItemsOverride) {
+		queryParams = queryParams || {};
+		const paginationFlags = {
+			'max-items':
+				maxItemsOverride === undefined
+					? this.flags['max-items']
+					: maxItemsOverride,
+		};
+		const paginationOptions =
+			PaginationUtilities.handlePagination(paginationFlags);
+		const maxItems =
+			paginationFlags['max-items'] === undefined
+				? paginationOptions.limit
+				: paginationFlags['max-items'];
+
+		let remaining = maxItems;
+		let entries = [];
+		const pageLimit = paginationOptions.limit;
+		let marker;
+
+		while (remaining > 0) {
+			let pageQueryParams = {
+				...queryParams,
+				limit: Math.min(pageLimit, remaining),
+			};
+
+			if (marker) {
+				pageQueryParams.marker = marker;
+			}
+
+			const page = await fetchPage(pageQueryParams);
+			const pageEntries = page.entries || [];
+			entries.push(...pageEntries);
+			remaining -= pageEntries.length;
+			marker = page.nextMarker || page.next_marker;
+
+			if (!marker || pageEntries.length === 0) {
+				break;
+			}
+		}
+
+		return entries;
 	}
 
 	/**

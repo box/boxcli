@@ -60,7 +60,7 @@ TokensExchangeCommand.flags = {
 		exclusive: ['file-id'],
 	}),
 	token: Flags.string({
-		char: 't',
+		char: 'T',
 		description: 'Specify the token to exchange',
 		exclusive: ['user-id'],
 	}),

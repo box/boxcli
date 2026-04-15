@@ -1,0 +1,26 @@
+{
+    "id": "12345",
+    "type": "hubs",
+    "title": "Roadmap Hub",
+    "description": "Planning hub for the summer release",
+    "created_at": "2026-02-18T09:12:45.000Z",
+    "updated_at": "2026-04-10T14:28:11.000Z",
+    "created_by": {
+        "id": "11446498",
+        "type": "user",
+        "name": "Aaron Levie",
+        "login": "ceo@example.com"
+    },
+    "updated_by": {
+        "id": "11446498",
+        "type": "user",
+        "name": "Aaron Levie",
+        "login": "ceo@example.com"
+    },
+    "view_count": 12,
+    "is_ai_enabled": true,
+    "is_collaboration_restricted_to_enterprise": false,
+    "can_non_owners_invite": true,
+    "can_shared_link_be_created": true,
+    "can_public_shared_link_be_created": false
+}

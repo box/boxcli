@@ -833,12 +833,13 @@ Update the metadata attached to a file
 USAGE
   $ box files:metadata:update ID --template-key <value> [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s
     | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--scope <value>]
-    [-a <value>...] [-c <value>...] [-m <value>...] [--remove <value>...] [--replace <value>...] [-t <value>...]
+    [-a <value>...] [-c <value>...] [-m <value>...] [--remove <value>...] [--replace <value>...] [-T <value>...]
 
 ARGUMENTS
   ID  ID of the file to update metadata on
 
 FLAGS
+  -T, --test=<value>...            Test that a metadata key contains a specific value; must be in the form key=value
   -a, --add=<value>...             Add a key to the metadata document; must be in the form key=value
   -c, --copy=<value>...            Copy a metadata value to another key; must be in the form sourceKey>destinationKey
   -h, --help                       Show CLI help
@@ -846,7 +847,6 @@ FLAGS
                                    sourceKey>destinationKey
   -q, --quiet                      Suppress any non-error output to stderr
   -s, --save                       Save report to default reports folder on disk
-  -t, --test=<value>...            Test that a metadata key contains a specific value; must be in the form key=value
   -t, --token=<value>              Provide a token to perform this call
   -v, --verbose                    Show verbose output, which can be helpful for debugging
   -y, --yes                        Automatically respond yes to all confirmation prompts

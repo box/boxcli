@@ -212,6 +212,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box folders`](docs/folders.md) - Manage folders
 * [`box groups`](docs/groups.md) - List all groups
 * [`box help`](docs/help.md) - Display help for the Box CLI
+* [`box hubs`](docs/hubs.md) - List Box Hubs for the current user
 * [`box integration-mappings`](docs/integration-mappings.md) - List Slack integration mappings
 * [`box legal-hold-policies`](docs/legal-hold-policies.md) - List legal hold policies
 * [`box login`](docs/login.md) - Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).
