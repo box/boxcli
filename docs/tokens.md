@@ -13,16 +13,16 @@ Get a token. Returns the service account token by default
 
 ```
 USAGE
-  $ box tokens:exchange SCOPE [--no-color] [-h] [-v] [-q] [-u <value> | -t <value>] [--file-id <value> | --folder-id
+  $ box tokens:exchange SCOPE [--no-color] [-h] [-v] [-q] [-u <value> | -T <value>] [--file-id <value> | --folder-id
     <value>]
 
 ARGUMENTS
   SCOPE  The scope(s) for the new token, separated by a comma if multiple are present
 
 FLAGS
+  -T, --token=<value>      Specify the token to exchange
   -h, --help               Show CLI help
   -q, --quiet              Suppress any non-error output to stderr
-  -t, --token=<value>      Specify the token to exchange
   -u, --user-id=<value>    Get a user token from a user ID
   -v, --verbose            Show verbose output, which can be helpful for debugging
       --file-id=<value>    Scope the token to a specific file

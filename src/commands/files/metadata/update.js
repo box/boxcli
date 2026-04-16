@@ -88,7 +88,7 @@ FilesUpdateMetadataCommand.flags = {
 		parse: utilities.parseMetadataOp,
 	}),
 	test: Flags.string({
-		char: 't',
+		char: 'T',
 		description:
 			'Test that a metadata key contains a specific value; must be in the form key=value',
 		multiple: true,
