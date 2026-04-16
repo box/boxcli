@@ -154,6 +154,95 @@ describe('Hubs', function () {
 			});
 	});
 
+	describe('hubs:items', function () {
+		const response = JSON.parse(getFixture('hubs/get_hub_items'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.get('/2.0/hub_items')
+					.query({
+						hub_id: '12345',
+						parent_id: '67890',
+						limit: 2,
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:items',
+				'12345',
+				'--parent-id=67890',
+				'--max-items=2',
+				'--json',
+				'--token=test',
+			])
+			.it('lists items in a hub', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
+			});
+	});
+
+	describe('hubs:items:manage', function () {
+		const response = JSON.parse(getFixture('hubs/post_hubs_id_manage_items'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.post('/2.0/hubs/12345/manage_items', {
+						operations: [
+							{
+								action: 'add',
+								item: {
+									id: '11111',
+									type: 'file',
+								},
+								parent_id: '67890',
+							},
+							{
+								action: 'remove',
+								item: {
+									id: '22222',
+									type: 'folder',
+								},
+							},
+						],
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:items:manage',
+				'12345',
+				'--add=id=11111,type=file,parent-id=67890',
+				'--remove=id=22222,type=folder',
+				'--json',
+				'--token=test',
+			])
+			.it('adds and removes items in a hub', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), {
+					operations: [
+						{
+							action: 'add',
+							item: {
+								id: '11111',
+								type: 'file',
+							},
+							parentId: '67890',
+							status: 201,
+						},
+						{
+							action: 'remove',
+							item: {
+								id: '22222',
+								type: 'folder',
+							},
+							status: 204,
+						},
+					],
+				});
+			});
+	});
+
 	describe('hubs:get', function () {
 		const response = JSON.parse(getFixture('hubs/get_hubs_id'));
 

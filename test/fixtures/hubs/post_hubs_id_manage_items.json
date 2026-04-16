@@ -1,0 +1,21 @@
+{
+	"operations": [
+		{
+			"action": "add",
+			"item": {
+				"id": "11111",
+				"type": "file"
+			},
+			"parent_id": "67890",
+			"status": 201
+		},
+		{
+			"action": "remove",
+			"item": {
+				"id": "22222",
+				"type": "folder"
+			},
+			"status": 204
+		}
+	]
+}
