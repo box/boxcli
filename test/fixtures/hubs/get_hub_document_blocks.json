@@ -1,0 +1,17 @@
+{
+	"entries": [
+		{
+			"id": "block_1",
+			"type": "section_title",
+			"parent_id": "page_1",
+			"fragment": "Goals"
+		},
+		{
+			"id": "block_2",
+			"type": "item_list",
+			"parent_id": "page_1"
+		}
+	],
+	"type": "document_blocks",
+	"limit": 2
+}
