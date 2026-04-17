@@ -4,6 +4,13 @@
 List Box Hubs for the current user
 
 * [`box hubs`](#box-hubs)
+* [`box hubs:collaborations ID`](#box-hubscollaborations-id)
+* [`box hubs:collaborations:add ID`](#box-hubscollaborationsadd-id)
+* [`box hubs:collaborations:create ID`](#box-hubscollaborationscreate-id)
+* [`box hubs:collaborations:delete ID`](#box-hubscollaborationsdelete-id)
+* [`box hubs:collaborations:get ID`](#box-hubscollaborationsget-id)
+* [`box hubs:collaborations:list ID`](#box-hubscollaborationslist-id)
+* [`box hubs:collaborations:update ID`](#box-hubscollaborationsupdate-id)
 * [`box hubs:copy ID`](#box-hubscopy-id)
 * [`box hubs:create TITLE`](#box-hubscreate-title)
 * [`box hubs:delete ID`](#box-hubsdelete-id)
@@ -70,6 +77,302 @@ EXAMPLES
 ```
 
 _See code: [src/commands/hubs/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/index.js)_
+
+## `box hubs:collaborations ID`
+
+List collaborations for a Box Hub
+
+```
+USAGE
+  $ box hubs:collaborations ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  List collaborations for a Box Hub
+
+ALIASES
+  $ box hubs:collaborations:list
+
+EXAMPLES
+  $ box hubs:collaborations 12345
+
+  $ box hubs:collaborations 12345 --max-items 50
+```
+
+_See code: [src/commands/hubs/collaborations/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/index.js)_
+
+## `box hubs:collaborations:add ID`
+
+Adds a collaboration with a specific role for a single user or a single group to a Box Hub. Collaborations can be created using email address, user IDs, or group IDs
+
+```
+USAGE
+  $ box hubs:collaborations:add ID -r editor|viewer|co-owner [-t <value>] [--as-user <value>] [--no-color] [--json | --csv]
+    [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--user-id
+    <value> | --group-id <value> | --login <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -r, --role=<option>              (required) Role to grant for the hub collaboration. One of: editor, viewer, co-owner
+                                   <options: editor|viewer|co-owner>
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --group-id=<value>           Collaborate a group by Box group ID
+      --json                       Output formatted JSON
+      --login=<value>              Collaborate a user by email address
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+      --user-id=<value>            Collaborate a user by Box user ID
+
+DESCRIPTION
+  Adds a collaboration with a specific role for a single user or a single group to a Box Hub. Collaborations can be
+  created using email address, user IDs, or group IDs
+
+ALIASES
+  $ box hubs:collaborations:add
+
+EXAMPLES
+  $ box hubs:collaborations:create 12345 --role editor --user-id 22222
+
+  $ box hubs:collaborations:create 12345 --role viewer --group-id 33333
+
+  $ box hubs:collaborations:create 12345 --role co-owner --login jdoe@example.com
+```
+
+## `box hubs:collaborations:create ID`
+
+Adds a collaboration with a specific role for a single user or a single group to a Box Hub. Collaborations can be created using email address, user IDs, or group IDs
+
+```
+USAGE
+  $ box hubs:collaborations:create ID -r editor|viewer|co-owner [-t <value>] [--as-user <value>] [--no-color] [--json | --csv]
+    [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--user-id
+    <value> | --group-id <value> | --login <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -r, --role=<option>              (required) Role to grant for the hub collaboration. One of: editor, viewer, co-owner
+                                   <options: editor|viewer|co-owner>
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --group-id=<value>           Collaborate a group by Box group ID
+      --json                       Output formatted JSON
+      --login=<value>              Collaborate a user by email address
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+      --user-id=<value>            Collaborate a user by Box user ID
+
+DESCRIPTION
+  Adds a collaboration with a specific role for a single user or a single group to a Box Hub. Collaborations can be
+  created using email address, user IDs, or group IDs
+
+ALIASES
+  $ box hubs:collaborations:add
+
+EXAMPLES
+  $ box hubs:collaborations:create 12345 --role editor --user-id 22222
+
+  $ box hubs:collaborations:create 12345 --role viewer --group-id 33333
+
+  $ box hubs:collaborations:create 12345 --role co-owner --login jdoe@example.com
+```
+
+_See code: [src/commands/hubs/collaborations/create.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/create.js)_
+
+## `box hubs:collaborations:delete ID`
+
+Delete a single Box Hub collaboration
+
+```
+USAGE
+  $ box hubs:collaborations:delete ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+ARGUMENTS
+  ID  ID of the hub collaboration to delete
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Delete a single Box Hub collaboration
+
+EXAMPLES
+  $ box hubs:collaborations:delete 99999
+```
+
+_See code: [src/commands/hubs/collaborations/delete.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/delete.js)_
+
+## `box hubs:collaborations:get ID`
+
+Retrieves details for a Box Hub collaboration by collaboration ID
+
+```
+USAGE
+  $ box hubs:collaborations:get ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+ARGUMENTS
+  ID  ID of the hub collaboration
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Retrieves details for a Box Hub collaboration by collaboration ID
+
+EXAMPLES
+  $ box hubs:collaborations:get 99999
+```
+
+_See code: [src/commands/hubs/collaborations/get.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/get.js)_
+
+## `box hubs:collaborations:list ID`
+
+List collaborations for a Box Hub
+
+```
+USAGE
+  $ box hubs:collaborations:list ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  List collaborations for a Box Hub
+
+ALIASES
+  $ box hubs:collaborations:list
+
+EXAMPLES
+  $ box hubs:collaborations 12345
+
+  $ box hubs:collaborations 12345 --max-items 50
+```
+
+## `box hubs:collaborations:update ID`
+
+Updates a Box Hub collaboration. Can be used to change the Box Hub role.
+
+```
+USAGE
+  $ box hubs:collaborations:update ID -r editor|viewer|co-owner [-t <value>] [--as-user <value>] [--no-color] [--json | --csv]
+    [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+ARGUMENTS
+  ID  ID of the hub collaboration to update
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -r, --role=<option>              (required) Updated role for the hub collaboration. One of: editor, viewer, co-owner
+                                   <options: editor|viewer|co-owner>
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Updates a Box Hub collaboration. Can be used to change the Box Hub role.
+
+EXAMPLES
+  $ box hubs:collaborations:update 99999 --role viewer
+```
+
+_See code: [src/commands/hubs/collaborations/update.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/update.js)_
 
 ## `box hubs:copy ID`
 
