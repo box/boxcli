@@ -9,6 +9,9 @@ List Box Hubs for the current user
 * [`box hubs:delete ID`](#box-hubsdelete-id)
 * [`box hubs:enterprise`](#box-hubsenterprise)
 * [`box hubs:get ID`](#box-hubsget-id)
+* [`box hubs:items ID`](#box-hubsitems-id)
+* [`box hubs:items:list ID`](#box-hubsitemslist-id)
+* [`box hubs:items:manage ID`](#box-hubsitemsmanage-id)
 * [`box hubs:list`](#box-hubslist)
 * [`box hubs:update ID`](#box-hubsupdate-id)
 
@@ -258,6 +261,142 @@ EXAMPLES
 ```
 
 _See code: [src/commands/hubs/get.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/get.js)_
+
+## `box hubs:items ID`
+
+List items in a Box Hub
+
+```
+USAGE
+  $ box hubs:items ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--parent-id
+    <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --parent-id=<value>          Filter to items that belong to a specific item list block in the Box Hub
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  List items in a Box Hub
+
+ALIASES
+  $ box hubs:items:list
+
+EXAMPLES
+  $ box hubs:items 12345
+
+  $ box hubs:items 12345 --parent-id 67890 --max-items 50
+```
+
+_See code: [src/commands/hubs/items/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/items/index.js)_
+
+## `box hubs:items:list ID`
+
+List items in a Box Hub
+
+```
+USAGE
+  $ box hubs:items:list ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--parent-id
+    <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --parent-id=<value>          Filter to items that belong to a specific item list block in the Box Hub
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  List items in a Box Hub
+
+ALIASES
+  $ box hubs:items:list
+
+EXAMPLES
+  $ box hubs:items 12345
+
+  $ box hubs:items 12345 --parent-id 67890 --max-items 50
+```
+
+## `box hubs:items:manage ID`
+
+Add or remove items in a Box Hub
+
+```
+USAGE
+  $ box hubs:items:manage ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--add <value>...] [--remove <value>...]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --add=<value>...             Add an item to the Box Hub. Format: id=ITEM_ID,type=TYPE,parent-id=PARENT_ID.
+                                   Supported types are file, folder, web_link. The parent-id is the ID of the parent
+                                   block to add the item to. It must be an Item List block. If not provided, the item
+                                   will be added to the first page's first Item List block.
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --remove=<value>...          Remove an item from the Box Hub. Format: id=ITEM_ID,type=TYPE. Supported types are
+                                   file, folder, web_link.
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Add or remove items in a Box Hub
+
+EXAMPLES
+  $ box hubs:items:manage 12345 --add id=11111,type=file,parent-id=67890
+
+  $ box hubs:items:manage 12345 --remove id=22222,type=folder
+```
+
+_See code: [src/commands/hubs/items/manage.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/items/manage.js)_
 
 ## `box hubs:list`
 

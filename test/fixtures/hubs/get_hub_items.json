@@ -1,0 +1,15 @@
+{
+	"entries": [
+		{
+			"id": "11111",
+			"type": "file",
+			"name": "Q2 roadmap.pdf"
+		},
+		{
+			"id": "22222",
+			"type": "folder",
+			"name": "Launch assets"
+		}
+	],
+	"limit": 2
+}
