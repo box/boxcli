@@ -243,6 +243,84 @@ describe('Hubs', function () {
 			});
 	});
 
+	describe('hubs:document:pages', function () {
+		const response = JSON.parse(getFixture('hubs/get_hub_document_pages'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.get('/2.0/hub_document_pages')
+					.query({
+						hub_id: '12345',
+						limit: 2,
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:document:pages',
+				'12345',
+				'--max-items=2',
+				'--json',
+				'--token=test',
+			])
+			.it('lists hub document pages', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), [
+					{
+						id: 'page_1',
+						type: 'page',
+						titleFragment: 'Overview',
+					},
+					{
+						id: 'page_2',
+						type: 'page',
+						parentId: 'page_1',
+						titleFragment: 'Launch Plan',
+					},
+				]);
+			});
+	});
+
+	describe('hubs:document:blocks', function () {
+		const response = JSON.parse(getFixture('hubs/get_hub_document_blocks'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.get('/2.0/hub_document_blocks')
+					.query({
+						hub_id: '12345',
+						page_id: 'page_1',
+						limit: 2,
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:document:blocks',
+				'12345',
+				'page_1',
+				'--max-items=2',
+				'--json',
+				'--token=test',
+			])
+			.it('lists hub document blocks for a page', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), [
+					{
+						id: 'block_1',
+						type: 'section_title',
+						parentId: 'page_1',
+						fragment: 'Goals',
+					},
+					{
+						id: 'block_2',
+						type: 'item_list',
+						parentId: 'page_1',
+					},
+				]);
+			});
+	});
+
 	describe('hubs:get', function () {
 		const response = JSON.parse(getFixture('hubs/get_hubs_id'));
 

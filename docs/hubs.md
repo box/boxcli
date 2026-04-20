@@ -7,6 +7,10 @@ List Box Hubs for the current user
 * [`box hubs:copy ID`](#box-hubscopy-id)
 * [`box hubs:create TITLE`](#box-hubscreate-title)
 * [`box hubs:delete ID`](#box-hubsdelete-id)
+* [`box hubs:document:blocks ID PAGEID`](#box-hubsdocumentblocks-id-pageid)
+* [`box hubs:document:blocks:list ID PAGEID`](#box-hubsdocumentblockslist-id-pageid)
+* [`box hubs:document:pages ID`](#box-hubsdocumentpages-id)
+* [`box hubs:document:pages:list ID`](#box-hubsdocumentpageslist-id)
 * [`box hubs:enterprise`](#box-hubsenterprise)
 * [`box hubs:get ID`](#box-hubsget-id)
 * [`box hubs:items ID`](#box-hubsitems-id)
@@ -177,6 +181,186 @@ EXAMPLES
 ```
 
 _See code: [src/commands/hubs/delete.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/delete.js)_
+
+## `box hubs:document:blocks ID PAGEID`
+
+Retrieve sorted Hub Document Blocks for a specific hub document page, excluding items. Results are organized by parent_id and include only blocks on that page, not sub pages or their content blocks.
+
+```
+USAGE
+  $ box hubs:document:blocks ID PAGEID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
+    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID      ID of the Box Hub
+  PAGEID  ID of the page in the Box Hub document
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Retrieve sorted Hub Document Blocks for a specific hub document page, excluding items. Results are organized by
+  parent_id and include only blocks on that page, not sub pages or their content blocks.
+
+ALIASES
+  $ box hubs:document:blocks:list
+
+EXAMPLES
+  $ box hubs:document:blocks 12345 55c8361a-012a-4fa1-a724-b7ef1cd87865
+
+  $ box hubs:document:blocks 12345 55c8361a-012a-4fa1-a724-b7ef1cd87865 --max-items 50
+```
+
+_See code: [src/commands/hubs/document/blocks.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/document/blocks.js)_
+
+## `box hubs:document:blocks:list ID PAGEID`
+
+Retrieve sorted Hub Document Blocks for a specific hub document page, excluding items. Results are organized by parent_id and include only blocks on that page, not sub pages or their content blocks.
+
+```
+USAGE
+  $ box hubs:document:blocks:list ID PAGEID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s |
+    --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID      ID of the Box Hub
+  PAGEID  ID of the page in the Box Hub document
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Retrieve sorted Hub Document Blocks for a specific hub document page, excluding items. Results are organized by
+  parent_id and include only blocks on that page, not sub pages or their content blocks.
+
+ALIASES
+  $ box hubs:document:blocks:list
+
+EXAMPLES
+  $ box hubs:document:blocks 12345 55c8361a-012a-4fa1-a724-b7ef1cd87865
+
+  $ box hubs:document:blocks 12345 55c8361a-012a-4fa1-a724-b7ef1cd87865 --max-items 50
+```
+
+## `box hubs:document:pages ID`
+
+Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages
+
+```
+USAGE
+  $ box hubs:document:pages ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages
+
+ALIASES
+  $ box hubs:document:pages:list
+
+EXAMPLES
+  $ box hubs:document:pages 12345
+
+  $ box hubs:document:pages 12345 --max-items 50
+```
+
+_See code: [src/commands/hubs/document/pages.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/document/pages.js)_
+
+## `box hubs:document:pages:list ID`
+
+Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages
+
+```
+USAGE
+  $ box hubs:document:pages:list ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>]
+
+ARGUMENTS
+  ID  ID of the Box Hub
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --max-items=<value>          A value that indicates the maximum number of results to return. This only specifies a
+                                   maximum boundary and will not guarantee the minimum number of results returned. When
+                                   the max-items (x) is greater than 1000, then the maximum ceil(x/1000) requests will
+                                   be made.
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages
+
+ALIASES
+  $ box hubs:document:pages:list
+
+EXAMPLES
+  $ box hubs:document:pages 12345
+
+  $ box hubs:document:pages 12345 --max-items 50
+```
 
 ## `box hubs:enterprise`
 
