@@ -1,0 +1,16 @@
+{
+	"id": "99999",
+	"type": "hub_collaboration",
+	"hub": {
+		"id": "12345",
+		"type": "hubs"
+	},
+	"accessible_by": {
+		"id": "22222",
+		"type": "user",
+		"name": "Editor Example",
+		"login": "editor@example.com"
+	},
+	"role": "viewer",
+	"status": "accepted"
+}

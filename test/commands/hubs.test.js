@@ -32,6 +32,43 @@ function formatHubJsonOutput(hub) {
 	};
 }
 
+function formatHubCollaborationGrantee(grantee) {
+	const output = {
+		id: grantee.id,
+		type: grantee.type,
+	};
+
+	if (grantee.name) {
+		output.name = grantee.name;
+	}
+	if (grantee.login) {
+		output.login = grantee.login;
+	}
+	if (grantee.group_type) {
+		output.groupType = grantee.group_type;
+	}
+
+	return output;
+}
+
+function formatHubCollaborationJsonOutput(collaboration) {
+	const output = {
+		id: collaboration.id,
+		type: collaboration.type,
+		hub: collaboration.hub,
+		role: collaboration.role,
+		status: collaboration.status,
+	};
+
+	if (collaboration.accessible_by) {
+		output.accessibleBy = formatHubCollaborationGrantee(
+			collaboration.accessible_by
+		);
+	}
+
+	return output;
+}
+
 describe('Hubs', function () {
 	describe('hubs', function () {
 		const response = {
@@ -455,6 +492,169 @@ describe('Hubs', function () {
 			.command(['hubs:delete', '12345', '--token=test'])
 			.it('deletes a hub by ID', (context) => {
 				assert.equal(context.stderr, `Deleted hub 12345${os.EOL}`);
+			});
+	});
+
+	describe('hubs:collaborations', function () {
+		const response = JSON.parse(getFixture('hubs/get_hub_collaborations'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.get('/2.0/hub_collaborations')
+					.query({
+						hub_id: '12345',
+						limit: 1,
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:collaborations',
+				'12345',
+				'--max-items=1',
+				'--json',
+				'--token=test',
+			])
+			.it('lists collaborations for a hub', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), [
+					formatHubCollaborationJsonOutput(response.entries[0]),
+				]);
+			});
+	});
+
+	describe('hubs:collaborations:create', function () {
+		const response = JSON.parse(getFixture('hubs/post_hub_collaborations'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.post('/2.0/hub_collaborations', {
+						hub: {
+							id: '12345',
+							type: 'hubs',
+						},
+						accessible_by: {
+							type: 'user',
+							id: '22222',
+						},
+						role: 'editor',
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:collaborations:create',
+				'12345',
+				'--role=editor',
+				'--user-id=22222',
+				'--json',
+				'--token=test',
+			])
+			.it('creates a collaboration for a hub', (context) => {
+				assert.deepEqual(
+					JSON.parse(context.stdout),
+					formatHubCollaborationJsonOutput(response)
+				);
+			});
+
+		it('rejects unsupported hub collaboration roles on create', async function () {
+			return test
+				.command([
+					'hubs:collaborations:create',
+					'12345',
+					'--role=owner',
+					'--user-id=22222',
+					'--token=test',
+				])
+				.catch((error) => {
+					assert.include(
+						error.message,
+						'Expected --role=owner to be one of: editor, viewer, co-owner'
+					);
+				});
+		});
+	});
+
+	describe('hubs:collaborations:get', function () {
+		const response = JSON.parse(getFixture('hubs/get_hub_collaborations_id'));
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api.get('/2.0/hub_collaborations/99999').reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:collaborations:get',
+				'99999',
+				'--json',
+				'--token=test',
+			])
+			.it('gets a hub collaboration by ID', (context) => {
+				assert.deepEqual(
+					JSON.parse(context.stdout),
+					formatHubCollaborationJsonOutput(response)
+				);
+			});
+	});
+
+	describe('hubs:collaborations:update', function () {
+		const response = JSON.parse(
+			getFixture('hubs/put_hub_collaborations_id')
+		);
+
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.put('/2.0/hub_collaborations/99999', {
+						role: 'viewer',
+					})
+					.reply(200, response)
+			)
+			.stdout()
+			.command([
+				'hubs:collaborations:update',
+				'99999',
+				'--role=viewer',
+				'--json',
+				'--token=test',
+			])
+			.it('updates a hub collaboration role', (context) => {
+				assert.deepEqual(
+					JSON.parse(context.stdout),
+					formatHubCollaborationJsonOutput(response)
+				);
+			});
+
+		it('rejects unsupported hub collaboration roles on update', async function () {
+			return test
+				.command([
+					'hubs:collaborations:update',
+					'99999',
+					'--role=owner',
+					'--token=test',
+				])
+				.catch((error) => {
+					assert.include(
+						error.message,
+						'Expected --role=owner to be one of: editor, viewer, co-owner'
+					);
+				});
+		});
+	});
+
+	describe('hubs:collaborations:delete', function () {
+		test
+			.nock(TEST_API_ROOT, (api) =>
+				api.delete('/2.0/hub_collaborations/99999').reply(204)
+			)
+			.stderr()
+			.command(['hubs:collaborations:delete', '99999', '--token=test'])
+			.it('deletes a hub collaboration by ID', (context) => {
+				assert.equal(
+					context.stderr,
+					`Deleted hub collaboration 99999${os.EOL}`
+				);
 			});
 	});
 });
