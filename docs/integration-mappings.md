@@ -233,8 +233,8 @@ List Teams integration mappings
 ```
 USAGE
   $ box integration-mappings:teams [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--partner-item-id
-    <value>] [--partner-item-type <value>] [--box-item-id <value>] [--box-item-type <value>]
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--raw-json | ]
+    [--partner-item-id <value>] [--partner-item-type <value>] [--box-item-id <value>] [--box-item-type <value>]
 
 FLAGS
   -h, --help                       Show CLI help
@@ -258,6 +258,9 @@ FLAGS
       --partner-item-id=<value>    ID of the mapped item, for which the mapping should be returned
       --partner-item-type=<value>  Mapped item type, for which the mapping should be returned, value is one of: channel,
                                    team
+      --raw-json                   Output the raw API JSON response instead of the tsClient-normalized object fields.
+                                   Added as a non-breaking compatibility flag for users who need JSON field names to
+                                   match the API schema exactly. Implies --json.
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
@@ -358,8 +361,8 @@ List Teams integration mappings
 ```
 USAGE
   $ box integration-mappings:teams:list [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--partner-item-id
-    <value>] [--partner-item-type <value>] [--box-item-id <value>] [--box-item-type <value>]
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--max-items <value>] [--raw-json | ]
+    [--partner-item-id <value>] [--partner-item-type <value>] [--box-item-id <value>] [--box-item-type <value>]
 
 FLAGS
   -h, --help                       Show CLI help
@@ -383,6 +386,9 @@ FLAGS
       --partner-item-id=<value>    ID of the mapped item, for which the mapping should be returned
       --partner-item-type=<value>  Mapped item type, for which the mapping should be returned, value is one of: channel,
                                    team
+      --raw-json                   Output the raw API JSON response instead of the tsClient-normalized object fields.
+                                   Added as a non-breaking compatibility flag for users who need JSON field names to
+                                   match the API schema exactly. Implies --json.
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
@@ -404,7 +410,7 @@ Update Teams integration mapping
 ```
 USAGE
   $ box integration-mappings:teams:update ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
-    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--box-item-id <value>]
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q] [--raw-json | ] [--box-item-id <value>]
 
 ARGUMENTS
   ID  ID of an integration mapping
@@ -423,6 +429,9 @@ FLAGS
       --fields=<value>             Comma separated list of fields to show
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
+      --raw-json                   Output the raw API JSON response instead of the tsClient-normalized object fields.
+                                   Added as a non-breaking compatibility flag for users who need JSON field names to
+                                   match the API schema exactly. Implies --json.
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION

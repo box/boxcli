@@ -51,8 +51,7 @@ class HubsManageItemsCommand extends BoxCommand {
 			args.id,
 			{ operations }
 		);
-		delete response.rawData;
-		await this.output(response);
+		await this.output(response.rawData ?? response);
 	}
 }
 

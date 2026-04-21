@@ -1188,6 +1188,44 @@ class BoxCommand extends Command {
 	}
 
 	/**
+	 * Returns true when raw API JSON output was requested.
+	 *
+	 * @returns {boolean} True if raw JSON output should be used
+	 * @private
+	 */
+	_wantsRawJsonOutput() {
+		return Boolean(this.flags && this.flags['raw-json']);
+	}
+
+	/**
+	 * Preserves default output behavior while adding raw JSON support.
+	 *
+	 * The generated TypeScript client can expose response objects with normalized
+	 * field names that do not match the original API schema. That behavior was
+	 * introduced as newer commands moved to `tsClient`. To fix the JSON output
+	 * shape without a breaking change, commands that support `--raw-json` use this
+	 * wrapper on the top-level response object before calling `output()`.
+	 *
+	 * @param {*} content The content to potentially replace with rawData
+	 * @returns {*} The content to send to output formatting
+	 */
+	getOutputContentWithRawJsonSupport(content) {
+		if (typeof content === 'object' && content !== null) {
+			if (this._wantsRawJsonOutput()) {
+				return content.rawData ?? content;
+			}
+
+			if (Object.hasOwn(content, 'rawData')) {
+				const output = { ...content };
+				delete output.rawData;
+				return output;
+			}
+		}
+
+		return content;
+	}
+
+	/**
 	 * Format data for output to stdout
 	 * @param {*} content The content to output
 	 * @returns {Promise<void>} A promise resolving when output is handled
@@ -1323,7 +1361,11 @@ class BoxCommand extends Command {
 			}
 
 			const page = await fetchPage(pageQueryParams);
-			const pageEntries = page.entries || [];
+			const rawPage =
+				typeof page?.rawData === 'object' && page.rawData !== null
+					? page.rawData
+					: page;
+			const pageEntries = rawPage.entries || page.entries || [];
 			entries.push(...pageEntries);
 			remaining -= pageEntries.length;
 			marker = page.nextMarker || page.next_marker;
@@ -1390,6 +1432,12 @@ class BoxCommand extends Command {
 	 */
 	_getOutputFormat() {
 		if (this.flags.json) {
+			return 'json';
+		}
+
+		// Raw API payloads are only intended for JSON output, so `--raw-json`
+		// implicitly promotes the format to JSON without changing default behavior.
+		if (this._wantsRawJsonOutput()) {
 			return 'json';
 		}
 
@@ -2213,6 +2261,14 @@ BoxCommand.flags = {
 		description: 'Suppress any non-error output to stderr',
 	}),
 };
+
+BoxCommand.rawJsonFlags = Object.freeze({
+	'raw-json': Flags.boolean({
+		description:
+			'Output the raw API JSON response instead of the tsClient-normalized object fields. Added as a non-breaking compatibility flag for users who need JSON field names to match the API schema exactly. Implies --json.',
+		exclusive: ['csv'],
+	}),
+});
 
 BoxCommand.minFlags = _.pick(BoxCommand.flags, [
 	'no-color',

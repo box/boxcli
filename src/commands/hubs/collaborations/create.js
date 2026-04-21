@@ -46,8 +46,7 @@ class HubsCreateCollaborationCommand extends BoxCommand {
 			await this.tsClient.hubCollaborations.createHubCollaborationV2025R0(
 				requestBody
 			);
-		delete collaboration.rawData;
-		await this.output(collaboration);
+		await this.output(collaboration.rawData ?? collaboration);
 	}
 }
 HubsCreateCollaborationCommand.aliases = ['hubs:collaborations:add'];

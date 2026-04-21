@@ -26,8 +26,9 @@ class IntegrationMappingsTeamsListCommand extends BoxCommand {
 			await this.tsClient.integrationMappings.getTeamsIntegrationMapping(
 				options
 			);
-		delete teamsIntegrationMappings.rawData;
-		await this.output(teamsIntegrationMappings);
+		await this.output(
+			this.getOutputContentWithRawJsonSupport(teamsIntegrationMappings)
+		);
 	}
 }
 
@@ -47,6 +48,7 @@ IntegrationMappingsTeamsListCommand._endpoint =
 IntegrationMappingsTeamsListCommand.flags = {
 	...BoxCommand.flags,
 	...PaginationUtilities.flags,
+	...BoxCommand.rawJsonFlags,
 	'partner-item-id': Flags.string({
 		hidden: false,
 		description:

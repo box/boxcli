@@ -16,8 +16,7 @@ class HubsCreateCommand extends BoxCommand {
 		}
 
 		const hub = await this.tsClient.hubs.createHubV2025R0(requestBody);
-		delete hub.rawData;
-		await this.output(hub);
+		await this.output(hub.rawData ?? hub);
 	}
 }
 

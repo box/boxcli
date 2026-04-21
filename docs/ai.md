@@ -16,7 +16,7 @@ Sends a request to supported LLMs using Box AI. This is intended for direct use,
 USAGE
   $ box ai:ask --prompt <value> --items <value>... [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
-    [--ai-agent <value>]
+    [--ai-agent <value>] [--raw-json | ]
 
 FLAGS
   -h, --help                       Show CLI help
@@ -36,6 +36,9 @@ FLAGS
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
       --prompt=<value>             (required) The prompt for the AI request
+      --raw-json                   Output the raw API JSON response instead of the tsClient-normalized object fields.
+                                   Added as a non-breaking compatibility flag for users who need JSON field names to
+                                   match the API schema exactly. Implies --json.
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION
@@ -55,7 +58,7 @@ Sends an AI request to supported Large Language Models (LLMs) and extracts metad
 USAGE
   $ box ai:extract --prompt <value> --items <value>... [-t <value>] [--as-user <value>] [--no-color] [--json |
     --csv] [-s | --save-to-file-path <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
-    [--ai-agent <value>]
+    [--raw-json | ] [--ai-agent <value>]
 
 FLAGS
   -h, --help                       Show CLI help
@@ -76,6 +79,9 @@ FLAGS
       --json                       Output formatted JSON
       --no-color                   Turn off colors for logging
       --prompt=<value>             (required) The prompt provided to a Large Language Model (LLM) in the request.
+      --raw-json                   Output the raw API JSON response instead of the tsClient-normalized object fields.
+                                   Added as a non-breaking compatibility flag for users who need JSON field names to
+                                   match the API schema exactly. Implies --json.
       --save-to-file-path=<value>  Override default file path to save report
 
 DESCRIPTION

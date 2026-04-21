@@ -24,8 +24,9 @@ class IntegrationMappingsTeamsUpdateCommand extends BoxCommand {
 					requestBody: body,
 				}
 			);
-		delete integrationMapping.rawData;
-		await this.output(integrationMapping);
+		await this.output(
+			this.getOutputContentWithRawJsonSupport(integrationMapping)
+		);
 	}
 }
 
@@ -39,6 +40,7 @@ IntegrationMappingsTeamsUpdateCommand._endpoint =
 
 IntegrationMappingsTeamsUpdateCommand.flags = {
 	...BoxCommand.flags,
+	...BoxCommand.rawJsonFlags,
 	'box-item-id': Flags.string({
 		description: 'ID of the mapped folder',
 	}),

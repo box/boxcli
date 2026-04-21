@@ -23,8 +23,7 @@ class AiAskCommand extends BoxCommand {
 		}
 
 		let answer = await this.tsClient.ai.createAiAsk(options);
-		delete answer.rawData;
-		await this.output(answer);
+		await this.output(this.getOutputContentWithRawJsonSupport(answer));
 	}
 }
 
@@ -96,6 +95,7 @@ AiAskCommand.flags = {
 			}
 		},
 	}),
+	...BoxCommand.rawJsonFlags,
 };
 
 module.exports = AiAskCommand;
