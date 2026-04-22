@@ -213,6 +213,38 @@ describe('Integration Mappings', function () {
 				assert.equal(context.stderr, '');
 				assert.deepEqual(JSON.parse(context.stdout), expectedResult);
 			});
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/integration_mappings/teams')
+				.query({
+					partner_item_id: partnerItemId,
+					partner_item_type: partnerItemType,
+					box_item_id: boxItemId,
+					box_item_type: boxItemType,
+				})
+				.reply(200, fixture, {
+					'Content-Type': 'application/json',
+				})
+		)
+			.stderr()
+			.stdout()
+			.command([
+				'integration-mappings:teams:list',
+				`--partner-item-id=${partnerItemId}`,
+				`--partner-item-type=${partnerItemType}`,
+				`--box-item-id=${boxItemId}`,
+				`--box-item-type=${boxItemType}`,
+				'--raw-json',
+				'--token=test',
+			])
+			.it(
+				'should list Teams integration mappings using raw JSON output',
+				(context) => {
+					assert.equal(context.stderr, '');
+					assert.deepEqual(JSON.parse(context.stdout), JSON.parse(fixture));
+				}
+			);
 	});
 
 	describe('integration-mappings:teams:create', function () {
@@ -338,6 +370,38 @@ describe('Integration Mappings', function () {
 				assert.equal(context.stderr, '');
 				assert.deepEqual(JSON.parse(context.stdout), expectedResult);
 			});
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put(
+					`/2.0/integration_mappings/teams/${integrationMappingId}`,
+					{
+						box_item: {
+							id: boxItemId,
+							type: 'folder',
+						},
+					}
+				)
+				.reply(200, fixture, {
+					'Content-Type': 'application/json',
+				})
+		)
+			.stderr()
+			.stdout()
+			.command([
+				'integration-mappings:teams:update',
+				integrationMappingId,
+				`--box-item-id=${boxItemId}`,
+				'--raw-json',
+				'--token=test',
+			])
+			.it(
+				'should update a Teams integration mapping using raw JSON output',
+				(context) => {
+					assert.equal(context.stderr, '');
+					assert.deepEqual(JSON.parse(context.stdout), JSON.parse(fixture));
+				}
+			);
 	});
 
 	describe('integration-mappings:teams:delete', function () {

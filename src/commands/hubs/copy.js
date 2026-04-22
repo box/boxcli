@@ -17,8 +17,7 @@ class HubsCopyCommand extends BoxCommand {
 		}
 
 		const hub = await this.tsClient.hubs.copyHubV2025R0(args.id, requestBody);
-		delete hub.rawData;
-		await this.output(hub);
+		await this.output(hub.rawData ?? hub);
 	}
 }
 

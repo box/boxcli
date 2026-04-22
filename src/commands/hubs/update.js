@@ -42,8 +42,7 @@ class HubsUpdateCommand extends BoxCommand {
 			args.id,
 			requestBody
 		);
-		delete hub.rawData;
-		await this.output(hub);
+		await this.output(hub.rawData ?? hub);
 	}
 }
 

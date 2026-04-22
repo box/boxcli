@@ -20,9 +20,7 @@ class AiExtractCommand extends BoxCommand {
 		}
 
 		let answer = await this.tsClient.ai.createAiExtract(options);
-
-		delete answer.rawData;
-		await this.output(answer);
+		await this.output(this.getOutputContentWithRawJsonSupport(answer));
 	}
 }
 
@@ -37,6 +35,7 @@ AiExtractCommand._endpoint = 'post_ai_extract';
 // Flags definition
 AiExtractCommand.flags = {
 	...BoxCommand.flags,
+	...BoxCommand.rawJsonFlags,
 	prompt: Flags.string({
 		required: true,
 		description:

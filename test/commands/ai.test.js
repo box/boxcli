@@ -93,6 +93,24 @@ describe('AI', function () {
 				'--items=content=one,two,three,id=12345,type=file',
 				'--prompt',
 				'What is the status of this document?',
+				'--raw-json',
+				'--token=test',
+			])
+			.it('should output the raw response when --raw-json is passed', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), expectedResponseBody);
+			});
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/ai/ask', expectedRequestBody)
+				.reply(200, expectedResponseBody)
+		)
+			.stdout()
+			.command([
+				'ai:ask',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'What is the status of this document?',
 				'--json',
 				'--token=test',
 			])
@@ -300,6 +318,29 @@ describe('AI', function () {
 
 		const fixture = getFixture('ai/post_ai_extract_response');
 		const yamlFixture = getFixture('ai/post_ai_extract_response_yaml.txt');
+
+		test.nock(TEST_API_ROOT, (api) => {
+			api.post('/2.0/ai/extract', expectedRequestBody).reply(
+				200,
+				expectedResponseBody
+			);
+		})
+			.stdout()
+			.command([
+				'ai:extract',
+				'--items=content=one,two,three,id=12345,type=file',
+				'--prompt',
+				'firstName, lastName, location, yearOfBirth, company',
+				'--raw-json',
+				'--token=test',
+			])
+
+			.it(
+				'should output the raw response when --raw-json is passed',
+				(context) => {
+					assert.deepEqual(JSON.parse(context.stdout), expectedResponseBody);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) => {
 			api.post('/2.0/ai/extract', expectedRequestBody).reply(

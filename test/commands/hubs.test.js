@@ -5,74 +5,11 @@ const { assert } = require('chai');
 const os = require('node:os');
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
-// Hub fixtures use API snake_case fields, but the TS SDK currently returns camelCase JSON output.
-// It also wraps date-time fields in `{ value: ... }` objects, so tests need a normalized expected shape.
-// This is a temporary test helper until a future PR makes command JSON output follow API field naming.
-function formatHubJsonOutput(hub) {
-	return {
-		id: hub.id,
-		type: hub.type,
-		title: hub.title,
-		description: hub.description,
-		createdAt: {
-			value: hub.created_at,
-		},
-		updatedAt: {
-			value: hub.updated_at,
-		},
-		createdBy: hub.created_by,
-		updatedBy: hub.updated_by,
-		viewCount: hub.view_count,
-		isAiEnabled: hub.is_ai_enabled,
-		isCollaborationRestrictedToEnterprise:
-			hub.is_collaboration_restricted_to_enterprise,
-		canNonOwnersInvite: hub.can_non_owners_invite,
-		canSharedLinkBeCreated: hub.can_shared_link_be_created,
-		canPublicSharedLinkBeCreated: hub.can_public_shared_link_be_created,
-	};
-}
-
-function formatHubCollaborationGrantee(grantee) {
-	const output = {
-		id: grantee.id,
-		type: grantee.type,
-	};
-
-	if (grantee.name) {
-		output.name = grantee.name;
-	}
-	if (grantee.login) {
-		output.login = grantee.login;
-	}
-	if (grantee.group_type) {
-		output.groupType = grantee.group_type;
-	}
-
-	return output;
-}
-
-function formatHubCollaborationJsonOutput(collaboration) {
-	const output = {
-		id: collaboration.id,
-		type: collaboration.type,
-		hub: collaboration.hub,
-		role: collaboration.role,
-		status: collaboration.status,
-	};
-
-	if (collaboration.accessible_by) {
-		output.accessibleBy = formatHubCollaborationGrantee(
-			collaboration.accessible_by
-		);
-	}
-
-	return output;
-}
-
 describe('Hubs', function () {
 	describe('hubs', function () {
+		const hubResponse = JSON.parse(getFixture('hubs/get_hubs_id'));
 		const response = {
-			entries: [{ id: '12345', type: 'hubs', title: 'Team Hub' }],
+			entries: [hubResponse],
 			limit: 10,
 		};
 
@@ -101,9 +38,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('lists hubs with provided filters', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), [
-					{ id: '12345', type: 'hubs', title: 'Team Hub' },
-				]);
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
 			});
 
 		const firstPageEntries = Array.from({ length: 1000 }, (_, index) => ({
@@ -153,8 +88,9 @@ describe('Hubs', function () {
 	});
 
 	describe('hubs:enterprise', function () {
+		const hubResponse = JSON.parse(getFixture('hubs/get_hubs_id'));
 		const response = {
-			entries: [{ id: '11111', type: 'hubs', title: 'Enterprise Hub' }],
+			entries: [hubResponse],
 			limit: 50,
 		};
 
@@ -181,13 +117,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('lists enterprise hubs with provided filters', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), [
-					{
-						id: '11111',
-						type: 'hubs',
-						title: 'Enterprise Hub',
-					},
-				]);
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
 			});
 	});
 
@@ -256,27 +186,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('adds and removes items in a hub', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), {
-					operations: [
-						{
-							action: 'add',
-							item: {
-								id: '11111',
-								type: 'file',
-							},
-							parentId: '67890',
-							status: 201,
-						},
-						{
-							action: 'remove',
-							item: {
-								id: '22222',
-								type: 'folder',
-							},
-							status: 204,
-						},
-					],
-				});
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 	});
 
@@ -302,19 +212,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('lists hub document pages', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), [
-					{
-						id: 'page_1',
-						type: 'page',
-						titleFragment: 'Overview',
-					},
-					{
-						id: 'page_2',
-						type: 'page',
-						parentId: 'page_1',
-						titleFragment: 'Launch Plan',
-					},
-				]);
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
 			});
 	});
 
@@ -342,19 +240,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('lists hub document blocks for a page', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), [
-					{
-						id: 'block_1',
-						type: 'section_title',
-						parentId: 'page_1',
-						fragment: 'Goals',
-					},
-					{
-						id: 'block_2',
-						type: 'item_list',
-						parentId: 'page_1',
-					},
-				]);
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
 			});
 	});
 
@@ -368,10 +254,7 @@ describe('Hubs', function () {
 			.stdout()
 			.command(['hubs:get', '12345', '--json', '--token=test'])
 			.it('gets a hub by ID', (context) => {
-				assert.deepEqual(
-					JSON.parse(context.stdout),
-					formatHubJsonOutput(response)
-				);
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 	});
 
@@ -440,10 +323,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('updates a hub with provided fields', (context) => {
-				assert.deepEqual(
-					JSON.parse(context.stdout),
-					formatHubJsonOutput(response)
-				);
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 	});
 
@@ -517,9 +397,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('lists collaborations for a hub', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), [
-					formatHubCollaborationJsonOutput(response.entries[0]),
-				]);
+				assert.deepEqual(JSON.parse(context.stdout), response.entries);
 			});
 	});
 
@@ -552,10 +430,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('creates a collaboration for a hub', (context) => {
-				assert.deepEqual(
-					JSON.parse(context.stdout),
-					formatHubCollaborationJsonOutput(response)
-				);
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 
 		it('rejects unsupported hub collaboration roles on create', async function () {
@@ -591,10 +466,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('gets a hub collaboration by ID', (context) => {
-				assert.deepEqual(
-					JSON.parse(context.stdout),
-					formatHubCollaborationJsonOutput(response)
-				);
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 	});
 
@@ -620,10 +492,7 @@ describe('Hubs', function () {
 				'--token=test',
 			])
 			.it('updates a hub collaboration role', (context) => {
-				assert.deepEqual(
-					JSON.parse(context.stdout),
-					formatHubCollaborationJsonOutput(response)
-				);
+				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 
 		it('rejects unsupported hub collaboration roles on update', async function () {

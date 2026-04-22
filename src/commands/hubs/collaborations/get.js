@@ -10,8 +10,7 @@ class HubsGetCollaborationCommand extends BoxCommand {
 			await this.tsClient.hubCollaborations.getHubCollaborationByIdV2025R0(
 				args.id
 			);
-		delete collaboration.rawData;
-		await this.output(collaboration);
+		await this.output(collaboration.rawData ?? collaboration);
 	}
 }
 

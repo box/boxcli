@@ -15,8 +15,7 @@ class HubsUpdateCollaborationCommand extends BoxCommand {
 					role: flags.role,
 				}
 			);
-		delete collaboration.rawData;
-		await this.output(collaboration);
+		await this.output(collaboration.rawData ?? collaboration);
 	}
 }
 
