@@ -48,7 +48,7 @@ EXAMPLES
   $ box ai:ask --items=id=12345,type=file --prompt "What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/ai/ask.js)_
+_See code: [src/commands/ai/ask.js](https://github.com/box/boxcli/blob/v4.8.0-beta/src/commands/ai/ask.js)_
 
 ## `box ai:extract`
 
@@ -94,7 +94,7 @@ EXAMPLES
   $ box ai:extract --prompt "firstName, lastName, location, yearOfBirth, company" --items "id=12345,type=file" --ai-agent '{"type":"ai_agent_extract","basic_text":{"model":"azure__openai__gpt_4o_mini"}}'
 ```
 
-_See code: [src/commands/ai/extract.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/ai/extract.js)_
+_See code: [src/commands/ai/extract.js](https://github.com/box/boxcli/blob/v4.8.0-beta/src/commands/ai/extract.js)_
 
 ## `box ai:extract-structured`
 
@@ -139,7 +139,7 @@ EXAMPLES
   $ box ai:extract-structured --items="id=12345,type=file" --metadata-template="type=metadata_template,scope=enterprise,template_key=test" --ai-agent '{"type":"ai_agent_extract_structured","basic_text":{"model":"azure__openai__gpt_4o_mini","prompt_template":"Answer using the provided content"}}'
 ```
 
-_See code: [src/commands/ai/extract-structured.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/ai/extract-structured.js)_
+_See code: [src/commands/ai/extract-structured.js](https://github.com/box/boxcli/blob/v4.8.0-beta/src/commands/ai/extract-structured.js)_
 
 ## `box ai:text-gen`
 
@@ -179,4 +179,4 @@ EXAMPLES
   $ box ai:text-gen --dialogue-history=prompt="What is the status of this document?",answer="It is in review",created-at="2024-07-09T11:29:46.835Z" --items=id=12345,type=file --prompt="What is the status of this document?"
 ```
 
-_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/ai/text-gen.js)_
+_See code: [src/commands/ai/text-gen.js](https://github.com/box/boxcli/blob/v4.8.0-beta/src/commands/ai/text-gen.js)_

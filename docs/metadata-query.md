@@ -60,4 +60,4 @@ EXAMPLES
   $ box metadata-query enterprise_12345.contractTemplate 12345 --query "status = :status" --query-param status=active
 ```
 
-_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/metadata-query.js)_
+_See code: [src/commands/metadata-query.js](https://github.com/box/boxcli/blob/v4.8.0-beta/src/commands/metadata-query.js)_
