@@ -49,4 +49,4 @@ EXAMPLES
   $ box request /folders -X POST --body '{"name":"New Folder","parent":{"id":"0"}}'
 ```
 
-_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/request.js)_
+_See code: [src/commands/request.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/request.js)_
