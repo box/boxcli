@@ -79,4 +79,4 @@ EXAMPLES
   $ box search --mdfilter "enterprise.employeeRecord.name=John Doe"
 ```
 
-_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/search.js)_
+_See code: [src/commands/search.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/search.js)_

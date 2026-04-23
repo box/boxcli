@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.0](https://github.com/box/boxcli/compare/v4.7.0...v4.8.0) (2026-04-23)
+
+
+### New Features and Enhancements
+
+* Add `--raw-json` flag and fix `--json` output ([#669](https://github.com/box/boxcli/issues/669)) ([ee6d61d](https://github.com/box/boxcli/commit/ee6d61d576e5cb037cf1b080f49ddfbd181eee09))
+* Add support for `Box Hub Collaborations` endpoints ([#668](https://github.com/box/boxcli/issues/668)) ([543cd60](https://github.com/box/boxcli/commit/543cd60b0f5532bb307aefc2291c0d051e8481bb))
+* Add support for `Box Hub Document` endpoints ([#667](https://github.com/box/boxcli/issues/667)) ([2b21328](https://github.com/box/boxcli/commit/2b213285ee8d6205a8461756231beb372ca81059))
+* Add support for `Box Hub Items` endpoints ([#665](https://github.com/box/boxcli/issues/665)) ([0f46680](https://github.com/box/boxcli/commit/0f466800a65ad9d57c20057f86f2410e8343493f))
+* Add support for `Box Hubs` endpoints ([#664](https://github.com/box/boxcli/issues/664)) ([681b312](https://github.com/box/boxcli/commit/681b31256592bbde00ffc4426917911f51fd951c))
+
 ## [4.7.0](https://github.com/box/boxcli/compare/v4.6.0...v4.7.0) (2026-03-26)
 
 

@@ -76,7 +76,7 @@ EXAMPLES
   $ box hubs --query "Product" --scope editable --sort name --direction ASC
 ```
 
-_See code: [src/commands/hubs/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/index.js)_
+_See code: [src/commands/hubs/index.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/index.js)_
 
 ## `box hubs:collaborations ID`
 
@@ -121,7 +121,7 @@ EXAMPLES
   $ box hubs:collaborations 12345 --max-items 50
 ```
 
-_See code: [src/commands/hubs/collaborations/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/index.js)_
+_See code: [src/commands/hubs/collaborations/index.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/collaborations/index.js)_
 
 ## `box hubs:collaborations:add ID`
 
@@ -219,7 +219,7 @@ EXAMPLES
   $ box hubs:collaborations:create 12345 --role co-owner --login jdoe@example.com
 ```
 
-_See code: [src/commands/hubs/collaborations/create.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/create.js)_
+_See code: [src/commands/hubs/collaborations/create.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/collaborations/create.js)_
 
 ## `box hubs:collaborations:delete ID`
 
@@ -255,7 +255,7 @@ EXAMPLES
   $ box hubs:collaborations:delete 99999
 ```
 
-_See code: [src/commands/hubs/collaborations/delete.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/delete.js)_
+_See code: [src/commands/hubs/collaborations/delete.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/collaborations/delete.js)_
 
 ## `box hubs:collaborations:get ID`
 
@@ -291,7 +291,7 @@ EXAMPLES
   $ box hubs:collaborations:get 99999
 ```
 
-_See code: [src/commands/hubs/collaborations/get.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/get.js)_
+_See code: [src/commands/hubs/collaborations/get.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/collaborations/get.js)_
 
 ## `box hubs:collaborations:list ID`
 
@@ -372,7 +372,7 @@ EXAMPLES
   $ box hubs:collaborations:update 99999 --role viewer
 ```
 
-_See code: [src/commands/hubs/collaborations/update.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/collaborations/update.js)_
+_See code: [src/commands/hubs/collaborations/update.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/collaborations/update.js)_
 
 ## `box hubs:copy ID`
 
@@ -410,7 +410,7 @@ EXAMPLES
   $ box hubs:copy 12345 --title "Copied hub title" --description "Copied hub description"
 ```
 
-_See code: [src/commands/hubs/copy.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/copy.js)_
+_See code: [src/commands/hubs/copy.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/copy.js)_
 
 ## `box hubs:create TITLE`
 
@@ -447,7 +447,7 @@ EXAMPLES
   $ box hubs:create "Roadmap Hub" --description "Q3 planning hub"
 ```
 
-_See code: [src/commands/hubs/create.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/create.js)_
+_See code: [src/commands/hubs/create.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/create.js)_
 
 ## `box hubs:delete ID`
 
@@ -483,7 +483,7 @@ EXAMPLES
   $ box hubs:delete 12345
 ```
 
-_See code: [src/commands/hubs/delete.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/delete.js)_
+_See code: [src/commands/hubs/delete.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/delete.js)_
 
 ## `box hubs:document:blocks ID PAGEID`
 
@@ -530,7 +530,7 @@ EXAMPLES
   $ box hubs:document:blocks 12345 55c8361a-012a-4fa1-a724-b7ef1cd87865 --max-items 50
 ```
 
-_See code: [src/commands/hubs/document/blocks.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/document/blocks.js)_
+_See code: [src/commands/hubs/document/blocks.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/document/blocks.js)_
 
 ## `box hubs:document:blocks:list ID PAGEID`
 
@@ -620,7 +620,7 @@ EXAMPLES
   $ box hubs:document:pages 12345 --max-items 50
 ```
 
-_See code: [src/commands/hubs/document/pages.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/document/pages.js)_
+_See code: [src/commands/hubs/document/pages.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/document/pages.js)_
 
 ## `box hubs:document:pages:list ID`
 
@@ -711,7 +711,7 @@ EXAMPLES
   $ box hubs:enterprise --query "Roadmap" --sort updated_at --direction DESC
 ```
 
-_See code: [src/commands/hubs/enterprise.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/enterprise.js)_
+_See code: [src/commands/hubs/enterprise.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/enterprise.js)_
 
 ## `box hubs:get ID`
 
@@ -747,7 +747,7 @@ EXAMPLES
   $ box hubs:get 12345
 ```
 
-_See code: [src/commands/hubs/get.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/get.js)_
+_See code: [src/commands/hubs/get.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/get.js)_
 
 ## `box hubs:items ID`
 
@@ -794,7 +794,7 @@ EXAMPLES
   $ box hubs:items 12345 --parent-id 67890 --max-items 50
 ```
 
-_See code: [src/commands/hubs/items/index.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/items/index.js)_
+_See code: [src/commands/hubs/items/index.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/items/index.js)_
 
 ## `box hubs:items:list ID`
 
@@ -883,7 +883,7 @@ EXAMPLES
   $ box hubs:items:manage 12345 --remove id=22222,type=folder
 ```
 
-_See code: [src/commands/hubs/items/manage.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/items/manage.js)_
+_See code: [src/commands/hubs/items/manage.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/items/manage.js)_
 
 ## `box hubs:list`
 
@@ -978,4 +978,4 @@ EXAMPLES
   $ box hubs:update 12345 --title "Updated title" --ai-enabled
 ```
 
-_See code: [src/commands/hubs/update.js](https://github.com/box/boxcli/blob/v4.7.0/src/commands/hubs/update.js)_
+_See code: [src/commands/hubs/update.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/hubs/update.js)_
