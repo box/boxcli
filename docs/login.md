@@ -84,4 +84,4 @@ DESCRIPTION
   CLI when prompted.
 ```
 
-_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.8.0/src/commands/login.js)_
+_See code: [src/commands/login.js](https://github.com/box/boxcli/blob/v4.8.1/src/commands/login.js)_
