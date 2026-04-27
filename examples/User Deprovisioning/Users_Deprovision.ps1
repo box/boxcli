@@ -254,7 +254,7 @@ Function Start-Deprovisioning-Script {
         }
 
         # Validate new files owner if is not current user
-        $AsUserHeader = ""
+        $AsUserHeader = $null
         if ($NewFilesOwnerID -and ($NewFilesOwnerID -ne $CurrentUserId)) {
             Write-Log "Validating new files owner exists" -output true -color Yellow
             try {
