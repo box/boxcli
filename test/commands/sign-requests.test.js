@@ -176,6 +176,42 @@ describe('Sign requests', function () {
 			.it('should create a sign request with kebab case', (context) => {
 				assert.equal(context.stdout, fixture);
 			});
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/sign_requests', {
+					signers: [
+						{
+							role: 'signer',
+							email: signerEmail,
+							order: 2,
+						},
+					],
+					source_files: [
+						{
+							type: 'file',
+							id: fileId,
+						},
+					],
+					parent_folder: {
+						type: 'folder',
+						id: parentFolderId,
+					},
+				})
+				.reply(200, fixture)
+		)
+			.stdout()
+			.command([
+				'sign-requests:create',
+				`--signer=email=${signerEmail},order=2`,
+				`--source-files=${fileId}`,
+				`--parent-folder=${parentFolderId}`,
+				'--json',
+				'--token=test',
+			])
+			.it('should coerce signer order to a number for the API', (context) => {
+				assert.equal(context.stdout, fixture);
+			});
 	});
 
 	describe('sign-requests:cancel', function () {
