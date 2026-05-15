@@ -90,7 +90,18 @@ SignRequestsCreateCommand.flags = {
 					}
 
 					case 'order': {
-						signer.order = value;
+						if (value === '') {
+							throw new BoxCLIError(
+								`Invalid value for order property of signer: (empty). Expecting an integer.`
+							);
+						}
+						const orderNum = Number(value);
+						if (!Number.isInteger(orderNum)) {
+							throw new BoxCLIError(
+								`Invalid value for order property of signer: ${value}. Expecting an integer.`
+							);
+						}
+						signer.order = orderNum;
 						break;
 					}
 
