@@ -2,9 +2,9 @@
 
 const chai = require('chai');
 const assert = require('chai').assert;
-const mockery = require('mockery');
 const leche = require('leche');
 const sinon = require('sinon');
+const os = require('node:os');
 const process = require('node:process');
 const fs = require('node:fs');
 const chaiAsPromised = require('chai-as-promised');
@@ -12,37 +12,21 @@ const { getDriveLetter, isWin } = require('./helpers/test-helper');
 
 chai.use(chaiAsPromised);
 
+const cliUtilities = require('../src/util');
+
 describe('Utilities', function () {
-	const MODULE_UNDER_TEST = '../src/util';
-
 	let sandbox = sinon.createSandbox();
-
-	let mockOS, cliUtilities;
 
 	const isWindows = isWin();
 
 	const driveLetter = isWindows ? getDriveLetter() : '';
 
 	beforeEach(function () {
-		mockery.enable({
-			useCleanCache: true,
-			warnOnUnregistered: false,
-		});
-
-		mockOS = {
-			homedir: sandbox.stub().returns('/home/user'),
-		};
-
-		mockery.registerMock('node:os', mockOS);
-
-		mockery.registerAllowable(MODULE_UNDER_TEST, true);
-		cliUtilities = require(MODULE_UNDER_TEST);
+		sandbox.stub(os, 'homedir').returns('/home/user');
 	});
 
 	afterEach(function () {
 		sandbox.verifyAndRestore();
-		mockery.deregisterAll();
-		mockery.disable();
 	});
 
 	describe('parsePath()', function () {
