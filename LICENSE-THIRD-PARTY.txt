@@ -1036,7 +1036,7 @@ Apache License
 
 The following npm package may be included in this product:
 
- - box-node-sdk@4.3.0
+ - box-node-sdk@4.10.0
 
 This package contains the following license:
 
@@ -4148,7 +4148,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - basic-ftp@5.2.0
+ - basic-ftp@5.3.0
 
 This package contains the following license:
 
@@ -4859,7 +4859,7 @@ IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - lodash@4.17.23
+ - lodash@4.18.1
 
 This package contains the following license:
 
@@ -5308,8 +5308,8 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - brace-expansion@1.1.12
- - brace-expansion@2.0.2
+ - brace-expansion@1.1.14
+ - brace-expansion@2.1.0
 
 These packages each contain the following license:
 
@@ -7399,8 +7399,8 @@ THE SOFTWARE.
 
 The following npm packages may be included in this product:
 
+ - uuid@11.1.1
  - uuid@8.3.2
- - uuid@9.0.1
 
 These packages each contain the following license:
 
@@ -7596,7 +7596,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 The following npm packages may be included in this product:
 
  - array-flatten@1.1.1
- - path-to-regexp@0.1.12
+ - path-to-regexp@0.1.13
  - ts-node@10.9.2
 
 These packages each contain the following license:
@@ -8355,7 +8355,7 @@ THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - picomatch@2.3.1
+ - picomatch@2.3.2
 
 This package contains the following license:
 
