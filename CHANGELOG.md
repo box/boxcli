@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.8.1](https://github.com/box/boxcli/compare/v4.8.0...v4.8.1) (2026-05-18)
+
+
+### Bug Fixes
+
+* Fix `deprovision` script when `AsUserHeader` is empty ([#672](https://github.com/box/boxcli/issues/672)) ([676d5a4](https://github.com/box/boxcli/commit/676d5a400775d7a12fdf63214df66908c77f94f1))
+* Fix order field parsing in `sign-requests:create` command ([#677](https://github.com/box/boxcli/issues/677)) ([6118076](https://github.com/box/boxcli/commit/61180763b723e6fd96099c28ad0fbdf650a1fb1c))
+
 ## [4.8.0](https://github.com/box/boxcli/compare/v4.7.0...v4.8.0) (2026-04-23)
 
 
