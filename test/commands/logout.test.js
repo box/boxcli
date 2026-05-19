@@ -3,10 +3,11 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const sinon = require('sinon');
-const mockery = require('mockery');
 const BoxCommand = require('../../src/box-command');
+const BoxSDK = require('box-node-sdk').default;
 const CLITokenCache = require('../../src/token-cache');
 const inquirer = require('inquirer');
+const OAuthLogoutCommand = require('../../src/commands/logout');
 
 const OAUTH_ENV = {
 	default: 'oauth',
@@ -36,7 +37,6 @@ describe('Logout', function () {
 	let tokenCacheGetStub;
 	let tokenCacheClearStub;
 	let revokeTokensStub;
-	let OAuthLogoutCommand;
 
 	beforeEach(function () {
 		sandbox = sinon.createSandbox();
@@ -50,22 +50,11 @@ describe('Logout', function () {
 
 		getEnvironmentsStub.resolves(OAUTH_ENV);
 
-		revokeTokensStub = sandbox.stub();
-		mockery.enable({ useCleanCache: true, warnOnUnregistered: false });
-		mockery.registerMock('box-node-sdk', {
-			default: function () {
-				return { revokeTokens: revokeTokensStub };
-			},
-		});
-		mockery.registerAllowable('../../src/commands/logout', true);
-		delete require.cache[require.resolve('../../src/commands/logout')];
-		OAuthLogoutCommand = require('../../src/commands/logout');
+		revokeTokensStub = sandbox.stub(BoxSDK.prototype, 'revokeTokens');
 	});
 
 	afterEach(function () {
 		sandbox.restore();
-		mockery.deregisterAll();
-		mockery.disable();
 	});
 
 	describe('logout command', function () {
