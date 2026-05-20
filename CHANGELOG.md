@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.8.2](https://github.com/box/boxcli/compare/v4.8.1...v4.8.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* upgrade package dependencies ([#683](https://github.com/box/boxcli/issues/683)) ([7e20a63](https://github.com/box/boxcli/commit/7e20a634b8c936fb352519af56b94b9e755154c7))
+
 ### [4.8.1](https://github.com/box/boxcli/compare/v4.8.0...v4.8.1) (2026-05-18)
 
 
