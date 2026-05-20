@@ -29,7 +29,7 @@
 		"@oclif/plugin-not-found": "^3.2.73",
 		"@oclif/plugin-update": "3.2.4",
 		"@oclif/plugin-version": "^2.2.36",
-		"@oclif/table": "^0.4.14",
+		"@oclif/table": "^0.5.8",
 		"@octokit/rest": "^22.0.0",
 		"archiver": "^3.0.0",
 		"box-node-sdk": "^4.10.0",
@@ -74,7 +74,7 @@
 		"oclif": "^4.22.38",
 		"prettier": "^3.6.2",
 		"signal-exit": "^4.1.0",
-		"sinon": "^19.0.2",
+		"sinon": "^22.0.0",
 		"standard-version": "^9.5.0",
 		"typescript": "^5.7.2"
 	},
@@ -172,6 +172,8 @@
 	"overrides": {
 		"leche": {
 			"mocha": ">=1.18"
-		}
+		},
+		"serialize-javascript": ">=7.0.5",
+		"diff": ">8.0.2"
 	}
 }
