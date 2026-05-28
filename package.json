@@ -31,7 +31,7 @@
 		"@oclif/plugin-version": "^2.2.36",
 		"@oclif/table": "^0.5.8",
 		"@octokit/rest": "^22.0.0",
-		"archiver": "^7.0.0",
+		"archiver": "^8.0.0",
 		"box-node-sdk": "^4.10.0",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
