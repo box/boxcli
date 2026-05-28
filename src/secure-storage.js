@@ -3,7 +3,8 @@
 const { promisify } = require('node:util');
 const DEBUG = require('./debug');
 const PLATFORM_DARWIN = 'darwin';
-const KEYTAR = 'keytar';
+const ZOWE_KEYRING = '@zowe/secrets-for-zowe-sdk';
+const KEYRING = 'keyring';
 const KEYCHAIN = 'keychain';
 
 /**
@@ -24,8 +25,9 @@ function loadOptionalModule(packageName, shouldLoad = true) {
 	}
 }
 
-const { loadedModule: keytarModule, loadError: keytarLoadError } =
-	loadOptionalModule(KEYTAR, process.platform !== PLATFORM_DARWIN);
+const { loadedModule: zoweModule, loadError: keyringLoadError } =
+	loadOptionalModule(ZOWE_KEYRING, process.platform !== PLATFORM_DARWIN);
+const keyringModule = zoweModule ? zoweModule.keyring : null;
 const { loadedModule: keychainModule, loadError: keychainLoadError } =
 	loadOptionalModule(KEYCHAIN, process.platform === PLATFORM_DARWIN);
 
@@ -60,20 +62,22 @@ function isSecretNotFoundError(error) {
  * that can access the item without prompting. Using `keychain` avoids ACL
  * prompts because the accessing process is always the stable system
  * `security` binary, regardless of CLI binary identity/signature changes.
- * If we used `keytar` on macOS, access would come from the current
- * `node`/CLI executable identity; after signed-binary upgrades, macOS can
- * treat it as a different app and show ACL prompts for existing items.
- * That is why this module intentionally does not use `keytar` on macOS.
+ * If we used a native NAPI library on macOS, access would come from the
+ * current `node`/CLI executable identity; after signed-binary upgrades,
+ * macOS can treat it as a different app and show ACL prompts for existing
+ * items. That is why this module intentionally avoids the native library
+ * on macOS.
  *
- * On Windows/Linux uses `keytar` (native Keychain/Credential Vault/libsecret).
+ * On Windows/Linux uses `@zowe/secrets-for-zowe-sdk` (a maintained fork of
+ * keytar) which uses Windows Credential Manager and Linux libsecret.
  */
 class SecureStorage {
 	constructor() {
 		if (isDarwin && keychainModule) {
 			this.backend = KEYCHAIN;
 			this.available = true;
-		} else if (!isDarwin && isSecurePlatform && keytarModule) {
-			this.backend = KEYTAR;
+		} else if (!isDarwin && isSecurePlatform && keyringModule) {
+			this.backend = KEYRING;
 			this.available = true;
 		} else {
 			this.backend = null;
@@ -85,7 +89,7 @@ class SecureStorage {
 			arch: process.arch,
 			backend: this.backend,
 			available: this.available,
-			keytarLoaded: Boolean(keytarModule),
+			keyringLoaded: Boolean(keyringModule),
 			darwinKeychainLoaded: Boolean(keychainModule),
 		});
 
@@ -96,10 +100,10 @@ class SecureStorage {
 					keychainLoadError?.message || 'unknown'
 				);
 			}
-			if (!isDarwin && !keytarModule) {
+			if (!isDarwin && !keyringModule) {
 				DEBUG.init(
-					'keytar module not available: %s',
-					keytarLoadError?.message || 'unknown'
+					'@zowe/secrets-for-zowe-sdk module not available: %s',
+					keyringLoadError?.message || 'unknown'
 				);
 			}
 		}
@@ -135,7 +139,7 @@ class SecureStorage {
 			}
 		}
 
-		return keytarModule.getPassword(service, account);
+		return keyringModule.getPassword(service, account);
 	}
 
 	/**
@@ -159,7 +163,7 @@ class SecureStorage {
 			return;
 		}
 
-		await keytarModule.setPassword(service, account, password);
+		await keyringModule.setPassword(service, account, password);
 	}
 
 	/**
@@ -189,7 +193,7 @@ class SecureStorage {
 			}
 		}
 
-		return keytarModule.deletePassword(service, account);
+		return keyringModule.deletePassword(service, account);
 	}
 }
 
