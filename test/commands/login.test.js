@@ -631,7 +631,7 @@ describe('Login', function () {
 
 		let busyServer;
 		// Use a high random port to reduce clashes with common local services.
-		const busyPort = 30000 + Math.floor(Math.random() * 10000);
+		const busyPort = 30_000 + Math.floor(Math.random() * 10_000);
 		test.do(async () => {
 			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
 			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
