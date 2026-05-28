@@ -160,7 +160,7 @@
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "oclif readme --multi && find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
-		"prepack": "npm run prettier && npm run license && oclif manifest && npm run updatemd && npm shrinkwrap && git checkout origin/main -- package-lock.json",
+		"prepack": "npm run prettier && npm run license && oclif manifest && npm run updatemd && npm shrinkwrap --omit=dev && git checkout origin/main -- package-lock.json",
 		"postpack": "rm -f oclif.manifest.json && rm -f npm-shrinkwrap.json",
 		"version": "npm run updatemd && git add README.md && git add docs",
 		"build": "oclif pack:macos && rm -rf tmp/ && oclif pack:win && rm -rf tmp/",
