@@ -2,7 +2,7 @@
 
 const paginationUtilities = require('../src/pagination-utils');
 const assert = require('chai').assert;
-const { test } = require('@oclif/test');
+const { test } = require('./helpers/test-chain');
 const { getFixture, TEST_API_ROOT } = require('./helpers/test-helper');
 
 describe('Pagination', function () {

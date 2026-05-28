@@ -1,6 +1,6 @@
 'use strict';
 
-const { test } = require('@oclif/test');
+const { test } = require('../helpers/test-chain');
 const assert = require('chai').assert;
 const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 

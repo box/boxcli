@@ -53,7 +53,7 @@
 		"semver": "^7.7.3"
 	},
 	"devDependencies": {
-		"@oclif/test": "^3.2.15",
+		"@oclif/test": "^4.1.18",
 		"@typescript-eslint/eslint-plugin": "^8.17.0",
 		"babel-eslint": "^10.1.0",
 		"baseline-browser-mapping": "^2.9.11",
@@ -65,6 +65,7 @@
 		"eslint-plugin-n": "^17.14.0",
 		"eslint-plugin-promise": "^7.2.1",
 		"eslint-plugin-unicorn": "^56.0.1",
+		"fancy-test": "^3.0.16",
 		"generate-license-file": "^4.1.0",
 		"jsonwebtoken": "^9.0.3",
 		"leche": "^2.3.0",

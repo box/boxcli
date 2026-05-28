@@ -2,7 +2,7 @@
 
 /* eslint-disable mocha/no-skipped-tests */
 
-const { test } = require('@oclif/test');
+const { test } = require('../helpers/test-chain');
 const assert = require('chai').assert;
 const jwt = require('jsonwebtoken');
 const { TEST_API_ROOT } = require('../helpers/test-helper');

@@ -4,7 +4,7 @@ const { assert } = require('chai');
 const BoxCommand = require('../src/box-command');
 const sinon = require('sinon');
 const leche = require('leche');
-const { test } = require('@oclif/test');
+const { test } = require('./helpers/test-chain');
 const debug = require('debug');
 const { TEST_API_ROOT, isWin } = require('./helpers/test-helper');
 
@@ -27,8 +27,7 @@ describe('BoxCommand', function () {
 				(context) => {
 					debug.disable();
 					const debugLines = context.stderr.split('\n');
-					assert.include(debugLines[0], 'box:@box/cli:hooks:init');
-					assert.include(debugLines[1], 'box-cli:init');
+					assert.include(debugLines[0], 'box-cli:init');
 				}
 			)
 			.timeout(10_000);

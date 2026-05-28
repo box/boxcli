@@ -1,5 +1,5 @@
 'use strict';
-const { test } = require('@oclif/test');
+const { test } = require('../helpers/test-chain');
 const assert = require('chai').assert;
 const fs = require('node:fs');
 const path = require('node:path');

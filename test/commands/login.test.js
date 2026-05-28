@@ -4,7 +4,7 @@ const { assert } = require('chai');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
 const nodeHttp = require('node:http');
-const { test } = require('@oclif/test');
+const { runCommand } = require('@oclif/test');
 const BoxCommand = require('../../src/box-command');
 const {
 	assertValidOAuthCode,
@@ -439,23 +439,16 @@ describe('Login', function () {
 		it('should show error when specified env does not exist and no current env', async function () {
 			getEnvironmentsStub.resolves({ default: '', environments: {} });
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it(
-					'shows error when env does not exist and no current env',
-					(ctx) => {
-						assert.include(
-							ctx.stdout,
-							'The "nonexistent" environment does not exist'
-						);
-					}
-				);
+			const { stderr } = await runCommand([
+				'login',
+				'--reauthorize',
+				'-n',
+				'nonexistent',
+			]);
+			assert.include(
+				stderr,
+				'The "nonexistent" environment does not exist'
+			);
 		});
 
 		it('should show error when specified env does not exist and current env is not OAuth', async function () {
@@ -466,23 +459,16 @@ describe('Login', function () {
 				},
 			});
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it(
-					'shows error when env does not exist and current is not oauth',
-					(ctx) => {
-						assert.include(
-							ctx.stdout,
-							'The "nonexistent" environment does not exist'
-						);
-					}
-				);
+			const { stderr } = await runCommand([
+				'login',
+				'--reauthorize',
+				'-n',
+				'nonexistent',
+			]);
+			assert.include(
+				stderr,
+				'The "nonexistent" environment does not exist'
+			);
 		});
 
 		it('should show error when specified env does not exist and name is not oauth (even if current is OAuth)', async function () {
@@ -497,20 +483,16 @@ describe('Login', function () {
 				},
 			});
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it('does not fallback when name is not oauth', (ctx) => {
-					assert.include(
-						ctx.stdout,
-						'The "nonexistent" environment does not exist'
-					);
-				});
+			const { stderr } = await runCommand([
+				'login',
+				'--reauthorize',
+				'-n',
+				'nonexistent',
+			]);
+			assert.include(
+				stderr,
+				'The "nonexistent" environment does not exist'
+			);
 		});
 
 		it('should use current OAuth env when name is oauth and that env does not exist', async function () {
@@ -529,148 +511,135 @@ describe('Login', function () {
 				},
 			});
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command([
-					'login',
-					'--reauthorize',
-					'-n',
-					'oauth',
-					'--default-box-app',
-					'--code',
-					'--port',
-					'16987',
-				])
-				.it(
-					'falls back to current oauth env when name is oauth and env does not exist',
-					(ctx) => {
-						assert.notInclude(
-							ctx.stdout,
-							'The "oauth" environment does not exist'
-						);
-						assert.include(ctx.stdout, 'Please open');
-						assert.isTrue(promptStub.calledOnce);
-					}
-				);
+			const { stderr } = await runCommand([
+				'login',
+				'--reauthorize',
+				'-n',
+				'oauth',
+				'--default-box-app',
+				'--code',
+				'--port',
+				'3000',
+			]);
+			assert.notInclude(
+				stderr,
+				'The "oauth" environment does not exist'
+			);
+			assert.include(stderr, 'Please open');
+			assert.isTrue(promptStub.calledOnce);
 		});
 	});
 
 	describe('oauth callback command behavior', function () {
-		let unsolicitedStatusPromise;
-		test.do(() => {
+		afterEach(function () {
+			OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+			OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+		});
+
+		it('should fail login when callback state is invalid', async function () {
 			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
 			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
-			unsolicitedStatusPromise = (async () => {
-				await waitForLoopbackPort(Number.parseInt('19093', 10));
+
+			sandbox.stub(BoxCommand.prototype, '_loadSettings').resolves({});
+			sandbox
+				.stub(BoxCommand.prototype, 'getEnvironments')
+				.resolves({ default: '', environments: {} });
+			sandbox
+				.stub(inquirer, 'prompt')
+				.onFirstCall()
+				.resolves({ clientId: 'cid' })
+				.onSecondCall()
+				.resolves({ clientSecret: 'secret' });
+
+			const unsolicitedStatusPromise = (async () => {
+				await waitForLoopbackPort(19_093);
 				return sendCallback(
 					'http://localhost:19093/callback?state=wrong-state&code=unsolicited'
 				);
 			})();
-		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
-			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
-				stub.resolves({ default: '', environments: {} })
-			)
-			.stub(inquirer, 'prompt', (stub) =>
-				stub
-					.onFirstCall()
-					.resolves({ clientId: 'cid' })
-					.onSecondCall()
-					.resolves({ clientSecret: 'secret' })
-			)
-			.stderr()
-			.command(['login', '--platform-app', '--port', '19093'])
-			.it(
-				'should fail login when callback state is invalid',
-				async (ctx) => {
-					const statusCode = await unsolicitedStatusPromise;
-					assert.strictEqual(statusCode, 500);
-					assert.include(
-						ctx.stderr,
-						'Login failed: Invalid OAuth state received in callback'
-					);
-					assert.notInclude(
-						ctx.stderr,
-						'Login timed out waiting for OAuth callback'
-					);
-					OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
-					OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
-				}
+
+			const { stderr } = await runCommand([
+				'login',
+				'--platform-app',
+				'--port',
+				'19093',
+			]);
+
+			const statusCode = await unsolicitedStatusPromise;
+			assert.strictEqual(statusCode, 500);
+			assert.include(
+				stderr,
+				'Login failed: Invalid OAuth state received in callback'
 			);
+			assert.notInclude(
+				stderr,
+				'Login timed out waiting for OAuth callback'
+			);
+		});
 
-		test.do(() => {
+		it('should time out when no callback is received', async function () {
 			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
 			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
-		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
-			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
-				stub.resolves({ default: '', environments: {} })
-			)
-			.stub(inquirer, 'prompt', (stub) =>
-				stub
-					.onFirstCall()
-					.resolves({ clientId: 'cid' })
-					.onSecondCall()
-					.resolves({ clientSecret: 'secret' })
-			)
-			.stderr()
-			.command(['login', '--platform-app', '--port', '19094'])
-			.it('should time out when no callback is received', (ctx) => {
-				assert.include(
-					ctx.stderr,
-					'Login timed out waiting for OAuth callback'
-				);
-				OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
-				OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
-			});
 
-		let busyServer;
-		// Use a high random port to reduce clashes with common local services.
-		const busyPort = 30_000 + Math.floor(Math.random() * 10_000);
-		test.do(async () => {
+			sandbox.stub(BoxCommand.prototype, '_loadSettings').resolves({});
+			sandbox
+				.stub(BoxCommand.prototype, 'getEnvironments')
+				.resolves({ default: '', environments: {} });
+			sandbox
+				.stub(inquirer, 'prompt')
+				.onFirstCall()
+				.resolves({ clientId: 'cid' })
+				.onSecondCall()
+				.resolves({ clientSecret: 'secret' });
+
+			const { stderr } = await runCommand([
+				'login',
+				'--platform-app',
+				'--port',
+				'19094',
+			]);
+			assert.include(
+				stderr,
+				'Login timed out waiting for OAuth callback'
+			);
+		});
+
+		it('should fail with a friendly message when callback port is in use', async function () {
 			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
 			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
-			busyServer = nodeHttp.createServer();
+
+			const busyPort = 30_000 + Math.floor(Math.random() * 10_000);
+			const busyServer = nodeHttp.createServer();
 			await new Promise((resolve, reject) => {
 				busyServer.once('error', reject);
 				busyServer.listen(busyPort, 'localhost', resolve);
 			});
-		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
-			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
-				stub.resolves({ default: '', environments: {} })
-			)
-			.stub(inquirer, 'prompt', (stub) =>
-				stub
-					.onFirstCall()
-					.resolves({ clientId: 'cid' })
-					.onSecondCall()
-					.resolves({ clientSecret: 'secret' })
-			)
-			.stderr()
-			.command(['login', '--platform-app', '--port', String(busyPort)])
-			.it(
-				'should fail with a friendly message when callback port is in use',
-				async (ctx) => {
-					try {
-						assert.include(
-							ctx.stderr,
-							`Port ${busyPort} is already in use. Please close the application using this port or use --port to specify a different port.`
-						);
-					} finally {
-						OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
-						OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
-						if (busyServer) {
-							await new Promise((resolve) => busyServer.close(resolve));
-							busyServer = null;
-						}
-					}
-				}
-			);
+
+			sandbox.stub(BoxCommand.prototype, '_loadSettings').resolves({});
+			sandbox
+				.stub(BoxCommand.prototype, 'getEnvironments')
+				.resolves({ default: '', environments: {} });
+			sandbox
+				.stub(inquirer, 'prompt')
+				.onFirstCall()
+				.resolves({ clientId: 'cid' })
+				.onSecondCall()
+				.resolves({ clientSecret: 'secret' });
+
+			try {
+				const { stderr } = await runCommand([
+					'login',
+					'--platform-app',
+					'--port',
+					String(busyPort),
+				]);
+				assert.include(
+					stderr,
+					`Port ${busyPort} is already in use. Please close the application using this port or use --port to specify a different port.`
+				);
+			} finally {
+				await new Promise((resolve) => busyServer.close(resolve));
+			}
+		});
 	});
 });
