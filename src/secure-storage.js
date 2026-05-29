@@ -3,6 +3,7 @@
 const { promisify } = require('node:util');
 const DEBUG = require('./debug');
 const PLATFORM_DARWIN = 'darwin';
+const KEYTAR_PACKAGE = '@github/keytar';
 const KEYTAR = 'keytar';
 const KEYCHAIN = 'keychain';
 
@@ -25,7 +26,7 @@ function loadOptionalModule(packageName, shouldLoad = true) {
 }
 
 const { loadedModule: keytarModule, loadError: keytarLoadError } =
-	loadOptionalModule(KEYTAR, process.platform !== PLATFORM_DARWIN);
+	loadOptionalModule(KEYTAR_PACKAGE, process.platform !== PLATFORM_DARWIN);
 const { loadedModule: keychainModule, loadError: keychainLoadError } =
 	loadOptionalModule(KEYCHAIN, process.platform === PLATFORM_DARWIN);
 
