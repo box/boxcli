@@ -7,7 +7,7 @@ const { mkdirp } = require('mkdirp');
 const path = require('node:path');
 const BoxCLIError = require('../../cli-error');
 const ora = require('ora');
-const archiver = require('archiver');
+let ZipArchive;
 const dateTime = require('date-fns');
 const utilities = require('../../util');
 
@@ -219,10 +219,12 @@ class FoldersDownloadCommand extends BoxCommand {
 	 * @throws BoxCLIError
 	 * @private
 	 */
-	_setupZip(destinationPath) {
-		// Set up archive stream
-		this.zip = archiver('zip', {
-			zlib: { level: 9 }, // Use the best available compression
+	async _setupZip(destinationPath) {
+		if (!ZipArchive) {
+			({ ZipArchive } = await import('archiver'));
+		}
+		this.zip = new ZipArchive({
+			zlib: { level: 9 },
 		});
 
 		let output;
