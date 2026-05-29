@@ -1,10 +1,50 @@
 'use strict';
 
 const { promisify } = require('node:util');
+const fs = require('node:fs');
+const path = require('node:path');
 const DEBUG = require('./debug');
 const PLATFORM_DARWIN = 'darwin';
+const KEYTAR_PACKAGE = '@github/keytar';
 const KEYTAR = 'keytar';
 const KEYCHAIN = 'keychain';
+
+/**
+ * Ensure the correct platform-specific keytar.node binary exists in
+ * build/Release before requiring @github/keytar. This handles the case
+ * where the CLI is packed on one OS (e.g. macOS) but runs on another
+ * (e.g. Windows): the prebuilds/ folder ships all platforms, and this
+ * copies the right one into place on first run.
+ */
+function ensureKeytarBinary() {
+	try {
+		const keytarDir = path.dirname(
+			require.resolve('@github/keytar/package.json')
+		);
+		const releaseDir = path.join(keytarDir, 'build', 'Release');
+		const targetBinary = path.join(releaseDir, 'keytar.node');
+
+		if (fs.existsSync(targetBinary)) {
+			return;
+		}
+
+		const prebuildDir = path.join(
+			keytarDir,
+			'prebuilds',
+			`${process.platform}-${process.arch}`
+		);
+		const sourceBinary = path.join(prebuildDir, 'keytar.node');
+
+		if (!fs.existsSync(sourceBinary)) {
+			return;
+		}
+
+		fs.mkdirSync(releaseDir, { recursive: true });
+		fs.copyFileSync(sourceBinary, targetBinary);
+	} catch {
+		// Non-fatal: keytar.js will still fall back to prebuilds/ at runtime
+	}
+}
 
 /**
  * Load an optional dependency and capture load errors.
@@ -24,8 +64,10 @@ function loadOptionalModule(packageName, shouldLoad = true) {
 	}
 }
 
+ensureKeytarBinary();
+
 const { loadedModule: keytarModule, loadError: keytarLoadError } =
-	loadOptionalModule(KEYTAR, process.platform !== PLATFORM_DARWIN);
+	loadOptionalModule(KEYTAR_PACKAGE, process.platform !== PLATFORM_DARWIN);
 const { loadedModule: keychainModule, loadError: keychainLoadError } =
 	loadOptionalModule(KEYCHAIN, process.platform === PLATFORM_DARWIN);
 
