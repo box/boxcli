@@ -614,7 +614,6 @@ describe('Utilities', function () {
 			assert.strictEqual(input.items[0].clientSecret, 'qwertyuiop');
 			assert.strictEqual(masked.items[0].clientSecret, '*******iop');
 			assert.strictEqual(masked.items[1].other, 'value');
-		
 		});
 
 		it('maskObjectValuesByKey() should support custom key and visible chars', function () {
@@ -626,14 +625,24 @@ describe('Utilities', function () {
 				clientSecret: 'dont-mask-default-key-if-custom-is-used',
 			};
 
-			const masked = cliUtilities.maskObjectValuesByKey(input, 'token', 2);
+			const masked = cliUtilities.maskObjectValuesByKey(
+				input,
+				'token',
+				2
+			);
 
 			assert.strictEqual(input.token, 'abcd1234');
 			assert.strictEqual(masked.token, '******34');
 			assert.strictEqual(input.nested.token, 'wxyz9876');
 			assert.strictEqual(masked.nested.token, '******76');
-			assert.strictEqual(input.clientSecret, 'dont-mask-default-key-if-custom-is-used');
-			assert.strictEqual(masked.clientSecret,'dont-mask-default-key-if-custom-is-used');
+			assert.strictEqual(
+				input.clientSecret,
+				'dont-mask-default-key-if-custom-is-used'
+			);
+			assert.strictEqual(
+				masked.clientSecret,
+				'dont-mask-default-key-if-custom-is-used'
+			);
 		});
 	});
 

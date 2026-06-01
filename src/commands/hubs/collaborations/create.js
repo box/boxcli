@@ -32,7 +32,9 @@ function getAccessibleBy(flags) {
 
 class HubsCreateCollaborationCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(HubsCreateCollaborationCommand);
+		const { flags, args } = await this.parse(
+			HubsCreateCollaborationCommand
+		);
 		const requestBody = {
 			hub: {
 				id: args.id,

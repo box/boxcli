@@ -13,7 +13,8 @@ class HubsDeleteCollaborationCommand extends BoxCommand {
 	}
 }
 
-HubsDeleteCollaborationCommand.description = 'Delete a single Box Hub collaboration';
+HubsDeleteCollaborationCommand.description =
+	'Delete a single Box Hub collaboration';
 HubsDeleteCollaborationCommand.examples = [
 	'box hubs:collaborations:delete 99999',
 ];

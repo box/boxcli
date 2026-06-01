@@ -396,8 +396,9 @@ class OAuthLoginCommand extends BoxCommand {
 					'Unknown error';
 				DEBUG.execute('Login error: %O', error);
 				this.info(chalk`{red Login failed: ${errorMessage}}`);
-				res.status(500).send('Login failed. Please check the CLI output for details.');
-
+				res.status(500).send(
+					'Login failed. Please check the CLI output for details.'
+				);
 			} finally {
 				finalizeCallbackFlow();
 			}
@@ -484,7 +485,8 @@ OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,
 	code: Flags.boolean({
 		char: 'c',
-		description: 'Manually provide state and authorization code instead of using a local callback server. Use this in headless environments where no browser is available — the CLI will display an authorize URL to visit externally.',
+		description:
+			'Manually provide state and authorization code instead of using a local callback server. Use this in headless environments where no browser is available — the CLI will display an authorize URL to visit externally.',
 		default: false,
 	}),
 	name: Flags.string({

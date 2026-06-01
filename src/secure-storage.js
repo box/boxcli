@@ -43,9 +43,16 @@ function ensureKeytarBinary() {
 
 		fs.mkdirSync(releaseDir, { recursive: true });
 		fs.copyFileSync(sourceBinary, targetBinary);
-		DEBUG.init('Copied keytar binary from %s to %s', sourceBinary, targetBinary);
+		DEBUG.init(
+			'Copied keytar binary from %s to %s',
+			sourceBinary,
+			targetBinary
+		);
 	} catch (error) {
-		DEBUG.init('Failed to ensure keytar binary, falling back to prebuilds/: %s', error.message);
+		DEBUG.init(
+			'Failed to ensure keytar binary, falling back to prebuilds/: %s',
+			error.message
+		);
 	}
 }
 

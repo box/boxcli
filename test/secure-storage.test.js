@@ -67,7 +67,11 @@ describe('ensureKeytarBinary', function () {
 	});
 
 	it('should not throw when prebuilds directory is missing', function () {
-		const fakePrebuildDir = path.join(keytarDir, 'prebuilds', 'fake-os-fake-arch');
+		const fakePrebuildDir = path.join(
+			keytarDir,
+			'prebuilds',
+			'fake-os-fake-arch'
+		);
 
 		// This just verifies the function doesn't crash — it's a no-op
 		assert.isFalse(fs.existsSync(fakePrebuildDir));

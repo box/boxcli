@@ -23,7 +23,8 @@ class HubsListDocumentPagesCommand extends BoxCommand {
 }
 
 HubsListDocumentPagesCommand.aliases = ['hubs:document:pages:list'];
-HubsListDocumentPagesCommand.description = 'Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages';
+HubsListDocumentPagesCommand.description =
+	'Retrieves a list of Hub Document Pages for the specified hub. Includes both root-level pages and sub pages';
 HubsListDocumentPagesCommand.examples = [
 	'box hubs:document:pages 12345',
 	'box hubs:document:pages 12345 --max-items 50',

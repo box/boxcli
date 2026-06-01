@@ -23,7 +23,8 @@ class HubsListCommand extends BoxCommand {
 		}
 
 		const hubs = await this.markerPagination(
-			(pageQueryParams) => this.tsClient.hubs.getHubsV2025R0(pageQueryParams),
+			(pageQueryParams) =>
+				this.tsClient.hubs.getHubsV2025R0(pageQueryParams),
 			queryParams
 		);
 		await this.output(hubs);

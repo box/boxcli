@@ -209,9 +209,12 @@ describe('Sign requests', function () {
 				'--json',
 				'--token=test',
 			])
-			.it('should coerce signer order to a number for the API', (context) => {
-				assert.equal(context.stdout, fixture);
-			});
+			.it(
+				'should coerce signer order to a number for the API',
+				(context) => {
+					assert.equal(context.stdout, fixture);
+				}
+			);
 	});
 
 	describe('sign-requests:cancel', function () {

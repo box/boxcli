@@ -13,19 +13,18 @@ describe('Hubs', function () {
 			limit: 10,
 		};
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hubs')
-					.query({
-						query: 'team',
-						scope: 'editable',
-						sort: 'name',
-						direction: 'ASC',
-						limit: 10,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hubs')
+				.query({
+					query: 'team',
+					scope: 'editable',
+					sort: 'name',
+					direction: 'ASC',
+					limit: 10,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs',
@@ -47,30 +46,29 @@ describe('Hubs', function () {
 		}));
 		const secondPageEntries = [{ id: '1001', type: 'hubs' }];
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hubs')
-					.query({
-						query: 'team',
-						limit: 1000,
-					})
-					.reply(200, {
-						entries: firstPageEntries,
-						limit: 1000,
-						next_marker: 'next-page',
-					})
-					.get('/2.0/hubs')
-					.query({
-						query: 'team',
-						limit: 1,
-						marker: 'next-page',
-					})
-					.reply(200, {
-						entries: secondPageEntries,
-						limit: 1,
-					})
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hubs')
+				.query({
+					query: 'team',
+					limit: 1000,
+				})
+				.reply(200, {
+					entries: firstPageEntries,
+					limit: 1000,
+					next_marker: 'next-page',
+				})
+				.get('/2.0/hubs')
+				.query({
+					query: 'team',
+					limit: 1,
+					marker: 'next-page',
+				})
+				.reply(200, {
+					entries: secondPageEntries,
+					limit: 1,
+				})
+		)
 			.stdout()
 			.command([
 				'hubs',
@@ -94,18 +92,17 @@ describe('Hubs', function () {
 			limit: 50,
 		};
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/enterprise_hubs')
-					.query({
-						query: 'enterprise',
-						sort: 'updated_at',
-						direction: 'DESC',
-						limit: 50,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/enterprise_hubs')
+				.query({
+					query: 'enterprise',
+					sort: 'updated_at',
+					direction: 'DESC',
+					limit: 50,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:enterprise',
@@ -124,17 +121,16 @@ describe('Hubs', function () {
 	describe('hubs:items', function () {
 		const response = JSON.parse(getFixture('hubs/get_hub_items'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hub_items')
-					.query({
-						hub_id: '12345',
-						parent_id: '67890',
-						limit: 2,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hub_items')
+				.query({
+					hub_id: '12345',
+					parent_id: '67890',
+					limit: 2,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:items',
@@ -150,32 +146,33 @@ describe('Hubs', function () {
 	});
 
 	describe('hubs:items:manage', function () {
-		const response = JSON.parse(getFixture('hubs/post_hubs_id_manage_items'));
+		const response = JSON.parse(
+			getFixture('hubs/post_hubs_id_manage_items')
+		);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/hubs/12345/manage_items', {
-						operations: [
-							{
-								action: 'add',
-								item: {
-									id: '11111',
-									type: 'file',
-								},
-								parent_id: '67890',
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/hubs/12345/manage_items', {
+					operations: [
+						{
+							action: 'add',
+							item: {
+								id: '11111',
+								type: 'file',
 							},
-							{
-								action: 'remove',
-								item: {
-									id: '22222',
-									type: 'folder',
-								},
+							parent_id: '67890',
+						},
+						{
+							action: 'remove',
+							item: {
+								id: '22222',
+								type: 'folder',
 							},
-						],
-					})
-					.reply(200, response)
-			)
+						},
+					],
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:items:manage',
@@ -193,16 +190,15 @@ describe('Hubs', function () {
 	describe('hubs:document:pages', function () {
 		const response = JSON.parse(getFixture('hubs/get_hub_document_pages'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hub_document_pages')
-					.query({
-						hub_id: '12345',
-						limit: 2,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hub_document_pages')
+				.query({
+					hub_id: '12345',
+					limit: 2,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:document:pages',
@@ -219,17 +215,16 @@ describe('Hubs', function () {
 	describe('hubs:document:blocks', function () {
 		const response = JSON.parse(getFixture('hubs/get_hub_document_blocks'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hub_document_blocks')
-					.query({
-						hub_id: '12345',
-						page_id: 'page_1',
-						limit: 2,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hub_document_blocks')
+				.query({
+					hub_id: '12345',
+					page_id: 'page_1',
+					limit: 2,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:document:blocks',
@@ -247,10 +242,9 @@ describe('Hubs', function () {
 	describe('hubs:get', function () {
 		const response = JSON.parse(getFixture('hubs/get_hubs_id'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.get('/2.0/hubs/12345').reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get('/2.0/hubs/12345').reply(200, response)
+		)
 			.stdout()
 			.command(['hubs:get', '12345', '--json', '--token=test'])
 			.it('gets a hub by ID', (context) => {
@@ -266,15 +260,14 @@ describe('Hubs', function () {
 			description: 'New hub description',
 		};
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/hubs', {
-						title: 'New Hub',
-						description: 'New hub description',
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/hubs', {
+					title: 'New Hub',
+					description: 'New hub description',
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:create',
@@ -296,19 +289,18 @@ describe('Hubs', function () {
 	describe('hubs:update', function () {
 		const response = JSON.parse(getFixture('hubs/put_hubs_id'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.put('/2.0/hubs/12345', {
-						title: 'Updated Hub',
-						description: 'Updated description',
-						is_ai_enabled: true,
-						is_collaboration_restricted_to_enterprise: true,
-						can_non_owners_invite: true,
-						can_shared_link_be_created: false,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put('/2.0/hubs/12345', {
+					title: 'Updated Hub',
+					description: 'Updated description',
+					is_ai_enabled: true,
+					is_collaboration_restricted_to_enterprise: true,
+					can_non_owners_invite: true,
+					can_shared_link_be_created: false,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:update',
@@ -335,15 +327,14 @@ describe('Hubs', function () {
 			description: 'Copied description',
 		};
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/hubs/12345/copy', {
-						title: 'Copied Hub',
-						description: 'Copied description',
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/hubs/12345/copy', {
+					title: 'Copied Hub',
+					description: 'Copied description',
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:copy',
@@ -364,10 +355,9 @@ describe('Hubs', function () {
 	});
 
 	describe('hubs:delete', function () {
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.delete('/2.0/hubs/12345').reply(204)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.delete('/2.0/hubs/12345').reply(204)
+		)
 			.stderr()
 			.command(['hubs:delete', '12345', '--token=test'])
 			.it('deletes a hub by ID', (context) => {
@@ -378,16 +368,15 @@ describe('Hubs', function () {
 	describe('hubs:collaborations', function () {
 		const response = JSON.parse(getFixture('hubs/get_hub_collaborations'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.get('/2.0/hub_collaborations')
-					.query({
-						hub_id: '12345',
-						limit: 1,
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.get('/2.0/hub_collaborations')
+				.query({
+					hub_id: '12345',
+					limit: 1,
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:collaborations',
@@ -404,22 +393,21 @@ describe('Hubs', function () {
 	describe('hubs:collaborations:create', function () {
 		const response = JSON.parse(getFixture('hubs/post_hub_collaborations'));
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.post('/2.0/hub_collaborations', {
-						hub: {
-							id: '12345',
-							type: 'hubs',
-						},
-						accessible_by: {
-							type: 'user',
-							id: '22222',
-						},
-						role: 'editor',
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.post('/2.0/hub_collaborations', {
+					hub: {
+						id: '12345',
+						type: 'hubs',
+					},
+					accessible_by: {
+						type: 'user',
+						id: '22222',
+					},
+					role: 'editor',
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:collaborations:create',
@@ -452,12 +440,13 @@ describe('Hubs', function () {
 	});
 
 	describe('hubs:collaborations:get', function () {
-		const response = JSON.parse(getFixture('hubs/get_hub_collaborations_id'));
+		const response = JSON.parse(
+			getFixture('hubs/get_hub_collaborations_id')
+		);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.get('/2.0/hub_collaborations/99999').reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get('/2.0/hub_collaborations/99999').reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:collaborations:get',
@@ -475,14 +464,13 @@ describe('Hubs', function () {
 			getFixture('hubs/put_hub_collaborations_id')
 		);
 
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api
-					.put('/2.0/hub_collaborations/99999', {
-						role: 'viewer',
-					})
-					.reply(200, response)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api
+				.put('/2.0/hub_collaborations/99999', {
+					role: 'viewer',
+				})
+				.reply(200, response)
+		)
 			.stdout()
 			.command([
 				'hubs:collaborations:update',
@@ -513,10 +501,9 @@ describe('Hubs', function () {
 	});
 
 	describe('hubs:collaborations:delete', function () {
-		test
-			.nock(TEST_API_ROOT, (api) =>
-				api.delete('/2.0/hub_collaborations/99999').reply(204)
-			)
+		test.nock(TEST_API_ROOT, (api) =>
+			api.delete('/2.0/hub_collaborations/99999').reply(204)
+		)
 			.stderr()
 			.command(['hubs:collaborations:delete', '99999', '--token=test'])
 			.it('deletes a hub collaboration by ID', (context) => {

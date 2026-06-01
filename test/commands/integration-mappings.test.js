@@ -242,7 +242,10 @@ describe('Integration Mappings', function () {
 				'should list Teams integration mappings using raw JSON output',
 				(context) => {
 					assert.equal(context.stderr, '');
-					assert.deepEqual(JSON.parse(context.stdout), JSON.parse(fixture));
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						JSON.parse(fixture)
+					);
 				}
 			);
 	});
@@ -399,7 +402,10 @@ describe('Integration Mappings', function () {
 				'should update a Teams integration mapping using raw JSON output',
 				(context) => {
 					assert.equal(context.stderr, '');
-					assert.deepEqual(JSON.parse(context.stdout), JSON.parse(fixture));
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						JSON.parse(fixture)
+					);
 				}
 			);
 	});
