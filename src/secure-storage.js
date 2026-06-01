@@ -25,6 +25,7 @@ function ensureKeytarBinary() {
 		const targetBinary = path.join(releaseDir, 'keytar.node');
 
 		if (fs.existsSync(targetBinary)) {
+			DEBUG.init('keytar binary already exists at %s', targetBinary);
 			return;
 		}
 
@@ -36,13 +37,15 @@ function ensureKeytarBinary() {
 		const sourceBinary = path.join(prebuildDir, 'keytar.node');
 
 		if (!fs.existsSync(sourceBinary)) {
+			DEBUG.init('keytar prebuild not found at %s', sourceBinary);
 			return;
 		}
 
 		fs.mkdirSync(releaseDir, { recursive: true });
 		fs.copyFileSync(sourceBinary, targetBinary);
-	} catch {
-		// Non-fatal: keytar.js will still fall back to prebuilds/ at runtime
+		DEBUG.init('Copied keytar binary from %s to %s', sourceBinary, targetBinary);
+	} catch (error) {
+		DEBUG.init('Failed to ensure keytar binary, falling back to prebuilds/: %s', error.message);
 	}
 }
 
