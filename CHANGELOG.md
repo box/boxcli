@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.9.1](https://github.com/box/boxcli/compare/v4.9.0...v4.9.1) (2026-06-01)
+
+
+### Bug Fixes
+
+* Update `shrinkwrap` command ([#690](https://github.com/box/boxcli/issues/690)) ([c7c69e2](https://github.com/box/boxcli/commit/c7c69e206c06131626eb84a9c69d7e02bd3ca7ec))
+
 ## [4.9.0](https://github.com/box/boxcli/compare/v4.8.2...v4.9.0) (2026-06-01)
 
 
