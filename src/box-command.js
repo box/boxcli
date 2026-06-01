@@ -2049,7 +2049,10 @@ class BoxCommand extends Command {
 				let fileContents = JSON.stringify(environments, null, 4);
 				fs.writeFileSync(ENVIRONMENTS_FILE_PATH, fileContents, 'utf8');
 
-				if (process.platform === 'linux' && this.supportsSecureStorage) {
+				if (
+					process.platform === 'linux' &&
+					this.supportsSecureStorage
+				) {
 					this.info(
 						'Could not store credentials in secure storage, falling back to file.' +
 							' To enable secure storage on Linux, install libsecret-1-dev package.'

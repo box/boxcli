@@ -306,7 +306,7 @@ function maskSecret(secret, visibleChars = DEFAULT_VISIBLE_SECRET_CHARS) {
 		_.isInteger(visibleChars) && visibleChars >= 0
 			? visibleChars
 			: DEFAULT_VISIBLE_SECRET_CHARS;
-			
+
 	if (!_.isString(secret) || secret.length <= normalizedVisibleChars) {
 		return '*'.repeat(normalizedVisibleChars);
 	}

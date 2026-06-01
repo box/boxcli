@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.9.0](https://github.com/box/boxcli/compare/v4.8.2...v4.9.0) (2026-06-01)
+
+
+### New Features and Enhancements
+
+* replace `keytar` with `@github/keytar` ([#688](https://github.com/box/boxcli/issues/688)) ([eb0a40d](https://github.com/box/boxcli/commit/eb0a40de809d8583d435b7310f3f0536c47c6afa))
+
 ### [4.8.2](https://github.com/box/boxcli/compare/v4.8.1...v4.8.2) (2026-05-20)
 
 

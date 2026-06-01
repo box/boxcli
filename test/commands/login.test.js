@@ -572,7 +572,9 @@ describe('Login', function () {
 				);
 			})();
 		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+				stub.resolves({})
+			)
 			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
 				stub.resolves({ default: '', environments: {} })
 			)
@@ -607,7 +609,9 @@ describe('Login', function () {
 			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
 			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
 		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+				stub.resolves({})
+			)
 			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
 				stub.resolves({ default: '', environments: {} })
 			)
@@ -641,7 +645,9 @@ describe('Login', function () {
 				busyServer.listen(busyPort, 'localhost', resolve);
 			});
 		})
-			.stub(BoxCommand.prototype, '_loadSettings', (stub) => stub.resolves({}))
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+				stub.resolves({})
+			)
 			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
 				stub.resolves({ default: '', environments: {} })
 			)
@@ -666,7 +672,9 @@ describe('Login', function () {
 						OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
 						OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
 						if (busyServer) {
-							await new Promise((resolve) => busyServer.close(resolve));
+							await new Promise((resolve) =>
+								busyServer.close(resolve)
+							);
 							busyServer = null;
 						}
 					}

@@ -342,9 +342,7 @@ describe('CLITokenCache', function () {
 			const env2Cache = new CLITokenCache('development');
 
 			expect(env1Cache.serviceName).to.equal('boxcli-token-production');
-			expect(env2Cache.serviceName).to.equal(
-				'boxcli-token-development'
-			);
+			expect(env2Cache.serviceName).to.equal('boxcli-token-development');
 		});
 	});
 

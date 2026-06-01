@@ -21,7 +21,9 @@ class HubsCreateCommand extends BoxCommand {
 }
 
 HubsCreateCommand.description = 'Create a new Box Hub';
-HubsCreateCommand.examples = ['box hubs:create "Roadmap Hub" --description "Q3 planning hub"'];
+HubsCreateCommand.examples = [
+	'box hubs:create "Roadmap Hub" --description "Q3 planning hub"',
+];
 HubsCreateCommand._endpoint = 'post_hubs';
 
 HubsCreateCommand.flags = {

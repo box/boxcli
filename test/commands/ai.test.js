@@ -96,9 +96,15 @@ describe('AI', function () {
 				'--raw-json',
 				'--token=test',
 			])
-			.it('should output the raw response when --raw-json is passed', (context) => {
-				assert.deepEqual(JSON.parse(context.stdout), expectedResponseBody);
-			});
+			.it(
+				'should output the raw response when --raw-json is passed',
+				(context) => {
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						expectedResponseBody
+					);
+				}
+			);
 
 		test.nock(TEST_API_ROOT, (api) =>
 			api
@@ -338,7 +344,10 @@ describe('AI', function () {
 			.it(
 				'should output the raw response when --raw-json is passed',
 				(context) => {
-					assert.deepEqual(JSON.parse(context.stdout), expectedResponseBody);
+					assert.deepEqual(
+						JSON.parse(context.stdout),
+						expectedResponseBody
+					);
 				}
 			);
 

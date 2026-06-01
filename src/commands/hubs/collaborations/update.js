@@ -7,7 +7,9 @@ const HUB_COLLABORATION_ROLES = ['editor', 'viewer', 'co-owner'];
 
 class HubsUpdateCollaborationCommand extends BoxCommand {
 	async run() {
-		const { flags, args } = await this.parse(HubsUpdateCollaborationCommand);
+		const { flags, args } = await this.parse(
+			HubsUpdateCollaborationCommand
+		);
 		const collaboration =
 			await this.tsClient.hubCollaborations.updateHubCollaborationByIdV2025R0(
 				args.id,
@@ -19,7 +21,8 @@ class HubsUpdateCollaborationCommand extends BoxCommand {
 	}
 }
 
-HubsUpdateCollaborationCommand.description = 'Updates a Box Hub collaboration. Can be used to change the Box Hub role.';
+HubsUpdateCollaborationCommand.description =
+	'Updates a Box Hub collaboration. Can be used to change the Box Hub role.';
 HubsUpdateCollaborationCommand.examples = [
 	'box hubs:collaborations:update 99999 --role viewer',
 ];

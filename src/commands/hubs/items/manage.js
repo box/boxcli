@@ -8,7 +8,10 @@ const HUB_ITEM_TYPES = ['file', 'folder', 'web_link'];
 const HUB_ITEM_OPERATION_KEYS = ['id', 'type', 'parent-id'];
 
 function parseHubItemOperation(action, input) {
-	const parsed = utilities.parseStringToObject(input, HUB_ITEM_OPERATION_KEYS);
+	const parsed = utilities.parseStringToObject(
+		input,
+		HUB_ITEM_OPERATION_KEYS
+	);
 	const operation = {
 		action,
 		item: {},
@@ -44,7 +47,9 @@ class HubsManageItemsCommand extends BoxCommand {
 		const operations = [...(flags.add || []), ...(flags.remove || [])];
 
 		if (operations.length === 0) {
-		throw new Error('Please provide at least one --add or --remove flag.');
+			throw new Error(
+				'Please provide at least one --add or --remove flag.'
+			);
 		}
 
 		const response = await this.tsClient.hubItems.manageHubItemsV2025R0(
@@ -66,7 +71,7 @@ HubsManageItemsCommand.flags = {
 	...BoxCommand.flags,
 	add: Flags.string({
 		description:
-			'Add an item to the Box Hub. Format: id=ITEM_ID,type=TYPE,parent-id=PARENT_ID. Supported types are file, folder, web_link. The parent-id is the ID of the parent block to add the item to. It must be an Item List block. If not provided, the item will be added to the first page\'s first Item List block.',
+			"Add an item to the Box Hub. Format: id=ITEM_ID,type=TYPE,parent-id=PARENT_ID. Supported types are file, folder, web_link. The parent-id is the ID of the parent block to add the item to. It must be an Item List block. If not provided, the item will be added to the first page's first Item List block.",
 		multiple: true,
 		parse(input) {
 			return parseHubItemOperation('add', input);
