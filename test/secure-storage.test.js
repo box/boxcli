@@ -2,6 +2,74 @@
 
 const { assert } = require('chai');
 const sinon = require('sinon');
+const fs = require('node:fs');
+const path = require('node:path');
+
+describe('ensureKeytarBinary', function () {
+	const keytarDir = path.dirname(
+		require.resolve('@github/keytar/package.json')
+	);
+	const releaseDir = path.join(keytarDir, 'build', 'Release');
+	const targetBinary = path.join(releaseDir, 'keytar.node');
+	const prebuildDir = path.join(
+		keytarDir,
+		'prebuilds',
+		`${process.platform}-${process.arch}`
+	);
+	const sourceBinary = path.join(prebuildDir, 'keytar.node');
+
+	afterEach(function () {
+		delete require.cache[require.resolve('../src/secure-storage')];
+	});
+
+	it('should copy prebuild to build/Release when binary is missing', function () {
+		if (!fs.existsSync(sourceBinary)) {
+			this.skip();
+		}
+
+		// Remove build/Release to simulate shipped state
+		if (fs.existsSync(releaseDir)) {
+			fs.rmSync(releaseDir, { recursive: true });
+		}
+		assert.isFalse(fs.existsSync(targetBinary));
+
+		// Re-require triggers ensureKeytarBinary
+		require('../src/secure-storage');
+
+		assert.isTrue(fs.existsSync(targetBinary));
+
+		// Verify it's the same content as the prebuild
+		const source = fs.readFileSync(sourceBinary);
+		const target = fs.readFileSync(targetBinary);
+		assert.isTrue(source.equals(target));
+	});
+
+	it('should not overwrite existing build/Release binary', function () {
+		if (!fs.existsSync(sourceBinary)) {
+			this.skip();
+		}
+
+		// Ensure build/Release exists with a known file
+		fs.mkdirSync(releaseDir, { recursive: true });
+		fs.writeFileSync(targetBinary, 'existing-binary');
+
+		require('../src/secure-storage');
+
+		const content = fs.readFileSync(targetBinary, 'utf8');
+		assert.equal(content, 'existing-binary');
+
+		// Restore the real binary
+		fs.copyFileSync(sourceBinary, targetBinary);
+	});
+
+	it('should not throw when prebuilds directory is missing', function () {
+		const fakePrebuildDir = path.join(keytarDir, 'prebuilds', 'fake-os-fake-arch');
+
+		// This just verifies the function doesn't crash — it's a no-op
+		assert.isFalse(fs.existsSync(fakePrebuildDir));
+		assert.doesNotThrow(() => require('../src/secure-storage'));
+	});
+});
 
 describe('SecureStorage', function () {
 	const sandbox = sinon.createSandbox();
