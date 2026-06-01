@@ -18,6 +18,10 @@ describe('ensureKeytarBinary', function () {
 	);
 	const sourceBinary = path.join(prebuildDir, 'keytar.node');
 
+	beforeEach(function () {
+		delete require.cache[require.resolve('../src/secure-storage')];
+	});
+
 	afterEach(function () {
 		delete require.cache[require.resolve('../src/secure-storage')];
 	});
