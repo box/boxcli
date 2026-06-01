@@ -27,7 +27,7 @@ describe('ensureKeytarBinary', function () {
 	});
 
 	it('should copy prebuild to build/Release when binary is missing', function () {
-		if (!fs.existsSync(sourceBinary)) {
+		if (process.platform === 'win32' || !fs.existsSync(sourceBinary)) {
 			this.skip();
 		}
 
@@ -49,7 +49,7 @@ describe('ensureKeytarBinary', function () {
 	});
 
 	it('should not overwrite existing build/Release binary', function () {
-		if (!fs.existsSync(sourceBinary)) {
+		if (process.platform === 'win32' || !fs.existsSync(sourceBinary)) {
 			this.skip();
 		}
 
