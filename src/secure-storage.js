@@ -41,6 +41,19 @@ function ensureKeytarBinary() {
 			return;
 		}
 
+		const writableDir = fs.existsSync(releaseDir)
+			? releaseDir
+			: keytarDir;
+		try {
+			fs.accessSync(writableDir, fs.constants.W_OK);
+		} catch {
+			DEBUG.init(
+				'No write permission on %s, skipping keytar binary copy',
+				writableDir
+			);
+			return;
+		}
+
 		fs.mkdirSync(releaseDir, { recursive: true });
 		fs.copyFileSync(sourceBinary, targetBinary);
 		DEBUG.init(
