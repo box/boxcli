@@ -29,3 +29,11 @@ jobs:
           repository: box/box-developer-changelog
           event-type: new-release-note
           client-payload: '{"ref": "${{ github.ref }}", "repository": "${{github.repository}}", "labels": "cli", "repo_display_name": "Box CLI"}'
+
+      - name: Notify npm-box of new release
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.DISPATCH_ACCESS_TOKEN }}
+          repository: box/npm-box
+          event-type: cli-release
+          client-payload: '{"version": "${{ github.event.release.tag_name }}", "repository": "${{ github.repository }}"}'
