@@ -1,13 +1,18 @@
 {
 	"name": "@box/cli",
-	"description": "Official command line interface for the Box API.",
+	"description": "Official command line interface for the Box API. Includes official AI agent skills: box/box-for-ai.",
 	"keywords": [
 		"box",
 		"cli",
 		"platform",
 		"api",
 		"upload",
-		"download"
+		"download",
+		"ai",
+		"agent",
+		"mcp",
+		"skills",
+		"box-for-ai"
 	],
 	"version": "4.9.2",
 	"author": "Box <oss@box.com>",
@@ -89,7 +94,7 @@
 		"/src"
 	],
 	"oclif": {
-		"description": "Official command line interface for the Box API. New here? Run 'box login -d' to sign in with your Box account in seconds. Already set up? Run 'box help' to explore all available commands.",
+		"description": "Official command line interface for the Box API. New here? Run 'box login -d' to sign in with your Box account in seconds. Already set up? Run 'box help' to explore all available commands. Working with an AI agent? Install the official Box skills for Claude Code, Cursor, and Codex to help your assistant use the Box CLI and Box APIs correctly: https://github.com/box/box-for-ai (npx skills add box/box-for-ai).",
 		"commands": "./src/commands",
 		"bin": "box",
 		"additionalHelpFlags": [

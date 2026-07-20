@@ -15,6 +15,8 @@ Among other features, Box CLI includes the following functionality:
 * As-User header - Act on behalf of another user.
 * Search API - Search for files and folders in your Box Enterprise account.
 
+> **Working with an AI agent?** Install the official [Box skills](https://github.com/box/box-for-ai) (`npx skills add box/box-for-ai`) to help your assistant use the Box CLI and Box APIs correctly.
+
 ## Table of contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
