@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.0](https://github.com/box/boxcli/compare/v4.9.2...v4.10.0) (2026-08-27)
+
+
+### New Features and Enhancements
+
+* check access for `keytar` write operation ([#694](https://github.com/box/boxcli/issues/694)) ([29e5cc9](https://github.com/box/boxcli/commit/29e5cc96467614af3df8f37810e68c475d5cfb73))
+
+### Bug Fixes
+
+* post install script update ([#711](https://github.com/box/boxcli/issues/711)) ([ace2d1c](https://github.com/box/boxcli/commit/ace2d1c0784eb331d02b17b3b07d12e5a46198b2))
+
 ### [4.9.2](https://github.com/box/boxcli/compare/v4.9.0...v4.9.2) (2026-06-01)
 
 ### Bug Fixes

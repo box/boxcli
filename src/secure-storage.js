@@ -41,9 +41,7 @@ function ensureKeytarBinary() {
 			return;
 		}
 
-		const writableDir = fs.existsSync(releaseDir)
-			? releaseDir
-			: keytarDir;
+		const writableDir = fs.existsSync(releaseDir) ? releaseDir : keytarDir;
 		try {
 			fs.accessSync(writableDir, fs.constants.W_OK);
 		} catch {
