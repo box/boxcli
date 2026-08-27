@@ -165,7 +165,7 @@
 		"lint": "eslint --fix ./src ./test",
 		"clean": "find src/ -type d -name 'dist' -exec rm -rf {} +",
 		"updatemd": "oclif readme --multi && find docs -type f -name '*.md' -exec sed -i '' 's/\\.ts/\\.js/g' {} +",
-		"postinstall": "rm -rf ./node_modules/@github/keytar/build",
+		"postinstall": "node ./src/postinstall.js",
 		"prepack": "oclif manifest && npm run updatemd",
 		"postpack": "rm -f oclif.manifest.json && npm install",
 		"version": "npm run updatemd && npm run prettier && npm run license && git add .",
