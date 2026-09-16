@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.10.1](https://github.com/box/boxcli/compare/v4.10.0...v4.10.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* await `archiver` import before traversing in `folders:download --zip` ([#721](https://github.com/box/boxcli/issues/721)) ([8cab5bc](https://github.com/box/boxcli/commit/8cab5bc3a788229838b5bbf5997eff0a4c8b2f6f))
+* resolve `keytar` directory in `postinstall` script ([#713](https://github.com/box/boxcli/issues/713)) ([24b6fce](https://github.com/box/boxcli/commit/24b6fce84f2e187c656507c69591977fcf434c89))
+
 ## [4.10.0](https://github.com/box/boxcli/compare/v4.9.2...v4.10.0) (2026-08-27)
 
 
