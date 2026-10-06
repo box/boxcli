@@ -175,9 +175,10 @@ class CLITokenCache {
 	}
 
 	/**
-	 * Delete the token from both secure storage and file system
-	 * @param {Function} callback The callback to pass results to
-	 * @returns {void}
+	 * Delete the token from both secure storage and file system.
+	 * Without a callback, returns a promise, as the TS SDK token storage contract requires.
+	 * @param {Function} [callback] The callback to pass results to
+	 * @returns {Promise<undefined>|void} A promise when called without a callback
 	 */
 	clear(callback) {
 		const promises = [];
@@ -235,11 +236,17 @@ class CLITokenCache {
 			})
 		);
 
-		Promise.all(promises)
-			.then(() => callback())
-			.catch((error) =>
-				callback(new BoxCLIError('Failed to delete token cache', error))
-			);
+		const cleared = (async () => {
+			try {
+				await Promise.all(promises);
+			} catch (error) {
+				throw new BoxCLIError('Failed to delete token cache', error);
+			}
+		})();
+		if (typeof callback !== 'function') {
+			return cleared;
+		}
+		cleared.then(() => callback(), callback);
 	}
 
 	/**

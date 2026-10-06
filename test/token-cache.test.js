@@ -386,6 +386,39 @@ describe('CLITokenCache', function () {
 			});
 		});
 
+		it('should return a promise when clearing without a callback, as the TS SDK token storage contract requires', async function () {
+			const cacheWithoutSecure = new CLITokenCache('promise-clear-env');
+			cacheWithoutSecure.supportsSecureStorage = false;
+			const unlinkStub = sinon.stub(utilities, 'unlinkAsync').resolves();
+
+			try {
+				await cacheWithoutSecure.clear();
+				expect(unlinkStub.calledOnceWith(cacheWithoutSecure.filePath))
+					.to.be.true;
+			} finally {
+				unlinkStub.restore();
+			}
+		});
+
+		it('should reject the returned promise when clearing without a callback fails', async function () {
+			const cacheWithoutSecure = new CLITokenCache('promise-clear-env');
+			cacheWithoutSecure.supportsSecureStorage = false;
+			const unlinkStub = sinon.stub(utilities, 'unlinkAsync').rejects(
+				Object.assign(new Error('Permission denied'), {
+					code: 'EACCES',
+				})
+			);
+
+			try {
+				await cacheWithoutSecure.clear();
+				expect.fail('Expected clear() to reject');
+			} catch (error) {
+				expect(error.message).to.equal('Failed to delete token cache');
+			} finally {
+				unlinkStub.restore();
+			}
+		});
+
 		it('should report secure storage deletion failures when clearing', function (done) {
 			if (!tokenCache.supportsSecureStorage) {
 				this.skip();

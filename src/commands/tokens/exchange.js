@@ -2,10 +2,17 @@
 
 const BoxCommand = require('../../box-command');
 const { Flags, Args } = require('@oclif/core');
+const {
+	createTokenExchangeNotSupportedError,
+} = require('../../platform-account');
 
 class TokensExchangeCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(TokensExchangeCommand);
+
+		if (this.usesPlatformAccountAuth()) {
+			throw createTokenExchangeNotSupportedError();
+		}
 
 		let client = this.client;
 		if (flags.token) {
@@ -31,8 +38,11 @@ class TokensExchangeCommand extends BoxCommand {
 	}
 }
 
-TokensExchangeCommand.description =
-	'Get a token. Returns the service account token by default';
+TokensExchangeCommand.description = [
+	'Get a token. Returns the service account token by default.',
+	'',
+	'Not supported for Platform Account environments.',
+].join('\n');
 
 TokensExchangeCommand.args = {
 	scope: Args.string({
