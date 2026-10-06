@@ -6,6 +6,10 @@ const fs = require('node:fs');
 const BoxCLIError = require('../../../cli-error');
 const chalk = require('chalk');
 const utilities = require('../../../util');
+const {
+	PLATFORM_ACCOUNT_AUTH_METHOD,
+	validatePlatformAccountConfig,
+} = require('../../../platform-account');
 
 class EnvironmentsAddCommand extends BoxCommand {
 	async run() {
@@ -24,8 +28,13 @@ class EnvironmentsAddCommand extends BoxCommand {
 		}
 
 		const isCCG = flags['ccg-auth'];
+		const isPlatformAccount = flags['platform-account-auth'];
 
-		utilities.validateConfigObject(configObject, isCCG);
+		if (isPlatformAccount) {
+			validatePlatformAccountConfig(configObject);
+		} else {
+			utilities.validateConfigObject(configObject, isCCG);
+		}
 
 		let newEnvironment = {
 			clientId: configObject.boxAppSettings.clientID,
@@ -80,7 +89,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 				);
 			}
 		}
-		if (!configObject.enterpriseID) {
+		if (!isPlatformAccount && !configObject.enterpriseID) {
 			throw new BoxCLIError(
 				'Your environment does not have an enterprise ID'
 			);
@@ -115,6 +124,12 @@ class EnvironmentsAddCommand extends BoxCommand {
 			newEnvironment.authMethod = 'ccg';
 		}
 
+		if (isPlatformAccount) {
+			newEnvironment.authMethod = PLATFORM_ACCOUNT_AUTH_METHOD;
+			newEnvironment.enterpriseId = configObject.enterpriseID ?? null;
+			newEnvironment.userId = configObject.userID;
+		}
+
 		environmentsObject.environments[environmentName] = newEnvironment;
 		await this.updateEnvironments(environmentsObject);
 		this.info(
@@ -127,7 +142,7 @@ class EnvironmentsAddCommand extends BoxCommand {
 EnvironmentsAddCommand.noClient = true;
 
 EnvironmentsAddCommand.description =
-	'Add a new Box environment from a Box app config file (JWT or CCG).\n' +
+	'Add a new Box environment from a Box app config file (JWT, CCG, or Platform Account).\n' +
 	'Open your application in Box Developer Console to get/create config data:\n' +
 	'https://cloud.app.box.com/developers/console\n' +
 	'\n' +
@@ -137,6 +152,7 @@ EnvironmentsAddCommand.examples = [
 	'box configure:environments:add ~/Downloads/my_app_config.json',
 	'box configure:environments:add ./config.json --name production --set-as-current',
 	'box configure:environments:add ./config.json --ccg-auth --name ci-bot',
+	'box configure:environments:add ./platform_account_config.json --platform-account-auth --name my-agent',
 ];
 
 EnvironmentsAddCommand.flags = {
@@ -158,6 +174,7 @@ EnvironmentsAddCommand.flags = {
 			'Add a CCG environment that will use a service account.\n' +
 			'Open your application in Box Developer Console and create this config JSON yourself.\n' +
 			'Required fields: boxAppSettings.clientID, boxAppSettings.clientSecret, enterpriseID.',
+		exclusive: ['platform-account-auth'],
 	}),
 	'ccg-user': Flags.string({
 		description:
@@ -167,6 +184,16 @@ EnvironmentsAddCommand.flags = {
 			'In`Configuration` tab, in section `Advanced Features` select `Generate user access tokens`. \n' +
 			'Do not forget to re-authorize application if it was already authorized.',
 		dependsOn: ['ccg-auth'],
+		exclusive: ['platform-account-auth'],
+	}),
+	'platform-account-auth': Flags.boolean({
+		description:
+			'Add a Platform Account environment. Commands will always run as the Platform Account from the config file; ' +
+			'switching users, --as-user and token downscoping are not supported.\n' +
+			'Use the credentials file downloaded for the Platform Account.\n' +
+			'Required fields: boxAppSettings.clientID, boxAppSettings.clientSecret, boxAppSettings.appAuth.publicKeyID, ' +
+			'boxAppSettings.appAuth.privateKey (or --private-key-path), boxAppSettings.appAuth.passphrase, userID.',
+		exclusive: ['ccg-auth', 'ccg-user'],
 	}),
 };
 
@@ -181,7 +208,8 @@ EnvironmentsAddCommand.args = {
 			'https://cloud.app.box.com/developers/console\n' +
 			'CCG: create this JSON file yourself using values from your application\n' +
 			'in Developer Console (Client ID and Client Secret from Configuration tab,\n' +
-			'Enterprise ID from General Settings tab).',
+			'Enterprise ID from General Settings tab).\n' +
+			'Platform Account: use the credentials file downloaded for the Platform Account.',
 	}),
 };
 

@@ -1,7 +1,9 @@
 `box tokens`
 ============
 
-Get a token. Returns the service account token by default
+Get a token. Returns the service account token by default.
+
+Not supported for Platform Account environments.
 
 * [`box tokens:exchange SCOPE`](#box-tokensexchange-scope)
 * [`box tokens:get`](#box-tokensget)
@@ -9,7 +11,7 @@ Get a token. Returns the service account token by default
 
 ## `box tokens:exchange SCOPE`
 
-Get a token. Returns the service account token by default
+Get a token. Returns the service account token by default.
 
 ```
 USAGE
@@ -30,14 +32,16 @@ FLAGS
       --no-color           Turn off colors for logging
 
 DESCRIPTION
-  Get a token. Returns the service account token by default
+  Get a token. Returns the service account token by default.
+
+  Not supported for Platform Account environments.
 ```
 
 _See code: [src/commands/tokens/exchange.js](https://github.com/box/boxcli/blob/v4.10.1/src/commands/tokens/exchange.js)_
 
 ## `box tokens:get`
 
-Generate a new access token. Returns a service account token for the default environment unless --user-id is specified.
+Generate a new access token. Returns a service account token for the default environment unless --user-id is specified. For Platform Account environments, returns a token for the Platform Account.
 
 ```
 USAGE
@@ -52,7 +56,7 @@ FLAGS
 
 DESCRIPTION
   Generate a new access token. Returns a service account token for the default environment unless --user-id is
-  specified.
+  specified. For Platform Account environments, returns a token for the Platform Account.
 
 EXAMPLES
   $ box tokens:get

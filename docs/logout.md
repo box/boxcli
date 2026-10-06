@@ -4,7 +4,7 @@
 Revoke the access token and clear local token cache.
 
 For OAuth, run `box login` to authorize again.
-For CCG and JWT, a new token is fetched automatically on the next command.
+For CCG, JWT, and Platform Account, a new token is fetched automatically on the next command.
 
 Use -f and --on-revoke-failure=clear or --on-revoke-failure=abort to skip the interactive prompt.
 
@@ -32,7 +32,7 @@ DESCRIPTION
   Revoke the access token and clear local token cache.
 
   For OAuth, run `box login` to authorize again.
-  For CCG and JWT, a new token is fetched automatically on the next command.
+  For CCG, JWT, and Platform Account, a new token is fetched automatically on the next command.
 
   Use -f and --on-revoke-failure=clear or --on-revoke-failure=abort to skip the interactive prompt.
 ```
