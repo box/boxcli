@@ -63,6 +63,7 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 		}
 
 		// @TODO(2018-09-18): Add progress bar for large downloads
+		this.reportStatus(`Downloading ${fileName}`);
 
 		// We need to await the end of the stream to avoid a race condition here
 		await new Promise((resolve, reject) => {
@@ -70,6 +71,7 @@ class FilesVersionsDownloadCommand extends BoxCommand {
 			stream.on('error', reject);
 		});
 		this.info(`Downloaded file ${fileName}`);
+		this.setStatusResult(`Downloaded ${fileName}`);
 	}
 }
 

@@ -34,6 +34,11 @@ class FilesUploadCommand extends BoxCommand {
 			fileAttributes.content_modified_at = flags['content-modified-at'];
 		}
 
+		const statusMessage = `Uploading ${name}`;
+		const onProgress = (percentage) =>
+			this.reportStatus(statusMessage, percentage);
+		this.reportStatus(statusMessage);
+
 		let file;
 		try {
 			file = await uploadFile(this.client, {
@@ -42,6 +47,7 @@ class FilesUploadCommand extends BoxCommand {
 				stream,
 				size,
 				fileAttributes,
+				onProgress,
 			});
 		} catch (error) {
 			const { statusCode, response } = error;
@@ -88,9 +94,11 @@ class FilesUploadCommand extends BoxCommand {
 				stream: versionStream,
 				size,
 				fileAttributes,
+				onProgress,
 			});
 		}
 
+		this.setStatusResult(`Uploaded ${name}`);
 		await this.output(file.entries[0]);
 	}
 }
