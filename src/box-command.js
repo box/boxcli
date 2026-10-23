@@ -37,6 +37,7 @@ const inquirer = require('./inquirer');
 const { stringifyStream } = require('@discoveryjs/json-ext');
 const progress = require('cli-progress');
 const secureStorage = require('./secure-storage');
+const { ProgramStatus } = require('./program-status');
 
 const DEBUG = require('./debug');
 const stream = require('node:stream');
@@ -323,6 +324,11 @@ class BoxCommand extends Command {
 		this.flags = flags;
 		this.args = args;
 		this.settings = await this._loadSettings();
+		this._programStatus = new ProgramStatus({
+			settings: this.settings,
+			label: this.id ? `box ${this.id}` : 'box',
+		});
+		this.programStatus.start();
 		this.client = await this.getClient();
 		this.tsClient = await this.getTsClient();
 
@@ -369,6 +375,9 @@ class BoxCommand extends Command {
 			stopOnComplete: true,
 		});
 		progressBar.start(bulkCalls.length, 0);
+		const bulkStatusMessage = (count) =>
+			`Bulk ${this.id}: ${count}/${bulkCalls.length} entries`;
+		this.programStatus.working(bulkStatusMessage(0), 0);
 
 		for (let bulkData of bulkCalls) {
 			this.argv = [];
@@ -396,6 +405,19 @@ class BoxCommand extends Command {
 			}
 
 			progressBar.update(bulkEntryIndex);
+			this.programStatus.working(
+				bulkStatusMessage(bulkEntryIndex),
+				(bulkEntryIndex / bulkCalls.length) * 100
+			);
+		}
+		if (this.bulkErrors.length > 0) {
+			this.programStatus.fail(
+				`Bulk ${this.id}: ${this.bulkErrors.length} of ${bulkCalls.length} entries failed`
+			);
+		} else {
+			this.programStatus.succeed(
+				`Bulk ${this.id}: processed ${bulkCalls.length} entries`
+			);
 		}
 		this.isBulk = false;
 		DEBUG.execute('Leaving bulk mode and writing final output');
@@ -1586,16 +1608,91 @@ class BoxCommand extends Command {
 			return true;
 		}
 
-		let answers = await inquirer.prompt([
-			{
-				name: 'confirmation',
-				message: promptText,
-				type: 'confirm',
-				default: defaultValue,
-			},
-		]);
+		let answers = await this.prompt(
+			[
+				{
+					name: 'confirmation',
+					message: promptText,
+					type: 'confirm',
+					default: defaultValue,
+				},
+			],
+			{ kind: 'permission' }
+		);
 
+		if (!answers.confirmation && !this.isBulk) {
+			this.programStatus.cancel();
+		}
 		return answers.confirmation;
+	}
+
+	/**
+	 * Prompt the user, reporting to the terminal that the command is waiting on them
+	 *
+	 * @param {Object[]} questions Inquirer questions
+	 * @param {Object} [options] Status options
+	 * @param {string} [options.kind] permission, question, or auth
+	 * @param {string} [options.msg] What the command is waiting for; defaults to the first question's message
+	 * @returns {Promise<Object>} The answers
+	 */
+	async prompt(questions, { kind = 'question', msg } = {}) {
+		this.programStatus.blocked(kind, msg ?? questions[0]?.message);
+		try {
+			return await inquirer.prompt(questions);
+		} finally {
+			this.programStatus.resume();
+		}
+	}
+
+	/**
+	 * Status reporting for the current command run
+	 *
+	 * @returns {ProgramStatus} The status reporter; reports nothing before init()
+	 */
+	get programStatus() {
+		if (!this._programStatus) {
+			this._programStatus = new ProgramStatus({ enabled: false });
+		}
+		return this._programStatus;
+	}
+
+	/**
+	 * Report what the command is working on. Ignored in bulk mode, which reports
+	 * progress across all entries instead.
+	 *
+	 * @param {string} msg What the command is doing
+	 * @param {number} [progress] Percentage complete; indeterminate if omitted
+	 * @returns {void}
+	 */
+	reportStatus(msg, progress) {
+		if (!this.isBulk) {
+			this.programStatus.working(msg, progress);
+		}
+	}
+
+	/**
+	 * Set the message reported when the command finishes. Ignored in bulk mode.
+	 *
+	 * @param {string} msg What the command finished
+	 * @returns {void}
+	 */
+	setStatusResult(msg) {
+		if (!this.isBulk) {
+			this.programStatus.succeed(msg);
+		}
+	}
+
+	/**
+	 * Mark the command as failed when it reports a failure without throwing.
+	 * Ignored in bulk mode.
+	 *
+	 * @param {string} msg What failed
+	 * @returns {void}
+	 */
+	setStatusFailed(msg) {
+		if (!this.isBulk) {
+			this.programStatus.fail(msg);
+		}
 	}
 
 	/**
@@ -1705,6 +1802,15 @@ class BoxCommand extends Command {
 				DEBUG.execute('Error parsing BoxSdkError message: %s', error);
 			}
 		}
+		if (err?.code !== 'EEXIT') {
+			const statusMessage =
+				typeof err?.message === 'string'
+					? this.wrapError(err).message
+					: String(err);
+			this.programStatus.fail(
+				`${this.programStatus.label} failed: ${statusMessage}`
+			);
+		}
 		try {
 			// Let the oclif default handler run first, since it handles the help and version flags there
 			/* eslint-disable promise/no-promise-in-callback */
@@ -1755,8 +1861,9 @@ class BoxCommand extends Command {
 	 * @param {Error} [err] An error, if one occurred
 	 * @returns {void}
 	 */
-	async finally(/* err */) {
+	async finally(err) {
 		// called after run and catch regardless of whether or not the command errored
+		this.programStatus.finish(err);
 	}
 
 	/**
