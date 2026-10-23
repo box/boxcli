@@ -50,6 +50,23 @@ async function waitForLoopbackPort(port, maxAttempts = 20, delayMs = 5) {
 	);
 }
 
+async function findFreePort(ports) {
+	for (const port of ports) {
+		const isFree = await new Promise((resolve) => {
+			const server = nodeHttp.createServer();
+			server.once('error', () => resolve(false));
+			server.listen(port, 'localhost', () =>
+				server.close(() => resolve(true))
+			);
+		});
+		if (isFree) {
+			return port;
+		}
+	}
+
+	throw new Error(`None of the ports ${ports.join(', ')} is free`);
+}
+
 describe('Login', function () {
 	let sandbox;
 	const DEFAULT_CLIENT_ID = 'udz8zp4yue87uk9dzq4xk425kkwvqvh1';
@@ -436,56 +453,42 @@ describe('Login', function () {
 			);
 		});
 
-		it('should show error when specified env does not exist and no current env', async function () {
+		test.do(() => {
 			getEnvironmentsStub.resolves({ default: '', environments: {} });
+		})
+			.stderr()
+			.command(['login', '--reauthorize', '-n', 'nonexistent'])
+			.it(
+				'should show error when specified env does not exist and no current env',
+				(ctx) => {
+					assert.include(
+						ctx.stderr,
+						'The "nonexistent" environment does not exist'
+					);
+				}
+			);
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it(
-					'shows error when env does not exist and no current env',
-					(ctx) => {
-						assert.include(
-							ctx.stdout,
-							'The "nonexistent" environment does not exist'
-						);
-					}
-				);
-		});
-
-		it('should show error when specified env does not exist and current env is not OAuth', async function () {
+		test.do(() => {
 			getEnvironmentsStub.resolves({
 				default: 'jwt-env',
 				environments: {
 					'jwt-env': { authMethod: 'jwt', clientId: 'cid' },
 				},
 			});
+		})
+			.stderr()
+			.command(['login', '--reauthorize', '-n', 'nonexistent'])
+			.it(
+				'should show error when specified env does not exist and current env is not OAuth',
+				(ctx) => {
+					assert.include(
+						ctx.stderr,
+						'The "nonexistent" environment does not exist'
+					);
+				}
+			);
 
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it(
-					'shows error when env does not exist and current is not oauth',
-					(ctx) => {
-						assert.include(
-							ctx.stdout,
-							'The "nonexistent" environment does not exist'
-						);
-					}
-				);
-		});
-
-		it('should show error when specified env does not exist and name is not oauth (even if current is OAuth)', async function () {
+		test.do(() => {
 			getEnvironmentsStub.resolves({
 				default: 'my-oauth',
 				environments: {
@@ -496,25 +499,37 @@ describe('Login', function () {
 					},
 				},
 			});
-
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command(['login', '--reauthorize', '-n', 'nonexistent'])
-				.it('does not fallback when name is not oauth', (ctx) => {
+		})
+			.stderr()
+			.command(['login', '--reauthorize', '-n', 'nonexistent'])
+			.it(
+				'should show error when specified env does not exist and name is not oauth (even if current is OAuth)',
+				(ctx) => {
 					assert.include(
-						ctx.stdout,
+						ctx.stderr,
 						'The "nonexistent" environment does not exist'
 					);
-				});
-		});
+				}
+			);
 
-		it('should use current OAuth env when name is oauth and that env does not exist', async function () {
-			const promptStub = sandbox.stub(inquirer, 'prompt').resolves({
+		let promptStub;
+		const reauthorizeWithCodeArgs = [
+			'login',
+			'--reauthorize',
+			'-n',
+			'oauth',
+			'--default-box-app',
+			'--code',
+			'--port',
+		];
+		test.do(async () => {
+			// .command() reads its args when the test runs, so the port can be appended here.
+			reauthorizeWithCodeArgs[7] = String(
+				await findFreePort(
+					OAuthLoginCommand._test.SUPPORTED_DEFAULT_APP_PORTS
+				)
+			);
+			promptStub = sandbox.stub(inquirer, 'prompt').resolves({
 				code: 'test-code',
 				state: 'test-state',
 			});
@@ -528,36 +543,20 @@ describe('Login', function () {
 					},
 				},
 			});
-
-			await test
-				.stub(
-					BoxCommand.prototype,
-					'getEnvironments',
-					getEnvironmentsStub
-				)
-				.stdout()
-				.command([
-					'login',
-					'--reauthorize',
-					'-n',
-					'oauth',
-					'--default-box-app',
-					'--code',
-					'--port',
-					'16987',
-				])
-				.it(
-					'falls back to current oauth env when name is oauth and env does not exist',
-					(ctx) => {
-						assert.notInclude(
-							ctx.stdout,
-							'The "oauth" environment does not exist'
-						);
-						assert.include(ctx.stdout, 'Please open');
-						assert.isTrue(promptStub.calledOnce);
-					}
-				);
-		});
+		})
+			.stderr()
+			.command(reauthorizeWithCodeArgs)
+			.it(
+				'should use current OAuth env when name is oauth and that env does not exist',
+				(ctx) => {
+					assert.notInclude(
+						ctx.stderr,
+						'The "oauth" environment does not exist'
+					);
+					assert.include(ctx.stderr, 'Please open');
+					assert.isTrue(promptStub.calledOnce);
+				}
+			);
 	});
 
 	describe('oauth callback command behavior', function () {

@@ -35,7 +35,7 @@
 		"@oclif/plugin-not-found": "^3.2.73",
 		"@oclif/plugin-update": "3.2.4",
 		"@oclif/plugin-version": "^2.2.36",
-		"@oclif/table": "^0.5.8",
+		"@oclif/table": "0.5.4",
 		"@octokit/rest": "^22.0.0",
 		"archiver": "^8.0.0",
 		"box-node-sdk": "^4.11.1",
