@@ -421,22 +421,23 @@ describe('Hubs', function () {
 				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 
-		it('rejects unsupported hub collaboration roles on create', async function () {
-			return test
-				.command([
-					'hubs:collaborations:create',
-					'12345',
-					'--role=owner',
-					'--user-id=22222',
-					'--token=test',
-				])
-				.catch((error) => {
+		test.stderr()
+			.command([
+				'hubs:collaborations:create',
+				'12345',
+				'--role=owner',
+				'--user-id=22222',
+				'--token=test',
+			])
+			.it(
+				'rejects unsupported hub collaboration roles on create',
+				(context) => {
 					assert.include(
-						error.message,
+						context.stderr,
 						'Expected --role=owner to be one of: editor, viewer, co-owner'
 					);
-				});
-		});
+				}
+			);
 	});
 
 	describe('hubs:collaborations:get', function () {
@@ -483,21 +484,22 @@ describe('Hubs', function () {
 				assert.deepEqual(JSON.parse(context.stdout), response);
 			});
 
-		it('rejects unsupported hub collaboration roles on update', async function () {
-			return test
-				.command([
-					'hubs:collaborations:update',
-					'99999',
-					'--role=owner',
-					'--token=test',
-				])
-				.catch((error) => {
+		test.stderr()
+			.command([
+				'hubs:collaborations:update',
+				'99999',
+				'--role=owner',
+				'--token=test',
+			])
+			.it(
+				'rejects unsupported hub collaboration roles on update',
+				(context) => {
 					assert.include(
-						error.message,
+						context.stderr,
 						'Expected --role=owner to be one of: editor, viewer, co-owner'
 					);
-				});
-		});
+				}
+			);
 	});
 
 	describe('hubs:collaborations:delete', function () {

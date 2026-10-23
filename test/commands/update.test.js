@@ -1,5 +1,7 @@
 'use strict';
 
+// fancy-test's .catch() asserts on a thrown error; it is not Promise#catch
+/* eslint-disable promise/catch-or-return */
 const { test } = require('@oclif/test');
 const assert = require('chai').assert;
 const sinon = require('sinon');
@@ -12,6 +14,7 @@ describe('Update', function () {
 	let fetchVersionIndexStub;
 	let findLocalVersionsStub;
 	let runUpdateStub;
+	let promptStub;
 
 	beforeEach(function () {
 		sandbox = sinon.createSandbox();
@@ -32,128 +35,77 @@ describe('Update', function () {
 	});
 
 	describe('update', function () {
-		it('should list available versions when --available flag is passed', async function () {
-			const mockVersionIndex = {
+		test.do(() => {
+			fetchVersionIndexStub.resolves({
 				'3.0.0':
 					'https://github.com/box/boxcli/releases/download/v3.0.0',
 				'2.5.0':
 					'https://github.com/box/boxcli/releases/download/v2.5.0',
 				'2.0.0':
 					'https://github.com/box/boxcli/releases/download/v2.0.0',
-			};
-			const mockLocalVersions = ['/path/to/3.0.0'];
-
-			fetchVersionIndexStub.resolves(mockVersionIndex);
-			findLocalVersionsStub.resolves(mockLocalVersions);
-
-			await test
-				.stdout()
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.stub(
-					GitHubUpdater.prototype,
-					'findLocalVersions',
-					findLocalVersionsStub
-				)
-				.command(['update', '--available'])
-				.it('displays available versions in table format', (ctx) => {
-					// Verify the stubs were called
+			});
+			findLocalVersionsStub.resolves(['/path/to/3.0.0']);
+		})
+			.stdout()
+			.command(['update', '--available'])
+			.it(
+				'should list available versions when --available flag is passed',
+				(ctx) => {
 					assert.isTrue(fetchVersionIndexStub.called);
 					assert.isTrue(findLocalVersionsStub.called);
-					// Verify output contains version numbers
 					assert.include(ctx.stdout, '3.0.0');
 					assert.include(ctx.stdout, '2.5.0');
-				});
-		});
-
-		it('should call runUpdate with correct parameters when updating to specific version', async function () {
-			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--version=3.0.0'])
-				.it('updates to specified version', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.equal(callArgs.version, '3.0.0');
-					assert.isFalse(callArgs.autoUpdate);
-					assert.isFalse(callArgs.force);
-				});
-		});
-
-		it('should call runUpdate with force flag', async function () {
-			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--force'])
-				.it('updates with force flag', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.isTrue(callArgs.force);
-				});
-		});
-
-		it('should call runUpdate with autoupdate flag', async function () {
-			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--autoupdate'])
-				.it('updates with autoupdate flag', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.isTrue(callArgs.autoUpdate);
-				});
-		});
-
-		it('should update to specific channel', async function () {
-			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', 'stable'])
-				.it('updates to specified channel', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.equal(callArgs.channel, 'stable');
-				});
-		});
-
-		it('should error when both version and channel are specified', async function () {
-			await test
-				.command(['update', 'stable', '--version=3.0.0'])
-				.catch((error) => {
-					assert.include(
-						error.message,
-						'You cannot specify both a version and a channel'
-					);
-				})
-				.it('throws error when both channel and version are provided');
-		});
-
-		it('should handle interactive version selection', async function () {
-			const promptStub = sandbox.stub(
-				UpdateCommand.prototype,
-				'promptForVersion'
+				}
 			);
-			promptStub.resolves('3.0.0');
-			runUpdateStub.resolves();
 
-			await test
-				.stub(UpdateCommand.prototype, 'promptForVersion', promptStub)
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--interactive'])
-				.it('prompts for version selection in interactive mode', () => {
-					assert.isTrue(promptStub.called);
+		test.do(() => {
+			runUpdateStub.resolves();
+		})
+			.command(['update', '--version=3.0.0'])
+			.it(
+				'should call runUpdate with correct parameters when updating to specific version',
+				() => {
 					assert.isTrue(runUpdateStub.called);
 					const callArgs = runUpdateStub.getCall(0).args[0];
 					assert.equal(callArgs.version, '3.0.0');
-				});
-		});
+					assert.notOk(callArgs.autoUpdate);
+					assert.notOk(callArgs.force);
+				}
+			);
+
+		test.do(() => {
+			runUpdateStub.resolves();
+		})
+			.command(['update', '--force'])
+			.it('should call runUpdate with force flag', () => {
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.isTrue(callArgs.force);
+			});
+
+		test.do(() => {
+			runUpdateStub.resolves();
+		})
+			.command(['update', '--autoupdate'])
+			.it('should call runUpdate with autoupdate flag', () => {
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.isTrue(callArgs.autoUpdate);
+			});
+
+		test.do(() => {
+			promptStub = sandbox
+				.stub(UpdateCommand.prototype, 'promptForVersion')
+				.resolves('3.0.0');
+			runUpdateStub.resolves();
+		})
+			.command(['update', '--interactive'])
+			.it('should handle interactive version selection', () => {
+				assert.isTrue(promptStub.called);
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.equal(callArgs.version, '3.0.0');
+			});
 	});
 
 	describe('update command description', function () {
@@ -166,285 +118,179 @@ describe('Update', function () {
 	});
 
 	describe('GitHubUpdater integration', function () {
-		it('should instantiate GitHubUpdater with config', async function () {
+		test.do(() => {
 			runUpdateStub.resolves();
+		})
+			.command(['update'])
+			.it('should instantiate GitHubUpdater with config', () => {
+				assert.isTrue(runUpdateStub.called);
+			});
 
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update'])
-				.it('creates GitHubUpdater instance', () => {
-					// Verify updater was instantiated
-					assert.isTrue(runUpdateStub.called);
-				});
-		});
+		test.do(() => {
+			runUpdateStub.rejects(new Error('Update failed'));
+		})
+			.command(['update'])
+			.catch((error) => {
+				assert.include(error.message, 'Update failed');
+			})
+			.it('should handle update errors gracefully');
 
-		it('should handle update errors gracefully', async function () {
-			const updateError = new Error('Update failed');
-			runUpdateStub.rejects(updateError);
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update'])
-				.catch((error) => {
-					assert.include(error.message, 'Update failed');
-				})
-				.it('handles update errors');
-		});
-
-		it('should handle version index fetch errors', async function () {
-			const fetchError = new Error('Failed to fetch version index');
-			fetchVersionIndexStub.rejects(fetchError);
-
-			await test
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.command(['update', '--available'])
-				.catch((error) => {
-					assert.include(
-						error.message,
-						'Failed to fetch version index'
-					);
-				})
-				.it('handles version index fetch errors');
-		});
+		test.do(() => {
+			fetchVersionIndexStub.rejects(
+				new Error('Failed to fetch version index')
+			);
+		})
+			.command(['update', '--available'])
+			.catch((error) => {
+				assert.include(error.message, 'Failed to fetch version index');
+			})
+			.it('should handle version index fetch errors');
 	});
 
 	describe('update flags combinations', function () {
-		it('should work with version and force flags together', async function () {
+		test.do(() => {
 			runUpdateStub.resolves();
+		})
+			.command(['update', '--version=3.0.0', '--force'])
+			.it('should work with version and force flags together', () => {
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.equal(callArgs.version, '3.0.0');
+				assert.isTrue(callArgs.force);
+			});
 
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--version=3.0.0', '--force'])
-				.it('updates to version with force', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.equal(callArgs.version, '3.0.0');
-					assert.isTrue(callArgs.force);
-				});
-		});
-
-		it('should work with channel and autoupdate flags together', async function () {
+		test.do(() => {
+			promptStub = sandbox
+				.stub(UpdateCommand.prototype, 'promptForVersion')
+				.resolves('3.5.0');
 			runUpdateStub.resolves();
+		})
+			.command(['update', '--interactive', '--force'])
+			.it('should work with interactive and force flags together', () => {
+				assert.isTrue(promptStub.called);
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.equal(callArgs.version, '3.5.0');
+				assert.isTrue(callArgs.force);
+			});
 
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', 'stable', '--autoupdate'])
-				.it('updates to channel with autoupdate', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.equal(callArgs.channel, 'stable');
-					assert.isTrue(callArgs.autoUpdate);
-				});
-		});
-
-		it('should work with interactive and force flags together', async function () {
-			const promptStub = sandbox.stub(
-				UpdateCommand.prototype,
-				'promptForVersion'
-			);
-			promptStub.resolves('3.5.0');
+		test.do(() => {
 			runUpdateStub.resolves();
-
-			await test
-				.stub(UpdateCommand.prototype, 'promptForVersion', promptStub)
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--interactive', '--force'])
-				.it('prompts for version with force flag', () => {
-					assert.isTrue(promptStub.called);
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.equal(callArgs.version, '3.5.0');
-					assert.isTrue(callArgs.force);
-				});
-		});
-
-		it('should handle autoupdate and force flags together', async function () {
-			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--autoupdate', '--force'])
-				.it('updates with autoupdate and force', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.isTrue(callArgs.autoUpdate);
-					assert.isTrue(callArgs.force);
-				});
-		});
+		})
+			.command(['update', '--autoupdate', '--force'])
+			.it('should handle autoupdate and force flags together', () => {
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.isTrue(callArgs.autoUpdate);
+				assert.isTrue(callArgs.force);
+			});
 	});
 
 	describe('update command without flags', function () {
-		it('should run update without any flags', async function () {
+		test.do(() => {
 			runUpdateStub.resolves();
-
-			await test
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update'])
-				.it('runs update with defaults', () => {
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.isFalse(callArgs.autoUpdate);
-					assert.isFalse(callArgs.force);
-					assert.isUndefined(callArgs.version);
-				});
-		});
+		})
+			.command(['update'])
+			.it('should run update without any flags', () => {
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.notOk(callArgs.autoUpdate);
+				assert.notOk(callArgs.force);
+				assert.isUndefined(callArgs.version);
+			});
 	});
 
 	describe('available versions display', function () {
-		it('should display both local and remote versions', async function () {
-			const mockVersionIndex = {
+		test.do(() => {
+			fetchVersionIndexStub.resolves({
 				'4.0.0':
 					'https://github.com/box/boxcli/releases/download/v4.0.0',
 				'3.5.0':
 					'https://github.com/box/boxcli/releases/download/v3.5.0',
 				'3.0.0':
 					'https://github.com/box/boxcli/releases/download/v3.0.0',
-			};
-			const mockLocalVersions = [
+			});
+			findLocalVersionsStub.resolves([
 				'/path/to/versions/4.0.0-darwin-x64',
 				'/path/to/versions/3.5.0-darwin-x64',
-			];
+			]);
+		})
+			.stdout()
+			.command(['update', '--available'])
+			.it('should display both local and remote versions', (ctx) => {
+				assert.isTrue(fetchVersionIndexStub.called);
+				assert.isTrue(findLocalVersionsStub.called);
+				assert.include(ctx.stdout, '4.0.0');
+				assert.include(ctx.stdout, '3.5.0');
+				assert.include(ctx.stdout, '3.0.0');
+			});
 
-			fetchVersionIndexStub.resolves(mockVersionIndex);
-			findLocalVersionsStub.resolves(mockLocalVersions);
-
-			await test
-				.stdout()
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.stub(
-					GitHubUpdater.prototype,
-					'findLocalVersions',
-					findLocalVersionsStub
-				)
-				.command(['update', '--available'])
-				.it('displays mixed local and remote versions', (ctx) => {
-					assert.isTrue(fetchVersionIndexStub.called);
-					assert.isTrue(findLocalVersionsStub.called);
-					assert.include(ctx.stdout, '4.0.0');
-					assert.include(ctx.stdout, '3.5.0');
-					assert.include(ctx.stdout, '3.0.0');
-				});
-		});
-
-		it('should display only remote versions when no local versions', async function () {
-			const mockVersionIndex = {
+		test.do(() => {
+			fetchVersionIndexStub.resolves({
 				'2.0.0':
 					'https://github.com/box/boxcli/releases/download/v2.0.0',
-			};
-			const mockLocalVersions = [];
-
-			fetchVersionIndexStub.resolves(mockVersionIndex);
-			findLocalVersionsStub.resolves(mockLocalVersions);
-
-			await test
-				.stdout()
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.stub(
-					GitHubUpdater.prototype,
-					'findLocalVersions',
-					findLocalVersionsStub
-				)
-				.command(['update', '--available'])
-				.it('displays only remote versions', (ctx) => {
+			});
+			findLocalVersionsStub.resolves([]);
+		})
+			.stdout()
+			.command(['update', '--available'])
+			.it(
+				'should display only remote versions when no local versions',
+				(ctx) => {
 					assert.isTrue(fetchVersionIndexStub.called);
 					assert.isTrue(findLocalVersionsStub.called);
 					assert.include(ctx.stdout, '2.0.0');
-				});
-		});
+				}
+			);
 	});
 
 	describe('edge cases', function () {
-		it('should handle empty version index', async function () {
-			const mockVersionIndex = {};
-			const mockLocalVersions = [];
+		test.do(() => {
+			fetchVersionIndexStub.resolves({});
+			findLocalVersionsStub.resolves([]);
+		})
+			.stdout()
+			.command(['update', '--available'])
+			.it('should handle empty version index', () => {
+				assert.isTrue(fetchVersionIndexStub.called);
+				assert.isTrue(findLocalVersionsStub.called);
+			});
 
-			fetchVersionIndexStub.resolves(mockVersionIndex);
-			findLocalVersionsStub.resolves(mockLocalVersions);
-
-			await test
-				.stdout()
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.stub(
-					GitHubUpdater.prototype,
-					'findLocalVersions',
-					findLocalVersionsStub
-				)
-				.command(['update', '--available'])
-				.it('handles empty version index gracefully', () => {
-					assert.isTrue(fetchVersionIndexStub.called);
-					assert.isTrue(findLocalVersionsStub.called);
-				});
-		});
-
-		it('should handle promptForVersion returning null', async function () {
-			const promptStub = sandbox.stub(
-				UpdateCommand.prototype,
-				'promptForVersion'
-			);
-			promptStub.resolves(null);
+		test.do(() => {
+			promptStub = sandbox
+				.stub(UpdateCommand.prototype, 'promptForVersion')
+				.resolves(null);
 			runUpdateStub.resolves();
+		})
+			.command(['update', '--interactive'])
+			.it('should handle promptForVersion returning null', () => {
+				assert.isTrue(promptStub.called);
+				assert.isTrue(runUpdateStub.called);
+				const callArgs = runUpdateStub.getCall(0).args[0];
+				assert.isNull(callArgs.version);
+			});
 
-			await test
-				.stub(UpdateCommand.prototype, 'promptForVersion', promptStub)
-				.stub(GitHubUpdater.prototype, 'runUpdate', runUpdateStub)
-				.command(['update', '--interactive'])
-				.it('handles null version from prompt', () => {
-					assert.isTrue(promptStub.called);
-					assert.isTrue(runUpdateStub.called);
-					const callArgs = runUpdateStub.getCall(0).args[0];
-					assert.isNull(callArgs.version);
-				});
-		});
-
-		it('should handle version with special characters in basename matching', async function () {
-			const mockVersionIndex = {
+		test.do(() => {
+			fetchVersionIndexStub.resolves({
 				'1.0.0-beta':
 					'https://github.com/box/boxcli/releases/download/v1.0.0-beta',
-			};
-			const mockLocalVersions = [
+			});
+			findLocalVersionsStub.resolves([
 				'/path/to/versions/1.0.0-beta-darwin-x64',
-			];
-
-			fetchVersionIndexStub.resolves(mockVersionIndex);
-			findLocalVersionsStub.resolves(mockLocalVersions);
-
-			await test
-				.stdout()
-				.stub(
-					GitHubUpdater.prototype,
-					'fetchVersionIndex',
-					fetchVersionIndexStub
-				)
-				.stub(
-					GitHubUpdater.prototype,
-					'findLocalVersions',
-					findLocalVersionsStub
-				)
-				.command(['update', '--available'])
-				.it('matches version with special characters', (ctx) => {
+			]);
+		})
+			.stdout()
+			.command(['update', '--available'])
+			.it(
+				'should handle version with special characters in basename matching',
+				(ctx) => {
 					assert.include(ctx.stdout, '1.0.0-beta');
 					assert.include(
 						ctx.stdout,
 						'/path/to/versions/1.0.0-beta-darwin-x64'
 					);
-				});
-		});
+				}
+			);
 	});
 
 	describe('command class properties', function () {

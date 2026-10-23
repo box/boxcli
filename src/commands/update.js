@@ -7,10 +7,10 @@ const UpdateCommand =
 
 class GithubUpdatecommand extends UpdateCommand {
 	async run() {
-		const { printTable } = await import('@oclif/table');
 		const { flags } = await this.parse(UpdateCommand);
 		const updater = new GitHubUpdater(this.config);
 		if (flags.available) {
+			const { printTable } = await import('@oclif/table');
 			const index = await updater.fetchVersionIndex();
 			const allVersions = sort(Object.keys(index)).reverse();
 			const localVersions = await updater.findLocalVersions();
@@ -30,7 +30,7 @@ class GithubUpdatecommand extends UpdateCommand {
 			return;
 		}
 
-		updater.runUpdate({
+		await updater.runUpdate({
 			autoUpdate: flags.autoupdate,
 			force: flags.force,
 			version: flags.interactive

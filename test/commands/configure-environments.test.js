@@ -30,7 +30,7 @@ describe('Configure environments masking', function () {
 		sandbox.restore();
 	});
 
-	it('configure:environments:get should not print raw client secrets', function () {
+	test.do(() => {
 		getEnvironmentsStub.resolves({
 			default: 'dev',
 			environments: {
@@ -40,18 +40,18 @@ describe('Configure environments masking', function () {
 				},
 			},
 		});
-
-		return test
-			.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
-			.stdout()
-			.command(['configure:environments:get'])
-			.it('masks clientSecret in output', (ctx) => {
+	})
+		.stdout()
+		.command(['configure:environments:get'])
+		.it(
+			'configure:environments:get should not print raw client secrets',
+			(ctx) => {
 				assert.notInclude(ctx.stdout, RAW_SECRET);
 				assert.include(ctx.stdout, MASKED_SECRET);
-			});
-	});
+			}
+		);
 
-	it('configure:environments:update should not print raw client secrets', function () {
+	test.do(() => {
 		getEnvironmentsStub.resolves({
 			default: 'dev',
 			environments: {
@@ -61,19 +61,14 @@ describe('Configure environments masking', function () {
 				},
 			},
 		});
-
-		return test
-			.stub(BoxCommand.prototype, 'getEnvironments', getEnvironmentsStub)
-			.stub(
-				BoxCommand.prototype,
-				'updateEnvironments',
-				updateEnvironmentsStub
-			)
-			.stdout()
-			.command(['configure:environments:update'])
-			.it('masks clientSecret in output', (ctx) => {
+	})
+		.stdout()
+		.command(['configure:environments:update'])
+		.it(
+			'configure:environments:update should not print raw client secrets',
+			(ctx) => {
 				assert.notInclude(ctx.stdout, RAW_SECRET);
 				assert.include(ctx.stdout, MASKED_SECRET);
-			});
-	});
+			}
+		);
 });
