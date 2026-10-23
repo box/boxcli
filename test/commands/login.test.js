@@ -50,6 +50,23 @@ async function waitForLoopbackPort(port, maxAttempts = 20, delayMs = 5) {
 	);
 }
 
+async function findFreePort(ports) {
+	for (const port of ports) {
+		const isFree = await new Promise((resolve) => {
+			const server = nodeHttp.createServer();
+			server.once('error', () => resolve(false));
+			server.listen(port, 'localhost', () =>
+				server.close(() => resolve(true))
+			);
+		});
+		if (isFree) {
+			return port;
+		}
+	}
+
+	throw new Error(`None of the ports ${ports.join(', ')} is free`);
+}
+
 describe('Login', function () {
 	let sandbox;
 	const DEFAULT_CLIENT_ID = 'udz8zp4yue87uk9dzq4xk425kkwvqvh1';
@@ -496,7 +513,22 @@ describe('Login', function () {
 			);
 
 		let promptStub;
-		test.do(() => {
+		const reauthorizeWithCodeArgs = [
+			'login',
+			'--reauthorize',
+			'-n',
+			'oauth',
+			'--default-box-app',
+			'--code',
+			'--port',
+		];
+		test.do(async () => {
+			// .command() reads its args when the test runs, so the port can be appended here.
+			reauthorizeWithCodeArgs[7] = String(
+				await findFreePort(
+					OAuthLoginCommand._test.SUPPORTED_DEFAULT_APP_PORTS
+				)
+			);
 			promptStub = sandbox.stub(inquirer, 'prompt').resolves({
 				code: 'test-code',
 				state: 'test-state',
@@ -513,16 +545,7 @@ describe('Login', function () {
 			});
 		})
 			.stderr()
-			.command([
-				'login',
-				'--reauthorize',
-				'-n',
-				'oauth',
-				'--default-box-app',
-				'--code',
-				'--port',
-				'4000',
-			])
+			.command(reauthorizeWithCodeArgs)
 			.it(
 				'should use current OAuth env when name is oauth and that env does not exist',
 				(ctx) => {

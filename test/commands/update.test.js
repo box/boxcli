@@ -145,6 +145,15 @@ describe('Update', function () {
 				assert.include(error.message, 'Failed to fetch version index');
 			})
 			.it('should handle version index fetch errors');
+
+		test.do(() => {
+			runUpdateStub.resolves();
+		})
+			.command(['update', 'stable'])
+			.catch((error) => {
+				assert.include(error.message, 'Unexpected argument: stable');
+			})
+			.it('should reject a channel argument');
 	});
 
 	describe('update flags combinations', function () {
