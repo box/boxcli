@@ -10,6 +10,8 @@ Commands wrap `box-node-sdk` manager methods. Copy the shape of a nearby command
 ## Inputs
 
 - **SDK method** as `<manager>.<method>`, e.g. `hubCollaborations.createHubCollaborationV2025R0`. If the user describes the operation instead, find the method by its API path (step 1).
+
+New commands always use the generated SDK (`box-node-sdk/sdk-gen`) through `this.tsClient`, even when the nearest sibling does not. Never call the legacy client `this.client` or use its managers in `node_modules/box-node-sdk/lib/managers/` for a new command.
 - **Command name**, e.g. `hubs:collaborations:create`. If not given, propose one in step 4.
 - **Anything else the user states**: allowed values, permissions, flag names, help text wording. User-stated facts override what you infer.
 
@@ -24,7 +26,7 @@ Ask about:
 - **Which SDK method**, when several match (e.g. a `V2025R0` method and an older one for the same path).
 - **Command name and placement**: new top-level topic or nested under an existing one, and aliases such as `:list` or `:add` when siblings have them.
 - **Accepted values** for fields the SDK types as plain `string`.
-- **Defaults and required flags**, when the API reference and SDK disagree or say nothing.
+- **Defaults and required flags**, when the OpenAPI schema and SDK disagree or say nothing.
 - **Permissions and scopes** the command needs, for the help text.
 - **Flag names**, when the API field name reads badly as a flag (e.g. `is_ai_enabled` as `--is-ai-enabled` or `--ai-enabled`).
 - **Output changes to a released command**: breaking change with `!` in the commit, or opt-in `--raw-json`.
@@ -38,7 +40,7 @@ When no user can answer, as in a scheduled or background run, take the recommend
 
 ### 1. Resolve the SDK method
 
-SDK sources live in `node_modules/box-node-sdk/lib/sdk-gen/`. Agent search tools respect `.gitignore` and skip `node_modules`, so use shell `rg` and `ls` there.
+SDK sources live in `node_modules/box-node-sdk/lib/sdk-gen/`. Agent search tools respect `.gitignore` and skip `node_modules`, so use shell `grep` and `ls` there.
 
 | File | Gives you |
 | --- | --- |
@@ -47,11 +49,11 @@ SDK sources live in `node_modules/box-node-sdk/lib/sdk-gen/`. Agent search tools
 | `schemas/v2025R0/<type>.d.ts` or `schemas/<type>.d.ts` | Request and response fields |
 | `client.d.ts` | Manager property name on `this.tsClient` |
 
-To find a method from an API path: `rg -n "'/2.0/hub_collaborations" node_modules/box-node-sdk/lib/sdk-gen/managers/*.js`. To list a manager's methods: `rg -o "^\s+(\w+)\(" -r '$1' node_modules/box-node-sdk/lib/sdk-gen/managers/<manager>.d.ts`.
+To find a method from an API path: `grep -n "'/2.0/hub_collaborations" node_modules/box-node-sdk/lib/sdk-gen/managers/*.js`. To list a manager's methods with their signatures: `grep -E '^    [A-Za-z0-9]+\(' node_modules/box-node-sdk/lib/sdk-gen/managers/<manager>.d.ts | grep -v constructor`.
 
 The HTTP method and path also give the `_endpoint` value and the fixture name: lowercase method, path after `/2.0/`, `/` replaced by `_`, path parameters replaced by `id`. `PUT /2.0/hub_collaborations/{id}` becomes `put_hub_collaborations_id`.
 
-Check whether a command already covers the endpoint: `rg -n "_endpoint = 'put_hub_collaborations_id'" src/commands`. A match turns the task into changing that command, so confirm with the user in step 4.
+Check whether a command already covers the endpoint: `grep -rn "_endpoint = 'put_hub_collaborations_id'" src/commands`. A match turns the task into changing that command, so confirm with the user in step 4.
 
 Done when you know the client property, method, HTTP method and path, the request and response types, and whether a command already exists.
 
@@ -59,7 +61,15 @@ Done when you know the client property, method, HTTP method and path, the reques
 
 The SDK types many constrained fields as plain `string`. Hub collaboration `role` is `string` in the SDK, while the API accepts only `editor`, `viewer`, and `co-owner`. The SDK also omits required permissions and scopes, and which errors deserve an explanation in help text.
 
-Check the [Box API reference](https://developer.box.com/reference/) for the endpoint. Every gap left after that becomes a question for step 4.
+Read the endpoint in the [Box OpenAPI schema](https://github.com/box/box-openapi), which the SDK and the API reference are generated from. Its `openapi/` directory holds one JSON file per API version: `openapi.json` for endpoints without a version, and `openapi-v<version>.json` for each version. A method ending in `V<year>R<n>` is in `openapi-v<year>.<n>.json`, e.g. `V2025R0` in `openapi-v2025.0.json`. List the directory when unsure, since new versions add new files. Download the file:
+
+```bash
+curl -sL https://raw.githubusercontent.com/box/box-openapi/main/openapi/openapi-v2025.0.json -o /tmp/box-openapi.json
+```
+
+In it, read the operation under `paths`, keyed by the path without `/2.0` and the lowercase HTTP method, e.g. `paths["/hub_collaborations"].post`: its `parameters`, its `requestBody`, and every `$ref` they point to under `components`.
+
+Take accepted values from `enum`, or from the description when it lists them instead, as it does for hub collaboration `role`. Take defaults from `default`, required fields from `required`, and admin-only endpoints from `x-box-requires-admin`. The schema has no structured scopes or permissions, so read them from the operation description and the [Box API reference](https://developer.box.com/reference/) page. Every gap left after that becomes a question for step 4.
 
 Done when every flag has known accepted values, format, default, and permission requirements, or an open question.
 
@@ -67,7 +77,9 @@ Done when every flag has known accepted values, format, default, and permission 
 
 Read the nearest sibling command in `src/commands/<topic>/`, its cases in `test/commands/<topic>.test.js`, its fixtures in `test/fixtures/<topic>/`, and `docs/<topic>.md`. Then read the section of [references/command-patterns.md](references/command-patterns.md) for your command kind (get, list, create, update, delete, compound flags).
 
-New commands call `this.tsClient`. Most existing commands still call `this.client`, the legacy SDK client, with different method names and output handling. When the nearest sibling uses `this.client`, take its flag names, help text, and test style, and take the SDK call and output code from the reference commands named in command-patterns.md.
+Siblings show naming, flags, help text, mocked paths, and fixtures. Take test structure from [references/testing.md](references/testing.md) instead: a `test` chain returned or awaited inside a mocha `it(...)` never runs, so a sibling written that way, and any copy of it, passes whatever it asserts.
+
+Most existing commands still call `this.client`, the legacy SDK client, with different method names and output handling. When the nearest sibling uses `this.client`, take its flag names and help text, and take the SDK call and output code from the reference commands named in command-patterns.md. When changing an existing command that uses `this.client`, keep it unless the user asks to migrate.
 
 ### 4. Propose the plan and ask
 
@@ -95,7 +107,7 @@ Read [references/testing.md](references/testing.md), write the test, then run on
 ./node_modules/.bin/mocha test/commands/<topic>.test.js --grep "<command>"
 ```
 
-Done when the test fails for the expected reason: command not found, request mismatch, or wrong output.
+Done when each new test fails for the expected reason: command not found, request mismatch, or wrong output. A test that passes before the command exists is not running; fix its structure before going on.
 
 ### 6. Implement, then go green
 

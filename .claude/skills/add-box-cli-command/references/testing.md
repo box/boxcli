@@ -36,7 +36,12 @@ describe('Hubs', function () {
 });
 ```
 
-Each case is a `test` chain inside a `describe`, ending in `.it(...)`. A chain without `.it(...)` never runs, and the surrounding test passes anyway. Pass `--token=test` so no stored credentials are used, and `--json` so output can be parsed.
+Each case is a `test` chain placed directly inside a `describe`, ending in `.it(...)`. These two shapes never run, and the surrounding mocha test passes whatever they assert:
+
+- `it('…', async function () { return test.command([...]).catch(...); })`: the chain has no `.it(...)`.
+- `it('…', async function () { await test.command([...]).it('…'); })`: an `.it(...)` nested inside a running mocha `it` is never scheduled.
+
+To set up stubs for one case, start the chain with `.do(() => { ... })`, which runs inside the test after `beforeEach`, instead of wrapping the chain in a mocha `it`. Pass `--token=test` so no stored credentials are used, and `--json` so output can be parsed.
 
 ## Recipes
 
