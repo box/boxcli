@@ -12,12 +12,18 @@ class FoldersUploadCommand extends BoxCommand {
 	async run() {
 		const { flags, args } = await this.parse(FoldersUploadCommand);
 
+		this.uploadedFileCount = 0;
+		this.statusFolderName =
+			flags['folder-name'] || path.basename(args.path);
 		let folderId = await this.uploadFolder(
 			args.path,
 			flags['parent-folder'],
 			flags['folder-name']
 		);
 		let folder = await this.client.folders.get(folderId);
+		this.setStatusResult(
+			`Uploaded folder ${this.statusFolderName} (${this.uploadedFileCount} files)`
+		);
 		await this.output(folder);
 	}
 
@@ -53,6 +59,9 @@ class FoldersUploadCommand extends BoxCommand {
 				await this.uploadFolder(itemPath, folderId);
 			} else {
 				let size = itemStat.size;
+				this.reportStatus(
+					`Uploading folder ${this.statusFolderName}: ${this.uploadedFileCount} files uploaded`
+				);
 
 				try {
 					let fileStream = fs.createReadStream(itemPath);
@@ -78,6 +87,7 @@ class FoldersUploadCommand extends BoxCommand {
 						error
 					);
 				}
+				this.uploadedFileCount += 1;
 			}
 		}
 		return folderId;

@@ -70,6 +70,12 @@ class FilesDownloadCommand extends BoxCommand {
 		progressBar.start(file.size, 0, { speed: 'N/A' });
 
 		let downloadedByte = 0;
+		const reportDownloadStatus = () =>
+			this.reportStatus(
+				`Downloading ${fileName}`,
+				file.size > 0 ? (downloadedByte / file.size) * 100 : undefined
+			);
+		reportDownloadStatus();
 		stream.on('data', (chunk) => {
 			downloadedByte += chunk.length;
 		});
@@ -79,6 +85,7 @@ class FilesDownloadCommand extends BoxCommand {
 					downloadedByte / (Date.now() - startTime) / 1000
 				),
 			});
+			reportDownloadStatus();
 		}, 1000);
 
 		// We need to await the end of the stream to avoid a race condition here
@@ -89,6 +96,7 @@ class FilesDownloadCommand extends BoxCommand {
 		clearInterval(intervalUpdate);
 		progressBar.update(downloadedByte);
 		this.info(`Downloaded file ${fileName}`);
+		this.setStatusResult(`Downloaded ${fileName}`);
 	}
 }
 

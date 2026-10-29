@@ -2,7 +2,6 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
-const inquirer = require('../../../inquirer');
 
 class EnvironmentsSetCurrentCommand extends BoxCommand {
 	async run() {
@@ -11,14 +10,17 @@ class EnvironmentsSetCurrentCommand extends BoxCommand {
 		let name = args.id;
 
 		if (!name) {
-			let answers = await inquirer.prompt([
-				{
-					type: 'list',
-					name: 'environment',
-					message: 'Which environment?',
-					choices: Object.keys(environmentsObject.environments),
-				},
-			]);
+			let answers = await this.prompt(
+				[
+					{
+						type: 'list',
+						name: 'environment',
+						message: 'Which environment?',
+						choices: Object.keys(environmentsObject.environments),
+					},
+				],
+				{ msg: 'Choose the Box environment to use' }
+			);
 			name = answers.environment;
 		}
 

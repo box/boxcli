@@ -63,6 +63,36 @@ function toUrlPath(filePath) {
 		: filePath;
 }
 
+// eslint-disable-next-line no-control-regex
+const PROGRAM_STATUS_REPORT_PATTERN = /\u001B\]7501;([^\u001B]*)\u001B\\/gu;
+const PROGRAM_STATUS_BODY_GRAMMAR =
+	/^[a-z]+=[A-Za-z0-9_.,+/=-]*(?::[a-z]+=[A-Za-z0-9_.,+/=-]*)*$/u;
+
+/**
+ * Parse the OSC 7501 program status reports out of captured output. Capture
+ * the output with stripColor disabled, since stripping removes the reports.
+ *
+ * @param {string} output Captured output
+ * @returns {Object[]} One record per report, with msg decoded
+ * @throws {Error} If a report body does not match the protocol grammar
+ */
+function getProgramStatusReports(output) {
+	return [...output.matchAll(PROGRAM_STATUS_REPORT_PATTERN)].map(
+		([, body]) => {
+			if (!PROGRAM_STATUS_BODY_GRAMMAR.test(body)) {
+				throw new Error(`Malformed program status report: ${body}`);
+			}
+			const record = Object.fromEntries(
+				body.split(':').map((pair) => pair.split(/=(.*)/su, 2))
+			);
+			if (record.msg) {
+				record.msg = Buffer.from(record.msg, 'base64').toString('utf8');
+			}
+			return record;
+		}
+	);
+}
+
 module.exports = {
 	TEST_API_ROOT,
 	TEST_UPLOAD_ROOT,
@@ -72,6 +102,7 @@ module.exports = {
 	getBulkProgressBar,
 	getDownloadProgressBar,
 	getDriveLetter,
+	getProgramStatusReports,
 	isWin,
 	toUrlPath,
 };

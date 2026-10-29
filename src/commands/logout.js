@@ -4,7 +4,6 @@ const BoxCommand = require('../box-command');
 const BoxSDK = require('box-node-sdk').default;
 const CLITokenCache = require('../token-cache');
 const chalk = require('chalk');
-const inquirer = require('../inquirer');
 const pkg = require('../../package.json');
 const { Flags } = require('@oclif/core');
 
@@ -131,6 +130,9 @@ class OAuthLogoutCommand extends BoxCommand {
 				this.info(
 					chalk`{yellow Logout aborted. Token was not revoked and remains cached.}`
 				);
+				this.setStatusFailed(
+					`Logout from "${currentEnv}" aborted: token was not revoked`
+				);
 				return;
 			}
 			if (action === 'clear') {
@@ -144,6 +146,7 @@ class OAuthLogoutCommand extends BoxCommand {
 		this.info(
 			chalk`{green Successfully logged out from "${currentEnv}" environment.}`
 		);
+		this.setStatusResult(`Logged out from "${currentEnv}" environment`);
 	}
 
 	getClientCredentials(environment) {
@@ -172,21 +175,27 @@ class OAuthLogoutCommand extends BoxCommand {
 		if (onRevokeFailure) {
 			return onRevokeFailure;
 		}
-		const result = await inquirer.prompt([
+		const revokeErrorMessage = getRevokeErrorMessage(thrownError, response);
+		const result = await this.prompt(
+			[
+				{
+					type: 'list',
+					name: 'action',
+					message: chalk`Could not revoke token: {red ${revokeErrorMessage}}\nWhat would you like to do?`,
+					choices: [
+						{ name: 'Try revoking again', value: 'retry' },
+						{
+							name: 'Clear local session only (token remains valid on Box)',
+							value: 'clear',
+						},
+						{ name: 'Abort', value: 'abort' },
+					],
+				},
+			],
 			{
-				type: 'list',
-				name: 'action',
-				message: chalk`Could not revoke token: {red ${getRevokeErrorMessage(thrownError, response)}}\nWhat would you like to do?`,
-				choices: [
-					{ name: 'Try revoking again', value: 'retry' },
-					{
-						name: 'Clear local session only (token remains valid on Box)',
-						value: 'clear',
-					},
-					{ name: 'Abort', value: 'abort' },
-				],
-			},
-		]);
+				msg: `Could not revoke token: ${revokeErrorMessage}. Choose what to do next`,
+			}
+		);
 		return result.action;
 	}
 }

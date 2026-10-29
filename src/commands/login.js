@@ -9,7 +9,6 @@ const CLITokenCache = require('../token-cache');
 const package_ = require('../../package.json');
 const chalk = require('chalk');
 const express = require('express');
-const inquirer = require('../inquirer');
 const path = require('node:path');
 const ora = require('ora');
 const http = require('node:http');
@@ -42,6 +41,13 @@ const DEFAULT_OPEN_AUTHORIZE_IN_BROWSER = (
 		openFn(authorizeUrl);
 	}
 };
+
+const PROMPT_STATUS = Object.freeze({
+	choice: { kind: 'question', msg: 'Choose how to sign in to Box' },
+	clientId: { kind: 'auth', msg: 'Enter the Client ID' },
+	clientSecret: { kind: 'auth', msg: 'Enter the Client Secret' },
+	code: { kind: 'auth', msg: 'Enter the authorization code and state' },
+});
 
 let oauthCallbackTimeoutMs = OAUTH_CALLBACK_TIMEOUT_MS;
 let openAuthorizeInBrowser = DEFAULT_OPEN_AUTHORIZE_IN_BROWSER;
@@ -126,6 +132,10 @@ class OAuthLoginCommand extends BoxCommand {
 		const apps = openModule.apps;
 
 		const { flags } = await this.parse(OAuthLoginCommand);
+		const prompter = {
+			prompt: (questions) =>
+				this.prompt(questions, PROMPT_STATUS[questions[0]?.name]),
+		};
 		const forceDefaultBoxApp = flags['default-box-app'];
 		const forcePlatformApp = flags['platform-app'];
 		let useDefaultBoxApp = false;
@@ -153,6 +163,9 @@ class OAuthLoginCommand extends BoxCommand {
 					this.info(
 						chalk`{red The "${this.flags.name}" environment does not exist}`
 					);
+					this.setStatusFailed(
+						`The "${this.flags.name}" environment does not exist`
+					);
 					return;
 				}
 			}
@@ -161,6 +174,9 @@ class OAuthLoginCommand extends BoxCommand {
 			if (environment.authMethod !== 'oauth20') {
 				this.info(
 					chalk`{red The selected environment is not of type oauth20}`
+				);
+				this.setStatusFailed(
+					'The selected environment is not of type oauth20'
 				);
 				return;
 			}
@@ -201,7 +217,7 @@ class OAuthLoginCommand extends BoxCommand {
 				authMethod: 'oauth20',
 			};
 		} else if (forcePlatformApp) {
-			const answers = await promptForPlatformAppCredentials(inquirer);
+			const answers = await promptForPlatformAppCredentials(prompter);
 			useDefaultBoxApp = false;
 
 			environment = {
@@ -212,8 +228,9 @@ class OAuthLoginCommand extends BoxCommand {
 				authMethod: 'oauth20',
 			};
 		} else {
-			const answers = await promptForAuthMethod(inquirer);
+			const answers = await promptForAuthMethod(prompter);
 			if (answers === null) {
+				this.programStatus.cancel('Cancelled sign-in to Box');
 				return;
 			}
 			useDefaultBoxApp = answers.useDefaultBoxApp;
@@ -230,6 +247,9 @@ class OAuthLoginCommand extends BoxCommand {
 		if (isUnsupportedDefaultAppPort()) {
 			this.info(
 				chalk`{red Unsupported port "${port}" for the Official Box CLI app flow. Supported ports: ${SUPPORTED_DEFAULT_APP_PORTS.join(', ')}}`
+			);
+			this.setStatusFailed(
+				`Unsupported port ${port} for the Official Box CLI app flow`
 			);
 			return;
 		}
@@ -314,6 +334,7 @@ class OAuthLoginCommand extends BoxCommand {
 			this.info(
 				chalk`{red Login timed out waiting for OAuth callback after ${oauthCallbackTimeoutMs / 1000} seconds.}`
 			);
+			this.setStatusFailed('Login timed out waiting for authorization');
 			finalizeCallbackFlow();
 		}, oauthCallbackTimeoutMs);
 
@@ -329,6 +350,7 @@ class OAuthLoginCommand extends BoxCommand {
 			}
 
 			callbackHandled = true;
+			this.reportStatus('Completing sign-in to Box');
 
 			try {
 				if (request.query.state !== state) {
@@ -372,6 +394,7 @@ class OAuthLoginCommand extends BoxCommand {
 				this.info(
 					chalk`{green Successfully logged in as ${user.login}!}`
 				);
+				this.setStatusResult(`Logged in to Box as ${user.login}`);
 				if (this.flags.reauthorize) {
 					this.info(
 						chalk`{green Environment "${environmentName}" has been updated, selected and it's ready to use.}`
@@ -396,6 +419,7 @@ class OAuthLoginCommand extends BoxCommand {
 					'Unknown error';
 				DEBUG.execute('Login error: %O', error);
 				this.info(chalk`{red Login failed: ${errorMessage}}`);
+				this.setStatusFailed(`Login failed: ${errorMessage}`);
 				res.status(500).send(
 					'Login failed. Please check the CLI output for details.'
 				);
@@ -431,7 +455,7 @@ class OAuthLoginCommand extends BoxCommand {
 			this.info(
 				chalk`{yellow If you are not seeing your code, please make sure you have set up the Redirect URI.}`
 			);
-			const authInfo = await inquirer.prompt([
+			const authInfo = await prompter.prompt([
 				{
 					type: 'input',
 					name: 'code',
@@ -458,6 +482,12 @@ class OAuthLoginCommand extends BoxCommand {
 					? chalk`{yellow If authorization fails, verify that you are using one of the supported ports for the Official Box CLI app flow and restart the login command.}`
 					: chalk`{yellow If you are redirected to the Files view, make sure your Redirect URI is configured correctly and restart the login command.}`
 			);
+			if (!callbackHandled) {
+				this.programStatus.blocked(
+					'auth',
+					'Waiting for you to grant access to Box in the browser'
+				);
+			}
 		}
 		await callbackFlowDone;
 	}
