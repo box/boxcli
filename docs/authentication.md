@@ -11,6 +11,7 @@ overview of how the Box API handles authentication.
   - [OAuth 2.0 Login (`box login`)](#oauth-20-login-box-login)
     - [Option 1: Official Box CLI App](#option-1-official-box-cli-app)
     - [Option 2: Your Own Platform App](#option-2-your-own-platform-app)
+    - [Option 3: Your Own Public Client App (PKCE)](#option-3-your-own-public-client-app-pkce)
     - [Supported Ports](#supported-ports)
     - [Additional Flags](#additional-flags)
     - [Reauthorize OAuth2](#reauthorize-oauth2)
@@ -127,7 +128,7 @@ box configure:environments:add /path/to/config.json --ccg-auth --ccg-user "USER_
 
 The `box login` command authenticates you with Box using OAuth 2.0. It starts a local callback server, opens your browser for authorization, and stores the resulting tokens in a named environment.
 
-When you run `box login`, the CLI presents three options: the **Official Box CLI App**, a **Platform App** you create yourself, or **quit** (`q`) to exit. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag. You can also paste a Client ID directly at the prompt — any input between 16 and 99 characters is treated as a Client ID.
+When you run `box login`, the CLI presents four options: the **Official Box CLI App**, a **Platform App** you create yourself, a **public client app** you create yourself, or **quit** (`q`) to exit. You can either choose interactively or skip the selection entirely using the `--default-box-app` (`-d`) flag. You can also paste a Client ID directly at the prompt — any input between 16 and 99 characters is treated as a Client ID.
 
 #### Option 1: Official Box CLI App
 
@@ -137,7 +138,7 @@ This is the fastest way to get started with Box CLI. No app creation in the Box 
 
 ```bash
 box login
-# Choose [1] for Official Box CLI App, [2] for Platform App, or [q] to quit.
+# Choose [1] for Official Box CLI App, [2] for Platform App, [3] for a public client app, or [q] to quit.
 ```
 
 **Skip the prompt** — use the `--default-box-app` (or `-d`) flag to go directly to authorization:
@@ -172,6 +173,27 @@ box login
 
 For a step-by-step walkthrough, see the [Quickstart Guide](https://developer.box.com/guides/tooling/cli/quick-start/).
 
+#### Option 3: Your Own Public Client App (PKCE)
+
+A command line tool can't keep a client secret confidential, so you can register your OAuth app as a **public client** instead. A public client has no client secret. Every login is protected with [PKCE](https://oauth.net/2/pkce/): the CLI creates a random code verifier, sends a challenge derived from it in the authorize URL, and presents the verifier when it exchanges the authorization code for tokens.
+
+Before running the command, set up the app in the [Box Developer Console](https://cloud.app.box.com/developers/console):
+
+1. Create a Custom App with **User Authentication (OAuth 2.0)** and choose the **public client** option. The app type can't be changed later, so an existing app with a client secret can't be turned into a public client.
+2. In the **Configuration** tab, set the **Redirect URI** to `http://localhost:3000/callback` (adjust the port if you use a different `--port` value).
+3. Click **Save Changes**.
+
+Then log in and enter only the **Client ID**:
+
+```bash
+box login --public-client
+# Or run "box login" and choose [3].
+```
+
+The environment is stored with `authMethod: oauth20` and `publicClient: true`, and no client secret. Access tokens are refreshed automatically with the refresh token, without a client secret. `box logout` and `box tokens:revoke` revoke tokens and `box tokens:exchange` downscopes them the same way.
+
+To reauthorize a public client environment, run `box login --reauthorize --name <ENVIRONMENT_NAME>` without `--public-client`. The stored Client ID is reused and the login is again protected with PKCE. `--public-client` can't be combined with `--reauthorize`.
+
 #### Supported Ports
 
 The `box login` command starts a local callback server to receive the OAuth redirect. You can control the port with the `--port` (`-p`) flag. The default port is **3000**.
@@ -194,6 +216,7 @@ When using your own Platform App, any port can be used — just make sure the **
 |------|-------|--------------------------------------------------------------------------------------|
 | `--default-box-app` | `-d` | Use the Official Box CLI App and proceed directly to authorization.                  |
 | `--platform-app` | | Skip the prompt and go directly to Platform App setup (Client ID and Client Secret). |
+| `--public-client` | | Skip the prompt and go directly to public client app setup (Client ID only, PKCE). Can't be combined with `--reauthorize`. |
 | `--port <number>` | `-p` | Set the port for the local callback server. Default: `3000`.                         |
 | `--name <string>` | `-n` | Set a name for the environment. Default: `oauth`.                                    |
 | `--reauthorize` | `-r` | Reauthorize an existing environment (requires `--name`).                             |
@@ -220,7 +243,7 @@ To reauthorize, run:
 box login --name "ENVIRONMENT_NAME" --reauthorize
 ```
 
-The `--reauthorize` flag retrieves the existing `clientID` and `clientSecret` from the stored environment, so you do not need to enter them again. After a successful login, the environment is updated and set as the default.
+The `--reauthorize` flag retrieves the existing `clientID` and `clientSecret` (or, for a public client app, just the `clientID`) from the stored environment, so you do not need to enter them again. After a successful login, the environment is updated and set as the default.
 
 You can also combine `--reauthorize` with `--default-box-app` to switch an existing environment to the Official Box CLI App:
 

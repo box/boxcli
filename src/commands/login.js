@@ -20,6 +20,11 @@ const {
 	assertValidOAuthCode,
 	getTokenInfoByAuthCode,
 } = require('../login-helper');
+const {
+	isPublicClientEnvironment,
+	createPublicClientTsClient,
+	getPublicClientAuthorizeUrl,
+} = require('../public-client');
 
 const GENERIC_OAUTH_CLIENT_ID = 'udz8zp4yue87uk9dzq4xk425kkwvqvh1';
 const GENERIC_OAUTH_CLIENT_SECRET = 'iZ1MbvC3ZaF25nbJli7IsKdRHAxfu3fn';
@@ -73,6 +78,27 @@ async function promptForPlatformAppCredentials(inquirerModule, clientId) {
 	};
 }
 
+async function promptForPublicClientCredentials(inquirerModule) {
+	let clientId = '';
+	// An empty Client ID would open an authorize URL that Box rejects, and the login would wait until it times out.
+	while (!clientId) {
+		const answer = await inquirerModule.prompt([
+			{
+				type: 'input',
+				name: 'clientId',
+				message: 'Enter the Client ID of the Public Client App:',
+			},
+		]);
+		clientId = (answer.clientId ?? '').trim();
+	}
+
+	return {
+		useDefaultBoxApp: false,
+		publicClient: true,
+		clientId,
+	};
+}
+
 async function promptForAuthMethod(inquirerModule) {
 	const CLIENT_ID_MIN_LENGTH = 16;
 	const CLIENT_ID_MAX_LENGTH = 99;
@@ -83,7 +109,7 @@ async function promptForAuthMethod(inquirerModule) {
 				type: 'input',
 				name: 'choice',
 				message:
-					'How would you like to authenticate?\n[1] Log-in as a Box user (OAuth)\n[2] Use a Box Platform App\n[q] Quit\n? Enter 1, 2, or q:',
+					'How would you like to authenticate?\n[1] Log-in as a Box user (OAuth)\n[2] Use a Box Platform App\n[3] Use a Box Platform Public Client App (PKCE, no client secret)\n[q] Quit\n? Enter 1, 2, 3, or q:',
 			},
 		]);
 
@@ -99,6 +125,10 @@ async function promptForAuthMethod(inquirerModule) {
 
 		if (trimmedChoice === '2') {
 			return promptForPlatformAppCredentials(inquirerModule);
+		}
+
+		if (trimmedChoice === '3') {
+			return promptForPublicClientCredentials(inquirerModule);
 		}
 
 		if (trimmedChoice.toLowerCase() === 'q') {
@@ -119,6 +149,102 @@ async function promptForAuthMethod(inquirerModule) {
 	}
 }
 
+/**
+ * Build the message for a failed login. Token exchange errors are wrapped in a BoxCLIError,
+ * so the API response is read from the wrapped cause: the legacy SDK puts it in `response`,
+ * the generated SDK in `responseInfo`.
+ *
+ * @param {Error} error The login error
+ * @returns {string} The message to show
+ */
+function getLoginErrorMessage(error) {
+	for (const source of [error, error?.cause]) {
+		const description =
+			source?.response?.body?.error_description ||
+			source?.responseInfo?.body?.error_description;
+		if (description) {
+			return description;
+		}
+	}
+	for (const source of [error, error?.cause]) {
+		const statusCode =
+			source?.response?.statusCode ??
+			source?.response?.status ??
+			source?.responseInfo?.statusCode;
+		if (statusCode) {
+			return `Request failed with status ${statusCode}`;
+		}
+	}
+	// Not an API error, e.g. a network failure: the wrapper's message alone does not say what went wrong.
+	const causeMessage = error?.cause?.message;
+	if (error?.message && causeMessage && causeMessage !== error.message) {
+		return `${error.message} ${causeMessage}`;
+	}
+	return error?.message || causeMessage || 'Unknown error';
+}
+
+/**
+ * Exchange the auth code with a client secret and cache the tokens.
+ *
+ * @param {BoxSDK} sdk Legacy SDK configured with the app's client ID and secret
+ * @param {string} environmentName Name of the environment to cache the tokens for
+ * @param {string} code Authorization code from the callback
+ * @param {string} redirectUri Redirect URI used in the authorize URL
+ * @param {string} [codeVerifier] PKCE code verifier, if the authorize URL had a code challenge
+ * @returns {Promise<Object>} The logged in user
+ */
+async function getConfidentialClientUser(
+	sdk,
+	environmentName,
+	code,
+	redirectUri,
+	codeVerifier
+) {
+	const tokenInfo = await getTokenInfoByAuthCode(
+		sdk,
+		code,
+		redirectUri,
+		codeVerifier
+	);
+	const tokenCache = new CLITokenCache(environmentName);
+	await new Promise((resolve, reject) => {
+		tokenCache.write(tokenInfo, (error) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve();
+			}
+		});
+	});
+	const client = sdk.getPersistentClient(tokenInfo, tokenCache);
+	return client.users.get('me');
+}
+
+/**
+ * Exchange the auth code with the PKCE code verifier stored for the state, without a client secret.
+ * The auth's token storage is the environment's token cache, so the tokens are cached by the exchange.
+ *
+ * @param {BoxTSSDK.BoxPublicClientOAuth} auth Public client auth that built the authorize URL
+ * @param {BoxTSSDK.BoxClient} client TS SDK client using the auth
+ * @param {Object} query Callback query with `code` and `state`
+ * @returns {Promise<Object>} The logged in user
+ */
+async function getPublicClientUser(auth, client, query) {
+	try {
+		await auth.getTokensAuthorizationCodeGrant(
+			query.code,
+			query.state,
+			client.networkSession
+		);
+	} catch (error) {
+		throw new BoxCLIError(
+			'Failed to exchange auth code for tokens.',
+			error
+		);
+	}
+	return client.users.getUserMe();
+}
+
 class OAuthLoginCommand extends BoxCommand {
 	async run() {
 		const openModule = await import('open');
@@ -128,6 +254,7 @@ class OAuthLoginCommand extends BoxCommand {
 		const { flags } = await this.parse(OAuthLoginCommand);
 		const forceDefaultBoxApp = flags['default-box-app'];
 		const forcePlatformApp = flags['platform-app'];
+		const forcePublicClient = flags['public-client'];
 		let useDefaultBoxApp = false;
 		const environmentsObject = await this.getEnvironments();
 		const port = flags.port;
@@ -168,6 +295,7 @@ class OAuthLoginCommand extends BoxCommand {
 				useDefaultBoxApp = true;
 				environment.clientId = GENERIC_OAUTH_CLIENT_ID;
 				environment.clientSecret = GENERIC_OAUTH_CLIENT_SECRET;
+				delete environment.publicClient;
 			} else {
 				useDefaultBoxApp =
 					environment.clientId === GENERIC_OAUTH_CLIENT_ID &&
@@ -200,6 +328,17 @@ class OAuthLoginCommand extends BoxCommand {
 				cacheTokens: true,
 				authMethod: 'oauth20',
 			};
+		} else if (forcePublicClient) {
+			const answers = await promptForPublicClientCredentials(inquirer);
+			useDefaultBoxApp = false;
+
+			environment = {
+				clientId: answers.clientId,
+				name: this.flags.name,
+				cacheTokens: true,
+				authMethod: 'oauth20',
+				publicClient: true,
+			};
 		} else if (forcePlatformApp) {
 			const answers = await promptForPlatformAppCredentials(inquirer);
 			useDefaultBoxApp = false;
@@ -218,13 +357,21 @@ class OAuthLoginCommand extends BoxCommand {
 			}
 			useDefaultBoxApp = answers.useDefaultBoxApp;
 
-			environment = {
-				clientId: answers.clientId,
-				clientSecret: answers.clientSecret,
-				name: this.flags.name,
-				cacheTokens: true,
-				authMethod: 'oauth20',
-			};
+			environment = answers.publicClient
+				? {
+						clientId: answers.clientId,
+						name: this.flags.name,
+						cacheTokens: true,
+						authMethod: 'oauth20',
+						publicClient: true,
+					}
+				: {
+						clientId: answers.clientId,
+						clientSecret: answers.clientSecret,
+						name: this.flags.name,
+						cacheTokens: true,
+						authMethod: 'oauth20',
+					};
 		}
 
 		if (isUnsupportedDefaultAppPort()) {
@@ -240,11 +387,24 @@ class OAuthLoginCommand extends BoxCommand {
 				version: package_.version,
 			},
 		});
-		const sdk = new BoxSDK({
-			clientID: environment.clientId,
-			clientSecret: environment.clientSecret,
-		});
-		this._configureSdk(sdk, sdkConfig);
+		const isPublicClient = isPublicClientEnvironment(environment);
+		let sdk;
+		let publicClientAuth;
+		let publicClientTsClient;
+		if (isPublicClient) {
+			// The legacy SDK requires a client secret, so public clients log in with the generated SDK.
+			({ auth: publicClientAuth, client: publicClientTsClient } =
+				createPublicClientTsClient(this, {
+					clientId: environment.clientId,
+					tokenStorage: new CLITokenCache(environmentName),
+				}));
+		} else {
+			sdk = new BoxSDK({
+				clientID: environment.clientId,
+				clientSecret: environment.clientSecret,
+			});
+			this._configureSdk(sdk, sdkConfig);
+		}
 
 		const app = express();
 		let callbackHandled = false;
@@ -337,24 +497,19 @@ class OAuthLoginCommand extends BoxCommand {
 					);
 				}
 				assertValidOAuthCode(request.query.code);
-				const tokenInfo = await getTokenInfoByAuthCode(
-					sdk,
-					request.query.code,
-					redirectUri,
-					pkce?.codeVerifier
-				);
-				const tokenCache = new CLITokenCache(environmentName);
-				await new Promise((resolve, reject) => {
-					tokenCache.write(tokenInfo, (error) => {
-						if (error) {
-							reject(error);
-						} else {
-							resolve();
-						}
-					});
-				});
-				const client = sdk.getPersistentClient(tokenInfo, tokenCache);
-				const user = await client.users.get('me');
+				const user = isPublicClient
+					? await getPublicClientUser(
+							publicClientAuth,
+							publicClientTsClient,
+							request.query
+						)
+					: await getConfidentialClientUser(
+							sdk,
+							environmentName,
+							request.query.code,
+							redirectUri,
+							pkce?.codeVerifier
+						);
 
 				environmentsObject.environments[environmentName] = environment;
 				environmentsObject.default = environmentName;
@@ -385,15 +540,7 @@ class OAuthLoginCommand extends BoxCommand {
 					);
 				}
 			} catch (error) {
-				const statusCode =
-					error?.response?.statusCode ?? error?.response?.status;
-				const errorMessage =
-					error?.response?.body?.error_description ||
-					(statusCode
-						? `Request failed with status ${statusCode}`
-						: null) ||
-					error?.message ||
-					'Unknown error';
+				const errorMessage = getLoginErrorMessage(error);
 				DEBUG.execute('Login error: %O', error);
 				this.info(chalk`{red Login failed: ${errorMessage}}`);
 				res.status(500).send(
@@ -414,16 +561,22 @@ class OAuthLoginCommand extends BoxCommand {
 		spinner.succeed();
 
 		// the URL to redirect the user to
-		const authorizeUrl = sdk.getAuthorizeURL({
-			response_type: 'code',
-			state,
-			redirect_uri: redirectUri,
-			...(useDefaultBoxApp
-				? {
-						code_challenge: pkce.codeChallenge,
-					}
-				: {}),
-		});
+		const authorizeUrl = isPublicClient
+			? await getPublicClientAuthorizeUrl(publicClientAuth, {
+					redirectUri,
+					state,
+					authorizeRootURL: this.settings.authorizeRootURL,
+				})
+			: sdk.getAuthorizeURL({
+					response_type: 'code',
+					state,
+					redirect_uri: redirectUri,
+					...(useDefaultBoxApp
+						? {
+								code_challenge: pkce.codeChallenge,
+							}
+						: {}),
+				});
 		if (flags.code) {
 			this.info(
 				chalk`{green Please open ${authorizeUrl} to authorize the application and read parameters from the URL accessed after authorization.}`
@@ -477,6 +630,9 @@ OAuthLoginCommand.description =
 	'  (2) Your own Platform OAuth App\n' +
 	'      Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.\n' +
 	'\n' +
+	'  (3) Your own Platform OAuth public client App\n' +
+	'      For apps registered as a public client, which have no client secret. Enter your Client ID when prompted; the login is protected with PKCE. Use --public-client to skip the prompt.\n' +
+	'\n' +
 	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.\n' +
 	'\n' +
 	'Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in an external browser, authorize and grant access to the app, then provide the state and authorization code back to the CLI when prompted.';
@@ -506,14 +662,23 @@ OAuthLoginCommand.flags = {
 			'This is the fastest way to integrate with Box — no app creation in the Developer Console is needed.\n' +
 			'Scopes are limited to content actions, allowing you to effectively operate with your files and folders.\n' +
 			'This flow requires a local callback server on a supported port (3000, 3001, 4000, 5000, or 8080). The default port is 3000; use --port to change it.',
-		exclusive: ['platform-app'],
+		exclusive: ['platform-app', 'public-client'],
 		default: false,
 	}),
 	'platform-app': Flags.boolean({
 		description:
 			'Skip the authentication method prompt and go directly to Platform App setup.\n' +
 			'You will be prompted for Client ID and Client Secret.',
-		exclusive: ['default-box-app'],
+		exclusive: ['default-box-app', 'public-client'],
+		default: false,
+	}),
+	'public-client': Flags.boolean({
+		description:
+			'Skip the authentication method prompt and go directly to public client app setup.\n' +
+			'Use this for an OAuth 2.0 app registered in the Developer Console as a public client, which has no client secret. ' +
+			'Every login is protected with PKCE. You will be prompted for the Client ID only.\n' +
+			'Cannot be combined with --reauthorize. To reauthorize a public client environment, run "box login --reauthorize --name <ENVIRONMENT_NAME>".',
+		exclusive: ['default-box-app', 'platform-app', 'reauthorize'],
 		default: false,
 	}),
 	reauthorize: Flags.boolean({
@@ -534,6 +699,8 @@ module.exports._test = {
 	SUPPORTED_DEFAULT_APP_PORTS,
 	promptForAuthMethod,
 	promptForPlatformAppCredentials,
+	promptForPublicClientCredentials,
+	getLoginErrorMessage,
 	setOAuthCallbackTimeoutMs(timeoutMs) {
 		oauthCallbackTimeoutMs = timeoutMs;
 	},

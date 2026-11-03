@@ -2,11 +2,16 @@
 
 const BoxCommand = require('../box-command');
 const BoxSDK = require('box-node-sdk').default;
+const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const CLITokenCache = require('../token-cache');
 const chalk = require('chalk');
 const inquirer = require('../inquirer');
 const pkg = require('../../package.json');
 const { Flags } = require('@oclif/core');
+const {
+	isPublicClientEnvironment,
+	createPublicClientTsClient,
+} = require('../public-client');
 
 const SDK_CONFIG = Object.freeze({
 	analyticsClient: { version: pkg.version },
@@ -95,7 +100,10 @@ class OAuthLogoutCommand extends BoxCommand {
 			let thrownError;
 			const { clientId, clientSecret } =
 				this.getClientCredentials(environment);
-			if (!clientId || !clientSecret) {
+			if (isPublicClientEnvironment(environment)) {
+				({ response, thrownError } =
+					await this.revokePublicClientToken(tokenCache, environment));
+			} else if (!clientId || !clientSecret) {
 				thrownError = new Error('Invalid client credentials.');
 				response = undefined;
 			} else {
@@ -144,6 +152,35 @@ class OAuthLogoutCommand extends BoxCommand {
 		this.info(
 			chalk`{green Successfully logged out from "${currentEnv}" environment.}`
 		);
+	}
+
+	/**
+	 * Revoke the cached token of a public client environment, which has no client secret.
+	 * The result has the same shape as the legacy SDK revoke response, so it is handled the same way.
+	 *
+	 * @param {CLITokenCache} tokenCache Token cache of the environment
+	 * @param {Object} environment The environment
+	 * @returns {Promise<{response: (Object|undefined), thrownError: (Error|undefined)}>} Revoke result
+	 */
+	async revokePublicClientToken(tokenCache, environment) {
+		try {
+			const { auth, client } = createPublicClientTsClient(this, {
+				clientId: environment.clientId,
+				tokenStorage: tokenCache,
+			});
+			await auth.revokeToken(client.networkSession);
+			return { response: { statusCode: 200 } };
+		} catch (error) {
+			if (error instanceof BoxTsErrors.BoxApiError && error.responseInfo) {
+				return {
+					response: {
+						statusCode: error.responseInfo.statusCode,
+						body: error.responseInfo.body,
+					},
+				};
+			}
+			return { thrownError: error };
+		}
 	}
 
 	getClientCredentials(environment) {
