@@ -30,6 +30,13 @@ const BoxTSSDK = require('box-node-sdk/sdk-gen');
 const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
+const PlatformAccountSessionAdapter = require('./platform-account-session-adapter');
+const {
+	isPlatformAccountEnvironment,
+	createFixedPrincipalError,
+	assertPlatformAccountPrincipalIsFixed,
+	createPlatformAccountAuth,
+} = require('./platform-account');
 const PaginationUtilities = require('./pagination-utils');
 const utils = require('./util');
 const pkg = require('../package.json');
@@ -61,6 +68,7 @@ const KEY_MAPPINGS = {
 	outputJson: 'Output JSON',
 	clientId: 'Client ID',
 	enterpriseId: 'Enterprise ID',
+	userId: 'User ID',
 	boxConfigFilePath: 'Box Config File Path',
 	hasInLinePrivateKey: 'Has Inline Private Key',
 	privateKeyPath: 'Private Key Path',
@@ -113,6 +121,24 @@ function getDebugErrorDetails(error) {
 		message: error.message || String(error),
 		stack: error.stack,
 	};
+}
+
+/**
+ * Build the CLI error message for a TS SDK API error response.
+ * OAuth2 token endpoint errors use `error` and `error_description` instead of the regular API error fields.
+ *
+ * @param {Object} responseInfo The response info of a BoxApiError
+ * @returns {string} The error message
+ */
+function formatApiErrorMessage(responseInfo) {
+	const body = responseInfo.body;
+	if (typeof body.error !== 'string') {
+		return `Unexpected API Response [${body.status} ${body.message} | ${body.request_id}] ${body.code} - ${body.message}`;
+	}
+	const message = `Unexpected API Response [${responseInfo.statusCode}] ${body.error}`;
+	return body.error_description
+		? `${message} - ${body.error_description}`
+		: message;
 }
 
 /**
@@ -482,6 +508,11 @@ class BoxCommand extends Command {
 					this.client.asSelf();
 				}
 			} else {
+				if (this.usesPlatformAccountAuth()) {
+					throw createFixedPrincipalError(
+						'The as-user bulk input field'
+					);
+				}
 				this.client.asUser(asUser.value);
 				DEBUG.init('Impersonating user ID %s', asUser.value);
 			}
@@ -811,6 +842,11 @@ class BoxCommand extends Command {
 			client = ccgUser
 				? sdk.getCCGClientForUser(ccgUser)
 				: sdk.getAnonymousClient();
+		} else if (isPlatformAccountEnvironment(environment)) {
+			client = this._createPlatformAccountClient(
+				environmentsObj.default,
+				environment
+			);
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -994,6 +1030,11 @@ class BoxCommand extends Command {
 				auth: ccgAuth,
 			});
 			client = this._configureTsSdk(client, SDK_CONFIG);
+		} else if (isPlatformAccountEnvironment(environment)) {
+			client = this._getPlatformAccountTsClient(
+				environmentsObj.default,
+				environment
+			);
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -1095,6 +1136,117 @@ class BoxCommand extends Command {
 			DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
 		}
 		return client;
+	}
+
+	/**
+	 * Whether this command authenticates as the Platform Account of the current environment.
+	 * Only meaningful after client setup.
+	 *
+	 * @returns {boolean} True for Platform Account environments not overridden by --token
+	 */
+	usesPlatformAccountAuth() {
+		return Boolean(this._platformAccountAuth);
+	}
+
+	/**
+	 * Request a new access token for the Platform Account of the current environment.
+	 *
+	 * @returns {Promise<BoxTSSDK.AccessToken>} The new access token, also stored in the token cache
+	 * @throws {BoxCLIError} If the command does not authenticate as a Platform Account
+	 */
+	requestPlatformAccountToken() {
+		if (!this.usesPlatformAccountAuth()) {
+			throw new BoxCLIError(
+				'The current environment does not use Platform Account authentication'
+			);
+		}
+		return this._platformAccountAuth.refreshToken(
+			this.tsClient.networkSession
+		);
+	}
+
+	/**
+	 * Create the legacy SDK client for a Platform Account environment.
+	 *
+	 * The legacy SDK has no Platform Account auth, so the client's session is
+	 * replaced with an adapter that gets tokens from the generated SDK auth.
+	 * Token requests use the TS client's network session, so they honor the
+	 * same proxy, base URL and header settings as the TS client.
+	 *
+	 * @param {string} environmentName Name of the current environment
+	 * @param {Object} environment The current environment
+	 * @returns {BoxClient} The legacy SDK client
+	 * @private
+	 */
+	_createPlatformAccountClient(environmentName, environment) {
+		DEBUG.init('Using Platform Account environment %s', environmentName);
+		const auth = this._getPlatformAccountAuth(environmentName, environment);
+		const tsClient = this._getPlatformAccountTsClient(
+			environmentName,
+			environment
+		);
+		const sdk = new BoxSDK({
+			clientID: auth.config.clientId,
+			clientSecret: auth.config.clientSecret,
+			...SDK_CONFIG,
+		});
+		this._configureSdk(sdk, { ...SDK_CONFIG });
+		this.sdk = sdk;
+
+		const client = sdk.getBasicClient('');
+		client._session = new PlatformAccountSessionAdapter(auth, {
+			expiryBufferMS: sdk.config.expiredBufferMS,
+			networkSession: tsClient.networkSession,
+		});
+		return client;
+	}
+
+	/**
+	 * Get the TS SDK client for a Platform Account environment.
+	 * Built once per command and shared with the legacy client's token requests.
+	 *
+	 * @param {string} environmentName Name of the current environment
+	 * @param {Object} environment The current environment
+	 * @returns {BoxTSSDK.BoxClient} The configured TS SDK client
+	 * @private
+	 */
+	_getPlatformAccountTsClient(environmentName, environment) {
+		if (!this._platformAccountTsClient) {
+			const auth = this._getPlatformAccountAuth(
+				environmentName,
+				environment
+			);
+			this._platformAccountTsClient = this._configureTsSdk(
+				new BoxTSSDK.BoxClient({ auth }),
+				SDK_CONFIG
+			);
+		}
+		return this._platformAccountTsClient;
+	}
+
+	/**
+	 * Get the Platform Account auth for the current environment, after
+	 * rejecting options that would make it act as another user.
+	 * Built once per command, so the legacy and TS clients share it.
+	 *
+	 * @param {string} environmentName Name of the current environment
+	 * @param {Object} environment The current environment
+	 * @returns {BoxTSSDK.BoxPlatformAccountAuth} The Platform Account auth
+	 * @private
+	 */
+	_getPlatformAccountAuth(environmentName, environment) {
+		assertPlatformAccountPrincipalIsFixed({
+			environmentName,
+			environment,
+			asUser: this.flags['as-user'],
+		});
+		if (!this._platformAccountAuth) {
+			this._platformAccountAuth = createPlatformAccountAuth(
+				environmentName,
+				environment
+			);
+		}
+		return this._platformAccountAuth;
 	}
 
 	/**
@@ -1662,7 +1814,7 @@ class BoxCommand extends Command {
 			'invalid_grant - Refresh token has expired':
 				'Your refresh token has expired. \nPlease run this command "box login --name <ENVIRONMENT_NAME> --reauthorize" to reauthorize selected environment and then run your command again.',
 			'Expired Auth: Auth code or refresh token has expired':
-				'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG: tokens are refreshed automatically, so this usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.',
+				'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG/Platform Account: tokens are refreshed automatically, so this usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.',
 		};
 
 		for (const key in messageMap) {
@@ -1682,15 +1834,18 @@ class BoxCommand extends Command {
 	 */
 	async catch(err) {
 		const AUTH_FAILED_HINT =
-			'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG: tokens are refreshed automatically, so a 401 usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.';
+			'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG/Platform Account: tokens are refreshed automatically, so a 401 usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.';
 		if (
 			err instanceof BoxTsErrors.BoxApiError &&
 			err.responseInfo &&
 			err.responseInfo.body
 		) {
 			const responseInfo = err.responseInfo;
-			let errorMessage = `Unexpected API Response [${responseInfo.body.status} ${responseInfo.body.message} | ${responseInfo.body.request_id}] ${responseInfo.body.code} - ${responseInfo.body.message}`;
-			if (responseInfo.body.status === 401) {
+			let errorMessage = formatApiErrorMessage(responseInfo);
+			if (
+				responseInfo.body.status === 401 ||
+				responseInfo.statusCode === 401
+			) {
 				errorMessage += `\n${AUTH_FAILED_HINT}`;
 			}
 			err = new BoxCLIError(errorMessage, err);

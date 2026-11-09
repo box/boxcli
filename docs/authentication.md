@@ -8,6 +8,7 @@ overview of how the Box API handles authentication.
   - [Developer Token](#developer-token)
   - [Server Auth with JWT](#server-auth-with-jwt)
   - [Server Auth with CCG](#server-auth-with-ccg)
+  - [Platform Account Auth](#platform-account-auth)
   - [OAuth 2.0 Login (`box login`)](#oauth-20-login-box-login)
     - [Option 1: Official Box CLI App](#option-1-official-box-cli-app)
     - [Option 2: Your Own Platform App](#option-2-your-own-platform-app)
@@ -27,6 +28,7 @@ Use this quick comparison to choose the right method:
 | OAuth 2.0 (`box login`) | Interactive user workflows | Yes (browser auth) | `box login -d` (quick start) |
 | JWT | Server-to-server automation | No | `box configure:environments:add /path/to/config.json` |
 | CCG | Server-to-server automation (no keypair) | No | `box configure:environments:add /path/to/config.json --ccg-auth` |
+| Platform Account | Automation that must always act as one Platform Account | No | `box configure:environments:add /path/to/config.json --platform-account-auth` |
 
 ### Developer Token
 
@@ -122,6 +124,62 @@ By default, CCG authenticates as the Service Account. To make API calls as an Ap
 ```bash
 box configure:environments:add /path/to/config.json --ccg-auth --ccg-user "USER_ID"
 ```
+
+### Platform Account Auth
+
+Platform Account authentication allows your application to authenticate as a single **Platform Account**. Like JWT, it uses a public/private key pair and does not require user interaction, but every command always runs as the Platform Account from the config file.
+
+**Key characteristics:**
+
+- The identity is fixed by the config file. Switching users is not supported: the `--as-user` flag, a default As-User (`box configure:environments:switch-user`), the `as-user` field in bulk input, and `box tokens:get --user-id` are rejected.
+- Tokens cannot be downscoped or exchanged, so `box tokens:exchange` is not supported.
+- Tokens are requested and refreshed automatically, like for JWT.
+- An Enterprise ID is not required.
+
+**Setup:**
+
+1. Download the credentials file for the Platform Account. It has the following structure:
+
+```json
+{
+  "boxAppSettings": {
+    "clientID": "your_client_id",
+    "clientSecret": "your_client_secret",
+    "appAuth": {
+      "publicKeyID": "your_public_key_id",
+      "privateKey": "-----BEGIN ENCRYPTED PRIVATE KEY-----\n...\n-----END ENCRYPTED PRIVATE KEY-----\n",
+      "passphrase": "your_passphrase"
+    }
+  },
+  "userID": "your_platform_account_user_id"
+}
+```
+
+2. Add the environment with the `--platform-account-auth` flag:
+
+```bash
+box configure:environments:add /path/to/config.json --platform-account-auth --name 'YOUR_ENVIRONMENT_NAME'
+```
+
+> **Tip:** If you keep the private key in a separate file, remove `privateKey` from the config file and pass `--private-key-path /path/to/private_key.pem`.
+
+3. If you have multiple environments, set the active one:
+
+```bash
+box configure:environments:set-current
+```
+
+To check which token the CLI uses, run `box tokens:get`. It returns a token for the Platform Account.
+
+**Updating the credentials:**
+
+To use a new credentials file, for example after rotating the key pair, point the environment to it:
+
+```bash
+box configure:environments:update 'YOUR_ENVIRONMENT_NAME' --config-file-path /path/to/new_config.json
+```
+
+The Client ID and the Platform Account ID are read again from the new file. The `--user-id` flag is not supported for Platform Account environments.
 
 ### OAuth 2.0 Login (`box login`)
 

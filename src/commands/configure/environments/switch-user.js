@@ -3,6 +3,10 @@
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
 const chalk = require('chalk');
+const {
+	isPlatformAccountEnvironment,
+	createFixedPrincipalError,
+} = require('../../../platform-account');
 
 class EnvironmentsSwitchUserCommand extends BoxCommand {
 	async run() {
@@ -11,6 +15,10 @@ class EnvironmentsSwitchUserCommand extends BoxCommand {
 		let environmentsObject = await this.getEnvironments();
 		let environment =
 			environmentsObject.environments[environmentsObject.default];
+
+		if (args.userID && isPlatformAccountEnvironment(environment)) {
+			throw createFixedPrincipalError('Switching users');
+		}
 
 		if (flags.default && !args.userID) {
 			environment.useDefaultAsUser = false;
