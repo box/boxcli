@@ -24,12 +24,17 @@ class FilesUploadVersionsCommand extends BoxCommand {
 			fileAttributes.name = flags.name;
 		}
 
+		const statusMessage = `Uploading a new version of file ${args.fileID}`;
+		this.reportStatus(statusMessage);
 		const file = await uploadNewFileVersion(this.client, {
 			fileID: args.fileID,
 			stream,
 			size,
 			fileAttributes,
+			onProgress: (percentage) =>
+				this.reportStatus(statusMessage, percentage),
 		});
+		this.setStatusResult(`Uploaded a new version of file ${args.fileID}`);
 		await this.output(file.entries[0]);
 	}
 }

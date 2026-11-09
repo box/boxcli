@@ -11,6 +11,7 @@ const {
 	getTokenInfoByAuthCode,
 } = require('../../src/login-helper');
 const OAuthLoginCommand = require('../../src/commands/login');
+const { getProgramStatusReports } = require('../helpers/test-helper');
 
 // Send a single callback request once the test decides flow timing.
 // Keeping this as a tiny helper makes callback assertions easier to read.
@@ -627,6 +628,100 @@ describe('Login', function () {
 				assert.include(
 					ctx.stderr,
 					'Login timed out waiting for OAuth callback'
+				);
+				OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+				OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+			});
+
+		test.do(() => {
+			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
+			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(50);
+		})
+			.env({ BOX_PROGRAM_STATUS: '1' })
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+				stub.resolves({})
+			)
+			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+				stub.resolves({ default: '', environments: {} })
+			)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub
+					.onFirstCall()
+					.resolves({ clientId: 'cid' })
+					.onSecondCall()
+					.resolves({ clientSecret: 'secret' })
+			)
+			.stderr({ stripColor: false })
+			.command(['login', '--platform-app', '--port', '19095'])
+			.it(
+				'should report blocked on auth while waiting for the browser and error on timeout',
+				(ctx) => {
+					assert.deepEqual(
+						getProgramStatusReports(ctx.stderr).map(
+							({ state, kind, msg }) => [state, kind, msg]
+						),
+						[
+							['working', undefined, 'Running box login'],
+							['blocked', 'auth', 'Enter the Client ID'],
+							['working', undefined, 'Running box login'],
+							['blocked', 'auth', 'Enter the Client Secret'],
+							['working', undefined, 'Running box login'],
+							[
+								'blocked',
+								'auth',
+								'Waiting for you to grant access to Box in the browser',
+							],
+							[
+								'error',
+								undefined,
+								'Login timed out waiting for authorization',
+							],
+						]
+					);
+					OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
+					OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();
+				}
+			);
+
+		let invalidStatePromise;
+		test.do(() => {
+			OAuthLoginCommand._test.setOpenAuthorizeInBrowser(() => {});
+			OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(1000);
+			invalidStatePromise = (async () => {
+				await waitForLoopbackPort(19_096);
+				return sendCallback(
+					'http://localhost:19096/callback?state=wrong-state&code=unsolicited'
+				);
+			})();
+		})
+			.env({ BOX_PROGRAM_STATUS: '1' })
+			.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+				stub.resolves({})
+			)
+			.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+				stub.resolves({ default: '', environments: {} })
+			)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub
+					.onFirstCall()
+					.resolves({ clientId: 'cid' })
+					.onSecondCall()
+					.resolves({ clientSecret: 'secret' })
+			)
+			.stderr({ stripColor: false })
+			.command(['login', '--platform-app', '--port', '19096'])
+			.it('should report error when the callback fails', async (ctx) => {
+				await invalidStatePromise;
+				const reports = getProgramStatusReports(ctx.stderr);
+				assert.deepInclude(reports, {
+					state: 'working',
+					app: 'box-cli',
+					msg: 'Completing sign-in to Box',
+				});
+				assert.equal(reports.at(-1).state, 'error');
+				assert.include(
+					reports.at(-1).msg,
+					'Login failed: Invalid OAuth state received in callback'
 				);
 				OAuthLoginCommand._test.resetOpenAuthorizeInBrowser();
 				OAuthLoginCommand._test.resetOAuthCallbackTimeoutMs();

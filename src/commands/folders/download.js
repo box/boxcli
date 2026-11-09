@@ -73,6 +73,8 @@ class FoldersDownloadCommand extends BoxCommand {
 		}
 
 		this.spinner = ora('Starting download').start();
+		let downloadedFileCount = 0;
+		this.reportStatus(`Downloading folder ${id}`);
 
 		if (flags.zip) {
 			this.overwrite = true;
@@ -112,6 +114,9 @@ class FoldersDownloadCommand extends BoxCommand {
 					this.spinnerLog(
 						`Downloading file ${item.id} to ${item.path}`
 					);
+					this.reportStatus(
+						`Downloading folder ${id}: ${downloadedFileCount} files downloaded`
+					);
 					let stream = await this.client.files.getReadStream(item.id);
 
 					if (this.zip) {
@@ -120,6 +125,7 @@ class FoldersDownloadCommand extends BoxCommand {
 						// @TODO(2018-08-15): Improve performance by queueing async work and performing in parallel
 						await saveFileToDisk(destinationPath, item, stream);
 					}
+					downloadedFileCount += 1;
 				}
 			}
 		} catch (error) {
@@ -128,9 +134,13 @@ class FoldersDownloadCommand extends BoxCommand {
 		}
 
 		if (this.zip) {
+			this.reportStatus(`Writing zip archive for folder ${id}`);
 			this.zip.finalize();
 		}
 		await outputFinalized;
+		this.setStatusResult(
+			`Downloaded folder ${id} (${downloadedFileCount} files)`
+		);
 		this.spinner.succeed(
 			`${this.bufferLog || ''}\nDownloaded folder ${id} to ${path.join(
 				this.outputPath,

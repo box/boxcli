@@ -48,6 +48,7 @@ class FilesZipCommand extends BoxCommand {
 
 		let downloadStatus;
 		let outputFinished = false;
+		this.reportStatus(`Downloading zip ${fileName}`);
 
 		await new Promise((resolve, reject) => {
 			/* eslint-disable promise/always-return */
@@ -69,6 +70,7 @@ class FilesZipCommand extends BoxCommand {
 			});
 			output.on('error', reject);
 		});
+		this.setStatusResult(`Downloaded zip ${fileName}`);
 		await this.output(downloadStatus);
 	}
 }

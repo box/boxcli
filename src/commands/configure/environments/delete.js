@@ -3,7 +3,6 @@
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
 const BoxCLIError = require('../../../cli-error');
-const inquirer = require('../../../inquirer');
 
 class EnvironmentsDeleteCommand extends BoxCommand {
 	async run() {
@@ -16,14 +15,17 @@ class EnvironmentsDeleteCommand extends BoxCommand {
 			if (choices.length === 0) {
 				throw new BoxCLIError('No environments to delete');
 			}
-			let answers = await inquirer.prompt([
-				{
-					type: 'list',
-					name: 'environment',
-					message: 'Which environment?',
-					choices: Object.keys(environmentsObject.environments),
-				},
-			]);
+			let answers = await this.prompt(
+				[
+					{
+						type: 'list',
+						name: 'environment',
+						message: 'Which environment?',
+						choices: Object.keys(environmentsObject.environments),
+					},
+				],
+				{ msg: 'Choose the Box environment to delete' }
+			);
 			name = answers.environment;
 		}
 
