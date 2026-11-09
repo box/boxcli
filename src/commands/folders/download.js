@@ -81,6 +81,10 @@ class FoldersDownloadCommand extends BoxCommand {
 				'YYYY-MM-DDTHH_mm_ss_SSS'
 			)}.zip`;
 			rootItemPath = fileName;
+			// Wait for the archiver module before starting traversal so this.zip is
+			// assigned before the first item is processed; otherwise items take the
+			// non-zip path and the archive is never finalized.
+			await this._loadZipArchive();
 			outputFinalized = this._setupZip(
 				path.join(destinationPath, fileName)
 			);
@@ -212,17 +216,26 @@ class FoldersDownloadCommand extends BoxCommand {
 	}
 
 	/**
-	 * Sets up a zip archive writing to the given destination.
+	 * Lazily loads the archiver module so that ZipArchive is available
+	 * for _setupZip(). Must be awaited before calling _setupZip().
 	 *
-	 * @param {string} destinationPath The path where the .zip file should be written
-	 * @returns {Promise<void>} A promise resolving when the archive is finalized and written to disk
-	 * @throws BoxCLIError
+	 * @returns {Promise<void>}
 	 * @private
 	 */
-	async _setupZip(destinationPath) {
+	async _loadZipArchive() {
 		if (!ZipArchive) {
 			({ ZipArchive } = await import('archiver'));
 		}
+	}
+
+	/**
+	 * Sets up a zip archive writing to the given destination. Requires
+	 * _loadZipArchive() to have completed first.
+	 * @param {string} destinationPath The path to write the zip file to
+	 * @returns {Promise<void>} A promise resolving when the archive is finalized and written to disk
+	 * @private
+	 */
+	_setupZip(destinationPath) {
 		this.zip = new ZipArchive({
 			zlib: { level: 9 },
 		});

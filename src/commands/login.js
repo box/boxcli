@@ -531,6 +531,7 @@ OAuthLoginCommand.flags = {
 
 module.exports = OAuthLoginCommand;
 module.exports._test = {
+	SUPPORTED_DEFAULT_APP_PORTS,
 	promptForAuthMethod,
 	promptForPlatformAppCredentials,
 	setOAuthCallbackTimeoutMs(timeoutMs) {

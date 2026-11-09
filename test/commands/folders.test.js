@@ -15,7 +15,47 @@ const {
 } = require('../helpers/test-helper');
 const os = require('node:os');
 const leche = require('leche');
+const sinon = require('sinon');
+const FoldersDownloadCommand = require('../../src/commands/folders/download');
 const _ = require('lodash');
+
+/**
+ * List the entry names of a zip file by walking its central directory, so the
+ * tests do not need an extra unzip dependency.
+ * @param {string} zipPath Path to the zip file
+ * @returns {string[]} Sorted entry names with forward slashes
+ */
+function getZipEntryNames(zipPath) {
+	const buffer = fs.readFileSync(zipPath);
+	const EOCD_SIGNATURE = 0x06_05_4b_50;
+	const CENTRAL_HEADER_SIGNATURE = 0x02_01_4b_50;
+	let eocdOffset = buffer.length - 22;
+	while (
+		eocdOffset >= 0 &&
+		buffer.readUInt32LE(eocdOffset) !== EOCD_SIGNATURE
+	) {
+		eocdOffset -= 1;
+	}
+	if (eocdOffset < 0) {
+		return [];
+	}
+	const entryCount = buffer.readUInt16LE(eocdOffset + 10);
+	let offset = buffer.readUInt32LE(eocdOffset + 16);
+	const names = [];
+	for (let i = 0; i < entryCount; i++) {
+		assert.equal(buffer.readUInt32LE(offset), CENTRAL_HEADER_SIGNATURE);
+		const nameLength = buffer.readUInt16LE(offset + 28);
+		const extraLength = buffer.readUInt16LE(offset + 30);
+		const commentLength = buffer.readUInt16LE(offset + 32);
+		names.push(
+			buffer
+				.toString('utf8', offset + 46, offset + 46 + nameLength)
+				.replaceAll('\\', '/')
+		);
+		offset += 46 + nameLength + extraLength + commentLength;
+	}
+	return names.sort();
+}
 
 describe('Folders', function () {
 	describe('folders:get', function () {
@@ -1871,6 +1911,67 @@ describe('Folders', function () {
 				}
 			);
 
+		// The archiver module is imported lazily and cached at module level, so the
+		// race this guards against only happens on the first --zip download in a
+		// process. Mocha runs a suite's own tests in order, so keep this test ahead
+		// of the other --zip tests.
+		let zipReadyBeforeTraversal;
+		test.do(() => {
+			const originalGetItems = FoldersDownloadCommand.prototype._getItems;
+			zipReadyBeforeTraversal = undefined;
+			sinon
+				.stub(FoldersDownloadCommand.prototype, '_getItems')
+				.callsFake(function (...args) {
+					zipReadyBeforeTraversal = Boolean(this.zip);
+					return originalGetItems.apply(this, args);
+				});
+		})
+			.nock(TEST_API_ROOT, (api) =>
+				api
+					.get(`/2.0/folders/${folderID}`)
+					.reply(200, getFolderFixture)
+					.get('/2.0/folders/22222')
+					.reply(200, getSubfolderFixture)
+					.get('/2.0/files/77777/content')
+					.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/77777` })
+					.get('/2.0/files/44444/content')
+					.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/44444` })
+					.get('/2.0/files/55555/content')
+					.reply(302, '', { Location: `${TEST_DOWNLOAD_ROOT}/55555` })
+			)
+			.nock(TEST_DOWNLOAD_ROOT, (api) =>
+				api
+					.get('/44444')
+					.reply(200, expectedContents['file 1.txt'])
+					.get('/55555')
+					.reply(200, expectedContents['file 2.txt'])
+					.get('/77777')
+					.reply(
+						200,
+						expectedContents.subfolder['subfolder file 1.txt']
+					)
+			)
+			.stdout()
+			.stderr()
+			.command([
+				'folders:download',
+				folderID,
+				`--destination=${downloadPath}`,
+				'--zip',
+				'--token=test',
+			])
+			.it(
+				'should initialize the zip archive before traversing the folder',
+				async () => {
+					sinon.restore();
+					await fs.remove(downloadPath);
+					assert.isTrue(
+						zipReadyBeforeTraversal,
+						'this.zip must be set before _getItems() runs'
+					);
+				}
+			);
+
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.get(`/2.0/folders/${folderID}`)
@@ -1908,18 +2009,25 @@ describe('Folders', function () {
 			.it(
 				'should download folder to zip file when --zip flag is passed',
 				async (context) => {
-					// Find zip file in directory
 					const files = await fs.readdir(downloadPath);
 					let filename = files.find(
 						(f) =>
 							f.startsWith(`folders-download-${folderID}`) &&
 							f.endsWith('.zip')
 					);
+					assert.ok(filename, 'Zip file should have been found');
+					let zipEntries = getZipEntryNames(
+						path.join(downloadPath, filename)
+					);
 					await fs.remove(downloadPath);
 
-					// @TODO(2018-10-30): Verify contents of zip file
-
-					assert.ok(filename, 'File shoudl have been found');
+					// Everything must be inside the archive; nothing may be written next to it
+					assert.deepEqual(files, [filename]);
+					assert.deepEqual(zipEntries, [
+						`${folderName}/file 1.txt`,
+						`${folderName}/file 2.txt`,
+						`${folderName}/subfolder/subfolder file 1.txt`,
+					]);
 					assert.equal(context.stdout, '');
 				}
 			);
