@@ -11,6 +11,9 @@ Login options:
   (2) Your own Platform OAuth App
       Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
 
+  (3) Your own Platform OAuth public client App
+      For apps registered as a public client, which have no client secret. Enter your Client ID when prompted; the login is protected with PKCE. Use --public-client to skip the prompt.
+
 Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.
 
 Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in an external browser, authorize and grant access to the app, then provide the state and authorization code back to the CLI when prompted.
@@ -23,7 +26,8 @@ Sign in with OAuth 2.0 and create a new environment (or update an existing one w
 
 ```
 USAGE
-  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [-d | --platform-app] [-r -n <value>] [-i]
+  $ box login [--no-color] [-h] [-v] [-q] [-c] [-p <value>] [-d | --platform-app | --public-client] [-r -n
+    <value>] [-i]
 
 FLAGS
   -c, --code
@@ -65,6 +69,13 @@ FLAGS
       Skip the authentication method prompt and go directly to Platform App setup.
       You will be prompted for Client ID and Client Secret.
 
+  --public-client
+      Skip the authentication method prompt and go directly to public client app setup.
+      Use this for an OAuth 2.0 app registered in the Developer Console as a public client, which has no client secret.
+      Every login is protected with PKCE. You will be prompted for the Client ID only.
+      Cannot be combined with --reauthorize. To reauthorize a public client environment, run "box login --reauthorize
+      --name <ENVIRONMENT_NAME>".
+
 DESCRIPTION
   Sign in with OAuth 2.0 and create a new environment (or update an existing one with --reauthorize).
 
@@ -75,6 +86,10 @@ DESCRIPTION
 
   (2) Your own Platform OAuth App
   Enter your Client ID and Client Secret when prompted. Use --platform-app to skip the prompt.
+
+  (3) Your own Platform OAuth public client App
+  For apps registered as a public client, which have no client secret. Enter your Client ID when prompted; the login is
+  protected with PKCE. Use --public-client to skip the prompt.
 
   Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is
   granted, the environment is created and set as default — you can start running commands right away.

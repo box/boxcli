@@ -11,6 +11,9 @@ const {
 	getTokenInfoByAuthCode,
 } = require('../../src/login-helper');
 const OAuthLoginCommand = require('../../src/commands/login');
+const CLITokenCache = require('../../src/token-cache');
+const BoxCLIError = require('../../src/cli-error');
+const { createHash } = require('node:crypto');
 
 // Send a single callback request once the test decides flow timing.
 // Keeping this as a tiny helper makes callback assertions easier to read.
@@ -189,8 +192,147 @@ describe('Login', function () {
 		});
 
 		it('should mark --platform-app and --default-box-app as mutually exclusive', function () {
-			assert.deepInclude(OAuthLoginCommand.flags['platform-app'], {
-				exclusive: ['default-box-app'],
+			assert.include(
+				OAuthLoginCommand.flags['platform-app'].exclusive,
+				'default-box-app'
+			);
+		});
+
+		it('should expose --public-client flag, exclusive with the other app flags', function () {
+			assert.property(OAuthLoginCommand.flags, 'public-client');
+			assert.sameMembers(
+				OAuthLoginCommand.flags['public-client'].exclusive,
+				['default-box-app', 'platform-app', 'reauthorize']
+			);
+			assert.include(
+				OAuthLoginCommand.flags['default-box-app'].exclusive,
+				'public-client'
+			);
+			assert.include(
+				OAuthLoginCommand.flags['platform-app'].exclusive,
+				'public-client'
+			);
+		});
+	});
+
+	describe('public client with --reauthorize', function () {
+		test.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+			stub.resolves({})
+		)
+			.stderr()
+			.command([
+				'login',
+				'--reauthorize',
+				'-n',
+				'my-app',
+				'--public-client',
+			])
+			.it(
+				'should reject --public-client combined with --reauthorize',
+				(ctx) => {
+					assert.include(ctx.stderr, '--public-client');
+					assert.include(ctx.stderr, '--reauthorize');
+					assert.include(ctx.stderr, 'cannot also be provided');
+				}
+			);
+	});
+
+	describe('getLoginErrorMessage', function () {
+		const { getLoginErrorMessage } = OAuthLoginCommand._test;
+
+		it('should show the error description from a wrapped API error', function () {
+			const error = new BoxCLIError(
+				'Failed to exchange auth code for tokens.',
+				Object.assign(new Error('Request failed'), {
+					responseInfo: {
+						statusCode: 400,
+						body: { error_description: 'Invalid redirect URI' },
+					},
+				})
+			);
+
+			assert.equal(getLoginErrorMessage(error), 'Invalid redirect URI');
+		});
+
+		it('should add the cause to the message when the wrapped error is not an API error', function () {
+			const error = new BoxCLIError(
+				'Failed to exchange auth code for tokens.',
+				new Error('No code verifier found for the given state.')
+			);
+
+			assert.equal(
+				getLoginErrorMessage(error),
+				'Failed to exchange auth code for tokens. No code verifier found for the given state.'
+			);
+		});
+
+		it('should show the message of an error without a cause', function () {
+			assert.equal(
+				getLoginErrorMessage(new Error('connect ECONNREFUSED')),
+				'connect ECONNREFUSED'
+			);
+		});
+	});
+
+	describe('public client prompts', function () {
+		it('should prompt for a public client ID only when user enters "3"', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ choice: '3' })
+				.onSecondCall()
+				.resolves({ clientId: ' public-client-id ' });
+
+			const result = await OAuthLoginCommand._test.promptForAuthMethod({
+				prompt: promptStub,
+			});
+
+			assert.strictEqual(promptStub.callCount, 2);
+			assert.strictEqual(
+				promptStub.secondCall.args[0][0].message,
+				'Enter the Client ID of the Public Client App:'
+			);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				publicClient: true,
+				clientId: 'public-client-id',
+			});
+		});
+
+		it('should ask again until the Client ID is not empty', async function () {
+			const promptStub = sandbox
+				.stub()
+				.onFirstCall()
+				.resolves({ clientId: '' })
+				.onSecondCall()
+				.resolves({ clientId: '   ' })
+				.onThirdCall()
+				.resolves({ clientId: 'public-client-id' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForPublicClientCredentials({
+					prompt: promptStub,
+				});
+
+			assert.strictEqual(promptStub.callCount, 3);
+			assert.strictEqual(result.clientId, 'public-client-id');
+		});
+
+		it('should not prompt for a client secret', async function () {
+			const promptStub = sandbox
+				.stub()
+				.resolves({ clientId: 'public-client-id' });
+
+			const result =
+				await OAuthLoginCommand._test.promptForPublicClientCredentials({
+					prompt: promptStub,
+				});
+
+			assert.isTrue(promptStub.calledOnce);
+			assert.deepEqual(result, {
+				useDefaultBoxApp: false,
+				publicClient: true,
+				clientId: 'public-client-id',
 			});
 		});
 	});
@@ -320,8 +462,12 @@ describe('Login', function () {
 				'[1] Log-in as a Box user (OAuth)'
 			);
 			assert.include(promptConfig.message, '[2] Use a Box Platform App');
+			assert.include(
+				promptConfig.message,
+				'[3] Use a Box Platform Public Client App (PKCE, no client secret)'
+			);
 			assert.include(promptConfig.message, '[q] Quit');
-			assert.include(promptConfig.message, 'Enter 1, 2, or q:');
+			assert.include(promptConfig.message, 'Enter 1, 2, 3, or q:');
 		});
 
 		it('should return null when user enters q to quit', async function () {
@@ -677,6 +823,234 @@ describe('Login', function () {
 							busyServer = null;
 						}
 					}
+				}
+			);
+	});
+
+	describe('public client login', function () {
+		const PUBLIC_CLIENT_ID = 'public-client-id';
+		let port;
+		let authorizeUrl;
+		let callbackStatusPromise;
+		let savedEnvironments;
+		let cachedTokenInfo;
+
+		// .command() reads its args when the test runs, so the port can be set here.
+		// Pass a failedTokenResponse to make the token endpoint reject the authorization code.
+		function publicClientLoginTest(environments, args, failedTokenResponse) {
+			return test
+				.do(async () => {
+					port = await findFreePort([19_095, 19_096, 19_097, 19_098]);
+					args[args.length - 1] = String(port);
+					savedEnvironments = null;
+					cachedTokenInfo = {};
+					callbackStatusPromise = null;
+					OAuthLoginCommand._test.setOAuthCallbackTimeoutMs(2000);
+					OAuthLoginCommand._test.setOpenAuthorizeInBrowser(
+						(openFn, apps, url) => {
+							authorizeUrl = new URL(url);
+							callbackStatusPromise = sendCallback(
+								`http://localhost:${port}/callback?state=${authorizeUrl.searchParams.get('state')}&code=auth-code`
+							);
+						}
+					);
+				})
+				.stub(BoxCommand.prototype, '_loadSettings', (stub) =>
+					stub.resolves({})
+				)
+				.stub(BoxCommand.prototype, 'getEnvironments', (stub) =>
+					stub.callsFake(async () => structuredClone(environments))
+				)
+				.stub(BoxCommand.prototype, 'updateEnvironments', (stub) =>
+					stub.callsFake(async (updated) => {
+						savedEnvironments = updated;
+					})
+				)
+				.stub(CLITokenCache.prototype, 'read', (stub) =>
+					stub.callsFake((callback) => callback(null, cachedTokenInfo))
+				)
+				.stub(CLITokenCache.prototype, 'write', (stub) =>
+					stub.callsFake((tokenInfo, callback) => {
+						cachedTokenInfo = tokenInfo;
+						callback();
+					})
+				)
+				.nock('https://api.box.com', (api) => {
+					const tokenRequest = api.post('/oauth2/token', (body) => {
+							// PKCE: no client secret, and the verifier must match the challenge in the authorize URL
+							assert.deepEqual(Object.keys(body).sort(), [
+								'client_id',
+								'code',
+								'code_verifier',
+								'grant_type',
+							]);
+							assert.equal(body.grant_type, 'authorization_code');
+							assert.equal(body.client_id, PUBLIC_CLIENT_ID);
+							assert.equal(body.code, 'auth-code');
+							assert.equal(
+								createHash('sha256')
+									.update(body.code_verifier)
+									.digest('base64url'),
+								authorizeUrl.searchParams.get('code_challenge')
+							);
+							return true;
+						});
+					if (failedTokenResponse) {
+						tokenRequest.reply(
+							failedTokenResponse.status,
+							failedTokenResponse.body
+						);
+						return;
+					}
+					tokenRequest
+						.reply(200, {
+							access_token: 'public-access-token',
+							refresh_token: 'public-refresh-token',
+							expires_in: 3600,
+							token_type: 'bearer',
+							restricted_to: [],
+						})
+						.get('/2.0/users/me')
+						.matchHeader('Authorization', 'Bearer public-access-token')
+						.reply(200, {
+							type: 'user',
+							id: '33333',
+							login: 'public@example.com',
+						});
+				});
+		}
+
+		const failedLoginArgs = ['login', '--public-client', '--port', 'PORT'];
+		publicClientLoginTest(
+			{ default: '', environments: {} },
+			failedLoginArgs,
+			{
+				status: 400,
+				body: {
+					error: 'invalid_grant',
+					error_description: 'The redirect URI is missing or does not match',
+				},
+			}
+		)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub.resolves({ clientId: PUBLIC_CLIENT_ID })
+			)
+			.stderr()
+			.command(failedLoginArgs)
+			.it(
+				'should show the reason from Box when the token exchange fails',
+				async (ctx) => {
+					assert.strictEqual(await callbackStatusPromise, 500);
+					assert.include(
+						ctx.stderr,
+						'Login failed: The redirect URI is missing or does not match'
+					);
+					assert.isNull(savedEnvironments);
+				}
+			);
+
+		const loginArgs = ['login', '--public-client', '--port', 'PORT'];
+		publicClientLoginTest({ default: '', environments: {} }, loginArgs)
+			.stub(inquirer, 'prompt', (stub) =>
+				stub.resolves({ clientId: PUBLIC_CLIENT_ID })
+			)
+			.stderr()
+			.command(loginArgs)
+			.it(
+				'should log in with PKCE and create a public client environment without a secret',
+				async (ctx) => {
+					assert.strictEqual(await callbackStatusPromise, 200);
+					assert.include(
+						ctx.stderr,
+						'Successfully logged in as public@example.com!'
+					);
+					assert.equal(
+						authorizeUrl.origin + authorizeUrl.pathname,
+						'https://account.box.com/api/oauth2/authorize'
+					);
+					assert.equal(
+						authorizeUrl.searchParams.get('client_id'),
+						PUBLIC_CLIENT_ID
+					);
+					assert.equal(
+						authorizeUrl.searchParams.get('redirect_uri'),
+						`http://localhost:${port}/callback`
+					);
+					assert.equal(
+						authorizeUrl.searchParams.get('code_challenge_method'),
+						'S256'
+					);
+					assert.deepEqual(savedEnvironments, {
+						default: 'oauth',
+						environments: {
+							oauth: {
+								clientId: PUBLIC_CLIENT_ID,
+								name: 'oauth',
+								cacheTokens: true,
+								authMethod: 'oauth20',
+								publicClient: true,
+							},
+						},
+					});
+					assert.equal(
+						cachedTokenInfo.accessToken,
+						'public-access-token'
+					);
+					assert.equal(
+						cachedTokenInfo.refreshToken,
+						'public-refresh-token'
+					);
+				}
+			);
+
+		const reauthorizeArgs = [
+			'login',
+			'--reauthorize',
+			'-n',
+			'public-env',
+			'--port',
+			'PORT',
+		];
+		let promptStub;
+		publicClientLoginTest(
+			{
+			default: 'public-env',
+			environments: {
+				'public-env': {
+					clientId: PUBLIC_CLIENT_ID,
+					name: 'public-env',
+					cacheTokens: true,
+					authMethod: 'oauth20',
+					publicClient: true,
+				},
+			},
+			},
+			reauthorizeArgs
+		)
+			.do(() => {
+				promptStub = sandbox.stub(inquirer, 'prompt');
+			})
+			.stderr()
+			.command(reauthorizeArgs)
+			.it(
+				'should reauthorize a public client environment with PKCE without prompting',
+				async (ctx) => {
+					assert.strictEqual(await callbackStatusPromise, 200);
+					assert.isTrue(promptStub.notCalled);
+					assert.include(
+						ctx.stderr,
+						'Environment "public-env" has been updated'
+					);
+					assert.deepEqual(
+						savedEnvironments.environments['public-env'],
+						{
+							clientId: PUBLIC_CLIENT_ID,
+							name: 'public-env',
+							cacheTokens: true,
+							authMethod: 'oauth20',
+							publicClient: true,
+						}
+					);
 				}
 			);
 	});
