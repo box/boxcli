@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleSystemsGetCommand extends BoxCommand {
 	async run() {
@@ -11,7 +12,7 @@ class ShuttleSystemsGetCommand extends BoxCommand {
 	}
 }
 
-ShuttleSystemsGetCommand.description = 'Get a shuttle system by ID';
+ShuttleSystemsGetCommand.description = `Get a shuttle system by ID ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsGetCommand.examples = ['box shuttle:systems:get 6a315c0754833bfc5df067bf'];
 ShuttleSystemsGetCommand._endpoint = 'get_shuttle_systems_id';
 

@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags, Args } = require('@oclif/core');
-const { resolveBody, bodyFlags } = require('../../../modules/shuttle');
+const { resolveBody, bodyFlags, SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleJobsStartCommand extends BoxCommand {
 	async run() {
@@ -26,7 +26,7 @@ class ShuttleJobsStartCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobsStartCommand.description = 'Start a shuttle job run';
+ShuttleJobsStartCommand.description = `Start a shuttle job run ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsStartCommand.examples = [
 	'box shuttle:jobs:start 6a315c0754833bfc5df067bf',
 	'box shuttle:jobs:start 6a315c0754833bfc5df067bf --mode transfer',
@@ -37,7 +37,8 @@ ShuttleJobsStartCommand.flags = {
 	...BoxCommand.flags,
 	...bodyFlags,
 	mode: Flags.string({
-		description: 'Run mode (defaults to simulation when omitted)',
+		description:
+			'Run mode (defaults to simulation when omitted). Accepted values: transfer, simulation, scan, analysis',
 		options: ['transfer', 'simulation', 'scan', 'analysis'],
 	}),
 };

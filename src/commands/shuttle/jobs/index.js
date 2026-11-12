@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const PaginationUtilities = require('../../../pagination-utils');
 
 class ShuttleJobsListCommand extends BoxCommand {
@@ -14,7 +15,7 @@ class ShuttleJobsListCommand extends BoxCommand {
 }
 
 ShuttleJobsListCommand.aliases = ['shuttle:jobs:list'];
-ShuttleJobsListCommand.description = 'List shuttle jobs';
+ShuttleJobsListCommand.description = `List shuttle jobs ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsListCommand.examples = ['box shuttle:jobs'];
 ShuttleJobsListCommand._endpoint = 'get_shuttle_jobs';
 

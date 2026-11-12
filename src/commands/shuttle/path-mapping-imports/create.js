@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags } = require('@oclif/core');
-const { resolveBody, bodyFlags } = require('../../../modules/shuttle');
+const { resolveBody, bodyFlags, SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttlePathMappingImportsCreateCommand extends BoxCommand {
 	async run() {
@@ -28,7 +28,7 @@ class ShuttlePathMappingImportsCreateCommand extends BoxCommand {
 }
 
 ShuttlePathMappingImportsCreateCommand.description =
-	'Import shuttle path mappings from a Box spreadsheet file (async; empty response on accept)';
+	`Import shuttle path mappings from a Box spreadsheet file (async; empty response on accept) ${SHUTTLE_PERMISSIONS}`;
 ShuttlePathMappingImportsCreateCommand.examples = [
 	'box shuttle:path-mapping-imports:create --job-id 6a315c0754833bfc5df067bf --file-id 12345678901',
 ];

@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleJobsStopCommand extends BoxCommand {
 	async run() {
@@ -10,7 +11,7 @@ class ShuttleJobsStopCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobsStopCommand.description = 'Stop a running shuttle job';
+ShuttleJobsStopCommand.description = `Stop a running shuttle job ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsStopCommand.examples = [
 	'box shuttle:jobs:stop 6a315c0754833bfc5df067bf',
 ];

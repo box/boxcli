@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	subjectTargetFlags,
 	buildSubjectTarget,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleSubjectMappingsUpdateCommand extends BoxCommand {
@@ -16,7 +17,7 @@ class ShuttleSubjectMappingsUpdateCommand extends BoxCommand {
 		);
 		const requestBody = resolveBody(flags, () => {
 			const body = {};
-			if (flags['is-subject-skipped'] !== undefined) {
+			if (Object.hasOwn(flags, 'is-subject-skipped')) {
 				body.isSubjectSkipped = flags['is-subject-skipped'];
 			}
 			const target = buildSubjectTarget(flags, { command: this });
@@ -40,7 +41,7 @@ class ShuttleSubjectMappingsUpdateCommand extends BoxCommand {
 }
 
 ShuttleSubjectMappingsUpdateCommand.description =
-	'Update a shuttle subject mapping';
+	`Update a shuttle subject mapping ${SHUTTLE_PERMISSIONS}`;
 ShuttleSubjectMappingsUpdateCommand.examples = [
 	'box shuttle:subject-mappings:update 6a315c0754833bfc5df067bf --target-type user --target-id 12345678',
 	'box shuttle:subject-mappings:update 6a315c0754833bfc5df067bf --is-subject-skipped --clear-target',

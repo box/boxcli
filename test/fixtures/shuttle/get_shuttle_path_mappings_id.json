@@ -1,0 +1,20 @@
+{
+	"id": "6a3ba68e810d9156194530c3",
+	"type": "shuttle_path_mapping",
+	"job_id": "6a315c0754833bfc5df067bf",
+	"is_path_skipped": false,
+	"source": {
+		"type": "account",
+		"path": "/Finance",
+		"account": {
+			"email": "admin@company.com"
+		}
+	},
+	"target": {
+		"type": "account",
+		"path": "/HR Migration",
+		"account": {
+			"email": "admin@company.box.com"
+		}
+	}
+}

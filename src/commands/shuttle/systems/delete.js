@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleSystemsDeleteCommand extends BoxCommand {
 	async run() {
@@ -11,7 +12,7 @@ class ShuttleSystemsDeleteCommand extends BoxCommand {
 	}
 }
 
-ShuttleSystemsDeleteCommand.description = 'Delete a shuttle system';
+ShuttleSystemsDeleteCommand.description = `Delete a shuttle system ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsDeleteCommand.examples = [
 	'box shuttle:systems:delete 6a315c0754833bfc5df067bf',
 ];

@@ -9,6 +9,7 @@ const {
 	buildAccountMapping,
 	jobSettingsFlags,
 	buildSettings,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleJobsCreateCommand extends BoxCommand {
@@ -47,7 +48,7 @@ class ShuttleJobsCreateCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobsCreateCommand.description = 'Create a shuttle job';
+ShuttleJobsCreateCommand.description = `Create a shuttle job ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsCreateCommand.examples = [
 	'box shuttle:jobs:create "Q4 Migration" --job-type transfer --source-system-id 6a3ba68e810d9156194530a1',
 	'box shuttle:jobs:create "Q4 Migration" --job-type transfer --source-system-id 6a3ba68e810d9156194530a1 --account-mapping-enabled --are-permissions-mapped --is-overwrite-enabled',
@@ -58,7 +59,8 @@ ShuttleJobsCreateCommand.flags = {
 	...BoxCommand.flags,
 	...bodyFlags,
 	'job-type': Flags.string({
-		description: 'Job type (required unless --body / --body-file)',
+		description:
+			'Job type (required unless --body / --body-file). Accepted values: transfer, analysis',
 		options: ['transfer', 'analysis'],
 	}),
 	'source-system-id': Flags.string({

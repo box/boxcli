@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const PaginationUtilities = require('../../../pagination-utils');
 
 class ShuttleSystemsListCommand extends BoxCommand {
@@ -14,7 +15,7 @@ class ShuttleSystemsListCommand extends BoxCommand {
 }
 
 ShuttleSystemsListCommand.aliases = ['shuttle:systems:list'];
-ShuttleSystemsListCommand.description = 'List shuttle systems';
+ShuttleSystemsListCommand.description = `List shuttle systems ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsListCommand.examples = ['box shuttle:systems', 'box shuttle:systems --max-items 50'];
 ShuttleSystemsListCommand._endpoint = 'get_shuttle_systems';
 

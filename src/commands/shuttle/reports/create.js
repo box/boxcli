@@ -2,7 +2,7 @@
 
 const BoxCommand = require('../../../box-command');
 const { Flags } = require('@oclif/core');
-const { resolveBody, bodyFlags } = require('../../../modules/shuttle');
+const { resolveBody, bodyFlags, SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleReportsCreateCommand extends BoxCommand {
 	async run() {
@@ -30,7 +30,7 @@ class ShuttleReportsCreateCommand extends BoxCommand {
 }
 
 ShuttleReportsCreateCommand.description =
-	'Create (generate) a shuttle report for a run';
+	`Create (generate) a shuttle report for a run ${SHUTTLE_PERMISSIONS}`;
 ShuttleReportsCreateCommand.examples = [
 	'box shuttle:reports:create --run-id 6a315c0754833bfc5df067bf:42 --format xlsx --section event_log --section transfer_overview',
 ];
@@ -43,7 +43,8 @@ ShuttleReportsCreateCommand.flags = {
 		description: 'Shuttle run ID (required unless --body / --body-file)',
 	}),
 	format: Flags.string({
-		description: 'Report format (required unless --body / --body-file)',
+		description:
+			'Report format (required unless --body / --body-file). Accepted values: xlsx, csv',
 		options: ['xlsx', 'csv'],
 	}),
 	section: Flags.string({
@@ -52,7 +53,8 @@ ShuttleReportsCreateCommand.flags = {
 		multiple: true,
 	}),
 	'users-scope': Flags.string({
-		description: 'Users scope for user-related sections',
+		description:
+			'Users scope for user-related sections. Accepted values: migrated, all',
 		options: ['migrated', 'all'],
 	}),
 };

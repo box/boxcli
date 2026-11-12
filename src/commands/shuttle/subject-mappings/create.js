@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	subjectTargetFlags,
 	buildSubjectTarget,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleSubjectMappingsCreateCommand extends BoxCommand {
@@ -25,7 +26,7 @@ class ShuttleSubjectMappingsCreateCommand extends BoxCommand {
 			if (flags.revision !== undefined) {
 				body.revision = flags.revision;
 			}
-			if (flags['is-subject-skipped'] !== undefined) {
+			if (Object.hasOwn(flags, 'is-subject-skipped')) {
 				body.isSubjectSkipped = flags['is-subject-skipped'];
 			}
 			const target = buildSubjectTarget(flags, { command: this });
@@ -42,7 +43,7 @@ class ShuttleSubjectMappingsCreateCommand extends BoxCommand {
 }
 
 ShuttleSubjectMappingsCreateCommand.description =
-	'Create a shuttle subject mapping';
+	`Create a shuttle subject mapping ${SHUTTLE_PERMISSIONS}`;
 ShuttleSubjectMappingsCreateCommand.examples = [
 	'box shuttle:subject-mappings:create --job-id 6a315c0754833bfc5df067bf --discovered-subject-id 6a3ba7c02ea17bc9461eeacf --target-type user --target-id 12345678',
 	'box shuttle:subject-mappings:create --job-id 6a315c0754833bfc5df067bf --discovered-subject-id 6a3ba7c02ea17bc9461eeacf --is-subject-skipped --clear-target',

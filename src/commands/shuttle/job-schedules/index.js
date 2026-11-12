@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags } = require('@oclif/core');
 const PaginationUtilities = require('../../../pagination-utils');
 
@@ -17,7 +18,7 @@ class ShuttleJobSchedulesListCommand extends BoxCommand {
 }
 
 ShuttleJobSchedulesListCommand.aliases = ['shuttle:job-schedules:list'];
-ShuttleJobSchedulesListCommand.description = 'List shuttle job schedules';
+ShuttleJobSchedulesListCommand.description = `List shuttle job schedules ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobSchedulesListCommand.examples = [
 	'box shuttle:job-schedules --job-id 6a315c0754833bfc5df067bf',
 ];

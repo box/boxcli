@@ -11,7 +11,7 @@ const { Flags } = require('@oclif/core');
 
 function parseJsonValue(raw, flagName) {
 	if (raw === undefined || raw === null || raw === '') {
-		return undefined;
+		return;
 	}
 	try {
 		return JSON.parse(raw);
@@ -25,12 +25,12 @@ function parseJsonValue(raw, flagName) {
  * Safe for already-camelCase input (keys without `_` are unchanged).
  */
 function snakeToCamelKey(key) {
-	return key.replace(/_([a-z0-9])/g, (_, ch) => ch.toUpperCase());
+	return key.replaceAll(/_([a-z0-9])/g, (_, ch) => ch.toUpperCase());
 }
 
 function snakeToCamel(value) {
 	if (Array.isArray(value)) {
-		return value.map(snakeToCamel);
+		return value.map((item) => snakeToCamel(item));
 	}
 	if (
 		value &&
@@ -85,9 +85,17 @@ const bodyFlags = Object.freeze({
 	}),
 });
 
-function hasAny(flags, names) {
-	return names.some((name) => flags[name] !== undefined);
+function flagSet(flags, name) {
+	return Object.hasOwn(flags, name);
 }
+
+function hasAny(flags, names) {
+	return names.some((name) => flagSet(flags, name));
+}
+
+/** Appended to Shuttle command descriptions for agent-oriented help. */
+const SHUTTLE_PERMISSIONS =
+	'Requires a token with the manage_enterprise_properties scope (and Shuttle access for the enterprise).';
 
 /**
  * Flat flags for a path-mapping location (source or target).
@@ -98,7 +106,7 @@ function pathLocationFlags(prefix, options = {}) {
 	const { allowIsDirectory = false } = options;
 	const flags = {
 		[`${prefix}-type`]: Flags.string({
-			description: `${prefix} location type`,
+			description: `${prefix} location type. Accepted values: account, shared_space`,
 			options: ['account', 'shared_space'],
 		}),
 		[`${prefix}-path`]: Flags.string({
@@ -160,7 +168,7 @@ function buildPathLocation(flags, prefix, options = {}) {
 				`--${typeKey} and --${pathKey} are required (or pass --body / --body-file).`
 			);
 		}
-		return undefined;
+		return;
 	}
 
 	const type = flags[typeKey];
@@ -178,7 +186,7 @@ function buildPathLocation(flags, prefix, options = {}) {
 	if (flags[pathIdKey] !== undefined) {
 		location.pathId = flags[pathIdKey];
 	}
-	if (allowIsDirectory && flags[isDirectoryKey] !== undefined) {
+	if (allowIsDirectory && flagSet(flags, isDirectoryKey)) {
 		location.isDirectory = flags[isDirectoryKey];
 	}
 
@@ -199,18 +207,16 @@ function buildPathLocation(flags, prefix, options = {}) {
 			throw new Error(`Missing account fields for ${prefix}`);
 		}
 		location.account = account;
-	} else if (type === 'shared_space') {
-		if (flags[spaceKey] !== undefined) {
+	} else if (type === 'shared_space' && flags[spaceKey] !== undefined) {
 			location.space = flags[spaceKey];
 		}
-	}
 
 	return location;
 }
 
 const subjectTargetFlags = Object.freeze({
 	'target-type': Flags.string({
-		description: 'Box target subject type',
+		description: 'Box target subject type. Accepted values: user, group',
 		options: ['user', 'group'],
 	}),
 	'target-id': Flags.string({
@@ -228,7 +234,7 @@ function buildSubjectTarget(flags, options = {}) {
 		return null;
 	}
 	if (flags['target-type'] === undefined && flags['target-id'] === undefined) {
-		return undefined;
+		return;
 	}
 	if (!flags['target-type'] || !flags['target-id']) {
 		if (command) {
@@ -246,7 +252,7 @@ function buildSubjectTarget(flags, options = {}) {
 
 const scheduleTriggerFlags = Object.freeze({
 	'trigger-type': Flags.string({
-		description: 'Schedule trigger type',
+		description: 'Schedule trigger type. Accepted values: by_time, by_job',
 		options: ['by_time', 'by_job'],
 	}),
 	'start-at': Flags.string({
@@ -257,14 +263,16 @@ const scheduleTriggerFlags = Object.freeze({
 		description: 'IANA time zone for by_time trigger',
 	}),
 	repeat: Flags.string({
-		description: 'Repeat cadence for by_time trigger',
+		description:
+			'Repeat cadence for by_time trigger. Accepted values: none, daily, weekly, weekdays, weekends',
 		options: ['none', 'daily', 'weekly', 'weekdays', 'weekends'],
 	}),
 	'triggered-by-job-id': Flags.string({
 		description: 'Triggering job ID for by_job trigger',
 	}),
 	'last-run-condition': Flags.string({
-		description: 'Condition on the triggering job last run',
+		description:
+			'Condition on the triggering job last run. Accepted values: always, on_success, on_finish',
 		options: ['always', 'on_success', 'on_finish'],
 	}),
 });
@@ -285,7 +293,7 @@ function buildScheduleTrigger(flags, options = {}) {
 				'--trigger-type and matching trigger fields are required (or pass --body / --body-file).'
 			);
 		}
-		return undefined;
+		return;
 	}
 
 	const type = flags['trigger-type'];
@@ -341,7 +349,8 @@ const jobAccountMappingFlags = Object.freeze({
 		allowNo: true,
 	}),
 	'permission-conflict-strategy': Flags.string({
-		description: 'Permission conflict strategy',
+		description:
+			'Permission conflict strategy. Accepted values: preserve_structure_restrict_sharing, preserve_structure_expand_sharing, preserve_sharing_modify_structure, warn_permissions_conflicts',
 		options: [
 			'preserve_structure_restrict_sharing',
 			'preserve_structure_expand_sharing',
@@ -361,17 +370,17 @@ const jobAccountMappingFlags = Object.freeze({
 
 function buildAccountMapping(flags) {
 	const body = {};
-	if (flags['account-mapping-enabled'] !== undefined) {
+	if (flagSet(flags, 'account-mapping-enabled')) {
 		body.isEnabled = flags['account-mapping-enabled'];
 	}
-	if (flags['permission-conflict-strategy'] !== undefined) {
+	if (flagSet(flags, 'permission-conflict-strategy')) {
 		body.permissionConflictStrategy =
 			flags['permission-conflict-strategy'];
 	}
-	if (flags['are-external-shares-mapped'] !== undefined) {
+	if (flagSet(flags, 'are-external-shares-mapped')) {
 		body.areExternalSharesMapped = flags['are-external-shares-mapped'];
 	}
-	if (flags['are-permissions-mapped'] !== undefined) {
+	if (flagSet(flags, 'are-permissions-mapped')) {
 		body.arePermissionsMapped = flags['are-permissions-mapped'];
 	}
 	return Object.keys(body).length > 0 ? body : undefined;
@@ -429,7 +438,7 @@ function buildSettings(flags) {
 	};
 	const body = {};
 	for (const [flagName, apiName] of Object.entries(map)) {
-		if (flags[flagName] !== undefined) {
+		if (flagSet(flags, flagName)) {
 			body[apiName] = flags[flagName];
 		}
 	}
@@ -437,6 +446,8 @@ function buildSettings(flags) {
 }
 
 module.exports = {
+	SHUTTLE_PERMISSIONS,
+	flagSet,
 	parseJsonValue,
 	snakeToCamel,
 	readBodyOverride,

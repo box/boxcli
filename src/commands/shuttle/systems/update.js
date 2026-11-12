@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags, Args } = require('@oclif/core');
 
 class ShuttleSystemsUpdateCommand extends BoxCommand {
@@ -23,7 +24,7 @@ class ShuttleSystemsUpdateCommand extends BoxCommand {
 	}
 }
 
-ShuttleSystemsUpdateCommand.description = 'Update a shuttle system';
+ShuttleSystemsUpdateCommand.description = `Update a shuttle system ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsUpdateCommand.examples = [
 	'box shuttle:systems:update 6a315c0754833bfc5df067bf --name "NYC File Server (Primary)"',
 ];

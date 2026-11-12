@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleSystemsIssueRegistrationTokenCommand extends BoxCommand {
 	async run() {
@@ -15,7 +16,7 @@ class ShuttleSystemsIssueRegistrationTokenCommand extends BoxCommand {
 }
 
 ShuttleSystemsIssueRegistrationTokenCommand.description =
-	'Issue a registration token for a Windows shuttle agent system';
+	`Issue a registration token for a Windows shuttle agent system ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsIssueRegistrationTokenCommand.examples = [
 	'box shuttle:systems:issue-registration-token 6a315c0754833bfc5df067bf',
 ];

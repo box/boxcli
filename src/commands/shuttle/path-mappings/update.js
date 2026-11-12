@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	pathLocationFlags,
 	buildPathLocation,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttlePathMappingsUpdateCommand extends BoxCommand {
@@ -14,7 +15,7 @@ class ShuttlePathMappingsUpdateCommand extends BoxCommand {
 		const { flags, args } = await this.parse(ShuttlePathMappingsUpdateCommand);
 		const requestBody = resolveBody(flags, () => {
 			const body = {};
-			if (flags['is-path-skipped'] !== undefined) {
+			if (Object.hasOwn(flags, 'is-path-skipped')) {
 				body.isPathSkipped = flags['is-path-skipped'];
 			}
 			const source = buildPathLocation(flags, 'source', {
@@ -51,7 +52,7 @@ class ShuttlePathMappingsUpdateCommand extends BoxCommand {
 	}
 }
 
-ShuttlePathMappingsUpdateCommand.description = 'Update a shuttle path mapping';
+ShuttlePathMappingsUpdateCommand.description = `Update a shuttle path mapping ${SHUTTLE_PERMISSIONS}`;
 ShuttlePathMappingsUpdateCommand.examples = [
 	'box shuttle:path-mappings:update 6a315c0754833bfc5df067bf --is-path-skipped --clear-target',
 	'box shuttle:path-mappings:update 6a315c0754833bfc5df067bf --target-type account --target-path "/HR" --target-account-email admin@company.box.com',

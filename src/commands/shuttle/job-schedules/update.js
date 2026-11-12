@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	scheduleTriggerFlags,
 	buildScheduleTrigger,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleJobSchedulesUpdateCommand extends BoxCommand {
@@ -14,13 +15,13 @@ class ShuttleJobSchedulesUpdateCommand extends BoxCommand {
 		const { flags, args } = await this.parse(ShuttleJobSchedulesUpdateCommand);
 		const requestBody = resolveBody(flags, () => {
 			const body = {};
-			if (flags.state !== undefined) {
+			if (Object.hasOwn(flags, 'state')) {
 				body.state = flags.state;
 			}
-			if (flags['run-mode'] !== undefined) {
+			if (Object.hasOwn(flags, 'run-mode')) {
 				body.runMode = flags['run-mode'];
 			}
-			if (flags.description !== undefined) {
+			if (Object.hasOwn(flags, 'description')) {
 				body.description = flags.description;
 			}
 			const trigger = buildScheduleTrigger(flags, { command: this });
@@ -43,7 +44,7 @@ class ShuttleJobSchedulesUpdateCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobSchedulesUpdateCommand.description = 'Update a shuttle job schedule';
+ShuttleJobSchedulesUpdateCommand.description = `Update a shuttle job schedule ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobSchedulesUpdateCommand.examples = [
 	'box shuttle:job-schedules:update 6a315c0754833bfc5df067bf --state paused',
 	'box shuttle:job-schedules:update 6a315c0754833bfc5df067bf --trigger-type by_time --start-at 2026-03-16T09:00:00 --time-zone America/Los_Angeles --repeat weekdays',
@@ -54,11 +55,12 @@ ShuttleJobSchedulesUpdateCommand.flags = {
 	...BoxCommand.flags,
 	...bodyFlags,
 	state: Flags.string({
-		description: 'Schedule state',
+		description: 'Schedule state. Accepted values: enabled, paused',
 		options: ['enabled', 'paused'],
 	}),
 	'run-mode': Flags.string({
-		description: 'Schedule run mode',
+		description:
+			'Schedule run mode. Accepted values: transfer, simulation, analysis',
 		options: ['transfer', 'simulation', 'analysis'],
 	}),
 	description: Flags.string({

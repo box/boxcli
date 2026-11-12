@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags } = require('@oclif/core');
 const PaginationUtilities = require('../../../pagination-utils');
 
@@ -17,7 +18,7 @@ class ShuttleMappingErrorsListCommand extends BoxCommand {
 }
 
 ShuttleMappingErrorsListCommand.aliases = ['shuttle:mapping-errors:list'];
-ShuttleMappingErrorsListCommand.description = 'List shuttle mapping errors';
+ShuttleMappingErrorsListCommand.description = `List shuttle mapping errors ${SHUTTLE_PERMISSIONS}`;
 ShuttleMappingErrorsListCommand.examples = [
 	'box shuttle:mapping-errors --job-id 6a315c0754833bfc5df067bf',
 ];

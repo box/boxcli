@@ -9,6 +9,7 @@ const {
 	buildAccountMapping,
 	jobSettingsFlags,
 	buildSettings,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleJobsUpdateCommand extends BoxCommand {
@@ -16,10 +17,10 @@ class ShuttleJobsUpdateCommand extends BoxCommand {
 		const { flags, args } = await this.parse(ShuttleJobsUpdateCommand);
 		const requestBody = resolveBody(flags, () => {
 			const body = {};
-			if (flags.name !== undefined) {
+			if (Object.hasOwn(flags, 'name')) {
 				body.name = flags.name;
 			}
-			if (flags.comment !== undefined) {
+			if (Object.hasOwn(flags, 'comment')) {
 				body.comment = flags.comment;
 			}
 			if (flags.tag) {
@@ -49,7 +50,7 @@ class ShuttleJobsUpdateCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobsUpdateCommand.description = 'Update a shuttle job';
+ShuttleJobsUpdateCommand.description = `Update a shuttle job ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsUpdateCommand.examples = [
 	'box shuttle:jobs:update 6a315c0754833bfc5df067bf --name "Q4 Migration (revised)"',
 	'box shuttle:jobs:update 6a315c0754833bfc5df067bf --account-mapping-enabled --no-are-permissions-mapped',

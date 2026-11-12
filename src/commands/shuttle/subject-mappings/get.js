@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleSubjectMappingsGetCommand extends BoxCommand {
 	async run() {
@@ -14,7 +15,7 @@ class ShuttleSubjectMappingsGetCommand extends BoxCommand {
 }
 
 ShuttleSubjectMappingsGetCommand.description =
-	'Get a shuttle subject mapping by ID';
+	`Get a shuttle subject mapping by ID ${SHUTTLE_PERMISSIONS}`;
 ShuttleSubjectMappingsGetCommand.examples = [
 	'box shuttle:subject-mappings:get 6a315c0754833bfc5df067bf',
 ];

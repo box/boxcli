@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleSubjectMappingsDeleteCommand extends BoxCommand {
 	async run() {
@@ -12,7 +13,7 @@ class ShuttleSubjectMappingsDeleteCommand extends BoxCommand {
 }
 
 ShuttleSubjectMappingsDeleteCommand.description =
-	'Delete a shuttle subject mapping';
+	`Delete a shuttle subject mapping ${SHUTTLE_PERMISSIONS}`;
 ShuttleSubjectMappingsDeleteCommand.examples = [
 	'box shuttle:subject-mappings:delete 6a315c0754833bfc5df067bf',
 ];

@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags } = require('@oclif/core');
 const PaginationUtilities = require('../../../pagination-utils');
 
@@ -34,7 +35,7 @@ class ShuttlePathEntriesListCommand extends BoxCommand {
 
 ShuttlePathEntriesListCommand.aliases = ['shuttle:path-entries:list'];
 ShuttlePathEntriesListCommand.description =
-	'List shuttle path entries for a job side';
+	`List shuttle path entries for a job side ${SHUTTLE_PERMISSIONS}`;
 ShuttlePathEntriesListCommand.examples = [
 	'box shuttle:path-entries --job-id 6a315c0754833bfc5df067bf --side source',
 ];
@@ -48,7 +49,8 @@ ShuttlePathEntriesListCommand.flags = {
 		required: true,
 	}),
 	side: Flags.string({
-		description: 'Which side of the migration to browse',
+		description:
+			'Which side of the migration to browse. Accepted values: source, target',
 		options: ['source', 'target'],
 		required: true,
 	}),

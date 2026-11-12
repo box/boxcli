@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttleJobsPrepareMigrationCommand extends BoxCommand {
 	async run() {
@@ -13,7 +14,7 @@ class ShuttleJobsPrepareMigrationCommand extends BoxCommand {
 }
 
 ShuttleJobsPrepareMigrationCommand.description =
-	'Prepare a shuttle job for migration';
+	`Prepare a shuttle job for migration ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobsPrepareMigrationCommand.examples = [
 	'box shuttle:jobs:prepare-migration 6a315c0754833bfc5df067bf',
 ];

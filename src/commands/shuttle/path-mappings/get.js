@@ -2,6 +2,7 @@
 
 const { Args } = require('@oclif/core');
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 
 class ShuttlePathMappingsGetCommand extends BoxCommand {
 	async run() {
@@ -13,7 +14,7 @@ class ShuttlePathMappingsGetCommand extends BoxCommand {
 	}
 }
 
-ShuttlePathMappingsGetCommand.description = 'Get a shuttle path mapping by ID';
+ShuttlePathMappingsGetCommand.description = `Get a shuttle path mapping by ID ${SHUTTLE_PERMISSIONS}`;
 ShuttlePathMappingsGetCommand.examples = [
 	'box shuttle:path-mappings:get 6a315c0754833bfc5df067bf',
 ];

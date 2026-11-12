@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	pathLocationFlags,
 	buildPathLocation,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttlePathMappingsCreateCommand extends BoxCommand {
@@ -27,7 +28,7 @@ class ShuttlePathMappingsCreateCommand extends BoxCommand {
 				jobId: flags['job-id'],
 				source,
 			};
-			if (flags['is-path-skipped'] !== undefined) {
+			if (Object.hasOwn(flags, 'is-path-skipped')) {
 				body.isPathSkipped = flags['is-path-skipped'];
 			}
 			if (flags['clear-target']) {
@@ -50,7 +51,7 @@ class ShuttlePathMappingsCreateCommand extends BoxCommand {
 	}
 }
 
-ShuttlePathMappingsCreateCommand.description = 'Create a shuttle path mapping';
+ShuttlePathMappingsCreateCommand.description = `Create a shuttle path mapping ${SHUTTLE_PERMISSIONS}`;
 ShuttlePathMappingsCreateCommand.examples = [
 	'box shuttle:path-mappings:create --job-id 6a315c0754833bfc5df067bf --source-type account --source-path "/Finance" --source-account-email admin@company.com --target-type account --target-path "/HR Migration" --target-account-email admin@company.box.com',
 ];

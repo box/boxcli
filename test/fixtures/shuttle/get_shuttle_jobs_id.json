@@ -1,0 +1,14 @@
+{
+	"id": "6a315c0754833bfc5df067bf",
+	"type": "shuttle_job",
+	"name": "Q4 Migration",
+	"job_type": "transfer",
+	"state": "draft",
+	"mapping_state": "incomplete",
+	"is_enabled": true,
+	"source_system": {
+		"type": "shuttle_system",
+		"id": "6a3ba68e810d9156194530a1",
+		"name": "NYC File Server"
+	}
+}

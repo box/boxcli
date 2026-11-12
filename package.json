@@ -145,6 +145,9 @@
 			"shared-links": {
 				"description": "Manage shared links"
 			},
+			"shuttle": {
+				"description": "Manage Box Shuttle migrations (systems, jobs, mappings, runs, reports)"
+			},
 			"tasks": {
 				"description": "Manage tasks"
 			},

@@ -3,7 +3,7 @@
 const { test } = require('@oclif/test');
 const { assert } = require('chai');
 const os = require('node:os');
-const { TEST_API_ROOT } = require('../helpers/test-helper');
+const { TEST_API_ROOT, getFixture } = require('../helpers/test-helper');
 
 describe('Shuttle', function () {
 	const jobId = '6a315c0754833bfc5df067bf';
@@ -16,138 +16,34 @@ describe('Shuttle', function () {
 	const reportId = '6a3ba68e810d9156194530e5';
 	const fileId = '12345678901';
 
-	const system = {
-		id: systemId,
-		type: 'shuttle_system',
-		name: 'NYC File Server',
-		system_type: 'windows',
-		state: 'connected',
-	};
-
-	const job = {
-		id: jobId,
-		type: 'shuttle_job',
-		name: 'Q4 Migration',
-		job_type: 'transfer',
-		state: 'draft',
-		mapping_state: 'incomplete',
-		is_enabled: true,
-		source_system: {
-			type: 'shuttle_system',
-			id: systemId,
-			name: 'NYC File Server',
-		},
-	};
-
-	const scheduleTrigger = {
-		type: 'by_time',
-		start_at: '2026-03-16T09:00:00',
-		time_zone: 'America/Los_Angeles',
-		repeat: 'daily',
-	};
-
-	const schedule = {
-		id: scheduleId,
-		type: 'shuttle_job_schedule',
-		job_id: jobId,
-		run_mode: 'transfer',
-		state: 'enabled',
-		trigger: scheduleTrigger,
-	};
-
-	const pathMapping = {
-		id: pathMappingId,
-		type: 'shuttle_path_mapping',
-		job_id: jobId,
-		is_path_skipped: false,
-		source: {
-			type: 'account',
-			path: '/Finance',
-			account: {
-				email: 'admin@company.com',
-			},
-		},
-		target: {
-			type: 'account',
-			path: '/HR Migration',
-			account: {
-				email: 'admin@company.box.com',
-			},
-		},
-	};
-
-	const subjectMapping = {
-		id: subjectMappingId,
-		type: 'shuttle_subject_mapping',
-		job_id: jobId,
-		discovered_subject_id: discoveredSubjectId,
-		is_subject_skipped: false,
-		source: {
-			type: 'user',
-			email: 'alice@company.com',
-			name: 'Alice',
-		},
-		target: {
-			type: 'user',
-			id: '12345678',
-		},
-	};
-
-	const run = {
-		id: runId,
-		type: 'shuttle_run',
-		job_id: jobId,
-		run_mode: 'transfer',
-		state: 'completed',
-	};
-
-	const report = {
-		id: reportId,
-		type: 'shuttle_report',
-		run_id: runId,
-		status: 'ready',
-		format: 'xlsx',
-	};
-
-	const mappingError = {
-		id: 'err1',
-		type: 'shuttle_mapping_error',
-		job_id: jobId,
-		revision: 1,
-		category: 'path_import',
-		path: '/Finance',
-		messages: ['Row 2: Invalid path'],
-	};
-
-	const discoveredSubject = {
-		id: discoveredSubjectId,
-		type: 'shuttle_discovered_subject',
-		job_id: jobId,
-		revision: 1,
-		source: {
-			type: 'user',
-			email: 'alice@company.com',
-			name: 'Alice',
-		},
-	};
-
-	const pathEntries = {
-		entries: [
-			{
-				id: 'pe1',
-				type: 'shuttle_path_entry',
-				name: 'Finance',
-				path: '/Finance',
-				is_directory: true,
-				can_map: true,
-				scope: {
-					type: 'account',
-					email: 'admin@company.com',
-				},
-			},
-		],
-		limit: 100,
-	};
+	const system = JSON.parse(getFixture('shuttle/get_shuttle_systems_id'));
+	const job = JSON.parse(getFixture('shuttle/get_shuttle_jobs_id'));
+	const schedule = JSON.parse(
+		getFixture('shuttle/get_shuttle_job_schedules_id')
+	);
+	const scheduleTrigger = schedule.trigger;
+	const pathMapping = JSON.parse(
+		getFixture('shuttle/get_shuttle_path_mappings_id')
+	);
+	const subjectMapping = JSON.parse(
+		getFixture('shuttle/get_shuttle_subject_mappings_id')
+	);
+	const run = JSON.parse(getFixture('shuttle/get_shuttle_runs_id'));
+	const report = JSON.parse(getFixture('shuttle/get_shuttle_reports_id'));
+	const mappingErrorsPage = JSON.parse(
+		getFixture('shuttle/get_shuttle_mapping_errors')
+	);
+	const mappingError = mappingErrorsPage.entries[0];
+	const discoveredSubjectsPage = JSON.parse(
+		getFixture('shuttle/get_shuttle_discovered_subjects')
+	);
+	const discoveredSubject = discoveredSubjectsPage.entries[0];
+	const pathEntries = JSON.parse(
+		getFixture('shuttle/get_shuttle_path_entries')
+	);
+	const credentials = JSON.parse(
+		getFixture('shuttle/post_shuttle_systems_id_issue_registration_token')
+	);
 
 	/* ------------------------------------------------------------------ */
 	/* systems                                                            */
@@ -247,12 +143,6 @@ describe('Shuttle', function () {
 	});
 
 	describe('shuttle:systems:issue-registration-token', function () {
-		const credentials = {
-			type: 'shuttle_agent_credentials',
-			registration_token: 'reg-token-xyz',
-			expires_at: '2026-03-16T10:00:00Z',
-		};
-
 		test.nock(TEST_API_ROOT, (api) =>
 			api
 				.post(`/2.0/shuttle_systems/${systemId}/issue_registration_token`)
@@ -1035,6 +925,140 @@ describe('Shuttle', function () {
 			])
 			.it('lists discovered subjects', (context) => {
 				assert.deepEqual(JSON.parse(context.stdout), [discoveredSubject]);
+			});
+	});
+
+	/* ------------------------------------------------------------------ */
+	/* negative options validation                                        */
+	/* ------------------------------------------------------------------ */
+
+	describe('shuttle options validation', function () {
+		test
+			.stderr()
+			.command([
+				'shuttle:systems:create',
+				'Bad System',
+				'--system-type=linux',
+				'--token=test',
+			])
+			.it('rejects unsupported system types', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --system-type=linux to be one of: windows'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:jobs:create',
+				'Bad Job',
+				'--job-type=clone',
+				`--source-system-id=${systemId}`,
+				'--token=test',
+			])
+			.it('rejects unsupported job types', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --job-type=clone to be one of: transfer, analysis'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:jobs:start',
+				jobId,
+				'--mode=backup',
+				'--token=test',
+			])
+			.it('rejects unsupported start modes', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --mode=backup to be one of: transfer, simulation, scan, analysis'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:job-schedules:create',
+				`--job-id=${jobId}`,
+				'--run-mode=scan',
+				'--trigger-type=by_time',
+				'--start-at=2026-03-16T09:00:00',
+				'--token=test',
+			])
+			.it('rejects unsupported schedule run modes', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --run-mode=scan to be one of: transfer, simulation, analysis'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:path-mappings:create',
+				`--job-id=${jobId}`,
+				'--source-type=folder',
+				'--source-path=/Finance',
+				'--source-account-email=admin@company.com',
+				'--token=test',
+			])
+			.it('rejects unsupported path mapping location types', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --source-type=folder to be one of: account, shared_space'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:subject-mappings:create',
+				`--job-id=${jobId}`,
+				`--discovered-subject-id=${discoveredSubjectId}`,
+				'--target-type=enterprise',
+				'--target-id=1',
+				'--token=test',
+			])
+			.it('rejects unsupported subject target types', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --target-type=enterprise to be one of: user, group'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:reports:create',
+				`--run-id=${runId}`,
+				'--format=pdf',
+				'--section=event_log',
+				'--token=test',
+			])
+			.it('rejects unsupported report formats', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --format=pdf to be one of: xlsx, csv'
+				);
+			});
+
+		test
+			.stderr()
+			.command([
+				'shuttle:path-entries',
+				`--job-id=${jobId}`,
+				'--side=both',
+				'--token=test',
+			])
+			.it('rejects unsupported path-entry sides', (context) => {
+				assert.include(
+					context.stderr,
+					'Expected --side=both to be one of: source, target'
+				);
 			});
 	});
 });

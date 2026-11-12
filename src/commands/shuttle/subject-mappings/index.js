@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags } = require('@oclif/core');
 const PaginationUtilities = require('../../../pagination-utils');
 
@@ -17,7 +18,7 @@ class ShuttleSubjectMappingsListCommand extends BoxCommand {
 }
 
 ShuttleSubjectMappingsListCommand.aliases = ['shuttle:subject-mappings:list'];
-ShuttleSubjectMappingsListCommand.description = 'List shuttle subject mappings';
+ShuttleSubjectMappingsListCommand.description = `List shuttle subject mappings ${SHUTTLE_PERMISSIONS}`;
 ShuttleSubjectMappingsListCommand.examples = [
 	'box shuttle:subject-mappings --job-id 6a315c0754833bfc5df067bf',
 ];

@@ -1,6 +1,7 @@
 'use strict';
 
 const BoxCommand = require('../../../box-command');
+const { SHUTTLE_PERMISSIONS } = require('../../../modules/shuttle');
 const { Flags, Args } = require('@oclif/core');
 
 class ShuttleSystemsCreateCommand extends BoxCommand {
@@ -17,7 +18,7 @@ class ShuttleSystemsCreateCommand extends BoxCommand {
 }
 
 ShuttleSystemsCreateCommand.description =
-	'Create a shuttle system (Windows agent systems only via public API)';
+	`Create a shuttle system (Windows agent systems only via public API) ${SHUTTLE_PERMISSIONS}`;
 ShuttleSystemsCreateCommand.examples = [
 	'box shuttle:systems:create "NYC File Server" --system-type windows',
 ];

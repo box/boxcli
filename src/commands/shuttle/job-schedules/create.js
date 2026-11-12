@@ -7,6 +7,7 @@ const {
 	bodyFlags,
 	scheduleTriggerFlags,
 	buildScheduleTrigger,
+	SHUTTLE_PERMISSIONS,
 } = require('../../../modules/shuttle');
 
 class ShuttleJobSchedulesCreateCommand extends BoxCommand {
@@ -41,7 +42,7 @@ class ShuttleJobSchedulesCreateCommand extends BoxCommand {
 	}
 }
 
-ShuttleJobSchedulesCreateCommand.description = 'Create a shuttle job schedule';
+ShuttleJobSchedulesCreateCommand.description = `Create a shuttle job schedule ${SHUTTLE_PERMISSIONS}`;
 ShuttleJobSchedulesCreateCommand.examples = [
 	'box shuttle:job-schedules:create --job-id 6a315c0754833bfc5df067bf --run-mode transfer --trigger-type by_time --start-at 2026-03-16T09:00:00 --time-zone America/Los_Angeles --repeat daily',
 	'box shuttle:job-schedules:create --job-id 6a315c0754833bfc5df067bf --run-mode simulation --trigger-type by_job --triggered-by-job-id 8d2ca68e810d9156194530c3 --last-run-condition on_success',
@@ -55,11 +56,12 @@ ShuttleJobSchedulesCreateCommand.flags = {
 		description: 'Shuttle job ID (required unless --body / --body-file)',
 	}),
 	'run-mode': Flags.string({
-		description: 'Schedule run mode (required unless --body / --body-file)',
+		description:
+			'Schedule run mode (required unless --body / --body-file). Accepted values: transfer, simulation, analysis',
 		options: ['transfer', 'simulation', 'analysis'],
 	}),
 	state: Flags.string({
-		description: 'Schedule state',
+		description: 'Schedule state. Accepted values: enabled, paused',
 		options: ['enabled', 'paused'],
 	}),
 	description: Flags.string({
