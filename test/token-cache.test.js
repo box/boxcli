@@ -31,15 +31,6 @@ describe('CLITokenCache', function () {
 	});
 
 	afterEach(function () {
-		// Clean up any test files
-		if (fs.existsSync(testFilePath)) {
-			try {
-				fs.unlinkSync(testFilePath);
-			} catch {
-				// Ignore cleanup errors
-			}
-		}
-
 		// Restore stubs
 		if (keytarStub) {
 			keytarStub.restore();

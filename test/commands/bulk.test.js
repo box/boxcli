@@ -32,11 +32,8 @@ describe('Bulk', function () {
 				'..',
 				'fixtures/bulk/input.csv'
 			),
-			saveFilePath = path.join(
-				__dirname,
-				'..',
-				'fixtures/bulk/saveTest.txt'
-			),
+			// Inside the temp home, so the test does not overwrite a tracked file
+			saveFilePath = path.join(os.homedir(), 'saveTest.txt'),
 			csvOutput = getFixture('bulk/post_collaborations_csv.csv'),
 			multipleFlagValuesInputFilePath = path.join(
 				__dirname,
@@ -198,6 +195,10 @@ describe('Bulk', function () {
 				.post('/2.0/collaborations', addCollaborationBody3)
 				.reply(200, addCollaborationFixture3)
 		)
+			.do(() => {
+				// Existing file, to check that -y overwrites it without asking
+				fs.writeFileSync(saveFilePath, 'foo', 'utf8');
+			})
 			.stdout()
 			.stderr()
 			.command([
@@ -728,11 +729,8 @@ describe('Bulk', function () {
 				__dirname,
 				'../fixtures/bulk/input_metadata_update.json'
 			),
-			saveFilePath = path.join(
-				__dirname,
-				'..',
-				'fixtures/bulk/saveTest.txt'
-			);
+			// Inside the temp home, so the test does not overwrite a tracked file
+			saveFilePath = path.join(os.homedir(), 'saveTest.txt');
 
 		let addCollaborationBody1 = {
 			item: {
@@ -935,6 +933,10 @@ describe('Bulk', function () {
 				.post('/2.0/collaborations', addCollaborationBody3)
 				.reply(200, addCollaborationFixture3)
 		)
+			.do(() => {
+				// Existing file, to check that -y overwrites it without asking
+				fs.writeFileSync(saveFilePath, 'foo', 'utf8');
+			})
 			.stdout()
 			.stderr()
 			.command([
