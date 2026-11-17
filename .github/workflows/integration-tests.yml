@@ -1,0 +1,43 @@
+name: integration-tests
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One run at a time per branch; a running job is never cancelled, so its cleanup always runs
+concurrency:
+  group: integration-tests-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integration-tests:
+    # Pull requests from forks and runs started by Dependabot get no Actions secrets, so the tests could not authenticate
+    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    name: Integration tests on Node 22
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: npm ci
+        run: npm ci
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG_BASE_64 }}
+          USER_ID: ${{ secrets.USER_ID }}
+          ADMIN_USER_ID: ${{ secrets.ADMIN_USER_ID }}
+          ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID }}
