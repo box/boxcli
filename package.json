@@ -173,7 +173,8 @@
 		"build:tarballs": "oclif pack:tarballs --no-xz --parallel",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
 		"license": "generate-license-file --overwrite",
-		"prettier": "prettier --write \"**/*.{js,json}\""
+		"prettier": "prettier --write \"**/*.{js,json}\"",
+		"test:integration": "mocha --timeout 120000 \"test/integration/**/*.it.js\""
 	},
 	"overrides": {
 		"leche": {

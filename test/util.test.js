@@ -671,4 +671,122 @@ describe('Utilities', function () {
 			return assert.isRejected(retrieveException(), Error);
 		});
 	});
+
+	describe('parseJsonFlag()', function () {
+		const {
+			serializeAiExtractStructuredAgent: serialize,
+			deserializeAiExtractStructuredAgent: deserialize,
+		} = require('box-node-sdk/sdk-gen/schemas/aiExtractStructuredAgent');
+		const options = { flag: 'ai-agent', serialize, deserialize };
+		// What the SDK sends: JSON leaves out the fields it sets to undefined, which structuredClone keeps
+		// eslint-disable-next-line unicorn/prefer-structured-clone
+		const sent = (value) => JSON.parse(JSON.stringify(serialize(value)));
+		const apiShape = {
+			type: 'ai_agent_extract_structured',
+			basic_text: {
+				model: 'azure__openai__gpt_4o_mini',
+				prompt_template: 'Answer using {content}',
+				llm_endpoint_params: { type: 'openai_params', temperature: 0 },
+			},
+		};
+		const sdkShape = {
+			type: 'ai_agent_extract_structured',
+			basicText: {
+				model: 'azure__openai__gpt_4o_mini',
+				promptTemplate: 'Answer using {content}',
+			},
+		};
+
+		it('returns the SDK object of JSON in the shape of the API, which the SDK sends unchanged', function () {
+			const value = cliUtilities.parseJsonFlag(
+				JSON.stringify(apiShape),
+				options
+			);
+			assert.equal(
+				value.basicText.promptTemplate,
+				'Answer using {content}'
+			);
+			assert.deepEqual(sent(value), apiShape);
+		});
+
+		it('picks the variant by type', function () {
+			const value = cliUtilities.parseJsonFlag(
+				'{"type":"ai_agent_id","id":"123"}',
+				options
+			);
+			assert.deepEqual(sent(value), {
+				type: 'ai_agent_id',
+				id: '123',
+			});
+		});
+
+		it('fails on invalid JSON, naming the flag', function () {
+			assert.throws(
+				() => cliUtilities.parseJsonFlag('{"type":', options),
+				/^Invalid JSON in --ai-agent: /u
+			);
+		});
+
+		it('fails on a value the SDK type rejects', function () {
+			assert.throws(
+				() => cliUtilities.parseJsonFlag('{"type":"unknown"}', options),
+				/^Invalid --ai-agent: Can't deserialize AiExtractStructuredAgent/u
+			);
+			assert.throws(
+				() => cliUtilities.parseJsonFlag('"text"', options),
+				/^Invalid --ai-agent: /u
+			);
+		});
+
+		it('fails on fields the SDK would drop, with their paths', function () {
+			const input = JSON.stringify({
+				type: 'ai_agent_extract_structured',
+				basic_text: { modle: 'x', prompt_template: 'p' },
+				extra: true,
+			});
+			assert.throws(
+				() => cliUtilities.parseJsonFlag(input, options),
+				/^Unknown fields "basic_text.modle", "extra" in --ai-agent\.$/u
+			);
+		});
+
+		it('refuses SDK field names and names the API field to use', function () {
+			assert.throws(
+				() =>
+					cliUtilities.parseJsonFlag(
+						JSON.stringify(sdkShape),
+						options
+					),
+				/^Unknown field "basicText" in --ai-agent\. Use API field names, such as "basic_text" instead of "basicText"\.$/u
+			);
+		});
+
+		it('with acceptSdkShape, returns SDK field names as they are and still reads the API shape', function () {
+			const compatible = { ...options, acceptSdkShape: true };
+			assert.deepEqual(
+				cliUtilities.parseJsonFlag(
+					JSON.stringify(sdkShape),
+					compatible
+				),
+				sdkShape
+			);
+			assert.deepEqual(
+				sent(
+					cliUtilities.parseJsonFlag(
+						JSON.stringify(apiShape),
+						compatible
+					)
+				),
+				apiShape
+			);
+			assert.throws(
+				() =>
+					cliUtilities.parseJsonFlag(
+						'{"type":"ai_agent_extract_structured","basicText":{"prompt_template":"p"}}',
+						compatible
+					),
+				/^Unknown field "basicText" in --ai-agent\./u
+			);
+		});
+	});
 });

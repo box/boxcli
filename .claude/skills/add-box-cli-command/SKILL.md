@@ -24,17 +24,16 @@ Use the harness's structured question tool when it has one (`AskQuestion` in Cur
 Ask about:
 
 - **Which SDK method**, when several match (e.g. a `V2025R0` method and an older one for the same path).
-- **Command name and placement**: new top-level topic or nested under an existing one, and aliases such as `:list` or `:add` when siblings have them.
-- **Accepted values** for fields the SDK types as plain `string`.
-- **Defaults and required flags**, when the OpenAPI schema and SDK disagree or say nothing.
+- **Command name and placement**, when "Command names" in [references/command-patterns.md](references/command-patterns.md) does not settle it: a new top-level topic or a place under an existing one, and aliases such as `:add` when siblings have them.
+- **Accepted values** for fields the SDK types as plain `string`, when the OpenAPI schema does not list them either.
+- **Args, flag names, defaults and required flags**, only for fields that "Request fields" in command-patterns.md does not settle.
 - **Permissions and scopes** the command needs, for the help text.
-- **Flag names**, when the API field name reads badly as a flag (e.g. `is_ai_enabled` as `--is-ai-enabled` or `--ai-enabled`).
 - **Output changes to a released command**: breaking change with `!` in the commit, or opt-in `--raw-json`.
 - **An existing command for the same endpoint**: change it, add a new command beside it, or stop.
 
 After the user approves the plan in step 4, work through the remaining steps without further questions unless a new decision comes up.
 
-When no user can answer, as in a scheduled or background run, take the recommended option for each question and list every such choice under "Assumptions" in the step 8 report.
+When no user can answer, as in a scheduled or background run, take the recommended option for each question and list every such choice under "Assumptions" in the step 9 report. A choice that a rule of this skill or its references settles, such as a name from "Command names" or a flag from "Request fields", is not a question and not a guess. In a run that cannot execute commands, skip `npm run updatemd` and do not edit `docs/**` or `README.md`; a later step regenerates them from the command's description, flags, args, and examples.
 
 ## Workflow
 
@@ -75,7 +74,7 @@ Done when every flag has known accepted values, format, default, and permission 
 
 ### 3. Read the closest existing pair
 
-Read the nearest sibling command in `src/commands/<topic>/`, its cases in `test/commands/<topic>.test.js`, its fixtures in `test/fixtures/<topic>/`, and `docs/<topic>.md`. Then read the section of [references/command-patterns.md](references/command-patterns.md) for your command kind (get, list, create, update, delete, compound flags).
+Read the nearest sibling command in `src/commands/<topic>/`, its cases in `test/commands/<topic>.test.js`, its fixtures in `test/fixtures/<topic>/`, and `docs/<topic>.md`. Then read the section of [references/command-patterns.md](references/command-patterns.md) for your command kind (get, list, create, update, delete, compound flags), and its "Command names" and "Request fields" for every command.
 
 Siblings show naming, flags, help text, mocked paths, and fixtures. Take test structure from [references/testing.md](references/testing.md) instead: a `test` chain returned or awaited inside a mocha `it(...)` never runs, so a sibling written that way, and any copy of it, passes whatever it asserts.
 
@@ -94,7 +93,8 @@ Flags:    --description        Description of the archive
           --storage-policy-id  ID of the storage policy for the archive
 Output:   created archive, API field names (rawData)
 Files:    src/commands/archives/create.js, test/commands/archives.test.js,
-          test/fixtures/archives/post_archives.json, docs/archives.md
+          test/fixtures/archives/post_archives.json,
+          test/integration/commands/archives.it.js, docs/archives.md
 ```
 
 Done when the user has approved the plan and answered every question.
@@ -109,18 +109,50 @@ Read [references/testing.md](references/testing.md), write the test, then run on
 
 Done when each new test fails for the expected reason: command not found, request mismatch, or wrong output. A test that passes before the command exists is not running; fix its structure before going on.
 
-### 6. Implement, then go green
+### 6. Integration test, when possible
 
-Write the minimum command code. Re-run the targeted test, then the whole topic file.
+An integration test calls the real API on a shared test account. The step 5 tests are required either way; decide per command.
 
-### 7. Lint and docs
+When the task gives a box-node-sdk integration test for the endpoint, that test passes on the same shared account: write the same scenario, also when it reuses a long-lived item of the account, creates users, or calls an admin endpoint. The reasons below apply only to endpoints without such a test.
+
+- **The task says integration tests are not requested**: add no integration test. In the step 9 report, say the command is covered by unit tests only and name the configuration an integration test would need.
+- **The endpoint can run on the shared test account**: add a case in `test/integration/commands/<topic>.it.js`. Follow "Integration tests" in [references/testing.md](references/testing.md): call the CLI only through the helpers of `require('../helpers')`: `run`, and `expectFailure` with the exact HTTP status for a failure case. Create the items the case needs inside the test file's folder with `cli-it-<uuid>` names (`createFolder(folder.id)`, `uploadFile(folder.id)`), assert fields of the `--json` output, read changed items back, and delete everything in `after`. Take every identity and ID of the shared account from the helpers of "Test account" in testing.md (`{ asUser: true }`, `userId()`, `enterpriseId()` and the others), never from a guess.
+- **The endpoint cannot be tested on the shared account, and no box-node-sdk test shows how**: add no integration test. In the step 9 report, give the reason and, in one sentence, what a test would need. Choose the reason by what is missing:
+    - `license`: the account lacks a paid feature the endpoint needs, so the API answers `403`. For example, Box Sign or Box AI on an account without them.
+    - `needs-config`: a setting is missing in the enterprise or in the JWT app. For example, a feature switched off in the Admin Console, or an app scope the endpoint needs.
+    - `needs-fixture`: the call needs an item that must already exist and that the test cannot create. For example, a second enterprise, an external user, a device for device pins, or a Relay workflow.
+    - `admin-wide`: the call affects more than the items the test created. For example, an enterprise setting, another user's account, or the sessions of real users.
+    - `irreversible`: what the call creates cannot be deleted, so every run would leave something behind. For example, an e-mail sent to a real address.
+
+  The report line then reads, for example: "`needs-fixture`: a test needs a Relay workflow in a folder of the test account."
+
+Before you choose `irreversible` or `needs-fixture`, check whether the box-node-sdk test works around it. Information barriers are an example:
+
+1. They look untestable: a barrier cannot be deleted, and an enterprise can have only one.
+2. The box-node-sdk test covers them anyway. It lists the enterprise's barriers, creates one only when the list is empty, keeps it in the draft state, and never deletes it.
+3. So the first run creates the barrier, and every later run reuses it: nothing piles up.
+4. The CLI test does the same: list the barriers, create one only when there is none, and never delete it.
+
+When you added a case, run the integration tests with `npm run test:integration` when `JWT_CONFIG_BASE_64` is set; they pass only once the command exists (step 7). Otherwise check that the file loads:
+
+```bash
+npx mocha --dry-run "test/integration/**/*.it.js"
+```
+
+Done when each new command has an integration case, or you know the reason it has none and the configuration a test would need, or the task said integration tests are not requested, and the integration files load.
+
+### 7. Implement, then go green
+
+Write the minimum command code. Re-run the targeted test, then the whole topic file, then any integration case from step 6 when `JWT_CONFIG_BASE_64` is set.
+
+### 8. Lint and docs
 
 ```bash
 ./node_modules/.bin/eslint --fix <edited files>
 npm run updatemd
 ```
 
-Run `updatemd` whenever description, examples, flags, args, aliases, or command registration changed. It runs `oclif readme --multi` and then fixes the `.ts` links that oclif writes back to `.js`, so always use the npm script. Its `sed -i ''` is macOS syntax. On Linux, run the same two steps with GNU sed:
+Run `updatemd` whenever description, examples, flags, args, aliases, or command registration changed, unless the run cannot execute commands (see "Ask the user"). It runs `oclif readme --multi` and then fixes the `.ts` links that oclif writes back to `.js`, so always use the npm script. Its `sed -i ''` is macOS syntax. On Linux, run the same two steps with GNU sed:
 
 ```bash
 ./node_modules/.bin/oclif readme --multi && find docs -type f -name '*.md' -exec sed -i 's/\.ts/\.js/g' {} +
@@ -128,9 +160,9 @@ Run `updatemd` whenever description, examples, flags, args, aliases, or command 
 
 Keep the diff to the topic's `docs/*.md` and `README.md`, and restore other regenerated files with `git checkout -- <file>`. For a new top-level topic, see "New topic" in [references/command-patterns.md](references/command-patterns.md).
 
-### 8. Report
+### 9. Report
 
-Summarize the new command, the files changed, and the test results. Suggest a conventional commit message: `feat: add archives:create command`, or `feat!: ...` when existing output or flags changed incompatibly. Use the same text as the pull request title, since CI checks the title's format and spelling. Commit only when the user asks.
+Summarize the new command, the files changed, and the test results. For each command, say whether an integration test ran. For a command without one, say it is covered by unit tests only, give the reason from step 6 when the endpoint cannot be tested on the shared test account, and name the configuration an integration test would need. Suggest a conventional commit message: `feat: add archives:create command`, or `feat!: ...` when existing output or flags changed incompatibly. Use the same text as the pull request title, since CI checks the title's format and spelling. Commit only when the user asks.
 
 ## Command conventions
 
@@ -151,7 +183,8 @@ The SDK renames response fields to camelCase and wraps dates as `{ value: ... }`
 ## Done
 
 - The user approved the plan and every question was answered.
-- Every new test failed before the implementation and passes after it.
+- Every new step 5 test failed before the implementation and passes after it.
 - The whole topic test file passes.
+- Each new command has an integration case, or the report says it is covered by unit tests only, with the step 6 reason when one applies and the configuration an integration test would need.
 - Lint is clean on edited files.
-- If help text changed, docs are regenerated and the diff is limited to the topic's docs and `README.md`.
+- If help text changed, docs are regenerated and the diff is limited to the topic's docs and `README.md`, or left untouched in a run that cannot execute commands.
