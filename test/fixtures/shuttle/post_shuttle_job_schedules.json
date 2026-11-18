@@ -1,0 +1,13 @@
+{
+	"id": "6a3ba68e810d9156194530b2",
+	"type": "shuttle_job_schedule",
+	"job_id": "6a315c0754833bfc5df067bf",
+	"run_mode": "transfer",
+	"state": "enabled",
+	"trigger": {
+		"type": "by_time",
+		"start_at": "2026-03-16T09:00:00",
+		"time_zone": "America/Los_Angeles",
+		"repeat": "daily"
+	}
+}

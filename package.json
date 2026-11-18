@@ -38,7 +38,7 @@
 		"@oclif/table": "0.5.4",
 		"@octokit/rest": "^22.0.0",
 		"archiver": "^8.0.0",
-		"box-node-sdk": "^4.11.1",
+		"box-node-sdk": "^4.19.0",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^6.3.3",
@@ -144,6 +144,9 @@
 			},
 			"shared-links": {
 				"description": "Manage shared links"
+			},
+			"shuttle": {
+				"description": "Manage Box Shuttle migrations (systems, jobs, mappings, runs, reports)"
 			},
 			"tasks": {
 				"description": "Manage tasks"

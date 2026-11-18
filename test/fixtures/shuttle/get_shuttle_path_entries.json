@@ -1,0 +1,17 @@
+{
+	"entries": [
+		{
+			"id": "pe1",
+			"type": "shuttle_path_entry",
+			"name": "Finance",
+			"path": "/Finance",
+			"is_directory": true,
+			"can_map": true,
+			"scope": {
+				"type": "account",
+				"email": "admin@company.com"
+			}
+		}
+	],
+	"limit": 100
+}

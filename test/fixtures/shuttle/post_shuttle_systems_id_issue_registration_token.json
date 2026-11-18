@@ -1,0 +1,5 @@
+{
+	"type": "shuttle_agent_credentials",
+	"registration_token": "reg-token-xyz",
+	"expires_at": "2026-03-16T10:00:00Z"
+}

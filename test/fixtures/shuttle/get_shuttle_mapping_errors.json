@@ -1,0 +1,16 @@
+{
+	"entries": [
+		{
+			"id": "err1",
+			"type": "shuttle_mapping_error",
+			"job_id": "6a315c0754833bfc5df067bf",
+			"revision": 1,
+			"category": "path_import",
+			"path": "/Finance",
+			"messages": [
+				"Row 2: Invalid path"
+			]
+		}
+	],
+	"limit": 10
+}
