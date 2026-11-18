@@ -30,6 +30,13 @@ const BoxTSSDK = require('box-node-sdk/sdk-gen');
 const BoxTsErrors = require('box-node-sdk/sdk-gen/box/errors');
 const BoxCLIError = require('./cli-error');
 const CLITokenCache = require('./token-cache');
+const PublicClientSessionAdapter = require('./public-client-session-adapter');
+const {
+	isPublicClientEnvironment,
+	createPublicClientTsClient,
+	createReauthorizeError,
+	isRefreshTokenRejectedError,
+} = require('./public-client');
 const PaginationUtilities = require('./pagination-utils');
 const utils = require('./util');
 const pkg = require('../package.json');
@@ -67,6 +74,7 @@ const KEY_MAPPINGS = {
 	defaultAsUserId: 'Default As-User ID',
 	useDefaultAsUser: 'Use Default As-User',
 	cacheTokens: 'Cache Tokens',
+	publicClient: 'Public Client',
 	ip: 'IP',
 	operationParams: 'Operation Params',
 	copyInstanceOnItemCopy: 'Copy Instance On Item Copy',
@@ -113,6 +121,24 @@ function getDebugErrorDetails(error) {
 		message: error.message || String(error),
 		stack: error.stack,
 	};
+}
+
+/**
+ * Build the CLI error message for a TS SDK API error response.
+ * OAuth2 token endpoint errors use `error` and `error_description` instead of the regular API error fields.
+ *
+ * @param {Object} responseInfo The response info of a BoxApiError
+ * @returns {string} The error message
+ */
+function formatApiErrorMessage(responseInfo) {
+	const body = responseInfo.body;
+	if (typeof body.error !== 'string') {
+		return `Unexpected API Response [${body.status} ${body.message} | ${body.request_id}] ${body.code} - ${body.message}`;
+	}
+	const message = `Unexpected API Response [${responseInfo.statusCode}] ${body.error}`;
+	return body.error_description
+		? `${message} - ${body.error_description}`
+		: message;
 }
 
 /**
@@ -811,6 +837,11 @@ class BoxCommand extends Command {
 			client = ccgUser
 				? sdk.getCCGClientForUser(ccgUser)
 				: sdk.getAnonymousClient();
+		} else if (isPublicClientEnvironment(environment)) {
+			client = await this._createPublicClientLegacyClient(
+				environmentsObj.default,
+				environment
+			);
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -994,6 +1025,11 @@ class BoxCommand extends Command {
 				auth: ccgAuth,
 			});
 			client = this._configureTsSdk(client, SDK_CONFIG);
+		} else if (isPublicClientEnvironment(environment)) {
+			client = this._getPublicClientTsClient(
+				environmentsObj.default,
+				environment
+			);
 		} else if (
 			environmentsObj.default &&
 			environmentsObj.environments[environmentsObj.default].authMethod ===
@@ -1095,6 +1131,88 @@ class BoxCommand extends Command {
 			DEBUG.init('Impersonating user ID %s', this.flags['as-user']);
 		}
 		return client;
+	}
+
+	/**
+	 * Create the legacy SDK client for a public client (PKCE) environment.
+	 *
+	 * The legacy SDK only supports OAuth with a client secret, so the client's
+	 * session is replaced with an adapter that gets tokens from the generated
+	 * SDK auth. Token requests use the TS client's network session, so they
+	 * honor the same proxy, base URL and header settings as the TS client.
+	 *
+	 * @param {string} environmentName Name of the current environment
+	 * @param {Object} environment The current environment
+	 * @returns {Promise<BoxClient>} The legacy SDK client
+	 * @private
+	 */
+	async _createPublicClientLegacyClient(environmentName, environment) {
+		DEBUG.init(
+			'Using public client environment %s %O',
+			environmentName,
+			environment
+		);
+		const tsClient = this._getPublicClientTsClient(
+			environmentName,
+			environment
+		);
+		const cachedToken = await this._publicClientAuth.tokenStorage.get();
+		if (!cachedToken?.accessToken) {
+			throw createReauthorizeError(environmentName);
+		}
+		const sdk = new BoxSDK({
+			clientID: environment.clientId,
+			clientSecret: '',
+			...SDK_CONFIG,
+		});
+		this._configureSdk(sdk, { ...SDK_CONFIG });
+		this.sdk = sdk;
+
+		const client = sdk.getBasicClient('');
+		client._session = new PublicClientSessionAdapter(
+			this._publicClientAuth,
+			{
+				environmentName,
+				expiryBufferMS: sdk.config.expiredBufferMS,
+				networkSession: tsClient.networkSession,
+				// Already read to check the environment is logged in, so the adapter does not read it again
+				initialToken: cachedToken,
+			}
+		);
+		return client;
+	}
+
+	/**
+	 * Get the TS SDK client for a public client (PKCE) environment.
+	 * Built once per command, so the legacy and TS clients share one auth and token cache.
+	 *
+	 * @param {string} environmentName Name of the current environment
+	 * @param {Object} environment The current environment
+	 * @returns {BoxTSSDK.BoxClient} The configured TS SDK client
+	 * @private
+	 */
+	_getPublicClientTsClient(environmentName, environment) {
+		if (!this._publicClientTsClient) {
+			// Public client tokens are always cached: without the refresh token every command would need a new login.
+			this._publicClientEnvironmentName = environmentName;
+			const { auth, client } = createPublicClientTsClient(this, {
+				clientId: environment.clientId,
+				tokenStorage: new CLITokenCache(environmentName),
+			});
+			this._publicClientAuth = auth;
+			this._publicClientTsClient = client;
+		}
+		return this._publicClientTsClient;
+	}
+
+	/**
+	 * Whether this command authenticates with the public client (PKCE) auth of the current environment.
+	 * Only meaningful after client setup.
+	 *
+	 * @returns {boolean} True for public client environments not overridden by --token
+	 */
+	usesPublicClientAuth() {
+		return Boolean(this._publicClientAuth);
 	}
 
 	/**
@@ -1684,13 +1802,26 @@ class BoxCommand extends Command {
 		const AUTH_FAILED_HINT =
 			'Authentication failed: token is invalid or expired. OAuth: run "box login --reauthorize". JWT/CCG: tokens are refreshed automatically, so a 401 usually means app credentials or environment configuration must be fixed. You can also provide a fresh token with --token.';
 		if (
+			this.usesPublicClientAuth() &&
+			err instanceof BoxTsErrors.BoxApiError &&
+			isRefreshTokenRejectedError(err)
+		) {
+			// The TS SDK refreshes on 401 and surfaces the token endpoint error when the refresh token is no longer valid.
+			err = createReauthorizeError(
+				this._publicClientEnvironmentName,
+				err
+			);
+		} else if (
 			err instanceof BoxTsErrors.BoxApiError &&
 			err.responseInfo &&
 			err.responseInfo.body
 		) {
 			const responseInfo = err.responseInfo;
-			let errorMessage = `Unexpected API Response [${responseInfo.body.status} ${responseInfo.body.message} | ${responseInfo.body.request_id}] ${responseInfo.body.code} - ${responseInfo.body.message}`;
-			if (responseInfo.body.status === 401) {
+			let errorMessage = formatApiErrorMessage(responseInfo);
+			if (
+				responseInfo.body.status === 401 ||
+				responseInfo.statusCode === 401
+			) {
 				errorMessage += `\n${AUTH_FAILED_HINT}`;
 			}
 			err = new BoxCLIError(errorMessage, err);
