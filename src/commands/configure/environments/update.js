@@ -5,6 +5,11 @@ const { Flags, Args } = require('@oclif/core');
 const fs = require('node:fs');
 const BoxCLIError = require('../../../cli-error');
 const utilities = require('../../../util');
+const {
+	isPlatformAccountEnvironment,
+	validatePlatformAccountConfig,
+	createFixedPrincipalError,
+} = require('../../../platform-account');
 
 class EnvironmentsUpdateCommand extends BoxCommand {
 	async run() {
@@ -20,6 +25,11 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 			return;
 		}
 
+		const isPlatformAccount = isPlatformAccountEnvironment(environment);
+		if (isPlatformAccount && flags['user-id']) {
+			throw createFixedPrincipalError('The --user-id flag');
+		}
+
 		if (flags['config-file-path']) {
 			let configObject;
 			try {
@@ -33,7 +43,11 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 				);
 			}
 
-			utilities.validateConfigObject(configObject);
+			if (isPlatformAccount) {
+				validatePlatformAccountConfig(configObject);
+			} else {
+				utilities.validateConfigObject(configObject);
+			}
 
 			if (
 				!configObject.boxAppSettings.appAuth.privateKey &&
@@ -49,6 +63,11 @@ class EnvironmentsUpdateCommand extends BoxCommand {
 				environment.hasInLinePrivateKey = true;
 			}
 			environment.boxConfigFilePath = flags['config-file-path'];
+			if (isPlatformAccount) {
+				environment.clientId = configObject.boxAppSettings.clientID;
+				environment.enterpriseId = configObject.enterpriseID ?? null;
+				environment.userId = configObject.userID;
+			}
 		}
 		if (flags.name) {
 			environment.name = flags.name;

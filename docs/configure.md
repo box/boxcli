@@ -15,12 +15,12 @@ Configure the Box CLI
 
 ## `box configure:environments:add PATH`
 
-Add a new Box environment from a Box app config file (JWT or CCG).
+Add a new Box environment from a Box app config file (JWT, CCG, or Platform Account).
 
 ```
 USAGE
   $ box configure:environments:add PATH [--no-color] [-h] [-v] [-q] [--private-key-path <value>] [--set-as-current] [-n <value>]
-    [--ccg-user <value> --ccg-auth]
+    [--ccg-user <value> [--ccg-auth | --platform-account-auth]]
 
 ARGUMENTS
   PATH
@@ -30,6 +30,7 @@ ARGUMENTS
       CCG: create this JSON file yourself using values from your application
       in Developer Console (Client ID and Client Secret from Configuration tab,
       Enterprise ID from General Settings tab).
+      Platform Account: use the credentials file downloaded for the Platform Account.
 
 FLAGS
   -h, --help
@@ -58,6 +59,13 @@ FLAGS
   --no-color
       Turn off colors for logging
 
+  --platform-account-auth
+      Add a Platform Account environment. Commands will always run as the Platform Account from the config file; switching
+      users, --as-user and token downscoping are not supported.
+      Use the credentials file downloaded for the Platform Account.
+      Required fields: boxAppSettings.clientID, boxAppSettings.clientSecret, boxAppSettings.appAuth.publicKeyID,
+      boxAppSettings.appAuth.privateKey (or --private-key-path), boxAppSettings.appAuth.passphrase, userID.
+
   --private-key-path=<value>
       Provide a path to application private key
 
@@ -65,7 +73,7 @@ FLAGS
       Set this new environment as your current environment
 
 DESCRIPTION
-  Add a new Box environment from a Box app config file (JWT or CCG).
+  Add a new Box environment from a Box app config file (JWT, CCG, or Platform Account).
   Open your application in Box Developer Console to get/create config data:
   https://cloud.app.box.com/developers/console
 
@@ -78,6 +86,8 @@ EXAMPLES
   $ box configure:environments:add ./config.json --name production --set-as-current
 
   $ box configure:environments:add ./config.json --ccg-auth --name ci-bot
+
+  $ box configure:environments:add ./platform_account_config.json --platform-account-auth --name my-agent
 ```
 
 _See code: [src/commands/configure/environments/add.js](https://github.com/box/boxcli/blob/v4.10.1/src/commands/configure/environments/add.js)_

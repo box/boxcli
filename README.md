@@ -112,7 +112,7 @@ To sign out from the current environment, run:
 box logout
 ```
 
-This revokes the access token on Box and clears the local token cache. For OAuth, run `box login` to authorize again. For CCG and JWT, a new token is fetched automatically on the next command. Use `-f` to skip the confirmation prompt, or `--on-revoke-failure=clear` / `--on-revoke-failure=abort` to control behavior when token revocation fails. See [`box logout`](docs/logout.md) for full details.
+This revokes the access token on Box and clears the local token cache. For OAuth, run `box login` to authorize again. For CCG, JWT, and Platform Account, a new token is fetched automatically on the next command. Use `-f` to skip the confirmation prompt, or `--on-revoke-failure=clear` / `--on-revoke-failure=abort` to control behavior when token revocation fails. See [`box logout`](docs/logout.md) for full details.
 
 ## Secure Storage
 
@@ -233,7 +233,7 @@ Avatar URL: 'https://app.box.com/api/avatar/large/77777'
 * [`box storage-policies`](docs/storage-policies.md) - List storage policies
 * [`box tasks`](docs/tasks.md) - Manage tasks
 * [`box terms-of-service`](docs/terms-of-service.md) - List terms of services for your enterprise
-* [`box tokens`](docs/tokens.md) - Get a token. Returns the service account token by default
+* [`box tokens`](docs/tokens.md) - Get a token. Returns the service account token by default.
 * [`box trash`](docs/trash.md) - List all items in trash
 * [`box update`](docs/update.md) - Update the BoxCLI using GitHub
 * [`box users`](docs/users.md) - List all Box users
