@@ -5,6 +5,7 @@ List your collections
 
 * [`box collections`](#box-collections)
 * [`box collections:add ITEMTYPE ITEMID COLLECTIONID`](#box-collectionsadd-itemtype-itemid-collectionid)
+* [`box collections:get ID`](#box-collectionsget-id)
 * [`box collections:items ID`](#box-collectionsitems-id)
 * [`box collections:list`](#box-collectionslist)
 * [`box collections:remove ITEMTYPE ITEMID COLLECTIONID`](#box-collectionsremove-itemtype-itemid-collectionid)
@@ -82,6 +83,43 @@ EXAMPLES
 ```
 
 _See code: [src/commands/collections/add.js](https://github.com/box/boxcli/blob/v4.10.1/src/commands/collections/add.js)_
+
+## `box collections:get ID`
+
+Get a collection by its ID. Returns the collection type (always "collection"), ID, name (such as "Favorites") and collection_type (such as "favorites"). Run "box collections" to list the IDs of your collections.
+
+```
+USAGE
+  $ box collections:get ID [-t <value>] [--as-user <value>] [--no-color] [--json | --csv] [-s | --save-to-file-path
+    <value>] [--fields <value>] [--bulk-file-path <value>] [-h] [-v] [-y] [-q]
+
+ARGUMENTS
+  ID  ID of the collection
+
+FLAGS
+  -h, --help                       Show CLI help
+  -q, --quiet                      Suppress any non-error output to stderr
+  -s, --save                       Save report to default reports folder on disk
+  -t, --token=<value>              Provide a token to perform this call
+  -v, --verbose                    Show verbose output, which can be helpful for debugging
+  -y, --yes                        Automatically respond yes to all confirmation prompts
+      --as-user=<value>            Provide an ID for a user
+      --bulk-file-path=<value>     File path to bulk .csv or .json objects
+      --csv                        Output formatted CSV
+      --fields=<value>             Comma separated list of fields to show
+      --json                       Output formatted JSON
+      --no-color                   Turn off colors for logging
+      --save-to-file-path=<value>  Override default file path to save report
+
+DESCRIPTION
+  Get a collection by its ID. Returns the collection type (always "collection"), ID, name (such as "Favorites") and
+  collection_type (such as "favorites"). Run "box collections" to list the IDs of your collections.
+
+EXAMPLES
+  $ box collections:get 926489
+```
+
+_See code: [src/commands/collections/get.js](https://github.com/box/boxcli/blob/v4.10.1/src/commands/collections/get.js)_
 
 ## `box collections:items ID`
 
