@@ -100,11 +100,11 @@ function getAccessibleBy(flags) {
 
 Reference: `src/commands/hubs/update.js`.
 
-- Send only the fields the user passed. Check string flags for a value and boolean flags with `Object.hasOwn`, so `--no-<flag>` sends `false`:
+- Send only the fields the user passed. Check every optional flag with `Object.hasOwn`, never by its truthiness, so `--no-<flag>` sends `false`, `0` is sent, and `--comment ""` sends an empty string. The same holds on create. `hubs:update` still checks `--title` by its value; leave it, and do not copy it:
 
 ```js
 const requestBody = {};
-if (flags.title) {
+if (Object.hasOwn(flags, 'title')) {
 	requestBody.title = flags.title;
 }
 if (Object.hasOwn(flags, 'ai-enabled')) {
@@ -115,13 +115,23 @@ if (Object.keys(requestBody).length === 0) {
 }
 ```
 
-- Boolean update flags use `allowNo: true`, which adds the `--no-<flag>` form.
+- Boolean flags use `allowNo: true`; see "Flag names".
+- A field that update replaces whole is named in the description, in this form: "--tag replaces the whole tag list", "The trigger is sent only with --trigger-type, together with all flags of that trigger type, and replaces the whole trigger". This covers arrays, variant objects and JSON flags.
+- When every field of the body is optional, as for `POST /shuttle_jobs/{id}/start`, build the body from the passed flags and send no body when none is passed.
 
-## Delete
+## Delete and other responses without a body
 
 Reference: `src/commands/hubs/delete.js`, `src/commands/hubs/collaborations/delete.js`.
 
-Call the SDK, then report on stderr with `this.info`, which `--quiet` suppresses:
+When the endpoint returns no body (`204`, or `202` without content), call the SDK, print nothing on stdout, and report one line on stderr with `this.info`, which `--quiet` suppresses. The status of the endpoint picks the text, so that every run writes the same one:
+
+| Status | Text | Examples |
+| --- | --- | --- |
+| `204` | `<Verb in past tense> <resource> <id>` | `Deleted hub collaboration 12345` |
+| `202` on `/{id}/<action>` | `Accepted <action, hyphens as spaces> of <resource> <id>` | `Accepted start of shuttle job 12345`, `Accepted prepare migration of shuttle job 12345` |
+| `202` on a collection | `Accepted <resource> for <parent resource> <parent id>` | `Accepted path mapping import for shuttle job 12345` |
+
+`<resource>` is the resource in words, singular and lowercase, with the topic in front: `shuttle job`, `hub collaboration`. A `202` only queues the work, so the text never says it has started or finished.
 
 ```js
 await this.tsClient.hubCollaborations.deleteHubCollaborationByIdV2025R0(args.id);
@@ -160,10 +170,11 @@ Args:
 
 Flag names:
 
-- A field's flag is its name in kebab-case: `storage_policy_id` is `--storage-policy-id`. A boolean named `is_…` or `are_…` drops that prefix and gets `allowNo: true`: `is_ai_enabled` is `--ai-enabled`, as in `hubs:update`.
+- A field's flag is its name in kebab-case: `storage_policy_id` is `--storage-policy-id`. A boolean named `is_…` or `are_…` drops that prefix: `is_ai_enabled` is `--ai-enabled`, as in `hubs:update`.
+- Every boolean field gets `allowNo: true`, on create and update, with or without the prefix, and is sent with `Object.hasOwn`, so `--no-<flag>` sends `false`: `can_view_path` is `--can-view-path` and `--no-can-view-path`, as in `collaborations:create`. A boolean flag that is not a request field, such as `--id-only`, does not get it.
 - A field of a nested object takes its own name: `settings.max_file_versions` is `--max-file-versions`, `settings.are_deletions_mirrored` is `--deletions-mirrored`, `trigger.start_at` is `--start-at`. It gets the name of its parent object in front only when:
     - its name, without the boolean prefix, is `id`, `type`, `name`, `enabled`, `path`, `email`, `state` or `mode`: `trigger.type` is `--trigger-type`, `account_mapping.is_enabled` is `--account-mapping-enabled`, `target.id` is `--target-id`; or
-    - another field of the request would get the same flag: `source.path` and `target.path` are `--source-path` and `--target-path`. When the parent's name does not tell them apart either, use the whole path: `source.account.id` is `--source-account-id`.
+    - another field of the request would get the same flag: `source.path` and `target.path` are `--source-path` and `--target-path`. When the parent's name does not tell them apart either, use the whole path: `source.account.id` is `--source-account-id`. Then every field of both objects gets its parent's name, also a field that only one of them has: `source.is_directory` is `--source-directory`, next to `--source-path`.
 
 Flags by the shape of the field. Count the flags a nested field would give from all its values at every depth; the depth itself does not matter:
 
@@ -171,14 +182,16 @@ Flags by the shape of the field. Count the flags a nested field would give from 
 | --- | --- |
 | A value | One flag |
 | An object that gives at most 10 flags, at any depth, such as `settings` (9) or `source` with `source.account.id` (7) | One flag per value, named as above. Build the object from the passed flags only, and send it only when one of them is passed |
-| An object with variants chosen by its `type`, whose variants hold values, and at most 10 flags with the fields of every variant counted | `--<field>-type` with the variant types as `options`, and one flag per variant field. A field of several variants is one flag. The command checks that the chosen variant's required flags are passed and refuses the flags of other variants, as `retention-policies:assign` checks `--assign-to-id`. A user-or-group target is the same: `--target-type` with `user` and `group`, and `--target-id`. Only `accessible_by` keeps the older `--user-id`, `--group-id` and `--login` of "Create" |
+| An object with variants chosen by its `type`, whose variants hold values, and at most 10 flags with the fields of every variant counted | `--<field>-type` with the variant types as `options`, and one flag per variant field. A field of several variants is one flag. `--<field>-type` counts as one of the flags: `trigger` gives 6, `--trigger-type` and five variant fields, so it gets flags and not a JSON flag. The command checks that the chosen variant's required flags are passed and refuses the flags of other variants, as `retention-policies:assign` checks `--assign-to-id`, with these messages: `--<flag> requires --<field>-type.`, `--<flag> cannot be used with --<field>-type=<type>.` and `--<field>-type=<type> requires --<flag>, --<flag>.` A user-or-group target is the same: `--target-type` with `user` and `group`, and `--target-id`. Only `accessible_by` keeps the older `--user-id`, `--group-id` and `--login` of "Create" |
 | An array of strings or IDs | `multiple: true`, one value per flag, named in the singular: `--tag` for `tags`, `--section` for `sections`. The request keeps the API field name |
 | An array of flat objects | A repeatable compound flag; see "Compound flags" |
 | An object that would give more than 10 flags, with the fields of every variant counted; or that has variants inside variants, an array of objects that hold objects or arrays, or a map with free-form keys, whatever its size | One JSON flag named after the field; see "JSON flags". The other fields of the request stay flags |
 | `enum`, or a closed list of values in the description | `options`. A list that the description calls open or growing gets no `options`; name the documented values in the description |
 | Required in OpenAPI but optional in the SDK | A required flag, because the API rejects the request without it. When it allows exactly one value, give it `options` and `default` of that value instead, so it is always sent |
 | A field the API description lets you set to `null` to clear it | Also `--clear-<field>`, a boolean `exclusive` with the field's flags, that sends `null`: `--clear-target` |
+| On update, a value that OpenAPI marks `nullable`, at any depth | Also `--clear-<flag name>`, a boolean `exclusive` with the flag, that sends `null`: `settings.max_file_versions` gives `--clear-max-file-versions`. An object marked `nullable` gets a clear flag only by the row above |
 
+- The SDK serializers keep `null` and drop `undefined`, so a `--clear-<…>` flag that sets the field to `null` reaches the API. The unit test checks `null` in the request body; it needs no review note.
 - Never invent a default. For an optional field with an OpenAPI `default`, send nothing when the flag is not passed, and name the default in the description.
 - Update commands take the flags of create, none of them required, and send only what was passed; see "Update". A variant object is sent only when `--<field>-type` is passed, and is then checked as on create.
 - When a field fits none of these rows, ask; a run without a user lists it under "Review notes".
