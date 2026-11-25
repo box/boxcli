@@ -149,6 +149,44 @@ For repeated structured input such as `--add id=11111,type=file,parent-id=67890`
 - Put the format, the allowed values, and what each key means in the flag description.
 - `parseStringToObject` ends a value where the name of any allowed key appears in it, so `path=/a/type/b` breaks when `type` is a key. Use a compound flag only when its values are IDs, numbers or values from a fixed list.
 
+## Shared code
+
+Reference: `src/modules/upload.js`, used by `files:upload` and `files:versions:upload`; `src/modules/shared-links.js`, used by `shared-links:create` and `shared-links:delete`.
+
+oclif loads every file under `src/commands` as a command, so shared code never lives there.
+
+- Code that two or more commands share, such as flag definitions, building one request field from flags, or checking flags against each other, goes in `src/modules/<topic>.js`, named after the topic's folder in `src/commands`. Each command requires it: `require('../../modules/<topic>')`, one `../` more per nested folder. Never copy such code from one command file to another, also not from create to update.
+- Export small named functions and flag objects: a function that returns the flags of one side, such as `locationFlags('source')`, to spread into `flags`, and a function that builds the request field from the parsed flags.
+- Keep code that only one command uses in that command.
+- Do not change another topic's module for a new command; add to your topic's module.
+- Unit tests stay per command in `test/commands/<topic>.test.js`. The module gets no test file of its own; the command tests cover it.
+
+```js
+// src/modules/shuttle.js
+const { Flags } = require('@oclif/core');
+
+function locationFlags(side) {
+	return {
+		[`${side}-path`]: Flags.string({ description: `Path of the ${side}` }),
+	};
+}
+
+function buildLocation(flags, side) {
+	return { path: flags[`${side}-path`] };
+}
+
+module.exports = { locationFlags, buildLocation };
+
+// src/commands/shuttle/jobs/create.js
+const { locationFlags, buildLocation } = require('../../../modules/shuttle');
+
+ShuttleJobsCreateCommand.flags = {
+	...BoxCommand.flags,
+	...locationFlags('source'),
+	...locationFlags('target'),
+};
+```
+
 ## Command names
 
 Name a new command after the API path, so that every run picks the same name:
@@ -188,6 +226,7 @@ Flags by the shape of the field. Count the flags a nested field would give from 
 | An object that would give more than 10 flags, with the fields of every variant counted; or that has variants inside variants, an array of objects that hold objects or arrays, or a map with free-form keys, whatever its size | One JSON flag named after the field; see "JSON flags". The other fields of the request stay flags |
 | `enum`, or a closed list of values in the description | `options`. A list that the description calls open or growing gets no `options`; name the documented values in the description |
 | Required in OpenAPI but optional in the SDK | A required flag, because the API rejects the request without it. When it allows exactly one value, give it `options` and `default` of that value instead, so it is always sent |
+| A required object whose fields are all optional, such as `account` with `id` and `email` | Require at least one of its flags, and stop with an error that names them before calling the API: `--source-type=account requires --source-account-id or --source-account-email.` The command never sends the object without one of its fields |
 | A field the API description lets you set to `null` to clear it | Also `--clear-<field>`, a boolean `exclusive` with the field's flags, that sends `null`: `--clear-target` |
 | On update, a value that OpenAPI marks `nullable`, at any depth | Also `--clear-<flag name>`, a boolean `exclusive` with the flag, that sends `null`: `settings.max_file_versions` gives `--clear-max-file-versions`. An object marked `nullable` gets a clear flag only by the row above |
 
