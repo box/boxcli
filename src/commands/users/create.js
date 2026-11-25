@@ -127,7 +127,7 @@ UsersCreateCommand.flags = {
 	language: Flags.string({
 		char: 'l',
 		description:
-			'Language of the user (ISO 639-1 Language Code). https://developer.box.com/v2.0/docs/api-language-codes',
+			'Language of the user (ISO 639-1 Language Code). https://developer.box.com/guides/api-calls/language-codes/',
 	}),
 	'job-title': Flags.string({
 		char: 'j',
