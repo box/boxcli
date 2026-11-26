@@ -1,0 +1,32 @@
+{
+	"id": "6a3ba68e810d9156194530a1",
+	"type": "shuttle_job",
+	"name": "Finance migration v2",
+	"comment": null,
+	"job_type": "transfer",
+	"state": "created",
+	"mapping_state": "paths_ready",
+	"source_system": {
+		"type": "shuttle_system",
+		"id": "6a315c0754833bfc5df067bf",
+		"name": "Finance file server"
+	},
+	"account_mapping": {
+		"is_enabled": true,
+		"permission_conflict_strategy": null,
+		"are_external_shares_mapped": false,
+		"are_permissions_mapped": true
+	},
+	"tags": ["finance", "q3"],
+	"settings": {
+		"bandwidth_limit_bytes_per_sec": null,
+		"are_deletions_mirrored": false,
+		"are_file_versions_synced": true,
+		"max_file_versions": null,
+		"is_overwrite_enabled": false,
+		"are_completed_mappings_skipped_on_rerun": true,
+		"is_content_scanning_enabled": false,
+		"include_shared_source_folders": true,
+		"include_shared_destination_folders": false
+	}
+}
