@@ -1,0 +1,14 @@
+{
+	"id": "6a3ba7a24ea17bc9461eeacd",
+	"type": "shuttle_path_mapping",
+	"job_id": "6a3ba68e810d9156194530a1",
+	"is_path_skipped": true,
+	"source": {
+		"type": "shared_space",
+		"space": "Team Drive",
+		"path": "/archive",
+		"path_id": null,
+		"is_directory": true
+	},
+	"target": null
+}
