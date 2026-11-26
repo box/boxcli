@@ -135,7 +135,7 @@ FLAGS
   -h, --help                            Show CLI help
   -j, --job-title=<value>               Job title of the user
   -l, --language=<value>                Language of the user (ISO 639-1 Language Code).
-                                        https://developer.box.com/v2.0/docs/api-language-codes
+                                        https://developer.box.com/guides/api-calls/language-codes/
   -p, --phone-number=<value>            Phone number of the user
   -q, --quiet                           Suppress any non-error output to stderr
   -r, --role=<option>                   Role of user. Enter user or coadmin
@@ -829,7 +829,7 @@ FLAGS
   -h, --help                            Show CLI help
   -j, --job-title=<value>               Job title of the user
   -l, --language=<value>                Language of the user (ISO 639-1 Language Code).
-                                        https://developer.box.com/v2.0/docs/api-language-codes
+                                        https://developer.box.com/guides/api-calls/language-codes/
   -n, --name=<value>                    Set the user's name
   -p, --phone-number=<value>            Phone number of the user
   -q, --quiet                           Suppress any non-error output to stderr
