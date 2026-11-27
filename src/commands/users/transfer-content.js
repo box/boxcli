@@ -34,7 +34,7 @@ UsersMoveRootContentCommand.description =
 UsersMoveRootContentCommand.examples = [
 	'box users:transfer-content 33333 44444',
 ];
-UsersMoveRootContentCommand._endpoint = 'put_users_id_folders_id';
+UsersMoveRootContentCommand._endpoint = 'put_users_id_folders_0';
 
 UsersMoveRootContentCommand.flags = {
 	...BoxCommand.flags,
