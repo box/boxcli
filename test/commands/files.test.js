@@ -2202,6 +2202,7 @@ describe('Files', function () {
 				})
 			)
 			.do(() => {
+				fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 				fs.writeFileSync(
 					path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName),
 					'foo',
@@ -2235,6 +2236,7 @@ describe('Files', function () {
 			api.get(`/2.0/files/${fileId}`).reply(200, getFileFixture)
 		)
 			.do(() => {
+				fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 				fs.writeFileSync(
 					path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName),
 					'foo',
@@ -2552,6 +2554,7 @@ describe('Files', function () {
 				})
 			)
 			.do(() => {
+				fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 				fs.writeFileSync(
 					path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName),
 					'foo',
@@ -2586,6 +2589,7 @@ describe('Files', function () {
 			api.get(`/2.0/files/${fileId}`).reply(200, getFileFixture)
 		)
 			.do(() => {
+				fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 				fs.writeFileSync(
 					path.join(DEFAULT_DOWNLOAD_PATH, saveAsFileName),
 					'foo',
@@ -2767,6 +2771,7 @@ describe('Files', function () {
 				api.get(statusUrl).reply(200, downloadStatusFixture)
 			)
 			.do(async () => {
+				fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 				await fs.writeFileSync(
 					path.join(DEFAULT_DOWNLOAD_PATH, fileName),
 					'foo'
@@ -2798,6 +2803,7 @@ describe('Files', function () {
 				}
 			);
 		test.do(async () => {
+			fs.mkdirSync(DEFAULT_DOWNLOAD_PATH, { recursive: true });
 			await fs.writeFileSync(
 				path.join(DEFAULT_DOWNLOAD_PATH, fileName),
 				'foo'

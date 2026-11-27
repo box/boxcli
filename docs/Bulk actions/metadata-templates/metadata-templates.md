@@ -4,7 +4,7 @@
 Get all metadata templates in your Enterprise
 
 * [`box metadata-templates:create`](#box-metadata-templatescreate)
-* [`box metadata-templates:cascade`](#box-metadata-templatescascade)
+* [`box metadata-templates:cascade`](#box-metadata-templatescascade-templatekey)
 
 
 ## `box metadata-templates:create`

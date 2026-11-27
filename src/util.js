@@ -238,6 +238,97 @@ function parseStringToObject(inputString, keys) {
 }
 
 /**
+ * Keys of input, as dotted paths, that output does not have
+ *
+ * @param {*} input The value the user passed
+ * @param {*} output The same value after the SDK read it
+ * @param {string} [prefix] Path of input in the whole value
+ * @returns {string[]} The missing keys
+ */
+function missingKeys(input, output, prefix = '') {
+	if (!_.isPlainObject(input) && !Array.isArray(input)) {
+		return [];
+	}
+	return Object.keys(input).flatMap((key) => {
+		const keyPath = `${prefix}${key}`;
+		if (output === null || typeof output !== 'object' || !(key in output)) {
+			return [keyPath];
+		}
+		return missingKeys(input[key], output[key], `${keyPath}.`);
+	});
+}
+
+function camelCaseKeys(value) {
+	if (!_.isPlainObject(value) && !Array.isArray(value)) {
+		return [];
+	}
+	return Object.entries(value).flatMap(([key, child]) => [
+		...(/[a-z][A-Z]/u.test(key) ? [key] : []),
+		...camelCaseKeys(child),
+	]);
+}
+
+function apiNameHint(value) {
+	const [key] = camelCaseKeys(value);
+	return key
+		? ` Use API field names, such as "${_.snakeCase(key)}" instead of "${key}".`
+		: '';
+}
+
+/**
+ * Parse a flag value given as JSON in the shape of the API (snake_case field
+ * names) into the object the SDK method takes. Fails on invalid JSON, on a
+ * value the SDK type rejects, and on fields the SDK would drop, such as typos.
+ *
+ * @param {string} input The flag value
+ * @param {Object} options Options
+ * @param {string} options.flag The flag name, for error messages
+ * @param {Function} options.serialize The SDK serialize function of the field's type
+ * @param {Function} options.deserialize The SDK deserialize function of the field's type
+ * @param {boolean} [options.acceptSdkShape] Also accept SDK field names (camelCase), for flags that took them before
+ * @returns {Object} The value for the SDK
+ * @throws BoxCLIError
+ */
+function parseJsonFlag(
+	input,
+	{ flag, serialize, deserialize, acceptSdkShape = false }
+) {
+	let parsed;
+	try {
+		parsed = JSON.parse(input);
+	} catch (error) {
+		throw new BoxCLIError(`Invalid JSON in --${flag}: ${error.message}`);
+	}
+	if (acceptSdkShape) {
+		try {
+			if (
+				missingKeys(parsed, deserialize(serialize(parsed))).length === 0
+			) {
+				return parsed;
+			}
+		} catch {
+			// Not a valid SDK object; read it in the shape of the API below
+		}
+	}
+	let value;
+	try {
+		value = deserialize(parsed);
+	} catch (error) {
+		throw new BoxCLIError(
+			`Invalid --${flag}: ${error.message}.${apiNameHint(parsed)}`
+		);
+	}
+	const unknown = missingKeys(parsed, serialize(value));
+	if (unknown.length > 0) {
+		const fields = unknown.map((key) => `"${key}"`).join(', ');
+		throw new BoxCLIError(
+			`Unknown field${unknown.length > 1 ? 's' : ''} ${fields} in --${flag}.${apiNameHint(parsed)}`
+		);
+	}
+	return value;
+}
+
+/**
  * Check if directory exists and creates it if shouldCreate flag was passed.
  *
  * @param {string} dirPath Directory path to check and create
@@ -430,6 +521,7 @@ module.exports = {
 	maskSecret,
 	maskObjectValuesByKey,
 	parseStringToObject,
+	parseJsonFlag,
 	checkDir,
 	readFileAsync,
 	writeFileAsync,
