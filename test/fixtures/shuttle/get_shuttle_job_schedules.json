@@ -1,0 +1,20 @@
+{
+	"entries": [
+		{
+			"id": "7c1ba68e810d9156194530b2",
+			"type": "shuttle_job_schedule",
+			"job_id": "6a3ba68e810d9156194530a1",
+			"state": "enabled",
+			"run_mode": "transfer",
+			"description": "Nightly transfer",
+			"last_attempt_at": "2026-11-24T09:00:00-08:00",
+			"trigger": {
+				"type": "by_time",
+				"start_at": "2030-01-01T09:00:00",
+				"time_zone": "America/Los_Angeles",
+				"repeat": "daily"
+			}
+		}
+	],
+	"limit": 1000
+}

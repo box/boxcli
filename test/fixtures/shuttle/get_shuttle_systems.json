@@ -1,0 +1,21 @@
+{
+	"entries": [
+		{
+			"id": "6a315c0754833bfc5df067bf",
+			"type": "shuttle_system",
+			"name": "Finance file server",
+			"system_type": "windows",
+			"label": "Windows",
+			"state": "connected"
+		},
+		{
+			"id": "6a315c0754833bfc5df067c0",
+			"type": "shuttle_system",
+			"name": "Company Box",
+			"system_type": "box",
+			"label": "Box",
+			"state": "connected"
+		}
+	],
+	"limit": 1000
+}
