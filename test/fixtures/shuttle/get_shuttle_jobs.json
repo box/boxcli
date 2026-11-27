@@ -1,0 +1,23 @@
+{
+	"entries": [
+		{
+			"id": "6a3ba68e810d9156194530a1",
+			"type": "shuttle_job",
+			"name": "Finance migration",
+			"comment": "Move the finance share",
+			"job_type": "transfer",
+			"state": "created",
+			"mapping_state": "awaiting_path_mapping",
+			"source_system": {
+				"type": "shuttle_system",
+				"id": "6a315c0754833bfc5df067bf",
+				"name": "Finance file server"
+			},
+			"account_mapping": {
+				"is_enabled": false
+			},
+			"tags": ["finance"]
+		}
+	],
+	"limit": 1000
+}

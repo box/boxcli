@@ -39,4 +39,4 @@ box files:download --bulk-file-path path/to/csv/file.csv --destination path/to/d
 
 
 [oauth-guide]: https://developer.box.com/guides/cli/quick-start/
-[csv-template]: https://github.com/box/boxcli/tree/main/docs/Bulk%20Actions
+[csv-template]: https://github.com/box/boxcli/tree/main/docs/Bulk%20actions

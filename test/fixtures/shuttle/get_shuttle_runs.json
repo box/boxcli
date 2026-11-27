@@ -1,0 +1,22 @@
+{
+	"entries": [
+		{
+			"id": "6a3ba68e810d9156194530a1:42",
+			"type": "shuttle_run",
+			"job_id": "6a3ba68e810d9156194530a1",
+			"run_mode": "simulation",
+			"state": "running",
+			"started_at": "2026-11-20T09:00:00-08:00",
+			"ended_at": null,
+			"duration_seconds": null,
+			"stats": {
+				"bytes_sent": 1048576,
+				"files_sent": 12,
+				"folders_created": 3,
+				"is_estimated": true
+			},
+			"available_report_sections": ["transfer_overview"]
+		}
+	],
+	"limit": 1000
+}

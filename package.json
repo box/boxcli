@@ -38,7 +38,7 @@
 		"@oclif/table": "0.5.4",
 		"@octokit/rest": "^22.0.0",
 		"archiver": "^8.0.0",
-		"box-node-sdk": "^4.11.1",
+		"box-node-sdk": "^4.20.0",
 		"chalk": "^2.4.1",
 		"cli-progress": "^2.1.0",
 		"csv": "^6.3.3",
@@ -145,6 +145,9 @@
 			"shared-links": {
 				"description": "Manage shared links"
 			},
+			"shuttle": {
+				"description": "Manage Box Shuttle migration jobs, systems, mappings, schedules, runs and reports"
+			},
 			"tasks": {
 				"description": "Manage tasks"
 			},
@@ -173,7 +176,8 @@
 		"build:tarballs": "oclif pack:tarballs --no-xz --parallel",
 		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
 		"license": "generate-license-file --overwrite",
-		"prettier": "prettier --write \"**/*.{js,json}\""
+		"prettier": "prettier --write \"**/*.{js,json}\"",
+		"test:integration": "mocha --timeout 120000 \"test/integration/**/*.it.js\""
 	},
 	"overrides": {
 		"leche": {

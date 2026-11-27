@@ -3,7 +3,7 @@
 
 Manage sign requests
 
-* [`box sign-requests:create`](#box-sign-requests:create)
+* [`box sign-requests:create`](#box-sign-requestscreate)
 
 
 ## `box sign-requests:create`

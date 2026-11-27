@@ -5,7 +5,7 @@ Manage files
 
 * [`box files:download ID`](#box-filesdownload-id)
 * [`box files:update ID`](#box-filesupdate-id)
-* [`box files:upload PATH`](#box-filesupload)
+* [`box files:upload PATH`](#box-filesupload-path)
 
 ## `box files:download ID`
 
