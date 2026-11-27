@@ -1,0 +1,20 @@
+{
+	"entries": [
+		{
+			"id": "6a3ba8d14f2c91e8370b4d12",
+			"type": "shuttle_report",
+			"run_id": "6a3ba68e810d9156194530a1:42",
+			"status": "complete",
+			"format": "xlsx",
+			"sections": ["transfer_overview", "files_and_folders"],
+			"users_scope": "migrated",
+			"output": {
+				"id": "12345",
+				"type": "file"
+			},
+			"created_at": "2026-11-20T10:00:00-08:00",
+			"completed_at": "2026-11-20T10:05:00-08:00"
+		}
+	],
+	"limit": 1000
+}

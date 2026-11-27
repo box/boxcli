@@ -31,6 +31,46 @@ describe('Collections', function () {
 			});
 	});
 
+	describe('collections:get', function () {
+		const collectionId = '926489';
+		const response = JSON.parse(
+			getFixture('collections/get_collections_id')
+		);
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/collections/${collectionId}`).reply(200, response)
+		)
+			.stdout()
+			.command([
+				'collections:get',
+				collectionId,
+				'--json',
+				'--token=test',
+			])
+			.it('gets a collection by ID', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), response);
+			});
+
+		test.nock(TEST_API_ROOT, (api) =>
+			api.get(`/2.0/collections/${collectionId}`).reply(200, response)
+		)
+			.stdout()
+			.command([
+				'collections:get',
+				collectionId,
+				'--fields=collection_type',
+				'--json',
+				'--token=test',
+			])
+			.it('keeps API field names in the output', (context) => {
+				assert.deepEqual(JSON.parse(context.stdout), {
+					type: 'collection',
+					id: collectionId,
+					collection_type: 'favorites',
+				});
+			});
+	});
+
 	describe('collections:items', function () {
 		let collectionId = '1234567890',
 			fixture = getFixture('collections/get_collections_id_items_page_1'),

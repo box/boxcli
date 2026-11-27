@@ -143,7 +143,7 @@ Done when each new command has an integration case, or you know the reason it ha
 
 ### 7. Implement, then go green
 
-Write the minimum command code. Re-run the targeted test, then the whole topic file, then any integration case from step 6 when `JWT_CONFIG_BASE_64` is set.
+Write the minimum command code. Code that two or more commands of the topic share goes in `src/modules/<topic>.js`, never copied between command files; see "Shared code" in [references/command-patterns.md](references/command-patterns.md). Re-run the targeted test, then the whole topic file, then any integration case from step 6 when `JWT_CONFIG_BASE_64` is set.
 
 ### 8. Lint and docs
 

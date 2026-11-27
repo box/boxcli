@@ -1,0 +1,21 @@
+{
+	"id": "6a3ba7a24ea17bc9461eeace",
+	"type": "shuttle_subject_mapping",
+	"job_id": "6a3ba68e810d9156194530a1",
+	"discovered_subject_id": "6a3ba7a24ea17bc9461eeacf",
+	"revision": 3,
+	"is_subject_skipped": false,
+	"source": {
+		"type": "user",
+		"id": "S-1-5-21-1004",
+		"email": "user@example.com",
+		"name": "Example User",
+		"roles": ["owner"]
+	},
+	"target": {
+		"type": "user",
+		"id": "11111",
+		"email": "user@example.com",
+		"name": "Example User"
+	}
+}
