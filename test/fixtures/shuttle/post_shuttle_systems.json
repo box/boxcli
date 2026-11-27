@@ -1,0 +1,8 @@
+{
+	"id": "6a315c0754833bfc5df067bf",
+	"type": "shuttle_system",
+	"name": "Finance file server",
+	"system_type": "windows",
+	"label": "Windows",
+	"state": "disconnected"
+}

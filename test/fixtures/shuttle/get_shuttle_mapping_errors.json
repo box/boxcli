@@ -1,0 +1,14 @@
+{
+	"entries": [
+		{
+			"id": "6a3ba8114ea17bc9461eead2",
+			"type": "shuttle_mapping_error",
+			"job_id": "6a3ba68e810d9156194530a1",
+			"revision": 2,
+			"category": "path_import",
+			"path": "/finance/budget",
+			"messages": ["Row 4: the target path does not exist"]
+		}
+	],
+	"limit": 1000
+}

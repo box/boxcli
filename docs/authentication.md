@@ -1,7 +1,7 @@
 Authentication
 ==============
 
-See the [OAuth 2 overview](https://developer.box.com/en/guides/authentication/) for a detailed
+See the [OAuth 2 overview](https://developer.box.com/guides/authentication/) for a detailed
 overview of how the Box API handles authentication.
 
 - [Ways to Authenticate](#ways-to-authenticate)

@@ -1,0 +1,14 @@
+{
+	"id": "7c1ba68e810d9156194530b2",
+	"type": "shuttle_job_schedule",
+	"job_id": "6a3ba68e810d9156194530a1",
+	"state": "enabled",
+	"run_mode": "simulation",
+	"description": null,
+	"last_attempt_at": "2026-11-24T09:00:00-08:00",
+	"trigger": {
+		"type": "by_job",
+		"triggered_by_job_id": "6a3ba68e810d9156194530a2",
+		"last_run_condition": "on_success"
+	}
+}

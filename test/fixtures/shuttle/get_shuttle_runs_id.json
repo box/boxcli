@@ -1,0 +1,25 @@
+{
+	"id": "6a3ba68e810d9156194530a1:42",
+	"type": "shuttle_run",
+	"job_id": "6a3ba68e810d9156194530a1",
+	"run_mode": "transfer",
+	"state": "completed",
+	"started_at": "2026-11-20T09:00:00-08:00",
+	"ended_at": "2026-11-20T09:45:00-08:00",
+	"duration_seconds": 2700,
+	"stats": {
+		"bytes_sent": 1073741824,
+		"files_sent": 1200,
+		"folders_created": 85,
+		"is_estimated": false
+	},
+	"created_by": {
+		"id": "11111",
+		"type": "user"
+	},
+	"available_report_sections": [
+		"transfer_overview",
+		"files_and_folders",
+		"event_log"
+	]
+}
