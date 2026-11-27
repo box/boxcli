@@ -24,7 +24,7 @@ MetadataCascadePoliciesForceApplyCommand.examples = [
 	'box metadata-cascade-policies:force-apply 12345 --conflict-resolution overwrite',
 ];
 MetadataCascadePoliciesForceApplyCommand._endpoint =
-	'post_metadata_cascade_policies_apply';
+	'post_metadata_cascade_policies_id_apply';
 
 MetadataCascadePoliciesForceApplyCommand.flags = {
 	...BoxCommand.flags,

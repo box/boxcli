@@ -34,6 +34,8 @@ class TokensExchangeCommand extends BoxCommand {
 TokensExchangeCommand.description =
 	'Get a token. Returns the service account token by default';
 
+TokensExchangeCommand._endpoint = 'post_oauth2_token';
+
 TokensExchangeCommand.args = {
 	scope: Args.string({
 		name: 'scope',

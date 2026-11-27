@@ -23,6 +23,8 @@ class TokensRevokeCommand extends BoxCommand {
 TokensRevokeCommand.description =
 	'Revoke a token.  The token will no longer be valid for making API calls.';
 
+TokensRevokeCommand._endpoint = 'post_oauth2_revoke';
+
 TokensRevokeCommand.args = {
 	token: Args.string({
 		name: 'token',

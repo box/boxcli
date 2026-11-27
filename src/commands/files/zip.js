@@ -78,7 +78,7 @@ FilesZipCommand.description =
 FilesZipCommand.examples = [
 	'box files:zip sample_file.zip --item=file:12421 --item=folder:48291',
 ];
-FilesZipCommand._endpoint = 'zip_downloads';
+FilesZipCommand._endpoint = 'post_zip_downloads';
 
 FilesZipCommand.flags = {
 	...BoxCommand.flags,
