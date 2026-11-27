@@ -183,7 +183,7 @@
 		"leche": {
 			"mocha": ">=1.18"
 		},
-		"serialize-javascript": ">=7.0.5",
+		"serialize-javascript": ">=7.1.4",
 		"diff": ">8.0.2"
 	}
 }
