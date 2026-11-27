@@ -480,6 +480,11 @@ OAuthLoginCommand.description =
 	'Quickstart: run "box login -d" to sign in immediately. A browser window will open for authorization. Once access is granted, the environment is created and set as default — you can start running commands right away.\n' +
 	'\n' +
 	'Headless environments: use --code (-c) if no browser is available. The CLI will display an authorize URL — visit it in an external browser, authorize and grant access to the app, then provide the state and authorization code back to the CLI when prompted.';
+OAuthLoginCommand._endpoint = [
+	'get_authorize',
+	'post_oauth2_token',
+	'get_users_me',
+];
 
 OAuthLoginCommand.flags = {
 	...BoxCommand.minFlags,

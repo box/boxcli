@@ -19,6 +19,10 @@ class SharedLinksDeleteCommand extends BoxCommand {
 
 SharedLinksDeleteCommand.description = 'Delete a shared link for a Box item';
 SharedLinksDeleteCommand.examples = ['box shared-links:delete 22222 folder'];
+SharedLinksDeleteCommand._endpoint = [
+	'put_files_id#remove_shared_link',
+	'put_folders_id#remove_shared_link',
+];
 
 SharedLinksDeleteCommand.flags = {
 	...BoxCommand.flags,

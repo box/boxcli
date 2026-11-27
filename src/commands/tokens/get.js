@@ -21,6 +21,7 @@ TokensGetCommand.examples = [
 	'box tokens:get',
 	'box tokens:get --user-id 12345',
 ];
+TokensGetCommand._endpoint = 'post_oauth2_token';
 
 TokensGetCommand.flags = {
 	...BoxCommand.minFlags,

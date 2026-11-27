@@ -41,6 +41,11 @@ class TrashGetCommand extends BoxCommand {
 
 TrashGetCommand.description = 'Get information about an item in trash';
 TrashGetCommand.examples = ['box trash:get folder 22222'];
+TrashGetCommand._endpoint = [
+	'get_files_id_trash',
+	'get_folders_id_trash',
+	'get_web_links_id_trash',
+];
 
 TrashGetCommand.flags = {
 	...BoxCommand.flags,

@@ -26,6 +26,10 @@ FoldersSetMetadataCommand.examples = [
 	'box folders:metadata:set 22222 --template-key employeeRecord --data "name=John Doe" --data department=Sales',
 	'box folders:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"',
 ];
+FoldersSetMetadataCommand._endpoint = [
+	'post_folders_id_metadata_id_id',
+	'put_folders_id_metadata_id_id',
+];
 
 FoldersSetMetadataCommand.flags = {
 	...BoxCommand.flags,

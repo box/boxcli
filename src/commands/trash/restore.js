@@ -49,6 +49,11 @@ class TrashRestoreCommand extends BoxCommand {
 
 TrashRestoreCommand.description = 'Restore an item from trash';
 TrashRestoreCommand.examples = ['box trash:restore folder 22222'];
+TrashRestoreCommand._endpoint = [
+	'post_files_id',
+	'post_folders_id',
+	'post_web_links_id',
+];
 
 TrashRestoreCommand.flags = {
 	...BoxCommand.flags,

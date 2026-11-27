@@ -20,6 +20,7 @@ class UsersSearchCommand extends BoxCommand {
 
 UsersSearchCommand.description = 'Search for Box users';
 UsersSearchCommand.examples = ['box users:search "John Doe"'];
+UsersSearchCommand._endpoint = 'get_users';
 
 UsersSearchCommand.flags = {
 	...BoxCommand.flags,

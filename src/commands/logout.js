@@ -202,6 +202,7 @@ OAuthLogoutCommand.description = [
 	'',
 	'Use -f and --on-revoke-failure=clear or --on-revoke-failure=abort to skip the interactive prompt.',
 ].join('\n');
+OAuthLogoutCommand._endpoint = 'post_oauth2_revoke';
 
 OAuthLogoutCommand.flags = {
 	...BoxCommand.minFlags,

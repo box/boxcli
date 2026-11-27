@@ -26,6 +26,10 @@ FilesSetMetadataCommand.examples = [
 	'box files:metadata:set 11111 --template-key employeeRecord --data "name=John Doe" --data department=Sales',
 	'box files:metadata:set 22222 --template-key myTemplate --data "multiselectkey1=[option1A,option1B]" --data "multiselectkey2=[option2A]"',
 ];
+FilesSetMetadataCommand._endpoint = [
+	'post_files_id_metadata_id_id',
+	'put_files_id_metadata_id_id',
+];
 
 FilesSetMetadataCommand.flags = {
 	...BoxCommand.flags,

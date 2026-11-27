@@ -25,6 +25,7 @@ LegalHoldPoliciesAssignCommand.description = 'Create a new policy assignment';
 LegalHoldPoliciesAssignCommand.examples = [
 	'box legal-hold-policies:assign 99999 --assign-to-type folder --assign-to-id 22222',
 ];
+LegalHoldPoliciesAssignCommand._endpoint = 'post_legal_hold_policy_assignments';
 
 LegalHoldPoliciesAssignCommand.flags = {
 	...BoxCommand.flags,

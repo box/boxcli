@@ -19,6 +19,10 @@ class WatermarkingApplyCommand extends BoxCommand {
 
 WatermarkingApplyCommand.description = 'Apply a watermark on an item';
 WatermarkingApplyCommand.examples = ['box watermarking:apply folder 22222'];
+WatermarkingApplyCommand._endpoint = [
+	'put_files_id_watermark',
+	'put_folders_id_watermark',
+];
 
 WatermarkingApplyCommand.flags = {
 	...BoxCommand.flags,

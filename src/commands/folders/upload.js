@@ -86,6 +86,14 @@ class FoldersUploadCommand extends BoxCommand {
 
 FoldersUploadCommand.description = 'Upload a folder';
 FoldersUploadCommand.examples = ['box folders:upload /path/to/folder'];
+FoldersUploadCommand._endpoint = [
+	'get_folders_id',
+	'post_folders',
+	'post_files_content',
+	'post_files_upload_sessions',
+	'put_files_upload_sessions_id',
+	'post_files_upload_sessions_id_commit',
+];
 
 FoldersUploadCommand.flags = {
 	...BoxCommand.flags,

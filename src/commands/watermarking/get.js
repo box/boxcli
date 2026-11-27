@@ -22,6 +22,10 @@ class WatermarkingGetCommand extends BoxCommand {
 
 WatermarkingGetCommand.description = 'Get the watermark on an item';
 WatermarkingGetCommand.examples = ['box watermarking:get folder 22222'];
+WatermarkingGetCommand._endpoint = [
+	'get_files_id_watermark',
+	'get_folders_id_watermark',
+];
 
 WatermarkingGetCommand.flags = {
 	...BoxCommand.flags,

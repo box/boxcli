@@ -266,6 +266,11 @@ class FoldersDownloadCommand extends BoxCommand {
 
 FoldersDownloadCommand.description = 'Download a folder';
 FoldersDownloadCommand.examples = ['box folders:download 22222'];
+FoldersDownloadCommand._endpoint = [
+	'get_folders_id',
+	'get_folders_id_items',
+	'get_files_id_content',
+];
 
 FoldersDownloadCommand.flags = {
 	...BoxCommand.flags,

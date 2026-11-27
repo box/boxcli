@@ -19,6 +19,7 @@ StoragePoliciesAssignCommand.description = 'Assign a storage policy';
 StoragePoliciesAssignCommand.examples = [
 	'box storage-policies:assign 12345 33333',
 ];
+StoragePoliciesAssignCommand._endpoint = 'post_storage_policy_assignments';
 
 StoragePoliciesAssignCommand.flags = {
 	...BoxCommand.flags,

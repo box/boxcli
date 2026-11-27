@@ -20,6 +20,10 @@ SharedLinksCreateCommand.description = 'Create a shared link for a Box item';
 SharedLinksCreateCommand.examples = [
 	'box shared-links:create 22222 folder --access company --vanity-name my-custom-name-123',
 ];
+SharedLinksCreateCommand._endpoint = [
+	'put_files_id#add_shared_link',
+	'put_folders_id#add_shared_link',
+];
 
 const sharedLinkFlags = {
 	...BoxCommand.flags,

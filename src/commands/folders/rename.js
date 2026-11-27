@@ -26,6 +26,7 @@ class FoldersRenameCommand extends BoxCommand {
 
 FoldersRenameCommand.description = 'Rename a folder';
 FoldersRenameCommand.examples = ['box folders:rename 22222 "New Folder Name"'];
+FoldersRenameCommand._endpoint = 'put_folders_id';
 
 FoldersRenameCommand.flags = {
 	...BoxCommand.flags,

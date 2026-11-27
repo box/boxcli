@@ -40,6 +40,8 @@ TermsOfServiceSetUserStatusCommand.description =
 TermsOfServiceSetUserStatusCommand.examples = [
 	'box terms-of-service:set-user-status 55555 --accept',
 ];
+TermsOfServiceSetUserStatusCommand._endpoint =
+	'post_terms_of_service_user_statuses';
 
 TermsOfServiceSetUserStatusCommand.flags = {
 	...BoxCommand.flags,

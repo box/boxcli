@@ -26,6 +26,7 @@ class FilesRenameCommand extends BoxCommand {
 
 FilesRenameCommand.description = 'Rename a file';
 FilesRenameCommand.examples = ['box files:rename 11111 "New File Name.pdf"'];
+FilesRenameCommand._endpoint = 'put_files_id';
 
 FilesRenameCommand.flags = {
 	...BoxCommand.flags,

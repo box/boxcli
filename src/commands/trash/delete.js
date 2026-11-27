@@ -33,6 +33,11 @@ class TrashDeleteCommand extends BoxCommand {
 
 TrashDeleteCommand.description = 'Permanently delete an item';
 TrashDeleteCommand.examples = ['box trash:delete folder 22222'];
+TrashDeleteCommand._endpoint = [
+	'delete_files_id_trash',
+	'delete_folders_id_trash',
+	'delete_web_links_id_trash',
+];
 
 TrashDeleteCommand.flags = {
 	...BoxCommand.flags,

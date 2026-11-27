@@ -24,6 +24,7 @@ FilesCollaborationsAddCommand.description = 'Create a collaboration for a file';
 FilesCollaborationsAddCommand.examples = [
 	'box files:collaborations:add 11111 --role editor --user-id 22222',
 ];
+FilesCollaborationsAddCommand._endpoint = 'post_collaborations';
 
 FilesCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,

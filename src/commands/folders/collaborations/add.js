@@ -27,6 +27,7 @@ FoldersCollaborationsAddCommand.description =
 FoldersCollaborationsAddCommand.examples = [
 	'box folders:collaborations:add 22222 --role editor --user-id 33333',
 ];
+FoldersCollaborationsAddCommand._endpoint = 'post_collaborations';
 
 FoldersCollaborationsAddCommand.flags = {
 	...CollaborationsCreateCommand.flags,

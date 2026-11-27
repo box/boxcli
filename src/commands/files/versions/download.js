@@ -78,6 +78,7 @@ FilesVersionsDownloadCommand.description =
 FilesVersionsDownloadCommand.examples = [
 	'box files:versions:download 11111 55555',
 ];
+FilesVersionsDownloadCommand._endpoint = 'get_files_id_content';
 
 FilesVersionsDownloadCommand.flags = {
 	..._.omit(FilesDownloadCommand.flags, 'version'),

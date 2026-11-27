@@ -42,6 +42,7 @@ class EventsPollCommand extends BoxCommand {
 }
 
 EventsPollCommand.description = 'Poll the event stream';
+EventsPollCommand._endpoint = ['options_events', 'get_events'];
 
 EventsPollCommand.flags = {
 	...BoxCommand.flags,
